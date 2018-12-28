@@ -14,6 +14,6 @@ export class HomeComponent implements OnInit {
   constructor(private titleService: Title) { }
 
   ngOnInit() {
-    this.titleService.setTitle('Home - Pill Press Registry');
+    this.titleService.setTitle('Home - Victim Services');
   }
 }

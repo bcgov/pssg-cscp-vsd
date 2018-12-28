@@ -5,7 +5,7 @@ services:
     image: vsd-app
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - BASE_PATH=/vsd
+      - BASE_PATH=/victimservices
       - BCEID_SERVICE_SVCID=${BCEID_SERVICE_SVCID}
       - BCEID_SERVICE_URL=${BCEID_SERVICE_URL}
       - BCEID_SERVICE_USER=${BCEID_SERVICE_USER}
