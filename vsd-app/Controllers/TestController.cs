@@ -1,15 +1,18 @@
 ﻿using Gov.Jag.VictimServices.Interfaces;
+using Gov.Jag.VictimServices.Public.JsonObjects;
+using Gov.Jag.VictimServices.Public.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Newtonsoft.Json;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net;
 
 namespace Gov.Jag.VictimServices.Public.Controllers
 {
@@ -32,32 +35,43 @@ namespace Gov.Jag.VictimServices.Public.Controllers
         [HttpGet("apitest")]
         public async Task<IActionResult> ApiTest()
         {
-            var t = Task.Run(() => CreateCaseAction());
+            var t = Task.Run(() => CreateCaseAction(Configuration));
             t.Wait();
 
-            var result = new { Status = "Api Test Run" };
+            var result = new { Status = "Api Test Run", Message = t.Result };
             return new JsonResult(result);
         }
 
-        static void Main(string[] args)
+        /// GET account in Dynamics for the current user
+        [HttpPut("saveapplication")]
+        public async Task<IActionResult> SaveApplication(ApplicationModel model)
         {
-            var t = Task.Run(() => CreateCaseAction());
+            var t = Task.Run(() => CreateCaseAction(Configuration, model));
             t.Wait();
 
-            Console.WriteLine();
-            Console.ReadLine();
+            var result = new { Status = "Api Save Test", Message = t.Result };
+            return new JsonResult(result);
+        }
+        
+        [HttpGet("getdata")]
+        public ActionResult Sample()
+        {
+            var application = GetApplicationData();
+            var applicationJson = JsonConvert.SerializeObject(application);
+
+            return new JsonResult(applicationJson);
         }
 
-        private static async Task<HttpResponseMessage> CreateCaseAction()
+        private static async Task<string> CreateCaseAction(IConfiguration configuration, ApplicationModel model = null)
         {
             HttpClient httpClient = null;
             try
             {
-                string dynamicsOdataUri = "";
-                string aadTenantId = "";
-                string serverAppIdUri = "";
-                string clientKey = "";
-                string clientId = "";
+                string dynamicsOdataUri = configuration["DYNAMICS_ODATAURI"];// "https://victimservicesdev.api.crm3.dynamics.com/api/data/v9.1";
+                string aadTenantId = configuration["DYNAMICS_AADTENTANTID"];//"quartechlab.com";
+                string serverAppIdUri = configuration["DYNAMICS_SERVERAPPIDURI"];//"https://victimservicesdev.api.crm3.dynamics.com";
+                string clientKey = configuration["DYNAMICS_CLIENTKEY"];//"Kv7jTrBeCKyVNAEOqyf2O7JJdn8LoIAapi3eWaLShbE=";
+                string clientId = configuration["DYNAMICS_CLIENTID"];//"57f86398-8e95-45aa-8420-6c394d5aa289";
 
                 string ssgUsername = "";
                 string ssgPassword = "";
@@ -73,32 +87,87 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                     task.Wait();
                     authenticationResult = task.Result;
                 }
+                ApplicationRoot application = GetApplicationData();
+
+                // Temporary hijack of this code to just get this wired up
+                if (model != null)
+                {
+                    application.Application.VsdApplicantsfirstname = model.applicantsfirstname;
+                    application.Application.VsdApplicantslastname = model.applicantslastname;
+                }
+
+                var applicationJson = JsonConvert.SerializeObject(application);
 
                 httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authenticationResult.AccessToken);
-                httpClient.BaseAddress = new Uri(string.Join("/", dynamicsOdataUri, "vsd_CreateCaseFromOpenShift"));
+                httpClient.BaseAddress = new Uri(string.Join("/", dynamicsOdataUri, "vsd_CreateCVAPClaim"));
                 httpClient.Timeout = new TimeSpan(1, 0, 0);  // 1 hour timeout  
                 httpClient.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
                 httpClient.DefaultRequestHeaders.Add("OData-Version", "4.0");
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "vsd_CreateCaseFromOpenShift");
-                request.Content = new StringContent("{\"Application\":{\"vsd_name\":\"Test from OS\",\"@odata.type\":\"Microsoft.Dynamics.CRM.vsd_application\"}}", Encoding.UTF8, "application/json");
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "vsd_CreateCVAPClaim");
+                request.Content = new StringContent(applicationJson, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await httpClient.SendAsync(request);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var jsonResult = response.Content.ReadAsStringAsync().Result;
+                    return jsonResult;
                 }
 
-                return response;
+                return response.Content.ReadAsStringAsync().Result;
+                //return response;
             }
             finally
             {
                 if (httpClient != null)
                     httpClient.Dispose();
             }
+        }
+
+        private static ApplicationRoot GetApplicationData()
+        {
+            var application = new ApplicationRoot();
+            application.Application = new Application
+            {
+                OdataType = "Microsoft.Dynamics.CRM.vsd_application",
+                VsdApplicanttype = 100000002,
+                VsdApplicantsfirstname = "N41",
+                VsdApplicantslastname = "Test 2",
+                VsdApplicantsbirthdate = "2000-04-01T00:00:00",
+                VsdApplicantsgendercode = 100000000,
+                VsdCvapTypeofcrime = "Faux Pas",
+                VsdApplicantsemail = "test@test.com",
+                VsdApplicantsprimaryphonenumber = "250-444-5656",
+
+                VsdCvapCrimestartdate = "2018-04-01T00:00:00",
+                VsdApplicantssignature = "Crime Victim Guy",
+                VsdCvapAuthorizationsigneddate = "2019-02-07T00:00:00",
+                VsdCvapDeclarationsigneddate = "2019-02-07T00:00:00",
+                VsdCvapOnbehalfofdeclaration = 100000000,
+            };
+
+            application.CourtInfoCollection = new System.Collections.Generic.List<CourtInfoCollection>
+                {
+                    new CourtInfoCollection
+                    {
+                        OdataType = "Microsoft.Dynamics.CRM.vsd_applicationcourtinformation",
+                        VsdCourtfilenumber = "1234567",
+                        VsdCourtlocation = "Victoria"
+                    }
+                };
+            application.ProviderCollection = new System.Collections.Generic.List<ProviderCollection>
+                {
+                    new ProviderCollection
+                    {
+                        OdataType = "Microsoft.Dynamics.CRM.vsd_applicationserviceprovider",
+                        VsdProvidername = "Mr. Smith",
+                        VsdType = 100000000
+                    }
+                };
+            return application;
         }
     }
 }

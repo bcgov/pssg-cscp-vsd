@@ -69,6 +69,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\bcsvcs-confirmation\bcsvcs-confirmation.component.html" />
+    <None Remove="ClientApp\src\app\models\dynamics-application.model.ts" />
     <None Remove="ClientApp\src\app\models\invoice.model.ts" />
   </ItemGroup>
 
@@ -88,6 +89,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\dynamics-application.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\invoice.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\adoxio-legalentities.model.ts" />
   </ItemGroup>

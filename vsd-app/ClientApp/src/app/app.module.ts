@@ -51,13 +51,11 @@ import { AdoxioLicenseDataService } from './services/adoxio-license-data.service
 import { PaymentDataService } from './services/payment-data.service';
 import { AppComponent } from './app.component';
 import { BceidConfirmationComponent } from './bceid-confirmation/bceid-confirmation.component';
-import { SearchBoxDirective } from './search-box/search-box.directive';
 import { GeneralDataService } from './general-data.service';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { DynamicsDataService } from './services/dynamics-data.service';
 import { StaticComponent } from './static/static.component';
 import { HomeComponent } from './home/home.component';
-import { PolicyDocumentDataService } from './services/policy-document-data.service';
 import { StatusBadgeComponent } from './status-badge/status-badge.component';
 import { SurveyDataService } from './services/survey-data.service';
 import { UserDataService } from './services/user-data.service';
@@ -72,15 +70,12 @@ import { FileUploaderComponent } from './shared/file-uploader/file-uploader.comp
 import { BusinessProfileSummaryComponent } from './business-profile-summary/business-profile-summary.component';
 import { NgBusyModule } from 'ng-busy';
 import { BsDatepickerModule, AlertModule } from 'ngx-bootstrap';
-import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
 import { BCeidAuthGuard } from './services/bceid-auth-guard.service';
-import { ServiceCardAuthGuard } from './services/service-card-auth-guard.service';
 import { metaReducers, reducers } from './app-state/reducers/reducers';
 import { StoreModule } from '@ngrx/store';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TermsAndConditionsComponent } from './lite/terms-and-conditions/terms-and-conditions.component';
 import { AliasDataService } from './services/alias-data.service';
-import { PreviousAddressDataService } from './services/previous-address-data.service';
 import { WorkerDataService } from './services/worker-data.service.';
 import { FieldComponent } from './shared/field/field.component';
 import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
@@ -97,7 +92,6 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     BreadcrumbComponent,
     HomeComponent,
     NotFoundComponent,
-    SearchBoxDirective,
     StaticComponent,
     StatusBadgeComponent,
     FileUploaderComponent,
@@ -202,7 +196,6 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     CookieService,
     DynamicsDataService,
     GeneralDataService,
-    PolicyDocumentDataService,
     SurveyDataService,
     UserDataService,
     AliasDataService,
@@ -212,13 +205,10 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     AccountDataService,
     ContactDataService,
     PaymentDataService,
-    PreviousAddressDataService,
     WorkerDataService,
     Title,
     VersionInfoDataService,
-    CanDeactivateGuard,
     BCeidAuthGuard,
-    ServiceCardAuthGuard,
   ],
   entryComponents: [
     VersionInfoDialog

@@ -3,13 +3,18 @@
     <div class="row" [formGroup]="form">
       <div class="col-lg-12">
         <section style="padding-top: 15px; padding-bottom: 20px;">
-          <h3>API Test Framework</h3>
+          <h3>API Test Framework from GOV</h3>
         </section>
         <p></p>
         <section>
 
           <button class="form-control" (click)="fireApiTest()">Fire API CAll</button>
           <label>Hit the button Max! {{ apiResult }}</label>
+
+          <br />
+
+          <button class="form-control" (click)="fireDataTest()">Fire API CAll</button>
+
         </section>
       </div>
 

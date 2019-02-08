@@ -4,9 +4,6 @@ import { VictimApplicationComponent } from './victim-application/victim-applicat
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { TestApiComponent } from './test-api/test-api.component';
-//import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
-//import { BCeidAuthGuard } from './services/bceid-auth-guard.service';
-//import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -25,21 +22,6 @@ const routes: Routes = [
     path: 'application-cancelled',
     component: ApplicationCancelledComponent,
   },
-  //{
-  //  path: 'business-profile',
-  //  component: BusinessProfileComponent,
-  //  canActivate: [BCeidAuthGuard]
-  //},
-  //{
-  //  path: 'business-profile-review',
-  //  component: ProfileSummaryComponent,
-  //  canActivate: [BCeidAuthGuard]
-  //},
-  //{
-  //  path: 'dashboard',
-  //  component: DashboardComponent,
-  //  canActivate: [BCeidAuthGuard]
-  //},
   { path: '**', component: NotFoundComponent }
 ];
 

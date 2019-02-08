@@ -49,11 +49,23 @@ export class TestApiComponent extends FormBase implements OnInit {
   }
 
   fireApiTest(): void {
-    console.log('Firing form');
+    this.busy = this.accountDataService
+      .getSampleCall()
+      .toPromise()
+      .then(result => {
+          console.log('From Data Call:', result);
+        }
+      );
+  }
 
-    this.busy = this.accountDataService.getSampleCall().toPromise();
-    
-    console.log('Button hit');
+  fireDataTest(): void {
+    this.busy = this.accountDataService
+      .getSampleData()
+      .toPromise()
+      .then(result => {
+        console.log('From Test Call:', result);
+      }
+    );
   }
 
   ngOnInit() {

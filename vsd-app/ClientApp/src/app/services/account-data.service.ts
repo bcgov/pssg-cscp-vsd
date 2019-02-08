@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { DynamicsAccount } from '../models/dynamics-account.model';
+import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProfileValidation } from '../models/profile-validation.model';
 import { Observable } from 'rxjs';
@@ -13,8 +14,7 @@ export class AccountDataService {
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-
-
+  
   constructor(private http: HttpClient) { }
 
   public getAccount(accountId: string): Observable<DynamicsAccount>{
@@ -33,9 +33,18 @@ export class AccountDataService {
     return this.http.get(this.apiPath + 'bceid', { headers: this.headers });
   }
 
+  public submitApplication(applicationModel: DynamicsApplicationModel) {
+    console.log('Firing submit call');
+    return this.http.put('/api/test/saveapplication', applicationModel, { headers: this.headers });
+  }
+
   public getSampleCall() {
     console.log('Firing apitest call');
     return this.http.get<string>('/api/test/apitest', { headers: this.headers });
+  }
+
+  public getSampleData() {
+    return this.http.get<string>('/api/test/getdata', { headers: this.headers });
   }
 
   public updateAccount(accountModel: DynamicsAccount) {

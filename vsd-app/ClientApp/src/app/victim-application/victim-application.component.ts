@@ -18,6 +18,7 @@ import { defaultFormat as _rollupMoment } from 'moment';
 
 import { AccountDataService } from '../services/account-data.service';
 import { DynamicsAccount } from '../models/dynamics-account.model';
+import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 
 import { COUNTRIES } from './country-list';
@@ -190,7 +191,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   addProvider() : void {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    this.otherTreatmentItems.push(this.createItem());
+    this.otherTreatmentItems.push(this.createTreatmentItem());
   }
 
   removeProvider(index: number): void {
@@ -198,14 +199,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.otherTreatmentItems.removeAt(index);
   }
   
-createItem(): FormGroup {
-  return this.fb.group({
-    providerType: '',   // 1 = Specialist, 2 = Counsellor/Psychologist, 3 = Dentist, 4 = Other ---- Figure out how to map these better
-    providerName: '',
-    providerPhoneNumber: '',
-    providerAddress: '',
-  });
-}
+  createTreatmentItem(): FormGroup {
+    return this.fb.group({
+      providerType: '',   // 1 = Specialist, 2 = Counsellor/Psychologist, 3 = Dentist, 4 = Other ---- Figure out how to map these better
+      providerName: '',
+      providerPhoneNumber: '',
+      providerAddress: '',
+    });
+  }
 
   ngOnInit() {
     this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
@@ -391,77 +392,30 @@ createItem(): FormGroup {
         authorizedPersonSignDate: ['', Validators.required],
       }),
     });
-    //this.reloadUser();
-
-    //this.form.get('personalInformation.iHaveOtherNames').valueChanges
-    //  .subscribe(value => {
-    //    this._showPersonalOtherNames = value;
-    //  });
   }
 
-  reloadUser() {
-    this.busy = this.userDataService.getCurrentUser()
-      .toPromise()
-      .then((data: User) => {
-        this.currentUser = data;
+  submitApplication() {
+    console.log("Form valid? " + this.form.valid);
+    //console.log("errors: ");
+    //this.getFormValidationErrors();
 
-        this.store.dispatch(new CurrentUserActions.SetCurrentUserAction(data));
-        this.dataLoaded = true;
-        if (this.currentUser && this.currentUser.accountid) {
-          this.busy2 = forkJoin(
-            this.accountDataService.getAccount(this.currentUser.accountid)
-          ).toPromise().then(res => {
-            const account: any = res[0];
-
-            this.form.patchValue({
-              businessProfile: account,
-              primaryContact: account.primaryContact || {},
-              additionalContact: account.additionalContact || {}
-            });
-
-            // set the mailing address differnt value if there is a value for the mailing address.
-
-            if (account.mailingAddressLine1 ||
-              account.mailingAddressLine2 ||
-              account.mailingAddressCity ||
-              account.mailingAddressPostalCode ||
-              account.mailingAddressProvince) {
-              account._mailingSameAsPhysicalAddress = true;
-            }
-
-            this.form.patchValue({
-              businessProfile: account,
-              primaryContact: account.primaryContact || {},
-              additionalContact: account.additionalContact || {}
-            });
-
-            if (account.additionalContact && (
-              account.additionalContact.email
-              || account.additionalContact.firstName
-              || account.additionalContact.lastName
-              || account.additionalContact.phoneNumber
-              || account.additionalContact.phoneNumberAlt
-              || account.additionalContact.title)) {
-              this._showAdditionalContact = true;
-            }
-
-            this.saveFormData = this.form.value;
-            // this.workerStatus = worker.status;
-            // if (worker.status !== 'Application Incomplete') {
-            //   this.form.disable();
-            // }
-          });
-        }
+    if (this.form.valid) {
+      this.save().subscribe(data => {
+        console.log("submitting");
+        this.router.navigate(['/application-cancelled']);  // Will be 'completed', have to build first
       });
+    } else {
+      this.markAsTouched();
+   }
   }
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const value = <DynamicsAccount>{
+    const value = <DynamicsApplicationModel>{
       //this.form.get('businessProfile').value,
     };
 
-    this.busy = this.accountDataService.updateAccount(value)
+    this.busy = this.accountDataService.submitApplication(value)
       .toPromise()
       .then(res => {
         subResult.next(true);
@@ -469,16 +423,6 @@ createItem(): FormGroup {
     this.busy3 = Promise.resolve(this.busy);
 
     return subResult;
-  }
-
-  gotoReview() {
-    if (this.form.valid) {
-      this.save().subscribe(data => {
-        this.router.navigate(['/business-profile-review']);
-      });
-    } else {
-      this.markAsTouched();
-    }
   }
 
   // marking the form as touched makes the validation messages show
