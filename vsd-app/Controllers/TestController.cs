@@ -1,5 +1,6 @@
 ﻿using Gov.Jag.VictimServices.Interfaces;
 using Gov.Jag.VictimServices.Public.JsonObjects;
+using Gov.Jag.VictimServices.Public.Utils;
 using Gov.Jag.VictimServices.Public.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,10 +44,12 @@ namespace Gov.Jag.VictimServices.Public.Controllers
             return new JsonResult(result);
         }
 
-        /// GET account in Dynamics for the current user
         [HttpPut("saveapplication")]
         public async Task<IActionResult> SaveApplication(ApplicationModel model)
         {
+//            _logger.LogInformation(LoggingEvents.HttpPut, "Begin method " + this.GetType().Name + "." + MethodBase.GetCurrentMethod().ReflectedType.Name);
+//            _logger.LogDebug(LoggingEvents.HttpPut, "Account parameter: " + JsonConvert.SerializeObject(model));
+
             var t = Task.Run(() => CreateCaseAction(Configuration, model));
             t.Wait();
 
@@ -143,7 +147,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                 OdataType = "Microsoft.Dynamics.CRM.vsd_application",
                 VsdApplicanttype = 100000002,
                 VsdApplicantsfirstname = "N41",
-                VsdApplicantslastname = "Test 3",
+                VsdApplicantslastname = "Test 5",
                 VsdApplicantsbirthdate = "2000-04-01T00:00:00",
                 VsdApplicantsgendercode = 100000000,
                 VsdCvapTypeofcrime = "Faux Pas",

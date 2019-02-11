@@ -63,6 +63,7 @@ import { VersionInfoDataService } from './services/version-info-data.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BusinessProfileComponent } from './business-information/business-profile/business-profile.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
+import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { TestApiComponent } from './test-api/test-api.component';
 import { FileDropModule } from 'ngx-file-drop';
@@ -87,6 +88,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     BceidConfirmationComponent,
     BusinessProfileComponent,
     VictimApplicationComponent,
+    ApplicationSuccessComponent,
     ApplicationCancelledComponent,
     TestApiComponent,
     BreadcrumbComponent,

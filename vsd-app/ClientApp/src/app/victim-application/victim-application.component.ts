@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AppState } from '../app-state/models/app-state';
-import { UserDataService } from '../services/user-data.service';
 import { User } from '../models/user.model';
 import { DynamicsContact } from '../models/dynamics-contact.model';
 import * as CurrentUserActions from '../app-state/actions/current-user.action';
@@ -16,6 +15,7 @@ import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { defaultFormat as _rollupMoment } from 'moment';
 
+import { UserDataService } from '../services/user-data.service';
 import { AccountDataService } from '../services/account-data.service';
 import { DynamicsAccount } from '../models/dynamics-account.model';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
@@ -67,7 +67,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   countryList = COUNTRIES;
 
   public currentFormStep: number;
-
   public summaryOfBenefitsUrl: string;
 
   // Should probably refactor these into a 'CountrySelection' class.
@@ -86,13 +85,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   representativePostalCodeType: string;
   representativePostalCodeSample: string;
 
-  accountId: string;
   saveFormData: any;
-
-  _showPersonalOtherNames: boolean;
-
-  _showAdditionalAddress: boolean;
-  _showAdditionalContact: boolean;
 
   public get otherTreatments(): FormArray {
     return this.form.get('medicalInformation.otherTreatments') as FormArray;
@@ -139,7 +132,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.alternatePostalCodeType = selectedCountry.postalCodeName;
     this.alternatePostalCodeSample = selectedCountry.postalCodeSample;
   }
-   
+
   updateRepresentativeLocation(event) {
     var selection = event.target.value.toLowerCase();
     var selectedCountry = COUNTRIES.filter(c => c.name.toLowerCase() == selection)[0];
@@ -149,7 +142,32 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.representativePostalCodeSample = selectedCountry.postalCodeSample;
   }
 
-  orEmpty(amI : FormControl) : string {
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+
+// IF not populated correctly - you could get aggregated FormGroup errors object
+getErrors(formGroup: FormGroup, errors: any = {}) {
+  Object.keys(formGroup.controls).forEach(field => {
+    const control = formGroup.get(field);
+    if (control instanceof FormControl) {
+      errors[field] = control.errors;
+    } else if (control instanceof FormGroup) {
+      errors[field] = this.getErrors(control);
+    }
+  });
+  return errors;
+}
+
+  orEmpty(amI: FormControl): string {
     if (amI == null || amI === undefined)
       return "--";
 
@@ -157,6 +175,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       return "--";
 
     return amI.value;
+  }
+
+  isFieldValid(field: string) {
+    return this.form.get(field).valid || !this.form.get(field).touched;
   }
 
   valueOrEmpty(controlName: string): string {
@@ -179,17 +201,52 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.currentFormStep = selectPage.selectedIndex;
   }
 
+  getFormGroupName(groupIndex: any) {
+    let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
+    return elements[groupIndex];
+  }
+
   gotoNextStep(stepper: MatStepper): void {
-    window.scroll(0, 0);
-    stepper.next();
+    if (stepper != null) {
+      console.log(stepper.selectedIndex);
+      var desiredFormIndex = stepper.selectedIndex;
+      var formGroupName = this.getFormGroupName(desiredFormIndex);
+
+      if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
+        var formParts = this.form.get(formGroupName);
+        var formValid = true;
+
+        if (formParts != null) {
+          formValid = formParts.valid;
+        }
+        console.log("Page " + desiredFormIndex + " valid: " + formValid);
+
+        if (formValid) {
+          window.scroll(0, 0);
+          stepper.next();
+        } else {
+          this.validateAllFormFields(formParts);
+          console.log(this.getErrors(formParts));
+        }
+      }
+
+      //if (stepper.selectedIndex == 2) {
+      //  var form1Valid = this.form.get('crimeInformation').valid;
+      //  console.log("Page 2 valid: " + form1Valid);
+      //  if (form1Valid) {
+      //    window.scroll(0, 0);
+      //    stepper.next();
+      //  } else {
+      //    this.validateAllFormFields(this.form.get('crimeInformation'));
+      //    console.log(this.getErrors(this.form.get('crimeInformation'));
+      //  }
+      //}
+    }
+
+    //stepper.next();
   }
 
-  checkform(): void {
-    var blip = this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses');;
-    console.log(blip);
-  }
-
-  addProvider() : void {
+  addProvider(): void {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
     this.otherTreatmentItems.push(this.createTreatmentItem());
   }
@@ -198,7 +255,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
     this.otherTreatmentItems.removeAt(index);
   }
-  
+
   createTreatmentItem(): FormGroup {
     return this.fb.group({
       providerType: '',   // 1 = Specialist, 2 = Counsellor/Psychologist, 3 = Dentist, 4 = Other ---- Figure out how to map these better
@@ -212,7 +269,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
     this.form = this.fb.group({
       introduction: this.fb.group({
-        understoodInformation: ['', Validators.required],
+        understoodInformation: ['', Validators.requiredTrue],
       }),
       personalInformation: this.fb.group({
         firstName: ['', Validators.required],
@@ -228,9 +285,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         birthDate: ['', Validators.required],
 
-        sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sinPart1: [''],
+        sinPart2: [''],
+        sinPart3: [''],
+        //sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        //sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        //sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
         // Add dashes into SIN glue
 
         gender: [''],
@@ -253,9 +313,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         typeOfCrime: ['', Validators.required],
 
         whenDidCrimeOccur: [''],
-        crimeSingleDate: ['', Validators.required],
         crimePeriodStart: ['', Validators.required],
-        crimePeriodEnd: ['', Validators.required],
+        crimePeriodEnd: [''],
         applicationFiledWithinOneYearFromCrime: [''],
         whyDidYouNotApplySooner: [''],
 
@@ -397,14 +456,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   submitApplication() {
     console.log("Form valid? " + this.form.valid);
 
-    if (this.form.valid) {
-      this.save().subscribe(data => {
-        console.log("submitting");
-        this.router.navigate(['/application-cancelled']);  // Will be 'completed', have to build first
-      });
-    } else {
-      this.markAsTouched();
-   }
+    //if (this.form.valid) {
+    this.save().subscribe(data => {
+      console.log("submitting");
+      this.router.navigate(['/application-cancelled']);  // Will be 'completed', have to build first
+    });
+    //} else {
+    //      console.log("form not validated");
+    //      this.markAsTouched();
+    //}
   }
 
   save(): Subject<boolean> {
@@ -413,11 +473,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       //this.form.get('businessProfile').value,
     };
 
-    this.busy = this.accountDataService.submitApplication(value)
-      .toPromise()
-      .then(res => {
-        subResult.next(true);
-      }, err => subResult.next(false));
+    value.applicantsfirstname = this.form.get('personalInformation.firstName').value;
+    value.applicantslastname = this.form.get('personalInformation.lastName').value,
+
+      this.busy = this.accountDataService.submitApplication(value)
+        .toPromise()
+        .then(res => {
+          subResult.next(true);
+        }, err => subResult.next(false));
     this.busy3 = Promise.resolve(this.busy);
 
     return subResult;

@@ -3,6 +3,6 @@
     public class ApplicationModel
     {
         public string applicantsfirstname { get; set; }
-          public string applicantslastname { get; set; }
+        public string applicantslastname { get; set; }
     }
 }

@@ -110,8 +110,10 @@
             <p>For more information, see the Government of British Columbia website at www.gov.bc.ca/crimevictimassistance or query &ldquo;cvap bc&rdquo; using your internet search engine.</p>
 
             <section>
-              <input type="checkbox" style="margin-right: 10px;" formControlName="understoodInformation" [value]="true">
-              <span>I have read and understood all the above information. *</span>
+              <app-field [valid]="isFieldValid('introduction.understoodInformation')" errorMessage="Indicate that you have read and understood all of the above information">
+                <input type="checkbox" style="margin-right: 10px;" formControlName="understoodInformation" [value]="true">
+                <span>I have read and understood all the above information. *</span>
+                </app-field>
             </section>
           </div>
 
@@ -121,15 +123,15 @@
 
             <h3>Applicant Name</h3>
 
-            <app-field label="First Name" [required]="true" [valid]="form.get('personalInformation.firstName').valid || !form.get('personalInformation.firstName').touched" errorMessage="Please enter your first name">
+            <app-field label="First Name" [required]="true" [valid]="isFieldValid('personalInformation.firstName')" errorMessage="Please enter your first name">
               <input class="form-control" style="width: 350px;" type="text" formControlName="firstName">
             </app-field>
 
-            <app-field label="Middle Name" [required]="false" [valid]="form.get('personalInformation.middleName').valid || !form.get('personalInformation.middleName').touched" errorMessage="Please enter your middle name">
+            <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('personalInformation.middleName')" errorMessage="Please enter your middle name">
               <input class="form-control" style="width: 350px;" type="text" formControlName="middleName">
             </app-field>
 
-            <app-field label="Last Name" [required]="true" [valid]="form.get('personalInformation.lastName').valid || !form.get('personalInformation.lastName').touched" errorMessage="Please enter your last name">
+            <app-field label="Last Name" [required]="true" [valid]="isFieldValid('personalInformation.lastName')" errorMessage="Please enter your last name">
               <input class="form-control" style="width: 350px;" type="text" formControlName="lastName">
             </app-field>
 
@@ -267,7 +269,7 @@
 
               <h3>Crime Type</h3>
 
-              <app-field label="Type of crime (e.g. home invastion, assault)" [required]="true" [valid]="form.get('crimeInformation.typeOfCrime').valid || !form.get('crimeInformation.typeOfCrime').touched" errorMessage="Please enter the type of crime" matTooltip="Info about the action" [matTooltipPosition]="after" aria-label="Button that displays a tooltip in various positions">
+              <app-field label="Type of crime (e.g. home invastion, assault)" [required]="true" [valid]="form.get('crimeInformation.typeOfCrime').valid || !form.get('crimeInformation.typeOfCrime').touched" errorMessage="Please enter the type of crime">
                 <input class="form-control" style="width: 350px;" type="text" formControlName="typeOfCrime">
               </app-field>
 
