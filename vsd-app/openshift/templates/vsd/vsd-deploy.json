@@ -317,14 +317,7 @@
                     "name": "SITEMINDER_LOGOUT_URL",
                     "value": "${SITEMINDER_LOGOUT_URL}"
                   },
-                  {
-                    "name": "PDF_SERVICE_BASE_URI",
-                    "value": "${PDF_SERVICE_BASE_URI}"
-                  },
-                  {
-                    "name": "PDF_JWT_TOKEN",
-                    "value": "${PDF_JWT_TOKEN}"
-                  },
+                 
                   {
                     "name": "BCEP_CONF_PATH_WORKER",
                     "value": "${BCEP_CONF_PATH_WORKER}"
@@ -486,21 +479,21 @@
       "displayName": "Name",
       "description": "The name assigned to all of the resources defined in this template.",
       "required": true,
-      "value": "pill-press"
+      "value": "vsd"
     },
     {
       "name": "SOURCE_IMAGE_NAME",
       "displayName": "Source Image Name",
       "description": "The name of the image to use for this resource.",
       "required": true,
-      "value": "pill-press"
+      "value": "vsd"
     },
     {
       "name": "IMAGE_NAMESPACE",
       "displayName": "Image Namespace",
       "description": "The namespace of the OpenShift project containing the imagestream for the application.",
       "required": true,
-      "value": "rqnyx8-dev"
+      "value": "pssg-cscp-vsd-tools"
     },
     {
       "name": "TAG_NAME",
@@ -544,20 +537,20 @@
       "description": "The endpoint used for SiteMinder routed access to the application.",
       "displayName": "SiteMinder Application Domain",
       "name": "SITEMINDER_APPLICATION_DOMAIN",
-      "value": "pill-press-dev.pathfinder.bcgov"
+      "value": "vsd-dev.pathfinder.bcgov"
     },
     {
       "description": "The exposed hostname that will route to the service, e.g., myappname.pathfinder.gov.bc.ca, if left blank a value will be defaulted.",
       "displayName": "Application Domain",
       "name": "APPLICATION_DOMAIN",
-      "value": "pill-press-dev.pathfinder.gov.bc.ca"
+      "value": "vsd-dev.pathfinder.gov.bc.ca"
     },
     {
       "description": "Webname for Sharepoint, e.g., pill pressdev, if left blank a value will be defaulted.",
       "displayName": "Sharepoint Webname",
       "name": "SHAREPOINT_WEBNAME",
       "required": false,
-      "value": "pill-press"
+      "value": "vsd"
     },
     {
       "description": "Sharepoint Tenant ID and Dynamics Tenant ID, e.g., bcgovtrial.onmicrosoft.com, if left blank a value will be defaulted.",
@@ -617,7 +610,7 @@
       "displayName": "Secret resource name",
       "description": "Secret resource name",
       "required": true,
-      "value": "pill-press"
+      "value": "vsd"
     },
     {
       "name": "SITEMINDER_LOGOUT_URL",
@@ -626,20 +619,7 @@
       "required": true,
       "value": "https://logon.gov.bc.ca/clp-cgi/logoff.cgi"
     },
-    {
-      "name": "PDF_SERVICE_BASE_URI",
-      "displayName": "URI to PDF Service",
-      "description": "URI to PDF Service, e.g., http://pdf-service:8080, if left blank a value will be defaulted.",
-      "required": true,
-      "value": "http://pdf-service:8080"
-    },
-    {
-      "name": "PDF_JWT_TOKEN",
-      "displayName": "JWT for PDF service",
-      "description": "JWT for PDF service.",
-      "required": true,
-      "value": ""
-    },
+  
     {
       "name": "BCEP_CONF_PATH_WORKER",
       "displayName": "Path to BCEP Conf",

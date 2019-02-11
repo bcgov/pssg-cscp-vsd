@@ -100,21 +100,21 @@
       "displayName": "Name",
       "description": "The name assigned to all of the resources defined in this template.",
       "required": true,
-      "value": "pill-press"
+      "value": "vsd"
     },
     {
       "name": "GIT_REPO_URL",
       "displayName": "Git Repo URL",
       "description": "The URL to your GIT repo.",
       "required": true,
-      "value": "https://github.com/bcgov/jag-pill-press-registry"
+      "value": "https://github.com/WillWeinzettl/pssg-cscp-vsd/"
     },
     {
       "name": "GIT_REF",
       "displayName": "Git Reference",
       "description": "The git reference or branch.",
       "required": true,
-      "value": "master"
+      "value": "development"
     },
     {
       "name": "SOURCE_CONTEXT_DIR",
@@ -149,7 +149,7 @@
       "displayName": "DotNet Startup Project",
       "description": "The path to the startup project for the .Net application.",
       "required": true,
-      "value": "pill-press-app/pill-press-app.csproj"
+      "value": "vsd-app/vsd-app.csproj"
     },
     {
       "name": "OUTPUT_IMAGE_TAG",
