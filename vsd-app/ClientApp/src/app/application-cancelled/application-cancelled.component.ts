@@ -7,9 +7,7 @@ import { Router } from "@angular/router";
   styleUrls: ['./application-cancelled.component.scss']
 })
 export class ApplicationCancelledComponent {
-    /** NotFound ctor */
   constructor(private router: Router) {
     this.router.navigateByUrl("/application-cancelled");
-
     }
 }

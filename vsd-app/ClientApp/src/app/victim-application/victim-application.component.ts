@@ -396,8 +396,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   submitApplication() {
     console.log("Form valid? " + this.form.valid);
-    //console.log("errors: ");
-    //this.getFormValidationErrors();
 
     if (this.form.valid) {
       this.save().subscribe(data => {

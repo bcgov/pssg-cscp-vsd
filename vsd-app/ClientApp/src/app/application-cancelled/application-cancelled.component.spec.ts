@@ -6,19 +6,19 @@ let component: ApplicationCancelledComponent;
 let fixture: ComponentFixture<ApplicationCancelledComponent>;
 
 describe('ApplicationCancelled component', () => {
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            declarations: [ NotFoundComponent ],
-            imports: [ BrowserModule ],
-            providers: [
-                { provide: ComponentFixtureAutoDetect, useValue: true }
-            ]
-        });
-      fixture = TestBed.createComponent(ApplicationCancelledComponent);
-        component = fixture.componentInstance;
-    }));
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ApplicationCancelledComponent],
+      imports: [BrowserModule],
+      providers: [
+        { provide: ComponentFixtureAutoDetect, useValue: true }
+      ]
+    });
+    fixture = TestBed.createComponent(ApplicationCancelledComponent);
+    component = fixture.componentInstance;
+  }));
 
-    it('should do something', async(() => {
-        expect(true).toEqual(true);
-    }));
+  it('should do something', async(() => {
+    expect(true).toEqual(true);
+  }));
 });

@@ -5,7 +5,6 @@ import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProfileValidation } from '../models/profile-validation.model';
 import { Observable } from 'rxjs';
-import { User } from '../models/user.model';
 
 @Injectable()
 export class AccountDataService {
@@ -39,7 +38,6 @@ export class AccountDataService {
   }
 
   public getSampleCall() {
-    console.log('Firing apitest call');
     return this.http.get<string>('/api/test/apitest', { headers: this.headers });
   }
 

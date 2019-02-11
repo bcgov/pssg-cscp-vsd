@@ -67,11 +67,11 @@ namespace Gov.Jag.VictimServices.Public.Controllers
             HttpClient httpClient = null;
             try
             {
-                string dynamicsOdataUri = configuration["DYNAMICS_ODATAURI"];// "https://victimservicesdev.api.crm3.dynamics.com/api/data/v9.1";
-                string aadTenantId = configuration["DYNAMICS_AADTENTANTID"];//"quartechlab.com";
-                string serverAppIdUri = configuration["DYNAMICS_SERVERAPPIDURI"];//"https://victimservicesdev.api.crm3.dynamics.com";
-                string clientKey = configuration["DYNAMICS_CLIENTKEY"];//"Kv7jTrBeCKyVNAEOqyf2O7JJdn8LoIAapi3eWaLShbE=";
-                string clientId = configuration["DYNAMICS_CLIENTID"];//"57f86398-8e95-45aa-8420-6c394d5aa289";
+                string dynamicsOdataUri = configuration["DYNAMICS_ODATAURI"];
+                string aadTenantId = configuration["DYNAMICS_AADTENTANTID"];
+                string serverAppIdUri = configuration["DYNAMICS_SERVERAPPIDURI"];
+                string clientKey = configuration["DYNAMICS_CLIENTKEY"];
+                string clientId = configuration["DYNAMICS_CLIENTID"];
 
                 string ssgUsername = "";
                 string ssgPassword = "";
@@ -80,20 +80,28 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                 // authenticate using ADFS.
                 if (string.IsNullOrEmpty(ssgUsername) || string.IsNullOrEmpty(ssgPassword))
                 {
-                    var authenticationContext = new AuthenticationContext(
-                        "https://login.windows.net/" + aadTenantId);
-                    ClientCredential clientCredential = new ClientCredential(clientId, clientKey);
+                    var authenticationContext = new AuthenticationContext($"https://login.windows.net/{aadTenantId}");
+                    var clientCredential = new ClientCredential(clientId, clientKey);
                     var task = authenticationContext.AcquireTokenAsync(serverAppIdUri, clientCredential);
+
                     task.Wait();
                     authenticationResult = task.Result;
                 }
+
                 ApplicationRoot application = GetApplicationData();
 
                 // Temporary hijack of this code to just get this wired up
                 if (model != null)
                 {
-                    application.Application.VsdApplicantsfirstname = model.applicantsfirstname;
-                    application.Application.VsdApplicantslastname = model.applicantslastname;
+                    if (!string.IsNullOrWhiteSpace(model.applicantsfirstname))
+                        application.Application.VsdApplicantsfirstname = model.applicantsfirstname;
+                    else
+                        application.Application.VsdApplicantsfirstname += " [notset]";
+
+                    if (!string.IsNullOrWhiteSpace(model.applicantslastname))
+                        application.Application.VsdApplicantslastname = model.applicantslastname;
+                    else
+                        application.Application.VsdApplicantslastname += " [notset]";
                 }
 
                 var applicationJson = JsonConvert.SerializeObject(application);
@@ -135,7 +143,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                 OdataType = "Microsoft.Dynamics.CRM.vsd_application",
                 VsdApplicanttype = 100000002,
                 VsdApplicantsfirstname = "N41",
-                VsdApplicantslastname = "Test 2",
+                VsdApplicantslastname = "Test 3",
                 VsdApplicantsbirthdate = "2000-04-01T00:00:00",
                 VsdApplicantsgendercode = 100000000,
                 VsdCvapTypeofcrime = "Faux Pas",
