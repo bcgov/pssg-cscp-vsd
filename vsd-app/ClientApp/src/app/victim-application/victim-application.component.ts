@@ -142,7 +142,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.representativePostalCodeSample = selectedCountry.postalCodeSample;
   }
 
-  validateAllFormFields(formGroup: FormGroup) {
+  validateAllFormFields(formGroup: any) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
 
@@ -155,7 +155,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
 // IF not populated correctly - you could get aggregated FormGroup errors object
-getErrors(formGroup: FormGroup, errors: any = {}) {
+getErrors(formGroup: any, errors: any = {}) {
   Object.keys(formGroup.controls).forEach(field => {
     const control = formGroup.get(field);
     if (control instanceof FormControl) {
@@ -178,6 +178,10 @@ getErrors(formGroup: FormGroup, errors: any = {}) {
   }
 
   isFieldValid(field: string) {
+    let formField = this.form.get(field);
+    if (formField == null)
+      return true;
+
     return this.form.get(field).valid || !this.form.get(field).touched;
   }
 
@@ -228,6 +232,7 @@ getErrors(formGroup: FormGroup, errors: any = {}) {
           this.validateAllFormFields(formParts);
           console.log(this.getErrors(formParts));
         }
+
       }
 
       //if (stepper.selectedIndex == 2) {
@@ -459,7 +464,7 @@ getErrors(formGroup: FormGroup, errors: any = {}) {
     //if (this.form.valid) {
     this.save().subscribe(data => {
       console.log("submitting");
-      this.router.navigate(['/application-cancelled']);  // Will be 'completed', have to build first
+      this.router.navigate(['/application-success']);
     });
     //} else {
     //      console.log("form not validated");
@@ -474,9 +479,21 @@ getErrors(formGroup: FormGroup, errors: any = {}) {
     };
 
     value.applicantsfirstname = this.form.get('personalInformation.firstName').value;
-    value.applicantslastname = this.form.get('personalInformation.lastName').value,
+    value.applicantsmiddlename = this.form.get('personalInformation.middleName').value;
+    value.applicantslastname = this.form.get('personalInformation.lastName').value;
+    value.applicantsotherfirstname = this.form.get('personalInformation.otherFirstName').value;
+    value.applicantsotherlastname = this.form.get('personalInformation.otherLastName').value;
 
-      this.busy = this.accountDataService.submitApplication(value)
+    value.applicantsphoneNumber = this.form.get('personalInformation.phoneNumber').value;
+    value.applicantsemail = this.form.get('personalInformation.email').value;
+    value.applicantsbirthdate = this.form.get('personalInformation.birthDate').value;
+
+    value.applicantsgender = this.form.get('personalInformation.gender').value;
+    value.applicantsmaritalstatus = this.form.get('personalInformation.maritalStatus').value;
+
+    value.typeofcrime = this.form.get('crimeInformation.typeOfCrime').value;
+
+    this.busy = this.accountDataService.submitApplication(value)
         .toPromise()
         .then(res => {
           subResult.next(true);

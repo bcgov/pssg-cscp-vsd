@@ -6,4 +6,4 @@ var DynamicsApplicationModel = /** @class */ (function () {
     return DynamicsApplicationModel;
 }());
 exports.DynamicsApplicationModel = DynamicsApplicationModel;
-//# sourceMappingURL=dynamics-application-model.js.map
+//# sourceMappingURL=dynamics-application.model.js.map

@@ -27,8 +27,19 @@ namespace Gov.Jag.VictimServices.Public.JsonObjects
         [JsonProperty("vsd_applicantsfirstname")]
         public string VsdApplicantsfirstname { get; set; }
 
+        [JsonProperty("vsd_applicantsmiddlename")]
+        public string VsdApplicantsmiddlename { get; set; }
+
         [JsonProperty("vsd_applicantslastname")]
         public string VsdApplicantslastname { get; set; }
+
+        [JsonProperty("vsd_otherfirstname")]
+        public string VsdApplicantsotherfirstname { get; set; }
+
+        [JsonProperty("vsd_otherlastname")]
+        public string VsdApplicantsotherlastname { get; set; }
+         
+        // NAME OF DATE CHANGE HERE
 
         [JsonProperty("vsd_applicantsbirthdate")]
         //public DateTime VsdApplicantsbirthdate { get; set; }
@@ -36,6 +47,9 @@ namespace Gov.Jag.VictimServices.Public.JsonObjects
 
         [JsonProperty("vsd_applicantsgendercode")]
         public long VsdApplicantsgendercode { get; set; }
+
+        [JsonProperty("vsd_applicantsmaritalstatus")]
+        public long VsdApplicantsmaritalstatus { get; set; }
 
         [JsonProperty("vsd_applicantsprimaryphonenumber")]
         public string VsdApplicantsprimaryphonenumber { get; set; }

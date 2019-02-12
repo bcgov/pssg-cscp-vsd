@@ -45,7 +45,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
         }
 
         [HttpPut("saveapplication")]
-        public async Task<IActionResult> SaveApplication(ApplicationModel model)
+        public async Task<IActionResult> SaveApplication([FromBody] ApplicationModel model)
         {
 //            _logger.LogInformation(LoggingEvents.HttpPut, "Begin method " + this.GetType().Name + "." + MethodBase.GetCurrentMethod().ReflectedType.Name);
 //            _logger.LogDebug(LoggingEvents.HttpPut, "Account parameter: " + JsonConvert.SerializeObject(model));
@@ -94,18 +94,42 @@ namespace Gov.Jag.VictimServices.Public.Controllers
 
                 ApplicationRoot application = GetApplicationData();
 
-                // Temporary hijack of this code to just get this wired up
+                // Temporary hijack of this code to just get this wired up -- all of this should auto bind
                 if (model != null)
                 {
+                    // Override default properties with values we know are being set -- Temporary demo patch
                     if (!string.IsNullOrWhiteSpace(model.applicantsfirstname))
                         application.Application.VsdApplicantsfirstname = model.applicantsfirstname;
-                    else
-                        application.Application.VsdApplicantsfirstname += " [notset]";
+
+                    if (!string.IsNullOrWhiteSpace(model.applicantslastname))
+                        application.Application.VsdApplicantsmiddlename = model.applicantsmiddlename;
 
                     if (!string.IsNullOrWhiteSpace(model.applicantslastname))
                         application.Application.VsdApplicantslastname = model.applicantslastname;
-                    else
-                        application.Application.VsdApplicantslastname += " [notset]";
+
+                    if (!string.IsNullOrWhiteSpace(model.applicantsotherfirstname))
+                        application.Application.VsdApplicantsotherfirstname = model.applicantsotherfirstname;
+
+                    if (!string.IsNullOrWhiteSpace(model.applicantsotherlastname))
+                        application.Application.VsdApplicantsotherlastname = model.applicantsotherlastname;
+
+                    if (!string.IsNullOrWhiteSpace(model.applicantsphoneNumber))
+                        application.Application.VsdApplicantsprimaryphonenumber = model.applicantsphoneNumber;
+
+                    if (!string.IsNullOrWhiteSpace(model.applicantsotherlastname))
+                        application.Application.VsdApplicantsemail = model.applicantsemail;
+
+                    // Try set birthdate here
+
+                    if (model.applicantsgender > 0)
+                        application.Application.VsdApplicantsgendercode = model.applicantsgender;
+
+                    if (model.applicantsmaritalstatus > 0)
+                        application.Application.VsdApplicantsmaritalstatus = model.applicantsgender;
+
+
+                    if (!string.IsNullOrWhiteSpace(model.typeofcrime))
+                        application.Application.VsdCvapTypeofcrime = model.typeofcrime;
                 }
 
                 var applicationJson = JsonConvert.SerializeObject(application);

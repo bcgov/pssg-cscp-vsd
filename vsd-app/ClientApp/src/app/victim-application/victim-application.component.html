@@ -111,8 +111,10 @@
 
             <section>
               <app-field [valid]="isFieldValid('introduction.understoodInformation')" errorMessage="Indicate that you have read and understood all of the above information">
-                <input type="checkbox" style="margin-right: 10px;" formControlName="understoodInformation" [value]="true">
-                <span>I have read and understood all the above information. *</span>
+                <label class="inline-label">
+                  <input type="checkbox" style="margin-right: 10px;" formControlName="understoodInformation" [value]="true">
+                  <span>I have read and understood all the above information. *</span>
+                </label>
                 </app-field>
             </section>
           </div>
@@ -135,8 +137,10 @@
               <input class="form-control" style="width: 350px;" type="text" formControlName="lastName">
             </app-field>
 
-            <input type="checkbox" style="margin-right: 10px;" formControlName="iHaveOtherNames" [value]="true">
-            <span>I also go by other names (e.g. nickname, maiden name, alias)</span>
+            <label class="inline-label">
+              <input type="checkbox" style="margin-right: 10px;" formControlName="iHaveOtherNames" [value]="true">
+              <span>I also go by other names (e.g. nickname, maiden name, alias)</span>
+            </label>
 
             <div *ngIf="form.get('personalInformation.iHaveOtherNames').value === true">
               <h3>Other Names Used</h3>
@@ -169,7 +173,6 @@
               <input type="text" class="form-control" formControlName="birthDate" placeholder="yyyy-mm-dd"
                      [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
               <mat-datepicker #birthDatePicker></mat-datepicker>
-
             </app-field>
 
             <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="form.get('personalInformation.sinPart1').valid || !form.get('personalInformation.sinPart1').touched" errorMessage="Please enter your SIN">
@@ -184,20 +187,21 @@
             <app-field label="Gender" [required]="false" errorMessage="Please select your gender from the dropdown list">
               <select class="form-control" style="width: 250px;" formControlName="gender">
                 <option value="">Select...</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="100000000">Male</option>
+                <option value="100000001">Female</option>
+                <option value="100000002">Unidentified</option>
               </select>
             </app-field>
 
             <app-field label="Marital Status" [required]="false" errorMessage="Please select your marital status from the dropdown list">
               <select class="form-control" style="width: 250px;" formControlName="maritalStatus">
                 <option value="">Select...</option>
-                <option value="Married">Married</option>
-                <option value="CommonLaw">Common Law</option>
-                <option value="Widowed">Widowed</option>
-                <option value="Divorced">Divorced</option>
-                <option value="Seperated">Seperated</option>
-                <option value="Single">Single</option>
+                <option value="100000000">Married</option>
+                <option value="100000001">Common Law</option>
+                <option value="100000002">Widowed</option>
+                <option value="100000003">Divorced</option>
+                <option value="100000004">Seperated</option>
+                <option value="100000005">Single</option>
               </select>
             </app-field>
 
@@ -269,7 +273,7 @@
 
               <h3>Crime Type</h3>
 
-              <app-field label="Type of crime (e.g. home invastion, assault)" [required]="true" [valid]="form.get('crimeInformation.typeOfCrime').valid || !form.get('crimeInformation.typeOfCrime').touched" errorMessage="Please enter the type of crime">
+              <app-field label="Type of crime (e.g. home invastion, assault)" [required]="true" [valid]="isFieldValid('crimeInformation.typeOfCrime')" errorMessage="Please enter the type of crime">
                 <input class="form-control" style="width: 350px;" type="text" formControlName="typeOfCrime">
               </app-field>
 
@@ -287,15 +291,15 @@
               </app-field>
 
               <section *ngIf="form.get('crimeInformation.whenDidCrimeOccur').value === true">
-                <app-field label="Date of crime" [required]="true" [valid]="form.get('crimeInformation.crimeSingleDate').valid || !form.get('crimeInformation.crimeSingleDate').touched" errorMessage="Please enter the crime date">
-                  <input type="text" class="form-control" formControlName="crimeSingleDate" placeholder="yyyy-mm-dd"
+                <app-field label="Date of crime" [required]="true" [valid]="isFieldValid('crimeInformation.crimePeriodStart')" errorMessage="Please enter the crime date">
+                  <input type="text" class="form-control" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd"
                          [matDatepicker]="crimeSingleDatePicker" (focus)="crimeSingleDatePicker.open()" (click)="crimeSingleDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
                   <mat-datepicker #crimeSingleDatePicker></mat-datepicker>
                 </app-field>
               </section>
 
               <section *ngIf="form.get('crimeInformation.whenDidCrimeOccur').value === false">
-                <app-field label="Approximate dates of crime" [required]="true" [valid]="form.get('crimeInformation.crimePeriodStart').valid || !form.get('crimeInformation.crimePeriodStart').touched" errorMessage="Please enter the crime date">
+                <app-field label="Approximate dates of crime" [required]="true" [valid]="isFieldValid('crimeInformation.crimePeriodStart')" errorMessage="Please enter the crime date">
                   <input type="text" class="form-control" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd"
                          [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" (click)="crimePeriodStartPicker.open()" readonly style="width: 200px; background-color: #fff;">
                   <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
@@ -1058,11 +1062,15 @@
               </app-field>
 
               <h2 class="blue-header">Optional Authorization</h2>
-              <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons.<br />Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?">
-                <input type="radio" [value]="true" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
-                <span>Yes</span>
-                <input type="radio" [value]="false" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
-                <span>No</span>
+              <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <span>No</span>
+                  </label>
               </app-field>
 
               <section *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === true">
