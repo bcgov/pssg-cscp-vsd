@@ -6,6 +6,11 @@
   display: none;
 }
 
+h3 span {
+  font-size: 14px;
+  font-weight: 400;
+}
+
 ::ng-deep .application-nav {
 
   .mat-step-label {
@@ -15,7 +20,22 @@
   .mat-step-text-label {
     text-overflow: initial;
     overflow: auto;
+    color: #ccc;
   }
+
+  .mat-step-header .mat-step-label.mat-step-label-active .mat-step-text-label {
+    color: #21527E;
+  }
+
+  .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-text-label {
+    color: #21527E;
+    font-weight: 700;
+  }
+
+  .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-icon {
+    background-color: #21527E;
+  }
+
 
   .mat-vertical-content {
     padding: 0 24px 0 24px;
@@ -27,6 +47,18 @@
 
   .mat-vertical-content-container {
     margin-left: 12px;
+  }
+
+  .mat-vertical-stepper-header .mat-step-icon {
+    border: 2px #4e719b solid;
+    background-color: #fff;
+  }
+
+  .mat-stepper-vertical-line::before {
+    top: -8px;
+    bottom: -16px;
+    left: -1px;
+    border-left: 2px solid #ccc;
   }
 }
 

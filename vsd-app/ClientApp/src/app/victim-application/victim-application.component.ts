@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppState } from '../app-state/models/app-state';
 import { User } from '../models/user.model';
-import { DynamicsContact } from '../models/dynamics-contact.model';
-import * as CurrentUserActions from '../app-state/actions/current-user.action';
 import { Store } from '@ngrx/store';
 import { Subscription, Observable, Subject, forkJoin } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
@@ -10,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { defaultFormat as _rollupMoment } from 'moment';
@@ -61,6 +58,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   busy2: Promise<any>;
   busy3: Promise<any>;
   form: FormGroup;
+  formFullyValidated: boolean;
 
   otherTreatmentItems: FormArray;
 
@@ -101,6 +99,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   ) {
     super();
 
+    this.formFullyValidated = false;
     this.currentFormStep = 0;
     var canada = COUNTRIES.filter(c => c.name.toLowerCase() == 'canada')[0];
     this.primaryProvinceList = canada.areas;
@@ -154,18 +153,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     });
   }
 
-// IF not populated correctly - you could get aggregated FormGroup errors object
-getErrors(formGroup: any, errors: any = {}) {
-  Object.keys(formGroup.controls).forEach(field => {
-    const control = formGroup.get(field);
-    if (control instanceof FormControl) {
-      errors[field] = control.errors;
-    } else if (control instanceof FormGroup) {
-      errors[field] = this.getErrors(control);
-    }
-  });
-  return errors;
-}
+  getErrors(formGroup: any, errors: any = {}) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        errors[field] = control.errors;
+      } else if (control instanceof FormGroup) {
+        errors[field] = this.getErrors(control);
+      }
+    });
+    return errors;
+  }
 
   orEmpty(amI: FormControl): string {
     if (amI == null || amI === undefined)
@@ -200,21 +198,23 @@ getErrors(formGroup: any, errors: any = {}) {
     return control.value;
   }
 
-  gotoPage(selectPage: any): void {
-    window.scroll(0, 0);
-    this.currentFormStep = selectPage.selectedIndex;
-  }
-
   getFormGroupName(groupIndex: any) {
     let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     return elements[groupIndex];
   }
 
+  gotoPage(selectPage: any): void {
+    window.scroll(0, 0);
+    this.currentFormStep = selectPage.selectedIndex;
+  }
+
   gotoNextStep(stepper: MatStepper): void {
     if (stepper != null) {
-      console.log(stepper.selectedIndex);
+      //console.log(stepper.selectedIndex);
       var desiredFormIndex = stepper.selectedIndex;
       var formGroupName = this.getFormGroupName(desiredFormIndex);
+
+      this.formFullyValidated = this.form.valid;
 
       if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
         var formParts = this.form.get(formGroupName);
@@ -223,32 +223,17 @@ getErrors(formGroup: any, errors: any = {}) {
         if (formParts != null) {
           formValid = formParts.valid;
         }
-        console.log("Page " + desiredFormIndex + " valid: " + formValid);
+        //console.log("Page " + desiredFormIndex + " valid: " + formValid);
 
         if (formValid) {
           window.scroll(0, 0);
           stepper.next();
         } else {
           this.validateAllFormFields(formParts);
-          console.log(this.getErrors(formParts));
+          //console.log(this.getErrors(formParts));
         }
-
       }
-
-      //if (stepper.selectedIndex == 2) {
-      //  var form1Valid = this.form.get('crimeInformation').valid;
-      //  console.log("Page 2 valid: " + form1Valid);
-      //  if (form1Valid) {
-      //    window.scroll(0, 0);
-      //    stepper.next();
-      //  } else {
-      //    this.validateAllFormFields(this.form.get('crimeInformation'));
-      //    console.log(this.getErrors(this.form.get('crimeInformation'));
-      //  }
-      //}
     }
-
-    //stepper.next();
   }
 
   addProvider(): void {
@@ -413,17 +398,17 @@ getErrors(formGroup: any, errors: any = {}) {
       representativeInformation: this.fb.group({
         completingOnBehalfOf: ['1'],
 
-        representativeFirstName: ['', Validators.required],
+        representativeFirstName: [''], //, Validators.required],
         representativeMiddleName: [''],
-        representativeLastName: ['', Validators.required],
+        representativeLastName: [''], //, Validators.required],
 
         representativeAddressLine1: [''],
         representativeAddressCity: [''],
         representativeAddressPostalCode: ['', [Validators.pattern(postalRegex)]],
         representativeAddressProvince: [{ value: 'British Columbia', disabled: false }],
         representativeAddressCountry: [{ value: 'Canada', disabled: false }],
-        representativePhoneNumbr: ['', Validators.required],
-        representativeEmail: ['', [Validators.required, Validators.email]],
+        representativePhoneNumbr: [''], //, Validators.required],
+        representativeEmail: [''], //, [Validators.required, Validators.email]],
 
         relationshipImmediateFamilyMember: [''],
         relationshipToVictim: [''],
@@ -451,31 +436,31 @@ getErrors(formGroup: any, errors: any = {}) {
         authorizedPersonRelationship: [''],
         authorizedPersonAgencyName: [''],
         authorizedPersonAgencyAddress: [''],
-        authorizedPersonAuthorizesDiscussion: [false, Validators.required],
-        authorizedPersonSignature: ['', Validators.required],
-        authorizedPersonSignDate: ['', Validators.required],
+        authorizedPersonAuthorizesDiscussion: [false], //, Validators.required],
+        authorizedPersonSignature: [''], //, Validators.required],
+        authorizedPersonSignDate: [''], //, Validators.required],
       }),
     });
   }
 
   submitApplication() {
-    console.log("Form valid? " + this.form.valid);
-
-    //if (this.form.valid) {
-    this.save().subscribe(data => {
-      console.log("submitting");
-      this.router.navigate(['/application-success']);
-    });
-    //} else {
-    //      console.log("form not validated");
-    //      this.markAsTouched();
-    //}
+    if (this.form.valid) {
+      this.formFullyValidated = true;
+      this.save().subscribe(data => {
+        console.log("submitting");
+        this.router.navigate(['/application-success']);
+      });
+    } else {
+      console.log("form not validated");
+      this.formFullyValidated = false;
+      this.markAsTouched();
+    }
   }
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const value = <DynamicsApplicationModel>{
-      //this.form.get('businessProfile').value,
+    const value = <DynamicsApplicationModel> {
+      
     };
 
     value.applicantsfirstname = this.form.get('personalInformation.firstName').value;

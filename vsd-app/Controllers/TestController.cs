@@ -12,7 +12,6 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -125,7 +124,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                         application.Application.VsdApplicantsgendercode = model.applicantsgender;
 
                     if (model.applicantsmaritalstatus > 0)
-                        application.Application.VsdApplicantsmaritalstatus = model.applicantsgender;
+                        application.Application.VsdApplicantsmaritalstatus = model.applicantsmaritalstatus;
 
 
                     if (!string.IsNullOrWhiteSpace(model.typeofcrime))
@@ -170,15 +169,16 @@ namespace Gov.Jag.VictimServices.Public.Controllers
             {
                 OdataType = "Microsoft.Dynamics.CRM.vsd_application",
                 VsdApplicanttype = 100000002,
-                VsdApplicantsfirstname = "N41",
-                VsdApplicantslastname = "Test 5",
-                VsdApplicantsbirthdate = "2000-04-01T00:00:00",
+                VsdApplicantsfirstname = "CVAP",
+                VsdApplicantslastname = "Form Test",
+                VsdApplicantsbirthdate = "1980-05-05T00:00:00",
                 VsdApplicantsgendercode = 100000000,
-                VsdCvapTypeofcrime = "Faux Pas",
+                VsdApplicantsmaritalstatus = 100000000,
+                VsdCvapTypeofcrime = "Break-in",
                 VsdApplicantsemail = "test@test.com",
                 VsdApplicantsprimaryphonenumber = "250-444-5656",
 
-                VsdCvapCrimestartdate = "2018-04-01T00:00:00",
+                VsdCvapCrimestartdate = "2018-06-03T00:00:00",
                 VsdApplicantssignature = "Crime Victim Guy",
                 VsdCvapAuthorizationsigneddate = "2019-02-07T00:00:00",
                 VsdCvapDeclarationsigneddate = "2019-02-07T00:00:00",

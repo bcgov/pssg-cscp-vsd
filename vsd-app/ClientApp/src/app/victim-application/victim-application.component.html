@@ -186,7 +186,7 @@
 
             <app-field label="Gender" [required]="false" errorMessage="Please select your gender from the dropdown list">
               <select class="form-control" style="width: 250px;" formControlName="gender">
-                <option value="">Select...</option>
+                <option value="0">Select...</option>
                 <option value="100000000">Male</option>
                 <option value="100000001">Female</option>
                 <option value="100000002">Unidentified</option>
@@ -195,7 +195,7 @@
 
             <app-field label="Marital Status" [required]="false" errorMessage="Please select your marital status from the dropdown list">
               <select class="form-control" style="width: 250px;" formControlName="maritalStatus">
-                <option value="">Select...</option>
+                <option value="0">Select...</option>
                 <option value="100000000">Married</option>
                 <option value="100000001">Common Law</option>
                 <option value="100000002">Widowed</option>
@@ -237,6 +237,7 @@
             <app-field label="{{ primaryPostalCodeType }}" [required]="false" [valid]="form.get('personalInformation.primaryAddressPostalCode').valid || !form.get('personalInformation.primaryAddressPostalCode').touched" errorMessage="Please enter your primary postal code">
               <input class="form-control" style="width: 200px;" type="text" placeholder="{{ primaryPostalCodeSample }}" formControlName="primaryAddressPostalCode">
             </app-field>
+            <br />
 
             <h3>Alternate Address <span>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</span></h3>
             <app-field label="Country">
@@ -1125,7 +1126,12 @@
             <section>
               <h2 class="blue-header">Overview</h2>
 
-              <p>[ ] I have read and understood all the above information.</p>
+              <p>
+                <label class="inline-label">
+                  <input type="checkbox" checked="checked" disabled="disabled" />
+                  <span>I have read and understood all the above information.</span>
+                </label>
+                </p>
 
             </section>
 
@@ -1252,7 +1258,7 @@
                   </tr>
                   <tr>
                     <th>When did this crime occur?</th>
-                    <td>-- single date, or date range output --</td>
+                    <td>--</td>
                   </tr>
                   <tr>
                     <th>Is this application being filed within one year of the date of the crime?</th>
@@ -1298,7 +1304,7 @@
                   </tr>
                   <tr>
                     <th>Date of report</th>
-                    <td>-- single date, or date range output --</td>
+                    <td>--</td>
                   </tr>
                   <tr>
                     <th>Police File Number</th>
@@ -1395,7 +1401,7 @@
                   </tr>
                   <tr>
                     <th>Date of treatment</th>
-                    <td>-- treatedAtHospitalDate -- </td>
+                    <td>--</td>
                   </tr>
                   <tr>
                     <th>Family doctor's name</th>
@@ -1420,7 +1426,7 @@
             </section>
           </div>
 
-          <div *ngIf="!form.valid && form.touched" class="error-summary">
+          <div *ngIf="stepper.selectedIndex == 9 && formFullyValidated === false" class="error-summary">
             <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
             <span>Some required fields have not been completed</span>
           </div>
