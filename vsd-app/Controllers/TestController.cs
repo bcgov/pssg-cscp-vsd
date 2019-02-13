@@ -115,7 +115,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                     if (!string.IsNullOrWhiteSpace(model.applicantsphoneNumber))
                         application.Application.VsdApplicantsprimaryphonenumber = model.applicantsphoneNumber;
 
-                    if (!string.IsNullOrWhiteSpace(model.applicantsotherlastname))
+                    if (!string.IsNullOrWhiteSpace(model.applicantsemail))
                         application.Application.VsdApplicantsemail = model.applicantsemail;
 
                     // Try set birthdate here
