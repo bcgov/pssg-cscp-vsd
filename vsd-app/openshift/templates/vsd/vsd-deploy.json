@@ -479,14 +479,14 @@
       "displayName": "Name",
       "description": "The name assigned to all of the resources defined in this template.",
       "required": true,
-      "value": "vsd"
+      "value": "vsd-app"
     },
     {
       "name": "SOURCE_IMAGE_NAME",
       "displayName": "Source Image Name",
       "description": "The name of the image to use for this resource.",
       "required": true,
-      "value": "vsd"
+      "value": "vsd-app"
     },
     {
       "name": "IMAGE_NAMESPACE",
@@ -537,20 +537,20 @@
       "description": "The endpoint used for SiteMinder routed access to the application.",
       "displayName": "SiteMinder Application Domain",
       "name": "SITEMINDER_APPLICATION_DOMAIN",
-      "value": "vsd-dev.pathfinder.bcgov"
+      "value": "vsd-app-dev.pathfinder.bcgov"
     },
     {
       "description": "The exposed hostname that will route to the service, e.g., myappname.pathfinder.gov.bc.ca, if left blank a value will be defaulted.",
       "displayName": "Application Domain",
       "name": "APPLICATION_DOMAIN",
-      "value": "vsd-dev.pathfinder.gov.bc.ca"
+      "value": "vsd-app-dev.pathfinder.gov.bc.ca"
     },
     {
       "description": "Webname for Sharepoint, e.g., pill pressdev, if left blank a value will be defaulted.",
       "displayName": "Sharepoint Webname",
       "name": "SHAREPOINT_WEBNAME",
       "required": false,
-      "value": "vsd"
+      "value": "vsd-app"
     },
     {
       "description": "Sharepoint Tenant ID and Dynamics Tenant ID, e.g., bcgovtrial.onmicrosoft.com, if left blank a value will be defaulted.",
@@ -610,7 +610,7 @@
       "displayName": "Secret resource name",
       "description": "Secret resource name",
       "required": true,
-      "value": "vsd"
+      "value": "vsd-app"
     },
     {
       "name": "SITEMINDER_LOGOUT_URL",
