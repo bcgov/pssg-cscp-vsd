@@ -1,7 +1,7 @@
-<div class="form-wrapper" style="position: relative;">
+<div class="form-wrahide-mepper" style="position: relative;">
   <div [ngBusy]="[busy, busy2]"></div>
   <div class="row" [formGroup]="form">
-    <div class="col-lg-3 col-sm-12" style="position: relative; padding-right: 50px;">
+    <div class="col-lg-3 col-sm-12 application-gutter">
       <section class="application-nav">
         <h3>Victim Application</h3>
         <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
@@ -31,20 +31,27 @@
           <p><a [attr.href]="summaryOfBenefitsUrl" target="_blank" class="btn btn-secondary">View Summary of Benefits</a></p>
         </div>
       </section>
+
+      <p>
+        <a href="#" (click)="testSnaks()">Show Form Data</a>
+        <button (click)="markAsTouched(); submitPartialApplication();" class="btn btn-primary">Partial Submit <i class="fas fa-chevron-right"></i></button>
+      </p>
     </div>
 
     <div class="col-lg-7 col-sm-12">
       <div [formGroup]="form">
         <div *ngIf="dataLoaded || true">
-          <div formGroupName="introduction" class="hide-me" *ngIf="this.currentFormStep == 0">
-            <h1>Overview</h1>
+          <div formGroupName="introduction" *ngIf="this.currentFormStep == 0">
+            <div class="page-header">
+              <h1>Overview</h1>
+            </div>
 
             <h2>Before you apply</h2>
             <h3>Who may use this application?</h3>
 
-            <p>This application form is designed for a Victim of violent crime. Under the Crime Victim Assistance Act, a Victim is a person who is injured physically or psychologically as a result of certain crimes committed in British Columbia.</p>
-            <p>If this definition does not apply to you, please see the application forms for  Witnesses or Immediate Family Members.</p>
-            <p>If the victim is deceased, please see the application for Immediate Family Members.</p>
+            <p>This application form is designed for a <strong>Victim of violent crime</strong>. Under the <em>Crime Victim Assistance Act</em>, a Victim is a person who is injured physically or psychologically as a result of certain crimes committed in British Columbia.</p>
+            <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/family-member-application">Immediate Family Members</a>.</p>
+            <p>If the victim is deceased, please see the application for <a routerLink="/family-member-application">Immediate Family Members</a>.</p>
 
             <h3>What types of benefits does the Crime Victim's Assistance Program provide?</h3>
 
@@ -68,7 +75,7 @@
               <li>injuries sustained from an offence occurring outside of B.C. or prior to July 1, 1972</li>
             </ul>
 
-            <p>Note: The Crime Victim Assistance Program will only provide benefits that are not covered by other programs (e.g., EI, ICBC, extended health coverage, personal insurance).</p>
+            <p class="text-muted"><em>Note: The Crime Victim Assistance Program will only provide benefits that are not covered by other programs (e.g., EI, ICBC, extended health coverage, personal insurance).</em></p>
             <p><a href="#">View full summary of benefits</a></p>
 
             <hr />
@@ -76,9 +83,9 @@
             <h2>Instructions</h2>
 
             <h3>Filling out the application</h3>
-            <p>The application form is also available in PDF format at www.gov.bc.ca/crimevictimassistance. To download the appropriate viewer, visit http://get.adobe.com/reader.</p>
+            <p>The application form is also available in PDF format at <a href="https://www.gov.bc.ca/crimevictimassistance" target="_blank">www.gov.bc.ca/crimevictimassistance</a>. To download the appropriate viewer, visit <a href="http://get.adobe.com/reader" target="_blank">http://get.adobe.com/reader</a>.</p>
             <p>Print versions of the application form are also available from the Crime Victim Assistance Program or a local victim service program.</p>
-            <p>A local victim service program can help you complete this application. To locate a program near you, call VictimLink BC toll-free at 1-800-563-0808.</p>
+            <p>A local victim service program can help you complete this application. To locate a program near you, call VictimLink BC toll-free at <strong>1-800-563-0808</strong>.</p>
 
             <h3>Be complete and accurate</h3>
             <p>Please ensure that all form fields that you fill in are done so accurately. Any information that is inaccurate will affect the processing of your claim.</p>
@@ -101,40 +108,72 @@
             </ul>
 
             <h3>Time needed to complete this application</h3>
-            <p>This application will take approximately 45 minutes to complete. You will not be able to save and come back to your application, so please be sure that you have enough time to finish it in one session.</p>
+            <p>This application will take approximately <strong>45 minutes</strong> to complete. You will <strong>not</strong> be able to save and come back to your application, so please be sure that you have enough time to finish it in one session.</p>
 
             <hr />
 
-            <p>If your address or telephone number changes after submitting this application, please inform the Crime Victim Assistance Program by calling 1-866-660-3888.</p>
-            <p>For additional questions, please contact the Crime Victim Assistance Program at 604-660-3888 or toll free in B.C. at 1-866-660-3888.</p>
-            <p>For more information, see the Government of British Columbia website at www.gov.bc.ca/crimevictimassistance or query &ldquo;cvap bc&rdquo; using your internet search engine.</p>
+            <p>If your address or telephone number changes after submitting this application, please inform the Crime Victim Assistance Program by calling <strong>1-866-660-3888</strong>.</p>
+            <p>For additional questions, please contact the Crime Victim Assistance Program at <strong>604-660-3888</strong> or toll free in B.C. at <strong>1-866-660-3888</strong>.</p>
+            <p>For more information, see the Government of British Columbia website at <a href="https://www.gov.bc.ca/crimevictimassistance" target="_blank">www.gov.bc.ca/crimevictimassistance</a> or query &ldquo;cvap bc&rdquo; using your internet search engine.</p>
+            <br /><br />
 
             <section>
               <app-field [valid]="isFieldValid('introduction.understoodInformation')" errorMessage="Indicate that you have read and understood all of the above information">
                 <label class="inline-label">
                   <input type="checkbox" style="margin-right: 10px;" formControlName="understoodInformation" [value]="true">
-                  <span>I have read and understood all the above information. *</span>
+                  <span>I have read and understood all the above information. <span class="error-states ng-star-inserted">*</span></span>
                 </label>
-                </app-field>
+              </app-field>
             </section>
+
+            <hr />
+
+            <section class="radio-list">
+              <app-field label="I am:" [required]="true" [valid]="isFieldValid('introduction.completingOnBehalfOf')" errorMessage="Please indicate who is completing this form.">
+                <label>
+                  <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                  Completing this application for myself
+                </label>
+                <br />
+                <label>
+                  <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                  A Victim Service Worker or other person helping a victim complete this application
+                </label>
+                <br />
+
+                <label>
+                  <input type="radio" [value]="100000002" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                  A parent completing this application for my minor child (19 and below)
+                </label>
+                <br />
+
+                <label>
+                  <input type="radio" [value]="100000002" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                  A legal representative or legal guardian completing this application on behalf of someone else
+                </label>
+              </app-field>
+            </section>
+
           </div>
 
           <div formGroupName="personalInformation" *ngIf="this.currentFormStep == 1">
-            <h1>Personal Information & Addresses</h1>
+            <div class="page-header">
+              <h1>Personal Information & Addresses</h1>
+            </div>
             <h2 class="blue-header">Personal Information</h2>
 
             <h3>Applicant Name</h3>
 
             <app-field label="First Name" [required]="true" [valid]="isFieldValid('personalInformation.firstName')" errorMessage="Please enter your first name">
-              <input class="form-control" style="width: 350px;" type="text" formControlName="firstName">
+              <input class="form-control" style="width: 350px;" type="text" formControlName="firstName" maxlength="100">
             </app-field>
 
             <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('personalInformation.middleName')" errorMessage="Please enter your middle name">
-              <input class="form-control" style="width: 350px;" type="text" formControlName="middleName">
+              <input class="form-control" style="width: 350px;" type="text" formControlName="middleName" maxlength="100">
             </app-field>
 
             <app-field label="Last Name" [required]="true" [valid]="isFieldValid('personalInformation.lastName')" errorMessage="Please enter your last name">
-              <input class="form-control" style="width: 350px;" type="text" formControlName="lastName">
+              <input class="form-control" style="width: 350px;" type="text" formControlName="lastName" maxlength="100">
             </app-field>
 
             <label class="inline-label">
@@ -146,11 +185,11 @@
               <h3>Other Names Used</h3>
 
               <app-field label="Other First Name" [required]="false" errorMessage="Please enter your other first name">
-                <input class="form-control" style="width: 350px;" type="text" formControlName="otherFirstName">
+                <input class="form-control" style="width: 350px;" type="text" formControlName="otherFirstName" maxlength="100">
               </app-field>
 
               <app-field label="Other Last Name" [required]="false" errorMessage="Please enter your other last name">
-                <input class="form-control" style="width: 350px;" type="text" formControlName="otherLastName">
+                <input class="form-control" style="width: 350px;" type="text" formControlName="otherLastName" maxlength="100">
               </app-field>
 
               <app-field label="Date of Name Change">
@@ -161,30 +200,13 @@
             </div>
 
             <h3>Other Details</h3>
-            <app-field label="Primary Phone Number (inc. area code)" [required]="true" [valid]="form.get('personalInformation.phoneNumber').valid || !form.get('personalInformation.phoneNumber').touched" errorMessage="Please enter your 10-digit phone number">
-              <input class="form-control" style="width: 250px;" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
-            </app-field>
-
-            <app-field label="Email Address" [required]="true" [valid]="form.get('personalInformation.email').valid || !form.get('personalInformation.email').touched" errorMessage="Please enter your email address">
-              <input class="form-control" style="width: 350px;" type="text" (blur)="trimValue(form.get('personalInformation.email'))" formControlName="email">
-            </app-field>
-
-            <app-field label="Birthdate" [required]="true" [valid]="form.get('personalInformation.birthDate').valid || !form.get('personalInformation.birthDate').touched" errorMessage="Please enter your birth date">
+            <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('personalInformation.birthDate')" errorMessage="Please enter your birth date">
               <input type="text" class="form-control" formControlName="birthDate" placeholder="yyyy-mm-dd"
                      [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
               <mat-datepicker #birthDatePicker></mat-datepicker>
             </app-field>
 
-            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="form.get('personalInformation.sinPart1').valid || !form.get('personalInformation.sinPart1').touched" errorMessage="Please enter your SIN">
-              <input class="form-control" style="width: 50px;" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart1">
-              <span> - </span>
-              <input class="form-control" style="width: 50px;" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
-              <span> - </span>
-              <input class="form-control" style="width: 50px;" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
-              <span>[info icon]</span>
-            </app-field>
-
-            <app-field label="Gender" [required]="false" errorMessage="Please select your gender from the dropdown list">
+            <app-field label="Gender" [required]="true" [valid]="isFieldValid('personalInformation.gender')" errorMessage="Please select your gender from the dropdown list">
               <select class="form-control" style="width: 250px;" formControlName="gender">
                 <option value="0">Select...</option>
                 <option value="100000000">Male</option>
@@ -193,7 +215,7 @@
               </select>
             </app-field>
 
-            <app-field label="Marital Status" [required]="false" errorMessage="Please select your marital status from the dropdown list">
+            <app-field label="Marital Status" [required]="true" [valid]="isFieldValid('personalInformation.maritalStatus')" errorMessage="Please select your marital status from the dropdown list">
               <select class="form-control" style="width: 250px;" formControlName="maritalStatus">
                 <option value="0">Select...</option>
                 <option value="100000000">Married</option>
@@ -205,82 +227,123 @@
               </select>
             </app-field>
 
-            <app-field label="Occupation" [required]="false" [valid]="form.get('personalInformation.occupation').valid || !form.get('personalInformation.occupation').touched" errorMessage="Please enter your occupation">
-              <input class="form-control" style="width: 350px;" type="text" formControlName="occupation">
+            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="form.get('personalInformation.sinPart1').valid || !form.get('personalInformation.sinPart1').touched" errorMessage="Please enter your SIN">
+              <input class="form-control" style="width: 50px;" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart1">
+              <span> - </span>
+              <input class="form-control" style="width: 50px;" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
+              <span> - </span>
+              <input class="form-control" style="width: 50px;" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
+              <span>[info icon]</span>
             </app-field>
 
-            <h2 class="blue-header">Addresses</h2>
+            <app-field label="Occupation" [required]="false" [valid]="isFieldValid('personalInformation.occupation')" errorMessage="Please enter your occupation">
+              <input class="form-control" style="width: 350px;" type="text" formControlName="occupation" maxlength="100">
+            </app-field>
+
+
+            <h2 class="blue-header">Contact Information</h2>
+
+            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('personalInformation.preferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
+              <select class="form-control" style="width: 250px;" formControlName="preferredMethodOfContact">
+                <option value="0">Select...</option>
+                <option value="100000000">Phone Call</option>
+                <option value="100000001">Email</option>
+                <option value="100000002">Mail</option>
+              </select>
+            </app-field>
+
+            <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('personalInformation.phoneNumber')" errorMessage="Please enter your 10-digit phone number">
+              <input class="form-control" style="width: 250px;" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
+            </app-field>
+
+            <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('personalInformation.alternatePhoneNumber')" errorMessage="Please enter your 10-digit phone number">
+              <input class="form-control" style="width: 250px;" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
+            </app-field>
+
+            <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('personalInformation.email')" errorMessage="Please enter your email address">
+              <input class="form-control" style="width: 350px;" type="text" (blur)="trimValue(form.get('personalInformation.email'))" formControlName="email" maxlength="100">
+            </app-field>
+
 
             <h3>Primary Address</h3>
-            <app-field label="Country">
-              <select class="form-control" style="width: 350px;" formControlName="primaryAddressCountry" (change)="updatePrimaryLocation($event)">
-                <option value="">Choose a country</option>
-                <option *ngFor="let item of countryList" [value]="item.name">
-                  {{ item.name }}
-                </option>
-              </select>
-            </app-field>
-            <app-field label="{{ primaryProvinceType }}">
-              <select class="form-control" style="width: 350px;" formControlName="primaryAddressProvince">
-                <option value="">Choose a {{ primaryProvinceType }}</option>
-                <option *ngFor="let item of primaryProvinceList" [value]="item">
-                  {{item}}
-                </option>
-              </select>
-            </app-field>
-            <app-field label="City" [required]="false" [valid]="form.get('personalInformation.primaryAddressCity').valid || !form.get('personalInformation.primaryAddressCity').touched" errorMessage="Please enter your primary city">
-              <input class="form-control" style="width: 350px;" type="text" formControlName="primaryAddressCity">
-            </app-field>
-            <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)" [required]="false" [valid]="form.get('personalInformation.primaryAddressLine1').valid || !form.get('personalInformation.primaryAddressLine1').touched" errorMessage="Please enter your primary mailing address">
-              <input class="form-control" style="width: 400px;" type="text" formControlName="primaryAddressLine1">
-            </app-field>
-            <app-field label="{{ primaryPostalCodeType }}" [required]="false" [valid]="form.get('personalInformation.primaryAddressPostalCode').valid || !form.get('personalInformation.primaryAddressPostalCode').touched" errorMessage="Please enter your primary postal code">
-              <input class="form-control" style="width: 200px;" type="text" placeholder="{{ primaryPostalCodeSample }}" formControlName="primaryAddressPostalCode">
-            </app-field>
-            <br />
-
+            <div formGroupName="primaryAddress">
+              <app-field label="Country">
+                <select class="form-control" style="width: 350px;" formControlName="country" (change)="updatePrimaryLocation($event)">
+                  <option value="">Choose a country</option>
+                  <option *ngFor="let item of countryList" [value]="item.name">
+                    {{ item.name }}
+                  </option>
+                </select>
+              </app-field>
+              <app-field label="{{ primaryProvinceType }}">
+                <select class="form-control" style="width: 350px;" formControlName="province">
+                  <option value="">Choose a {{ primaryProvinceType }}</option>
+                  <option *ngFor="let item of primaryProvinceList" [value]="item">
+                    {{item}}
+                  </option>
+                </select>
+              </app-field>
+              <app-field label="City" [required]="true" [valid]="isChildFieldValid('personalInformation', 'primaryAddress.city')" errorMessage="Please enter your primary city">
+                <input class="form-control" style="width: 350px;" type="text" formControlName="city">
+              </app-field>
+              <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)" [required]="addressIsRequired" [valid]="isFieldValid('personalInformation.primaryAddress.line1')" errorMessage="Please enter your primary mailing address">
+                <input class="form-control" style="width: 400px;" type="text" formControlName="line1"><br /><br />
+                <input class="form-control" style="width: 400px;" type="text" formControlName="line2"><br /><br />
+                <input class="form-control" style="width: 400px;" type="text" formControlName="line3">
+              </app-field>
+              <app-field label="{{ primaryPostalCodeType }}" [required]="false" [valid]="isChildFieldValid('personalInformation', 'primaryAddress.postalCode')" errorMessage="Please enter your primary postal code">
+                <input class="form-control" style="width: 200px;" type="text" placeholder="{{ primaryPostalCodeSample }}" formControlName="postalCode">
+              </app-field>
+              <br />
+            </div>
             <h3>Alternate Address <span>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</span></h3>
-            <app-field label="Country">
-              <select class="form-control" style="width: 350px;" formControlName="alternateAddressCountry" (change)="updateAlternateLocation($event)">
-                <option value="">Choose a country</option>
-                <option *ngFor="let item of countryList" [value]="item.name">
-                  {{ item.name }}
-                </option>
-              </select>
-            </app-field>
-            <app-field label="{{ alternateProvinceType }}">
-              <select class="form-control" style="width: 350px;" formControlName="alternateAddressProvince">
-                <option value="">Choose a {{ alternateProvinceType }}</option>
-                <option *ngFor="let item of alternateProvinceList" [value]="item">
-                  {{item}}
-                </option>
-              </select>
-            </app-field>
-            <app-field label="City" [required]="false" [valid]="form.get('personalInformation.alternateAddressCity').valid || !form.get('personalInformation.alternateAddressCity').touched" errorMessage="Please enter your alternate city">
-              <input class="form-control" style="width: 350px;" type="text" formControlName="alternateAddressCity">
-            </app-field>
-            <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)" [required]="false" [valid]="form.get('personalInformation.alternateAddressLine1').valid || !form.get('personalInformation.alternateAddressLine1').touched" errorMessage="Please enter your alternate mailing address">
-              <input class="form-control" style="width: 400px;" type="text" formControlName="alternateAddressLine1">
-            </app-field>
-            <app-field label="{{ alternatePostalCodeType }}" [required]="false" [valid]="form.get('personalInformation.alternateAddressPostalCode').valid || !form.get('personalInformation.alternateAddressPostalCode').touched" errorMessage="Please enter your alternate postal code">
-              <input class="form-control" style="width: 200px;" type="text" placeholder="{{ alternatePostalCodeSample }}" formControlName="alternateAddressPostalCode">
-            </app-field>
+            <div formGroupName="alternateAddress">
+              <app-field label="Country">
+                <select class="form-control" style="width: 350px;" formControlName="country" (change)="updateAlternateLocation($event)">
+                  <option value="">Choose a country</option>
+                  <option *ngFor="let item of countryList" [value]="item.name">
+                    {{ item.name }}
+                  </option>
+                </select>
+              </app-field>
+              <app-field label="{{ alternateProvinceType }}">
+                <select class="form-control" style="width: 350px;" formControlName="province">
+                  <option value="">Choose a {{ alternateProvinceType }}</option>
+                  <option *ngFor="let item of alternateProvinceList" [value]="item">
+                    {{item}}
+                  </option>
+                </select>
+              </app-field>
+              <app-field label="City" errorMessage="Please enter your alternate city">
+                <input class="form-control" style="width: 350px;" type="text" formControlName="city">
+              </app-field>
+              <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
+                <input class="form-control" style="width: 400px;" type="text" formControlName="line1"><br /><br />
+                <input class="form-control" style="width: 400px;" type="text" formControlName="line2"><br /><br />
+                <input class="form-control" style="width: 400px;" type="text" formControlName="line3">
+              </app-field>
+              <app-field label="{{ alternatePostalCodeType }}">
+                <input class="form-control" style="width: 200px;" type="text" placeholder="{{ alternatePostalCodeSample }}" formControlName="postalCode">
+              </app-field>
+            </div>
           </div>
 
-          <div formGroupName="crimeInformation" class="hide-me" *ngIf="this.currentFormStep == 2">
-            <h1>Crime Information</h1>
+          <div formGroupName="crimeInformation" *ngIf="this.currentFormStep == 2">
+            <div class="page-header">
+              <h1>Crime Information</h1>
+            </div>
             <section>
               <h2 class="blue-header">Crime Occurence</h2>
 
               <h3>Crime Type</h3>
 
-              <app-field label="Type of crime (e.g. home invastion, assault)" [required]="true" [valid]="isFieldValid('crimeInformation.typeOfCrime')" errorMessage="Please enter the type of crime">
+              <app-field label="Please indicate the type of crime that occurred (e.g. home invasion, assault)" [required]="true" [valid]="isFieldValid('crimeInformation.typeOfCrime')" errorMessage="Please enter the type of crime">
                 <input class="form-control" style="width: 350px;" type="text" formControlName="typeOfCrime">
               </app-field>
 
               <h3>Crime Date(s)</h3>
 
-              <app-field label="When did this crime occur?" errorMessage="Please make a selection" [showChevrons]="false">
+              <app-field label="If the crime occurred over a period of time please provide the approximate dates (e.g., Sept 2001 - Dec 2002)." errorMessage="Please make a selection" [showChevrons]="false">
                 <label class="inline-label">
                   <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
                   <span>On a single day</span>
@@ -330,18 +393,18 @@
 
               <section>
                 <h3>Crime Location(s)</h3>
-                <app-field label="Please provide the city/town in BC where the crime took place. If the crime occured over a period of time in more than one location, please provide the names of all locations">
+                <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeLocations')" label="Please provide the city/town in BC where the crime took place. If the crime occured over a period of time in more than one location, please provide the names of all locations" errorMessage="Please detail locations">
                   <textarea class="form-control standard" formControlName="crimeLocations"></textarea>
                 </app-field>
               </section>
 
               <section>
                 <h3>Crime Details</h3>
-                <app-field label="Please briefly describe how the incident occured, in your own words.">
+                <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeDetails')" label="Please briefly describe how the incident occured, in your own words. Please complete this section even if you have filed a police report." errorMessage="Please detail crime">
                   <textarea class="form-control bigger" formControlName="crimeDetails"></textarea>
                 </app-field>
 
-                <app-field label="Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness)">
+                <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeInjuries')" label="Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness)." errorMessage="Please detail injuries">
                   <textarea class="form-control standard" formControlName="crimeInjuries"></textarea>
                 </app-field>
 
@@ -358,21 +421,21 @@
 
               <app-field label="Was a report made to the police?" errorMessage="Please make a selection" [showChevrons]="false">
                 <label class="inline-label">
-                  <input type="radio" [value]="true" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+                  <input type="radio" [value]="100000001" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="false" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+                  <input type="radio" [value]="100000000" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
                   <span>No</span>
                 </label>
               </app-field>
 
-              <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === true">
+              <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000001">
                 <app-field label="To which police force was the report made?">
                   <input class="form-control" style="width: 350px;" type="text" formControlName="policeReportedWhichPoliceForce">
                 </app-field>
 
-                <app-field label="Date of crime">
+                <app-field label="Date report was made to the police.">
                   <input type="text" class="form-control" formControlName="policeReportedDate" placeholder="yyyy-mm-dd"
                          [matDatepicker]="policeReportedDateDatePicker" (focus)="policeReportedDateDatePicker.open()" (click)="policeReportedDateDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
                   <mat-datepicker #policeReportedDateDatePicker></mat-datepicker>
@@ -387,9 +450,9 @@
                 </app-field>
               </section>
 
-              <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === false">
+              <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000000">
                 <app-field label="Please identify who the report was made to (e.g. doctor, social worker, counsellor, other)">
-                  <input class="form-control" style="width: 350px;" type="text" formControlName="noPoliceReportIndentification">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="noPoliceReportIdentification">
                 </app-field>
               </section>
 
@@ -415,77 +478,199 @@
                 <input class="form-control" style="width: 350px;" type="text" formControlName="offenderRelationship">
               </app-field>
 
-              <app-field label="Has the alleged offender been charged?">
+              <app-field label="Has the alleged offender been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
                 <label class="inline-label">
-                  <input type="radio" [value]="1" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                  <input type="radio" [value]="100000000" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="2" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                  <input type="radio" [value]="100000001" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                   <span>No</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="3" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                  <input type="radio" [value]="100000002" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                   <span>Unknown</span>
                 </label>
               </app-field>
 
               <h3>Court Information</h3>
-              <app-field label="Court File Number (if known) [tooltip icon]">
-                <input class="form-control" style="width: 350px;" type="text" formControlName="courtFileNumber">
-              </app-field>
-
-              <app-field label="Court Location">
-                <input class="form-control" style="width: 350px;" type="text" formControlName="courtLocation">
-              </app-field>
+              <div class="court-information">
+                <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('crimeInformation.courtFiles').controls; let i = index;">
+                  <div [formGroupName]="i" class="court-files">
+                    <app-field label="Court File Number (if known) [tooltip icon]">
+                      <input class="form-control" style="width: 350px;" type="text" formControlName="courtFileNumber">
+                      <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">
+                        <i class="fas fa-trash-alt"></i> Remove Court File and Location
+                      </a>
+                    </app-field>
+                    <app-field label="Court Location">
+                      <input class="form-control" style="width: 350px;" type="text" formControlName="courtLocation">
+                    </app-field>
+                  </div>
+                </div>
+                <a href="javascript:void(0);" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add Additional Court Information</a>
+              </div>
 
               <app-field label="Have you sued the alleged offender(s)?">
                 <label class="inline-label">
-                  <input type="radio" [value]="true" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
+                  <input type="radio" [value]="100000001" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="false" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
+                  <input type="radio" [value]="100000000" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
                   <span>No</span>
                 </label>
               </app-field>
-
-              <section *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === true">
-                <app-field label="Court File Number">
-                  <input class="form-control" style="width: 350px;" type="text" formControlName="suedCourtFileNumber">
-                </app-field>
-
-                <app-field label="Court Location">
-                  <input class="form-control" style="width: 350px;" type="text" formControlName="suedCourtLocation">
-                </app-field>
-              </section>
-
-              <section *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === false">
+              <section *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === 100000000">
                 <app-field label="Do you intend to sue the alleged offender?">
                   <label class="inline-label">
-                    <input type="radio" [value]="1" name="intendToSueOffender" formControlName="intendToSueOffender">
+                    <input type="radio" [value]="100000000" name="intendToSueOffender" formControlName="intendToSueOffender">
                     <span>Yes</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="2" name="intendToSueOffender" formControlName="intendToSueOffender">
+                    <input type="radio" [value]="100000001" name="intendToSueOffender" formControlName="intendToSueOffender">
                     <span>No</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="3" name="intendToSueOffender" formControlName="intendToSueOffender">
+                    <input type="radio" [value]="100000002" name="intendToSueOffender" formControlName="intendToSueOffender">
                     <span>Undecided</span>
                   </label>
                 </app-field>
               </section>
+
+              <!-- RACAF FORM -->
+              <section *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === 100000001 || form.get('crimeInformation.intendToSueOffender').value === 100000000">
+
+                <div formGroupName="racafInformation">
+                  <h2 class="blue-header">Restitution and Civil Action</h2>
+
+                  <p><strong>Please note:</strong></p>
+                  <p>You are not required to take legal action (a civil action or lawsuit) against anyone responsible for injury or loss. However, if you have taken legal action or intend to do so, we need to know this</p>
+                  <p>Signing this form does not mean that you agree with the decision on the claim, and does not affect your right to request a reconsideration or reassessment of that decision.</p>
+
+                  <h3>Restitution</h3>
+                  <p><strong>Restitution</strong> refers to money that an offender is ordered to pay a victim, to help cover the victim’s monetary loss. Restitution is ordered by a judge in a criminal court as part of the offender’s sentence.</p>
+
+                  <app-field label="Did you apply to the court for money from the offender?">
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000000" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                      <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000001" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                      <span>No</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000002" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                      <span>Not Applicable (No trial/conviction)</span>
+                    </label>
+                  </app-field>
+
+                  <section *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === 100000000">
+                    <app-field label="If yes, what expenses did you ask to be covered?">
+                      <input class="form-control" style="width: 350px;" type="text" formControlName="expensesRequested">
+                    </app-field>
+
+                    <app-field label="Amount awarded by the judge">
+                      <input class="form-control" style="width: 350px;" type="text" formControlName="expensesAwarded">
+                    </app-field>
+
+                    <app-field label="Amount received">
+                      <input class="form-control" style="width: 350px;" type="text" formControlName="expensesReceived">
+                    </app-field>
+                  </section>
+
+                  <h3>Civil Action</h3>
+                  <p><strong>Civil action refers to taking legal action against, or suing, a person or party responsible for the claimant’s injury or loss.</strong></p>
+
+                  <app-field label="Have you taken, or will you be taking, legal action?">
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000000" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+                      <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000001" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+                      <span>No</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000002" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+                      <span>Unsure</span>
+                    </label>
+                  </app-field>
+
+                  <h3>Lawyer Information</h3>
+                  <p>Please provide the name and address of your lawyer or law firm: </p>
+
+                  <app-field label="Lawyer or Law Firm Name">
+                    <input class="form-control" style="width: 350px;" type="text" formControlName="expensesReceived">
+                  </app-field>
+
+                  <app-field label="Law Firm or Office Address">
+                  </app-field>
+
+                  <div formGroupName="lawyerAddress">
+                    <p>!!! NEED TO REJIG THIS !!!</p>
+                    <app-field label="Country">
+                      <select class="form-control" style="width: 350px;" formControlName="country">
+                        <option value="">Choose a country</option>
+                        <option *ngFor="let item of countryList" [value]="item.name">
+                          {{ item.name }}
+                        </option>
+                      </select>
+                    </app-field>
+                    <app-field label="Province">
+                      <select class="form-control" style="width: 350px;" formControlName="province">
+                        <option value="">Choose a Province</option>
+                        <option *ngFor="let item of primaryProvinceList" [value]="item">
+                          {{item}}
+                        </option>
+                      </select>
+                    </app-field>
+                    <app-field label="City" errorMessage="Please enter your primary city">
+                      <input class="form-control" style="width: 350px;" type="text" formControlName="city">
+                    </app-field>
+                    <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)" [required]="addressIsRequired" errorMessage="Please enter your primary mailing address">
+                      <input class="form-control" style="width: 400px;" type="text" formControlName="line1"><br /><br />
+                      <input class="form-control" style="width: 400px;" type="text" formControlName="line2"><br /><br />
+                      <input class="form-control" style="width: 400px;" type="text" formControlName="line3">
+                    </app-field>
+                    <app-field label="Postal Code" [required]="false" errorMessage="Please enter your primary postal code">
+                      <input class="form-control" style="width: 200px;" type="text" placeholder="" formControlName="postalCode">
+                    </app-field>
+                  </div>
+
+                  <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
+                  <div class="terms">
+                    <p>I, <input class="form-control" style="width: 350px;" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following:</p>
+                    <ol>
+                      <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
+                      <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
+                      <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
+                      <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
+                    </ol>
+                  </div>
+
+                  <app-field label="Applicant's Signature">
+                    [ This will be a signature pad ]
+                  </app-field>
+
+                  <app-field label="Date" [required]="true" [valid]="isFieldValid('crimeInformation.racafInformation.signDate')" errorMessage="Please enter the sign date">
+                    <input type="text" class="form-control" formControlName="signDate" placeholder="yyyy-mm-dd"
+                           [matDatepicker]="racafSignDatePicker" (focus)="racafSignDatePicker.open()" (click)="racafSignDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
+                    <mat-datepicker #racafSignDatePicker></mat-datepicker>
+                  </app-field>
+                </div>
+              </section>
             </section>
           </div>
-
-          <div formGroupName="medicalInformation" class="hide-me" *ngIf="this.currentFormStep == 3">
-            <h1>Medical & Dental Information</h1>
+          <div formGroupName="medicalInformation" *ngIf="this.currentFormStep == 3">
+            <div class="page-header">
+              <h1>Medical & Dental Information</h1>
+            </div>
             <p>This section provides information regarding any medical or dental treatment you recieved as a result of the crime.</p>
             <section>
               <h2 class="blue-header">Coverage</h2>
               <h3>Medical Services Coverage [tooltip icon]</h3>
-
               <app-field label="Do you have medical services coverage? (e.g. a BC Services Card or BC Care Card)">
                 <label class="inline-label">
                   <input type="radio" [value]="true" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage">
@@ -496,13 +681,11 @@
                   <span>No</span>
                 </label>
               </app-field>
-
               <section *ngIf="form.get('medicalInformation.doYouHaveMedicalServicesCoverage').value === true">
                 <app-field label="Personal Health Number">
                   <input class="form-control" style="width: 350px;" type="text" formControlName="personalHealthNumber">
                 </app-field>
               </section>
-
               <h3>Other Health Coverage</h3>
               <app-field label="Do you have other health coverage? (e.g. Blue Cross)">
                 <label class="inline-label">
@@ -514,7 +697,6 @@
                   <span>No</span>
                 </label>
               </app-field>
-
               <section *ngIf="form.get('medicalInformation.doYouHaveOtherHealthCoverage').value === true">
                 <app-field label="Name of provider">
                   <input class="form-control" style="width: 350px;" type="text" formControlName="otherHealthCoverageProviderName">
@@ -523,11 +705,8 @@
                   <input class="form-control" style="width: 350px;" type="text" formControlName="otherHealthCoverageExtendedPlanNumber">
                 </app-field>
               </section>
-
-
               <h2 class="blue-header">Treatment</h2>
               <h3>Hospital Information</h3>
-
               <app-field label="Did you go to a hospital to be treated for injuries resulting from the incident?">
                 <label class="inline-label">
                   <input type="radio" [value]="true" name="weYouTreatedAtHospital" formControlName="weYouTreatedAtHospital">
@@ -538,7 +717,6 @@
                   <span>No</span>
                 </label>
               </app-field>
-
               <section *ngIf="form.get('medicalInformation.weYouTreatedAtHospital').value === true">
                 <app-field label="Name of hospital">
                   <input class="form-control" style="width: 350px;" type="text" formControlName="treatedAtHospitalName">
@@ -549,7 +727,6 @@
                   <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
                 </app-field>
               </section>
-
               <h3>Other Treatment Information</h3>
               <p>
                 Please add information about any other providers (doctors, specialists, or counsellors) who have been treating you for injuries resulting from the incident
@@ -594,10 +771,11 @@
               <a href="javascript:void(0);" class="btn btn-secondary" (click)="addProvider()">Add a Provider</a>
             </section>
           </div>
-
-          <div formGroupName="expenseInformation" class="hide-me" *ngIf="this.currentFormStep == 4">
-            <h1>Expense & Loss Information</h1>
-            <p>This section provides information regarding any expenses or losses you are claiming as a result of the crime. Please keep reciepts for all expenses you are claiming. The program will require you to submit <strong>original reciepts</strong>.</p>
+          <div formGroupName="expenseInformation" *ngIf="this.currentFormStep == 4">
+            <div class="page-header">
+              <h1>Expense & Loss Information</h1>
+            </div>
+            <p>This section provides information regarding any expenses or losses you are claiming as a result of the crime. Please keep receipts for all expenses you are claiming. The program will require you to submit <strong>original receipts</strong>.</p>
             <section>
               <h2 class="blue-header">Benefits Available Through CVAP</h2>
               <p>
@@ -612,69 +790,59 @@
                     Medical Expenses
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveDentalExpenses" formControlName="haveDentalExpenses">
                     Dental Expenses
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="havePrescriptionDrugExpenses" formControlName="havePrescriptionDrugExpenses">
                     Prescription drug expenses
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveCounsellingExpenses" formControlName="haveCounsellingExpenses">
                     Counselling
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses">
                     Lost employment income (reimbursed at minimum wage)
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="havePersonalPropertyLostExpenses" formControlName="havePersonalPropertyLostExpenses">
                     Repair or replacement costs of damaged or destroyed personal property that you were wearing at the time of the incident (e.g. eyeglasses, clothing)
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveProtectiveMeasureExpenses" formControlName="haveProtectiveMeasureExpenses">
                     Protective measures (e.g. moving expenses, security devices)
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveDisabilityExpenses" formControlName="haveDisabilityExpenses">
                     Disability benefits, services or equipment
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses">
                     Crime scene cleaning
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses">
                     Other
                   </label>
-
                   <section *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true">
                     <app-field label="Please specify">
                       <input class="form-control" style="width: 350px;" type="text" formControlName="otherSpecificExpenses">
@@ -683,7 +851,6 @@
                 </app-field>
               </div>
             </section>
-
             <section>
               <h2 class="blue-header">Other Benefits</h2>
               <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply:</p>
@@ -694,48 +861,41 @@
                     Disability Plan benefits
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveEmploymentInsuranceBenefits" formControlName="haveEmploymentInsuranceBenefits">
                     Employment Insurance benefits
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveIncomeAssistance" formControlName="haveIncomeAssistanceBenefits">
                     Income Assistance
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveCanadaPensionPlanBenefits" formControlName="haveCanadaPensionPlanBenefits">
                     Canada Pension Plan
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits" formControlName="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits">
                     Aboriginal Affairs and Northern Development Canada
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveCivilActionBenefits" formControlName="haveCivilActionBenefits">
                     Benefits you have recieved as a result of civil action
                   </label>
                 </app-field>
-
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits">
                     Other
                   </label>
-
                   <section *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true">
                     <app-field label="Please specify">
                       <input class="form-control" style="width: 350px;" type="text" formControlName="otherSpecificBenefits">
@@ -745,25 +905,23 @@
               </div>
             </section>
           </div>
-
-          <div formGroupName="employmentIncomeInformation" class="hide-me" *ngIf="this.currentFormStep == 5">
-            <h1 (click)="checkform()">Employment Income</h1>
+          <div formGroupName="employmentIncomeInformation" *ngIf="this.currentFormStep == 5">
+            <div class="page-header">
+              <h1 (click)="checkform()">Employment Income</h1>
+            </div>
             <section *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
               <p>This section provides information regarding employment information.  This information is only necessary if you are requesting benefits for lost employment income.</p>
               <p><strong>You have not requested lost employment income benefits.</strong> Go back to Expense & Loss Information to request this particular benefit, or continue to the next section.</p>
             </section>
             <section *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
               <p>This section provides information regarding employment information.  This information is necessary if you are requesting benefits for lost employment income.</p>
-
               <section>
                 <h2 class="blue-header">Income Loss Information</h2>
-
                 <app-field label="Were you employed when the crime occured?">
                   <label class="inline-label">
                     <input type="radio" [value]="1" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
                     <span>Yes</span>
                   </label>
-
                   <label class="inline-label">
                     <input type="radio" [value]="2" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
                     <span>No</span>
@@ -773,7 +931,6 @@
                     <span>Self-employed</span>
                   </label>
                 </app-field>
-
                 <section *ngIf="form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 1 || form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 3">
                   <app-field label="Were you at work at the time of the incident?">
                     <label class="inline-label">
@@ -786,7 +943,6 @@
                     </label>
                   </app-field>
                 </section>
-
                 <section *ngIf="form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').value === true">
                   <app-field label="Have you applied for Worker's Compensation Benefits?">
                     <label class="inline-label">
@@ -798,14 +954,12 @@
                       <span>No</span>
                     </label>
                   </app-field>
-
                   <section *ngIf="form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation').value === true">
                     <app-field label="Worker's Compensation Benefits claim number">
                       <input class="form-control" style="width: 350px;" type="text" formControlName="workersCompensationClaimNumber">
                     </app-field>
                   </section>
                 </section>
-
                 <app-field label="As a result of any crime-related injuries, did you miss work?">
                   <label class="inline-label">
                     <input type="radio" [value]="true" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
@@ -816,7 +970,6 @@
                     <span>No</span>
                   </label>
                 </app-field>
-
                 <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === true">
                   <app-field label="Please provide days of work missed">
                     <!--[valid]="form.get('crimeInformation.crimePeriodStart').valid || !form.get('crimeInformation.crimePeriodStart').touched"-->
@@ -828,7 +981,6 @@
                            [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly style="width: 200px; background-color: #fff;">
                     <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
                   </app-field>
-
                   <app-field label="Did you lose wages? [tooltip icon]">
                     <label class="inline-label">
                       <input type="radio" [value]="true" name="didYouLoseWages" formControlName="didYouLoseWages">
@@ -841,10 +993,8 @@
                   </app-field>
                 </section>
               </section>
-
               <section>
                 <h2 class="blue-header">Employer Information</h2>
-
                 <app-field label="Name of Company / Organization">
                   <input type="text" formControlName="employerName">
                 </app-field>
@@ -867,129 +1017,111 @@
               </section>
             </section>
           </div>
-
-          <div formGroupName="representativeInformation" class="hide-me" *ngIf="this.currentFormStep == 6">
-            <h1>Application on Behalf on Victim</h1>
-
-            <section class="radio-list">
-              <app-field label="I am:">
-                <label>
-                  <input type="radio" [value]="1" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                  Completing this application for myself
-                </label>
-                <br />
-                <label>
-                  <input type="radio" [value]="2" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                  A Victim Service Worker or other person helping a victim complete this application
-                </label>
-                <br />
-
-                <label>
-                  <input type="radio" [value]="3" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                  A parent, legal guardian, or legal representative completing and signing this application form on behalf of the victim
-                </label>
-              </app-field>
+          <div formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6">
+            <div class="page-header">
+              <h1>Application on Behalf of Victim</h1>
+            </div>
+            <section *ngIf="form.get('introduction.completingOnBehalfOf').value === 100000000">
+              <p>This section provides information regarding applying on behalf of an applicant. This information is only necessary if you are a guardian or legal representative of the applicant.</p>
+              <p><strong>You are not a guardian or legal representative.</strong> If this is an error, please go back to <a href="#" class="stepper-link" (click)="gotoPageIndex(stepper, 0)">Overview</a> and select the parent and/or legal guardian option otherwise click on the "Continue" button to proceed with the application.</p>
             </section>
-
-            <section *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === 3">
+            <section *ngIf="form.get('introduction.completingOnBehalfOf').value === 100000002">
               <h3>Name</h3>
-
               <app-field label="First Name" [required]="true" [valid]="form.get('representativeInformation.representativeFirstName').valid || !form.get('representativeInformation.representativeFirstName').touched" errorMessage="Please enter a first name">
                 <input class="form-control" style="width: 350px;" type="text" formControlName="representativeFirstName">
               </app-field>
-
               <app-field label="Middle Name" [required]="false">
                 <input class="form-control" style="width: 350px;" type="text" formControlName="representativeMiddleName">
               </app-field>
-
               <app-field label="Last Name" [required]="true" [valid]="form.get('representativeInformation.representativeLastName').valid || !form.get('representativeInformation.representativeLastName').touched" errorMessage="Please enter a last name">
                 <input class="form-control" style="width: 350px;" type="text" formControlName="representativeLastName">
               </app-field>
-
               <h3>Address & Contact Information</h3>
-
               <app-field label="Country">
                 <select class="form-control" style="width: 350px;" formControlName="representativeAddressCountry" (change)="updateRepresentativeLocation($event)">
                   <option value="">Choose a country</option>
                   <option *ngFor="let item of countryList" [value]="item.name">
-                    {{ item.name }}
-                  </option>
+                    {{ item.name
+                }}
+                </option>
                 </select>
-              </app-field>
-
-              <app-field label="{{ representativeProvinceType }}">
-                <select class="form-control" style="width: 350px;" formControlName="representativeAddressProvince">
-                  <option value="">Choose a {{ representativeProvinceType }}</option>
-                  <option *ngFor="let item of representativeProvinceList" [value]="item">
-                    {{item}}
-                  </option>
-                </select>
-              </app-field>
-
-              <app-field label="City">
-                <input class="form-control" style="width: 350px;" type="text" formControlName="representativeAddressCity">
-              </app-field>
-
-              <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
-                <input class="form-control" style="width: 400px;" type="text" formControlName="representativeAddressLine1">
-              </app-field>
-
-              <app-field label="{{ representativePostalCodeType }}">
-                <input class="form-control" style="width: 200px;" type="text" placeholder="{{ representativePostalCodeSample }}" formControlName="representativeAddressPostalCode">
-              </app-field>
-
-              <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="form.get('representativeInformation.representativePhoneNumbr').valid || !form.get('representativeInformation.representativePhoneNumbr').touched" errorMessage="Please enter a phone number">
-                <input class="form-control" style="width: 350px;" type="text" formControlName="representativePhoneNumbr">
-              </app-field>
-
-              <app-field label="Email Address" [required]="true" [valid]="form.get('representativeInformation.representativeEmail').valid || !form.get('representativeInformation.representativeEmail').touched" errorMessage="Please enter an email address">
-                <input class="form-control" style="width: 350px;" type="text" formControlName="representativeEmail" placeholder="myname@email.com">
-              </app-field>
-
-              <h3>Relationship to Victim</h3>
-              <app-field label="Are you an immediate family member?">
-                <label class="inline-label">
-                  <input type="radio" [value]="true" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
-                  <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                  <input type="radio" [value]="false" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
-                  <span>No</span>
-                </label>
-              </app-field>
-
-              <section *ngIf="form.get('representativeInformation.relationshipImmediateFamilyMember').value === true">
-                <app-field label="What is your relationship to the victim? (e.g. mother)">
-                  <input class="form-control" style="width: 350px;" type="text" formControlName="relationshipToVictim">
                 </app-field>
-              </section>
 
-              <app-field label="Are you a legal representative?">
-                <label class="inline-label">
-                  <input type="radio" [value]="true" name="relationshipLegalRepresentative" formControlName="relationshipLegalRepresentative">
-                  <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                  <input type="radio" [value]="false" name="relationshipLegalRepresentative" formControlName="relationshipLegalRepresentative">
-                  <span>No</span>
-                </label>
-              </app-field>
-
-              <section *ngIf="form.get('representativeInformation.relationshipLegalRepresentative').value === true">
-                <app-field label="What is your authority? (e.g. Public Guardian and Trustee)">
-                  <input class="form-control" style="width: 350px;" type="text" formControlName="relationshipLegalAuthority">
+                <app-field label="{{ representativeProvinceType }}">
+                  <select class="form-control" style="width: 350px;" formControlName="representativeAddressProvince">
+                    <option value="">Choose a {{ representativeProvinceType }}</option>
+                    <option *ngFor="let item of representativeProvinceList" [value]="item">
+                      {{item}}
+                    </option>
+                  </select>
                 </app-field>
-              </section>
 
-              <p>If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship / trusteeship</p>
-              <div class="file-upload-placeholder">
-                [upload functionality goes here]
-              </div>
-            </section>
+                <app-field label="City">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="representativeAddressCity">
+                </app-field>
+
+                <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
+                  <input class="form-control" style="width: 400px;" type="text" formControlName="representativeAddressLine1">
+                </app-field>
+
+                <app-field label="{{ representativePostalCodeType }}">
+                  <input class="form-control" style="width: 200px;" type="text" placeholder="{{ representativePostalCodeSample }}" formControlName="representativeAddressPostalCode">
+                </app-field>
+
+                <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="form.get('representativeInformation.representativePhoneNumbr').valid || !form.get('representativeInformation.representativePhoneNumbr').touched" errorMessage="Please enter a phone number">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="representativePhoneNumbr">
+                </app-field>
+
+                <app-field label="Email Address" [required]="true" [valid]="form.get('representativeInformation.representativeEmail').valid || !form.get('representativeInformation.representativeEmail').touched" errorMessage="Please enter an email address">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="representativeEmail" placeholder="myname@email.com">
+                </app-field>
+
+                <h3>Relationship to Victim</h3>
+                <app-field label="Are you an immediate family member?">
+                  <label class="inline-label">
+                    <input type="radio" [value]="true" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="false" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
+                    <span>No</span>
+                  </label>
+                </app-field>
+
+                <section *ngIf="form.get('representativeInformation.relationshipImmediateFamilyMember').value === true">
+                  <app-field label="What is your relationship to the victim? (e.g. mother)">
+                    <input class="form-control" style="width: 350px;" type="text" formControlName="relationshipToVictim">
+                  </app-field>
+                </section>
+
+                <app-field label="Are you a legal representative?">
+                  <label class="inline-label">
+                    <input type="radio" [value]="true" name="relationshipLegalRepresentative" formControlName="relationshipLegalRepresentative">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="false" name="relationshipLegalRepresentative" formControlName="relationshipLegalRepresentative">
+                    <span>No</span>
+                  </label>
+                </app-field>
+
+                <section *ngIf="form.get('representativeInformation.relationshipLegalRepresentative').value === true">
+                  <app-field label="What is your authority? (e.g. Public Guardian and Trustee)">
+                    <input class="form-control" style="width: 350px;" type="text" formControlName="relationshipLegalAuthority">
+                  </app-field>
+                </section>
+
+                <p>If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship / trusteeship</p>
+                <div class="file-upload-placeholder">
+                  [upload functionality goes here]
+                </div>
+</section>
           </div>
 
           <div formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7">
-            <h1>Declaration</h1>
+            <div class="page-header">
+              <h1>Declaration</h1>
+            </div>
             <p>Information supplied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>.  Any information collected will be used only for the purposes of adjudicating your claim for benefits.</p>
             <p>By signing this section you declare that the information you have provided on this application is true and correct. It is an offence to provide false or misleading information on this application and may lead to prosecution. If it is discovered at a lter time that false or misleading information has been provided on this application form, you may be rquired to repay to CVAP any benefits received.</p>
 
@@ -1017,7 +1149,9 @@
           </div>
 
           <div formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8">
-            <h1>Authorization</h1>
+            <div class="page-header">
+              <h1>Authorization</h1>
+            </div>
             <p>Information suppllied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits.This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. Your application will be returned if this section is not signed and dated. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program at (604) 660-3888 or toll free in B.C. at 1-866-660-3888.</p>
 
             <section>
@@ -1071,7 +1205,7 @@
                 <label class="inline-label">
                   <input type="radio" [value]="false" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                   <span>No</span>
-                  </label>
+                </label>
               </app-field>
 
               <section *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === true">
@@ -1120,7 +1254,9 @@
           </div>
 
           <div *ngIf="this.currentFormStep == 9">
-            <h1>Review & Submit</h1>
+            <div class="page-header">
+              <h1>Review & Submit</h1>
+            </div>
             <p>Please check the accuracy of the information entered in your application before submitting.</p>
 
             <section>
@@ -1131,7 +1267,7 @@
                   <input type="checkbox" checked="checked" disabled="disabled" />
                   <span>I have read and understood all the above information.</span>
                 </label>
-                </p>
+              </p>
 
             </section>
 
@@ -1142,19 +1278,19 @@
                 <tbody>
                   <tr>
                     <th>First Name</th>
-                    <td>{{ form.get('personalInformation.firstName').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.firstName') }} </td>
                   </tr>
                   <tr>
                     <th>Middle Name</th>
-                    <td>{{ form.get('personalInformation.middleName').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.middleName') }} </td>
                   </tr>
                   <tr>
                     <th>Last Name</th>
-                    <td>{{ form.get('personalInformation.lastName').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.lastName') }} </td>
                   </tr>
                   <tr>
                     <th>Other First Name</th>
-                    <td>{{ orEmpty(form.get('personalInformation.otherFirstName')) }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.otherFirstName') }} </td>
                   </tr>
                   <tr>
                     <th>Other Last Name</th>
@@ -1162,7 +1298,7 @@
                   </tr>
                   <tr>
                     <th>Date of Name Change</th>
-                    <td>{{ form.get('personalInformation.dateOfNameChange').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.dateOfNameChange') }} </td>
                   </tr>
                 </tbody>
               </table>
@@ -1172,31 +1308,31 @@
                 <tbody>
                   <tr>
                     <th>Primary Phone Number</th>
-                    <td>{{ form.get('personalInformation.phoneNumber').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.phoneNumber') }} </td>
                   </tr>
                   <tr>
                     <th>Email Address</th>
-                    <td>{{ form.get('personalInformation.email').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.email') }} </td>
                   </tr>
                   <tr>
                     <th>Birth Date</th>
-                    <td>{{ form.get('personalInformation.birthDate') }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.birthDate') }} </td>
                   </tr>
                   <tr>
                     <th>Social Insurance Number (SIN)</th>
-                    <td>{{ form.get('personalInformation.sinPart1').value }}-{{ form.get('personalInformation.sinPart2').value }}-{{ form.get('personalInformation.sinPart3').value }} (do this sin better)</td>
+                    <td>{{ valueOrEmpty('personalInformation.sinPart1') }}-{{ valueOrEmpty('personalInformation.sinPart2') }}-{{ valueOrEmpty('personalInformation.sinPart3') }}</td>
                   </tr>
                   <tr>
                     <th>Gender</th>
-                    <td>{{ form.get('personalInformation.gender').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.gender') }} </td>
                   </tr>
                   <tr>
                     <th>Marital Status</th>
-                    <td>{{ form.get('personalInformation.maritalStatus').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.maritalStatus') }} </td>
                   </tr>
                   <tr>
                     <th>Occupation</th>
-                    <td>{{ form.get('personalInformation.occupation').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.occupation') }} </td>
                   </tr>
                 </tbody>
               </table>
@@ -1206,19 +1342,19 @@
                 <tbody>
                   <tr>
                     <th>Mailing Address</th>
-                    <td>{{ form.get('personalInformation.primaryAddressLine1').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.primaryAddressLine1') }} </td>
                   </tr>
                   <tr>
                     <th>City</th>
-                    <td>{{ form.get('personalInformation.primaryAddressCity').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.primaryAddressCity') }} </td>
                   </tr>
                   <tr>
                     <th>Province</th>
-                    <td>{{ form.get('personalInformation.primaryAddressProvince').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.primaryAddressProvince') }} </td>
                   </tr>
                   <tr>
                     <th>Postal Code</th>
-                    <td>{{ form.get('personalInformation.primaryAddressPostalCode').value }}</td>
+                    <td>{{ valueOrEmpty('personalInformation.primaryAddressPostalCode') }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -1228,19 +1364,19 @@
                 <tbody>
                   <tr>
                     <th>Mailing Address</th>
-                    <td>{{ form.get('personalInformation.alternateAddressLine1').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.alternateAddressLine1') }} </td>
                   </tr>
                   <tr>
                     <th>City</th>
-                    <td>{{ form.get('personalInformation.alternateAddressCity').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.alternateAddressCity') }} </td>
                   </tr>
                   <tr>
                     <th>Province</th>
-                    <td>{{ form.get('personalInformation.alternateAddressProvince').value }} </td>
+                    <td>{{ valueOrEmpty('personalInformation.alternateAddressProvince') }} </td>
                   </tr>
                   <tr>
                     <th>Postal Code</th>
-                    <td>{{ form.get('personalInformation.alternateAddressPostalCode').value }}</td>
+                    <td>{{ valueOrEmpty('personalInformation.alternateAddressPostalCode') }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -1254,7 +1390,7 @@
                 <tbody>
                   <tr>
                     <th>Type of Crime</th>
-                    <td>{{ form.get('crimeInformation.typeOfCrime').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.typeOfCrime') }} </td>
                   </tr>
                   <tr>
                     <th>When did this crime occur?</th>
@@ -1262,23 +1398,23 @@
                   </tr>
                   <tr>
                     <th>Is this application being filed within one year of the date of the crime?</th>
-                    <td>{{ form.get('crimeInformation.applicationFiledWithinOneYearFromCrime').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.applicationFiledWithinOneYearFromCrime') }} </td>
                   </tr>
                   <tr>
                     <th>Why you did not apply sooner?</th>
-                    <td>{{ form.get('crimeInformation.whyDidYouNotApplySooner').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.whyDidYouNotApplySooner') }} </td>
                   </tr>
                   <tr>
                     <th>Crime Location(s)</th>
-                    <td>{{ form.get('crimeInformation.crimeLocations').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.crimeLocations') }} </td>
                   </tr>
                   <tr>
                     <th>Crime Detail(s)</th>
-                    <td>{{ form.get('crimeInformation.crimeDetails').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.crimeDetails') }} </td>
                   </tr>
                   <tr>
                     <th>Associated Injuries</th>
-                    <td>{{ form.get('crimeInformation.crimeInjuries').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.crimeInjuries') }} </td>
                   </tr>
                   <tr>
                     <th>Additional Information</th>
@@ -1292,15 +1428,15 @@
                 <tbody>
                   <tr>
                     <th>Was the report made to the police?</th>
-                    <td>{{ form.get('crimeInformation.wasReportMadeToPolice').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.wasReportMadeToPolice') }} </td>
                   </tr>
                   <tr>
                     <th>[NO CASE] Who was the report made to (e.g. doctor, social worker, counsellor, other)?</th>
-                    <td>{{ form.get('crimeInformation.noPoliceReportIndentification').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.noPoliceReportIndentification') }} </td>
                   </tr>
                   <tr>
                     <th>[YES CASE] To which police was the report made?</th>
-                    <td>{{ form.get('crimeInformation.policeReportedWhichPoliceForce').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.policeReportedWhichPoliceForce') }} </td>
                   </tr>
                   <tr>
                     <th>Date of report</th>
@@ -1308,11 +1444,11 @@
                   </tr>
                   <tr>
                     <th>Police File Number</th>
-                    <td>{{ form.get('crimeInformation.policeReportedPoliceFileNumber').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.policeReportedPoliceFileNumber') }} </td>
                   </tr>
                   <tr>
                     <th>Name of Investigating Officer</th>
-                    <td>{{ form.get('crimeInformation.policeReportedInvestigatingOfficer').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.policeReportedInvestigatingOfficer') }} </td>
                   </tr>
                 </tbody>
               </table>
@@ -1322,39 +1458,39 @@
                 <tbody>
                   <tr>
                     <th>Offender Name</th>
-                    <td>{{ form.get('crimeInformation.offenderFirstName').value }} {{ form.get('crimeInformation.offenderMiddleName').value }} {{ form.get('crimeInformation.offenderLastName').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.offenderFirstName') }} {{ valueOrEmpty('crimeInformation.offenderMiddleName') }} {{ valueOrEmpty('crimeInformation.offenderLastName') }} </td>
                   </tr>
                   <tr>
                     <th>Relationship to offender</th>
-                    <td>{{ form.get('crimeInformation.offenderRelationship').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.offenderRelationship') }} </td>
                   </tr>
                   <tr>
                     <th>Has the alleged offender been charged?</th>
-                    <td>{{ form.get('crimeInformation.offenderBeenCharged').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.offenderBeenCharged') }} </td>
                   </tr>
                   <tr>
                     <th>Court File Number</th>
-                    <td>{{ form.get('crimeInformation.courtFileNumber').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.courtFileNumber') }} </td>
                   </tr>
                   <tr>
                     <th>Court Location</th>
-                    <td>{{ form.get('crimeInformation.courtLocation').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.courtLocation') }} </td>
                   </tr>
                   <tr>
                     <th>Have you sued the alleged offender(s)?</th>
-                    <td>{{ form.get('crimeInformation.haveYouSuedOffender').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.haveYouSuedOffender') }} </td>
                   </tr>
                   <tr>
                     <th>Do you intend to sue the alleged offender?</th>
-                    <td>{{ form.get('crimeInformation.intendToSueOffender').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.intendToSueOffender') }} </td>
                   </tr>
                   <tr>
                     <th>Court File Number</th>
-                    <td>{{ form.get('crimeInformation.suedCourtFileNumber').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.suedCourtFileNumber') }} </td>
                   </tr>
                   <tr>
                     <th>Court Location</th>
-                    <td>{{ form.get('crimeInformation.suedCourtLocation').value }} </td>
+                    <td>{{ valueOrEmpty('crimeInformation.suedCourtLocation') }} </td>
                   </tr>
                 </tbody>
               </table>
@@ -1367,23 +1503,23 @@
                 <tbody>
                   <tr>
                     <th>Do you have medical services coverage?</th>
-                    <td>{{ form.get('medicalInformation.doYouHaveMedicalServicesCoverage').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.doYouHaveMedicalServicesCoverage') }} </td>
                   </tr>
                   <tr>
                     <th>Personal Health Number</th>
-                    <td>{{ form.get('medicalInformation.personalHealthNumber').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.personalHealthNumber') }} </td>
                   </tr>
                   <tr>
                     <th>Do you have other health coverage?</th>
-                    <td>{{ form.get('medicalInformation.doYouHaveOtherHealthCoverage').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.doYouHaveOtherHealthCoverage') }} </td>
                   </tr>
                   <tr>
                     <th>Name of provider</th>
-                    <td>{{ form.get('medicalInformation.otherHealthCoverageProviderName').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.otherHealthCoverageProviderName') }} </td>
                   </tr>
                   <tr>
                     <th>Extended Health Plan Number</th>
-                    <td>{{ form.get('medicalInformation.otherHealthCoverageExtendedPlanNumber').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.otherHealthCoverageExtendedPlanNumber') }} </td>
                   </tr>
                 </tbody>
               </table>
@@ -1393,11 +1529,11 @@
                 <tbody>
                   <tr>
                     <th>Were you treated at a hospital?</th>
-                    <td>{{ form.get('medicalInformation.weYouTreatedAtHospital').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.weYouTreatedAtHospital') }} </td>
                   </tr>
                   <tr>
                     <th>Name of hospital</th>
-                    <td>{{ form.get('medicalInformation.treatedAtHospitalName').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.treatedAtHospitalName') }} </td>
                   </tr>
                   <tr>
                     <th>Date of treatment</th>
@@ -1405,15 +1541,15 @@
                   </tr>
                   <tr>
                     <th>Family doctor's name</th>
-                    <td>{{ form.get('medicalInformation.familyDoctorName').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.familyDoctorName') }} </td>
                   </tr>
                   <tr>
                     <th>Family doctor's Phone Number</th>
-                    <td>{{ form.get('medicalInformation.familyDoctorPhoneNumber').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.familyDoctorPhoneNumber') }} </td>
                   </tr>
                   <tr>
                     <th>Family doctor's Address</th>
-                    <td>{{ form.get('medicalInformation.familyDoctorAddress').value }} </td>
+                    <td>{{ valueOrEmpty('medicalInformation.familyDoctorAddress') }} </td>
                   </tr>
                   <tr>
                     <th>Other Treatments</th>

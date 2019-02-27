@@ -44,19 +44,18 @@ import {
 import { CdkTableModule } from '@angular/cdk/table';
 
 import { AccountDataService } from './services/account-data.service';
+import { JusticeApplicationDataService } from './services/justice-application-data.service';
 import { ContactDataService } from './services/contact-data.service';
 import { ApplicationDataService } from './services/adoxio-application-data.service';
 import { AdoxioLegalEntityDataService } from './services/adoxio-legal-entity-data.service';
 import { AdoxioLicenseDataService } from './services/adoxio-license-data.service';
 import { PaymentDataService } from './services/payment-data.service';
 import { AppComponent } from './app.component';
-import { BceidConfirmationComponent } from './bceid-confirmation/bceid-confirmation.component';
 import { GeneralDataService } from './general-data.service';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { DynamicsDataService } from './services/dynamics-data.service';
 import { StaticComponent } from './static/static.component';
 import { HomeComponent } from './home/home.component';
-import { StatusBadgeComponent } from './status-badge/status-badge.component';
 import { SurveyDataService } from './services/survey-data.service';
 import { UserDataService } from './services/user-data.service';
 import { VersionInfoDataService } from './services/version-info-data.service';
@@ -68,16 +67,13 @@ import { ApplicationCancelledComponent } from './application-cancelled/applicati
 import { TestApiComponent } from './test-api/test-api.component';
 import { FileDropModule } from 'ngx-file-drop';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
-import { BusinessProfileSummaryComponent } from './business-profile-summary/business-profile-summary.component';
 import { NgBusyModule } from 'ng-busy';
 import { BsDatepickerModule, AlertModule } from 'ngx-bootstrap';
 import { BCeidAuthGuard } from './services/bceid-auth-guard.service';
 import { metaReducers, reducers } from './app-state/reducers/reducers';
 import { StoreModule } from '@ngrx/store';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { TermsAndConditionsComponent } from './lite/terms-and-conditions/terms-and-conditions.component';
 import { AliasDataService } from './services/alias-data.service';
-import { WorkerDataService } from './services/worker-data.service.';
 import { FieldComponent } from './shared/field/field.component';
 import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
 import { VersionInfoDialog } from './version-info/version-info.component';
@@ -85,7 +81,6 @@ import { VersionInfoDialog } from './version-info/version-info.component';
 @NgModule({
   declarations: [
     AppComponent,
-    BceidConfirmationComponent,
     BusinessProfileComponent,
     VictimApplicationComponent,
     ApplicationSuccessComponent,
@@ -95,10 +90,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     HomeComponent,
     NotFoundComponent,
     StaticComponent,
-    StatusBadgeComponent,
     FileUploaderComponent,
-    BusinessProfileSummaryComponent,
-    DashboardComponent,
     FieldComponent,
     ProfileSummaryComponent,
     TermsAndConditionsComponent,
@@ -205,9 +197,9 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     AdoxioLegalEntityDataService,
     AdoxioLicenseDataService,
     AccountDataService,
+    JusticeApplicationDataService,
     ContactDataService,
     PaymentDataService,
-    WorkerDataService,
     Title,
     VersionInfoDataService,
     BCeidAuthGuard,

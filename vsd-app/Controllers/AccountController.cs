@@ -3,8 +3,6 @@ using Gov.Jag.VictimServices.Interfaces.Models;
 using Gov.Jag.VictimServices.Public.Authentication;
 using Gov.Jag.VictimServices.Public.Models;
 using Gov.Jag.VictimServices.Public.Utils;
-using Gov.Jag.VictimServices.Public.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -95,7 +92,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
             // query the BCeID API to get the business record.
             var business = await _bceid.ProcessBusinessQuery(userSettings.SiteMinderGuid);
 
-             var cleanNumber = BusinessNumberSanitizer.SanitizeNumber(business?.businessNumber);
+             var cleanNumber = business?.businessNumber;
             if (cleanNumber != null)
             {
                 business.businessNumber = cleanNumber;
@@ -379,7 +376,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
 
             // get BCeID record for the current user
             Gov.Jag.VictimServices.Interfaces.BCeIDBusiness bceidBusiness = await _bceid.ProcessBusinessQuery(userSettings.SiteMinderGuid);
-            var cleanNumber = BusinessNumberSanitizer.SanitizeNumber(bceidBusiness?.businessNumber);
+            var cleanNumber = bceidBusiness?.businessNumber;
             if (cleanNumber != null)
             {
                 bceidBusiness.businessNumber = cleanNumber;

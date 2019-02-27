@@ -1,7 +1,7 @@
-using Gov.Jag.VictimServices.Interfaces;
-using Gov.Jag.VictimServices.Public.Authentication;
+//using Gov.Jag.VictimServices.Interfaces;
+//using Gov.Jag.VictimServices.Public.Authentication;
 using Gov.Jag.VictimServices.Public.Authorization;
-using Gov.Jag.VictimServices.Public.Models;
+//using Gov.Jag.VictimServices.Public.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -11,19 +11,15 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Net.Http.Headers;
-using Microsoft.Rest;
 using NWebsec.AspNetCore.Mvc;
 using NWebsec.AspNetCore.Mvc.Csp;
 using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Gov.Jag.VictimServices.Public
@@ -141,85 +137,85 @@ namespace Gov.Jag.VictimServices.Public
             string ssgUsername = Configuration["SSG_USERNAME"];
             string ssgPassword = Configuration["SSG_PASSWORD"];
 
-            AuthenticationResult authenticationResult = null;
-            // authenticate using ADFS.
-            if (string.IsNullOrEmpty(ssgUsername) || string.IsNullOrEmpty(ssgPassword))
-            {
-                var authenticationContext = new AuthenticationContext(
-                    "https://login.windows.net/" + aadTenantId);
-                ClientCredential clientCredential = new ClientCredential(clientId, clientKey);
-                var task = authenticationContext.AcquireTokenAsync(serverAppIdUri, clientCredential);
-                task.Wait();
-                authenticationResult = task.Result;
-            }
+            //AuthenticationResult authenticationResult = null;
+            //// authenticate using ADFS.
+            //if (string.IsNullOrEmpty(ssgUsername) || string.IsNullOrEmpty(ssgPassword))
+            //{
+            //    var authenticationContext = new AuthenticationContext(
+            //        "https://login.windows.net/" + aadTenantId);
+            //    ClientCredential clientCredential = new ClientCredential(clientId, clientKey);
+            //    var task = authenticationContext.AcquireTokenAsync(serverAppIdUri, clientCredential);
+            //    task.Wait();
+            //    authenticationResult = task.Result;
+            //}
 
             
 
-            services.AddTransient(new Func<IServiceProvider, IDynamicsClient>((serviceProvider) =>
-            {
+            //services.AddTransient(new Func<IServiceProvider, IDynamicsClient>((serviceProvider) =>
+            //{
 
-                ServiceClientCredentials serviceClientCredentials = null;
+            //    ServiceClientCredentials serviceClientCredentials = null;
 
-                if (string.IsNullOrEmpty(ssgUsername) || string.IsNullOrEmpty(ssgPassword))
-                {
-                    var authenticationContext = new AuthenticationContext(
-                    "https://login.windows.net/" + aadTenantId);
-                    ClientCredential clientCredential = new ClientCredential(clientId, clientKey);
-                    var task = authenticationContext.AcquireTokenAsync(serverAppIdUri, clientCredential);
-                    task.Wait();
-                    authenticationResult = task.Result;
-                    string token = authenticationResult.CreateAuthorizationHeader().Substring("Bearer ".Length);
-                    serviceClientCredentials = new TokenCredentials(token);
-                }
-                else
-                {
-                    serviceClientCredentials = new BasicAuthenticationCredentials()
-                    {
-                        UserName = ssgUsername,
-                        Password = ssgPassword
-                    };
-                }
+            //    if (string.IsNullOrEmpty(ssgUsername) || string.IsNullOrEmpty(ssgPassword))
+            //    {
+            //        var authenticationContext = new AuthenticationContext(
+            //        "https://login.windows.net/" + aadTenantId);
+            //        ClientCredential clientCredential = new ClientCredential(clientId, clientKey);
+            //        var task = authenticationContext.AcquireTokenAsync(serverAppIdUri, clientCredential);
+            //        task.Wait();
+            //        authenticationResult = task.Result;
+            //        string token = authenticationResult.CreateAuthorizationHeader().Substring("Bearer ".Length);
+            //        serviceClientCredentials = new TokenCredentials(token);
+            //    }
+            //    else
+            //    {
+            //        serviceClientCredentials = new BasicAuthenticationCredentials()
+            //        {
+            //            UserName = ssgUsername,
+            //            Password = ssgPassword
+            //        };
+            //    }
 
-                IDynamicsClient client = new DynamicsClient(new Uri(Configuration["DYNAMICS_ODATA_URI"]), serviceClientCredentials);
+            //    IDynamicsClient client = new DynamicsClient(new Uri(Configuration["DYNAMICS_ODATA_URI"]), serviceClientCredentials);
 
 
-                // set the native client URI
-                if (string.IsNullOrEmpty(Configuration["DYNAMICS_NATIVE_ODATA_URI"]))
-                {
-                    client.NativeBaseUri = new Uri(Configuration["DYNAMICS_ODATA_URI"]);
-                }
-                else
-                {
-                    client.NativeBaseUri = new Uri(Configuration["DYNAMICS_NATIVE_ODATA_URI"]);
-                }
+            //    // set the native client URI
+            //    if (string.IsNullOrEmpty(Configuration["DYNAMICS_NATIVE_ODATA_URI"]))
+            //    {
+            //        client.NativeBaseUri = new Uri(Configuration["DYNAMICS_ODATA_URI"]);
+            //    }
+            //    else
+            //    {
+            //        client.NativeBaseUri = new Uri(Configuration["DYNAMICS_NATIVE_ODATA_URI"]);
+            //    }
 
-                return client;
-            }));
+            //    return client;
+            //}));
 
             // add SharePoint.
 
-            string sharePointServerAppIdUri = Configuration["SHAREPOINT_SERVER_APPID_URI"];
-            string sharePointOdataUri = Configuration["SHAREPOINT_ODATA_URI"];
-            string sharePointWebname = Configuration["SHAREPOINT_WEBNAME"];
-            string sharePointAadTenantId = Configuration["SHAREPOINT_AAD_TENANTID"];
-            string sharePointClientId = Configuration["SHAREPOINT_CLIENT_ID"];
-            string sharePointCertFileName = Configuration["SHAREPOINT_CERTIFICATE_FILENAME"];
-            string sharePointCertPassword = Configuration["SHAREPOINT_CERTIFICATE_PASSWORD"];
-            string sharePointNativeBaseURI = Configuration["SHAREPOINT_NATIVE_BASE_URI"];
+            //string sharePointServerAppIdUri = Configuration["SHAREPOINT_SERVER_APPID_URI"];
+            //string sharePointOdataUri = Configuration["SHAREPOINT_ODATA_URI"];
+            //string sharePointWebname = Configuration["SHAREPOINT_WEBNAME"];
+            //string sharePointAadTenantId = Configuration["SHAREPOINT_AAD_TENANTID"];
+            //string sharePointClientId = Configuration["SHAREPOINT_CLIENT_ID"];
+            //string sharePointCertFileName = Configuration["SHAREPOINT_CERTIFICATE_FILENAME"];
+            //string sharePointCertPassword = Configuration["SHAREPOINT_CERTIFICATE_PASSWORD"];
+            //string sharePointNativeBaseURI = Configuration["SHAREPOINT_NATIVE_BASE_URI"];
             //if (! string.IsNullOrEmpty(sharePointOdataUri))
             //{
             //    services.AddTransient<SharePointFileManager>(_ => new SharePointFileManager(sharePointServerAppIdUri, sharePointOdataUri, sharePointWebname, sharePointAadTenantId, sharePointClientId, sharePointCertFileName, sharePointCertPassword, ssgUsername, ssgPassword, sharePointNativeBaseURI));
             //}
             
 
-            // add BCeID Web Services
+            //// add BCeID Web Services
 
-            string bceidUrl = Configuration["BCEID_SERVICE_URL"];
-            string bceidSvcId = Configuration["BCEID_SERVICE_SVCID"];
-            string bceidUserid = Configuration["BCEID_SERVICE_USER"];
-            string bceidPasswd = Configuration["BCEID_SERVICE_PASSWD"];
+            //string bceidUrl = Configuration["BCEID_SERVICE_URL"];
+            //string bceidSvcId = Configuration["BCEID_SERVICE_SVCID"];
+            //string bceidUserid = Configuration["BCEID_SERVICE_USER"];
+            //string bceidPasswd = Configuration["BCEID_SERVICE_PASSWD"];
 
-            services.AddTransient<BCeIDBusinessQuery>(_ => new BCeIDBusinessQuery(bceidSvcId, bceidUserid, bceidPasswd, bceidUrl));
+            //services.AddTransient<BCeIDBusinessQuery>(_ => new BCeIDBusinessQuery(bceidSvcId, bceidUserid, bceidPasswd, bceidUrl));
 
         }
 
@@ -253,15 +249,16 @@ namespace Gov.Jag.VictimServices.Public
             app.UseXContentTypeOptions();
             app.UseXfo(xfo => xfo.Deny());
 
-            StaticFileOptions staticFileOptions = new StaticFileOptions();
-
-            staticFileOptions.OnPrepareResponse = ctx =>
+            StaticFileOptions staticFileOptions = new StaticFileOptions
             {
-                ctx.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache, no-store, must-revalidate, private";
-                ctx.Context.Response.Headers[HeaderNames.Pragma] = "no-cache";
-                ctx.Context.Response.Headers["X-Frame-Options"] = "SAMEORIGIN";
-                ctx.Context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
-                ctx.Context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache, no-store, must-revalidate, private";
+                    ctx.Context.Response.Headers[HeaderNames.Pragma] = "no-cache";
+                    ctx.Context.Response.Headers["X-Frame-Options"] = "SAMEORIGIN";
+                    ctx.Context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+                    ctx.Context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+                }
             };
 
             app.UseStaticFiles(staticFileOptions);
@@ -271,19 +268,13 @@ namespace Gov.Jag.VictimServices.Public
             // IMPORTANT: This session call MUST go before UseMvc()
             app.UseSession();
             //app.UseAuthentication();
-            
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                routes.MapRoute(name: "default", template: "{controller}/{action=Index}/{id?}");
             });
-
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
+                // To learn more about options for serving an Angular SPA from ASP.NET Core, see https://go.microsoft.com/fwlink/?linkid=864501
                 spa.Options.SourcePath = "ClientApp";
 
                 // Only run the angular CLI Server in Development mode (not staging or test.)
@@ -293,7 +284,6 @@ namespace Gov.Jag.VictimServices.Public
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-
         }
     }
 }

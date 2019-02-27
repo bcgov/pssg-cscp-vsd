@@ -1,14 +1,30 @@
-.hide-me {
-  //display: none;
-}
-
-.hide-me.srsly {
-  display: none;
-}
-
 h3 span {
   font-size: 14px;
   font-weight: 400;
+}
+
+.page-header h1 {
+  border-bottom: 3px solid #f2f2f2;
+  padding-bottom: 10px;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+}
+
+h2, h3 {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+::ng-deep label {
+  font-weight: 400;
+}
+
+::ng-deep .application-gutter {
+  position: relative;
+  padding-right: 30px;
+  padding-left: 30px;
 }
 
 ::ng-deep .application-nav {
@@ -62,7 +78,7 @@ h3 span {
   }
 }
 
-.learn-benefits{
+.learn-benefits {
   margin-top: 50px;
 }
 
@@ -80,6 +96,7 @@ textarea.form-control {
   }
 
   &.bigger {
+    width: 75%;
     height: 200px;
   }
 }
@@ -90,6 +107,22 @@ textarea.form-control {
     padding-left: 5px;
     margin-right: 15px;
     font-weight: normal;
+  }
+}
+
+.court-information {
+  margin-bottom: 24px;
+
+  .court-listing {
+    .court-files {
+      padding: 0 0 15px;
+    }
+    .court-files a {
+      margin-left: 25px;
+    }
+    .court-files:last-child {
+      padding-bottom: 0;
+    }
   }
 }
 
@@ -127,6 +160,19 @@ textarea.form-control {
   margin-bottom: 5px;
 }
 
+::ng-deep .terms {
+    input[type=text] {
+      margin-left: 15px;
+    }
+
+    ol {
+      padding-left: 12px;
+
+      li {
+        padding-left: 1em;
+      }
+    }
+  }
 .review-table {
   border-collapse: separate;
   border-spacing: 3px;

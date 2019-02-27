@@ -1,7 +1,3 @@
-using System.Runtime.Serialization;
-using System;
-using System.Globalization;
-
 namespace Gov.Jag.VictimServices.Interfaces
 {
     public class BCeIDBusiness

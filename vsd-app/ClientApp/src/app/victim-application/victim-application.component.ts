@@ -11,14 +11,16 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { defaultFormat as _rollupMoment } from 'moment';
+import { MatSnackBar } from '@angular/material';
 
-import { UserDataService } from '../services/user-data.service';
-import { AccountDataService } from '../services/account-data.service';
-import { DynamicsAccount } from '../models/dynamics-account.model';
+import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
+import { PersonalInformationModel } from '../models/justice/personal-information.model';
+import { CrimeInformationModel } from '../models/justice/crime-information.model';
 import { FormBase } from '../shared/form-base';
 
 import { COUNTRIES } from './country-list';
+import { CustomAddress } from '../models/custom-address.model';
 
 const moment = _rollupMoment || _moment;
 
@@ -47,10 +49,10 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
     // application's root module. We provide it at the component level here, due to limitations of
     // our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
+
 export class VictimApplicationComponent extends FormBase implements OnInit {
   currentUser: User;
   dataLoaded = false;
@@ -61,6 +63,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   formFullyValidated: boolean;
 
   otherTreatmentItems: FormArray;
+  courtFileItems: FormArray;
+
+  showAddCourtInfo: boolean = true;
+  showRemoveCourtInfo: boolean = false;
 
   countryList = COUNTRIES;
 
@@ -83,21 +89,33 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   representativePostalCodeType: string;
   representativePostalCodeSample: string;
 
+  phoneIsRequired: boolean;
+  emailIsRequired: boolean;
+  addressIsRequired: boolean;
+
   saveFormData: any;
+  personalModel: PersonalInformationModel;
+
+  public get courtFiles(): FormArray {
+    return this.form.get('crimeInformation.courtFiles') as FormArray;
+  }
 
   public get otherTreatments(): FormArray {
     return this.form.get('medicalInformation.otherTreatments') as FormArray;
   }
 
-  constructor(private userDataService: UserDataService,
-    private store: Store<AppState>,
-    private accountDataService: AccountDataService,
+  constructor(
+    private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-
+    public snackBar: MatSnackBar
   ) {
     super();
+
+    this.phoneIsRequired = false;
+    this.emailIsRequired = false;
+    this.addressIsRequired = false;
 
     this.formFullyValidated = false;
     this.currentFormStep = 0;
@@ -182,6 +200,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
     return this.form.get(field).valid || !this.form.get(field).touched;
   }
+  
+  isChildFieldValid(parent: string, field: string) {
+    let formField = this.form.get(parent);
+    if (formField == null)
+      return true;
+
+    return formField.get(field).valid || !formField.get(field).touched;
+  }
 
   valueOrEmpty(controlName: string): string {
     var control = this.form.get(controlName);
@@ -189,10 +215,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     if (control == null || control === undefined)
       return "--";
 
-    if (control.value == null)
+    if (control.value == null || control.value === undefined)
       return "--";
 
-    if (control.value.length == 0)
+    if (control.value.length == 0 || control.value.length === undefined)
       return "--";
 
     return control.value;
@@ -203,14 +229,19 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     return elements[groupIndex];
   }
 
-  gotoPage(selectPage: any): void {
+  gotoPageIndex(stepper: MatStepper, selectPage: number): void {
+    window.scroll(0, 0);
+    stepper.selectedIndex = selectPage;
+    this.currentFormStep = selectPage;
+  }
+
+  gotoPage(selectPage: MatStepper): void {
     window.scroll(0, 0);
     this.currentFormStep = selectPage.selectedIndex;
   }
 
   gotoNextStep(stepper: MatStepper): void {
     if (stepper != null) {
-      //console.log(stepper.selectedIndex);
       var desiredFormIndex = stepper.selectedIndex;
       var formGroupName = this.getFormGroupName(desiredFormIndex);
 
@@ -223,14 +254,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         if (formParts != null) {
           formValid = formParts.valid;
         }
-        //console.log("Page " + desiredFormIndex + " valid: " + formValid);
 
+        let errors = this.getErrors(this.form.get('crimeInformation'));
+        console.log('Form Valid: ' + formValid);
+        console.log(errors);
         if (formValid) {
           window.scroll(0, 0);
           stepper.next();
         } else {
           this.validateAllFormFields(formParts);
-          //console.log(this.getErrors(formParts));
         }
       }
     }
@@ -255,11 +287,33 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     });
   }
 
+  addCourtInfo(): void {
+    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
+    this.courtFileItems.push(this.createCourtInfoItem());
+    this.showAddCourtInfo = this.courtFileItems.length < 3;
+    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
+  }
+
+  removeCourtInfo(index: number): void {
+    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
+    this.courtFileItems.removeAt(index);
+    this.showAddCourtInfo = this.courtFileItems.length < 3;
+    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
+  }
+
+  createCourtInfoItem(): FormGroup {
+    return this.fb.group({
+      courtFileNumber: '',
+      courtLocation: ''
+    });
+  }
+
   ngOnInit() {
     this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
     this.form = this.fb.group({
       introduction: this.fb.group({
         understoodInformation: ['', Validators.requiredTrue],
+        completingOnBehalfOf: ['', [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002
       }),
       personalInformation: this.fb.group({
         firstName: ['', Validators.required],
@@ -271,33 +325,54 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         otherLastName: [''],
         dateOfNameChange: [''],
 
-        phoneNumber: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
-        email: ['', [Validators.required, Validators.email]],
-        birthDate: ['', Validators.required],
-
+        gender: ['', Validators.required],
+        maritalStatus: ['', Validators.required],
         sinPart1: [''],
         sinPart2: [''],
         sinPart3: [''],
         //sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
         //sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
         //sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        // Add dashes into SIN glue
-
-        gender: [''],
-        maritalStatus: [''],
         occupation: [''],
 
-        primaryAddressLine1: [''],
-        primaryAddressCity: [''],
-        primaryAddressPostalCode: ['', [Validators.pattern(postalRegex)]],
-        primaryAddressProvince: [{ value: 'British Columbia', disabled: false }],
-        primaryAddressCountry: [{ value: 'Canada', disabled: false }],
+        preferredMethodOfContact: ['', [Validators.required, Validators.min(100000000)]],
 
-        alternateAddressLine1: [''],
-        alternateAddressCity: [''],
-        alternateAddressPostalCode: ['', [Validators.pattern(postalRegex)]],
-        alternateAddressProvince: [{ value: 'British Columbia', disabled: false }],
-        alternateAddressCountry: [{ value: 'Canada', disabled: false }],
+        phoneNumber: [''],
+        alternatePhoneNumber: [''],
+        email: [''],
+        birthDate: [''],
+
+        primaryAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          line3: [''],
+          city: [''],
+          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+        alternateAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          line3: [''],
+          city: ['', Validators.required],
+          postalCode: ['', [Validators.pattern(postalRegex)]],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+        //primaryAddressLine1: [''],
+        //primaryAddressLine2: [''],
+        //primaryAddressLine3: [''],
+        //primaryAddressCity: [''],
+        //primaryAddressPostalCode: ['', [Validators.pattern(postalRegex)]],
+        //primaryAddressProvince: [{ value: 'British Columbia', disabled: false }],
+        //primaryAddressCountry: [{ value: 'Canada', disabled: false }],
+
+        //alternateAddressLine1: [''],
+        //alternateAddressCity: [''],
+        //alternateAddressPostalCode: ['', [Validators.pattern(postalRegex)]],
+        //alternateAddressProvince: [{ value: 'British Columbia', disabled: false }],
+        //alternateAddressCountry: [{ value: 'Canada', disabled: false }],
       }),
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
@@ -308,35 +383,55 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         applicationFiledWithinOneYearFromCrime: [''],
         whyDidYouNotApplySooner: [''],
 
-        crimeLocations: [''],
-        crimeDetails: [''],
-        crimeInjuries: [''],
+        crimeLocations: ['', Validators.required],
+        crimeDetails: ['', Validators.required],
+        crimeInjuries: ['', Validators.required],
         additionalInformation: this.fb.array([]),  // This will be a collection of uploaded files
 
-        wasReportMadeToPolice: [''],
+        wasReportMadeToPolice: [''], // No: 100000000 Yes: 100000001
 
         policeReportedWhichPoliceForce: [''],
         policeReportedDate: [''],
         policeReportedPoliceFileNumber: [''],
         policeReportedInvestigatingOfficer: [''],
 
-        noPoliceReportIndentification: [''],
+        noPoliceReportIdentification: [''],
 
         offenderFirstName: [''],
         offenderMiddleName: [''],
         offenderLastName: [''],
         offenderRelationship: [''],
-        offenderBeenCharged: [''],  // 1 = Yes, 2 = No, 3 = Unknown   | Having binding issues
+        offenderBeenCharged: ['', [Validators.required, Validators.min(100000000)]],  // Yes: 100000000 No: 100000001 Undecided: 100000002
 
-        courtFiles: this.fb.array([]),
+        courtFiles: this.fb.array([ this.createCourtInfoItem() ]),
 
         courtFileNumber: [''],
         courtLocation: [''],
 
-        haveYouSuedOffender: [''],
+        haveYouSuedOffender: [''], // No: 100000000   Yes: 100000001
         suedCourtLocation: [''],
         suedCourtFileNumber: [''],
-        intendToSueOffender: [''],   // 1 = Yes, 2 = No, 3 = Undecided   | Having binding issues
+        intendToSueOffender: [''], // Yes: 100000000 No: 100000001 Undecided: 100000002
+
+        racafInformation: this.fb.group({
+          applyToCourtForMoneyFromOffender: [''],
+          expensesRequested: [''],
+          expensesAwarded: [''],
+          expensesReceived: [''],
+          willBeTakingLegalAction: [''],
+          lawyerOrFirmName: [''],
+          lawyerAddress: this.fb.group({
+            line1: [''],
+            line2: [''],
+            line3: [''],
+            city: [''],
+            postalCode: [''],  // , [Validators.pattern(postalRegex)]
+            province: [{ value: 'British Columbia', disabled: false }],
+            country: [{ value: 'Canada', disabled: false }],
+          }),
+          signName: [''],
+          signDate: ['']
+        }),
       }),
       medicalInformation: this.fb.group({
         doYouHaveMedicalServicesCoverage: [''],
@@ -396,8 +491,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       }),
 
       representativeInformation: this.fb.group({
-        completingOnBehalfOf: ['1'],
-
+        // Complete on Behalf of belongs on representative, but it is collected in the introduction
         representativeFirstName: [''], //, Validators.required],
         representativeMiddleName: [''],
         representativeLastName: [''], //, Validators.required],
@@ -441,15 +535,77 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         authorizedPersonSignDate: [''], //, Validators.required],
       }),
     });
+
+    this.form.get('personalInformation.preferredMethodOfContact')
+      .valueChanges
+      .subscribe(value => {
+        let phoneControl = this.form.get('personalInformation.phoneNumber');
+        let emailControl = this.form.get('personalInformation.email');
+        let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
+
+        phoneControl.clearValidators();
+        emailControl.clearValidators();
+        addressControl.clearValidators();
+
+        phoneControl.setErrors(null);
+        emailControl.setErrors(null);
+        addressControl.setErrors(null);
+
+        let contactMethod = parseInt(value);
+        if (contactMethod === 100000000) {
+          phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+          this.phoneIsRequired = true;
+          this.emailIsRequired = false;
+          this.addressIsRequired = false;
+        } else if (contactMethod === 100000001) {
+          emailControl.setValidators([Validators.required, Validators.email]);
+          this.phoneIsRequired = false;
+          this.emailIsRequired = true;
+          this.addressIsRequired = false;
+        } else if (contactMethod === 100000002) {
+          addressControl.setValidators([Validators.required]);
+          this.phoneIsRequired = false;
+          this.emailIsRequired = false;
+          this.addressIsRequired = true;
+        }
+
+        phoneControl.markAsTouched();
+        emailControl.markAsTouched();
+        addressControl.markAsTouched();
+
+        addressControl.updateValueAndValidity();
+        emailControl.updateValueAndValidity();
+        phoneControl.updateValueAndValidity();
+      });
   }
 
+  submitPartialApplication() {
+      this.formFullyValidated = true;
+      this.save().subscribe(
+      data => {
+        console.log("submitting partial form");
+        this.router.navigate(['/application-success']);
+      },
+      err => {
+        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        console.log('Error submitting application');
+      }
+    );
+  }
+  
   submitApplication() {
     if (this.form.valid) {
       this.formFullyValidated = true;
-      this.save().subscribe(data => {
+      this.save().subscribe(
+      data => {
         console.log("submitting");
         this.router.navigate(['/application-success']);
-      });
+      },
+      err => {
+        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        console.log('Error submitting application');
+      }
+);
     } else {
       console.log("form not validated");
       this.formFullyValidated = false;
@@ -457,33 +613,34 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     }
   }
 
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
-    const value = <DynamicsApplicationModel> {
-      
+  testSnaks(): void {
+    let content = this.form.get('personalInformation').value;
+    this.personalModel = content;
+
+    let formData = <DynamicsApplicationModel> {
+      PersonalInformation: this.form.get('personalInformation').value,
+      CrimeInformation: this.form.get('crimeInformation').value,
     };
 
-    value.applicantsfirstname = this.form.get('personalInformation.firstName').value;
-    value.applicantsmiddlename = this.form.get('personalInformation.middleName').value;
-    value.applicantslastname = this.form.get('personalInformation.lastName').value;
-    value.applicantsotherfirstname = this.form.get('personalInformation.otherFirstName').value;
-    value.applicantsotherlastname = this.form.get('personalInformation.otherLastName').value;
+    //formData.PersonalInformation = this.form.get('personalInformation').value;
+//    formData.CrimeInformation = this.form.get('crimeInformation').value;
 
-    value.applicantsphoneNumber = this.form.get('personalInformation.phoneNumber').value;
-    value.applicantsemail = this.form.get('personalInformation.email').value;
-    value.applicantsbirthdate = this.form.get('personalInformation.birthDate').value;
+    console.log(formData);
+  }
 
-    value.applicantsgender = this.form.get('personalInformation.gender').value;
-    value.applicantsmaritalstatus = this.form.get('personalInformation.maritalStatus').value;
+  save(): Subject<boolean> {
+    const subResult = new Subject<boolean>();
+    const formData = <DynamicsApplicationModel>{
+      PersonalInformation: this.form.get('personalInformation').value,
+      CrimeInformation: this.form.get('crimeInformation').value,
+    };
 
-    value.typeofcrime = this.form.get('crimeInformation.typeOfCrime').value;
-
-    this.busy = this.accountDataService.submitApplication(value)
+    this.busy = this.justiceDataService.submitApplication(formData)
         .toPromise()
         .then(res => {
           subResult.next(true);
         }, err => subResult.next(false));
-    this.busy3 = Promise.resolve(this.busy);
+    this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
   }

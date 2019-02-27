@@ -42,10 +42,14 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\e2e-reports\**" />
+    <Compile Remove="ClientApp\e2e\**" />
     <Compile Remove="Migrations\**" />
     <Compile Remove="Seeders\**" />
     <Compile Remove="Test\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\e2e-reports\**" />
+    <Content Remove="ClientApp\e2e\**" />
     <Content Remove="Migrations\**" />
     <Content Remove="Seeders\**" />
     <Content Remove="Test\**" />
@@ -54,9 +58,13 @@
   
 
   <ItemGroup>
+    <EmbeddedResource Remove="ClientApp\e2e-reports\**" />
+    <EmbeddedResource Remove="ClientApp\e2e\**" />
     <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="Seeders\**" />
     <EmbeddedResource Remove="Test\**" />
+    <None Remove="ClientApp\e2e-reports\**" />
+    <None Remove="ClientApp\e2e\**" />
     <None Remove="Migrations\**" />
     <None Remove="Seeders\**" />
     <None Remove="Test\**" />
@@ -71,6 +79,8 @@
     <None Remove="ClientApp\src\app\bcsvcs-confirmation\bcsvcs-confirmation.component.html" />
     <None Remove="ClientApp\src\app\models\dynamics-application.model.ts" />
     <None Remove="ClientApp\src\app\models\invoice.model.ts" />
+    <None Remove="ClientApp\src\app\models\justice\crime-information.model.ts" />
+    <None Remove="ClientApp\src\app\models\justice\personal-information.model.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -92,6 +102,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\dynamics-application.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\invoice.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\adoxio-legalentities.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\justice\crime-information.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\justice\personal-information.model.ts" />
   </ItemGroup>
 
   <ItemGroup>
