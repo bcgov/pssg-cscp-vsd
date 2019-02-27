@@ -100,7 +100,7 @@
       "displayName": "Name",
       "description": "The name assigned to all of the resources defined in this template.",
       "required": true,
-      "value": "vsd"
+      "value": "vsd-app"
     },
     {
       "name": "GIT_REPO_URL",
