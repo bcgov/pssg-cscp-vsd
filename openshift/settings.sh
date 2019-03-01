@@ -17,7 +17,7 @@ export components=${components:-"vsd-app"}
 export builds=${builds:-""}
 
 # The images to be tagged after build
-export images=${images:-"vsd"}
+export images=${images:-"vsd-app"}
 
 # The routes for the project
 export routes=${routes:-""}
