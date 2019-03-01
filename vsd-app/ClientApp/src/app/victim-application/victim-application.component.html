@@ -264,68 +264,11 @@
               <input class="form-control" style="width: 350px;" type="text" (blur)="trimValue(form.get('personalInformation.email'))" formControlName="email" maxlength="100">
             </app-field>
 
-
             <h3>Primary Address</h3>
-            <div formGroupName="primaryAddress">
-              <app-field label="Country">
-                <select class="form-control" style="width: 350px;" formControlName="country" (change)="updatePrimaryLocation($event)">
-                  <option value="">Choose a country</option>
-                  <option *ngFor="let item of countryList" [value]="item.name">
-                    {{ item.name }}
-                  </option>
-                </select>
-              </app-field>
-              <app-field label="{{ primaryProvinceType }}">
-                <select class="form-control" style="width: 350px;" formControlName="province">
-                  <option value="">Choose a {{ primaryProvinceType }}</option>
-                  <option *ngFor="let item of primaryProvinceList" [value]="item">
-                    {{item}}
-                  </option>
-                </select>
-              </app-field>
-              <app-field label="City" [required]="true" [valid]="isChildFieldValid('personalInformation', 'primaryAddress.city')" errorMessage="Please enter your primary city">
-                <input class="form-control" style="width: 350px;" type="text" formControlName="city">
-              </app-field>
-              <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)" [required]="addressIsRequired" [valid]="isFieldValid('personalInformation.primaryAddress.line1')" errorMessage="Please enter your primary mailing address">
-                <input class="form-control" style="width: 400px;" type="text" formControlName="line1"><br /><br />
-                <input class="form-control" style="width: 400px;" type="text" formControlName="line2"><br /><br />
-                <input class="form-control" style="width: 400px;" type="text" formControlName="line3">
-              </app-field>
-              <app-field label="{{ primaryPostalCodeType }}" [required]="false" [valid]="isChildFieldValid('personalInformation', 'primaryAddress.postalCode')" errorMessage="Please enter your primary postal code">
-                <input class="form-control" style="width: 200px;" type="text" placeholder="{{ primaryPostalCodeSample }}" formControlName="postalCode">
-              </app-field>
-              <br />
-            </div>
+            <app-address [group]="form.get('personalInformation.primaryAddress')"></app-address>
+
             <h3>Alternate Address <span>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</span></h3>
-            <div formGroupName="alternateAddress">
-              <app-field label="Country">
-                <select class="form-control" style="width: 350px;" formControlName="country" (change)="updateAlternateLocation($event)">
-                  <option value="">Choose a country</option>
-                  <option *ngFor="let item of countryList" [value]="item.name">
-                    {{ item.name }}
-                  </option>
-                </select>
-              </app-field>
-              <app-field label="{{ alternateProvinceType }}">
-                <select class="form-control" style="width: 350px;" formControlName="province">
-                  <option value="">Choose a {{ alternateProvinceType }}</option>
-                  <option *ngFor="let item of alternateProvinceList" [value]="item">
-                    {{item}}
-                  </option>
-                </select>
-              </app-field>
-              <app-field label="City" errorMessage="Please enter your alternate city">
-                <input class="form-control" style="width: 350px;" type="text" formControlName="city">
-              </app-field>
-              <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
-                <input class="form-control" style="width: 400px;" type="text" formControlName="line1"><br /><br />
-                <input class="form-control" style="width: 400px;" type="text" formControlName="line2"><br /><br />
-                <input class="form-control" style="width: 400px;" type="text" formControlName="line3">
-              </app-field>
-              <app-field label="{{ alternatePostalCodeType }}">
-                <input class="form-control" style="width: 200px;" type="text" placeholder="{{ alternatePostalCodeSample }}" formControlName="postalCode">
-              </app-field>
-            </div>
+            <app-address [group]="form.get('personalInformation.alternateAddress')"></app-address>
           </div>
 
           <div formGroupName="crimeInformation" *ngIf="this.currentFormStep == 2">
@@ -608,36 +551,7 @@
                   <app-field label="Law Firm or Office Address">
                   </app-field>
 
-                  <div formGroupName="lawyerAddress">
-                    <p>!!! NEED TO REJIG THIS !!!</p>
-                    <app-field label="Country">
-                      <select class="form-control" style="width: 350px;" formControlName="country">
-                        <option value="">Choose a country</option>
-                        <option *ngFor="let item of countryList" [value]="item.name">
-                          {{ item.name }}
-                        </option>
-                      </select>
-                    </app-field>
-                    <app-field label="Province">
-                      <select class="form-control" style="width: 350px;" formControlName="province">
-                        <option value="">Choose a Province</option>
-                        <option *ngFor="let item of primaryProvinceList" [value]="item">
-                          {{item}}
-                        </option>
-                      </select>
-                    </app-field>
-                    <app-field label="City" errorMessage="Please enter your primary city">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="city">
-                    </app-field>
-                    <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)" [required]="addressIsRequired" errorMessage="Please enter your primary mailing address">
-                      <input class="form-control" style="width: 400px;" type="text" formControlName="line1"><br /><br />
-                      <input class="form-control" style="width: 400px;" type="text" formControlName="line2"><br /><br />
-                      <input class="form-control" style="width: 400px;" type="text" formControlName="line3">
-                    </app-field>
-                    <app-field label="Postal Code" [required]="false" errorMessage="Please enter your primary postal code">
-                      <input class="form-control" style="width: 200px;" type="text" placeholder="" formControlName="postalCode">
-                    </app-field>
-                  </div>
+                  <app-address [group]="form.get('crimeInformation.racafInformation.lawyerAddress')"></app-address>
 
                   <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
                   <div class="terms">
@@ -1036,86 +950,58 @@
               <app-field label="Last Name" [required]="true" [valid]="form.get('representativeInformation.representativeLastName').valid || !form.get('representativeInformation.representativeLastName').touched" errorMessage="Please enter a last name">
                 <input class="form-control" style="width: 350px;" type="text" formControlName="representativeLastName">
               </app-field>
+
               <h3>Address & Contact Information</h3>
-              <app-field label="Country">
-                <select class="form-control" style="width: 350px;" formControlName="representativeAddressCountry" (change)="updateRepresentativeLocation($event)">
-                  <option value="">Choose a country</option>
-                  <option *ngFor="let item of countryList" [value]="item.name">
-                    {{ item.name
-                }}
-                </option>
-                </select>
+              <app-address [group]="form.get('representativeInformation.representativeAddress')"></app-address>
+
+              <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="form.get('representativeInformation.representativePhoneNumber').valid || !form.get('representativeInformation.representativePhoneNumber').touched" errorMessage="Please enter a phone number">
+                <input class="form-control" style="width: 350px;" type="text" formControlName="representativePhoneNumber">
+              </app-field>
+
+              <app-field label="Email Address" [required]="true" [valid]="form.get('representativeInformation.representativeEmail').valid || !form.get('representativeInformation.representativeEmail').touched" errorMessage="Please enter an email address">
+                <input class="form-control" style="width: 350px;" type="text" formControlName="representativeEmail" placeholder="myname@email.com">
+              </app-field>
+
+              <h3>Relationship to Victim</h3>
+              <app-field label="Are you an immediate family member?">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
+                  <span>No</span>
+                </label>
+              </app-field>
+
+              <section *ngIf="form.get('representativeInformation.relationshipImmediateFamilyMember').value === true">
+                <app-field label="What is your relationship to the victim? (e.g. mother)">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="relationshipToVictim">
                 </app-field>
+              </section>
 
-                <app-field label="{{ representativeProvinceType }}">
-                  <select class="form-control" style="width: 350px;" formControlName="representativeAddressProvince">
-                    <option value="">Choose a {{ representativeProvinceType }}</option>
-                    <option *ngFor="let item of representativeProvinceList" [value]="item">
-                      {{item}}
-                    </option>
-                  </select>
+              <app-field label="Are you a legal representative?">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="relationshipLegalRepresentative" formControlName="relationshipLegalRepresentative">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="relationshipLegalRepresentative" formControlName="relationshipLegalRepresentative">
+                  <span>No</span>
+                </label>
+              </app-field>
+
+              <section *ngIf="form.get('representativeInformation.relationshipLegalRepresentative').value === true">
+                <app-field label="What is your authority? (e.g. Public Guardian and Trustee)">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="relationshipLegalAuthority">
                 </app-field>
+              </section>
 
-                <app-field label="City">
-                  <input class="form-control" style="width: 350px;" type="text" formControlName="representativeAddressCity">
-                </app-field>
-
-                <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
-                  <input class="form-control" style="width: 400px;" type="text" formControlName="representativeAddressLine1">
-                </app-field>
-
-                <app-field label="{{ representativePostalCodeType }}">
-                  <input class="form-control" style="width: 200px;" type="text" placeholder="{{ representativePostalCodeSample }}" formControlName="representativeAddressPostalCode">
-                </app-field>
-
-                <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="form.get('representativeInformation.representativePhoneNumbr').valid || !form.get('representativeInformation.representativePhoneNumbr').touched" errorMessage="Please enter a phone number">
-                  <input class="form-control" style="width: 350px;" type="text" formControlName="representativePhoneNumbr">
-                </app-field>
-
-                <app-field label="Email Address" [required]="true" [valid]="form.get('representativeInformation.representativeEmail').valid || !form.get('representativeInformation.representativeEmail').touched" errorMessage="Please enter an email address">
-                  <input class="form-control" style="width: 350px;" type="text" formControlName="representativeEmail" placeholder="myname@email.com">
-                </app-field>
-
-                <h3>Relationship to Victim</h3>
-                <app-field label="Are you an immediate family member?">
-                  <label class="inline-label">
-                    <input type="radio" [value]="true" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="false" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
-                    <span>No</span>
-                  </label>
-                </app-field>
-
-                <section *ngIf="form.get('representativeInformation.relationshipImmediateFamilyMember').value === true">
-                  <app-field label="What is your relationship to the victim? (e.g. mother)">
-                    <input class="form-control" style="width: 350px;" type="text" formControlName="relationshipToVictim">
-                  </app-field>
-                </section>
-
-                <app-field label="Are you a legal representative?">
-                  <label class="inline-label">
-                    <input type="radio" [value]="true" name="relationshipLegalRepresentative" formControlName="relationshipLegalRepresentative">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="false" name="relationshipLegalRepresentative" formControlName="relationshipLegalRepresentative">
-                    <span>No</span>
-                  </label>
-                </app-field>
-
-                <section *ngIf="form.get('representativeInformation.relationshipLegalRepresentative').value === true">
-                  <app-field label="What is your authority? (e.g. Public Guardian and Trustee)">
-                    <input class="form-control" style="width: 350px;" type="text" formControlName="relationshipLegalAuthority">
-                  </app-field>
-                </section>
-
-                <p>If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship / trusteeship</p>
-                <div class="file-upload-placeholder">
-                  [upload functionality goes here]
-                </div>
-</section>
+              <p>If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship / trusteeship</p>
+              <div class="file-upload-placeholder">
+                [upload functionality goes here]
+              </div>
+            </section>
           </div>
 
           <div formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7">

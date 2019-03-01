@@ -61,6 +61,7 @@ import { UserDataService } from './services/user-data.service';
 import { VersionInfoDataService } from './services/version-info-data.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BusinessProfileComponent } from './business-information/business-profile/business-profile.component';
+import { AddressComponent } from './shared/address/address.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
@@ -82,6 +83,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
   declarations: [
     AppComponent,
     BusinessProfileComponent,
+    AddressComponent,
     VictimApplicationComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,

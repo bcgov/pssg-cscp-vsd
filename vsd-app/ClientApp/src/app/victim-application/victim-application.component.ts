@@ -73,22 +73,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   public currentFormStep: number;
   public summaryOfBenefitsUrl: string;
 
-  // Should probably refactor these into a 'CountrySelection' class.
-  primaryProvinceList: string[];
-  primaryProvinceType: string;
-  primaryPostalCodeType: string;
-  primaryPostalCodeSample: string;
-
-  alternateProvinceList: string[];
-  alternateProvinceType: string;
-  alternatePostalCodeType: string;
-  alternatePostalCodeSample: string;
-
-  representativeProvinceList: string[];
-  representativeProvinceType: string;
-  representativePostalCodeType: string;
-  representativePostalCodeSample: string;
-
   phoneIsRequired: boolean;
   emailIsRequired: boolean;
   addressIsRequired: boolean;
@@ -119,44 +103,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
     this.formFullyValidated = false;
     this.currentFormStep = 0;
-    var canada = COUNTRIES.filter(c => c.name.toLowerCase() == 'canada')[0];
-    this.primaryProvinceList = canada.areas;
-    this.alternateProvinceList = canada.areas;
-
-    this.primaryProvinceType = canada.areaType;
-    this.primaryPostalCodeType = canada.postalCodeName;
-    this.primaryPostalCodeSample = canada.postalCodeSample;
-
-    this.alternateProvinceType = canada.areaType;
-    this.alternatePostalCodeType = canada.postalCodeName;
-    this.alternatePostalCodeSample = canada.postalCodeSample;
-  }
-
-  updatePrimaryLocation(event) {
-    var selection = event.target.value.toLowerCase();
-    var selectedCountry = COUNTRIES.filter(c => c.name.toLowerCase() == selection)[0];
-    this.primaryProvinceList = selectedCountry.areas;
-    this.primaryProvinceType = selectedCountry.areaType;
-    this.primaryPostalCodeType = selectedCountry.postalCodeName;
-    this.primaryPostalCodeSample = selectedCountry.postalCodeSample;
-  }
-
-  updateAlternateLocation(event) {
-    var selection = event.target.value.toLowerCase();
-    var selectedCountry = COUNTRIES.filter(c => c.name.toLowerCase() == selection)[0];
-    this.alternateProvinceList = selectedCountry.areas;
-    this.alternateProvinceType = selectedCountry.areaType;
-    this.alternatePostalCodeType = selectedCountry.postalCodeName;
-    this.alternatePostalCodeSample = selectedCountry.postalCodeSample;
-  }
-
-  updateRepresentativeLocation(event) {
-    var selection = event.target.value.toLowerCase();
-    var selectedCountry = COUNTRIES.filter(c => c.name.toLowerCase() == selection)[0];
-    this.representativeProvinceList = selectedCountry.areas;
-    this.representativeProvinceType = selectedCountry.areaType;
-    this.representativePostalCodeType = selectedCountry.postalCodeName;
-    this.representativePostalCodeSample = selectedCountry.postalCodeSample;
   }
 
   validateAllFormFields(formGroup: any) {
@@ -346,7 +292,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           line1: [''],
           line2: [''],
           line3: [''],
-          city: [''],
+          city: ['', Validators.required],
           postalCode: [''],  // , [Validators.pattern(postalRegex)]
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
@@ -360,19 +306,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
-        //primaryAddressLine1: [''],
-        //primaryAddressLine2: [''],
-        //primaryAddressLine3: [''],
-        //primaryAddressCity: [''],
-        //primaryAddressPostalCode: ['', [Validators.pattern(postalRegex)]],
-        //primaryAddressProvince: [{ value: 'British Columbia', disabled: false }],
-        //primaryAddressCountry: [{ value: 'Canada', disabled: false }],
-
-        //alternateAddressLine1: [''],
-        //alternateAddressCity: [''],
-        //alternateAddressPostalCode: ['', [Validators.pattern(postalRegex)]],
-        //alternateAddressProvince: [{ value: 'British Columbia', disabled: false }],
-        //alternateAddressCountry: [{ value: 'Canada', disabled: false }],
       }),
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
@@ -496,12 +429,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         representativeMiddleName: [''],
         representativeLastName: [''], //, Validators.required],
 
-        representativeAddressLine1: [''],
-        representativeAddressCity: [''],
-        representativeAddressPostalCode: ['', [Validators.pattern(postalRegex)]],
-        representativeAddressProvince: [{ value: 'British Columbia', disabled: false }],
-        representativeAddressCountry: [{ value: 'Canada', disabled: false }],
-        representativePhoneNumbr: [''], //, Validators.required],
+        representativeAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          line3: [''],
+          city: [''],
+          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+
+        representativePhoneNumber: [''], //, Validators.required],
         representativeEmail: [''], //, [Validators.required, Validators.email]],
 
         relationshipImmediateFamilyMember: [''],
@@ -536,6 +474,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       }),
     });
 
+    /* Need to rework this with the new app-address control */
     this.form.get('personalInformation.preferredMethodOfContact')
       .valueChanges
       .subscribe(value => {
@@ -620,6 +559,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     let formData = <DynamicsApplicationModel> {
       PersonalInformation: this.form.get('personalInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
+      MedicalInformation: this.form.get('medicalInformation').value,
     };
 
     //formData.PersonalInformation = this.form.get('personalInformation').value;

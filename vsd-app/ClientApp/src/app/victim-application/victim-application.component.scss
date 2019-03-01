@@ -161,18 +161,19 @@ textarea.form-control {
 }
 
 ::ng-deep .terms {
-    input[type=text] {
-      margin-left: 15px;
-    }
+  input[type=text] {
+    margin-left: 15px;
+  }
 
-    ol {
-      padding-left: 12px;
+  ol {
+    padding-left: 12px;
 
-      li {
-        padding-left: 1em;
-      }
+    li {
+      padding-left: 1em;
     }
   }
+}
+
 .review-table {
   border-collapse: separate;
   border-spacing: 3px;
