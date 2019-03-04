@@ -67,6 +67,7 @@ import { ApplicationSuccessComponent } from './application-success/application-s
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { TestApiComponent } from './test-api/test-api.component';
 import { FileDropModule } from 'ngx-file-drop';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
 import { NgBusyModule } from 'ng-busy';
 import { BsDatepickerModule, AlertModule } from 'ngx-bootstrap';
@@ -141,6 +142,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     MatToolbarModule,
     MatTooltipModule,
     FileDropModule,
+    TooltipModule.forRoot(),
     BsDatepickerModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     AlertModule.forRoot()
@@ -186,6 +188,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     MatTabsModule,
     MatToolbarModule,
     FileDropModule,
+    TooltipModule,
     MatTooltipModule
   ],
   providers: [

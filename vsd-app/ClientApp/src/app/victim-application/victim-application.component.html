@@ -3,6 +3,7 @@
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter">
       <section class="application-nav">
+        {{ useApplicationType }}
         <h3>Victim Application</h3>
         <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
           <ng-template matStepperIcon="edit">
@@ -33,7 +34,7 @@
       </section>
 
       <p>
-        <a href="#" (click)="testSnaks()">Show Form Data</a>
+        <a href="#" (click)="testSnaks()">Show Form Data</a><br /><br />
         <button (click)="markAsTouched(); submitPartialApplication();" class="btn btn-primary">Partial Submit <i class="fas fa-chevron-right"></i></button>
       </p>
     </div>
@@ -233,7 +234,8 @@
               <input class="form-control" style="width: 50px;" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
               <span> - </span>
               <input class="form-control" style="width: 50px;" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
-              <span>[info icon]</span>
+              <span class="tooltip-icon" [tooltip]="tolTemplate">[info icon]</span>
+              <ng-template #tolTemplate>Info about <strong>the</strong> action</ng-template>
             </app-field>
 
             <app-field label="Occupation" [required]="false" [valid]="isFieldValid('personalInformation.occupation')" errorMessage="Please enter your occupation">
@@ -1440,7 +1442,7 @@
                   <tr>
                     <th>Other Treatments</th>
                     <td>
-                      Figure out how to loop on form thing
+                      --
                     </td>
                   </tr>
                 </tbody>

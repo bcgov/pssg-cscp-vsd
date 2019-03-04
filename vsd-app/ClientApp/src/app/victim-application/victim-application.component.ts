@@ -19,9 +19,6 @@ import { PersonalInformationModel } from '../models/justice/personal-information
 import { CrimeInformationModel } from '../models/justice/crime-information.model';
 import { FormBase } from '../shared/form-base';
 
-import { COUNTRIES } from './country-list';
-import { CustomAddress } from '../models/custom-address.model';
-
 const moment = _rollupMoment || _moment;
 
 // See the Moment.js docs for the meaning of these formats:
@@ -61,14 +58,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   busy3: Promise<any>;
   form: FormGroup;
   formFullyValidated: boolean;
+  useApplicationType: string;
 
   otherTreatmentItems: FormArray;
   courtFileItems: FormArray;
 
   showAddCourtInfo: boolean = true;
   showRemoveCourtInfo: boolean = false;
-
-  countryList = COUNTRIES;
 
   public currentFormStep: number;
   public summaryOfBenefitsUrl: string;
@@ -105,156 +101,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.currentFormStep = 0;
   }
 
-  validateAllFormFields(formGroup: any) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
-      }
-    });
-  }
-
-  getErrors(formGroup: any, errors: any = {}) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        errors[field] = control.errors;
-      } else if (control instanceof FormGroup) {
-        errors[field] = this.getErrors(control);
-      }
-    });
-    return errors;
-  }
-
-  orEmpty(amI: FormControl): string {
-    if (amI == null || amI === undefined)
-      return "--";
-
-    if (amI.value.length == 0)
-      return "--";
-
-    return amI.value;
-  }
-
-  isFieldValid(field: string) {
-    let formField = this.form.get(field);
-    if (formField == null)
-      return true;
-
-    return this.form.get(field).valid || !this.form.get(field).touched;
-  }
-  
-  isChildFieldValid(parent: string, field: string) {
-    let formField = this.form.get(parent);
-    if (formField == null)
-      return true;
-
-    return formField.get(field).valid || !formField.get(field).touched;
-  }
-
-  valueOrEmpty(controlName: string): string {
-    var control = this.form.get(controlName);
-
-    if (control == null || control === undefined)
-      return "--";
-
-    if (control.value == null || control.value === undefined)
-      return "--";
-
-    if (control.value.length == 0 || control.value.length === undefined)
-      return "--";
-
-    return control.value;
-  }
-
-  getFormGroupName(groupIndex: any) {
-    let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
-    return elements[groupIndex];
-  }
-
-  gotoPageIndex(stepper: MatStepper, selectPage: number): void {
-    window.scroll(0, 0);
-    stepper.selectedIndex = selectPage;
-    this.currentFormStep = selectPage;
-  }
-
-  gotoPage(selectPage: MatStepper): void {
-    window.scroll(0, 0);
-    this.currentFormStep = selectPage.selectedIndex;
-  }
-
-  gotoNextStep(stepper: MatStepper): void {
-    if (stepper != null) {
-      var desiredFormIndex = stepper.selectedIndex;
-      var formGroupName = this.getFormGroupName(desiredFormIndex);
-
-      this.formFullyValidated = this.form.valid;
-
-      if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
-        var formParts = this.form.get(formGroupName);
-        var formValid = true;
-
-        if (formParts != null) {
-          formValid = formParts.valid;
-        }
-
-        let errors = this.getErrors(this.form.get('crimeInformation'));
-        console.log('Form Valid: ' + formValid);
-        console.log(errors);
-        if (formValid) {
-          window.scroll(0, 0);
-          stepper.next();
-        } else {
-          this.validateAllFormFields(formParts);
-        }
-      }
-    }
-  }
-
-  addProvider(): void {
-    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    this.otherTreatmentItems.push(this.createTreatmentItem());
-  }
-
-  removeProvider(index: number): void {
-    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    this.otherTreatmentItems.removeAt(index);
-  }
-
-  createTreatmentItem(): FormGroup {
-    return this.fb.group({
-      providerType: '',   // 1 = Specialist, 2 = Counsellor/Psychologist, 3 = Dentist, 4 = Other ---- Figure out how to map these better
-      providerName: '',
-      providerPhoneNumber: '',
-      providerAddress: '',
-    });
-  }
-
-  addCourtInfo(): void {
-    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
-    this.courtFileItems.push(this.createCourtInfoItem());
-    this.showAddCourtInfo = this.courtFileItems.length < 3;
-    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
-  }
-
-  removeCourtInfo(index: number): void {
-    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
-    this.courtFileItems.removeAt(index);
-    this.showAddCourtInfo = this.courtFileItems.length < 3;
-    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
-  }
-
-  createCourtInfoItem(): FormGroup {
-    return this.fb.group({
-      courtFileNumber: '',
-      courtLocation: ''
-    });
-  }
-
   ngOnInit() {
+    this.useApplicationType = this.route.snapshot.queryParamMap.get('at');
+
     this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
     this.form = this.fb.group({
       introduction: this.fb.group({
@@ -336,7 +185,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         offenderRelationship: [''],
         offenderBeenCharged: ['', [Validators.required, Validators.min(100000000)]],  // Yes: 100000000 No: 100000001 Undecided: 100000002
 
-        courtFiles: this.fb.array([ this.createCourtInfoItem() ]),
+        courtFiles: this.fb.array([this.createCourtInfoItem()]),
 
         courtFileNumber: [''],
         courtLocation: [''],
@@ -517,6 +366,156 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         phoneControl.updateValueAndValidity();
       });
   }
+
+  validateAllFormFields(formGroup: any) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+
+  getErrors(formGroup: any, errors: any = {}) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        errors[field] = control.errors;
+      } else if (control instanceof FormGroup) {
+        errors[field] = this.getErrors(control);
+      }
+    });
+    return errors;
+  }
+
+  orEmpty(amI: FormControl): string {
+    if (amI == null || amI === undefined)
+      return "--";
+
+    if (amI.value.length == 0)
+      return "--";
+
+    return amI.value;
+  }
+
+  isFieldValid(field: string) {
+    let formField = this.form.get(field);
+    if (formField == null)
+      return true;
+
+    return this.form.get(field).valid || !this.form.get(field).touched;
+  }
+  
+  isChildFieldValid(parent: string, field: string) {
+    let formField = this.form.get(parent);
+    if (formField == null)
+      return true;
+
+    return formField.get(field).valid || !formField.get(field).touched;
+  }
+
+  valueOrEmpty(controlName: string): string {
+    var control = this.form.get(controlName);
+
+    if (control == null || control === undefined)
+      return "--";
+
+    if (control.value == null || control.value === undefined)
+      return "--";
+
+    if (control.value.length == 0 || control.value.length === undefined)
+      return "--";
+
+    return control.value;
+  }
+
+  getFormGroupName(groupIndex: any) {
+    let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
+    return elements[groupIndex];
+  }
+
+  gotoPageIndex(stepper: MatStepper, selectPage: number): void {
+    window.scroll(0, 0);
+    stepper.selectedIndex = selectPage;
+    this.currentFormStep = selectPage;
+  }
+
+  gotoPage(selectPage: MatStepper): void {
+    window.scroll(0, 0);
+    this.currentFormStep = selectPage.selectedIndex;
+  }
+
+  gotoNextStep(stepper: MatStepper): void {
+    if (stepper != null) {
+      var desiredFormIndex = stepper.selectedIndex;
+      var formGroupName = this.getFormGroupName(desiredFormIndex);
+
+      this.formFullyValidated = this.form.valid;
+
+      if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
+        var formParts = this.form.get(formGroupName);
+        var formValid = true;
+
+        if (formParts != null) {
+          formValid = formParts.valid;
+        }
+
+        let errors = this.getErrors(this.form.get('crimeInformation'));
+        console.log('Form Valid: ' + formValid);
+        console.log(errors);
+        if (formValid) {
+          window.scroll(0, 0);
+          stepper.next();
+        } else {
+          this.validateAllFormFields(formParts);
+        }
+      }
+    }
+  }
+
+  addProvider(): void {
+    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
+    this.otherTreatmentItems.push(this.createTreatmentItem());
+  }
+
+  removeProvider(index: number): void {
+    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
+    this.otherTreatmentItems.removeAt(index);
+  }
+
+  createTreatmentItem(): FormGroup {
+    return this.fb.group({
+      providerType: '',   // 1 = Specialist, 2 = Counsellor/Psychologist, 3 = Dentist, 4 = Other ---- Figure out how to map these better
+      providerName: '',
+      providerPhoneNumber: '',
+      providerAddress: '',
+    });
+  }
+
+  addCourtInfo(): void {
+    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
+    this.courtFileItems.push(this.createCourtInfoItem());
+    this.showAddCourtInfo = this.courtFileItems.length < 3;
+    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
+  }
+
+  removeCourtInfo(index: number): void {
+    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
+    this.courtFileItems.removeAt(index);
+    this.showAddCourtInfo = this.courtFileItems.length < 3;
+    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
+  }
+
+  createCourtInfoItem(): FormGroup {
+    return this.fb.group({
+      courtFileNumber: '',
+      courtLocation: ''
+    });
+  }
+
 
   submitPartialApplication() {
       this.formFullyValidated = true;
