@@ -1,0 +1,236 @@
+<div class="form-wrapper" style="position: relative;">
+  <div [ngBusy]="[busy, busy2]"></div>
+  <div class="row" [formGroup]="form">
+    <div class="col-lg-3 col-sm-12 application-gutter">
+
+      <section class="submit-container learn-benefits">
+        <div class="submit-content">
+          <h2>Questions about Invoice Submission?</h2>
+          <p>Review the Invoice submission guidelines outlined before submitting. This will open a new window.</p>
+          <p><a [attr.href]="summaryOfBenefitsUrl" target="_blank" class="btn btn-secondary">Invoice Submission Guidelines</a></p>
+        </div>
+      </section>
+
+      <p>
+        <a href="#" (click)="testSnaks()">Show Form Data</a><br /><br />
+        <button (click)="markAsTouched(); submitPartialApplication();" class="btn btn-primary">Partial Submit <i class="fas fa-chevron-right"></i></button>
+      </p>
+    </div>
+
+    <div class="col-lg-7 col-sm-12">
+      <div [formGroup]="form">
+        <div *ngIf="dataLoaded || true">
+          <div formGroupName="invoiceDetails">
+            <div class="page-header">
+              <h1>Submit an Invoice</h1>
+            </div>
+
+            <h2 class="blue-header">Claim Information</h2>
+            <div class="row no-gutter">
+              <div class="col-6">
+                <app-field label="Claim Number" [required]="true" [valid]="isFieldValid('invoiceDetails.claimNumber')" errorMessage="Please enter the claim number">
+                  <input class="form-control" type="text" formControlName="claimNumber" maxlength="100">
+                </app-field>
+
+                <app-field label="Claimant's Name" [required]="true" [valid]="isFieldValid('invoiceDetails.claimantsName')" errorMessage="Please enter the claimaint's name">
+                  <input class="form-control" type="text" formControlName="claimantsName" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-6">
+                <app-field label="Invoice Number" [required]="true" [valid]="isFieldValid('invoiceDetails.invoiceNumber')" errorMessage="Please enter the invoice number">
+                  <input class="form-control" type="text" formControlName="invoiceNumber" maxlength="100">
+                </app-field>
+
+                <app-field label="Invoice Date" [required]="true" [valid]="isFieldValid('invoiceDetails.invoiceDate')" errorMessage="Please enter the invoice date">
+                  <input type="text" class="form-control" formControlName="invoiceDate" placeholder="yyyy-mm-dd"
+                         [matDatepicker]="invoiceDatePicker" (focus)="invoiceDatePicker.open()" (click)="invoiceDatePicker.open()" readonly style="background-color: #fff;">
+                  <mat-datepicker #invoiceDatePicker></mat-datepicker>
+                </app-field>
+              </div>
+            </div>
+
+            <h2 class="blue-header">Address & Contact Information</h2>
+            <div class="row no-gutter">
+              <div class="col-6">
+                <app-address [group]="form.get('invoiceDetails.invoiceAddress')"></app-address>
+              </div>
+              <div class="col-6">
+                <app-field label="Phone Number" [required]="true" [valid]="isFieldValid('invoiceDetails.phoneNumber')" errorMessage="Please enter a 10-digit phone number">
+                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
+                </app-field>
+
+                <app-field label="Email Address" [required]="true" [valid]="isFieldValid('invoiceDetails.email')" errorMessage="Please enter an email address">
+                  <input class="form-control" type="text" (blur)="trimValue(form.get('invoiceDetails.email'))" formControlName="email" maxlength="100">
+                </app-field>
+
+                <app-field label="Fax" [required]="false" [valid]="isFieldValid('invoiceDetails.faxNumber')" errorMessage="Please enter a 10-digit fax number">
+                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="faxNumber">
+                </app-field>
+
+              </div>
+            </div>
+
+            <h2 class="blue-header">Invoice Details</h2>
+
+            <div class="row no-gutter">
+              <div class="col-6">
+                <app-field label="Name of Payee" [required]="true" [valid]="isFieldValid('invoiceDetails.nameOfPayee')" errorMessage="Please enter the payee name">
+                  <input class="form-control" type="text" formControlName="nameOfPayee" maxlength="100">
+                </app-field>
+
+                <app-field label="Payment Type " [required]="true" [valid]="isFieldValid('invoiceDetails.paymentType')" errorMessage="Please select your payment type">
+                  <select class="form-control" formControlName="paymentType">
+                    <option value="0">Select...</option>
+                    <option value="100000000">EFT</option>
+                    <option value="100000001">Cheque</option>
+                    <option value="100000002">Wire Transfer</option>
+                  </select>
+                </app-field>
+              </div>
+              <div class="col-6">
+                <app-field label="Name of Counsellor who provided the counselling" [required]="true" [valid]="isFieldValid('invoiceDetails.nameOfPayee')" errorMessage="Please enter the counsellor name">
+                  <input class="form-control" type="text" formControlName="nameOfPayee" maxlength="100">
+                </app-field>
+
+                <app-field label="Counsellor Registration Number" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorRegistrationNumber')" errorMessage="Please enter counsellor registration number">
+                  <input class="form-control" type="text" formControlName="counsellorRegistrationNumber" maxlength="100">
+                </app-field>
+              </div>
+            </div>
+
+            <h3>Settings</h3>
+            <section class="settings-panel">
+              <div class="row no-gutter">
+                <div class="col-6">
+                  <app-field label="Counselling Type" [valid]="isFieldValid('invoiceDetails.settingsCounsellingType')">
+                    <select class="form-control" formControlName="settingsCounsellingType">
+                      <option value="0">Select...</option>
+                      <option value="100000000">Counselling Session</option>
+                      <option value="100000001">Court Supporting Counselling</option>
+                      <option value="100000002">Psycho-educational sessions</option>
+                    </select>
+                  </app-field>
+
+                  <app-field label="Counselling Rate" [valid]="isFieldValid('invoiceDetails.settingsCounsellingRate')" errorMessage="Please enter a dollar amount">
+                    <input class="form-control" type="number" formControlName="settingsCounsellingRate" maxlength="20" step="0.01">
+                  </app-field>
+                </div>
+
+                <div class="col-6">
+                  <app-field label="Number of Sessions" [valid]="isFieldValid('invoiceDetails.settingsNumberOfSessions')" errorMessage="Please enter a number amount">
+                    <input class="form-control" type="number" formControlName="settingsNumberOfSessions" maxlength="5" step="1" required>
+                  </app-field>
+
+                  <app-field label="Session Duration" [valid]="isFieldValid('invoiceDetails.settingsSessionDuration')" errorMessage="Please enter hour amount">
+                    <input class="form-control" type="number" formControlName="settingsSessionDuration" maxlength="10" step="0.25">
+                  </app-field>
+                </div>
+              </div>
+              <div class="row no-gutter">
+                <div class="col-12">
+                  <a href="javascript:void(0);" class="btn btn-secondary pull-right" (click)="setLineItems()">Set Line Items</a>
+                </div>
+              </div>
+            </section>
+
+            <div class="invoice-items">
+              <div class="item-listing" formArrayName="lineItems" *ngFor="let item of form.get('invoiceDetails.lineItems').controls; let i = index;">
+                <div [formGroupName]="i" class="invoice-item row no-gutter">
+                  <div class="col col-3">
+                    <app-field label="Description" [required]="true">
+                      <input class="form-control" type="text" formControlName="description" placeholder="Session {{ i + 1 }}">
+                    </app-field>
+                  </div>
+                  <div class="col col-2">
+                    <app-field label="Counselling Type" [required]="true">
+                      <select class="form-control" formControlName="counsellingType">
+                        <option value="0">Select...</option>
+                        <option value="100000000">Counselling Session</option>
+                        <option value="100000001">Court Supporting Counselling</option>
+                        <option value="100000002">Psycho-educational sessions</option>
+                      </select>
+                    </app-field>
+                  </div>
+                  <div class="col col-2">
+                    <app-field label="Session Date" [required]="true">
+                      <input class="form-control" type="text" formControlName="sessionDate">
+                    </app-field>
+                  </div>
+                  <div class="col">
+                    <app-field label="Hrs">
+                      <input class="form-control" type="text" formControlName="sessionHours">
+                    </app-field>
+                  </div>
+                  <div class="col">
+                    <app-field label="Rate">
+                      <input class="form-control" type="text" formControlName="sessionRate">
+                    </app-field>
+                  </div>
+                  <div class="col">
+                    <app-field label="Amount">
+                      <input class="form-control" type="text" formControlName="sessionAmount">
+                    </app-field>
+                  </div>
+                  <div class="col">
+                    <a href="javascript:void(0);" (click)="removeLineItem(i)" *ngIf="showRemoveLine">
+                      <i class="fas fa-trash-alt"></i> Remove
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <a href="javascript:void(0);" class="btn btn-secondary" (click)="addLineItem()">Add Line</a>
+            </div>
+
+            <div class="form-totals">
+              <div class="row">
+                <div class="col text-right">
+                  <label>Sub-total</label>
+                  <span class="amount">$ {{ invoiceSubTotal }}</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col text-right">
+                  <label>
+                    Exempt from GST?
+                    <span>
+                      <input type="checkbox" [value]="true" name="exemptFromGst" formControlName="exemptFromGst">
+                      Yes
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="row gst" *ngIf="form.get('invoiceDetails.exemptFromGst').value === false">
+                <div class="col text-right">
+                  <label>GST (Calculated at 5%)</label>
+                  <span class="amount">$ {{ invoiceGstTotal }}</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col text-right">
+                  <label>Total</label>
+                  <span class="amount">$ {{ invoiceGrandTotal }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="formSubmitted === true && formFullyValidated === false" class="error-summary">
+            <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+            <span>Some required fields have not been completed</span>
+          </div>
+
+          <section class="button-container">
+            <a routerLink="/application-cancelled"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
+            <span style="float: right;">
+              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
+            </span>
+          </section>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

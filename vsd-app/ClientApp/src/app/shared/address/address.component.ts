@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, Validators } from "@angular/forms";
 import { COUNTRIES_ADDRESS } from './country-list';
 
 @Component({
@@ -26,7 +26,7 @@ export class AddressComponent implements OnInit {
   }
 
   isSubFieldValid(field: string) {
-    let formField = this.group.controls[field];
+    let formField = this.group['controls'][field];  // this.group.controls should work, but it doesn't
     if (formField == null)
       return true;
 

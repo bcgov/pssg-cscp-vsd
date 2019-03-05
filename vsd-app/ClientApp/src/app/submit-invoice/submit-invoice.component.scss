@@ -1,0 +1,40 @@
+.settings-panel {
+  background-color: #eee;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+::ng-deep .invoice-item {
+  background-color: #f1f4fa;
+  padding: 15px;
+  padding-bottom: 0;
+  margin-bottom: 5px;
+
+  .col {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}
+
+.item-listing:nth-of-type(odd) .invoice-item {
+  background-color: #e1e8f2;
+}
+
+
+.form-totals {
+  .gst {
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0;
+  }
+
+  span.amount {
+    display: block;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+}

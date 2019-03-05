@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
-import { CookieService } from 'ngx-cookie-service';
+//import { CookieService } from 'ngx-cookie-service';
 import { AppRoutingModule } from './app-routing.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -42,7 +42,6 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
-
 import { AccountDataService } from './services/account-data.service';
 import { JusticeApplicationDataService } from './services/justice-application-data.service';
 import { ContactDataService } from './services/contact-data.service';
@@ -65,6 +64,7 @@ import { AddressComponent } from './shared/address/address.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
+import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
 import { TestApiComponent } from './test-api/test-api.component';
 import { FileDropModule } from 'ngx-file-drop';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -88,6 +88,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     VictimApplicationComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
+    SubmitInvoiceComponent,
     TestApiComponent,
     BreadcrumbComponent,
     HomeComponent,
@@ -192,7 +193,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     MatTooltipModule
   ],
   providers: [
-    CookieService,
+    //CookieService,
     DynamicsDataService,
     GeneralDataService,
     SurveyDataService,

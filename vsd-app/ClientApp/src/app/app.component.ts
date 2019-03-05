@@ -39,7 +39,6 @@ export class AppComponent implements OnInit {
     private userDataService: UserDataService,
     private versionInfoDataService: VersionInfoDataService,
     private store: Store<AppState>,
-    private adoxioLegalEntityDataService: AdoxioLegalEntityDataService,
     private dialog: MatDialog
   ) {
     this.isDevMode = isDevMode();
@@ -60,31 +59,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.reloadUser();
-    //this.loadVersionInfo();
-
-    //this.store.select(state => state.legalEntitiesState)
-    //  .pipe(filter(state => !!state))
-    //  .subscribe(state => {
-    //    this.businessProfiles = state.legalEntities;
-    //  });
-
   }
 
   loadVersionInfo() {
     this.versionInfoDataService.getVersionInfo()
       .subscribe((versionInfo: VersionInfo) => {
         this.versionInfo = versionInfo;
-      });
-  }
-
-  reloadUser() {
-    this.userDataService.getCurrentUser()
-      .subscribe((data: User) => {
-        this.currentUser = data;
-        this.isNewUser = this.currentUser.isNewUser;
-
-        this.store.dispatch(new CurrentUserActions.SetCurrentUserAction(data));
       });
   }
 
