@@ -1,14 +1,14 @@
 <div [formGroup]="group">
-  <app-field label="Country">
-    <select class="form-control" style="width: 350px;" formControlName="country" (change)="updateLocation($event)">
+  <app-field label="Country" [required]="true">
+    <select class="form-control" formControlName="country" (change)="updateLocation($event)">
       <option value="">Choose a country</option>
       <option *ngFor="let item of countryList" [value]="item.name">
         {{ item.name }}
       </option>
     </select>
   </app-field>
-  <app-field label="{{ provinceType }}">
-    <select class="form-control" style="width: 350px;" formControlName="province">
+  <app-field label="{{ provinceType }}" [required]="true">
+    <select class="form-control" formControlName="province">
       <option value="">Choose a {{ provinceType }}</option>
       <option *ngFor="let item of provinceList" [value]="item">
         {{item}}
@@ -16,14 +16,16 @@
     </select>
   </app-field>
   <app-field label="City" [required]="true" [valid]="isSubFieldValid('city')" errorMessage="Please enter your city">
-    <input class="form-control" style="width: 350px;" type="text" formControlName="city">
+    <input class="form-control" type="text" formControlName="city">
   </app-field>
-  <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)" [required]="true" [valid]="isSubFieldValid('line1')" errorMessage="Please enter your mailing address">
-    <input class="form-control" style="width: 400px;" type="text" formControlName="line1"><br /><br />
-    <input class="form-control" style="width: 400px;" type="text" formControlName="line2">
+  <app-field label="Mailing Address" [required]="true" [valid]="isSubFieldValid('line1')" errorMessage="Please enter your mailing address">
+    <input class="form-control" type="text" formControlName="line1">
+  </app-field>
+  <app-field label="Mailing Address Line 2">
+    <input class="form-control" type="text" formControlName="line2">
   </app-field>
   <app-field label="{{ postalCodeType }}"  [required]="true" [valid]="isSubFieldValid('postalCode')" errorMessage="Please enter your postal code">
-    <input class="form-control" style="width: 200px;" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
+    <input class="form-control" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
   </app-field>
   <br />
 </div>

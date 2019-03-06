@@ -6,7 +6,7 @@ $bootstrap-sass-asset-helper: true;
     color: #fff;
 }
 
-.no-gutter {
+::ng-deep .no-gutter {
   margin-right: 0;
   margin-left: 0;
 }
@@ -312,6 +312,10 @@ button.btn-mobile {
     background: #ddd;
 }
 
+::ng-deep .page-header h1 {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
 
 h3 span {
   font-size: 14px;
@@ -330,6 +334,10 @@ h1, h2, h3 {
 h2, h3 {
   margin-top: 30px;
   margin-bottom: 20px;
+}
+
+::ng-deep h2.blue-header {
+  margin-bottom: 25px;
 }
 
 ::ng-deep label {

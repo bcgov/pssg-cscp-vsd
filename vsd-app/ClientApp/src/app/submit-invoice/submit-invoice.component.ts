@@ -12,9 +12,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
-import { PersonalInformationModel } from '../models/justice/personal-information.model';
 import { FormBase } from '../shared/form-base';
-import { isNumber } from 'ngx-bootstrap/chronos/utils/type-checks';
 
 const moment = _rollupMoment || _moment;
 
@@ -64,13 +62,17 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   public currentFormStep: number;
   public summaryOfBenefitsUrl: string;
 
+  public showFormPanel: boolean = true;
+  public showSuccessPanel: boolean = false;
+  public showCancelPanel: boolean = false;
+  
   invoiceSubTotal: number = 0.00;
   invoiceGstTotal: number = 0.00;
   invoiceGrandTotal: number = 0.00;
 
   saveFormData: any;
-  
-  constructor (
+
+  constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
     private router: Router,
@@ -118,6 +120,58 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     });
   }
 
+  invoiceSuccess(): void {
+    this.showFormPanel = false;
+    this.showSuccessPanel = true;
+    this.showCancelPanel = false;
+  }
+
+  invoiceCancel($event): void {
+    $event.preventDefault();
+    this.showFormPanel = false;
+    this.showSuccessPanel = false;
+    this.showCancelPanel = true;
+  }
+
+  calculateRowTotal(event, rowIndex): void {
+    console.log(rowIndex);
+    console.log(event.target.value);
+  }
+
+  calculateRow(item): string {
+    let rowTotal = parseFloat(item.get('sessionHours').value || 0) * parseFloat(item.get('sessionRate').value || 0);
+    this.calculateAllTotals();
+    return rowTotal.toFixed(2).toString();
+  }
+
+  calculateAllTotals(): void {
+    let exemptFromGst = this.form.get('invoiceDetails.exemptFromGst').value === true;
+    const gstRate = exemptFromGst ? 0.00 : 0.05;
+
+    let invoiceSubTotal = 0.00;
+    let invoiceItems = <FormArray>this.form.get('invoiceDetails.lineItems');
+    invoiceItems.controls.forEach(item => {
+      let rowTotal = parseFloat(item.get('sessionHours').value || 0) * parseFloat(item.get('sessionRate').value || 0);
+      invoiceSubTotal += rowTotal;
+    });
+
+    let invoiceGstTotal = invoiceSubTotal * gstRate;
+    this.invoiceSubTotal = invoiceSubTotal;
+    this.invoiceGstTotal = invoiceGstTotal;
+    this.invoiceGrandTotal = invoiceSubTotal + invoiceGstTotal;
+  }
+
+  createLineItem(type: number = 0, sessionHours: string = '', sessionRate: string = ''): FormGroup {
+    return this.fb.group({
+      description: ['', Validators.required],
+      counsellingType: [type, Validators.required],
+      sessionDate: ['', Validators.required],
+      sessionHours: [sessionHours, Validators.required],
+      sessionRate: [sessionRate, Validators.required],
+      sessionAmount: [''],
+    });
+  }
+
   validateAllFormFields(formGroup: any) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
@@ -149,7 +203,16 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
     return this.form.get(field).valid || !this.form.get(field).touched;
   }
-  
+
+  isControlValid(formControl: FormGroup, field: string) {
+    let formField = formControl;
+    if (formField == null)
+      return true;
+
+    return formField.controls[field].valid || !formField.controls[field].touched;
+  }
+
+
   isChildFieldValid(parent: string, field: string) {
     let formField = this.form.get(parent);
     if (formField == null)
@@ -173,8 +236,12 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       this.lineItems.removeAt(0)
     }
 
-    if (isNaN(desiredLines) || desiredLines < 0 || desiredLines > 10) {
+    if (isNaN(desiredLines) || desiredLines < 0) {
       desiredLines = 1;
+    }
+
+    if (isNaN(desiredLines) || desiredLines > 10) {
+      desiredLines = 10;
     }
 
     //    if (isNumber(desiredType))
@@ -206,17 +273,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.showRemoveLine = this.lineItems.length > 1;
   }
 
-  createLineItem(type: number = 0, sessionHours: string = '', sessionRate: string = ''): FormGroup {
-    return this.fb.group({
-      description: ['', Validators.required],
-      counsellingType: [type, Validators.required],
-      sessionDate: ['', Validators.required],
-      sessionHours: [sessionHours],
-      sessionRate: [sessionRate],
-      sessionAmount: [''],
-    });
-  }
-  
   submitPartialApplication() {
       this.formFullyValidated = true;
       this.save().subscribe(
@@ -231,35 +287,25 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     );
   }
   
-  submitApplication() {
+  submitInvoice() {
     this.formSubmitted = true;
     if (this.form.valid) {
       this.formFullyValidated = true;
-      this.save().subscribe(
-      data => {
-        console.log("submitting");
-        this.router.navigate(['/application-success']);
-      },
-      err => {
-        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application');
-      }
-);
+      this.invoiceSuccess();
+      //this.save().subscribe(
+      //data => {
+      //  console.log("submitting");
+      //  this.router.navigate(['/application-success']);
+      //},
+      //err => {
+      //  this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+      //  console.log('Error submitting invoice');
+      //);
     } else {
       console.log("form not validated");
       this.formFullyValidated = false;
       this.markAsTouched();
     }
-  }
-
-  testSnaks(): void {
-    let content = this.form.get('personalInformation').value;
-
-    let formData = <DynamicsApplicationModel> {
-      PersonalInformation: this.form.get('invoiceDetails').value,
-    };
-
-    console.log(formData);
   }
 
   save(): Subject<boolean> {
@@ -283,16 +329,24 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.form.get('invoiceDetails').markAsTouched();
 
     const invoiceControls = (<FormGroup>(this.form.get('invoiceDetails'))).controls;
-    for (const c in invoiceControls) {
-      if (typeof (invoiceControls[c].markAsTouched) === 'function') {
-        invoiceControls[c].markAsTouched();
+    for (const a in invoiceControls) {
+      if (typeof (invoiceControls[a].markAsTouched) === 'function') {
+        invoiceControls[a].markAsTouched();
       }
     }
 
     const invoiceAddressControls = (<FormGroup>(this.form.get('invoiceDetails.invoiceAddress'))).controls;
-    for (const c in invoiceAddressControls) {
-      if (typeof (invoiceAddressControls[c].markAsTouched) === 'function') {
-        invoiceAddressControls[c].markAsTouched();
+    for (const b in invoiceAddressControls) {
+      if (typeof (invoiceAddressControls[b].markAsTouched) === 'function') {
+        invoiceAddressControls[b].markAsTouched();
+      }
+    }
+
+    const invoiceItemControls = (<FormGroup>(this.form.get('invoiceDetails.lineItems'))).controls;
+    for (const c in invoiceItemControls) {
+      console.log(c);
+      if (typeof (invoiceItemControls[c].markAsTouched) === 'function') {
+        invoiceItemControls[c].markAsTouched();
       }
     }
   }
