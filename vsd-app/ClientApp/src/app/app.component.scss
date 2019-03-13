@@ -1,5 +1,9 @@
 $bootstrap-sass-asset-helper: true;
 // @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+::ng-deep body {
+  font-size: 16px;
+}
+
 .title {
     font-weight: Semi-bold;
     font-size: 30px;
@@ -129,6 +133,7 @@ div.c1 li.c2 a {
     vertical-align: middle;
     padding: 15px 20px;
     position: relative;
+    font-size: 14px;
 }
 
 .navigationRibbon .level2Navigation {
@@ -405,11 +410,24 @@ h2, h3 {
   margin-top: 50px;
 }
 
+::ng-deep .attention {
+  background-color: #f1f4fa;
+  margin: 20px 0;
+  padding: 1em;
+
+  h3 {
+    margin-top: 10px;
+  }
+}
+
 .file-upload-placeholder {
   border: 1px dashed #9fb6d9;
   background-color: #f1f4fa;
   padding: 20px;
   text-align: center;
+}
+::ng-deep .form-control {
+  font-size: 16px;
 }
 
 textarea.form-control {
@@ -424,7 +442,7 @@ textarea.form-control {
   }
 }
 
-.inline-label {
+::ng-deep .inline-label {
   span {
     display: inline-block;
     padding-left: 5px;
@@ -464,7 +482,7 @@ textarea.form-control {
   }
 }
 
-.radio-list {
+::ng-deep .radio-list {
   label {
     font-weight: normal;
     margin-bottom: 5px;
@@ -475,13 +493,16 @@ textarea.form-control {
     margin-right: 5px;
   }
 
-  .app-field {
-    margin-bottom: 5px !important;
-    background-color: #f90;
+  &.per-line label {
+    display: block;
+  }
+
+  &.per-line label:first-child {
+    display: inline-block;
   }
 }
 
-.radio-list .app-field {
+::ng-deep .radio-list .app-field {
   margin-bottom: 5px;
 }
 
@@ -609,4 +630,13 @@ hr {
 }
 
 ::ng-deep .tooltip-icon {
+}
+
+::ng-deep .address-info {
+  .standard {
+    width: 400px;
+  }
+  .shorter {
+    width: 250px;
+  }
 }

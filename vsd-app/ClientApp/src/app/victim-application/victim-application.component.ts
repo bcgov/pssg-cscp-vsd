@@ -102,13 +102,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   ngOnInit() {
-    this.useApplicationType = this.route.snapshot.queryParamMap.get('at');
-
+    let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
+    console.log(completeOnBehalfOf);
     this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
     this.form = this.fb.group({
       introduction: this.fb.group({
         understoodInformation: ['', Validators.requiredTrue],
-        completingOnBehalfOf: ['', [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002
+        completingOnBehalfOf: [completeOnBehalfOf + '', [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002
       }),
       personalInformation: this.fb.group({
         firstName: ['', Validators.required],
@@ -138,11 +138,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         birthDate: [''],
 
         primaryAddress: this.fb.group({
-          line1: [''],
+          line1: ['', Validators.required],
           line2: [''],
           line3: [''],
           city: ['', Validators.required],
-          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
@@ -150,8 +150,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           line1: [''],
           line2: [''],
           line3: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex)]],
+          city: [''],
+          postalCode: [''],
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
@@ -401,14 +401,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     return amI.value;
   }
 
-  isFieldValid(field: string) {
-    let formField = this.form.get(field);
-    if (formField == null)
-      return true;
-
-    return this.form.get(field).valid || !this.form.get(field).touched;
-  }
-  
   isChildFieldValid(parent: string, field: string) {
     let formField = this.form.get(parent);
     if (formField == null)

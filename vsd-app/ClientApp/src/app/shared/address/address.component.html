@@ -1,6 +1,6 @@
-<div [formGroup]="group">
+<div [formGroup]="group" class="address-info">
   <app-field label="Country" [required]="true">
-    <select class="form-control" formControlName="country" (change)="updateLocation($event)">
+    <select class="form-control standard" formControlName="country" (change)="updateLocation($event)">
       <option value="">Choose a country</option>
       <option *ngFor="let item of countryList" [value]="item.name">
         {{ item.name }}
@@ -8,7 +8,7 @@
     </select>
   </app-field>
   <app-field label="{{ provinceType }}" [required]="true">
-    <select class="form-control" formControlName="province">
+    <select class="form-control standard" formControlName="province">
       <option value="">Choose a {{ provinceType }}</option>
       <option *ngFor="let item of provinceList" [value]="item">
         {{item}}
@@ -16,16 +16,16 @@
     </select>
   </app-field>
   <app-field label="City" [required]="true" [valid]="isSubFieldValid('city')" errorMessage="Please enter your city">
-    <input class="form-control" type="text" formControlName="city">
+    <input class="form-control standard" type="text" formControlName="city">
   </app-field>
   <app-field label="Mailing Address" [required]="true" [valid]="isSubFieldValid('line1')" errorMessage="Please enter your mailing address">
-    <input class="form-control" type="text" formControlName="line1">
+    <input class="form-control standard" type="text" formControlName="line1">
   </app-field>
   <app-field label="Mailing Address Line 2">
-    <input class="form-control" type="text" formControlName="line2">
+    <input class="form-control standard" type="text" formControlName="line2">
   </app-field>
   <app-field label="{{ postalCodeType }}"  [required]="true" [valid]="isSubFieldValid('postalCode')" errorMessage="Please enter your postal code">
-    <input class="form-control" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
+    <input class="form-control shorter" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
   </app-field>
   <br />
 </div>

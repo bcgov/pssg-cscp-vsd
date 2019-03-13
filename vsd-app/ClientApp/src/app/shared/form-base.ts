@@ -3,6 +3,14 @@ import { ValidatorFn, AbstractControl, FormControl, FormGroup } from '@angular/f
 
 export class FormBase {
     form: FormGroup;
+  
+    isFieldValid(field: string) {
+      let formField = this.form.get(field);
+      if (formField == null)
+        return true;
+
+      return this.form.get(field).valid || !this.form.get(field).touched;
+    }
 
     isValidOrNotTouched(field: string) {
         return this.form.get(field).valid || !this.form.get(field).touched;

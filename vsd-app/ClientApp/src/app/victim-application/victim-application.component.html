@@ -12,7 +12,7 @@
           <ng-template matStepperIcon="number">
           </ng-template>
           <mat-step label="Overview"></mat-step>
-          <mat-step label="Personal Information & Addresses"></mat-step>
+          <mat-step label="Victim Information & Addresses"></mat-step>
           <mat-step label="Crime Information"></mat-step>
           <mat-step label="Medical & Dental Information"></mat-step>
           <mat-step label="Expense & Loss Information"></mat-step>
@@ -32,11 +32,12 @@
           <p><a [attr.href]="summaryOfBenefitsUrl" target="_blank" class="btn btn-secondary">View Summary of Benefits</a></p>
         </div>
       </section>
+      <a href="#" (click)="testSnaks()">Show Form Data</a><br /><br />
 
       <!--<p>
-        <a href="#" (click)="testSnaks()">Show Form Data</a><br /><br />
-        <button (click)="markAsTouched(); submitPartialApplication();" class="btn btn-primary">Partial Submit <i class="fas fa-chevron-right"></i></button>
-      </p>-->
+    <a href="#" (click)="testSnaks()">Show Form Data</a><br /><br />
+    <button (click)="markAsTouched(); submitPartialApplication();" class="btn btn-primary">Partial Submit <i class="fas fa-chevron-right"></i></button>
+  </p>-->
     </div>
 
     <div class="col-lg-7 col-sm-12">
@@ -76,17 +77,21 @@
               <li>injuries sustained from an offence occurring outside of B.C. or prior to July 1, 1972</li>
             </ul>
 
-            <p class="text-muted"><em>Note: The Crime Victim Assistance Program will only provide benefits that are not covered by other programs (e.g., EI, ICBC, extended health coverage, personal insurance).</em></p>
-            <p><a href="#">View full summary of benefits</a></p>
-
-            <hr />
+            <div class="attention">
+              <h3>Note</h3>
+              <p>
+                The Crime Victim Assistance Program will only provide benefits that are not covered by other programs<br />
+                (e.g., EI, ICBC, extended health coverage, personal insurance).
+              </p>
+              <p><a href="#">View full summary of benefits</a></p>
+            </div>
 
             <h2>Instructions</h2>
 
             <h3>Filling out the application</h3>
             <p>The application form is also available in PDF format at <a href="https://www.gov.bc.ca/crimevictimassistance" target="_blank">www.gov.bc.ca/crimevictimassistance</a>. To download the appropriate viewer, visit <a href="http://get.adobe.com/reader" target="_blank">http://get.adobe.com/reader</a>.</p>
             <p>Print versions of the application form are also available from the Crime Victim Assistance Program or a local victim service program.</p>
-            <p>A local victim service program can help you complete this application. To locate a program near you, call VictimLink BC toll-free at <strong>1-800-563-0808</strong>.</p>
+            <p>A local victim service program can help you complete this application. To locate a program near you, call VictimLink BC toll-free at <strong class="phone-number">1-800-563-0808</strong>.</p>
 
             <h3>Be complete and accurate</h3>
             <p>Please ensure that all form fields that you fill in are done so accurately. Any information that is inaccurate will affect the processing of your claim.</p>
@@ -113,8 +118,8 @@
 
             <hr />
 
-            <p>If your address or telephone number changes after submitting this application, please inform the Crime Victim Assistance Program by calling <strong>1-866-660-3888</strong>.</p>
-            <p>For additional questions, please contact the Crime Victim Assistance Program at <strong>604-660-3888</strong> or toll free in B.C. at <strong>1-866-660-3888</strong>.</p>
+            <p>If your address or telephone number changes after submitting this application, please inform the Crime Victim Assistance Program by calling <strong class="phone-number">1-866-660-3888</strong>.</p>
+            <p>For additional questions, please contact the Crime Victim Assistance Program at <strong>604-660-3888</strong> or toll free in B.C. at <strong class="phone-number">1-866-660-3888</strong>.</p>
             <p>For more information, see the Government of British Columbia website at <a href="https://www.gov.bc.ca/crimevictimassistance" target="_blank">www.gov.bc.ca/crimevictimassistance</a> or query &ldquo;cvap bc&rdquo; using your internet search engine.</p>
             <br /><br />
 
@@ -159,23 +164,29 @@
 
           <div formGroupName="personalInformation" *ngIf="this.currentFormStep == 1">
             <div class="page-header">
-              <h1>Personal Information & Addresses</h1>
+              <h1>Victim Information & Addresses</h1>
             </div>
-            <h2 class="blue-header">Personal Information</h2>
+            <h2 class="blue-header">Victim Information</h2>
 
             <h3>Applicant Name</h3>
 
-            <app-field label="First Name" [required]="true" [valid]="isFieldValid('personalInformation.firstName')" errorMessage="Please enter your first name">
-              <input class="form-control" style="width: 350px;" type="text" formControlName="firstName" maxlength="100">
-            </app-field>
-
-            <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('personalInformation.middleName')" errorMessage="Please enter your middle name">
-              <input class="form-control" style="width: 350px;" type="text" formControlName="middleName" maxlength="100">
-            </app-field>
-
-            <app-field label="Last Name" [required]="true" [valid]="isFieldValid('personalInformation.lastName')" errorMessage="Please enter your last name">
-              <input class="form-control" style="width: 350px;" type="text" formControlName="lastName" maxlength="100">
-            </app-field>
+            <div class="row">
+              <div class="col-4">
+                <app-field label="First Name" [required]="true" [valid]="isFieldValid('personalInformation.firstName')" errorMessage="Please enter your first name">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="firstName" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('personalInformation.middleName')" errorMessage="Please enter your middle name">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="middleName" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Last Name" [required]="true" [valid]="isFieldValid('personalInformation.lastName')" errorMessage="Please enter your last name">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="lastName" maxlength="100">
+                </app-field>
+              </div>
+            </div>
 
             <label class="inline-label">
               <input type="checkbox" style="margin-right: 10px;" formControlName="iHaveOtherNames" [value]="true">
@@ -888,7 +899,6 @@
                 </app-field>
                 <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === true">
                   <app-field label="Please provide days of work missed">
-                    <!--[valid]="form.get('crimeInformation.crimePeriodStart').valid || !form.get('crimeInformation.crimePeriodStart').touched"-->
                     <input type="text" class="form-control" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd"
                            [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly style="width: 200px; background-color: #fff;">
                     <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
