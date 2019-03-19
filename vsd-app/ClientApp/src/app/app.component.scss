@@ -416,8 +416,20 @@ h2, h3 {
   padding: 1em;
 
   h3 {
-    margin-top: 10px;
+    margin-top: 10px !important;
   }
+
+  p {
+    margin-bottom: 0 !important;
+  }
+}
+
+::ng-deep ul.list li {
+  margin-bottom: 5px;
+}
+
+::ng-deep ol.list li {
+  margin-bottom: 15px;
 }
 
 .file-upload-placeholder {

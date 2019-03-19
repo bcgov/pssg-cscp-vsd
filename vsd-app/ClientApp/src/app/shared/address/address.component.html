@@ -19,10 +19,10 @@
     <input class="form-control standard" type="text" formControlName="city">
   </app-field>
   <app-field label="Mailing Address" [required]="true" [valid]="isSubFieldValid('line1')" errorMessage="Please enter your mailing address">
-    <input class="form-control standard" type="text" formControlName="line1">
+    <input class="form-control standard" type="text" formControlName="line1" placeholder="Street Number, Street Address, PO Box, C/O" />
   </app-field>
   <app-field label="Mailing Address Line 2">
-    <input class="form-control standard" type="text" formControlName="line2">
+    <input class="form-control standard" type="text" formControlName="line2" placeholder="Apartment, Suite, Building, Floor">
   </app-field>
   <app-field label="{{ postalCodeType }}"  [required]="true" [valid]="isSubFieldValid('postalCode')" errorMessage="Please enter your postal code">
     <input class="form-control shorter" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">

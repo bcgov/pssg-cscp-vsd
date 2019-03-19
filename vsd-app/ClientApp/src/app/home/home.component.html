@@ -47,7 +47,7 @@
                     <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
                     Completing this application for myself
                   </label>
-                  <label>
+                  <label *ngIf="selectedApplicationType === 100000002">
                     <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
                     A Victim Service Worker or other person helping a victim complete this application
                   </label>

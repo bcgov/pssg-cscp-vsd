@@ -97,6 +97,10 @@ h2, h3 {
   text-align: center;
 }
 
+input.sin-input {
+  width: 50px;
+}
+
 textarea.form-control {
   &.standard {
     width: 75%;
@@ -106,6 +110,16 @@ textarea.form-control {
   &.bigger {
     width: 75%;
     height: 200px;
+  }
+}
+
+input.form-control {
+  &.standard {
+    width: 50%;
+ }
+
+  &.bigger {
+    width: 75%;
   }
 }
 
@@ -131,6 +145,43 @@ textarea.form-control {
     }
 
     .court-files:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.police-report-information {
+  margin-top: 40px;
+  margin-bottom: 24px;
+
+  .police-report-listing {
+    .police-report {
+      padding: 0 0 15px;
+    }
+
+    .police-report a {
+      margin-left: 25px;
+    }
+
+    .police-report:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.crime-location-information {
+  margin-bottom: 24px;
+
+  .location-listing {
+    .crime-location {
+      padding: 0 0 15px;
+    }
+
+    .crime-location a {
+      margin-left: 25px;
+    }
+
+    .crime-location:last-child {
       padding-bottom: 0;
     }
   }
@@ -294,4 +345,36 @@ hr {
 }
 
 ::ng-deep .tooltip-icon {
+}
+
+
+::ng-deep .signature-trigger {
+  width: 385px;
+  padding: 40px 0;
+  border: 1px solid #9fb6d9;
+  background-color: #f1f4fa;
+  color: #9fb6d9;
+  text-align: center;
+  border-radius: 4px;
+
+  p {
+    margin: 0;
+    font-size: 0.95em;
+  }
+}
+
+::ng-deep .signature-preview {
+  img {
+    width: 300px;
+    height: 100px;
+  }
+
+  a.redo {
+    display: block;
+    cursor: pointer;
+  }
+
+  a.redo:hover {
+    text-decoration: underline;
+  }
 }

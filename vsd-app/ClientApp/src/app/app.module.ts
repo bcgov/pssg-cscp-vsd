@@ -61,6 +61,7 @@ import { VersionInfoDataService } from './services/version-info-data.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BusinessProfileComponent } from './business-information/business-profile/business-profile.component';
 import { AddressComponent } from './shared/address/address.component';
+import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
@@ -79,12 +80,14 @@ import { AliasDataService } from './services/alias-data.service';
 import { FieldComponent } from './shared/field/field.component';
 import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
 import { VersionInfoDialog } from './version-info/version-info.component';
+import { SignaturePadModule } from 'angular2-signaturepad';
 
 @NgModule({
   declarations: [
     AppComponent,
     BusinessProfileComponent,
     AddressComponent,
+    SignPadDialog,
     VictimApplicationComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
@@ -143,6 +146,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     MatToolbarModule,
     MatTooltipModule,
     FileDropModule,
+    SignaturePadModule,
     TooltipModule.forRoot(),
     BsDatepickerModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
@@ -211,7 +215,8 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     BCeidAuthGuard,
   ],
   entryComponents: [
-    VersionInfoDialog
+    VersionInfoDialog,
+    SignPadDialog
   ],
   bootstrap: [AppComponent]
 })
