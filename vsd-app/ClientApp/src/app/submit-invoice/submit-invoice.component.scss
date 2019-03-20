@@ -32,6 +32,7 @@ h2, h3 {
 }
 
 ::ng-deep .application-nav {
+
   .mat-step-label {
     white-space: initial;
   }
@@ -81,11 +82,6 @@ h2, h3 {
   }
 }
 
-::ng-deep .phone-number {
-  white-space: nowrap;
-  font-weight: 600;
-}
-
 .learn-benefits {
   margin-top: 50px;
 }
@@ -97,10 +93,6 @@ h2, h3 {
   text-align: center;
 }
 
-input.sin-input {
-  width: 50px;
-}
-
 textarea.form-control {
   &.standard {
     width: 75%;
@@ -110,16 +102,6 @@ textarea.form-control {
   &.bigger {
     width: 75%;
     height: 200px;
-  }
-}
-
-input.form-control {
-  &.standard {
-    width: 50%;
- }
-
-  &.bigger {
-    width: 75%;
   }
 }
 
@@ -145,43 +127,6 @@ input.form-control {
     }
 
     .court-files:last-child {
-      padding-bottom: 0;
-    }
-  }
-}
-
-.police-report-information {
-  margin-top: 40px;
-  margin-bottom: 24px;
-
-  .police-report-listing {
-    .police-report {
-      padding: 0 0 15px;
-    }
-
-    .police-report a {
-      margin-left: 25px;
-    }
-
-    .police-report:last-child {
-      padding-bottom: 0;
-    }
-  }
-}
-
-.crime-location-information {
-  margin-bottom: 24px;
-
-  .location-listing {
-    .crime-location {
-      padding: 0 0 15px;
-    }
-
-    .crime-location a {
-      margin-left: 25px;
-    }
-
-    .crime-location:last-child {
       padding-bottom: 0;
     }
   }
@@ -348,33 +293,84 @@ hr {
 }
 
 
-::ng-deep .signature-trigger {
-  width: 385px;
-  padding: 40px 0;
-  border: 1px solid #9fb6d9;
-  background-color: #f1f4fa;
-  color: #9fb6d9;
-  text-align: center;
-  border-radius: 4px;
+
+
+
+
+
+.invoice-questions {
+  background-color: #f1f1f2;
+  color: #000;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  padding: 30px;
+  padding-top: 20px;
+
+  h3 {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
 
   p {
-    margin: 0;
-    font-size: 0.95em;
+    margin: 20px 0;
+    font-size: 16px;
   }
 }
 
-::ng-deep .signature-preview {
-  img {
-    width: 300px;
-    height: 100px;
+::ng-deep .settings-panel {
+  background-color: #eee;
+  padding: 15px;
+  margin-bottom: 15px;
+
+  .form-control {
+    width: 120px;
   }
 
-  a.redo {
+  select.form-control {
+    width: 220px;
+  }
+}
+
+::ng-deep .invoice-item {
+  background-color: #f1f4fa;
+  padding: 15px;
+  padding-bottom: 0;
+  margin-bottom: 5px;
+
+  .col {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}
+
+.item-listing:nth-of-type(odd) .invoice-item {
+  background-color: #e1e8f2;
+}
+
+::ng-deep .settings-field {
+  text-align: right;
+}
+
+::ng-deep .fixed-select {
+  height: 34px !important;
+}
+
+.form-totals {
+  .gst {
+    margin-bottom: 15px;
+  }
+
+  label {
     display: block;
-    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 0;
   }
 
-  a.redo:hover {
-    text-decoration: underline;
+  span.amount {
+    display: block;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 25px;
   }
 }

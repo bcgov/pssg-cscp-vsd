@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
-import { CookieService } from 'ngx-cookie-service';
+//import { CookieService } from 'ngx-cookie-service';
 import { AppRoutingModule } from './app-routing.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -42,7 +42,6 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
-
 import { AccountDataService } from './services/account-data.service';
 import { JusticeApplicationDataService } from './services/justice-application-data.service';
 import { ContactDataService } from './services/contact-data.service';
@@ -62,11 +61,14 @@ import { VersionInfoDataService } from './services/version-info-data.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BusinessProfileComponent } from './business-information/business-profile/business-profile.component';
 import { AddressComponent } from './shared/address/address.component';
+import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
+import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
 import { TestApiComponent } from './test-api/test-api.component';
 import { FileDropModule } from 'ngx-file-drop';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
 import { NgBusyModule } from 'ng-busy';
 import { BsDatepickerModule, AlertModule } from 'ngx-bootstrap';
@@ -78,15 +80,18 @@ import { AliasDataService } from './services/alias-data.service';
 import { FieldComponent } from './shared/field/field.component';
 import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
 import { VersionInfoDialog } from './version-info/version-info.component';
+import { SignaturePadModule } from 'angular2-signaturepad';
 
 @NgModule({
   declarations: [
     AppComponent,
     BusinessProfileComponent,
     AddressComponent,
+    SignPadDialog,
     VictimApplicationComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
+    SubmitInvoiceComponent,
     TestApiComponent,
     BreadcrumbComponent,
     HomeComponent,
@@ -141,6 +146,8 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     MatToolbarModule,
     MatTooltipModule,
     FileDropModule,
+    SignaturePadModule,
+    TooltipModule.forRoot(),
     BsDatepickerModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     AlertModule.forRoot()
@@ -186,10 +193,11 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     MatTabsModule,
     MatToolbarModule,
     FileDropModule,
+    TooltipModule,
     MatTooltipModule
   ],
   providers: [
-    CookieService,
+    //CookieService,
     DynamicsDataService,
     GeneralDataService,
     SurveyDataService,
@@ -207,7 +215,8 @@ import { VersionInfoDialog } from './version-info/version-info.component';
     BCeidAuthGuard,
   ],
   entryComponents: [
-    VersionInfoDialog
+    VersionInfoDialog,
+    SignPadDialog
   ],
   bootstrap: [AppComponent]
 })

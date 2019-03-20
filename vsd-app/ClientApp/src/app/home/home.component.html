@@ -1,53 +1,95 @@
-<div style="position: relative;">
+<div class="form-wrapper" style="position: relative;">
   <div [ngBusy]="busy"></div>
-  <div class="home-header-wrapper">
-    <div class="home-margins">
+  <div>
       <div class="row">
-
         <div class="col-md-7 col-sm-12">
-          <div class="jumbotron home-header">
-            <h2>
-              Welcome
-            </h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            </p>
-            <div class="text-left">
-              <button style="margin-bottom: 10px;" class="btn btn-primary" (click)="window.location.href='https://www.bceid.ca/register/'"
-                tabindex="3">
-                <strong>REGISTER FOR A BUSINESS BCeID</strong>
-                <br>
-              </button>
-              <span style="padding: 10px;">OR</span>
-              <button style="margin-bottom: 10px;" class="btn btn-primary" (click)="window.location.href='login'"
-                tabindex="3">
-                <strong>LOG IN</strong>
-                <br>
-              </button>
+          <div class="page-header">
+            <h1>Crime Victim Assistance Program Application</h1>
+          </div>
+
+
+          <p>The Crime Victim Assistance Program (CVAP) provides benefits to <strong>Victims of violent crime</strong> in accordance with the Crime Victim Assistance Act and its regulations.</p>
+          <p>The program may also provide benefits to <strong>Immediate Family Members</strong> of an injured or deceased victim of crime, as well as <strong>Witnesses</strong> to the crime with a close personal relationship to the victim.</p>
+          <p>To begin your application, select the option below that applies to you. If you are applying on behalf of one of the following, the following page will ask for your relationship to the person you are applying on behalf of.</p>
+
+          <div [formGroup]="form">
+            <app-field label="Please select the application form that applies to you." (change)="updateForm($event)">
+              <select class="form-control" style="width: 350px;" formControlName="applicationType">
+                <option value="0">Select...</option>
+                <option value="100000002">Victim Application</option>
+                <option value="100000001">Immediate Family Member Application</option>
+                <option value="100000000">Witness Application</option>
+              </select>
+            </app-field>
+
+            <div *ngIf="selectedApplicationType !== 0">
+              <div *ngIf="selectedApplicationType === 100000002" class="attention">
+                <p>
+                  This application package is designed for a Victim of violent crime. Under the Crime Victim Assistance Act, a Victim is a person who is injured physically or psychologically as a result of certain crimes committed in British Columbia.
+                </p>
+              </div>
+
+              <div *ngIf="selectedApplicationType === 100000001" class="attention">
+                <p>
+                  This application package is designed for an Immediate Family Member of an injured or deceased victim of violent crime. Under the Crime Victim Assistance Act, an Immediate Family Member may include the spouse, child, parent, or sibling of a victim who has been injured or died as a result of a prescribed offence. An Immediate Family Member may also include a grandparent or grandchild if financially dependent on the victim.
+                </p>
+              </div>
+
+              <div *ngIf="selectedApplicationType === 100000000" class="attention">
+                <p>
+                  This application package is designed for a Witness of an injured or deceased victim of violent crime. Under the Crime Victim Assistance Act, a Witness is a person who may not necessarily be related to the victim, but has strong emotional attachments to the victim, and witnesses or comes upon the scene of a crime that caused a life-threatening injury to, or the death of, the victim.
+                </p>
+              </div>
+
+              <section class="radio-list per-line">
+                <app-field label="I am:">
+                  <label>
+                    <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                    Completing this application for myself
+                  </label>
+                  <label *ngIf="selectedApplicationType === 100000002">
+                    <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                    A Victim Service Worker or other person helping a victim complete this application
+                  </label>
+                  <label>
+                    <input type="radio" [value]="100000002" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                    A parent completing this application for my minor child (19 and below)
+                  </label>
+                  <label>
+                    <input type="radio" [value]="100000003" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                    A legal representative or legal guardian completing this application on behalf of someone else
+                  </label>
+                </app-field>
+              </section>
+
+              <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
+                <label>Did the crime occur in BC</label>
+                <br />
+                <table style="width: 100%" class="out-of-line">
+                  <tr>
+                    <td class="lead-cell">
+                      <label class="inline-label">
+                        <input type="radio" [value]="true" name="wasCrimeInBC" formControlName="wasCrimeInBC">
+                        <span>Yes</span>
+                      </label>
+                      <label class="inline-label">
+                        <input type="radio" [value]="false" name="wasCrimeInBC" formControlName="wasCrimeInBC">
+                        <span>No</span>
+                      </label>
+                    </td>
+                    <td class="error-cell was-in-bc-warning" *ngIf="form.get('wasCrimeInBC').value === false">
+                      CVAP only accepts applications for crimes that have occurred in BC. Please click <a href="#" class="fake-link">here</a>to apply to your provincial assistance program or call CVAP toll free at 1-866-660-3888 if you have any questions.
+                    </td>
+                  </tr>
+                </table>
+              </section>
+
+              <section class="button-container">
+                <button (click)="gotoApplication();" [disabled]="!canProceedWithApplication()" class="btn btn-primary pull-right">CONTINUE TO {{ selectedApplicationName }} <i class="fas fa-chevron-right"></i></button>
+              </section>
             </div>
           </div>
         </div>
-
-        <div class="col-md-5 ">
-          <div class="side-box-wrapper" style="margin-left: -15px;">
-            <section class="side-box">
-              <section style="display: flex">
-                <button mat-fab class="fab-button mat-elevation-z0">
-                  <mat-icon class="icon" aria-label="description icon">description</mat-icon>
-                </button>
-                <h2>Useful Links & Information</h2>
-              </section>
-              <p style="padding-top: 30px;">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-              <div style="float: right;">
-                <button class="btn btn-primary" routerLink="/policy-document/application-stats"
-                  tabindex="3">Learn More</button>
-              </div>
-            </section>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

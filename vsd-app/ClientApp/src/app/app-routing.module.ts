@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
+import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -9,11 +11,15 @@ import { TestApiComponent } from './test-api/test-api.component';
 const routes: Routes = [
   {
     path: '',
-    component: VictimApplicationComponent
+    component: HomeComponent
   },
   {
     path: 'victim-application',
     component: VictimApplicationComponent,
+  },
+  {
+    path: 'submit-invoice',
+    component: SubmitInvoiceComponent,
   },
   {
     path: 'test-api',

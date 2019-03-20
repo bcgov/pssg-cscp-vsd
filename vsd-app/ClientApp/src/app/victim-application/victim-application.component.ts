@@ -11,16 +11,14 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { defaultFormat as _rollupMoment } from 'moment';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 
+import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { PersonalInformationModel } from '../models/justice/personal-information.model';
 import { CrimeInformationModel } from '../models/justice/crime-information.model';
 import { FormBase } from '../shared/form-base';
-
-import { COUNTRIES } from './country-list';
-import { CustomAddress } from '../models/custom-address.model';
 
 const moment = _rollupMoment || _moment;
 
@@ -61,14 +59,19 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   busy3: Promise<any>;
   form: FormGroup;
   formFullyValidated: boolean;
+  useApplicationType: string;
 
   otherTreatmentItems: FormArray;
   courtFileItems: FormArray;
+  crimeLocationItems: FormArray;
+  policeReportItems: FormArray;
 
   showAddCourtInfo: boolean = true;
   showRemoveCourtInfo: boolean = false;
-
-  countryList = COUNTRIES;
+  showAddCrimeLocation: boolean = true;
+  showRemoveCrimeLocation: boolean = false;
+  showAddPoliceReport: boolean = true;
+  showRemovePoliceReport: boolean = false;
 
   public currentFormStep: number;
   public summaryOfBenefitsUrl: string;
@@ -93,7 +96,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
     super();
 
@@ -103,6 +107,76 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
     this.formFullyValidated = false;
     this.currentFormStep = 0;
+  }
+
+  ngOnInit() {
+    let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
+    this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
+
+    this.form = this.buildApplicationForm();
+
+    this.form.get('representativeInformation').patchValue({
+      completingOnBehalfOf: parseInt(completeOnBehalfOf)
+    });
+
+    /* Need to rework this with the new app-address control */
+    this.form.get('personalInformation.preferredMethodOfContact')
+      .valueChanges
+      .subscribe(value => {
+        let phoneControl = this.form.get('personalInformation.phoneNumber');
+        let emailControl = this.form.get('personalInformation.email');
+        let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
+
+        phoneControl.clearValidators();
+        emailControl.clearValidators();
+        addressControl.clearValidators();
+
+        phoneControl.setErrors(null);
+        emailControl.setErrors(null);
+        addressControl.setErrors(null);
+
+        let contactMethod = parseInt(value);
+        if (contactMethod === 100000000) {
+          phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+          this.phoneIsRequired = true;
+          this.emailIsRequired = false;
+          this.addressIsRequired = false;
+        } else if (contactMethod === 100000001) {
+          emailControl.setValidators([Validators.required, Validators.email]);
+          this.phoneIsRequired = false;
+          this.emailIsRequired = true;
+          this.addressIsRequired = false;
+        } else if (contactMethod === 100000002) {
+          addressControl.setValidators([Validators.required]);
+          this.phoneIsRequired = false;
+          this.emailIsRequired = false;
+          this.addressIsRequired = true;
+        }
+
+        phoneControl.markAsTouched();
+        emailControl.markAsTouched();
+        addressControl.markAsTouched();
+
+        addressControl.updateValueAndValidity();
+        emailControl.updateValueAndValidity();
+        phoneControl.updateValueAndValidity();
+      });
+  }
+
+  showSignPad(group, control): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(SignPadDialog, dialogConfig);
+    dialogRef.afterClosed().subscribe(
+      data => {
+        //console.log("Dialog output:", data)
+        this.form.get(group).patchValue(
+          { signature: data }
+        );
+      }
+    ); 
   }
 
   validateAllFormFields(formGroup: any) {
@@ -139,14 +213,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     return amI.value;
   }
 
-  isFieldValid(field: string) {
-    let formField = this.form.get(field);
-    if (formField == null)
-      return true;
-
-    return this.form.get(field).valid || !this.form.get(field).touched;
-  }
-  
   isChildFieldValid(parent: string, field: string) {
     let formField = this.form.get(parent);
     if (formField == null)
@@ -170,6 +236,21 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     return control.value;
   }
 
+  hasSignature(controlName: string): boolean {
+    var control = this.form.get(controlName);
+
+    if (control == null || control === undefined)
+      return false;
+
+    if (control.value == null || control.value === undefined)
+      return false;
+
+    if (control.value.length == 0 || control.value.length === undefined)
+      return false;
+
+    return control.value.length > 0;
+  }
+
   getFormGroupName(groupIndex: any) {
     let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     return elements[groupIndex];
@@ -187,6 +268,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   gotoNextStep(stepper: MatStepper): void {
+    console.log(this.currentFormStep);
     if (stepper != null) {
       var desiredFormIndex = stepper.selectedIndex;
       var formGroupName = this.getFormGroupName(desiredFormIndex);
@@ -201,9 +283,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           formValid = formParts.valid;
         }
 
-        let errors = this.getErrors(this.form.get('crimeInformation'));
-        console.log('Form Valid: ' + formValid);
-        console.log(errors);
+//        let errors = this.getErrors(this.form.get('crimeInformation'));
+//        console.log('Form Valid: ' + formValid);
+//        console.log(errors);
         if (formValid) {
           window.scroll(0, 0);
           stepper.next();
@@ -253,13 +335,150 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       courtLocation: ''
     });
   }
+  
+  addCrimeLocation(): void {
+    this.crimeLocationItems = this.form.get('crimeInformation.crimeLocations') as FormArray;
+    this.crimeLocationItems.push(this.createCrimeLocationItem());
+    this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
+    this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
+  }
 
-  ngOnInit() {
-    this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
-    this.form = this.fb.group({
+  removeCrimeLocation(index: number): void {
+    this.crimeLocationItems = this.form.get('crimeInformation.crimeLocations') as FormArray;
+    this.crimeLocationItems.removeAt(index);
+    this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
+    this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
+  }
+
+  createCrimeLocationItem(): FormGroup {
+    return this.fb.group({
+      location: ''
+    });
+  }
+
+  addPoliceReport(): void {
+    this.policeReportItems = this.form.get('crimeInformation.policeReports') as FormArray;
+    this.policeReportItems.push(this.createPoliceReport());
+    this.showAddPoliceReport = this.policeReportItems.length < 5;
+    this.showRemovePoliceReport = this.policeReportItems.length > 1;
+  }
+
+  removePoliceReport(index: number): void {
+    this.policeReportItems = this.form.get('crimeInformation.policeReports') as FormArray;
+    this.policeReportItems.removeAt(index);
+    this.showAddPoliceReport = this.policeReportItems.length < 5;
+    this.showRemovePoliceReport = this.policeReportItems.length > 1;
+  }
+
+  createPoliceReport(): FormGroup {
+    return this.fb.group({
+      policeFileNumber: '',
+      investigatingOfficer: ''
+    });
+  }
+
+
+  submitPartialApplication() {
+      this.formFullyValidated = true;
+      this.save().subscribe(
+      data => {
+        console.log("submitting partial form");
+        this.router.navigate(['/application-success']);
+      },
+      err => {
+        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        console.log('Error submitting application');
+      }
+    );
+  }
+  
+  submitApplication() {
+    if (this.form.valid) {
+      this.formFullyValidated = true;
+      this.save().subscribe(
+      data => {
+        console.log("submitting");
+        this.router.navigate(['/application-success']);
+      },
+      err => {
+        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        console.log('Error submitting application');
+      }
+);
+    } else {
+      console.log("form not validated");
+      this.formFullyValidated = false;
+      this.markAsTouched();
+    }
+  }
+
+  testSnaks(): void {
+    let content = this.form.get('personalInformation').value;
+    this.personalModel = content;
+
+    let formData = <DynamicsApplicationModel> {
+      Introduction: this.form.get('introduction').value,
+      PersonalInformation: this.form.get('personalInformation').value,
+      CrimeInformation: this.form.get('crimeInformation').value,
+      MedicalInformation: this.form.get('medicalInformation').value,
+      RepresentativeInformation: this.form.get('representativeInformation').value,
+    };
+
+    //formData.PersonalInformation = this.form.get('personalInformation').value;
+//    formData.CrimeInformation = this.form.get('crimeInformation').value;
+
+    console.log(formData);
+  }
+
+  save(): Subject<boolean> {
+    const subResult = new Subject<boolean>();
+    const formData = <DynamicsApplicationModel>{
+      Introduction: this.form.get('introduction').value,
+      PersonalInformation: this.form.get('personalInformation').value,
+      CrimeInformation: this.form.get('crimeInformation').value,
+      MedicalInformation: this.form.get('medicalInformation').value,
+    };
+
+    this.busy = this.justiceDataService.submitApplication(formData)
+        .toPromise()
+        .then(res => {
+          subResult.next(true);
+        }, err => subResult.next(false));
+    this.busy2 = Promise.resolve(this.busy);
+
+    return subResult;
+  }
+
+  // marking the form as touched makes the validation messages show
+  markAsTouched() {
+    this.form.markAsTouched();
+
+    //const businessProfileControls = (<FormGroup>(this.form.get('businessProfile'))).controls;
+    //for (const c in businessProfileControls) {
+    //  if (typeof (businessProfileControls[c].markAsTouched) === 'function') {
+    //    businessProfileControls[c].markAsTouched();
+    //  }
+    //}
+
+    //const additionalContactControls = (<FormGroup>(this.form.get('additionalContact'))).controls;
+    //for (const c in additionalContactControls) {
+    //  if (typeof (additionalContactControls[c].markAsTouched) === 'function') {
+    //    additionalContactControls[c].markAsTouched();
+    //  }
+    //}
+
+    //const primaryContactControls = (<FormGroup>(this.form.get('primaryContact'))).controls;
+    //for (const c in primaryContactControls) {
+    //  if (typeof (primaryContactControls[c].markAsTouched) === 'function') {
+    //    primaryContactControls[c].markAsTouched();
+    //  }
+    //}
+  }
+
+  private buildApplicationForm() : FormGroup {
+    return this.fb.group({
       introduction: this.fb.group({
-        understoodInformation: ['', Validators.requiredTrue],
-        completingOnBehalfOf: ['', [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002
+        understoodInformation: ['', Validators.requiredTrue]
       }),
       personalInformation: this.fb.group({
         firstName: ['', Validators.required],
@@ -271,8 +490,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         otherLastName: [''],
         dateOfNameChange: [''],
 
-        gender: ['', Validators.required],
-        maritalStatus: ['', Validators.required],
+        gender: [0, Validators.required],
+        maritalStatus: [0, Validators.required],
         sinPart1: [''],
         sinPart2: [''],
         sinPart3: [''],
@@ -281,7 +500,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         //sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
         occupation: [''],
 
-        preferredMethodOfContact: ['', [Validators.required, Validators.min(100000000)]],
+        preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],
 
         phoneNumber: [''],
         alternatePhoneNumber: [''],
@@ -289,11 +508,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         birthDate: [''],
 
         primaryAddress: this.fb.group({
-          line1: [''],
+          line1: ['', Validators.required],
           line2: [''],
           line3: [''],
           city: ['', Validators.required],
-          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
@@ -301,8 +520,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           line1: [''],
           line2: [''],
           line3: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex)]],
+          city: [''],
+          postalCode: [''],
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
@@ -310,13 +529,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
 
-        whenDidCrimeOccur: [''],
+        unsureOfCrimeDates: [''],
+        whenDidCrimeOccur: [''],  // True = Period of Time, False = Start date only
         crimePeriodStart: ['', Validators.required],
         crimePeriodEnd: [''],
         applicationFiledWithinOneYearFromCrime: [''],
         whyDidYouNotApplySooner: [''],
 
-        crimeLocations: ['', Validators.required],
+        crimeLocation: ['', Validators.required],
+        crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
         additionalInformation: this.fb.array([]),  // This will be a collection of uploaded files
@@ -324,9 +545,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         wasReportMadeToPolice: [''], // No: 100000000 Yes: 100000001
 
         policeReportedWhichPoliceForce: [''],
+        policeReportedMultipleTimes: [''],
         policeReportedDate: [''],
-        policeReportedPoliceFileNumber: [''],
-        policeReportedInvestigatingOfficer: [''],
+        policeReportedEndDate: [''],
+        policeReports: this.fb.array([this.createPoliceReport()]),
 
         noPoliceReportIdentification: [''],
 
@@ -336,10 +558,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         offenderRelationship: [''],
         offenderBeenCharged: ['', [Validators.required, Validators.min(100000000)]],  // Yes: 100000000 No: 100000001 Undecided: 100000002
 
-        courtFiles: this.fb.array([ this.createCourtInfoItem() ]),
-
-        courtFileNumber: [''],
-        courtLocation: [''],
+        courtFiles: this.fb.array([this.createCourtInfoItem()]),
 
         haveYouSuedOffender: [''], // No: 100000000   Yes: 100000001
         suedCourtLocation: [''],
@@ -363,7 +582,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             country: [{ value: 'Canada', disabled: false }],
           }),
           signName: [''],
-          signDate: ['']
+          signDate: [''],
+          signature: [''],
         }),
       }),
       medicalInformation: this.fb.group({
@@ -424,7 +644,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       }),
 
       representativeInformation: this.fb.group({
-        // Complete on Behalf of belongs on representative, but it is collected in the introduction
+        completingOnBehalfOf: [100000000, [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
         representativeFirstName: [''], //, Validators.required],
         representativeMiddleName: [''],
         representativeLastName: [''], //, Validators.required],
@@ -473,141 +693,5 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         authorizedPersonSignDate: [''], //, Validators.required],
       }),
     });
-
-    /* Need to rework this with the new app-address control */
-    this.form.get('personalInformation.preferredMethodOfContact')
-      .valueChanges
-      .subscribe(value => {
-        let phoneControl = this.form.get('personalInformation.phoneNumber');
-        let emailControl = this.form.get('personalInformation.email');
-        let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
-
-        phoneControl.clearValidators();
-        emailControl.clearValidators();
-        addressControl.clearValidators();
-
-        phoneControl.setErrors(null);
-        emailControl.setErrors(null);
-        addressControl.setErrors(null);
-
-        let contactMethod = parseInt(value);
-        if (contactMethod === 100000000) {
-          phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-          this.phoneIsRequired = true;
-          this.emailIsRequired = false;
-          this.addressIsRequired = false;
-        } else if (contactMethod === 100000001) {
-          emailControl.setValidators([Validators.required, Validators.email]);
-          this.phoneIsRequired = false;
-          this.emailIsRequired = true;
-          this.addressIsRequired = false;
-        } else if (contactMethod === 100000002) {
-          addressControl.setValidators([Validators.required]);
-          this.phoneIsRequired = false;
-          this.emailIsRequired = false;
-          this.addressIsRequired = true;
-        }
-
-        phoneControl.markAsTouched();
-        emailControl.markAsTouched();
-        addressControl.markAsTouched();
-
-        addressControl.updateValueAndValidity();
-        emailControl.updateValueAndValidity();
-        phoneControl.updateValueAndValidity();
-      });
-  }
-
-  submitPartialApplication() {
-      this.formFullyValidated = true;
-      this.save().subscribe(
-      data => {
-        console.log("submitting partial form");
-        this.router.navigate(['/application-success']);
-      },
-      err => {
-        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application');
-      }
-    );
-  }
-  
-  submitApplication() {
-    if (this.form.valid) {
-      this.formFullyValidated = true;
-      this.save().subscribe(
-      data => {
-        console.log("submitting");
-        this.router.navigate(['/application-success']);
-      },
-      err => {
-        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application');
-      }
-);
-    } else {
-      console.log("form not validated");
-      this.formFullyValidated = false;
-      this.markAsTouched();
-    }
-  }
-
-  testSnaks(): void {
-    let content = this.form.get('personalInformation').value;
-    this.personalModel = content;
-
-    let formData = <DynamicsApplicationModel> {
-      PersonalInformation: this.form.get('personalInformation').value,
-      CrimeInformation: this.form.get('crimeInformation').value,
-      MedicalInformation: this.form.get('medicalInformation').value,
-    };
-
-    //formData.PersonalInformation = this.form.get('personalInformation').value;
-//    formData.CrimeInformation = this.form.get('crimeInformation').value;
-
-    console.log(formData);
-  }
-
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
-    const formData = <DynamicsApplicationModel>{
-      PersonalInformation: this.form.get('personalInformation').value,
-      CrimeInformation: this.form.get('crimeInformation').value,
-    };
-
-    this.busy = this.justiceDataService.submitApplication(formData)
-        .toPromise()
-        .then(res => {
-          subResult.next(true);
-        }, err => subResult.next(false));
-    this.busy2 = Promise.resolve(this.busy);
-
-    return subResult;
-  }
-
-  // marking the form as touched makes the validation messages show
-  markAsTouched() {
-    this.form.markAsTouched();
-
-    //const businessProfileControls = (<FormGroup>(this.form.get('businessProfile'))).controls;
-    //for (const c in businessProfileControls) {
-    //  if (typeof (businessProfileControls[c].markAsTouched) === 'function') {
-    //    businessProfileControls[c].markAsTouched();
-    //  }
-    //}
-
-    //const additionalContactControls = (<FormGroup>(this.form.get('additionalContact'))).controls;
-    //for (const c in additionalContactControls) {
-    //  if (typeof (additionalContactControls[c].markAsTouched) === 'function') {
-    //    additionalContactControls[c].markAsTouched();
-    //  }
-    //}
-
-    //const primaryContactControls = (<FormGroup>(this.form.get('primaryContact'))).controls;
-    //for (const c in primaryContactControls) {
-    //  if (typeof (primaryContactControls[c].markAsTouched) === 'function') {
-    //    primaryContactControls[c].markAsTouched();
-    //  }
-    //}
   }
 }

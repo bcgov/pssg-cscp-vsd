@@ -1,28 +1,10 @@
-import { Subscription, Observable, Subject, forkJoin } from 'rxjs';
-import { FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatStepper } from '@angular/material/stepper';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import * as _moment from 'moment';
-// tslint:disable-next-line:no-duplicate-imports
-import { defaultFormat as _rollupMoment } from 'moment';
-import { MatSnackBar } from '@angular/material';
-
-
-
-
 import { Component, OnInit, Input } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms'
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { COUNTRIES_ADDRESS } from './country-list';  // Make this live in here
-
-
+import { FormGroup, Validators } from "@angular/forms";
+import { COUNTRIES_ADDRESS } from './country-list';
 
 @Component({
   selector: 'app-address',
-  templateUrl: './address.component.html',
-  styleUrls: ['./address.component.scss']
+  templateUrl: './address.component.html'
 })
 export class AddressComponent implements OnInit {
   countryList = COUNTRIES_ADDRESS;
@@ -31,8 +13,6 @@ export class AddressComponent implements OnInit {
   provinceType: string;
   postalCodeType: string;
   postalCodeSample: string;
-
-
 
   @Input() group = FormGroup;
 
@@ -45,9 +25,8 @@ export class AddressComponent implements OnInit {
     this.postalCodeSample = canada.postalCodeSample;
   }
 
-
   isSubFieldValid(field: string) {
-    let formField = this.group.controls[field];
+    let formField = this.group['controls'][field];  // this.group.controls should work, but it doesn't
     if (formField == null)
       return true;
 

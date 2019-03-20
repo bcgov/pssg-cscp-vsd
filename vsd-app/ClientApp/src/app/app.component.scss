@@ -1,9 +1,23 @@
 $bootstrap-sass-asset-helper: true;
 // @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+::ng-deep body {
+  font-size: 16px;
+}
+
 .title {
     font-weight: Semi-bold;
     font-size: 30px;
     color: #fff;
+}
+
+::ng-deep .no-gutter {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.no-gutter > [class*="col-"] {
+  padding-right: 0;
+  padding-left: 0;
 }
 
 @media (max-width: 575.98px) {
@@ -119,6 +133,7 @@ div.c1 li.c2 a {
     vertical-align: middle;
     padding: 15px 20px;
     position: relative;
+    font-size: 14px;
 }
 
 .navigationRibbon .level2Navigation {
@@ -300,4 +315,340 @@ button.btn-mobile {
     border: none;
     outline: none;
     background: #ddd;
+}
+
+::ng-deep .page-header h1 {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+h3 span {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.page-header h1 {
+  border-bottom: 3px solid #f2f2f2;
+  padding-bottom: 10px;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+}
+
+h2, h3 {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+::ng-deep h2.blue-header {
+  margin-bottom: 25px;
+}
+
+::ng-deep label {
+  font-weight: 400;
+}
+
+::ng-deep .application-gutter {
+  position: relative;
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+::ng-deep .application-nav {
+
+  .mat-step-label {
+    white-space: initial;
+  }
+
+  .mat-step-text-label {
+    text-overflow: initial;
+    overflow: auto;
+    color: #ccc;
+  }
+
+  .mat-step-header .mat-step-label.mat-step-label-active .mat-step-text-label {
+    color: #21527E;
+  }
+
+  .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-text-label {
+    color: #21527E;
+    font-weight: 700;
+  }
+
+  .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-icon {
+    background-color: #21527E;
+  }
+
+
+  .mat-vertical-content {
+    padding: 0 24px 0 24px;
+  }
+
+  .mat-vertical-stepper-header {
+    padding: 8px 0 !important;
+  }
+
+  .mat-vertical-content-container {
+    margin-left: 12px;
+  }
+
+  .mat-vertical-stepper-header .mat-step-icon {
+    border: 2px #4e719b solid;
+    background-color: #fff;
+  }
+
+  .mat-stepper-vertical-line::before {
+    top: -8px;
+    bottom: -16px;
+    left: -1px;
+    border-left: 2px solid #ccc;
+  }
+}
+
+.learn-benefits {
+  margin-top: 50px;
+}
+
+::ng-deep .attention {
+  background-color: #f1f4fa;
+  margin: 20px 0;
+  padding: 1em;
+
+  h3 {
+    margin-top: 10px !important;
+  }
+
+  p {
+    margin-bottom: 0 !important;
+  }
+}
+
+::ng-deep ul.list li {
+  margin-bottom: 5px;
+}
+
+::ng-deep ol.list li {
+  margin-bottom: 15px;
+}
+
+.file-upload-placeholder {
+  border: 1px dashed #9fb6d9;
+  background-color: #f1f4fa;
+  padding: 20px;
+  text-align: center;
+}
+::ng-deep .form-control {
+  font-size: 16px;
+}
+
+textarea.form-control {
+  &.standard {
+    width: 75%;
+    height: 100px;
+  }
+
+  &.bigger {
+    width: 75%;
+    height: 200px;
+  }
+}
+
+::ng-deep .inline-label {
+  span {
+    display: inline-block;
+    padding-left: 5px;
+    margin-right: 15px;
+    font-weight: normal;
+  }
+}
+
+.court-information {
+  margin-bottom: 24px;
+
+  .court-listing {
+    .court-files {
+      padding: 0 0 15px;
+    }
+
+    .court-files a {
+      margin-left: 25px;
+    }
+
+    .court-files:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.other-treatments {
+  margin-bottom: 10px;
+
+  .other-treatment {
+    background-color: #eee;
+    padding: 15px;
+  }
+
+  &:nth-child(even) .other-treatment {
+    background-color: #fff;
+  }
+}
+
+::ng-deep .radio-list {
+  label {
+    font-weight: normal;
+    margin-bottom: 5px;
+  }
+
+  input[type=checkbox],
+  input[type=radio] {
+    margin-right: 5px;
+  }
+
+  &.per-line label {
+    display: block;
+  }
+
+  &.per-line label:first-child {
+    display: inline-block;
+  }
+}
+
+::ng-deep .radio-list .app-field {
+  margin-bottom: 5px;
+}
+
+::ng-deep .terms {
+  input[type=text] {
+    margin-left: 15px;
+  }
+
+  ol {
+    padding-left: 12px;
+
+    li {
+      padding-left: 1em;
+    }
+  }
+}
+
+.review-table {
+  border-collapse: separate;
+  border-spacing: 3px;
+
+  tr {
+    background-color: #f1f4fa;
+
+    th,
+    td {
+      //background-color: #e1e8f2;
+      border: 0 !important;
+    }
+
+    th {
+      font-weight: normal;
+      width: 30%;
+    }
+
+    td {
+      font-weight: bold;
+      width: 70%;
+    }
+  }
+
+  &.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #e1e8f2;
+  }
+}
+
+.label {
+  font-size: 16px;
+  font-weight: normal;
+  color: #000;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-left: -8px;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+.step {
+  border-bottom: 2px solid #FCBA19;
+}
+
+.button-container {
+  position: relative;
+  margin: 30px 0 15px;
+
+  .btn {
+    margin-left: 0 !important;
+  }
+}
+
+.submitted-header {
+  background-color: rgba(56, 89, 138, 1);
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  color: #fff !important;
+}
+
+.submitted-header h2 {
+  color: #fff !important;
+}
+
+.submitted-content {
+  background-color: #eee;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.submit-container {
+  background-color: #38598A;
+  border-bottom: solid 4px #FFCC00;
+  color: #fff;
+  margin-bottom: 20px;
+  padding: 30px;
+  padding-top: 20px;
+
+  h2 {
+    color: #fff;
+  }
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #337AB7;
+  color: #000 !important;
+}
+
+::ng-deep .mat-calendar-body-cell-content {
+  color: #54708b;
+}
+
+::ng-deep .mat-calendar-header {
+  background-color: #337AB7;
+  color: #fff;
+}
+
+::ng-deep .tooltip-icon {
+}
+
+::ng-deep .address-info {
+  .standard {
+    width: 400px;
+  }
+  .shorter {
+    width: 250px;
+  }
 }

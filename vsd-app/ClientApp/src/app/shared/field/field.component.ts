@@ -10,6 +10,7 @@ export class FieldComponent implements OnInit {
   @Input() showChevrons = true;
   @Input() valid = true;
   @Input() label: string;
+  @Input() tooltipReference: string;
   @Input() leadingText: string;
   @Input() errorMessage: string;
 
