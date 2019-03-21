@@ -221,6 +221,14 @@ input.form-control {
   margin-bottom: 5px;
 }
 
+.pushed {
+  margin-left: 20px;
+
+  label {
+    font-style: italic;
+  }
+}
+
 ::ng-deep .terms {
   input[type=text] {
     margin-left: 15px;

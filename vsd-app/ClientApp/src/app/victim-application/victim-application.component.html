@@ -236,8 +236,8 @@
               <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
               <span> - </span>
               <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
-              <span class="tooltip-icon" [tooltip]="tolTemplate"><i class="fa fa-info-circle"> </i></span>
-              <ng-template #tolTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
+              <app-tool-tip [trigger]="sinTemplate"></app-tool-tip>
+              <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
             </app-field>
 
             <h2 class="blue-header">Contact Information</h2>
@@ -285,7 +285,7 @@
                 <app-address [group]="form.get('personalInformation.primaryAddress')"></app-address>
               </div>
               <div class="col-6">
-                <h3>Alternate Address <span class="tooltip-icon" [tooltip]="altAddressTemplate"><i class="fa fa-info-circle"> </i></span></h3>
+                <h3>Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip></h3>
                 <ng-template #altAddressTemplate>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</ng-template>
                 <app-address [group]="form.get('personalInformation.alternateAddress')"></app-address>
               </div>
@@ -344,8 +344,8 @@
               </app-field>
 
               <section *ngIf="form.get('crimeInformation.applicationFiledWithinOneYearFromCrime').value === false">
-                <app-field label="Please briefly explain why you did not apply sooner">
-                  <textarea class="form-control standard" formControlName="whyDidYouNotApplySooner"></textarea> <span class='tooltip-icon' [tooltip]='fileWithinYearTemplate'><i class='fa fa-info-circle'> </i></span>
+                <app-field label="Please briefly explain why you did not apply sooner" toolTipReference="fileWithinYearTemplate">
+                  <textarea class="form-control standard" formControlName="whyDidYouNotApplySooner"></textarea>
                 </app-field>
                 <ng-template #fileWithinYearTemplate><strong>One-Year Time Limit</strong><br />Applications to CVAP must be submitted within one year of the date of the incident. An explanation is required to determine if the time limit can be extended. The one year time limit does not apply if the applicant is a minor (under 19 years old) or if the application is from a victim of sexual offence.</ng-template>
               </section>
@@ -519,15 +519,6 @@
                 </div>
               </div>
 
-              <div class="row">
-                <div class="col-4">
-                </div>
-                <div class="col-4">
-                </div>
-                <div class="col-4">
-                </div>
-              </div>
-
               <h3>Court Information</h3>
               <div class="court-information">
                 <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('crimeInformation.courtFiles').controls; let i = index;">
@@ -685,114 +676,151 @@
               </section>
             </section>
           </div>
-              <div formGroupName="medicalInformation" *ngIf="this.currentFormStep == 3">
-                <div class="page-header">
-                  <h1>Medical & Dental Information</h1>
-                </div>
-                <p>This section provides information regarding any medical or dental treatment you recieved as a result of the crime.</p>
-                <section>
-                  <h2 class="blue-header">Coverage</h2>
-                  <h3>Medical Services Coverage [tooltip icon]</h3>
-                  <app-field label="Do you have medical services coverage? (e.g. a BC Services Card or BC Care Card)">
-                    <label class="inline-label">
-                      <input type="radio" [value]="true" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage">
-                      <span>Yes</span>
-                    </label>
-                    <label class="inline-label">
-                      <input type="radio" [value]="false" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage">
-                      <span>No</span>
-                    </label>
-                  </app-field>
-                  <section *ngIf="form.get('medicalInformation.doYouHaveMedicalServicesCoverage').value === true">
-                    <app-field label="Personal Health Number">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="personalHealthNumber">
+          <div formGroupName="medicalInformation" *ngIf="this.currentFormStep == 3">
+            <div class="page-header">
+              <h1>Medical & Dental Information</h1>
+            </div>
+            <p>This section provides information regarding any medical or dental treatment you recieved as a result of the crime.</p>
+
+            <section>
+              <h2 class="blue-header">Coverage</h2>
+              <h3>Medical Services Coverage <app-tool-tip [trigger]="mspcTemplate"></app-tool-tip></h3>
+              <ng-template #mspcTemplate><strong>Health Plan / Dental Plan Coverage</strong><br />CVAP will only pay expenses or provide benefits that are not already covered by your existing health or dental plan</ng-template>
+
+              <app-field label="Do you have medical services coverage? (e.g. a BC Services Card or BC Care Card)">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage">
+                  <span>No</span>
+                </label>
+              </app-field>
+              <section *ngIf="form.get('medicalInformation.doYouHaveMedicalServicesCoverage').value === true">
+                <app-field label="Personal Health Number">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="personalHealthNumber">
+                </app-field>
+              </section>
+              <h3>Other Health Coverage</h3>
+              <app-field label="Do you have other health coverage? (e.g. Blue Cross)">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage">
+                  <span>No</span>
+                </label>
+              </app-field>
+              <section *ngIf="form.get('medicalInformation.doYouHaveOtherHealthCoverage').value === true">
+                <app-field label="Name of provider">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="otherHealthCoverageProviderName">
+                </app-field>
+                <app-field label="Extended Health Plan Number">
+                  <input class="form-control" style="width: 350px;" type="text" formControlName="otherHealthCoverageExtendedPlanNumber">
+                </app-field>
+              </section>
+              <h2 class="blue-header">Treatment</h2>
+              <h3>Hospital Information</h3>
+              <app-field label="Did you go to a hospital to be treated for injuries resulting from the incident?">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="wereYouTreatedAtHospital" formControlName="wereYouTreatedAtHospital">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="wereYouTreatedAtHospital" formControlName="wereYouTreatedAtHospital">
+                  <span>No</span>
+                </label>
+              </app-field>
+              <section *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
+                <app-field label="Name of hospital">
+                  <input class="form-control standard" type="text" formControlName="treatedAtHospitalName">
+                </app-field>
+                <app-field label="Date of treatment">
+                  <input type="text" class="form-control" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd"
+                         [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
+                  <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
+                </app-field>
+              </section>
+
+              <h3>Family Doctor Information</h3>
+              <app-field label="Do you have a medical doctor / clicnic who has been treating you for injuries resulting from the incident?" [required]="true" errorMessage="Please select an option">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
+                  <span>No</span>
+                </label>
+              </app-field>
+              <section *ngIf="form.get('medicalInformation.beingTreatedByFamilyDoctor').value === true">
+                <app-field label="Name of Medical Doctor/Clinic">
+                  <input class="form-control standard" type="text" formControlName="familyDoctorName">
+                </app-field>
+                <app-field label="Phone Number (incl. area code)">
+                  <input class="form-control standard" type="text" formControlName="familyDoctorPhoneNumber">
+                </app-field>
+                <app-field label="Address (Apt. No., Street Number, Street Address, PO Box)">
+                  <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
+                  <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine2" placeholder="Address Line 2"><br /><br />
+                  <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine3" placeholder="Address Line 3">
+                </app-field>
+              </section>
+
+              <h3>Other Treatment Information</h3>
+              <app-field label="Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?" [required]="true" errorMessage="Please select an option">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                  <span>No</span>
+                </label>
+              </app-field>
+              <section *ngIf="form.get('medicalInformation.hadOtherTreatments').value === true">
+                <div class="other-treatments" formArrayName="otherTreatments" *ngFor="let item of form.get('medicalInformation.otherTreatments').controls; let i = index;">
+                  <div [formGroupName]="i" class="other-treatment">
+                    <a href="javascript:void(0);" (click)="removeProvider(i)" class="float-right" *ngIf="showRemoveProvider">
+                      <i class="fas fa-trash-alt"></i> Delete Provider
+                    </a>
+                    <app-field label="Type of provider">
+                      <label class="inline-label">
+                        <input type="radio" [value]="1" name="providerType" formControlName="providerType">
+                        <span>Specialist</span>
+                      </label>
+                      <br />
+                      <label class="inline-label">
+                        <input type="radio" [value]="2" name="providerType" formControlName="providerType">
+                        <span>Counsellor / Psychologist</span>
+                      </label>
+                      <br />
+                      <label class="inline-label">
+                        <input type="radio" [value]="3" name="providerType" formControlName="providerType">
+                        <span>Dentist</span>
+                      </label>
+                      <br />
+                      <label class="inline-label">
+                        <input type="radio" [value]="4" name="providerType" formControlName="providerType">
+                        <span>Other</span>
+                      </label>
                     </app-field>
-                  </section>
-                  <h3>Other Health Coverage</h3>
-                  <app-field label="Do you have other health coverage? (e.g. Blue Cross)">
-                    <label class="inline-label">
-                      <input type="radio" [value]="true" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage">
-                      <span>Yes</span>
-                    </label>
-                    <label class="inline-label">
-                      <input type="radio" [value]="false" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage">
-                      <span>No</span>
-                    </label>
-                  </app-field>
-                  <section *ngIf="form.get('medicalInformation.doYouHaveOtherHealthCoverage').value === true">
-                    <app-field label="Name of provider">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="otherHealthCoverageProviderName">
+                    <app-field label="Provider name">
+                      <input type="text" formControlName="providerName">
                     </app-field>
-                    <app-field label="Extended Health Plan Number">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="otherHealthCoverageExtendedPlanNumber">
+                    <app-field label="Phone number (incl. area code)">
+                      <input type="text" formControlName="providerPhoneNumber">
                     </app-field>
-                  </section>
-                  <h2 class="blue-header">Treatment</h2>
-                  <h3>Hospital Information</h3>
-                  <app-field label="Did you go to a hospital to be treated for injuries resulting from the incident?">
-                    <label class="inline-label">
-                      <input type="radio" [value]="true" name="weYouTreatedAtHospital" formControlName="weYouTreatedAtHospital">
-                      <span>Yes</span>
-                    </label>
-                    <label class="inline-label">
-                      <input type="radio" [value]="false" name="weYouTreatedAtHospital" formControlName="weYouTreatedAtHospital">
-                      <span>No</span>
-                    </label>
-                  </app-field>
-                  <section *ngIf="form.get('medicalInformation.weYouTreatedAtHospital').value === true">
-                    <app-field label="Name of hospital">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="treatedAtHospitalName">
-                    </app-field>
-                    <app-field label="Date of treatment">
-                      <input type="text" class="form-control" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd"
-                             [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
-                      <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
-                    </app-field>
-                  </section>
-                  <h3>Other Treatment Information</h3>
-                  <p>
-                    Please add information about any other providers (doctors, specialists, or counsellors) who have been treating you for injuries resulting from the incident
-                  </p>
-                  <div class="other-treatments" formArrayName="otherTreatments" *ngFor="let item of form.get('medicalInformation.otherTreatments').controls; let i = index;">
-                    <div [formGroupName]="i" class="other-treatment">
-                      <a href="javascript:void(0);" (click)="removeProvider(i)" style="float: right">
-                        <i class="fas fa-trash-alt"></i> Delete Provider
-                      </a>
-                      <app-field label="Type of provider">
-                        <label class="inline-label">
-                          <input type="radio" [value]="1" name="providerType" formControlName="providerType">
-                          <span>Specialist</span>
-                        </label>
-                        <br />
-                        <label class="inline-label">
-                          <input type="radio" [value]="2" name="providerType" formControlName="providerType">
-                          <span>Counsellor / Psychologist</span>
-                        </label>
-                        <br />
-                        <label class="inline-label">
-                          <input type="radio" [value]="3" name="providerType" formControlName="providerType">
-                          <span>Dentist</span>
-                        </label>
-                        <br />
-                        <label class="inline-label">
-                          <input type="radio" [value]="4" name="providerType" formControlName="providerType">
-                          <span>Other</span>
-                        </label>
-                      </app-field>
-                      <app-field label="Provider name">
-                        <input type="text" formControlName="providerName">
-                      </app-field>
-                      <app-field label="Phone number (incl. area code)">
-                        <input type="text" formControlName="providerPhoneNumber">
-                      </app-field>
-                      <app-field label="Address (Apt. No., Street Number, Street Address, PO Box)">
-                        <input type="text" formControlName="providerAddress">
-                      </app-field>
-                    </div>
+                    <app-address [group]="item.get('providerAddress')"></app-address>
                   </div>
-                  <a href="javascript:void(0);" class="btn btn-secondary" (click)="addProvider()">Add a Provider</a>
-                </section>
-              </div>
+                </div>
+                <a href="javascript:void(0);" class="btn btn-secondary" (click)="addProvider()" *ngIf="showAddProvider">Add a Provider</a>
+              </section>
+            </section>
+
+          </div>
               <div formGroupName="expenseInformation" *ngIf="this.currentFormStep == 4">
                 <div class="page-header">
                   <h1>Expense & Loss Information</h1>
@@ -804,60 +832,62 @@
                     For a complete list of benefits available through CVAP, please view the <a [attr.href]="summaryOfBenefitsUrl" target="_blank">Summary of Benefits</a>.<br />
                     <strong>Original reciepts</strong> are required for expenses not covered by your extended health or other insurance plan
                   </p>
+                  <br />
+
                   <p>Please check all that apply:</p>
                   <div class="radio-list">
                     <app-field>
                       <label>
                         <input type="checkbox" [value]="true" name="haveMedicalExpenses" formControlName="haveMedicalExpenses">
-                        Medical Expenses
+                        Medical Expenses <app-tool-tip [trigger]="benefitsMedicalExpenses"></app-tool-tip>
                       </label>
                     </app-field>
                     <app-field>
                       <label>
                         <input type="checkbox" [value]="true" name="haveDentalExpenses" formControlName="haveDentalExpenses">
-                        Dental Expenses
+                        Dental Expenses <app-tool-tip [trigger]="benefitsDental"></app-tool-tip>
                       </label>
                     </app-field>
                     <app-field>
                       <label>
                         <input type="checkbox" [value]="true" name="havePrescriptionDrugExpenses" formControlName="havePrescriptionDrugExpenses">
-                        Prescription drug expenses
+                        Prescription drug expenses <app-tool-tip [trigger]="benefitsPrescription"></app-tool-tip>
                       </label>
                     </app-field>
                     <app-field>
                       <label>
                         <input type="checkbox" [value]="true" name="haveCounsellingExpenses" formControlName="haveCounsellingExpenses">
-                        Counselling
+                        Counselling <app-tool-tip [trigger]="benefitsCounselling"></app-tool-tip>
                       </label>
                     </app-field>
                     <app-field>
                       <label>
                         <input type="checkbox" [value]="true" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses">
-                        Lost employment income (reimbursed at minimum wage)
+                        Lost employment income (reimbursed at minimum wage) <app-tool-tip [trigger]="benefitsLostEmployment"></app-tool-tip>
                       </label>
                     </app-field>
                     <app-field>
                       <label>
                         <input type="checkbox" [value]="true" name="havePersonalPropertyLostExpenses" formControlName="havePersonalPropertyLostExpenses">
-                        Repair or replacement costs of damaged or destroyed personal property that you were wearing at the time of the incident (e.g. eyeglasses, clothing)
+                        Repair or replacement costs of damaged or destroyed personal property that you were wearing at the time of the incident (e.g. eyeglasses, clothing) <app-tool-tip [trigger]="benefitsLostProperty"></app-tool-tip>
                       </label>
                     </app-field>
                     <app-field>
                       <label>
                         <input type="checkbox" [value]="true" name="haveProtectiveMeasureExpenses" formControlName="haveProtectiveMeasureExpenses">
-                        Protective measures (e.g. moving expenses, security devices)
+                        Protective measures (e.g. moving expenses, security devices) <app-tool-tip [trigger]="benefitsProtective"></app-tool-tip>
                       </label>
                     </app-field>
                     <app-field>
                       <label>
                         <input type="checkbox" [value]="true" name="haveDisabilityExpenses" formControlName="haveDisabilityExpenses">
-                        Disability benefits, services or equipment
+                        Disability benefits, services or equipment <app-tool-tip [trigger]="benefitsDisability"></app-tool-tip>
                       </label>
                     </app-field>
                     <app-field>
                       <label>
                         <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses">
-                        Crime scene cleaning
+                        Crime scene cleaning <app-tool-tip [trigger]="benefitsCrimeScene"></app-tool-tip>
                       </label>
                     </app-field>
                     <app-field>
@@ -865,12 +895,22 @@
                         <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses">
                         Other
                       </label>
-                      <section *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true">
+                      <section *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true" class="pushed">
                         <app-field label="Please specify">
                           <input class="form-control" style="width: 350px;" type="text" formControlName="otherSpecificExpenses">
                         </app-field>
                       </section>
                     </app-field>
+                    <ng-template #benefitsMedicalExpenses><h3>Medical Expenses</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li><li>Medical equipment and supplies</li></ul></ng-template>
+                    <ng-template #benefitsDental><h3>Dental Expenses</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li></ul></ng-template>
+                    <ng-template #benefitsPrescription><h3>Prescription Drug Expenses</h3><p>Victims who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Medications prescribed by a doctor, dentist, or podiatrist</li></ul></ng-template>
+                    <ng-template #benefitsCounselling><h3>Counselling</h3><p>For all victims of crime</p><p><strong>Examples:</strong></p><ul><li>Counselling Sessions</li><li>Psycho-educational sessions to others who support the victim</li></ul></ng-template>
+                    <ng-template #benefitsLostEmployment><h3>Lost Employment Income (reimbursed at minimum wage)</h3><p>Victims whose injuries have a long-term effect on their ability to work and who did not have a job when the crime occurred (special eligibility issues for minors)</p><p><strong>Examples:</strong></p><ul><li>Monthly payments to assist in financially supporting the victim</li></ul></ng-template>
+                    <ng-template #benefitsLostProperty><h3>Damaged or destroyed personal property</h3><p>Victims whose eyeglasses/contacts, disability aids, or articles of clothing were damaged or destroyed because of the crime</p><p><strong>Repair or replacement of:</strong></p><ul><li>Eyeglass frames</li><li>Prescription lenses</li><li>Various types of disability aids</li><li>Clothing</li></ul></ng-template>
+                    <ng-template #benefitsProtective><h3>Protective Measures</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li></ul></ng-template>
+                    <ng-template #benefitsDisability><h3>Disability benefits, services or equipment</h3><p>Victims who need disability aids because of their injuries from the crime, to reduce the effects of the injuries, improve their quality of life, and assist in daily living</p><p><strong>Examples:</strong></p><ul><li>Mobility aids</li><li>Communication aids</li><li>Vision aids</li><li>Specialized clothing</li><li>Prostheses and orthoses</li><li>Other equipment or supplies</li></ul></ng-template>
+                    <ng-template #benefitsCrimeScene><h3>Crime Scene Cleaning</h3><p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p><p><strong>Examples:</strong></p><ul><li>Specialized cleaning and disinfecting of contaminated areas</li><li>Replacement of contaminated flooring, wall covering, or other built-in features</li></ul></ng-template>
+                    <ng-template #fillThisIn><h3>Title</h3><p>Content</ng-template>
                   </div>
                 </section>
                 <section>
@@ -918,11 +958,17 @@
                         <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits">
                         Other
                       </label>
-                      <section *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true">
+                      <section *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true" class="pushed">
                         <app-field label="Please specify">
                           <input class="form-control" style="width: 350px;" type="text" formControlName="otherSpecificBenefits">
                         </app-field>
                       </section>
+                      <app-field>
+                        <label>
+                          <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="haveCivilActionBenefits">
+                          None of the above
+                        </label>
+                      </app-field>
                     </app-field>
                   </div>
                 </section>
@@ -977,7 +1023,7 @@
                         </label>
                       </app-field>
                       <section *ngIf="form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation').value === true">
-                        <app-field label="Worker's Compensation Benefits claim number">
+                        <app-field label="What is your Worker's Compensation Benefits claim number?">
                           <input class="form-control" style="width: 350px;" type="text" formControlName="workersCompensationClaimNumber">
                         </app-field>
                       </section>
@@ -1002,7 +1048,7 @@
                                [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly style="width: 200px; background-color: #fff;">
                         <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
                       </app-field>
-                      <app-field label="Did you lose wages? [tooltip icon]">
+                      <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate">
                         <label class="inline-label">
                           <input type="radio" [value]="true" name="didYouLoseWages" formControlName="didYouLoseWages">
                           <span>Yes</span>
@@ -1012,20 +1058,29 @@
                           <span>No</span>
                         </label>
                       </app-field>
+                      <ng-template #lostWagesTemplate><p><strong>Lost wages or income</strong></p><p>If you are claiming for lost wages or income, we will need to verify your employment</p></ng-template>
                     </section>
                   </section>
-                  <section>
+                  <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === true">
                     <h2 class="blue-header">Employer Information</h2>
-                    <app-field label="Name of Company / Organization">
-                      <input type="text" formControlName="employerName">
-                    </app-field>
-                    <app-field label="Phone number (incl. area code)">
-                      <input type="text" formControlName="employerPhoneNumber">
-                    </app-field>
-                    <app-field label="Address (Apt. No., Street Number, Street Address, PO Box)">
-                      <input type="text" formControlName="employerAddress">
-                    </app-field>
-                    <app-field label="May we contact your employer?">
+                    <div class="row">
+                      <div class="col-4">
+                        <app-field label="Name of Company / Organization">
+                          <input type="text" class="form-control" formControlName="employerName">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                        <app-field label="Phone Number of Contact Person">
+                          <input type="text" class="form-control" formControlName="employerPhoneNumber">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                      </div>
+                    </div>
+
+                    <app-address [group]="form.get('employmentIncomeInformation.employerAddress')"></app-address>
+
+                    <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
                       <label class="inline-label">
                         <input type="radio" [value]="true" name="mayContactEmployer" formControlName="mayContactEmployer">
                         <span>Yes</span>
@@ -1035,9 +1090,27 @@
                         <span>No</span>
                       </label>
                     </app-field>
+
+                    <section *ngIf="form.get('employmentIncomeInformation.mayContactEmployer').value === true">
+                      <div class="row">
+                        <div class="col-4">
+                          <app-field label="Employer First Name">
+                            <input type="text" class="form-control" formControlName="employerFirstName">
+                          </app-field>
+                        </div>
+                        <div class="col-4">
+                          <app-field label="Employer Last name">
+                            <input type="text" class="form-control" formControlName="employerLastName">
+                          </app-field>
+                        </div>
+                        <div class="col-4">
+                        </div>
+                      </div>
+                    </section>
                   </section>
                 </section>
               </div>
+
               <div formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6">
                 <div class="page-header">
                   <h1>Application on Behalf of Victim</h1>

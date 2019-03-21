@@ -19,6 +19,7 @@ import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { PersonalInformationModel } from '../models/justice/personal-information.model';
 import { CrimeInformationModel } from '../models/justice/crime-information.model';
 import { FormBase } from '../shared/form-base';
+import { HOSPITALS } from '../shared/hospital-list';
 
 const moment = _rollupMoment || _moment;
 
@@ -72,6 +73,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   showRemoveCrimeLocation: boolean = false;
   showAddPoliceReport: boolean = true;
   showRemovePoliceReport: boolean = false;
+  showAddProvider: boolean = true;
+  showRemoveProvider: boolean = false;
 
   public currentFormStep: number;
   public summaryOfBenefitsUrl: string;
@@ -299,11 +302,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   addProvider(): void {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
     this.otherTreatmentItems.push(this.createTreatmentItem());
+    this.showAddProvider = this.otherTreatmentItems.length < 5;
+    this.showRemoveProvider = this.otherTreatmentItems.length > 1;
   }
 
   removeProvider(index: number): void {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
     this.otherTreatmentItems.removeAt(index);
+    this.showAddProvider = this.otherTreatmentItems.length < 5;
+    this.showRemoveProvider = this.otherTreatmentItems.length > 1;
   }
 
   createTreatmentItem(): FormGroup {
@@ -311,7 +318,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       providerType: '',   // 1 = Specialist, 2 = Counsellor/Psychologist, 3 = Dentist, 4 = Other ---- Figure out how to map these better
       providerName: '',
       providerPhoneNumber: '',
-      providerAddress: '',
+      providerAddress: this.fb.group({
+        line1: [''],
+        line2: [''],
+        line3: [''],
+        city: [''],
+        postalCode: [''],  // , [Validators.pattern(postalRegex)]
+        province: [{ value: 'British Columbia', disabled: false }],
+        country: [{ value: 'Canada', disabled: false }],
+      }),
     });
   }
 
@@ -594,16 +609,21 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         otherHealthCoverageProviderName: [''],
         otherHealthCoverageExtendedPlanNumber: [''],
 
-        weYouTreatedAtHospital: [''],
+        wereYouTreatedAtHospital: [''],
         treatedAtHospitalName: [''],
+        treatedOutsideBc: [''],
+        treatedOutsideBcHospitalName: [''],
         treatedAtHospitalDate: [''],
 
         beingTreatedByFamilyDoctor: [''],
         familyDoctorName: [''],
         familyDoctorPhoneNumber: [''],
-        familyDoctorAddress: [''],
+        familyDoctorAddressLine1: [''],
+        familyDoctorAddressLine2: [''],
+        familyDoctorAddressLine3: [''],
 
-        otherTreatments: this.fb.array([]),  // Not sure how this will post yet   [ This is filled by the method 'createItem' ]
+        hadOtherTreatments: [''],
+        otherTreatments: this.fb.array([this.createTreatmentItem()]),
       }),
       expenseInformation: this.fb.group({
         haveMedicalExpenses: [false],
@@ -639,8 +659,19 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
         employerName: [''],
         employerPhoneNumber: [''],
-        employerAddress: [''],
+        employerAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          line3: [''],
+          city: [''],
+          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
         mayContactEmployer: [''],
+        employerFirstName: [''],
+        employerLastName: [''],
+        tst: ['']
       }),
 
       representativeInformation: this.fb.group({

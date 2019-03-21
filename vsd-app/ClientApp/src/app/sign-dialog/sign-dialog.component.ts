@@ -12,13 +12,10 @@ export class SignPadDialog implements OnInit {
   public signatureImage: any;
   wasSigned: boolean = false;
   signatureData: string;
-
-  constructor(public dialogRef: MatDialogRef<SignPadDialog>) { 
-  }
-
+    
   @ViewChild(SignaturePad) signaturePad: SignaturePad;
 
-  private signaturePadOptions: Object = { // passed through to szimek/signature_pad constructor
+  signaturePadOptions: Object = { // passed through to szimek/signature_pad constructor
     'minWidth': 0.3,
     'maxWidth': 2.5,
     'canvasWidth': 600,
@@ -26,6 +23,9 @@ export class SignPadDialog implements OnInit {
     'penColor': '#000',
     'backgroundColor': '#fff'
   };
+
+  constructor(public dialogRef: MatDialogRef<SignPadDialog>) {
+  }
 
   clearSignature() {
     this.wasSigned = false;

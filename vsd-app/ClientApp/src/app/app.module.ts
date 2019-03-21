@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
-//import { CookieService } from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie-service';
 import { AppRoutingModule } from './app-routing.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -78,6 +78,7 @@ import { StoreModule } from '@ngrx/store';
 import { TermsAndConditionsComponent } from './lite/terms-and-conditions/terms-and-conditions.component';
 import { AliasDataService } from './services/alias-data.service';
 import { FieldComponent } from './shared/field/field.component';
+import { ToolTipTriggerComponent } from './shared/tool-tip/tool-tip.component';
 import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
 import { VersionInfoDialog } from './version-info/version-info.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
@@ -99,6 +100,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     StaticComponent,
     FileUploaderComponent,
     FieldComponent,
+    ToolTipTriggerComponent,
     ProfileSummaryComponent,
     TermsAndConditionsComponent,
     VersionInfoDialog,    
@@ -197,7 +199,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     MatTooltipModule
   ],
   providers: [
-    //CookieService,
+    CookieService,
     DynamicsDataService,
     GeneralDataService,
     SurveyDataService,
