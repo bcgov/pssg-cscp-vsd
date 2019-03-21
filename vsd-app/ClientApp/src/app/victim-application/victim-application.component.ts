@@ -61,6 +61,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   form: FormGroup;
   formFullyValidated: boolean;
   useApplicationType: string;
+  waiverId: number;
 
   otherTreatmentItems: FormArray;
   courtFileItems: FormArray;
@@ -174,9 +175,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     const dialogRef = this.dialog.open(SignPadDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        //console.log("Dialog output:", data)
+        var patchObject = {};
+        patchObject[control] = data;
         this.form.get(group).patchValue(
-          { signature: data }
+          patchObject
         );
       }
     ); 
@@ -239,7 +241,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     return control.value;
   }
 
-  hasSignature(controlName: string): boolean {
+  hasValueSet(controlName: string): boolean {
     var control = this.form.get(controlName);
 
     if (control == null || control === undefined)
@@ -252,6 +254,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       return false;
 
     return control.value.length > 0;
+  }
+
+  hasSignature(controlName: string): boolean {
+    return this.hasValueSet(controlName);
   }
 
   getFormGroupName(groupIndex: any) {
@@ -321,7 +327,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       providerAddress: this.fb.group({
         line1: [''],
         line2: [''],
-        line3: [''],
         city: [''],
         postalCode: [''],  // , [Validators.pattern(postalRegex)]
         province: [{ value: 'British Columbia', disabled: false }],
@@ -525,7 +530,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         primaryAddress: this.fb.group({
           line1: ['', Validators.required],
           line2: [''],
-          line3: [''],
           city: ['', Validators.required],
           postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
           province: [{ value: 'British Columbia', disabled: false }],
@@ -534,7 +538,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         alternateAddress: this.fb.group({
           line1: [''],
           line2: [''],
-          line3: [''],
           city: [''],
           postalCode: [''],
           province: [{ value: 'British Columbia', disabled: false }],
@@ -590,7 +593,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           lawyerAddress: this.fb.group({
             line1: [''],
             line2: [''],
-            line3: [''],
             city: [''],
             postalCode: [''],  // , [Validators.pattern(postalRegex)]
             province: [{ value: 'British Columbia', disabled: false }],
@@ -608,7 +610,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         doYouHaveOtherHealthCoverage: [''],
         otherHealthCoverageProviderName: [''],
         otherHealthCoverageExtendedPlanNumber: [''],
-
+        
         wereYouTreatedAtHospital: [''],
         treatedAtHospitalName: [''],
         treatedOutsideBc: [''],
@@ -662,7 +664,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         employerAddress: this.fb.group({
           line1: [''],
           line2: [''],
-          line3: [''],
           city: [''],
           postalCode: [''],  // , [Validators.pattern(postalRegex)]
           province: [{ value: 'British Columbia', disabled: false }],
@@ -670,46 +671,37 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         }),
         mayContactEmployer: [''],
         employerFirstName: [''],
-        employerLastName: [''],
-        tst: ['']
+        employerLastName: ['']
       }),
 
       representativeInformation: this.fb.group({
-        completingOnBehalfOf: [100000000, [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
-        representativeFirstName: [''], //, Validators.required],
-        representativeMiddleName: [''],
-        representativeLastName: [''], //, Validators.required],
-
+        completingOnBehalfOf: [0, [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
+        representativeName: [''],
+        representativePreferredMethodOfContact: [0],
+        representativePhoneNumber: [''], //, Validators.required],
+        representativeAlternatePhoneNumber: [''], //, Validators.required],
+        representativeEmail: [''], //, [Validators.required, Validators.email]],
         representativeAddress: this.fb.group({
           line1: [''],
           line2: [''],
-          line3: [''],
           city: [''],
           postalCode: [''],  // , [Validators.pattern(postalRegex)]
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
-
-        representativePhoneNumber: [''], //, Validators.required],
-        representativeEmail: [''], //, [Validators.required, Validators.email]],
-
-        relationshipImmediateFamilyMember: [''],
-        relationshipToVictim: [''],
-
         relationshipLegalRepresentative: [''],
         relationshipLegalAuthority: [''],
-        // Legal Guardian forms would go here
+        // Legal Guardian uploads would go here
       }),
 
       declarationInformation: this.fb.group({
         declaredAndSigned: ['', Validators.required],
         signature: ['', Validators.required],
-        signDate: ['', Validators.required],
       }),
 
       authorizationInformation: this.fb.group({
-        approvedAuthorityNotification: [false, Validators.required],
-        readAndUnderstoodTermsAndConditions: [false, Validators.required],
+        approvedAuthorityNotification: ['', Validators.required],
+        readAndUnderstoodTermsAndConditions: ['', Validators.required],
         signature: ['', Validators.required],
         signDate: ['', Validators.required],
 
@@ -718,8 +710,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         authorizedPersonPhoneNumber: [''],
         authorizedPersonRelationship: [''],
         authorizedPersonAgencyName: [''],
-        authorizedPersonAgencyAddress: [''],
-        authorizedPersonAuthorizesDiscussion: [false], //, Validators.required],
+        authorizedPersonAgencyAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          city: [''],
+          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+        authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
         authorizedPersonSignature: [''], //, Validators.required],
         authorizedPersonSignDate: [''], //, Validators.required],
       }),

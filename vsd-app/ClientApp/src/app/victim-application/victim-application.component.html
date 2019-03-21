@@ -910,7 +910,6 @@
                     <ng-template #benefitsProtective><h3>Protective Measures</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li></ul></ng-template>
                     <ng-template #benefitsDisability><h3>Disability benefits, services or equipment</h3><p>Victims who need disability aids because of their injuries from the crime, to reduce the effects of the injuries, improve their quality of life, and assist in daily living</p><p><strong>Examples:</strong></p><ul><li>Mobility aids</li><li>Communication aids</li><li>Vision aids</li><li>Specialized clothing</li><li>Prostheses and orthoses</li><li>Other equipment or supplies</li></ul></ng-template>
                     <ng-template #benefitsCrimeScene><h3>Crime Scene Cleaning</h3><p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p><p><strong>Examples:</strong></p><ul><li>Specialized cleaning and disinfecting of contaminated areas</li><li>Replacement of contaminated flooring, wall covering, or other built-in features</li></ul></ng-template>
-                    <ng-template #fillThisIn><h3>Title</h3><p>Content</ng-template>
                   </div>
                 </section>
                 <section>
@@ -1116,6 +1115,11 @@
                   <h1>Application on Behalf of Victim</h1>
                 </div>
 
+                <p>This section provides information regarding applying on behalf of an applicant. This information is only necessary if you are a guardian or legal representative of the applicant.</p>
+                <div class="attention" *ngIf="form.get('representativeInformation.completingOnBehalfOf').value > 0">
+                  <p>You previously selected the option below. Verify that this is correct before continuing with the application.</p>
+                </div>
+
                 <section class="radio-list">
                   <app-field label="I am:" [required]="true" [valid]="isFieldValid('representativeInformation.completingOnBehalfOf')" errorMessage="Please indicate who is completing this form.">
                     <label>
@@ -1145,49 +1149,52 @@
                 <hr />
 
                 <section *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === 100000000">
-                  <p>This section provides information regarding applying on behalf of an applicant. This information is only necessary if you are a guardian or legal representative of the applicant.</p>
-                  <p><strong>You are not a guardian or legal representative.</strong> If this is an error, please go back to <a href="#" class="stepper-link" (click)="gotoPageIndex(stepper, 0)">Overview</a> and select the parent and/or legal guardian option otherwise click on the "Continue" button to proceed with the application.</p>
+                  <p>Continue to the next step in the application.</p>
                 </section>
-                <section *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === 100000002">
-                  <h3>Name</h3>
-                  <app-field label="First Name" [required]="true" [valid]="form.get('representativeInformation.representativeFirstName').valid || !form.get('representativeInformation.representativeFirstName').touched" errorMessage="Please enter a first name">
-                    <input class="form-control" style="width: 350px;" type="text" formControlName="representativeFirstName">
-                  </app-field>
-                  <app-field label="Middle Name" [required]="false">
-                    <input class="form-control" style="width: 350px;" type="text" formControlName="representativeMiddleName">
-                  </app-field>
-                  <app-field label="Last Name" [required]="true" [valid]="form.get('representativeInformation.representativeLastName').valid || !form.get('representativeInformation.representativeLastName').touched" errorMessage="Please enter a last name">
-                    <input class="form-control" style="width: 350px;" type="text" formControlName="representativeLastName">
-                  </app-field>
 
-                  <h3>Address & Contact Information</h3>
+                <section *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === 100000001 || form.get('representativeInformation.completingOnBehalfOf').value === 100000002 || form.get('representativeInformation.completingOnBehalfOf').value === 100000003">
+                  <p>Complete the following before continuing with the application.</p>
+                  <h2 class="blue-header">Person Completing the Application</h2>
+
+                  <p style="background-color: yellow; font-size: 16px;">See required fields based on preferred contact methods here</p>
+                  <div class="row">
+                    <div class="col-4">
+                      <app-field label="First Name" [required]="true" [valid]="isFieldValid('representativeInformation.representativeName')" errorMessage="Please enter a full name">
+                        <input class="form-control" type="text" formControlName="representativeName" placeholder="Full Name">
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                      <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('representativeInformation.representativePreferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
+                        <select class="form-control" formControlName="representativePreferredMethodOfContact">
+                          <option value="0">Select...</option>
+                          <option value="100000000">Phone Call</option>
+                          <option value="100000001">Email</option>
+                          <option value="100000002">Mail</option>
+                        </select>
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4">
+                      <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
+                        <input class="form-control" type="text" formControlName="representativePhoneNumber">
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                      <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeInformation.representativeAlternatePhoneNumber')" errorMessage="Please enter a phone number">
+                        <input class="form-control" type="text" formControlName="representativeAlternatePhoneNumber">
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                      <app-field label="Email Address" [required]="true" [valid]="isFieldValid('representativeInformation.representativeEmail')" errorMessage="Please enter an email address">
+                        <input class="form-control" type="text" formControlName="representativeEmail" placeholder="myname@email.com">
+                      </app-field>
+                    </div>
+                  </div>
+
                   <app-address [group]="form.get('representativeInformation.representativeAddress')"></app-address>
-
-                  <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="form.get('representativeInformation.representativePhoneNumber').valid || !form.get('representativeInformation.representativePhoneNumber').touched" errorMessage="Please enter a phone number">
-                    <input class="form-control" style="width: 350px;" type="text" formControlName="representativePhoneNumber">
-                  </app-field>
-
-                  <app-field label="Email Address" [required]="true" [valid]="form.get('representativeInformation.representativeEmail').valid || !form.get('representativeInformation.representativeEmail').touched" errorMessage="Please enter an email address">
-                    <input class="form-control" style="width: 350px;" type="text" formControlName="representativeEmail" placeholder="myname@email.com">
-                  </app-field>
-
-                  <h3>Relationship to Victim</h3>
-                  <app-field label="Are you an immediate family member?">
-                    <label class="inline-label">
-                      <input type="radio" [value]="true" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
-                      <span>Yes</span>
-                    </label>
-                    <label class="inline-label">
-                      <input type="radio" [value]="false" name="relationshipImmediateFamilyMember" formControlName="relationshipImmediateFamilyMember">
-                      <span>No</span>
-                    </label>
-                  </app-field>
-
-                  <section *ngIf="form.get('representativeInformation.relationshipImmediateFamilyMember').value === true">
-                    <app-field label="What is your relationship to the victim? (e.g. mother)">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="relationshipToVictim">
-                    </app-field>
-                  </section>
 
                   <app-field label="Are you a legal representative?">
                     <label class="inline-label">
@@ -1206,12 +1213,13 @@
                     </app-field>
                   </section>
 
-                  <p>If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship / trusteeship</p>
+                  <p>Note: If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship/trusteeship.</p>
                   <div class="file-upload-placeholder">
                     [upload functionality goes here]
                   </div>
                 </section>
               </div>
+
 
               <div formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7">
                 <div class="page-header">
@@ -1222,14 +1230,14 @@
 
                 <section>
                   <h2 class="blue-header">Declaration & Signature</h2>
-                  <app-field [required]="true" [valid]="form.get('declarationInformation.declaredAndSigned').valid || !form.get('declarationInformation.declaredAndSigned').touched" errorMessage="Please check declaration">
+                  <app-field [required]="true" [valid]="isFieldValid('declarationInformation.declaredAndSigned')" errorMessage="Please check declaration">
                     <label>
                       <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
-                      I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct.
+                      I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
                     </label>
                   </app-field>
 
-                  <app-field label="Applicant's Signature" [required]="true" [valid]="form.get('declarationInformation.signature').valid || !form.get('declarationInformation.signature').touched" errorMessage="Please provide your digital signature">
+                  <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('declarationInformation.signature')" errorMessage="Please provide your digital signature">
                     <div class="signature-trigger" (click)="showSignPad('declarationInformation', 'signature')" *ngIf="!hasSignature('declarationInformation.signature')">
                       <p>Click this box to sign</p>
                     </div>
@@ -1238,13 +1246,6 @@
                       <a class="redo" (click)="showSignPad('declarationInformation', 'signature')">Redo Signature</a>
                     </div>
                   </app-field>
-
-                  <app-field label="Date" [required]="true" [valid]="form.get('declarationInformation.signDate').valid || !form.get('declarationInformation.signDate').touched" errorMessage="Please enter the date">
-                    <input type="text" class="form-control" formControlName="signDate" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="signDatePicker" (focus)="signDatePicker.open()" (click)="signDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
-                    <mat-datepicker #signDatePicker></mat-datepicker>
-                  </app-field>
-
                 </section>
               </div>
 
@@ -1256,41 +1257,47 @@
 
                 <section>
                   <h2>By signing this section you hereby authorize:</h2>
-                  <ol>
-                    <li>The doctor, dentist, optometrist, chiropractor, or other health care progressional who treated my injuries (physical and/or psychological) to give the Crime Victim Assistance Program, on request, medical or other reports regarding my injuries, treatment or other information relevant to this application;</li>
-                    <li>The police or other law enforcement authorities to give the Crime Victim Assistance Program, on request, a copy of police reports, statements, incident reports or other information relevant to this application;</li>
-                    <li>The Workers' Compensation Board of BC or other authority from which the victim received or will receive or will be eligible to receieve payments from provincial, federal or other jurisdictions funds to give the Crime Victim Assistance Program, on request, information relevant to this application.</li>
-                    <li>My employer(s) or similar authority to give the Crime Victim Assistance Program, on request, information as to my employment earnings, benefits or other information relevant to this application;</li>
-                    <li>Any accident, disability, sickness, life insurance/assurance company or private pension scheme or extended health benefits scheme from which payments or services were received or wlil be received to give the Crime Victim Assistance Program, on request, information relevant to this application;</li>
-                    <li>Human Resources and Skills Development Canada or Aboriginal Affairs and Northern Development Canada or any other authority from which payments were received or will be received to give the Crime Victim Assistance Program, on request information relevant to this application;</li>
-                    <li>The Canada Employment Insurance Commission or the Canada Pension Plan or similar employment insurance and pension plans from other jurisdictions, to give the Crime Victim Assistance Program, on request, information as to benefits received or to be received relevant to this application; and,</li>
-                    <li>Canada Revenue Agency or other similar agency in any other jurisdiction, to give the Crime Victim Assistance Program, upon request information as to my employment income.
-                    <li>The Ministry of Children and Family Development (MCFD) to give the Crime Victim Assistance Program, on request, a copy of information relevant to this application.</li>
+                  <ol class="list punctuated">
+                    <li><span>The doctor, dentist, optometrist, chiropractor, or other health care progressional who treated my injuries (physical and/or psychological) to give the Crime Victim Assistance Program, on request, medical or other reports regarding my injuries, treatment or other information relevant to this application;</span></li>
+                    <li><span>The police or other law enforcement authorities to give the Crime Victim Assistance Program, on request, a copy of police reports, statements, incident reports or other information relevant to this application;</span></li>
+                    <li><span>The Workers' Compensation Board of BC or other authority from which the victim received or will receive or will be eligible to receieve payments from provincial, federal or other jurisdictions funds to give the Crime Victim Assistance Program, on request, information relevant to this application.</span></li>
+                    <li><span>My employer(s) or similar authority to give the Crime Victim Assistance Program, on request, information as to my employment earnings, benefits or other information relevant to this application;</span></li>
+                    <li><span>Any accident, disability, sickness, life insurance/assurance company or private pension scheme or extended health benefits scheme from which payments or services were received or wlil be received to give the Crime Victim Assistance Program, on request, information relevant to this application;</span></li>
+                    <li><span>Human Resources and Skills Development Canada or Aboriginal Affairs and Northern Development Canada or any other authority from which payments were received or will be received to give the Crime Victim Assistance Program, on request information relevant to this application;</span></li>
+                    <li><span>The Canada Employment Insurance Commission or the Canada Pension Plan or similar employment insurance and pension plans from other jurisdictions, to give the Crime Victim Assistance Program, on request, information as to benefits received or to be received relevant to this application; and,</span></li>
+                    <li><span>Canada Revenue Agency or other similar agency in any other jurisdiction, to give the Crime Victim Assistance Program, upon request information as to my employment income.</span></li>
+                    <li><span>The Ministry of Children and Family Development (MCFD) to give the Crime Victim Assistance Program, on request, a copy of information relevant to this application.</span></li>
                   </ol>
                 </section>
 
                 <section>
                   <h2 class="blue-header">Standard Authorization & Signature</h2>
-                  <app-field [required]="true" [valid]="form.get('authorizationInformation.approvedAuthorityNotification').valid || !form.get('authorizationInformation.approvedAuthorityNotification').touched" errorMessage="Please check declaration">
+                  <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.approvedAuthorityNotification')" errorMessage="Please check declaration">
                     <label>
                       <input type="checkbox" [value]="true" name="approvedAuthorityNotification" formControlName="approvedAuthorityNotification">
-                      I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the <em>Crime Victim Assistance Act</em>.
+                      I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the <em>Crime Victim Assistance Act</em>. <span class="error-states">*</span>
                     </label>
                   </app-field>
 
-                  <app-field [required]="true" [valid]="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').valid || !form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').touched" errorMessage="Please check declaration">
+                  <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.readAndUnderstoodTermsAndConditions')" errorMessage="Please check declaration">
                     <label>
                       <input type="checkbox" [value]="true" name="readAndUnderstoodTermsAndConditions" formControlName="readAndUnderstoodTermsAndConditions">
-                      I have read and understood the above information
+                      I have read and understood the above information <span class="error-states">*</span>
                     </label>
                   </app-field>
 
-                  <app-field label="Applicant's Signature" [required]="true" [valid]="form.get('authorizationInformation.signature').valid || !form.get('authorizationInformation.signature').touched" errorMessage="Please provide your digital signature">
-                    <input class="form-control" style="width: 350px;" type="text" formControlName="signature" placeholder="Please type your full name">
-                    <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
+                  <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('authorizationInformation.signature')" errorMessage="Please provide your digital signature">
+                    <div class="signature-trigger" (click)="showSignPad('authorizationInformation', 'signature')" *ngIf="!hasSignature('authorizationInformation.signature')">
+                      <p>Click this box to sign</p>
+                    </div>
+                    <div *ngIf="hasSignature('authorizationInformation.signature')" class="signature-preview">
+                      <img src="{{ valueOrEmpty('authorizationInformation.signature') }}" />
+                      <a class="redo" (click)="showSignPad('authorizationInformation', 'signature')">Redo Signature</a>
+                    </div>
                   </app-field>
+                  <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
 
-                  <app-field label="Date" [required]="true" [valid]="form.get('authorizationInformation.signDate').valid || !form.get('authorizationInformation.signDate').touched" errorMessage="Please enter the date">
+                  <app-field label="Date" [required]="true" [valid]="isFieldValid('authorizationInformation.signDate')" errorMessage="Please enter the date">
                     <input type="text" class="form-control" formControlName="signDate" placeholder="yyyy-mm-dd"
                            [matDatepicker]="authSignDatePicker" (focus)="authSignDatePicker.open()" (click)="authSignDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
                     <mat-datepicker #authSignDatePicker></mat-datepicker>
@@ -1310,39 +1317,54 @@
 
                   <section *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === true">
                     <h3>Authorized Person</h3>
-                    <app-field label="Full Name">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="authorizedPersonFullName">
-                    </app-field>
+                    <div class="row">
+                      <div class="col-4">
+                        <app-field label="Full Name">
+                          <input class="form-control" type="text" formControlName="authorizedPersonFullName">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                        <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
+                          <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber">
+                        </app-field>
+                      </div>
+                      <div class="col-4"></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-4">
+                        <app-field label="Relationship to you (applicant)">
+                          <input class="form-control" type="text" formControlName="authorizedPersonRelationship">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                        <app-field label="Agency Name">
+                          <input class="form-control" type="text" formControlName="authorizedPersonAgencyName">
+                        </app-field>
+                      </div>
+                      <div class="col-4"></div>
+                    </div>
 
-                    <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="form.get('authorizationInformation.authorizedPersonPhoneNumber').valid || !form.get('authorizationInformation.authorizedPersonPhoneNumber').touched" errorMessage="Please enter a phone number">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="authorizedPersonPhoneNumber">
-                    </app-field>
+                    <app-address [group]="form.get('authorizationInformation.authorizedPersonAgencyAddress')"></app-address>
 
-                    <app-field label="Relationship to you (applicant)">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="authorizedPersonRelationship">
-                    </app-field>
-
-                    <app-field label="Agency Name">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="authorizedPersonAgencyName">
-                    </app-field>
-
-                    <app-field label="Agency Address (Apt. No., Street Number, Street Address, PO Box)">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="authorizedPersonAgencyAddress">
-                    </app-field>
-
-                    <app-field [required]="true" [valid]="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').valid || !form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').touched" errorMessage="Please check declaration">
+                    <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration">
                       <label>
                         <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion">
                         I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.
                       </label>
                     </app-field>
 
-                    <app-field label="Applicant's Signature" [required]="true" [valid]="form.get('authorizationInformation.authorizedPersonSignature').valid || !form.get('authorizationInformation.authorizedPersonSignature').touched" errorMessage="Please provide your digital signature">
-                      <input class="form-control" style="width: 350px;" type="text" formControlName="authorizedPersonSignature" placeholder="Please type your full name">
-                      <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
+                    <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonSignature')" errorMessage="Please provide your digital signature">
+                      <div class="signature-trigger" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')" *ngIf="!hasSignature('authorizationInformation.authorizedPersonSignature')">
+                        <p>Click this box to sign</p>
+                      </div>
+                      <div *ngIf="hasSignature('authorizationInformation.authorizedPersonSignature')" class="signature-preview">
+                        <img src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature') }}" />
+                        <a class="redo" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')">Redo Signature</a>
+                      </div>
                     </app-field>
+                    <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
 
-                    <app-field label="Date" [required]="true" [valid]="form.get('authorizationInformation.authorizedPersonSignDate').valid || !form.get('authorizationInformation.authorizedPersonSignDate').touched" errorMessage="Please enter the date">
+                    <app-field label="Date" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonSignDate')" errorMessage="Please enter the date">
                       <input type="text" class="form-control" formControlName="authorizedPersonSignDate" placeholder="yyyy-mm-dd"
                              [matDatepicker]="authorizedPersonSignDatePicker" (focus)="authorizedPersonSignDatePicker.open()" (click)="authorizedPersonSignDatePicker.open()" readonly style="width: 200px; background-color: #fff;">
                       <mat-datepicker #authorizedPersonSignDatePicker></mat-datepicker>

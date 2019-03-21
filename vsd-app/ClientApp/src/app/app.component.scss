@@ -484,8 +484,19 @@ h2, h3 {
   margin-bottom: 5px;
 }
 
-::ng-deep ol.list li {
-  margin-bottom: 15px;
+::ng-deep ol.list {
+
+  li {
+    margin-bottom: 15px;
+  }
+
+  &.punctuated li {
+    font-weight: 600;
+
+    span {
+      font-weight: 400;
+    }
+  }
 }
 
 .file-upload-placeholder {
