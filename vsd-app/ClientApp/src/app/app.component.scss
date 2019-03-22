@@ -20,6 +20,14 @@ $bootstrap-sass-asset-helper: true;
   padding-left: 0;
 }
 
+.app-header {
+  .top-menu {
+    padding-left: 30px;
+    padding-right: 30px;
+    margin: 0;
+  }
+}
+
 @media (max-width: 575.98px) {
     .title {
         font-size: 20px;

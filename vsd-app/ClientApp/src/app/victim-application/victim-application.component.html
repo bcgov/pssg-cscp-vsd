@@ -28,7 +28,7 @@
           <h2>Want to learn more about your Benefits?</h2>
           <p>Click below to open a new window and view the full summary of benefits.</p>
           <p>You will not lose your progress on this application.</p>
-          <p><a [attr.href]="summaryOfBenefitsUrl" target="_blank" class="btn btn-secondary">View Summary of Benefits</a></p>
+          <p><button class="btn btn-secondary" (click)="showSummaryOfBenefits()">View Summary of Benefits</button></p>
         </div>
       </section>
       <a (click)="testSnaks()">Show Form Data</a><br /><br />
@@ -838,7 +838,7 @@
                   <div class="radio-list">
                     <app-field>
                       <label>
-                        <input type="checkbox" [value]="true" name="haveMedicalExpenses" formControlName="haveMedicalExpenses">
+                        <input type="checkbox" [value]="10000000" name="haveMedicalExpenses" formControlName="haveMedicalExpenses">
                         Medical Expenses <app-tool-tip [trigger]="benefitsMedicalExpenses"></app-tool-tip>
                       </label>
                     </app-field>
@@ -962,16 +962,17 @@
                           <input class="form-control" style="width: 350px;" type="text" formControlName="otherSpecificBenefits">
                         </app-field>
                       </section>
-                      <app-field>
-                        <label>
-                          <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="haveCivilActionBenefits">
-                          None of the above
-                        </label>
-                      </app-field>
+                    </app-field>
+                    <app-field>
+                      <label>
+                        <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits">
+                        None of the above
+                      </label>
                     </app-field>
                   </div>
                 </section>
               </div>
+
               <div formGroupName="employmentIncomeInformation" *ngIf="this.currentFormStep == 5">
                 <div class="page-header">
                   <h1 (click)="checkform()">Employment Income</h1>

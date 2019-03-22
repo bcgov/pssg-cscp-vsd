@@ -14,6 +14,7 @@ import { defaultFormat as _rollupMoment } from 'moment';
 import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
+import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { PersonalInformationModel } from '../models/justice/personal-information.model';
@@ -182,6 +183,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         );
       }
     ); 
+  }
+
+  showSummaryOfBenefits(): void {
+    const dialogConfig = new MatDialogConfig();
+    const dialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important' });
   }
 
   validateAllFormFields(formGroup: any) {
@@ -441,6 +447,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       PersonalInformation: this.form.get('personalInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
       MedicalInformation: this.form.get('medicalInformation').value,
+      ExpenseInformation: this.form.get('expenseInformation').value,
       RepresentativeInformation: this.form.get('representativeInformation').value,
     };
 
@@ -648,6 +655,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         haveCivilActionBenefits: [''],
         haveOtherBenefits: [''],
         otherSpecificBenefits: [''],
+        noneOfTheAboveBenefits: [''],
       }),
       employmentIncomeInformation: this.fb.group({
         wereYouEmployedAtTimeOfCrime: [''],  // 1 = Yes, 2 = No, 3 = Self-Employed

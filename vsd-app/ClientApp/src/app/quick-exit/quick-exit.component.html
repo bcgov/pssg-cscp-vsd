@@ -1,0 +1,10 @@
+<div class="slide-close" (click)="closeEverything()" (mouseenter)="openSlide()" (mouseleave)="closeSlide()" [@openClose]="isOpen ? 'open' : 'closed'">
+  <div class="close-box">
+    <i class="fa fa-2x fa-exclamation-circle"> </i><br />
+    <span>Close</span>
+  </div>
+  <div class="close-info">
+    <p><strong>Click here to close this site quickly.</strong></p>
+    <p>Your information will not be saved.</p>
+  </div>
+</div>

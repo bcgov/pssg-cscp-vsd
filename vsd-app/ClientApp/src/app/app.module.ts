@@ -62,6 +62,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { BusinessProfileComponent } from './business-information/business-profile/business-profile.component';
 import { AddressComponent } from './shared/address/address.component';
 import { SignPadDialog } from './sign-dialog/sign-dialog.component';
+import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefits.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
@@ -78,6 +79,7 @@ import { StoreModule } from '@ngrx/store';
 import { TermsAndConditionsComponent } from './lite/terms-and-conditions/terms-and-conditions.component';
 import { AliasDataService } from './services/alias-data.service';
 import { FieldComponent } from './shared/field/field.component';
+import { QuickExitComponent } from './quick-exit/quick-exit.component';
 import { ToolTipTriggerComponent } from './shared/tool-tip/tool-tip.component';
 import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
 import { VersionInfoDialog } from './version-info/version-info.component';
@@ -89,6 +91,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     BusinessProfileComponent,
     AddressComponent,
     SignPadDialog,
+    SummaryOfBenefitsDialog,
     VictimApplicationComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
@@ -100,6 +103,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     StaticComponent,
     FileUploaderComponent,
     FieldComponent,
+    QuickExitComponent,
     ToolTipTriggerComponent,
     ProfileSummaryComponent,
     TermsAndConditionsComponent,
@@ -218,7 +222,8 @@ import { SignaturePadModule } from 'angular2-signaturepad';
   ],
   entryComponents: [
     VersionInfoDialog,
-    SignPadDialog
+    SignPadDialog,
+    SummaryOfBenefitsDialog
   ],
   bootstrap: [AppComponent]
 })

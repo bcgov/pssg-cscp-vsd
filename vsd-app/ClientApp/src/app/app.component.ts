@@ -5,14 +5,13 @@ import { User } from './models/user.model';
 import { VersionInfo } from './models/version-info.model';
 import { isDevMode } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { AdoxioLegalEntity } from './models/adoxio-legalentities.model';
 import 'rxjs/add/operator/filter';
 import { VersionInfoDialog } from './version-info/version-info.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = '';
