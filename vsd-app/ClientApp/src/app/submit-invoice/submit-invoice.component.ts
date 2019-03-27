@@ -8,7 +8,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { defaultFormat as _rollupMoment } from 'moment';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
+import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
@@ -77,7 +78,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
     super();
 
@@ -87,37 +89,15 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   ngOnInit() {
     this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
-    this.form = this.fb.group({
-      invoiceDetails: this.fb.group({
-        claimNumber: ['', Validators.required],
-        claimantsName: ['', Validators.required],
-        invoiceNumber: ['', Validators.required],
-        invoiceDate: ['', Validators.required],
-        invoiceAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.required, Validators.pattern(postalRegex)]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        phoneNumber: ['', Validators.required],
-        faxNumber: [''],
-        email: ['', [Validators.required, Validators.email]],
-        nameOfPayee: ['', Validators.required],
-        nameOfCounseller: ['', Validators.required],
-        paymentType: ['', Validators.required],  // EFT: 100000000  Cheque: 100000001  Wire Transfer: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
-        counsellorRegistrationNumber: ['', Validators.required],
+    this.form = this.buildInvoiceForm();
+  }
+  
+  testSnaks(): void {
+    let formData = {
+      InvoiceDetails: this.form.get('invoiceDetails').value
+    };
 
-        settingsCounsellingType: [''],  // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
-        settingsNumberOfSessions: [''],
-        settingsCounsellingRate: [''],
-        settingsSessionDuration: [''], // , Validators.pattern("/^[0-9]+(\.[0-9]{1,2})?$/")
-        exemptFromGst: [false],
-
-        lineItems: this.fb.array([this.createLineItem()]),
-      }),
-    });
+    console.log(JSON.stringify(formData));
   }
 
   invoiceSuccess(): void {
@@ -170,6 +150,23 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       sessionRate: [sessionRate, Validators.required],
       sessionAmount: [''],
     });
+  }
+
+  showSignPad(group, control): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(SignPadDialog, dialogConfig);
+    dialogRef.afterClosed().subscribe(
+      data => {
+        var patchObject = {};
+        patchObject[control] = data;
+        this.form.get(group).patchValue(
+          patchObject
+        );
+      }
+    );
   }
 
   validateAllFormFields(formGroup: any) {
@@ -349,5 +346,65 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         invoiceItemControls[c].markAsTouched();
       }
     }
+  }
+
+  private buildInvoiceForm(): FormGroup {
+    return this.fb.group({
+      invoiceDetails: this.fb.group({
+
+        registeredCounsellorWithCvap: ['', Validators.required],
+
+        claimNumber: ['', Validators.required],
+        claimantsName: ['', Validators.required],
+        invoiceNumber: ['', Validators.required],
+        invoiceDate: ['', Validators.required],
+
+        submittedInvoiceBefore: ['', Validators.required],
+        hasYourAddressChanged: ['', Validators.required],
+
+        payeeFirstName: ['', Validators.required],
+        payeeLastName: ['', Validators.required],
+        payeePhoneNumber: ['', Validators.required],
+        payeeFaxNumber: [''],
+        payeeEmail: ['', [Validators.required, Validators.email]],
+        payeeAddress: this.fb.group({
+          line1: ['', Validators.required],
+          line2: [''],
+          city: ['', Validators.required],
+          postalCode: ['', [Validators.required, Validators.pattern(postalRegex)]],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+
+        organisationNameOfCounseller: ['', Validators.required],
+        organisationName: [''],
+        organisationCounsellorRegistrationNumber: ['', Validators.required],
+        organisationPhoneNumber: ['', Validators.required],
+        organisationFaxNumber: [''],
+        organisationEmail: ['', [Validators.required, Validators.email]],
+        organisationAddress: this.fb.group({
+          line1: ['', Validators.required],
+          line2: [''],
+          city: ['', Validators.required],
+          postalCode: ['', [Validators.required, Validators.pattern(postalRegex)]],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+
+        paymentType: ['', Validators.required],  // EFT: 100000000  Cheque: 100000001  Wire Transfer: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
+
+        // Pull these out into a new subsection -- ignore on submission
+        settingsCounsellingType: [''],  // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
+        settingsNumberOfSessions: [''],
+        settingsCounsellingRate: [''],
+        settingsSessionDuration: [''], // , Validators.pattern("/^[0-9]+(\.[0-9]{1,2})?$/")
+        exemptFromGst: [false],
+
+        lineItems: this.fb.array([this.createLineItem()]),
+
+        declaredAndSigned: ['', Validators.required],
+        signature: ['', Validators.required],
+      }),
+    });
   }
 }

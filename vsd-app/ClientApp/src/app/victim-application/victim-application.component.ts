@@ -131,14 +131,24 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         let phoneControl = this.form.get('personalInformation.phoneNumber');
         let emailControl = this.form.get('personalInformation.email');
         let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
+        let addressControls = [
+          this.form.get('personalInformation').get('primaryAddress.country'),
+          this.form.get('personalInformation').get('primaryAddress.province'),
+          this.form.get('personalInformation').get('primaryAddress.city'),
+          this.form.get('personalInformation').get('primaryAddress.line1'),
+          this.form.get('personalInformation').get('primaryAddress.postalCode'),
+        ];
 
         phoneControl.clearValidators();
-        emailControl.clearValidators();
-        addressControl.clearValidators();
-
         phoneControl.setErrors(null);
+        emailControl.clearValidators();
         emailControl.setErrors(null);
+        addressControl.clearValidators();
         addressControl.setErrors(null);
+        for (let control of addressControls) {
+          control.clearValidators();
+          control.setErrors(null);
+        }
 
         let contactMethod = parseInt(value);
         if (contactMethod === 100000000) {
@@ -153,18 +163,24 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           this.addressIsRequired = false;
         } else if (contactMethod === 100000002) {
           addressControl.setValidators([Validators.required]);
+          for (let control of addressControls) {
+            control.setValidators([Validators.required]);
+          }
           this.phoneIsRequired = false;
           this.emailIsRequired = false;
           this.addressIsRequired = true;
         }
 
         phoneControl.markAsTouched();
-        emailControl.markAsTouched();
-        addressControl.markAsTouched();
-
-        addressControl.updateValueAndValidity();
-        emailControl.updateValueAndValidity();
         phoneControl.updateValueAndValidity();
+        emailControl.markAsTouched();
+        emailControl.updateValueAndValidity();
+        addressControl.markAsTouched();
+        addressControl.updateValueAndValidity();
+        for (let control of addressControls) {
+          control.markAsTouched();
+          control.updateValueAndValidity();
+        }
       });
   }
 
@@ -232,40 +248,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     return formField.get(field).valid || !formField.get(field).touched;
   }
 
-  valueOrEmpty(controlName: string): string {
-    var control = this.form.get(controlName);
-
-    if (control == null || control === undefined)
-      return "--";
-
-    if (control.value == null || control.value === undefined)
-      return "--";
-
-    if (control.value.length == 0 || control.value.length === undefined)
-      return "--";
-
-    return control.value;
-  }
-
-  hasValueSet(controlName: string): boolean {
-    var control = this.form.get(controlName);
-
-    if (control == null || control === undefined)
-      return false;
-
-    if (control.value == null || control.value === undefined)
-      return false;
-
-    if (control.value.length == 0 || control.value.length === undefined)
-      return false;
-
-    return control.value.length > 0;
-  }
-
-  hasSignature(controlName: string): boolean {
-    return this.hasValueSet(controlName);
-  }
-
   getFormGroupName(groupIndex: any) {
     let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     return elements[groupIndex];
@@ -298,9 +280,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           formValid = formParts.valid;
         }
 
-//        let errors = this.getErrors(this.form.get('crimeInformation'));
-//        console.log('Form Valid: ' + formValid);
-//        console.log(errors);
         if (formValid) {
           window.scroll(0, 0);
           stepper.next();
@@ -327,9 +306,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   createTreatmentItem(): FormGroup {
     return this.fb.group({
-      providerType: '',   // 1 = Specialist, 2 = Counsellor/Psychologist, 3 = Dentist, 4 = Other ---- Figure out how to map these better
-      providerName: '',
-      providerPhoneNumber: '',
+      providerType: [0],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
+      providerName: [''],
+      providerPhoneNumber: [''],
       providerAddress: this.fb.group({
         line1: [''],
         line2: [''],
@@ -419,18 +398,21 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
   
   submitApplication() {
-    if (this.form.valid) {
+    //let formIsValid = this.form.valid;
+    let formIsValid = true;
+    if (formIsValid) {
       this.formFullyValidated = true;
       this.save().subscribe(
-      data => {
-        console.log("submitting");
-        this.router.navigate(['/application-success']);
-      },
-      err => {
-        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application');
-      }
-);
+        data => {
+          console.log(data['isSuccess']);
+          console.log("submitting");
+          this.router.navigate(['/application-success']);
+        },
+        err => {
+          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+          console.log('Error submitting application');
+        }
+      );
     } else {
       console.log("form not validated");
       this.formFullyValidated = false;
@@ -448,13 +430,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       CrimeInformation: this.form.get('crimeInformation').value,
       MedicalInformation: this.form.get('medicalInformation').value,
       ExpenseInformation: this.form.get('expenseInformation').value,
+      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value,
       RepresentativeInformation: this.form.get('representativeInformation').value,
+      DeclarationInformation: this.form.get('declarationInformation').value,
+      AuthorizationInformation: this.form.get('authorizationInformation').value,
     };
 
     //formData.PersonalInformation = this.form.get('personalInformation').value;
 //    formData.CrimeInformation = this.form.get('crimeInformation').value;
 
-    console.log(formData);
+    //console.log(formData);
+    console.log(JSON.stringify(formData));
   }
 
   save(): Subject<boolean> {
@@ -464,6 +450,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       PersonalInformation: this.form.get('personalInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
       MedicalInformation: this.form.get('medicalInformation').value,
+      ExpenseInformation: this.form.get('expenseInformation').value,
+      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value,
+      RepresentativeInformation: this.form.get('representativeInformation').value,
+      DeclarationInformation: this.form.get('declarationInformation').value,
+      AuthorizationInformation: this.form.get('authorizationInformation').value,
     };
 
     this.busy = this.justiceDataService.submitApplication(formData)
@@ -517,22 +508,22 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         otherLastName: [''],
         dateOfNameChange: [''],
 
-        gender: [0, Validators.required],
-        maritalStatus: [0, Validators.required],
-        sinPart1: [''],
-        sinPart2: [''],
-        sinPart3: [''],
-        //sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        //sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        //sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
+        birthDate: ['', [Validators.required]],
+        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
+        sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
         occupation: [''],
 
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],
+        preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],  // Phone = 100000000, Email = 100000001, Mail = 100000002
+
+        permissionToContactViaMethod: [false],
+        agreeToCvapCommunicationExchange: [''],
 
         phoneNumber: [''],
         alternatePhoneNumber: [''],
         email: [''],
-        birthDate: [''],
 
         primaryAddress: this.fb.group({
           line1: ['', Validators.required],
@@ -561,13 +552,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         applicationFiledWithinOneYearFromCrime: [''],
         whyDidYouNotApplySooner: [''],
 
-        crimeLocation: ['', Validators.required],
+        crimeLocation: [''],  // REMOVE AFTER DEMO
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformation: this.fb.array([]),  // This will be a collection of uploaded files
+        additionalInformationFiles: this.fb.array([]),  // This will be a collection of uploaded files
 
-        wasReportMadeToPolice: [''], // No: 100000000 Yes: 100000001
+        wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
 
         policeReportedWhichPoliceForce: [''],
         policeReportedMultipleTimes: [''],
@@ -581,14 +572,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         offenderMiddleName: [''],
         offenderLastName: [''],
         offenderRelationship: [''],
-        offenderBeenCharged: ['', [Validators.required, Validators.min(100000000)]],  // Yes: 100000000 No: 100000001 Undecided: 100000002
+        offenderBeenCharged: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // Yes: 100000000 No: 100000001 Undecided: 100000002
 
         courtFiles: this.fb.array([this.createCourtInfoItem()]),
 
-        haveYouSuedOffender: [''], // No: 100000000   Yes: 100000001
-        suedCourtLocation: [''],
-        suedCourtFileNumber: [''],
-        intendToSueOffender: [''], // Yes: 100000000 No: 100000001 Undecided: 100000002
+        haveYouSuedOffender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000   Yes: 100000001
+        intendToSueOffender: [0], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
         racafInformation: this.fb.group({
           applyToCourtForMoneyFromOffender: [''],
@@ -611,27 +600,27 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         }),
       }),
       medicalInformation: this.fb.group({
-        doYouHaveMedicalServicesCoverage: [''],
+        doYouHaveMedicalServicesCoverage: ['', Validators.required],
         personalHealthNumber: [''],
 
-        doYouHaveOtherHealthCoverage: [''],
+        doYouHaveOtherHealthCoverage: ['', Validators.required],
         otherHealthCoverageProviderName: [''],
         otherHealthCoverageExtendedPlanNumber: [''],
         
-        wereYouTreatedAtHospital: [''],
+        wereYouTreatedAtHospital: ['', Validators.required],
         treatedAtHospitalName: [''],
         treatedOutsideBc: [''],
         treatedOutsideBcHospitalName: [''],
         treatedAtHospitalDate: [''],
 
-        beingTreatedByFamilyDoctor: [''],
+        beingTreatedByFamilyDoctor: ['', Validators.required],
         familyDoctorName: [''],
         familyDoctorPhoneNumber: [''],
         familyDoctorAddressLine1: [''],
         familyDoctorAddressLine2: [''],
         familyDoctorAddressLine3: [''],
 
-        hadOtherTreatments: [''],
+        hadOtherTreatments: ['', Validators.required],
         otherTreatments: this.fb.array([this.createTreatmentItem()]),
       }),
       expenseInformation: this.fb.group({
@@ -647,26 +636,27 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         haveOtherExpenses: [false],
         otherSpecificExpenses: [''],
 
-        haveDisabilityPlanBenefits: [''],
-        haveEmploymentInsuranceBenefits: [''],
-        haveIncomeAssistanceBenefits: [''],
-        haveCanadaPensionPlanBenefits: [''],
-        haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [''],
-        haveCivilActionBenefits: [''],
-        haveOtherBenefits: [''],
+        haveDisabilityPlanBenefits: [false],
+        haveEmploymentInsuranceBenefits: [false],
+        haveIncomeAssistanceBenefits: [false],
+        haveCanadaPensionPlanBenefits: [false],
+        haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
+        haveCivilActionBenefits: [false],
+        haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
-        noneOfTheAboveBenefits: [''],
+        noneOfTheAboveBenefits: [false],
       }),
       employmentIncomeInformation: this.fb.group({
-        wereYouEmployedAtTimeOfCrime: [''],  // 1 = Yes, 2 = No, 3 = Self-Employed
-        wereYouAtWorkAtTimeOfIncident: [''],
-        haveYouAppliedForWorkersCompensation: [''],
+        wereYouEmployedAtTimeOfCrime: [0], //, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // 100000000 = Yes, 1000000001 = No, 100000002 = Self-Employed
+        wereYouAtWorkAtTimeOfIncident: [''], //, Validators.required],
+        haveYouAppliedForWorkersCompensation: [''],//, Validators.required],
         workersCompensationClaimNumber: [''],
-        didYouMissWorkDueToCrime: [''],
-        daysWorkMissedStart: [''],
+        didYouMissWorkDueToCrime: [''], //, Validators.required],
+        daysWorkMissedStart: [''], //, Validators.required],
         daysWorkMissedEnd: [''],
-        didYouLoseWages: [''],
+        didYouLoseWages: [''], //, Validators.required],
 
+        areYouSelfEmployed: [''],
         employerName: [''],
         employerPhoneNumber: [''],
         employerAddress: this.fb.group({
@@ -685,9 +675,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       representativeInformation: this.fb.group({
         completingOnBehalfOf: [0, [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
         representativeName: [''],
-        representativePreferredMethodOfContact: [0],
-        representativePhoneNumber: [''], //, Validators.required],
-        representativeAlternatePhoneNumber: [''], //, Validators.required],
+        representativePreferredMethodOfContact: [0],   // Phone = 100000000, Email = 100000001, Mail = 100000002
+        representativePhoneNumber: [''],
+        representativeAlternatePhoneNumber: [''],
         representativeEmail: [''], //, [Validators.required, Validators.email]],
         representativeAddress: this.fb.group({
           line1: [''],
@@ -697,9 +687,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
+
         relationshipLegalRepresentative: [''],
         relationshipLegalAuthority: [''],
-        // Legal Guardian uploads would go here
+
+        legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
       }),
 
       declarationInformation: this.fb.group({

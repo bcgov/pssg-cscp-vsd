@@ -15,6 +15,7 @@ export class AddressComponent implements OnInit {
   postalCodeSample: string;
 
   @Input() group = FormGroup;
+  @Input() showChildrenAsRequired: Boolean = true;
 
   constructor() {
 
@@ -36,13 +37,17 @@ export class AddressComponent implements OnInit {
   updateLocation(event) {
     var selection = event.target.value.toLowerCase();
     var selectedCountry = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == selection)[0];
-    this.provinceList = selectedCountry.areas;
-    this.provinceType = selectedCountry.areaType;
-    this.postalCodeType = selectedCountry.postalCodeName;
-    this.postalCodeSample = selectedCountry.postalCodeSample;
+    if (selectedCountry !== undefined) {
+      this.provinceList = selectedCountry.areas;
+      this.provinceType = selectedCountry.areaType;
+      this.postalCodeType = selectedCountry.postalCodeName;
+      this.postalCodeSample = selectedCountry.postalCodeSample;
+    }
   }
 
   ngOnInit() {
+    if (this.showChildrenAsRequired === undefined)
+      this.showChildrenAsRequired = true;
   }
 
 }

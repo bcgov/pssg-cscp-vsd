@@ -91,7 +91,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                 }
 
                 var application = GetApplicationData();
-                application.Application.VsdApplicanttype = (long)ApplicationType.Witness;
+                application.Application.VsdApplicanttype = (long)ApplicationType.Victim;
 
                 // Temporary hijack of this code to just get this wired up -- all of this should auto bind
                 if (model != null)
@@ -139,7 +139,6 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                         {
                             application.Application.vsd_applicantsprimaryaddressline1 = model.PersonalInformation.primaryAddress.line1;
                             application.Application.vsd_applicantsprimaryaddressline2 = model.PersonalInformation.primaryAddress.line2;
-                            application.Application.vsd_applicantsprimaryaddressline3 = model.PersonalInformation.primaryAddress.line3;
                             application.Application.vsd_applicantsprimarycity = model.PersonalInformation.primaryAddress.city;
                             application.Application.vsd_applicantsprimaryprovince = model.PersonalInformation.primaryAddress.province;
                             application.Application.vsd_applicantsprimarycountry = model.PersonalInformation.primaryAddress.country;
@@ -150,7 +149,6 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                         {
                             application.Application.vsd_applicantsalternateaddressline1 = model.PersonalInformation.alternateAddress.line1;
                             application.Application.vsd_applicantsalternateaddressline2 = model.PersonalInformation.alternateAddress.line2;
-                            application.Application.vsd_applicantsalternateaddressline3 = model.PersonalInformation.alternateAddress.line3;
                             application.Application.vsd_applicantsalternatecity = model.PersonalInformation.alternateAddress.city;
                             application.Application.vsd_applicantsalternateprovince = model.PersonalInformation.alternateAddress.province;
                             application.Application.vsd_applicantsalternatecountry = model.PersonalInformation.alternateAddress.country;
@@ -165,7 +163,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                             application.Application.VsdCvapCrimestartdate = model.CrimeInformation.crimePeriodStart.Value;
                         if (model.CrimeInformation.crimePeriodEnd.HasValue)
                             application.Application.VsdCvapCrimeenddate = model.CrimeInformation.crimePeriodEnd.Value;
-                        application.Application.VsdCvapCrimelocations = model.CrimeInformation.crimeLocations;
+                        application.Application.VsdCvapCrimelocations = model.CrimeInformation.crimeLocation;
                         application.Application.VsdCvapCrimeDetails = model.CrimeInformation.crimeDetails;
                         application.Application.VsdCvapInjuries = model.CrimeInformation.crimeInjuries;
                     }

@@ -44,12 +44,14 @@
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Compile Remove="ClientApp\e2e-reports\**" />
     <Compile Remove="ClientApp\e2e\**" />
+    <Compile Remove="ClientApp\src\app\NewFolder\**" />
     <Compile Remove="Migrations\**" />
     <Compile Remove="Seeders\**" />
     <Compile Remove="Test\**" />
     <Content Remove="$(SpaRoot)**" />
     <Content Remove="ClientApp\e2e-reports\**" />
     <Content Remove="ClientApp\e2e\**" />
+    <Content Remove="ClientApp\src\app\NewFolder\**" />
     <Content Remove="Migrations\**" />
     <Content Remove="Seeders\**" />
     <Content Remove="Test\**" />
@@ -60,11 +62,13 @@
   <ItemGroup>
     <EmbeddedResource Remove="ClientApp\e2e-reports\**" />
     <EmbeddedResource Remove="ClientApp\e2e\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\NewFolder\**" />
     <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="Seeders\**" />
     <EmbeddedResource Remove="Test\**" />
     <None Remove="ClientApp\e2e-reports\**" />
     <None Remove="ClientApp\e2e\**" />
+    <None Remove="ClientApp\src\app\NewFolder\**" />
     <None Remove="Migrations\**" />
     <None Remove="Seeders\**" />
     <None Remove="Test\**" />
@@ -112,10 +116,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ODataClient.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ClientApp\src\app\NewFolder\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

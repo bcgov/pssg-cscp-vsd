@@ -64,6 +64,7 @@ import { AddressComponent } from './shared/address/address.component';
 import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefits.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
+import { VictimReviewComponent } from './victim-application/victim-review.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
@@ -93,6 +94,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     SignPadDialog,
     SummaryOfBenefitsDialog,
     VictimApplicationComponent,
+    VictimReviewComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
     SubmitInvoiceComponent,

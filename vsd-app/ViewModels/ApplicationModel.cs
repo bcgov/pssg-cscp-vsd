@@ -70,7 +70,7 @@ namespace Gov.Jag.VictimServices.Public.ViewModels
         //public bool applicationFiledWithinOneYearFromCrime { get; set; }
         public string whyDidYouNotApplySooner { get; set; }
 
-        public string crimeLocations { get; set; }
+        public string crimeLocation { get; set; }
         public string crimeDetails { get; set; }
         public string crimeInjuries { get; set; }
         //        additionalInformation: this.fb.array([]),  // This will be a collection of uploaded files

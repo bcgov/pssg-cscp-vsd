@@ -727,3 +727,35 @@ hr {
     width: 250px;
   }
 }
+
+
+::ng-deep .signature-trigger {
+  width: 385px;
+  padding: 40px 0;
+  border: 1px solid #9fb6d9;
+  background-color: #f1f4fa;
+  color: #9fb6d9;
+  text-align: center;
+  border-radius: 4px;
+
+  p {
+    margin: 0;
+    font-size: 0.95em;
+  }
+}
+
+::ng-deep .signature-preview {
+  img {
+    width: 300px;
+    height: 100px;
+  }
+
+  a.redo {
+    display: block;
+    cursor: pointer;
+  }
+
+  a.redo:hover {
+    text-decoration: underline;
+  }
+}

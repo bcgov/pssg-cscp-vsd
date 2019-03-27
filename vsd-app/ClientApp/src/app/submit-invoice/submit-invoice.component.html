@@ -10,249 +10,357 @@
           <p><a [attr.href]="summaryOfBenefitsUrl" target="_blank" class="btn btn-secondary">Invoice Submission Guidelines <i class="fa fa-external-link"></i></a></p>
         </div>
       </section>
-    </div>
+      <a (click)="testSnaks()">Show Form Data</a><br /><br />
 
-    <div class="col-lg-7 col-sm-12">
-      <div [formGroup]="form">
-        <div *ngIf="dataLoaded || true">
-          <div formGroupName="invoiceDetails">
-            <div class="page-header">
-              <h1>Submit an Invoice</h1>
-            </div>
+      </div>
 
-            <h2 class="blue-header">Claim Information</h2>
-            <div class="row no-gutter">
-              <div class="col-6">
-                <app-field label="Claim Number" [required]="true" [valid]="isFieldValid('invoiceDetails.claimNumber')" errorMessage="Please enter the claim number">
-                  <input class="form-control" type="text" formControlName="claimNumber" maxlength="100">
-                </app-field>
-
-                <app-field label="Claimant's Name" [required]="true" [valid]="isFieldValid('invoiceDetails.claimantsName')" errorMessage="Please enter the claimaint's name">
-                  <input class="form-control" type="text" formControlName="claimantsName" maxlength="100">
-                </app-field>
+      <div class="col-lg-7 col-sm-12">
+        <div [formGroup]="form">
+          <div *ngIf="dataLoaded || true">
+            <div formGroupName="invoiceDetails">
+              <div class="page-header">
+                <h1>Submit an Invoice</h1>
               </div>
-              <div class="col-6">
-                <app-field label="Invoice Number" [required]="true" [valid]="isFieldValid('invoiceDetails.invoiceNumber')" errorMessage="Please enter the invoice number">
-                  <input class="form-control" type="text" formControlName="invoiceNumber" maxlength="100">
-                </app-field>
 
-                <app-field label="Invoice Date" [required]="true" [valid]="isFieldValid('invoiceDetails.invoiceDate')" errorMessage="Please enter the invoice date">
-                  <input type="text" class="form-control" formControlName="invoiceDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="invoiceDatePicker" (focus)="invoiceDatePicker.open()" (click)="invoiceDatePicker.open()" readonly style="background-color: #fff;">
-                  <mat-datepicker #invoiceDatePicker></mat-datepicker>
-                </app-field>
-              </div>
-            </div>
+              <h2 class="blue-header">Claim Information</h2>
 
-            <h2 class="blue-header">Address & Contact Information</h2>
-            <div class="row no-gutter">
-              <div class="col-6">
-                <app-address [group]="form.get('invoiceDetails.invoiceAddress')"></app-address>
-              </div>
-              <div class="col-6">
-                <app-field label="Phone Number" [required]="true" [valid]="isFieldValid('invoiceDetails.phoneNumber')" errorMessage="Please enter a 10-digit phone number">
-                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
-                </app-field>
+              <app-field label="Are you a registered counsellor with CVAP?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('crimeInformation.crimePeriodStart')">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="registeredCounsellorWithCvap" formControlName="registeredCounsellorWithCvap">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="registeredCounsellorWithCvap" formControlName="registeredCounsellorWithCvap">
+                  <span>No</span>
+                </label>
+              </app-field>
 
-                <app-field label="Email Address" [required]="true" [valid]="isFieldValid('invoiceDetails.email')" errorMessage="Please enter an email address">
-                  <input class="form-control" type="text" (blur)="trimValue(form.get('invoiceDetails.email'))" formControlName="email" maxlength="100">
-                </app-field>
-
-                <app-field label="Fax" [required]="false" [valid]="isFieldValid('invoiceDetails.faxNumber')" errorMessage="Please enter a 10-digit fax number">
-                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="faxNumber">
-                </app-field>
-
-              </div>
-            </div>
-
-            <h2 class="blue-header">Invoice Details</h2>
-
-            <div class="row no-gutter">
-              <div class="col-6">
-                <app-field label="Name of Payee" [required]="true" [valid]="isFieldValid('invoiceDetails.nameOfPayee')" errorMessage="Please enter the payee name">
-                  <input class="form-control" type="text" formControlName="nameOfPayee" maxlength="100">
-                </app-field>
-
-                <app-field label="Payment Type " [required]="true" [valid]="isFieldValid('invoiceDetails.paymentType')" errorMessage="Please select your payment type">
-                  <select class="form-control" formControlName="paymentType">
-                    <option value="0">Select...</option>
-                    <option value="100000000">EFT</option>
-                    <option value="100000001">Cheque</option>
-                    <option value="100000002">Wire Transfer</option>
-                  </select>
-                </app-field>
-              </div>
-              <div class="col-6">
-                <app-field label="Name of Counsellor who provided the counselling" [required]="true" [valid]="isFieldValid('invoiceDetails.nameOfCounseller')" errorMessage="Please enter the counsellor name">
-                  <input class="form-control" type="text" formControlName="nameOfCounseller" maxlength="100">
-                </app-field>
-
-                <app-field label="Counsellor Registration Number" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorRegistrationNumber')" errorMessage="Please enter counsellor registration number">
-                  <input class="form-control" type="text" formControlName="counsellorRegistrationNumber" maxlength="100">
-                </app-field>
-              </div>
-            </div>
-
-            <h3>Settings</h3>
-            <section class="settings-panel">
-              <div class="row no-gutter">
-                <div class="col-6">
-                  <app-field label="Counselling Type" [valid]="isFieldValid('invoiceDetails.settingsCounsellingType')">
-                    <select class="form-control fixed-select" formControlName="settingsCounsellingType">
-                      <option value="0">Select...</option>
-                      <option value="100000000">Counselling Session</option>
-                      <option value="100000001">Court Supporting Counselling</option>
-                      <option value="100000002">Psycho-educational sessions</option>
-                    </select>
-                  </app-field>
-
-                  <app-field label="Counselling Rate" [valid]="isFieldValid('invoiceDetails.settingsCounsellingRate')" errorMessage="Please enter a dollar amount">
-                    <input class="form-control number-field" type="number" formControlName="settingsCounsellingRate" maxlength="20" step="0.1" placeholder="$">
-                  </app-field>
+              <section *ngIf="form.get('invoiceDetails.registeredCounsellorWithCvap').value === false">
+                <div class="attention">
+                  <h3>Register to be a Counsellor</h3>
+                  <p>Please register to be a counsellor before submitting an invoice.</p>
+                  <p><a [attr.href]="summaryOfBenefitsUrl" target="_blank">View the Crime Victim Assisstance Program Counselling Guidelines <i class="fa fa-external-link"></i></a></p>
                 </div>
+              </section>
 
-                <div class="col-6">
-                  <app-field label="Number of Sessions" [valid]="isFieldValid('invoiceDetails.settingsNumberOfSessions')" errorMessage="Please enter a number amount">
-                    <input class="form-control number-field" type="number" formControlName="settingsNumberOfSessions" maxlength="5" step="1">
-                  </app-field>
+              <section *ngIf="form.get('invoiceDetails.registeredCounsellorWithCvap').value === true">
+                <div class="row">
+                  <div class="col-6">
+                    <app-field label="Claim Number" [required]="true" [valid]="isFieldValid('invoiceDetails.claimNumber')" errorMessage="Please enter the claim number">
+                      <input class="form-control" type="text" formControlName="claimNumber" maxlength="100">
+                    </app-field>
 
-                  <app-field label="Session Duration" [valid]="isFieldValid('invoiceDetails.settingsSessionDuration')" errorMessage="Please enter hour amount">
-                    <input class="form-control number-field" type="number" formControlName="settingsSessionDuration" maxlength="10" step="0.25" placeholder="hours">
-                  </app-field>
-                </div>
-              </div>
-              <div class="row no-gutter">
-                <div class="col-12">
-                  <a href="javascript:void(0);" class="btn btn-secondary pull-right" (click)="setLineItems()">Set Line Items</a>
-                </div>
-              </div>
-            </section>
-
-            <div class="invoice-items">
-              <div class="item-listing" formArrayName="lineItems" *ngFor="let item of form.get('invoiceDetails.lineItems').controls; let i = index;">
-                <div [formGroupName]="i" class="invoice-item row no-gutter">
-                  <div class="col col-3">
-                    <app-field label="Description" [required]="true" [valid]="isControlValid(item, 'description')" errorMessage="Enter a description">
-                      <input class="form-control" type="text" formControlName="description" placeholder="Session {{ i + 1 }}">
-                      <div *ngIf="item.controls.description.dirty">
-                        <div *ngIf="item.hasError('required', 'description')">Required</div>
-                      </div>
+                    <app-field label="Claimant's Name" [required]="true" [valid]="isFieldValid('invoiceDetails.claimantsName')" errorMessage="Please enter the claimaint's name">
+                      <input class="form-control" type="text" formControlName="claimantsName" maxlength="100">
                     </app-field>
                   </div>
-                  <div class="col col-2">
-                    <app-field label="Counselling Type" [required]="true" [valid]="isControlValid(item, 'counsellingType')" errorMessage="Select type">
-                      <select class="form-control fixed-select" formControlName="counsellingType">
+                  <div class="col-6">
+                    <app-field label="Invoice Number" [required]="true" [valid]="isFieldValid('invoiceDetails.invoiceNumber')" errorMessage="Please enter the invoice number">
+                      <input class="form-control" type="text" formControlName="invoiceNumber" maxlength="100">
+                    </app-field>
+
+                    <app-field label="Invoice Date" [required]="true" [valid]="isFieldValid('invoiceDetails.invoiceDate')" errorMessage="Please enter the invoice date">
+                      <input type="text" class="form-control" formControlName="invoiceDate" placeholder="yyyy-mm-dd"
+                             [matDatepicker]="invoiceDatePicker" (focus)="invoiceDatePicker.open()" (click)="invoiceDatePicker.open()" readonly style="background-color: #fff;">
+                      <mat-datepicker #invoiceDatePicker></mat-datepicker>
+                    </app-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12">
+                    <app-field label="Have you submitted an invoice before?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('invoiceDetails.submittedInvoiceBefore')">
+                      <label class="inline-label">
+                        <input type="radio" [value]="true" name="submittedInvoiceBefore" formControlName="submittedInvoiceBefore">
+                        <span>Yes</span>
+                      </label>
+                      <label class="inline-label">
+                        <input type="radio" [value]="false" name="submittedInvoiceBefore" formControlName="submittedInvoiceBefore">
+                        <span>No</span>
+                      </label>
+                    </app-field>
+                  </div>
+                </div>
+
+                <section *ngIf="form.get('invoiceDetails.submittedInvoiceBefore').value === true && form.get('invoiceDetails.submittedInvoiceBefore').value === true">
+                  <div class="row">
+                    <div class="col-12">
+                      <app-field label="Has your address changed?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('invoiceDetails.hasYourAddressChanged')">
+                        <label class="inline-label">
+                          <input type="radio" [value]="true" name="hasYourAddressChanged" formControlName="hasYourAddressChanged">
+                          <span>Yes</span>
+                        </label>
+                        <label class="inline-label">
+                          <input type="radio" [value]="false" name="hasYourAddressChanged" formControlName="hasYourAddressChanged">
+                          <span>No</span>
+                        </label>
+                      </app-field>
+                    </div>
+                  </div>
+                </section>
+
+                <!--- Chunk this logic out to a variable to drive the required fields -->
+                <section *ngIf="form.get('invoiceDetails.submittedInvoiceBefore').value === false || (form.get('invoiceDetails.submittedInvoiceBefore').value === true && form.get('invoiceDetails.hasYourAddressChanged').value === true)">
+                  <h2 class="blue-header">Payee Address & Contact Information</h2>
+                  <div class="row">
+                    <div class="col-6">
+                      <app-field label="Payee First Name" [required]="true" [valid]="isFieldValid('invoiceDetails.payeeFirstName')" errorMessage="Please enter the payee first name">
+                        <input class="form-control" type="text" formControlName="payeeFirstName" maxlength="100">
+                      </app-field>
+
+                      <app-field label="Payee Last Name" [required]="true" [valid]="isFieldValid('invoiceDetails.payeeLastName')" errorMessage="Please enter the payee first name">
+                        <input class="form-control" type="text" formControlName="payeeLastName" maxlength="100">
+                      </app-field>
+
+                      <app-field label="Phone Number" [required]="true" [valid]="isFieldValid('invoiceDetails.payeePhoneNumber')" errorMessage="Please enter a 10-digit phone number">
+                        <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="payeePhoneNumber">
+                      </app-field>
+
+                      <app-field label="Email Address" [required]="true" [valid]="isFieldValid('invoiceDetails.payeeEmail')" errorMessage="Please enter an email address">
+                        <input class="form-control" type="text" (blur)="trimValue(form.get('invoiceDetails.payeeEmail'))" formControlName="payeeEmail" maxlength="100">
+                      </app-field>
+
+                      <app-field label="Fax" [required]="false" [valid]="isFieldValid('invoiceDetails.payeeFaxNumber')" errorMessage="Please enter a 10-digit fax number">
+                        <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="payeeFaxNumber">
+                      </app-field>
+                    </div>
+                    <div class="col-6">
+                      <app-address [group]="form.get('invoiceDetails.payeeAddress')"></app-address>
+                    </div>
+                  </div>
+
+                  <h2 class="blue-header">Organisation Information</h2>
+                  <div class="row">
+                    <div class="col-6">
+                      <app-field label="Name of Counsellor who provided the counselling" [required]="true" [valid]="isFieldValid('invoiceDetails.organisationNameOfCounseller')" errorMessage="Please enter the payee first name">
+                        <input class="form-control" type="text" formControlName="organisationNameOfCounseller" maxlength="100">
+                      </app-field>
+
+                      <app-field label="Name of Organization" [required]="false" [valid]="isFieldValid('invoiceDetails.organisationName')" errorMessage="Please enter the payee first name">
+                        <input class="form-control" type="text" formControlName="organisationName" maxlength="100">
+                      </app-field>
+
+                      <app-field label="Counsellor Registration Number" [required]="true" [valid]="isFieldValid('invoiceDetails.organisationCounsellorRegistrationNumber')" errorMessage="Please enter the payee first name">
+                        <input class="form-control" type="text" formControlName="organisationCounsellorRegistrationNumber" maxlength="100">
+                      </app-field>
+
+                      <app-field label="Phone Number" [required]="true" [valid]="isFieldValid('invoiceDetails.organisationPhoneNumber')" errorMessage="Please enter a 10-digit phone number">
+                        <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="organisationPhoneNumber">
+                      </app-field>
+
+                      <app-field label="Email Address" [required]="true" [valid]="isFieldValid('invoiceDetails.organisationEmail')" errorMessage="Please enter an email address">
+                        <input class="form-control" type="text" (blur)="trimValue(form.get('invoiceDetails.organisationEmail'))" formControlName="payeeEmail" maxlength="100">
+                      </app-field>
+
+                      <app-field label="Fax" [required]="false" [valid]="isFieldValid('invoiceDetails.organisationFaxNumber')" errorMessage="Please enter a 10-digit fax number">
+                        <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="organisationFaxNumber">
+                      </app-field>
+                    </div>
+                    <div class="col-6">
+                      <app-address [group]="form.get('invoiceDetails.organisationAddress')"></app-address>
+                    </div>
+                  </div>
+                </section>
+
+                <h2 class="blue-header">Invoice Details</h2>
+
+                <h3>Settings</h3>
+                <section class="settings-panel">
+                  <div class="row">
+                    <div class="col-6">
+                      <app-field label="Counselling Type" [valid]="isFieldValid('invoiceDetails.settingsCounsellingType')">
+                        <select class="form-control fixed-select" formControlName="settingsCounsellingType">
+                          <option value="0">Select...</option>
+                          <option value="100000000">Counselling Session</option>
+                          <option value="100000001">Court Supporting Counselling</option>
+                          <option value="100000002">Psycho-educational sessions</option>
+                        </select>
+                      </app-field>
+
+                      <app-field label="Counselling Rate" [valid]="isFieldValid('invoiceDetails.settingsCounsellingRate')" errorMessage="Please enter a dollar amount">
+                        <input class="form-control number-field" type="number" formControlName="settingsCounsellingRate" maxlength="20" step="0.1" placeholder="$">
+                      </app-field>
+                    </div>
+
+                    <div class="col-6">
+                      <app-field label="Number of Sessions" [valid]="isFieldValid('invoiceDetails.settingsNumberOfSessions')" errorMessage="Please enter a number amount">
+                        <input class="form-control number-field" type="number" formControlName="settingsNumberOfSessions" maxlength="5" step="1">
+                      </app-field>
+
+                      <app-field label="Session Duration" [valid]="isFieldValid('invoiceDetails.settingsSessionDuration')" errorMessage="Please enter hour amount">
+                        <input class="form-control number-field" type="number" formControlName="settingsSessionDuration" maxlength="10" step="0.25" placeholder="hours">
+                      </app-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <a href="javascript:void(0);" class="btn btn-secondary pull-right" (click)="setLineItems()">Set Line Items</a>
+                    </div>
+                  </div>
+                </section>
+
+                <div class="invoice-items">
+                  <div class="item-listing" formArrayName="lineItems" *ngFor="let item of form.get('invoiceDetails.lineItems').controls; let i = index;">
+                    <div [formGroupName]="i" class="invoice-item row no-gutter">
+                      <div class="col col-3">
+                        <app-field label="Description" [required]="true" [valid]="isControlValid(item, 'description')" errorMessage="Enter a description">
+                          <input class="form-control" type="text" formControlName="description" placeholder="Session {{ i + 1 }}">
+                          <div *ngIf="item.controls.description.dirty">
+                            <div *ngIf="item.hasError('required', 'description')">Required</div>
+                          </div>
+                        </app-field>
+                      </div>
+                      <div class="col col-2">
+                        <app-field label="Counselling Type" [required]="true" [valid]="isControlValid(item, 'counsellingType')" errorMessage="Select type">
+                          <select class="form-control fixed-select" formControlName="counsellingType">
+                            <option value="0">Select...</option>
+                            <option value="100000000">Counselling Session</option>
+                            <option value="100000001">Court Supporting Counselling</option>
+                            <option value="100000002">Psycho-educational sessions</option>
+                          </select>
+                        </app-field>
+                      </div>
+                      <div class="col col-2">
+                        <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter date">
+                          <input type="text" class="form-control" formControlName="sessionDate" placeholder="yyyy-mm-dd" />
+                        </app-field>
+                      </div>
+                      <div class="col">
+                        <app-field label="Hrs" [required]="true" [valid]="isControlValid(item, 'sessionHours')" errorMessage="Enter hours">
+                          <input class="form-control number-field" type="number" step="0.25" formControlName="sessionHours">
+                        </app-field>
+                      </div>
+                      <div class="col">
+                        <app-field label="Rate" [required]="true" [valid]="isControlValid(item, 'sessionRate')" errorMessage="Enter rate">
+                          <input class="form-control number-field" type="number" step="0.1" formControlName="sessionRate">
+                        </app-field>
+                      </div>
+                      <div class="col">
+                        <app-field label="Amount">
+                          <input class="form-control number-field" type="number" formControlName="sessionAmount" [value]="calculateRow(item)" readonly>
+                        </app-field>
+                      </div>
+                      <div class="col">
+                        <a href="javascript:void(0);" (click)="removeLineItem(i)" *ngIf="showRemoveLine">
+                          <i class="fas fa-trash-alt"></i> Remove
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <a href="javascript:void(0);" class="btn btn-secondary" (click)="addLineItem()">Add Line</a>
+                </div>
+
+                <div class="form-totals">
+                  <div class="row">
+                    <div class="col text-right">
+                      <label>Sub-total</label>
+                      <span class="amount">$ {{ invoiceSubTotal.toFixed(2).toString() }}</span>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col text-right">
+                      <label>
+                        Exempt from GST?
+                        <span>
+                          <input type="checkbox" [value]="true" name="exemptFromGst" formControlName="exemptFromGst">
+                          Yes
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="row gst" *ngIf="form.get('invoiceDetails.exemptFromGst').value === false">
+                    <div class="col text-right">
+                      <label>GST (Calculated at 5%)</label>
+                      <span class="amount">$ {{ invoiceGstTotal.toFixed(2).toString() }}</span>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col text-right">
+                      <label>Total</label>
+                      <span class="amount">$ {{ invoiceGrandTotal.toFixed(2).toString() }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-6">
+                    <app-field label="Payment Type " [required]="true" [valid]="isFieldValid('invoiceDetails.paymentType')" errorMessage="Please select your payment type">
+                      <select class="form-control" formControlName="paymentType">
                         <option value="0">Select...</option>
-                        <option value="100000000">Counselling Session</option>
-                        <option value="100000001">Court Supporting Counselling</option>
-                        <option value="100000002">Psycho-educational sessions</option>
+                        <option value="100000000">EFT</option>
+                        <option value="100000001">Cheque</option>
+                        <option value="100000002">Wire Transfer</option>
                       </select>
                     </app-field>
                   </div>
-                  <div class="col col-2">
-                    <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter date">
-                      <input type="text" class="form-control" formControlName="sessionDate" placeholder="yyyy-mm-dd" />
-                    </app-field>
-                  </div>
-                  <div class="col">
-                    <app-field label="Hrs" [required]="true" [valid]="isControlValid(item, 'sessionHours')" errorMessage="Enter hours">
-                      <input class="form-control number-field" type="number" step="0.25" formControlName="sessionHours">
-                    </app-field>
-                  </div>
-                  <div class="col">
-                    <app-field label="Rate" [required]="true" [valid]="isControlValid(item, 'sessionRate')" errorMessage="Enter rate">
-                      <input class="form-control number-field" type="number" step="0.1" formControlName="sessionRate">
-                    </app-field>
-                  </div>
-                  <div class="col">
-                    <app-field label="Amount">
-                      <input class="form-control number-field" type="number" formControlName="sessionAmount" [value]="calculateRow(item)" readonly>
-                    </app-field>
-                  </div>
-                  <div class="col">
-                    <a href="javascript:void(0);" (click)="removeLineItem(i)" *ngIf="showRemoveLine">
-                      <i class="fas fa-trash-alt"></i> Remove
-                    </a>
+                  <div class="col-6">
                   </div>
                 </div>
-              </div>
-              <a href="javascript:void(0);" class="btn btn-secondary" (click)="addLineItem()">Add Line</a>
-            </div>
 
-            <div class="form-totals">
-              <div class="row">
-                <div class="col text-right">
-                  <label>Sub-total</label>
-                  <span class="amount">$ {{ invoiceSubTotal.toFixed(2).toString() }}</span>
-                </div>
-              </div>
+                <section>
+                  <h2 class="blue-header">Declaration</h2>
+                  <app-field [required]="true" [valid]="isFieldValid('invoiceDetails.declaredAndSigned')" errorMessage="Please check declaration">
+                    <label>
+                      <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
+                      I submit this invoice for payment in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided on this invoice is true and correct. <span class="error-states">*</span>
+                    </label>
+                  </app-field>
 
-              <div class="row">
-                <div class="col text-right">
-                  <label>
-                    Exempt from GST?
-                    <span>
-                      <input type="checkbox" [value]="true" name="exemptFromGst" formControlName="exemptFromGst">
-                      Yes
-                    </span>
-                  </label>
-                </div>
-              </div>
+                  <app-field label="Signature" [required]="true" [valid]="isFieldValid('invoiceDetails.signature')" errorMessage="Please provide your digital signature">
+                    <div class="signature-trigger" (click)="showSignPad('invoiceDetails', 'signature')" *ngIf="!hasSignature('invoiceDetails.signature')">
+                      <p>Click this box to sign</p>
+                    </div>
+                    <div *ngIf="hasSignature('invoiceDetails.signature')" class="signature-preview">
+                      <img src="{{ valueOrEmpty('invoiceDetails.signature') }}" />
+                      <a class="redo" (click)="showSignPad('invoiceDetails', 'signature')">Redo Signature</a>
+                    </div>
+                  </app-field>
+                </section>
 
-              <div class="row gst" *ngIf="form.get('invoiceDetails.exemptFromGst').value === false">
-                <div class="col text-right">
-                  <label>GST (Calculated at 5%)</label>
-                  <span class="amount">$ {{ invoiceGstTotal.toFixed(2).toString() }}</span>
+                <div *ngIf="formSubmitted === true && formFullyValidated === false" class="error-summary">
+                  <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+                  <span>Some required fields have not been completed</span>
                 </div>
-              </div>
 
-              <div class="row">
-                <div class="col text-right">
-                  <label>Total</label>
-                  <span class="amount">$ {{ invoiceGrandTotal.toFixed(2).toString() }}</span>
-                </div>
-              </div>
+                <section class="button-container">
+                  <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
+                  <span style="float: right;">
+                    <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
+                  </span>
+                </section>
+
+              </section>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
 
-          <div *ngIf="formSubmitted === true && formFullyValidated === false" class="error-summary">
-            <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
-            <span>Some required fields have not been completed</span>
+    <div class="container" *ngIf="showSuccessPanel">
+      <div class="row">
+        <div class="col">
+          <div class="page-header">
+            <h1>Thank you for your invoice submission</h1>
           </div>
+          <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+          <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
+        </div>
+      </div>
+    </div>
 
-          <section class="button-container">
-            <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
-            <span style="float: right;">
-              <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
-            </span>
-          </section>
+    <div class="container" *ngIf="showCancelPanel">
+      <div class="row">
+        <div class="col">
+          <div class="page-header">
+            <h1>Invoice submission cancelled</h1>
+          </div>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+          <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="container" *ngIf="showSuccessPanel">
-    <div class="row">
-      <div class="col">
-        <div class="page-header">
-          <h1>Thank you for your invoice submission</h1>
-        </div>
-        <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-        <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="container" *ngIf="showCancelPanel">
-    <div class="row">
-      <div class="col">
-        <div class="page-header">
-          <h1>Invoice submission cancelled</h1>
-        </div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-        <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
-      </div>
-    </div>
-  </div>
-</div>
