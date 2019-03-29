@@ -205,6 +205,18 @@ input.form-control {
   }
 }
 
+.employers {
+  margin-bottom: 10px;
+
+  .employer {
+    padding: 10px 0;
+
+    h3 {
+      margin-top: 0 !important;
+    }
+  }
+}
+
 .radio-list {
   label {
     font-weight: normal;

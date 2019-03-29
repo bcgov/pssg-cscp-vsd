@@ -72,6 +72,48 @@ export class FormBase {
       return control.value ? null : { 'required': { value: control.value } };
     };
   }
+  
+  validateAllFormFields(formGroup: any) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+
+  getErrors(formGroup: any, errors: any = {}) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        errors[field] = control.errors;
+      } else if (control instanceof FormGroup) {
+        errors[field] = this.getErrors(control);
+      }
+    });
+    return errors;
+  }
+
+  orEmpty(amI: FormControl): string {
+    if (amI == null || amI === undefined)
+      return "--";
+
+    if (amI.value.length == 0)
+      return "--";
+
+    return amI.value;
+  }
+
+  isChildFieldValid(parent: string, field: string) {
+    let formField = this.form.get(parent);
+    if (formField == null)
+      return true;
+
+    return formField.get(field).valid || !formField.get(field).touched;
+  }
 
   controlsHaveValueCheck(controlKeys: Array<string>, formGroup: FormGroup): Array<boolean> {
     return controlKeys.map((item) => {

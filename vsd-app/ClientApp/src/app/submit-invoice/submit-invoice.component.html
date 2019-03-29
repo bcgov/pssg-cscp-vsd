@@ -69,7 +69,7 @@
 
                 <div class="row">
                   <div class="col-12">
-                    <app-field label="Have you submitted an invoice before?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('invoiceDetails.submittedInvoiceBefore')">
+                    <app-field label="Have you submitted an invoice before?" errorMessage="Please choose an option" [showChevrons]="false" [required]="true" [valid]="isFieldValid('invoiceDetails.submittedInvoiceBefore')">
                       <label class="inline-label">
                         <input type="radio" [value]="true" name="submittedInvoiceBefore" formControlName="submittedInvoiceBefore">
                         <span>Yes</span>
@@ -85,7 +85,7 @@
                 <section *ngIf="form.get('invoiceDetails.submittedInvoiceBefore').value === true && form.get('invoiceDetails.submittedInvoiceBefore').value === true">
                   <div class="row">
                     <div class="col-12">
-                      <app-field label="Has your address changed?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('invoiceDetails.hasYourAddressChanged')">
+                      <app-field label="Has your address changed?" errorMessage="Please choose an option" [showChevrons]="false" [required]="true" [valid]="isFieldValid('invoiceDetails.hasYourAddressChanged')">
                         <label class="inline-label">
                           <input type="radio" [value]="true" name="hasYourAddressChanged" formControlName="hasYourAddressChanged">
                           <span>Yes</span>

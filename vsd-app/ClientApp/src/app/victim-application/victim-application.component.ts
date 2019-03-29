@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppState } from '../app-state/models/app-state';
 import { User } from '../models/user.model';
-import { Store } from '@ngrx/store';
 import { Subscription, Observable, Subject, forkJoin } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,8 +16,6 @@ import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
-import { PersonalInformationModel } from '../models/justice/personal-information.model';
-import { CrimeInformationModel } from '../models/justice/crime-information.model';
 import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 
@@ -65,9 +62,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   waiverId: number;
 
   otherTreatmentItems: FormArray;
+  employerItems: FormArray;
   courtFileItems: FormArray;
   crimeLocationItems: FormArray;
   policeReportItems: FormArray;
+
+  hospitalList = HOSPITALS;
 
   showAddCourtInfo: boolean = true;
   showRemoveCourtInfo: boolean = false;
@@ -75,6 +75,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   showRemoveCrimeLocation: boolean = false;
   showAddPoliceReport: boolean = true;
   showRemovePoliceReport: boolean = false;
+  showAddEmployer: boolean = true;
+  showRemoveEmployer: boolean = false;
   showAddProvider: boolean = true;
   showRemoveProvider: boolean = false;
 
@@ -86,7 +88,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   addressIsRequired: boolean;
 
   saveFormData: any;
-  personalModel: PersonalInformationModel;
 
   public get courtFiles(): FormArray {
     return this.form.get('crimeInformation.courtFiles') as FormArray;
@@ -206,48 +207,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     const dialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important' });
   }
 
-  validateAllFormFields(formGroup: any) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
-      }
-    });
-  }
-
-  getErrors(formGroup: any, errors: any = {}) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        errors[field] = control.errors;
-      } else if (control instanceof FormGroup) {
-        errors[field] = this.getErrors(control);
-      }
-    });
-    return errors;
-  }
-
-  orEmpty(amI: FormControl): string {
-    if (amI == null || amI === undefined)
-      return "--";
-
-    if (amI.value.length == 0)
-      return "--";
-
-    return amI.value;
-  }
-
-  isChildFieldValid(parent: string, field: string) {
-    let formField = this.form.get(parent);
-    if (formField == null)
-      return true;
-
-    return formField.get(field).valid || !formField.get(field).touched;
-  }
-
   getFormGroupName(groupIndex: any) {
     let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     return elements[groupIndex];
@@ -265,7 +224,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   gotoNextStep(stepper: MatStepper): void {
-    console.log(this.currentFormStep);
+//    console.log(this.currentFormStep);
     if (stepper != null) {
       var desiredFormIndex = stepper.selectedIndex;
       var formGroupName = this.getFormGroupName(desiredFormIndex);
@@ -317,6 +276,37 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         province: [{ value: 'British Columbia', disabled: false }],
         country: [{ value: 'Canada', disabled: false }],
       }),
+    });
+  }
+  
+  addEmployer(): void {
+    this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
+    this.employerItems.push(this.createEmployerItem());
+    this.showAddEmployer = this.employerItems.length < 5;
+    this.showRemoveEmployer = this.employerItems.length > 1;
+  }
+
+  removeEmployer(index: number): void {
+    this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
+    this.employerItems.removeAt(index);
+    this.showAddEmployer = this.employerItems.length < 5;
+    this.showRemoveEmployer = this.employerItems.length > 1;
+  }
+
+  createEmployerItem(): FormGroup {
+    return this.fb.group({
+      employerName: [''],
+      employerPhoneNumber: [''],
+      employerFirstName: [''],
+      employerLastName: [''],
+      employerAddress: this.fb.group({
+        line1: [''],
+        line2: [''],
+        city: [''],
+        postalCode: [''],  // , [Validators.pattern(postalRegex)]
+        province: [{ value: 'British Columbia', disabled: false }],
+        country: [{ value: 'Canada', disabled: false }],
+      })
     });
   }
 
@@ -398,8 +388,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
   
   submitApplication() {
-    //let formIsValid = this.form.valid;
-    let formIsValid = true;
+    let formIsValid = this.form.valid;
+    //let formIsValid = true;
     if (formIsValid) {
       this.formFullyValidated = true;
       this.save().subscribe(
@@ -421,9 +411,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   testSnaks(): void {
-    let content = this.form.get('personalInformation').value;
-    this.personalModel = content;
-
     let formData = <DynamicsApplicationModel> {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
@@ -435,10 +422,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       DeclarationInformation: this.form.get('declarationInformation').value,
       AuthorizationInformation: this.form.get('authorizationInformation').value,
     };
-
-    //formData.PersonalInformation = this.form.get('personalInformation').value;
-//    formData.CrimeInformation = this.form.get('crimeInformation').value;
-
     //console.log(formData);
     console.log(JSON.stringify(formData));
   }
@@ -470,27 +453,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   // marking the form as touched makes the validation messages show
   markAsTouched() {
     this.form.markAsTouched();
-
-    //const businessProfileControls = (<FormGroup>(this.form.get('businessProfile'))).controls;
-    //for (const c in businessProfileControls) {
-    //  if (typeof (businessProfileControls[c].markAsTouched) === 'function') {
-    //    businessProfileControls[c].markAsTouched();
-    //  }
-    //}
-
-    //const additionalContactControls = (<FormGroup>(this.form.get('additionalContact'))).controls;
-    //for (const c in additionalContactControls) {
-    //  if (typeof (additionalContactControls[c].markAsTouched) === 'function') {
-    //    additionalContactControls[c].markAsTouched();
-    //  }
-    //}
-
-    //const primaryContactControls = (<FormGroup>(this.form.get('primaryContact'))).controls;
-    //for (const c in primaryContactControls) {
-    //  if (typeof (primaryContactControls[c].markAsTouched) === 'function') {
-    //    primaryContactControls[c].markAsTouched();
-    //  }
-    //}
   }
 
   private buildApplicationForm() : FormGroup {
@@ -657,19 +619,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         didYouLoseWages: [''], //, Validators.required],
 
         areYouSelfEmployed: [''],
-        employerName: [''],
-        employerPhoneNumber: [''],
-        employerAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
+        employers: this.fb.array([this.createEmployerItem()]),
+
         mayContactEmployer: [''],
-        employerFirstName: [''],
-        employerLastName: ['']
       }),
 
       representativeInformation: this.fb.group({

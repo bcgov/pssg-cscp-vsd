@@ -31,8 +31,8 @@
           <p><button class="btn btn-secondary" (click)="showSummaryOfBenefits()">View Summary of Benefits</button></p>
         </div>
       </section>
-      <!--      <a (click)="testSnaks()">Show Form Data</a><br /><br />
-        <p>
+            <a (click)="testSnaks()">Show Form Data</a><br /><br />
+      <!--  <p>
       <a href="#" (click)="testSnaks()">Show Form Data</a><br /><br />
       <button (click)="markAsTouched(); submitPartialApplication();" class="btn btn-primary">Partial Submit <i class="fas fa-chevron-right"></i></button>
     </p>-->
@@ -753,9 +753,26 @@
                 </label>
               </app-field>
               <section *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
-                <app-field label="Name of hospital">
-                  <input class="form-control standard" type="text" formControlName="treatedAtHospitalName">
+                <app-field label="Name of hospital" [required]="true" [valid]="isFieldValid('medicalInformation.treatedAtHospitalName')" errorMessage="Please selection a hospital">
+                  <select class="form-control" formControlName="treatedAtHospitalName">
+                    <option value="0">Select...</option>
+                    <option *ngFor="let item of hospitalList">{{ item }}</option>
+                  </select>
                 </app-field>
+
+                <app-field>
+                  <label class="inline-label">
+                    <input type="checkbox" style="margin-right: 10px;" formControlName="treatedOutsideBc" [value]="true">
+                    <span>Click this checkbox if the hospital is outside of BC.</span>
+                  </label>
+                </app-field>
+
+                <section *ngIf="form.get('medicalInformation.treatedOutsideBc').value === true">
+                  <app-field label="Please enter the name of the hospital below">
+                    <input class="form-control standard" type="text" formControlName="treatedOutsideBcHospitalName">
+                  </app-field>
+                </section>
+
                 <app-field label="Date of treatment">
                   <input type="text" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd"
                          [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
@@ -1103,24 +1120,47 @@
                   </label>
                 </app-field>
 
-                <h3>Name & Phone Number</h3>
-                <div class="row">
-                  <div class="col-4">
-                    <app-field label="Name of Company / Organization">
-                      <input type="text" class="form-control" formControlName="employerName">
-                    </app-field>
-                  </div>
-                  <div class="col-4">
-                    <app-field label="Phone Number of Contact Person">
-                      <input type="text" class="form-control" formControlName="employerPhoneNumber">
-                    </app-field>
-                  </div>
-                  <div class="col-4">
+                <div class="employers" formArrayName="employers" *ngFor="let item of form.get('employmentIncomeInformation.employers').controls; let i = index;">
+                  <div [formGroupName]="i" class="employer">
+                    <a href="javascript:void(0);" (click)="removeEmployer(i)" class="float-right" *ngIf="showRemoveEmployer">
+                      <i class="fas fa-trash-alt"></i> Delete Employer
+                    </a>
+
+                    <h3>Name & Phone Number</h3>
+                    <div class="row">
+                      <div class="col-4">
+                        <app-field label="Name of Company / Organization" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a company name">
+                          <input type="text" class="form-control" formControlName="employerName">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                        <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a contact phone number">
+                          <input type="text" class="form-control" formControlName="employerPhoneNumber">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-4">
+                        <app-field label="Employer First Name">
+                          <input type="text" class="form-control" formControlName="employerFirstName">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                        <app-field label="Employer Last name">
+                          <input type="text" class="form-control" formControlName="employerLastName">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                      </div>
+                    </div>
+
+                    <h3>Mailing Address</h3>
+                    <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="false"></app-address>
                   </div>
                 </div>
-
-                <h3>Mailing Address</h3>
-                <app-address [group]="form.get('employmentIncomeInformation.employerAddress')" [showChildrenAsRequired]="false"></app-address>
+                <a href="javascript:void(0);" class="btn btn-secondary" (click)="addEmployer()" *ngIf="showAddEmployer">Add Employer</a>
 
                 <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
                   <label class="inline-label">
@@ -1132,23 +1172,6 @@
                     <span>No</span>
                   </label>
                 </app-field>
-
-                <section *ngIf="form.get('employmentIncomeInformation.mayContactEmployer').value === true">
-                  <div class="row">
-                    <div class="col-4">
-                      <app-field label="Employer First Name">
-                        <input type="text" class="form-control" formControlName="employerFirstName">
-                      </app-field>
-                    </div>
-                    <div class="col-4">
-                      <app-field label="Employer Last name">
-                        <input type="text" class="form-control" formControlName="employerLastName">
-                      </app-field>
-                    </div>
-                    <div class="col-4">
-                    </div>
-                  </div>
-                </section>
               </section>
             </section>
           </div>
