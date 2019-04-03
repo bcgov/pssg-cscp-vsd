@@ -1,8 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AppState } from '../app-state/models/app-state';
-import { User } from '../models/user.model';
-import { Store } from '@ngrx/store';
-import { Subscription, Observable, Subject, forkJoin } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
@@ -21,6 +17,7 @@ import { PersonalInformationModel } from '../models/justice/personal-information
 import { CrimeInformationModel } from '../models/justice/crime-information.model';
 import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
+import { EnumHelper } from '../shared/enums-list';
 
 const moment = _rollupMoment || _moment;
 
@@ -55,8 +52,10 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
 
 export class VictimReviewComponent extends FormBase implements OnInit {
   form: FormGroup;
+  enumHelper = new EnumHelper();
 
   @Input() group: FormGroup;
+  @Input() parentStepper: MatStepper;
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -72,5 +71,11 @@ export class VictimReviewComponent extends FormBase implements OnInit {
 
   ngOnInit() {
     this.form = this.group;
+  }
+
+
+  gotoPageIndex(selectPage: number): void {
+    window.scroll(0, 0);
+    this.parentStepper.selectedIndex = selectPage;
   }
 }

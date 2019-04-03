@@ -529,6 +529,11 @@ textarea.form-control {
   }
 }
 
+select.form-control {
+  &.standard {
+    width: 50%;
+  }
+}
 ::ng-deep .inline-label {
   span {
     display: inline-block;
@@ -728,7 +733,6 @@ hr {
   }
 }
 
-
 ::ng-deep .signature-trigger {
   width: 385px;
   padding: 40px 0;
@@ -758,4 +762,20 @@ hr {
   a.redo:hover {
     text-decoration: underline;
   }
+}
+
+::ng-deep .review-btn {
+  float: right;
+  padding: 0;
+  color: #fff;
+  font-size: 16px;
+  margin-top: -3px;
+
+  i {
+    margin-right: 4px;
+  }
+}
+
+::ng-deep .review-signature {
+  width: 150px;
 }

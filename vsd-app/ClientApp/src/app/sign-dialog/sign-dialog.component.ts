@@ -21,7 +21,7 @@ export class SignPadDialog implements OnInit {
     'canvasWidth': 600,
     'canvasHeight': 200,
     'penColor': '#000',
-    'backgroundColor': '#fff'
+    'backgroundColor': 'rgba(255, 255, 255, 0)'
   };
 
   constructor(public dialogRef: MatDialogRef<SignPadDialog>) {

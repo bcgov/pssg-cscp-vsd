@@ -1,6 +1,13 @@
 <section>
-  <h2 class="blue-header">Overview</h2>
-
+  <h2 class="blue-header">Overview <button (click)="gotoPageIndex(0);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>I am:</th>
+        <td>{{ enumHelper.CompletingOnBehalfOf[valueForEnum('representativeInformation.completingOnBehalfOf')] }}</td>
+      </tr>
+    </tbody>
+  </table>
   <p>
     <label class="inline-label">
       <input type="checkbox" checked="checked" disabled="disabled" />
@@ -10,7 +17,9 @@
 </section>
 
 <section>
-  <h2 class="blue-header">Personal Information & Addresses</h2>
+  <h2 class="blue-header">
+    Personal Information & Addresses <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+  </h2>
   <h3>Applicant Name</h3>
   <table class="table table-striped review-table">
     <tbody>
@@ -32,11 +41,11 @@
       </tr>
       <tr>
         <th>Other Last Name</th>
-        <td>{{ valueOrEmpty('personalInformation.otherFirstName') }} </td>
+        <td>{{ valueOrEmpty('personalInformation.otherLastName') }} </td>
       </tr>
       <tr>
         <th>Date of Name Change</th>
-        <td>{{ valueOrEmpty('personalInformation.dateOfNameChange') }} </td>
+        <td>{{ datesOrEmpty('personalInformation.dateOfNameChange') }}</td>
       </tr>
     </tbody>
   </table>
@@ -54,19 +63,19 @@
       </tr>
       <tr>
         <th>Birth Date</th>
-        <td>{{ valueOrEmpty('personalInformation.birthDate') }} </td>
+        <td>{{ datesOrEmpty('personalInformation.birthDate') }}</td>
       </tr>
       <tr>
         <th>Social Insurance Number (SIN)</th>
-        <td>{{ valueOrEmpty('personalInformation.sinPart1') }}-{{ valueOrEmpty('personalInformation.sinPart2') }}-{{ valueOrEmpty('personalInformation.sinPart3') }}</td>
+        <td>{{ formatSin('personalInformation.sinPart1', 'personalInformation.sinPart2', 'personalInformation.sinPart3') }}</td>
       </tr>
       <tr>
         <th>Gender</th>
-        <td>{{ valueOrEmpty('personalInformation.gender') }} </td>
+        <td>{{ enumHelper.Gender[valueForEnum('personalInformation.gender')] }} </td>
       </tr>
       <tr>
         <th>Marital Status</th>
-        <td>{{ valueOrEmpty('personalInformation.maritalStatus') }} </td>
+        <td>{{ enumHelper.MaritalStatus[valueForEnum('personalInformation.maritalStatus')] }} </td>
       </tr>
       <tr>
         <th>Occupation</th>
@@ -79,20 +88,28 @@
   <table class="table table-striped review-table">
     <tbody>
       <tr>
+        <th>Country</th>
+        <td>{{ valueOrEmpty('personalInformation.primaryAddress.country') }} </td>
+      </tr>
+      <tr>
         <th>Mailing Address</th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddressLine1') }} </td>
+        <td>{{ valueOrEmpty('personalInformation.primaryAddress.line1') }} </td>
+      </tr>
+      <tr *ngIf="valueOrEmpty('personalInformation.primaryAddress.line2') != '--'">
+        <th></th>
+        <td>{{ valueOrEmpty('personalInformation.primaryAddress.line2') }} </td>
       </tr>
       <tr>
         <th>City</th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddressCity') }} </td>
+        <td>{{ valueOrEmpty('personalInformation.primaryAddress.city') }} </td>
       </tr>
       <tr>
         <th>Province</th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddressProvince') }} </td>
+        <td>{{ valueOrEmpty('personalInformation.primaryAddress.province') }} </td>
       </tr>
       <tr>
         <th>Postal Code</th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddressPostalCode') }}</td>
+        <td>{{ valueOrEmpty('personalInformation.primaryAddress.postalCode') }}</td>
       </tr>
     </tbody>
   </table>
@@ -101,20 +118,28 @@
   <table class="table table-striped review-table">
     <tbody>
       <tr>
+        <th>Country</th>
+        <td>{{ valueOrEmpty('personalInformation.alternateAddress.country') }} </td>
+      </tr>
+      <tr>
         <th>Mailing Address</th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddressLine1') }} </td>
+        <td>{{ valueOrEmpty('personalInformation.alternateAddress.line1') }} </td>
+      </tr>
+      <tr *ngIf="valueOrEmpty('personalInformation.alternateAddress.line2') != '--'">
+        <th></th>
+        <td>{{ valueOrEmpty('personalInformation.alternateAddress.line2') }} </td>
       </tr>
       <tr>
         <th>City</th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddressCity') }} </td>
+        <td>{{ valueOrEmpty('personalInformation.alternateAddress.city') }} </td>
       </tr>
       <tr>
         <th>Province</th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddressProvince') }} </td>
+        <td>{{ valueOrEmpty('personalInformation.alternateAddress.province') }} </td>
       </tr>
       <tr>
         <th>Postal Code</th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddressPostalCode') }}</td>
+        <td>{{ valueOrEmpty('personalInformation.alternateAddress.postalCode') }}</td>
       </tr>
     </tbody>
   </table>
@@ -122,7 +147,7 @@
 </section>
 
 <section>
-  <h2 class="blue-header">Crime Information</h2>
+  <h2 class="blue-header">Crime Information <button (click)="gotoPageIndex(2);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
   <h3>Crime Occurence</h3>
   <table class="table table-striped review-table">
     <tbody>
@@ -132,7 +157,9 @@
       </tr>
       <tr>
         <th>When did this crime occur?</th>
-        <td>--</td>
+        <td>
+          {{ datesOrEmpty('crimeInformation.crimePeriodStart', 'crimeInformation.crimePeriodEnd') }}
+        </td>
       </tr>
       <tr>
         <th>Is this application being filed within one year of the date of the crime?</th>
@@ -142,9 +169,9 @@
         <th>Why you did not apply sooner?</th>
         <td>{{ valueOrEmpty('crimeInformation.whyDidYouNotApplySooner') }} </td>
       </tr>
-      <tr>
-        <th>Crime Location(s)</th>
-        <td>{{ valueOrEmpty('crimeInformation.crimeLocations') }} </td>
+      <tr *ngFor="let item of form.get('crimeInformation.crimeLocations').controls; let i = index;">
+        <th><span *ngIf="i <= 0">Crime Location(s)</span></th>
+        <td>{{ item.get('location').value }}</td>
       </tr>
       <tr>
         <th>Crime Detail(s)</th>
@@ -154,49 +181,63 @@
         <th>Associated Injuries</th>
         <td>{{ valueOrEmpty('crimeInformation.crimeInjuries') }} </td>
       </tr>
-      <tr>
+      <!--<tr>
         <th>Additional Information</th>
         <td>-- output file list here --</td>
-      </tr>
+      </tr>-->
     </tbody>
   </table>
 
   <h3>Police Involvement</h3>
-  <table class="table table-striped review-table">
+  <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000000">
     <tbody>
       <tr>
         <th>Was the report made to the police?</th>
-        <td>{{ valueOrEmpty('crimeInformation.wasReportMadeToPolice') }} </td>
+        <td>{{ enumHelper.ReportMadeToPolice[valueForEnum('crimeInformation.wasReportMadeToPolice')] }}</td>
       </tr>
       <tr>
-        <th>[NO CASE] Who was the report made to (e.g. doctor, social worker, counsellor, other)?</th>
-        <td>{{ valueOrEmpty('crimeInformation.noPoliceReportIndentification') }} </td>
-      </tr>
-      <tr>
-        <th>[YES CASE] To which police was the report made?</th>
-        <td>{{ valueOrEmpty('crimeInformation.policeReportedWhichPoliceForce') }} </td>
-      </tr>
-      <tr>
-        <th>Date of report</th>
-        <td>--</td>
-      </tr>
-      <tr>
-        <th>Police File Number</th>
-        <td>{{ valueOrEmpty('crimeInformation.policeReportedPoliceFileNumber') }} </td>
-      </tr>
-      <tr>
-        <th>Name of Investigating Officer</th>
-        <td>{{ valueOrEmpty('crimeInformation.policeReportedInvestigatingOfficer') }} </td>
+        <th>Who was the report made to (e.g. doctor, social worker, counsellor, other)?</th>
+        <td>{{ valueOrEmpty('crimeInformation.noPoliceReportIdentification') }} </td>
       </tr>
     </tbody>
   </table>
+  <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000001">
+    <table class="table table-striped review-table">
+      <tbody>
+        <tr>
+          <th>Was the report made to the police?</th>
+          <td>{{ enumHelper.ReportMadeToPolice[valueForEnum('crimeInformation.wasReportMadeToPolice')] }}</td>
+        </tr>
+        <tr>
+          <th>To which police was the report made?</th>
+          <td>{{ valueOrEmpty('crimeInformation.policeReportedWhichPoliceForce') }} </td>
+        </tr>
+        <tr>
+          <th>Date of report</th>
+          <td>{{ datesOrEmpty('crimeInformation.policeReportedDate', 'crimeInformation.policeReportedEndDate') }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-striped review-table" *ngFor="let item of form.get('crimeInformation.policeReports').controls; let i = index">
+      <tbody>
+        <tr>
+          <th>Police File Number</th>
+          <td>{{ valueOrEmpty(item.get('policeFileNumber')) }} </td>
+        </tr>
+        <tr>
+          <th>Name of Investigating Officer</th>
+          <td>{{ valueOrEmpty(item.get('investigatingOfficer')) }} </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
   <h3>Offender & Court Information</h3>
   <table class="table table-striped review-table">
     <tbody>
       <tr>
         <th>Offender Name</th>
-        <td>{{ valueOrEmpty('crimeInformation.offenderFirstName') }} {{ valueOrEmpty('crimeInformation.offenderMiddleName') }} {{ valueOrEmpty('crimeInformation.offenderLastName') }} </td>
+        <td>{{ multiValueOrEmpty('crimeInformation.offenderFirstName', 'crimeInformation.offenderMiddleName', 'crimeInformation.offenderLastName') }} </td>
       </tr>
       <tr>
         <th>Relationship to offender</th>
@@ -204,38 +245,35 @@
       </tr>
       <tr>
         <th>Has the alleged offender been charged?</th>
-        <td>{{ valueOrEmpty('crimeInformation.offenderBeenCharged') }} </td>
-      </tr>
-      <tr>
-        <th>Court File Number</th>
-        <td>{{ valueOrEmpty('crimeInformation.courtFileNumber') }} </td>
-      </tr>
-      <tr>
-        <th>Court Location</th>
-        <td>{{ valueOrEmpty('crimeInformation.courtLocation') }} </td>
+        <td>{{ enumHelper.OffenderBeenCharged[valueForEnum('crimeInformation.offenderBeenCharged')] }}</td>
       </tr>
       <tr>
         <th>Have you sued the alleged offender(s)?</th>
-        <td>{{ valueOrEmpty('crimeInformation.haveYouSuedOffender') }} </td>
+        <td>{{ enumHelper.HaveYouSuedOffender[valueForEnum('crimeInformation.offenderBeenCharged')] }}</td>
+
       </tr>
       <tr>
         <th>Do you intend to sue the alleged offender?</th>
-        <td>{{ valueOrEmpty('crimeInformation.intendToSueOffender') }} </td>
+        <td>{{ enumHelper.IntendToSueOffender[valueForEnum('crimeInformation.intendToSueOffender')] }}</td>
       </tr>
+    </tbody>
+  </table>
+  <table class="table table-striped review-table" *ngFor="let item of form.get('crimeInformation.courtFiles').controls; let i = index">
+    <tbody>
       <tr>
         <th>Court File Number</th>
-        <td>{{ valueOrEmpty('crimeInformation.suedCourtFileNumber') }} </td>
+        <td>{{ valueOrEmpty(item.get('courtFileNumber')) }} </td>
       </tr>
       <tr>
         <th>Court Location</th>
-        <td>{{ valueOrEmpty('crimeInformation.suedCourtLocation') }} </td>
+        <td>{{ valueOrEmpty(item.get('courtLocation')) }} </td>
       </tr>
     </tbody>
   </table>
 </section>
 
 <section>
-  <h2 class="blue-header">Medical & Dental Information</h2>
+  <h2 class="blue-header">Medical & Dental Information <button (click)="gotoPageIndex(3);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
   <h3>Coverage</h3>
   <table class="table table-striped review-table">
     <tbody>
@@ -266,19 +304,31 @@
   <table class="table table-striped review-table">
     <tbody>
       <tr>
-        <th>Were you treated at a hospital?</th>
-        <td>{{ valueOrEmpty('medicalInformation.weYouTreatedAtHospital') }} </td>
+        <th>Did you goto a hospital to be treated for injuries resulting from the incident?</th>
+        <td>{{ valueOrEmpty('medicalInformation.wereYouTreatedAtHospital') }} </td>
       </tr>
       <tr>
         <th>Name of hospital</th>
         <td>{{ valueOrEmpty('medicalInformation.treatedAtHospitalName') }} </td>
       </tr>
       <tr>
-        <th>Date of treatment</th>
-        <td>--</td>
+        <th>Is the hospital outside of BC?</th>
+        <td>{{ valueOrEmpty('medicalInformation.treatedOutsideBc') }} </td>
       </tr>
       <tr>
-        <th>Family doctor's name</th>
+        <th>Please enter the name of the hospital</th>
+        <td>{{ valueOrEmpty('medicalInformation.treatedOutsideBcHospitalName') }} </td>
+      </tr>
+      <tr>
+        <th>Date of treatment</th>
+        <td>{{ datesOrEmpty('medicalInformation.treatedAtHospitalDate') }}</td>
+      </tr>
+      <tr>
+        <th>Do you have a medical doctor / clicnic who has been treating you for injuries resulting from the incident?</th>
+        <td>{{ valueOrEmpty('medicalInformation.beingTreatedByFamilyDoctor') }} </td>
+      </tr>
+      <tr>
+        <th>Name of Medical Doctor/Clinic</th>
         <td>{{ valueOrEmpty('medicalInformation.familyDoctorName') }} </td>
       </tr>
       <tr>
@@ -286,14 +336,371 @@
         <td>{{ valueOrEmpty('medicalInformation.familyDoctorPhoneNumber') }} </td>
       </tr>
       <tr>
-        <th>Family doctor's Address</th>
-        <td>{{ valueOrEmpty('medicalInformation.familyDoctorAddress') }} </td>
+        <th>Mailing Address</th>
+        <td>{{ multiValueOrEmpty('medicalInformation.familyDoctorAddressLine1', 'medicalInformation.familyDoctorAddressLine2', 'medicalInformation.familyDoctorAddressLine3') }} </td>
       </tr>
       <tr>
-        <th>Other Treatments</th>
+        <th>Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?</th>
+        <td>{{ valueOrEmpty('medicalInformation.hadOtherTreatments') }} </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-striped review-table" *ngFor="let item of form.get('medicalInformation.otherTreatments').controls; let i = index">
+    <tbody>
+      <tr>
+        <th>Type</th>
+        <td>{{ enumHelper.ProviderSpecialistType[item.get('providerType').value] }}</td>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <td>{{ item.get('providerName').value }}</td>
+      </tr>
+      <tr>
+        <th>Phone</th>
+        <td>{{ item.get('providerPhoneNumber').value }}</td>
+      </tr>
+      <tr>
+        <th>Mailing Address</th>
+        <td><span [innerHTML]="displayMailingAddress(item.get('providerAddress'))"></span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2 class="blue-header">Expense and Loss <button (click)="gotoPageIndex(4);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+  <h3>Benefits Available Through CVAP</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Medical expenses</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveMedicalExpenses')"></span></td>
+      </tr>
+      <tr>
+        <th>Dental expenses</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDentalExpenses')"></span></td>
+      </tr>
+      <tr>
+        <th>Prescription drug expenses</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePrescriptionDrugExpenses')"></span></td>
+      </tr>
+      <tr>
+        <th>Counselling</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingExpenses')"></span></td>
+      </tr>
+      <tr>
+        <th>Lost employment income (reimbursed at minimum wage)</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLostEmploymentIncomeExpenses')"></span></td>
+      </tr>
+      <tr>
+        <th>Repair or replacement costs of damaged or destroyed personal property that you were wearing at the time of the incident (e.g. eyeglasses, clothing)</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePersonalPropertyLostExpenses')"></span></td>
+      </tr>
+      <tr>
+        <th>Protective measures (e.g. moving expenses, security devices)</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveProtectiveMeasureExpenses')"></span></td>
+      </tr>
+      <tr>
+        <th>Disability benefits, services or equipment</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDisabilityExpenses')"></span></td>
+      </tr>
+      <tr>
+        <th>Crime scene cleaning</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span></td>
+      </tr>
+      <tr>
+        <th>Other</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"> </span> <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Other Benefits</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Disability Plan benefits</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDisabilityPlanBenefits')"></span></td>
+      </tr>
+      <tr>
+        <th>Employment Insurance benefits</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveEmploymentInsuranceBenefits')"></span></td>
+      </tr>
+      <tr>
+        <th>Income Assistance</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveIncomeAssistanceBenefits')"></span></td>
+      </tr>
+      <tr>
+        <th>Canada Pension Plan</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCanadaPensionPlanBenefits')"></span></td>
+      </tr>
+      <tr>
+        <th>Aboriginal Affairs and Northern Development Canada</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits')"></span></td>
+      </tr>
+      <tr>
+        <th>Benefits you have recieved as a result of civil action</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCivilActionBenefits')"></span></td>
+      </tr>
+      <tr>
+        <th>Other</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
+      </tr>
+      <tr>
+        <th>None of the above</th>
+        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.noneOfTheAboveBenefits')"></span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2 class="blue-header">Employment Income <button (click)="gotoPageIndex(5);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+  <h3>Income Loss Information</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Were you employed when the crime occured?</th>
+        <td>{{ enumHelper.WereYouEmployedAtTimeOfCrime[valueForEnum('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')] }}</td>
+      </tr>
+      <tr>
+        <th>Were you at work at the time of the incident?</th>
+        <td>{{ valueOrEmpty('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident') }} </td>
+      </tr>
+      <tr>
+        <th>Have you applied for Workers' Compensation Benefits?</th>
+        <td>{{ valueOrEmpty('employmentIncomeInformation.haveYouAppliedForWorkersCompensation') }} </td>
+      </tr>
+      <tr>
+        <th>What is your Worker's Compensation Benefits claim number?</th>
+        <td>{{ valueOrEmpty('employmentIncomeInformation.workersCompensationClaimNumber') }} </td>
+      </tr>
+      <tr>
+        <th>As a result of any crime-related injuries, did you miss work?</th>
+        <td>{{ valueOrEmpty('employmentIncomeInformation.didYouMissWorkDueToCrime') }} </td>
+      </tr>
+      <tr>
+        <th>Please provide days of work missed</th>
+        <td>{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart') }} - {{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd') }} </td>
+      </tr>
+      <tr>
+        <th>As a result of any crime-related injuries, did you lose wages?</th>
+        <td>{{ valueOrEmpty('employmentIncomeInformation.didYouLoseWages') }} </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Income Loss Information</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Are you self employed?</th>
+        <td>{{ valueOrEmpty('employmentIncomeInformation.areYouSelfEmployed') }} </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-striped review-table" *ngFor="let item of form.get('employmentIncomeInformation.employers').controls; let i = index">
+    <tbody>
+      <tr>
+        <th>Name of Company/Organization</th>
+        <td>{{ valueOrEmpty(item.get('employerName')) }}</td>
+      </tr>
+      <tr>
+        <th>Phone Number of Contact Person</th>
+        <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) }}</td>
+      </tr>
+      <tr>
+        <th>Mailing Address</th>
+        <td><span [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
+      </tr>
+      <tr>
+        <th>Contact Name</th>
+        <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName')) }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>If you are requesting benefits for lost wages, may we contact your employer?</th>
+        <td>{{ valueOrEmpty('employmentIncomeInformation.mayContactEmployer') }} </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2 class="blue-header">Application on Behalf of the Victim <button (click)="gotoPageIndex(6);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>I am:</th>
+        <td>{{ enumHelper.CompletingOnBehalfOf[valueForEnum('representativeInformation.completingOnBehalfOf')] }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Name</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>First Name</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeFirstName') }}</td>
+      </tr>
+      <tr>
+        <th>Middle Name</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeMiddleName') }}</td>
+      </tr>
+      <tr>
+        <th>Last Name</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeLastName') }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Contact Information</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Preferred Method of Contact</th>
+        <td>{{ enumHelper.PreferredMethodOfContact[valueForEnum('representativeInformation.representativePreferredMethodOfContact')]  }}</td>
+      </tr>
+      <tr>
+        <th>Phone Number</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativePhoneNumber') }}</td>
+      </tr>
+      <tr>
+        <th>Phone Number</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeAlternatePhoneNumber') }}</td>
+      </tr>
+      <tr>
+        <th>Email Address</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeEmail') }} </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Mailing Address</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Country</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.country') }}</td>
+      </tr>
+      <tr>
+        <th>Mailing Address</th>
+        <td>{{ multiValueOrEmpty('representativeInformation.representativeAddress.line1') }}</td>
+      </tr>
+      <tr *ngIf="valueOrEmpty('representativeInformation.representativeAddress.line2') != '--'">
+        <th></th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.line2') }} </td>
+      </tr>
+      <tr>
+        <th>City</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.city') }}</td>
+      </tr>
+      <tr>
+        <th>Province</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.province') }}</td>
+      </tr>
+      <tr>
+        <th>Postal Code</th>
+        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.postalCode') }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2 class="blue-header">Declaration <button (click)="gotoPageIndex(7);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+  <p>
+    <label class="inline-label">
+      <input *ngIf="form.get('declarationInformation.declaredAndSigned').value === true" type="checkbox" checked="checked" disabled="disabled" />
+      <input *ngIf="form.get('declarationInformation.declaredAndSigned').value !== true" type="checkbox" disabled="disabled" />
+      <span>I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct.</span>
+    </label>
+  </p>
+
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Applicant's Signature</th>
         <td>
-          --
+          <img class="review-signature" *ngIf="valueOrEmpty('declarationInformation.signature', '') != ''" src="{{ valueOrEmpty('declarationInformation.signature', '') }}" />
         </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2 class="blue-header">Authorization <button (click)="gotoPageIndex(8);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+  <p>
+    <label class="inline-label">
+      <input *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value === true" type="checkbox" checked="checked" disabled="disabled" />
+      <input *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value !== true" type="checkbox" disabled="disabled" />
+      <span>I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the Crime Victim Assistance Act.</span>
+    </label>
+  </p>
+  <p>
+    <label class="inline-label">
+      <input *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value === true" type="checkbox" checked="checked" disabled="disabled" />
+      <input *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value !== true" type="checkbox" disabled="disabled" />
+      <span>I have read and understood the above information.</span>
+    </label>
+  </p>
+
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Applicant's Signature</th>
+        <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.signature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.signature', '') }}" /></td>
+      </tr>
+      <tr>
+        <th>Optional authorization given?</th>
+        <td>{{ valueOrEmpty('authorizationInformation.allowCvapStaffSharing') }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Optional Authorization</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Full Name</th>
+        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonFullName') }}</td>
+      </tr>
+      <tr>
+        <th>Phone Number</th>
+        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonPhoneNumber') }}</td>
+      </tr>
+      <tr>
+        <th>Relationship to you (applicant)</th>
+        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonRelationship') }}</td>
+      </tr>
+      <tr>
+        <th>Agency Name</th>
+        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonAgencyName') }}</td>
+      </tr>
+      <tr>
+        <th>Agency Address</th>
+        <td><span [innerHTML]="displayMailingAddress('authorizationInformation.authorizedPersonAgencyAddress')"></span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    <label class="inline-label">
+      <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true" type="checkbox" checked="checked" disabled="disabled" />
+      <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value !== true" type="checkbox" disabled="disabled" />
+      <span>I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.</span>
+    </label>
+  </p>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Applicant's Signature</th>
+        <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') }}" /></td>
       </tr>
     </tbody>
   </table>

@@ -18,6 +18,7 @@ import { JusticeApplicationDataService } from '../services/justice-application-d
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
+import { EnumHelper } from '../shared/enums-list';
 
 const moment = _rollupMoment || _moment;
 
@@ -68,6 +69,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   policeReportItems: FormArray;
 
   hospitalList = HOSPITALS;
+  enumHelper = new EnumHelper();
 
   showAddCourtInfo: boolean = true;
   showRemoveCourtInfo: boolean = false;
@@ -116,6 +118,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   ngOnInit() {
+
     let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
     this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
 
@@ -557,7 +560,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             country: [{ value: 'Canada', disabled: false }],
           }),
           signName: [''],
-          signDate: [''],
+          signDate: [''],  // REMOVE
           signature: [''],
         }),
       }),
@@ -626,7 +629,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
       representativeInformation: this.fb.group({
         completingOnBehalfOf: [0, [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
-        representativeName: [''],
+        representativeFirstName: [''], //, Validators.required],
+        representativeMiddleName: [''],
+        representativeLastName: [''], //, Validators.required],
         representativePreferredMethodOfContact: [0],   // Phone = 100000000, Email = 100000001, Mail = 100000002
         representativePhoneNumber: [''],
         representativeAlternatePhoneNumber: [''],
@@ -655,7 +660,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         approvedAuthorityNotification: ['', Validators.required],
         readAndUnderstoodTermsAndConditions: ['', Validators.required],
         signature: ['', Validators.required],
-        signDate: ['', Validators.required],
 
         allowCvapStaffSharing: [''],
         authorizedPersonFullName: [''],
@@ -672,7 +676,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         }),
         authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
         authorizedPersonSignature: [''], //, Validators.required],
-        authorizedPersonSignDate: [''], //, Validators.required],
       }),
     });
   }

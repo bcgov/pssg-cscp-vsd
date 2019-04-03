@@ -191,6 +191,7 @@
             </div>
 
             <h3>Other Details</h3>
+
             <app-field label="Gender" [required]="true" [valid]="isFieldValid('personalInformation.gender')" errorMessage="Please select your gender">
               <label class="inline-label">
                 <input type="radio" [value]="100000000" name="gender" formControlName="gender">
@@ -681,12 +682,6 @@
                       <a class="redo" (click)="showSignPad('crimeInformation.racafInformation', 'signature')">Redo Signature</a>
                     </div>
                   </app-field>
-
-                  <app-field label="Date" [required]="true" [valid]="isFieldValid('crimeInformation.racafInformation.signDate')" errorMessage="Please enter the sign date">
-                    <input type="text" class="form-control date-picker" formControlName="signDate" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="racafSignDatePicker" (focus)="racafSignDatePicker.open()" (click)="racafSignDatePicker.open()" readonly>
-                    <mat-datepicker #racafSignDatePicker></mat-datepicker>
-                  </app-field>
                 </div>
               </section>
             </section>
@@ -754,7 +749,7 @@
               </app-field>
               <section *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
                 <app-field label="Name of hospital" [required]="true" [valid]="isFieldValid('medicalInformation.treatedAtHospitalName')" errorMessage="Please selection a hospital">
-                  <select class="form-control" formControlName="treatedAtHospitalName">
+                  <select class="form-control standard" formControlName="treatedAtHospitalName">
                     <option value="0">Select...</option>
                     <option *ngFor="let item of hospitalList">{{ item }}</option>
                   </select>
@@ -1161,6 +1156,7 @@
                   </div>
                 </div>
                 <a href="javascript:void(0);" class="btn btn-secondary" (click)="addEmployer()" *ngIf="showAddEmployer">Add Employer</a>
+                <br /><br />
 
                 <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
                   <label class="inline-label">
@@ -1225,10 +1221,22 @@
               <p style="display: none; background-color: yellow; font-size: 16px;">See required fields based on preferred contact methods here</p>
               <div class="row">
                 <div class="col-4">
-                  <app-field label="First Name" [required]="true" [valid]="isFieldValid('representativeInformation.representativeName')" errorMessage="Please enter a full name">
-                    <input class="form-control" type="text" formControlName="representativeName" placeholder="Full Name">
+                  <app-field label="First Name" [required]="true" [valid]="isFieldValid('representativeInformation.representativeFirstName')" errorMessage="Please enter a first name">
+                    <input class="form-control" type="text" formControlName="representativeFirstName" placeholder="Full Name">
                   </app-field>
                 </div>
+                <div class="col-4">
+                  <app-field label="Middle Name" [required]="false" errorMessage="Please enter a middle name">
+                    <input class="form-control" type="text" formControlName="representativeMiddleName" placeholder="Full Name">
+                  </app-field>
+                </div>
+                <div class="col-4">
+                  <app-field label="Last Name" [required]="true" [valid]="isFieldValid('representativeInformation.representativeLastName')" errorMessage="Please enter a last name">
+                    <input class="form-control" type="text" formControlName="representativeLastName" placeholder="Full Name">
+                  </app-field>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col-4">
                   <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('representativeInformation.representativePreferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
                     <select class="form-control" formControlName="representativePreferredMethodOfContact">
@@ -1238,6 +1246,8 @@
                       <option value="100000002">Mail</option>
                     </select>
                   </app-field>
+                </div>
+                <div class="col-4">
                 </div>
                 <div class="col-4">
                 </div>
@@ -1363,12 +1373,6 @@
               </app-field>
               <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
 
-              <app-field label="Date" [required]="true" [valid]="isFieldValid('authorizationInformation.signDate')" errorMessage="Please enter the date">
-                <input type="text" class="form-control date-picker" formControlName="signDate" placeholder="yyyy-mm-dd"
-                       [matDatepicker]="authSignDatePicker" (focus)="authSignDatePicker.open()" (click)="authSignDatePicker.open()" readonly>
-                <mat-datepicker #authSignDatePicker></mat-datepicker>
-              </app-field>
-
               <h2 class="blue-header">Optional Authorization</h2>
               <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?">
                 <label class="inline-label">
@@ -1429,13 +1433,6 @@
                   </div>
                 </app-field>
                 <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
-
-                <app-field label="Date" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonSignDate')" errorMessage="Please enter the date">
-                  <input type="text" class="form-control date-picker" formControlName="authorizedPersonSignDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="authorizedPersonSignDatePicker" (focus)="authorizedPersonSignDatePicker.open()" (click)="authorizedPersonSignDatePicker.open()" readonly>
-                  <mat-datepicker #authorizedPersonSignDatePicker></mat-datepicker>
-                </app-field>
-
               </section>
             </section>
           </div>
@@ -1445,7 +1442,7 @@
               <h1>Review & Submit</h1>
             </div>
             <p>Please check the accuracy of the information entered in your application before submitting.</p>
-            <app-victim-review [group]="form"></app-victim-review>
+            <app-victim-review [group]="form" [parentStepper]="stepper"></app-victim-review>
           </div>
 
           <div *ngIf="stepper.selectedIndex == 9 && formFullyValidated === false" class="error-summary">
