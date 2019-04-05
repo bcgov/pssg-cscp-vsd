@@ -76,12 +76,16 @@ export class HomeComponent extends FormBase implements OnInit {
       switch (applicationType) {
         case 100000002:
           routeUrl = '/victim-application';
+          break;
         case 100000001:
-          routeUrl = '/victim-application';
+          routeUrl = '/ifm-application';
+          break;
         case 100000000:
           routeUrl = '/victim-application';
+          break;
       }
 
+      console.log(applicationType);
       let navigationExtras: NavigationExtras = {
         queryParams: { 'ob': behalfOf }
       };

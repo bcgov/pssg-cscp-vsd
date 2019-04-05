@@ -7,6 +7,15 @@ export class EnumHelper {
     100000002: 'X',
   };
 
+  public RelationshipToVictim = {
+    0: '--',
+    100000000: 'Spouse',
+    100000001: 'Parent/Guardian',
+    100000002: 'Child',
+    100000003: 'Sibling',
+    100000004: 'Other',
+  }
+
   public MaritalStatus = {
     0: '--',
     100000000: 'Married',

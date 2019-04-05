@@ -3,7 +3,7 @@
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter">
       <section class="application-nav">
-        <h3>Victim Application</h3>
+        <h3>Immediate Family Member Application</h3>
         <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
           <ng-template matStepperIcon="edit">
             <mat-icon>done</mat-icon>
@@ -11,11 +11,11 @@
           <ng-template matStepperIcon="number">
           </ng-template>
           <mat-step label="Overview"></mat-step>
-          <mat-step label="Victim Information & Addresses"></mat-step>
+          <mat-step label="Personal Information & Addresses"></mat-step>
+          <mat-step label="Victim Information"></mat-step>
           <mat-step label="Crime Information"></mat-step>
           <mat-step label="Medical & Dental Information"></mat-step>
-          <mat-step label="Expense & Loss Information"></mat-step>
-          <mat-step label="Employment Income"></mat-step>
+          <mat-step label="Expense & Benefits"></mat-step>
           <mat-step label="Application on Behalf of Victim"></mat-step>
           <mat-step label="Declaration"></mat-step>
           <mat-step label="Authorization"></mat-step>
@@ -49,21 +49,21 @@
             <h2>Before you apply</h2>
             <h3>Who may use this application?</h3>
 
-            <p>This application form is designed for a <strong>Victim of violent crime</strong>. Under the <em>Crime Victim Assistance Act</em>, a Victim is a person who is injured physically or psychologically as a result of certain crimes committed in British Columbia.</p>
-            <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/family-member-application">Immediate Family Members</a>.</p>
-            <p>If the victim is deceased, please see the application for <a routerLink="/family-member-application">Immediate Family Members</a>.</p>
+            <p>This application form is designed for a Immediate Family Member of an injured or deceased victim . Under the <em>Crime Victim Assistance Act</em>, a Victim is a person who is injured physically or psychologically as a result of certain crimes committed in British Columbia.</p>
+            <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/victim-application">Victims</a>.</p>
 
             <h3>What types of benefits does the Crime Victim's Assistance Program provide?</h3>
 
-            <p>Benefits that may be available to Victims of violent crime include:</p>
+            <p>Benefits that may be available to Immediate Family Members include:</p>
             <ul class="list">
-              <li>medical and dental expenses</li>
-              <li>prescription drug expenses</li>
               <li>counselling</li>
-              <li>lost employment income (reimbursed at minimum wage)</li>
-              <li>repair or replacement costs of damaged or destroyed property that a person was wearing at the time of the crime (e.g., eyeglasses, clothing)</li>
-              <li>protective measures (e.g., moving expenses)</li>
-              <li>disability benefits, services or equipment</li>
+              <li>prescription drug expenses</li>
+              <li>transportation and related expenses</li>
+              <li>funeral expenses</li>
+              <li>bereavement leave</li>
+              <li>income support</li>
+              <li>crime scene cleaning</li>
+              <li>loss of parental guidance</li>
             </ul>
 
             <h3>The Crime Victim Assistance Program will NOT cover:</h3>
@@ -81,7 +81,7 @@
                 The Crime Victim Assistance Program will only provide benefits that are not covered by other programs<br />
                 (e.g., EI, ICBC, extended health coverage, personal insurance).
               </p>
-              <p>View full <a [routerLink]="" (click)="showSummaryOfBenefits()">summary of benefits</a></p>
+              <p><a [routerLink]="" (click)="showSummaryOfBenefits()">View full summary of benefits</a></p>
             </div>
 
             <h2>Instructions</h2>
@@ -133,9 +133,9 @@
 
           <div formGroupName="personalInformation" *ngIf="this.currentFormStep == 1">
             <div class="page-header">
-              <h1>Victim Information & Addresses</h1>
+              <h1>Personal Information & Addresses</h1>
             </div>
-            <h2 class="blue-header">Victim Information</h2>
+            <h2 class="blue-header">Personal Information</h2>
 
             <h3>Applicant Name</h3>
 
@@ -192,6 +192,33 @@
 
             <h3>Other Details</h3>
 
+            <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('personalInformation.relationshipToVictim')" errorMessage="Please select a relationship">
+              <label class="inline-label">
+                <input type="radio" [value]="100000000" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Spouse</span>
+              </label>
+              <label class="inline-label">
+                <input type="radio" [value]="100000001" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Parent/Guardian</span>
+              </label>
+              <label class="inline-label">
+                <input type="radio" [value]="100000002" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Child</span>
+              </label>
+              <label class="inline-label">
+                <input type="radio" [value]="100000003" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Sibling</span>
+              </label>
+              <label class="inline-label">
+                <input type="radio" [value]="100000004" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Other</span>
+              </label>
+              <label class="inline-label" *ngIf="form.get('personalInformation.relationshipToVictim').value === 100000004">
+                <span>Please specify</span>
+                <input type="text" name="relationshipToVictimOther" formControlName="relationshipToVictimOther">
+              </label>
+            </app-field>
+
             <app-field label="Gender" [required]="true" [valid]="isFieldValid('personalInformation.gender')" errorMessage="Please select your gender">
               <label class="inline-label">
                 <input type="radio" [value]="100000000" name="gender" formControlName="gender">
@@ -216,34 +243,22 @@
                 </app-field>
               </div>
               <div class="col-4">
-                <app-field label="Marital Status" [required]="true" [valid]="isFieldValid('personalInformation.maritalStatus')" errorMessage="Please select your marital status">
-                  <select class="form-control" formControlName="maritalStatus">
-                    <option value="0">Select...</option>
-                    <option value="100000000">Married</option>
-                    <option value="100000001">Common Law</option>
-                    <option value="100000002">Widowed</option>
-                    <option value="100000003">Divorced</option>
-                    <option value="100000004">Seperated</option>
-                    <option value="100000005">Single</option>
-                  </select>
-                </app-field>
-              </div>
-              <div class="col-4">
                 <app-field label="Occupation" [required]="false" [valid]="isFieldValid('personalInformation.occupation')" errorMessage="Please enter your occupation">
                   <input class="form-control" type="text" formControlName="occupation" maxlength="100">
                 </app-field>
               </div>
+              <div class="col-4">
+                <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="form.get('personalInformation.sinPart1').valid || !form.get('personalInformation.sinPart1').touched" errorMessage="Please enter your SIN">
+                  <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart1">
+                  <span> - </span>
+                  <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
+                  <span> - </span>
+                  <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
+                  <app-tool-tip [trigger]="sinTemplate"></app-tool-tip>
+                  <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
+                </app-field>
+              </div>
             </div>
-
-            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="form.get('personalInformation.sinPart1').valid || !form.get('personalInformation.sinPart1').touched" errorMessage="Please enter your SIN">
-              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart1">
-              <span> - </span>
-              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
-              <span> - </span>
-              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
-              <app-tool-tip [trigger]="sinTemplate"></app-tool-tip>
-              <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
-            </app-field>
 
             <h2 class="blue-header">Contact Information</h2>
             <div class="row">
@@ -265,7 +280,7 @@
               <div class="col-12">
                 <label class="inline-label">
                   <input type="checkbox" style="margin-right: 10px;" formControlName="permissionToContactViaMethod" [value]="true">
-                  <span>I give permission to be contacted via this method. </span>
+                  <span>I give permission to be contacted via this method.</span>
                 </label>
               </div>
             </div>
@@ -304,7 +319,6 @@
               </div>
             </div>
 
-
             <div class="row">
               <div class="col-6">
                 <h3>Primary Address</h3>
@@ -318,7 +332,170 @@
             </div>
           </div>
 
-          <div formGroupName="crimeInformation" *ngIf="this.currentFormStep == 2">
+          <div formGroupName="victimInformation" *ngIf="this.currentFormStep == 2">
+            <div class="page-header">
+              <h1>Victim Information</h1>
+            </div>
+            <h2 class="blue-header">Victim Information</h2>
+
+            <h3>Victim Name</h3>
+
+            <div class="row">
+              <div class="col-4">
+                <app-field label="First Name" [required]="true" [valid]="isFieldValid('victimInformation.firstName')" errorMessage="Please enter your first name">
+                  <input class="form-control" type="text" formControlName="firstName" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('victimInformation.middleName')" errorMessage="Please enter your middle name">
+                  <input class="form-control" type="text" formControlName="middleName" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Last Name" [required]="true" [valid]="isFieldValid('victimInformation.lastName')" errorMessage="Please enter your last name">
+                  <input class="form-control" type="text" formControlName="lastName" maxlength="100">
+                </app-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <label class="inline-label">
+                  <input type="checkbox" style="margin-right: 10px;" formControlName="iHaveOtherNames" [value]="true">
+                  <span>They also go by other names (e.g. nickname, maiden name, alias)</span>
+                </label>
+              </div>
+            </div>
+
+            <div *ngIf="form.get('victimInformation.iHaveOtherNames').value === true">
+              <h3>Other Names Used</h3>
+
+              <div class="row">
+                <div class="col-4">
+                  <app-field label="Other First Name" [required]="false" errorMessage="Please enter your other first name">
+                    <input class="form-control" type="text" formControlName="otherFirstName" maxlength="100">
+                  </app-field>
+                </div>
+                <div class="col-4">
+                  <app-field label="Other Last Name" [required]="false" errorMessage="Please enter your other last name">
+                    <input class="form-control" type="text" formControlName="otherLastName" maxlength="100">
+                  </app-field>
+                </div>
+                <div class="col-4">
+                  <app-field label="Date of Name Change">
+                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd"
+                           [matDatepicker]="dateOfNameChangePicker" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
+                    <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
+                  </app-field>
+                </div>
+              </div>
+            </div>
+
+            <h3>Other Details</h3>
+
+            <app-field label="Gender" [required]="true" [valid]="isFieldValid('victimInformation.gender')" errorMessage="Please select your gender">
+              <label class="inline-label">
+                <input type="radio" [value]="100000000" name="gender" formControlName="gender">
+                <span>M</span>
+              </label>
+              <label class="inline-label">
+                <input type="radio" [value]="100000001" name="gender" formControlName="gender">
+                <span>F</span>
+              </label>
+              <label class="inline-label">
+                <input type="radio" [value]="100000002" name="gender" formControlName="gender">
+                <span>X</span>
+              </label>
+            </app-field>
+
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('victimInformation.birthDate')" errorMessage="Please enter your birth date">
+                  <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd"
+                         [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
+                  <mat-datepicker #birthDatePicker></mat-datepicker>
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Marital Status" [required]="true" [valid]="isFieldValid('victimInformation.maritalStatus')" errorMessage="Please select your marital status">
+                  <select class="form-control" formControlName="maritalStatus">
+                    <option value="0">Select...</option>
+                    <option value="100000000">Married</option>
+                    <option value="100000001">Common Law</option>
+                    <option value="100000002">Widowed</option>
+                    <option value="100000003">Divorced</option>
+                    <option value="100000004">Seperated</option>
+                    <option value="100000005">Single</option>
+                  </select>
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Occupation" [required]="false" [valid]="isFieldValid('victimInformation.occupation')" errorMessage="Please enter your occupation">
+                  <input class="form-control" type="text" formControlName="occupation" maxlength="100">
+                </app-field>
+              </div>
+            </div>
+
+            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="form.get('victimInformation.sinPart1').valid || !form.get('victimInformation.sinPart1').touched" errorMessage="Please enter your SIN">
+              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart1">
+              <span> - </span>
+              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
+              <span> - </span>
+              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
+              <app-tool-tip [trigger]="sinTemplate"></app-tool-tip>
+              <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
+            </app-field>
+
+            <h2 class="blue-header">Victim's Contact Information</h2>
+            <div class="row">
+              <div class="col-5">
+                <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('victimInformation.phoneNumber')" errorMessage="Please enter your 10-digit phone number">
+                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
+                </app-field>
+              </div>
+              <div class="col-5">
+                <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('victimInformation.alternatePhoneNumber')" errorMessage="Please enter your 10-digit phone number">
+                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
+                </app-field>
+              </div>
+              <div class="col-2">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('victimInformation.email')" errorMessage="Please enter your email address">
+                  <input class="form-control" type="text" (blur)="trimValue(form.get('victimInformation.email'))" formControlName="email" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-7">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <h3>Most Recent Mailing Address</h3>
+                <app-field label="Is victim's most recent mailing address same as applicant's address?" [valid]="isFieldValid('victimInformation.mostRecentMailingAddressSameAsPersonal')" [required]="true" errorMessage="Please make a selection" [showChevrons]="false">
+                  <label class="inline-label">
+                    <input type="radio" [value]="true" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="false" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
+                    <span>No</span>
+                  </label>
+                </app-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <app-address [group]="form.get('victimInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
+              </div>
+              <div class="col-6">
+              </div>
+            </div>
+          </div>
+
+          <div formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3">
             <div class="page-header">
               <h1>Crime Information</h1>
             </div>
@@ -397,6 +574,24 @@
 
               <section>
                 <h3>Crime Details</h3>
+
+                <app-field label="Is the Victim deceased as a result of the crime?" [valid]="isFieldValid('crimeInformation.victimDeceasedFromCrime')" [required]="true" errorMessage="Please make a selection">
+                  <label class="inline-label">
+                    <input type="radio" [value]="true" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="false" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
+                    <span>No</span>
+                  </label>
+                </app-field>
+
+                <app-field label="Date of Death" *ngIf="form.get('crimeInformation.victimDeceasedFromCrime').value === true">
+                  <input type="text" class="form-control date-picker" formControlName="dateOfDeath" placeholder="yyyy-mm-dd"
+                         [matDatepicker]="dateOfDeathPicker" (focus)="dateOfDeathPicker.open()" (click)="dateOfDeathPicker.open()" readonly>
+                  <mat-datepicker #dateOfDeathPicker></mat-datepicker>
+                </app-field>
+
                 <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeDetails')" label="Please briefly describe how the incident occured, in your own words. Please complete this section even if you have filed a police report." errorMessage="Please detail crime">
                   <textarea class="form-control bigger" formControlName="crimeDetails"></textarea>
                 </app-field>
@@ -686,7 +881,7 @@
               </section>
             </section>
           </div>
-          <div formGroupName="medicalInformation" *ngIf="this.currentFormStep == 3">
+          <div formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4">
             <div class="page-header">
               <h1>Medical & Dental Information</h1>
             </div>
@@ -709,7 +904,7 @@
                 </label>
               </app-field>
               <section *ngIf="form.get('medicalInformation.doYouHaveMedicalServicesCoverage').value === true">
-                <app-field label="Personal Health Number">
+                <app-field label="Please provide your Personal Health Number">
                   <input class="form-control standard" type="text" formControlName="personalHealthNumber">
                 </app-field>
               </section>
@@ -800,7 +995,7 @@
               </section>
 
               <h3>Other Treatment Information</h3>
-              <app-field label="Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?" [valid]="isFieldValid('medicalInformation.hadOtherTreatments')" [required]="true" errorMessage="Please select an option">
+              <app-field label="Do you have a counsellor/therapist who has been treating you as a result of the incident?" [valid]="isFieldValid('medicalInformation.hadOtherTreatments')" [required]="true" errorMessage="Please select an option">
                 <label class="inline-label">
                   <input type="radio" [value]="true" name="hadOtherTreatments" formControlName="hadOtherTreatments">
                   <span>Yes</span>
@@ -861,9 +1056,9 @@
             </section>
 
           </div>
-          <div formGroupName="expenseInformation" *ngIf="this.currentFormStep == 4">
+          <div formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5">
             <div class="page-header">
-              <h1>Expense & Loss Information</h1>
+              <h1>Expense & Benefits Information</h1>
             </div>
             <p>This section provides information regarding any expenses or losses you are claiming as a result of the crime. Please keep receipts for all expenses you are claiming. The program will require you to submit <strong>original receipts</strong>.</p>
             <section>
@@ -878,14 +1073,14 @@
               <div class="radio-list">
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveMedicalExpenses" formControlName="haveMedicalExpenses">
-                    Medical Expenses <app-tool-tip [trigger]="benefitsMedicalExpenses"></app-tool-tip>
+                    <input type="checkbox" [value]="true" name="haveCounsellingExpenses" formControlName="haveCounsellingExpenses">
+                    Counselling <app-tool-tip [trigger]="benefitsCounselling"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveDentalExpenses" formControlName="haveDentalExpenses">
-                    Dental Expenses <app-tool-tip [trigger]="benefitsDental"></app-tool-tip>
+                    <input type="checkbox" [value]="true" name="haveCounsellingTransportation" formControlName="haveCounsellingTransportation">
+                    Transportation to obtain counselling <app-tool-tip [trigger]="benefitsCounsellingTransportation"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
@@ -894,233 +1089,118 @@
                     Prescription drug expenses <app-tool-tip [trigger]="benefitsPrescription"></app-tool-tip>
                   </label>
                 </app-field>
+
+                <ng-template #benefitsCounsellingTransportation><h3>Transportation to obtain counselling</h3><p>Witnesses who have to travel some distance to obtain counselling services provided as crime victim assistance benefits.</p><p><strong>Examples:</strong></p><ul><li>Transportation expenses such as bus fare, air fare, mileage expenses</li><li>Meals and accommodation</li><li>Childcare while attending appointments</li></ul></ng-template>
+                <ng-template #benefitsPrescription><h3>Prescription Drug Expenses</h3><p>Victims who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Medications prescribed by a doctor, dentist, or podiatrist</li></ul></ng-template>
+                <ng-template #benefitsCounselling><h3>Counselling</h3><p>For all victims of crime</p><p><strong>Examples:</strong></p><ul><li>Counselling Sessions</li><li>Psycho-educational sessions to others who support the victim</li></ul></ng-template>
+              </div>
+            </section>
+
+            <section *ngIf="form.get('crimeInformation.victimDeceasedFromCrime').value == true">
+              <h2 class="blue-header">Additional Benefits</h2>
+              <p>If the victim is deceased as a result of the crime, please indicate which additional expenses or benefits you wish to claim (at least one is required):</p>
+              <div class="radio-list">
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveCounsellingExpenses" formControlName="haveCounsellingExpenses">
-                    Counselling <app-tool-tip [trigger]="benefitsCounselling"></app-tool-tip>
+                    <input type="checkbox" [value]="true" name="haveVocationalServicesExpenses" formControlName="haveVocationalServicesExpenses">
+                    Vocational services or training
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses">
-                    Lost employment income (reimbursed at minimum wage) <app-tool-tip [trigger]="benefitsLostEmployment"></app-tool-tip>
+                    <input type="checkbox" [value]="true" name="haveIncomeSupportExpenses" formControlName="haveIncomeSupportExpenses">
+                    Income support
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="havePersonalPropertyLostExpenses" formControlName="havePersonalPropertyLostExpenses">
-                    Repair or replacement costs of damaged or destroyed personal property that you were wearing at the time of the incident (e.g. eyeglasses, clothing) <app-tool-tip [trigger]="benefitsLostProperty"></app-tool-tip>
+                    <input type="checkbox" [value]="true" name="haveChildcareExpenses" formControlName="haveChildcareExpenses">
+                    Childcare
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveProtectiveMeasureExpenses" formControlName="haveProtectiveMeasureExpenses">
-                    Protective measures (e.g. moving expenses, security devices) <app-tool-tip [trigger]="benefitsProtective"></app-tool-tip>
+                    <input type="checkbox" [value]="true" name="haveLegalProceedingExpenses" formControlName="haveLegalProceedingExpenses">
+                    Transportation to attend legal proceedings
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveDisabilityExpenses" formControlName="haveDisabilityExpenses">
-                    Disability benefits, services or equipment <app-tool-tip [trigger]="benefitsDisability"></app-tool-tip>
+                    <input type="checkbox" [value]="true" name="haveFuneralExpenses" formControlName="haveFuneralExpenses">
+                    Funeral expenses
+                  </label>
+                </app-field>
+                <app-field>
+                  <label>
+                    <input type="checkbox" [value]="true" name="haveBereavementLeaveExpenses" formControlName="haveBereavementLeaveExpenses">
+                    Bereavement leave
+                  </label>
+                </app-field>
+                <app-field>
+                  <label>
+                    <input type="checkbox" [value]="true" name="haveLostOfParentalGuidanceExpenses" formControlName="haveLostOfParentalGuidanceExpenses">
+                    Loss of parental guidance
+                  </label>
+                </app-field>
+                <app-field>
+                  <label>
+                    <input type="checkbox" [value]="true" name="haveHomeMakerExpenses" formControlName="haveHomeMakerExpenses">
+                    Homemaker services
                   </label>
                 </app-field>
                 <app-field>
                   <label>
                     <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses">
-                    Crime scene cleaning <app-tool-tip [trigger]="benefitsCrimeScene"></app-tool-tip>
+                    Crime scene cleaning
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses">
-                    Other
-                  </label>
-                  <section *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true" class="pushed">
-                    <app-field label="Please specify">
-                      <input class="form-control standard" type="text" formControlName="otherSpecificExpenses">
-                    </app-field>
-                  </section>
-                </app-field>
-                <ng-template #benefitsMedicalExpenses><h3>Medical Expenses</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li><li>Medical equipment and supplies</li></ul></ng-template>
-                <ng-template #benefitsDental><h3>Dental Expenses</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li></ul></ng-template>
-                <ng-template #benefitsPrescription><h3>Prescription Drug Expenses</h3><p>Victims who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Medications prescribed by a doctor, dentist, or podiatrist</li></ul></ng-template>
-                <ng-template #benefitsCounselling><h3>Counselling</h3><p>For all victims of crime</p><p><strong>Examples:</strong></p><ul><li>Counselling Sessions</li><li>Psycho-educational sessions to others who support the victim</li></ul></ng-template>
-                <ng-template #benefitsLostEmployment><h3>Lost Employment Income (reimbursed at minimum wage)</h3><p>Victims whose injuries have a long-term effect on their ability to work and who did not have a job when the crime occurred (special eligibility issues for minors)</p><p><strong>Examples:</strong></p><ul><li>Monthly payments to assist in financially supporting the victim</li></ul></ng-template>
-                <ng-template #benefitsLostProperty><h3>Damaged or destroyed personal property</h3><p>Victims whose eyeglasses/contacts, disability aids, or articles of clothing were damaged or destroyed because of the crime</p><p><strong>Repair or replacement of:</strong></p><ul><li>Eyeglass frames</li><li>Prescription lenses</li><li>Various types of disability aids</li><li>Clothing</li></ul></ng-template>
-                <ng-template #benefitsProtective><h3>Protective Measures</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li></ul></ng-template>
-                <ng-template #benefitsDisability><h3>Disability benefits, services or equipment</h3><p>Victims who need disability aids because of their injuries from the crime, to reduce the effects of the injuries, improve their quality of life, and assist in daily living</p><p><strong>Examples:</strong></p><ul><li>Mobility aids</li><li>Communication aids</li><li>Vision aids</li><li>Specialized clothing</li><li>Prostheses and orthoses</li><li>Other equipment or supplies</li></ul></ng-template>
-                <ng-template #benefitsCrimeScene><h3>Crime Scene Cleaning</h3><p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p><p><strong>Examples:</strong></p><ul><li>Specialized cleaning and disinfecting of contaminated areas</li><li>Replacement of contaminated flooring, wall covering, or other built-in features</li></ul></ng-template>
-              </div>
-            </section>
-            <section>
-              <h2 class="blue-header">Other Benefits</h2>
-              <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply:</p>
-              <div class="radio-list">
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveDisabilityPlanBenefits" formControlName="haveDisabilityPlanBenefits">
-                    Disability Plan benefits
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveEmploymentInsuranceBenefits" formControlName="haveEmploymentInsuranceBenefits">
-                    Employment Insurance benefits
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveIncomeAssistance" formControlName="haveIncomeAssistanceBenefits">
-                    Income Assistance
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveCanadaPensionPlanBenefits" formControlName="haveCanadaPensionPlanBenefits">
-                    Canada Pension Plan
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits" formControlName="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits">
-                    Aboriginal Affairs and Northern Development Canada
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveCivilActionBenefits" formControlName="haveCivilActionBenefits">
-                    Benefits you have recieved as a result of civil action
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits">
-                    Other
-                  </label>
-                  <section *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true" class="pushed">
-                    <app-field label="Please specify">
-                      <input class="form-control standard" type="text" formControlName="otherSpecificBenefits">
-                    </app-field>
-                  </section>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits">
+                    <input type="checkbox" [value]="true" name="noneOfTheAboveExpenses" formControlName="noneOfTheAboveExpenses">
                     None of the above
                   </label>
                 </app-field>
               </div>
-            </section>
-          </div>
 
-          <div formGroupName="employmentIncomeInformation" *ngIf="this.currentFormStep == 5">
-            <div class="page-header">
-              <h1 (click)="checkform()">Employment Income</h1>
-            </div>
-            <section *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
-              <p>This section provides information regarding employment information.  This information is only necessary if you are requesting benefits for lost employment income.</p>
-              <p><strong>You have not requested lost employment income benefits.</strong> Go back to Expense & Loss Information to request this particular benefit, or continue to the next section.</p>
-            </section>
+              <p>The following section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
+              <h2 class="blue-header">Income Loss Information</h2>
 
-            <section *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
-              <p>This section provides information regarding employment information.  This information is necessary if you are requesting benefits for lost employment income.</p>
-              <section>
-                <h2 class="blue-header">Income Loss Information</h2>
-                <app-field label="Were you employed when the crime occured?" [valid]="isFieldValid('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')" [required]="true" errorMessage="Please select an option">
+              <app-field label="Have you missed work as a result of the death of the victim?" [valid]="isFieldValid('expenseInformation.missedWorkDueToDeathOfVictim')" [required]="true" errorMessage="Please select an option">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="missedWorkDueToDeathOfVictim" formControlName="missedWorkDueToDeathOfVictim">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="missedWorkDueToDeathOfVictim" formControlName="missedWorkDueToDeathOfVictim">
+                  <span>No</span>
+                </label>
+              </app-field>
+
+              <section *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === true">
+                <app-field label="Please provide days of work missed" [valid]="isFieldValid('expenseInformation.daysWorkMissedStart')" [required]="true" errorMessage="Please select an option">
+                  <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd"
+                          [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
+                  <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
+                  <span> - </span>
+                  <input type="text" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd"
+                          [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
+                  <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+                </app-field>
+                <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="isFieldValid('expenseInformation.didYouLoseWages')" [required]="true" errorMessage="Please select an option">
                   <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
+                    <input type="radio" [value]="true" name="didYouLoseWages" formControlName="didYouLoseWages">
                     <span>Yes</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
+                    <input type="radio" [value]="false" name="didYouLoseWages" formControlName="didYouLoseWages">
                     <span>No</span>
                   </label>
                 </app-field>
-                <section *ngIf="form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 100000000 || form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 100000002">
-                  <app-field label="Were you at work at the time of the incident?" [valid]="isFieldValid('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident')" [required]="true" errorMessage="Please select an option">
-                    <label class="inline-label">
-                      <input type="radio" [value]="true" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
-                      <span>Yes</span>
-                    </label>
-                    <label class="inline-label">
-                      <input type="radio" [value]="false" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
-                      <span>No</span>
-                    </label>
-                  </app-field>
-                </section>
-                <section *ngIf="form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').value === true">
-                  <app-field label="Have you applied for Worker's Compensation Benefits?" [valid]="isFieldValid('employmentIncomeInformation.haveYouAppliedForWorkersCompensation')" [required]="true" errorMessage="Please select an option">
-                    <label class="inline-label">
-                      <input type="radio" [value]="true" name="haveYouAppliedForWorkersCompensation" formControlName="haveYouAppliedForWorkersCompensation">
-                      <span>Yes</span>
-                    </label>
-                    <label class="inline-label">
-                      <input type="radio" [value]="false" name="haveYouAppliedForWorkersCompensation" formControlName="haveYouAppliedForWorkersCompensation">
-                      <span>No</span>
-                    </label>
-                  </app-field>
-                  <section *ngIf="form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation').value === true">
-                    <app-field label="What is your Worker's Compensation Benefits claim number?">
-                      <input class="form-control standard" type="text" formControlName="workersCompensationClaimNumber">
-                    </app-field>
-                  </section>
-                </section>
-                <app-field label="As a result of any crime-related injuries, did you miss work?" [valid]="isFieldValid('employmentIncomeInformation.didYouMissWorkDueToCrime')" [required]="true" errorMessage="Please select an option">
-                  <label class="inline-label">
-                    <input type="radio" [value]="true" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="false" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
-                    <span>No</span>
-                  </label>
-                </app-field>
-                <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === true">
-                  <app-field label="Please provide days of work missed" [valid]="isFieldValid('employmentIncomeInformation.daysWorkMissedStart')" [required]="true" errorMessage="Please select an option">
-                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
-                    <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
-                    <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
-                    <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
-                  </app-field>
-                  <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="isFieldValid('employmentIncomeInformation.didYouLoseWages')" [required]="true" errorMessage="Please select an option">
-                    <label class="inline-label">
-                      <input type="radio" [value]="true" name="didYouLoseWages" formControlName="didYouLoseWages">
-                      <span>Yes</span>
-                    </label>
-                    <label class="inline-label">
-                      <input type="radio" [value]="false" name="didYouLoseWages" formControlName="didYouLoseWages">
-                      <span>No</span>
-                    </label>
-                  </app-field>
-                  <ng-template #lostWagesTemplate><p><strong>Lost wages or income</strong></p><p>If you are claiming for lost wages or income, we will need to verify your employment</p></ng-template>
-                </section>
-              </section>
-              <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === true">
-                <h2 class="blue-header">Employer Information</h2>
-                <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
-                <br />
+                <ng-template #lostWagesTemplate><p><strong>Lost wages or income</strong></p><p>If you are claiming for lost wages or income, we will need to verify your employment</p></ng-template>
 
-                <app-field label="Are you self employed?" [valid]="isFieldValid('employmentIncomeInformation.areYouSelfEmployed')" [required]="true" errorMessage="Please select an option">
-                  <label class="inline-label">
-                    <input type="radio" [value]="true" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="false" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
-                    <span>No</span>
-                  </label>
-                </app-field>
-
-                <div class="employers" formArrayName="employers" *ngFor="let item of form.get('employmentIncomeInformation.employers').controls; let i = index;">
+                <h3 class="blue-header">Employer Information</h3>
+                <div class="employers" formArrayName="employers" *ngFor="let item of form.get('expenseInformation.employers').controls; let i = index;">
                   <div [formGroupName]="i" class="employer">
-                    <a href="javascript:void(0);" (click)="removeEmployer(i)" class="float-right" *ngIf="showRemoveEmployer">
-                      <i class="fas fa-trash-alt"></i> Delete Employer
-                    </a>
-
-                    <h3>Name & Phone Number</h3>
                     <div class="row">
                       <div class="col-4">
                         <app-field label="Name of Company / Organization" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a company name">
@@ -1150,12 +1230,9 @@
                       </div>
                     </div>
 
-                    <h3>Mailing Address</h3>
                     <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="false"></app-address>
                   </div>
                 </div>
-                <a href="javascript:void(0);" class="btn btn-secondary" (click)="addEmployer()" *ngIf="showAddEmployer">Add Employer</a>
-                <br /><br />
 
                 <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
                   <label class="inline-label">
@@ -1167,13 +1244,71 @@
                     <span>No</span>
                   </label>
                 </app-field>
+
+                <h2 class="blue-header">Other Benefits</h2>
+                <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply (at least one is required):</p>
+                <div class="radio-list">
+                  <app-field>
+                    <label>
+                      <input type="checkbox" [value]="true" name="haveDisabilityPlanBenefits" formControlName="haveDisabilityPlanBenefits">
+                      Disability Plan benefits
+                    </label>
+                  </app-field>
+                  <app-field>
+                    <label>
+                      <input type="checkbox" [value]="true" name="haveEmploymentInsuranceBenefits" formControlName="haveEmploymentInsuranceBenefits">
+                      Employment Insurance benefits
+                    </label>
+                  </app-field>
+                  <app-field>
+                    <label>
+                      <input type="checkbox" [value]="true" name="haveIncomeAssistance" formControlName="haveIncomeAssistanceBenefits">
+                      Income Assistance
+                    </label>
+                  </app-field>
+                  <app-field>
+                    <label>
+                      <input type="checkbox" [value]="true" name="haveCanadaPensionPlanBenefits" formControlName="haveCanadaPensionPlanBenefits">
+                      Canada Pension Plan
+                    </label>
+                  </app-field>
+                  <app-field>
+                    <label>
+                      <input type="checkbox" [value]="true" name="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits" formControlName="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits">
+                      Aboriginal Affairs and Northern Development Canada
+                    </label>
+                  </app-field>
+                  <app-field>
+                    <label>
+                      <input type="checkbox" [value]="true" name="haveCivilActionBenefits" formControlName="haveCivilActionBenefits">
+                      Benefits you have recieved as a result of civil action
+                    </label>
+                  </app-field>
+                  <app-field>
+                    <label>
+                      <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits">
+                      Other
+                    </label>
+                    <section *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true" class="pushed">
+                      <app-field label="Please specify">
+                        <input class="form-control standard" type="text" formControlName="otherSpecificBenefits">
+                      </app-field>
+                    </section>
+                  </app-field>
+                  <app-field>
+                    <label>
+                      <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits">
+                      None of the above
+                    </label>
+                  </app-field>
+                </div>
               </section>
             </section>
           </div>
 
           <div formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6">
             <div class="page-header">
-              <h1>Application on Behalf of Victim</h1>
+              <h1>Application on Behalf of Immediate Family Member</h1>
             </div>
 
             <p>This section provides information regarding applying on behalf of an applicant. This information is only necessary if you are a guardian or legal representative of the applicant.</p>
@@ -1186,11 +1321,6 @@
                 <label>
                   <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
                   Completing this application for myself
-                </label>
-                <br />
-                <label>
-                  <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                  A Victim Service Worker or other person helping a victim complete this application
                 </label>
                 <br />
 
@@ -1276,7 +1406,6 @@
               <h3>Mailing Address</h3>
               <app-address [group]="form.get('representativeInformation.representativeAddress')"></app-address>
 
-
               <h2 class="blue-header">Proof of Guardianship/Trusteeship</h2>
               <p>Note: If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship/trusteeship.</p>
               <div class="file-upload-placeholder">
@@ -1284,6 +1413,7 @@
               </div>
             </section>
           </div>
+
 
           <div formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7">
             <div class="page-header">
@@ -1297,7 +1427,7 @@
               <app-field [required]="true" [valid]="isFieldValid('declarationInformation.declaredAndSigned')" errorMessage="Please check declaration">
                 <label>
                   <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
-                  I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
+                  I submit this application in support of a claim for benefits available to Immediate Family Members under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
                 </label>
               </app-field>
 
@@ -1430,7 +1560,7 @@
               <h1>Review & Submit</h1>
             </div>
             <p>Please check the accuracy of the information entered in your application before submitting.</p>
-            <app-victim-review [group]="form" [parentStepper]="stepper"></app-victim-review>
+            <app-ifm-review [group]="form" [parentStepper]="stepper"></app-ifm-review>
           </div>
 
           <div *ngIf="stepper.selectedIndex == 9 && formFullyValidated === false" class="error-summary">

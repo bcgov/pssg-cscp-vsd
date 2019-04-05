@@ -28,6 +28,11 @@ $bootstrap-sass-asset-helper: true;
   }
 }
 
+::ng-deep .angular-click-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 @media (max-width: 575.98px) {
     .title {
         font-size: 20px;

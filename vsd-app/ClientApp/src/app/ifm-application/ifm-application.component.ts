@@ -38,9 +38,9 @@ export const MY_FORMATS = {
 export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 
 @Component({
-  selector: 'app-victim-application',
-  templateUrl: './victim-application.component.html',
-  styleUrls: ['./victim-application.component.scss'],
+  selector: 'app-ifm-application',
+  templateUrl: './ifm-application.component.html',
+  styleUrls: ['./ifm-application.component.scss'],
   providers: [
     // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
     // application's root module. We provide it at the component level here, due to limitations of
@@ -50,7 +50,7 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
   ],
 })
 
-export class VictimApplicationComponent extends FormBase implements OnInit {
+export class IfmApplicationComponent extends FormBase implements OnInit {
   currentUser: User;
   dataLoaded = false;
   busy: Promise<any>;
@@ -58,7 +58,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   busy3: Promise<any>;
   form: FormGroup;
   formFullyValidated: boolean;
-  
+
   otherTreatmentItems: FormArray;
   employerItems: FormArray;
   courtFileItems: FormArray;
@@ -74,8 +74,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   showRemoveCrimeLocation: boolean = false;
   showAddPoliceReport: boolean = true;
   showRemovePoliceReport: boolean = false;
-  showAddEmployer: boolean = true;
-  showRemoveEmployer: boolean = false;
   showAddProvider: boolean = true;
   showRemoveProvider: boolean = false;
 
@@ -106,9 +104,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   ngOnInit() {
-
     let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
-
     this.form = this.buildApplicationForm();
 
     this.form.get('representativeInformation').patchValue({
@@ -198,7 +194,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   getFormGroupName(groupIndex: any) {
-    let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
+    let elements: Array<string> = ['introduction', 'personalInformation', 'victimInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     return elements[groupIndex];
   }
 
@@ -214,7 +210,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   gotoNextStep(stepper: MatStepper): void {
-//    console.log(this.currentFormStep);
     if (stepper != null) {
       var desiredFormIndex = stepper.selectedIndex;
       var formGroupName = this.getFormGroupName(desiredFormIndex);
@@ -269,20 +264,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     });
   }
   
-  addEmployer(): void {
-    this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
-    this.employerItems.push(this.createEmployerItem());
-    this.showAddEmployer = this.employerItems.length < 5;
-    this.showRemoveEmployer = this.employerItems.length > 1;
-  }
-
-  removeEmployer(index: number): void {
-    this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
-    this.employerItems.removeAt(index);
-    this.showAddEmployer = this.employerItems.length < 5;
-    this.showRemoveEmployer = this.employerItems.length > 1;
-  }
-
   createEmployerItem(): FormGroup {
     return this.fb.group({
       employerName: [''],
@@ -410,16 +391,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     let formData = <DynamicsApplicationModel> {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
+      VictimInformation: this.form.get('victimInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
       MedicalInformation: this.form.get('medicalInformation').value,
       ExpenseInformation: this.form.get('expenseInformation').value,
-      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value,
       RepresentativeInformation: this.form.get('representativeInformation').value,
       DeclarationInformation: this.form.get('declarationInformation').value,
       AuthorizationInformation: this.form.get('authorizationInformation').value,
     };
-    //console.log(formData);
-    console.log(JSON.stringify(formData));
+    console.log(formData);
+    //console.log(JSON.stringify(formData));
   }
 
   save(): Subject<boolean> {
@@ -427,10 +408,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     const formData = <DynamicsApplicationModel>{
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
+      VictimInformation: this.form.get('victimInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
       MedicalInformation: this.form.get('medicalInformation').value,
       ExpenseInformation: this.form.get('expenseInformation').value,
-      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value,
       RepresentativeInformation: this.form.get('representativeInformation').value,
       DeclarationInformation: this.form.get('declarationInformation').value,
       AuthorizationInformation: this.form.get('authorizationInformation').value,
@@ -467,8 +448,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         dateOfNameChange: [''],
 
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
+        relationshipToVictim: [0, [Validators.required, Validators.min(100000000), Validators.max(100000004)]],
+        relationshipToVictimOther: [''],
+
         birthDate: ['', [Validators.required]],
-        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
+
         sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
         sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
         sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
@@ -500,6 +484,40 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           country: [{ value: 'Canada', disabled: false }],
         }),
       }),
+      victimInformation: this.fb.group({
+        firstName: ['', Validators.required],
+        middleName: [''],
+        lastName: ['', Validators.required],
+
+        iHaveOtherNames: [''],
+        otherFirstName: [''],
+        otherLastName: [''],
+        dateOfNameChange: [''],
+
+        gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
+        birthDate: ['', [Validators.required]],
+        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
+        sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        occupation: [''],
+
+        phoneNumber: [''],
+        alternatePhoneNumber: [''],
+        email: [''],
+
+        // Bind a subscribe event on this field being true. Change victim primary address when applicant address changes
+        mostRecentMailingAddressSameAsPersonal: ['', Validators.required],
+
+        primaryAddress: this.fb.group({
+          line1: ['', Validators.required],
+          line2: [''],
+          city: ['', Validators.required],
+          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+      }),
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
 
@@ -509,6 +527,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         crimePeriodEnd: [''],
         applicationFiledWithinOneYearFromCrime: [''],
         whyDidYouNotApplySooner: [''],
+
+        victimDeceasedFromCrime: ['', Validators.required],
+        dateOfDeath: [''],
 
         crimeLocation: [''],  // REMOVE AFTER DEMO
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
@@ -581,18 +602,32 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         otherTreatments: this.fb.array([this.createTreatmentItem()]),
       }),
       expenseInformation: this.fb.group({
-        haveMedicalExpenses: [false],
-        haveDentalExpenses: [false],
-        havePrescriptionDrugExpenses: [false],
         haveCounsellingExpenses: [false],
-        haveLostEmploymentIncomeExpenses: [false],
-        havePersonalPropertyLostExpenses: [false],
-        haveProtectiveMeasureExpenses: [false],
-        haveDisabilityExpenses: [false],
-        haveCrimeSceneCleaningExpenses: [false],
-        haveOtherExpenses: [false],
-        otherSpecificExpenses: [''],
+        haveCounsellingTransportation: [false],
+        havePrescriptionDrugExpenses: [false],
 
+        // Additional Expenses
+        haveVocationalServicesExpenses: [false],
+        haveIncomeSupportExpenses: [false],
+        haveChildcareExpenses: [false],
+        haveLegalProceedingExpenses: [false],
+        haveFuneralExpenses: [false],
+        haveBereavementLeaveExpenses: [false],
+        haveLostOfParentalGuidanceExpenses: [false],
+        haveHomeMakerExpenses: [false],
+        haveCrimeSceneCleaningExpenses: [false],
+        noneOfTheAboveExpenses: [''],
+
+        missedWorkDueToDeathOfVictim: ['', Validators.required],
+
+        didYouLoseWages: [''], //, Validators.required],
+        daysWorkMissedStart: [''], //, Validators.required],
+        daysWorkMissedEnd: [''],
+
+        employers: this.fb.array([this.createEmployerItem()]),
+        mayContactEmployer: [''],
+
+        // Other Benefits
         haveDisabilityPlanBenefits: [false],
         haveEmploymentInsuranceBenefits: [false],
         haveIncomeAssistanceBenefits: [false],
@@ -602,21 +637,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
-      }),
-      employmentIncomeInformation: this.fb.group({
-        wereYouEmployedAtTimeOfCrime: [0], //, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // 100000000 = Yes, 1000000001 = No, 100000002 = Self-Employed
-        wereYouAtWorkAtTimeOfIncident: [''], //, Validators.required],
-        haveYouAppliedForWorkersCompensation: [''],//, Validators.required],
-        workersCompensationClaimNumber: [''],
-        didYouMissWorkDueToCrime: [''], //, Validators.required],
-        daysWorkMissedStart: [''], //, Validators.required],
-        daysWorkMissedEnd: [''],
-        didYouLoseWages: [''], //, Validators.required],
-
-        areYouSelfEmployed: [''],
-        employers: this.fb.array([this.createEmployerItem()]),
-
-        mayContactEmployer: [''],
       }),
 
       representativeInformation: this.fb.group({

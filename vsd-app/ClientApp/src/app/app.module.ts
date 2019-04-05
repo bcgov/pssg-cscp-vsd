@@ -50,7 +50,6 @@ import { AdoxioLegalEntityDataService } from './services/adoxio-legal-entity-dat
 import { AdoxioLicenseDataService } from './services/adoxio-license-data.service';
 import { PaymentDataService } from './services/payment-data.service';
 import { AppComponent } from './app.component';
-import { GeneralDataService } from './general-data.service';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { DynamicsDataService } from './services/dynamics-data.service';
 import { StaticComponent } from './static/static.component';
@@ -65,6 +64,8 @@ import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefits.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { VictimReviewComponent } from './victim-application/victim-review.component';
+import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
+import { IfmReviewComponent } from './ifm-application/ifm-review.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
@@ -95,6 +96,8 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     SummaryOfBenefitsDialog,
     VictimApplicationComponent,
     VictimReviewComponent,
+    IfmApplicationComponent,
+    IfmReviewComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
     SubmitInvoiceComponent,
@@ -207,7 +210,6 @@ import { SignaturePadModule } from 'angular2-signaturepad';
   providers: [
     CookieService,
     DynamicsDataService,
-    GeneralDataService,
     SurveyDataService,
     UserDataService,
     AliasDataService,

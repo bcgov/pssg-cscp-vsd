@@ -31,29 +31,27 @@ namespace Gov.Jag.VictimServices.Public.Controllers
         [HttpPost("saveapplication")]
         public async Task<IActionResult> SaveApplication([FromBody] ApplicationModel model)
         {
-            //            _logger.LogInformation(LoggingEvents.HttpPut, "Begin method " + this.GetType().Name + "." + MethodBase.GetCurrentMethod().ReflectedType.Name);
-            //            _logger.LogDebug(LoggingEvents.HttpPut, "Account parameter: " + JsonConvert.SerializeObject(model));
-            
             if (model == null)
             {
                 if (ModelState.ErrorCount > 0)
                 {
                     var errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
-                    return new JsonResult(new { IsSuccess = false, Status = "Application Save", Message = "Errors in binding: " + string.Join(Environment.NewLine, errors) });
+                    return new JsonResult(new { IsSuccess = false, Status = "Application Save Error", Message = "Errors in binding: " + string.Join(Environment.NewLine, errors) });
                 }
                 else
                 {
-                    return new JsonResult(new { IsSuccess = false, Status = "Application Save Test", Message = "Error: Model is null." });
+                    return new JsonResult(new { IsSuccess = false, Status = "Application Save Error", Message = "Error: Model is null." });
                 }
             }
 
             var t = Task.Run(() => CreateCaseAction(_configuration, model));
             t.Wait();
 
-            var result = new { Status = "Application Save", Message = t.Result };
+            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
+            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Application Save", Message = dynamicsResponse.Result };
             return new JsonResult(result);
         }
-        
+
         [HttpGet("getdata")]
         public ActionResult Sample()
         {
@@ -99,14 +97,14 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                     if (model.PersonalInformation != null)
                     {
                         // Override default properties with values we know are being set -- Temporary demo patch
-//                        if (!string.IsNullOrWhiteSpace(model.PersonalInformation.firstName))
-                            application.Application.VsdApplicantsfirstname = model.PersonalInformation.firstName;
+                        //                        if (!string.IsNullOrWhiteSpace(model.PersonalInformation.firstName))
+                        application.Application.VsdApplicantsfirstname = model.PersonalInformation.firstName;
 
                         if (!string.IsNullOrWhiteSpace(model.PersonalInformation.middleName))
                             application.Application.VsdApplicantsmiddlename = model.PersonalInformation.middleName;
 
-//                        if (!string.IsNullOrWhiteSpace(model.PersonalInformation.lastName))
-                            application.Application.VsdApplicantslastname = model.PersonalInformation.lastName;
+                        //                        if (!string.IsNullOrWhiteSpace(model.PersonalInformation.lastName))
+                        application.Application.VsdApplicantslastname = model.PersonalInformation.lastName;
 
                         if (!string.IsNullOrWhiteSpace(model.PersonalInformation.otherFirstName))
                             application.Application.VsdApplicantsotherfirstname = model.PersonalInformation.otherFirstName;
@@ -122,7 +120,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                             application.Application.VsdApplicantsemail = model.PersonalInformation.email;
 
                         if (!string.IsNullOrWhiteSpace(model.PersonalInformation.sinPart1) && !string.IsNullOrWhiteSpace(model.PersonalInformation.sinPart2) && !string.IsNullOrWhiteSpace(model.PersonalInformation.sinPart3))
-                            application.Application.VsdApplicantssocialinsurancenumber = $"{ model.PersonalInformation.sinPart1 }-{ model.PersonalInformation.sinPart2 }-{ model.PersonalInformation.sinPart3}";;
+                            application.Application.VsdApplicantssocialinsurancenumber = $"{ model.PersonalInformation.sinPart1 }-{ model.PersonalInformation.sinPart2 }-{ model.PersonalInformation.sinPart3}"; ;
 
                         if (model.PersonalInformation.birthDate.HasValue)
                             application.Application.VsdApplicantsbirthdate = model.PersonalInformation.birthDate.Value;
@@ -223,13 +221,13 @@ namespace Gov.Jag.VictimServices.Public.Controllers
             {
                 OdataType = "Microsoft.Dynamics.CRM.vsd_application",
                 VsdApplicanttype = 100000002,
-//                VsdApplicantsfirstname = "CVAP DEV",
-//                VsdApplicantslastname = "Form Test",
+                //                VsdApplicantsfirstname = "CVAP DEV",
+                //                VsdApplicantslastname = "Form Test",
                 //VsdApplicantsbirthdate = "1982-05-05T00:00:00",
-//                VsdApplicantsbirthdate = new DateTime(1983, 6, 4), //"1982-05-05T00:00:00",
-//                VsdApplicantsgendercode = 100000000,
-//                VsdApplicantsmaritalstatus = 100000000,
-//                VsdCvapTypeofcrime = "Break-in",
+                //                VsdApplicantsbirthdate = new DateTime(1983, 6, 4), //"1982-05-05T00:00:00",
+                //                VsdApplicantsgendercode = 100000000,
+                //                VsdApplicantsmaritalstatus = 100000000,
+                //                VsdCvapTypeofcrime = "Break-in",
                 VsdApplicantsemail = "test@test.com",
                 VsdApplicantsprimaryphonenumber = "250-444-5656",
 
@@ -259,6 +257,15 @@ namespace Gov.Jag.VictimServices.Public.Controllers
                     }
                 };
             return application;
+        }
+
+        // Sample error result
+        // "message": "{\"@odata.context\":\"https://victimservicesdev.api.crm3.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.vsd_CreateCVAPClaimResponse\",\"IsSuccess\":false,\"Result\":\"Error: Applicant's First Name is required..\"}"
+        internal class DynamicsResponse
+        {
+            public string odatacontext { get; set; }
+            public bool IsSuccess { get; set; }
+            public string Result { get; set; }
         }
     }
 }

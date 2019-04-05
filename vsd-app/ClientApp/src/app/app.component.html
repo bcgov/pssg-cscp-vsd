@@ -25,20 +25,20 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav mr-auto">
-                                <li class="nav-item">
-                                    <a (click)="toggleButton.click()" tabindex="2" routerLink="/victim-application" title="Home">Victim Application</a>
-                                </li>
+                          <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                              <a (click)="toggleButton.click()" tabindex="2" routerLink="/victim-application" title="Home">Victim Application</a>
+                            </li>
                                 <!--<li class="nav-item">
-                                    <a (click)="toggleButton.click()" tabindex="2" routerLink="/wtiness-application" title="Home">Witness Application</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a (click)="toggleButton.click()" tabindex="2" routerLink="/family-member-application">Family Member Application</a>
-                                </li>-->
-                                <li class="nav-item">
-                                    <a (click)="toggleButton.click()" tabindex="2" routerLink="/submit-invoice">Submit Invoice</a>
-                                </li>
-                            </ul>
+          <a (click)="toggleButton.click()" tabindex="2" routerLink="/wtiness-application" title="Home">Witness Application</a>
+      </li>-->
+                            <li class="nav-item">
+                                <a (click)="toggleButton.click()" tabindex="2" routerLink="/ifm-application">Family Member Application</a>
+                            </li>
+                            <li class="nav-item">
+                              <a (click)="toggleButton.click()" tabindex="2" routerLink="/submit-invoice">Submit Invoice</a>
+                            </li>
+                          </ul>
                         </div>
                     </nav>
                 </div>
@@ -51,9 +51,6 @@
                 <router-outlet></router-outlet>
             </div>
         </main>
-      <style type="text/css">
-
-      </style>
       <app-quick-exit></app-quick-exit>
     </div>
 

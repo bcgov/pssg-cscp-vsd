@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-quick-exit',
@@ -23,10 +24,10 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   ],
 })
 export class QuickExitComponent implements OnInit {
-
   isOpen = true;
 
-  constructor() {
+  constructor(@Inject(DOCUMENT) private document: any) {
+
   }
 
   ngOnInit() {
@@ -36,7 +37,7 @@ export class QuickExitComponent implements OnInit {
   }
 
   closeEverything() {
-    console.log('Close down the site');
+    this.document.location.href = 'https://www.google.ca';
   }
 
   openSlide() {
