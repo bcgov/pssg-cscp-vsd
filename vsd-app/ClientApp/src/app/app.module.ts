@@ -66,6 +66,8 @@ import { VictimApplicationComponent } from './victim-application/victim-applicat
 import { VictimReviewComponent } from './victim-application/victim-review.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
 import { IfmReviewComponent } from './ifm-application/ifm-review.component';
+import { WitnessApplicationComponent } from './witness-application/witness-application.component';
+import { WitnessReviewComponent } from './witness-application/witness-review.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
@@ -98,6 +100,8 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     VictimReviewComponent,
     IfmApplicationComponent,
     IfmReviewComponent,
+    WitnessApplicationComponent,
+    WitnessReviewComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
     SubmitInvoiceComponent,

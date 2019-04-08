@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { BenefitList } from './benefit-list';
+import { BenefitLists } from './benefit-list';
 @Component({
   selector: 'app-summary-of-benefits-dialog',
   templateUrl: './summary-of-benefits.component.html',
@@ -8,9 +8,14 @@ import { BenefitList } from './benefit-list';
 })
 export class SummaryOfBenefitsDialog implements OnInit {
 
-  benefitList = BenefitList;
+  benefitList = BenefitLists.BenefitList;
+  applicationType: string;
 
-  constructor(public dialogRef: MatDialogRef<SummaryOfBenefitsDialog>) {
+  showVictimBenefits : boolean = false;
+  showFamilyBenefits : boolean = false;
+  showWitnessBenefits : boolean = false;
+  
+  constructor(public dialogRef: MatDialogRef<SummaryOfBenefitsDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   closeMe(): void {
@@ -18,5 +23,20 @@ export class SummaryOfBenefitsDialog implements OnInit {
   }
     
   ngOnInit() {
+
+    this.applicationType = this.data;
+    console.log(this.data);
+    console.log(this.applicationType);
+
+    if (this.applicationType == 'victim') {
+      this.benefitList = BenefitLists.VictimBenefitList;
+    }
+    if (this.applicationType == 'ifm') {
+      this.benefitList = BenefitLists.IfmBenefitList;
+    }
+    if (this.applicationType == 'witness') {
+      this.benefitList = BenefitLists.WitnessBenefitList;
+    }
+
   }
 }

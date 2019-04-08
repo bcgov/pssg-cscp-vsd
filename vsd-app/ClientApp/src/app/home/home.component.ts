@@ -81,7 +81,7 @@ export class HomeComponent extends FormBase implements OnInit {
           routeUrl = '/ifm-application';
           break;
         case 100000000:
-          routeUrl = '/victim-application';
+          routeUrl = '/witness-application';
           break;
       }
 

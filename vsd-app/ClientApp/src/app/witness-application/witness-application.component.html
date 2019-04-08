@@ -3,7 +3,7 @@
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter">
       <section class="application-nav">
-        <h3>Immediate Family Member Application</h3>
+        <h3>Witness Application</h3>
         <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
           <ng-template matStepperIcon="edit">
             <mat-icon>done</mat-icon>
@@ -49,8 +49,8 @@
             <h2>Before you apply</h2>
             <h3>Who may use this application?</h3>
 
-            <p>This application form is designed for a Immediate Family Member of an injured or deceased victim . Under the <em>Crime Victim Assistance Act</em>, a Victim is a person who is injured physically or psychologically as a result of certain crimes committed in British Columbia.</p>
-            <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/victim-application">Victims</a>.</p>
+            <p>This application form is designed for a Witness of an injured or deceased victim. Under the <em>Crime Victim Assistance Act</em>, a Victim is a person who is injured physically or psychologically as a result of certain crimes committed in British Columbia.</p>
+            <p>If this definition does not apply to you, please see the application forms for <a routerLink="/ifm-application">Immediate Family Members</a> or <a routerLink="/victim-application">Victims</a>.</p>
 
             <h3>What types of benefits does the Crime Victim's Assistance Program provide?</h3>
 
@@ -59,11 +59,7 @@
               <li>counselling</li>
               <li>prescription drug expenses</li>
               <li>transportation and related expenses</li>
-              <li>funeral expenses</li>
-              <li>bereavement leave</li>
-              <li>income support</li>
               <li>crime scene cleaning</li>
-              <li>loss of parental guidance</li>
             </ul>
 
             <h3>The Crime Victim Assistance Program will NOT cover:</h3>
@@ -191,33 +187,6 @@
             </div>
 
             <h3>Other Details</h3>
-
-            <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('personalInformation.relationshipToVictim')" errorMessage="Please select a relationship">
-              <label class="inline-label">
-                <input type="radio" [value]="100000000" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Spouse</span>
-              </label>
-              <label class="inline-label">
-                <input type="radio" [value]="100000001" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Parent/Guardian</span>
-              </label>
-              <label class="inline-label">
-                <input type="radio" [value]="100000002" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Child</span>
-              </label>
-              <label class="inline-label">
-                <input type="radio" [value]="100000003" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Sibling</span>
-              </label>
-              <label class="inline-label">
-                <input type="radio" [value]="100000004" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Other</span>
-              </label>
-              <label class="inline-label" *ngIf="form.get('personalInformation.relationshipToVictim').value === 100000004">
-                <span>Please specify</span>
-                <input type="text" name="relationshipToVictimOther" formControlName="relationshipToVictimOther">
-              </label>
-            </app-field>
 
             <app-field label="Gender" [required]="true" [valid]="isFieldValid('personalInformation.gender')" errorMessage="Please select your gender">
               <label class="inline-label">
@@ -1090,68 +1059,20 @@
                   </label>
                 </app-field>
 
-                <ng-template #benefitsCounsellingTransportation><h3>Transportation to obtain counselling</h3><p>For Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p><p>Also for Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death.</p><p><strong>Examples:</strong></p><ul><li>Transportation expenses such as bus fare, air fare, mileage expenses</li><li>Meals and accommodation</li><li>Childcare while attending appointments</li></ul></ng-template>
-                <ng-template #benefitsPrescription><h3>Prescription Drug Expenses</h3><p>For Immediate Family Members who need prescription drugs to recover from the psychological injury caused by the crime</p><p><strong>Examples:</strong></p><ul><li>Medications prescribed by a doctor</li></ul></ng-template>
-                <ng-template #benefitsCounselling><h3>Counselling</h3><p>For Immediate Family Members who need counselling to recover from the psychological injury caused by the crime</p><p><strong>Examples:</strong></p><ul><li>Counselling Sessions</li></ul></ng-template>
+                <ng-template #benefitsCounsellingTransportation><h3>Transportation to obtain counselling</h3><p>Witnesses who have to travel some distance to obtain counselling services provided as crime victim assistance benefits.</p><p><strong>Examples:</strong></p><ul><li>Transportation expenses such as bus fare, air fare, mileage expenses</li><li>Meals and accommodation</li><li>Childcare while attending appointments</li></ul></ng-template>
+                <ng-template #benefitsPrescription><h3>Prescription Drug Expenses</h3><p>Witnesses who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Medications prescribed by a doctor, dentist, or podiatrist</li></ul></ng-template>
+                <ng-template #benefitsCounselling><h3>Counselling</h3><p>For Witnesses who need counselling to recover from the psychological injury caused by the crime</p><p><strong>Examples:</strong></p><ul><li>Counselling Sessions</li></ul></ng-template>
               </div>
             </section>
-            
+
             <section *ngIf="form.get('crimeInformation.victimDeceasedFromCrime').value == true">
               <h2 class="blue-header">Additional Benefits</h2>
               <p>If the victim is deceased as a result of the crime, please indicate which additional expenses or benefits you wish to claim (at least one is required):</p>
               <div class="radio-list">
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveVocationalServicesExpenses" formControlName="haveVocationalServicesExpenses">
-                    Vocational services or training <app-tool-tip [trigger]="expensesVocational"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveIncomeSupportExpenses" formControlName="haveIncomeSupportExpenses">
-                    Income support <app-tool-tip [trigger]="expensesIncomeSupport"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveChildcareExpenses" formControlName="haveChildcareExpenses">
-                    Childcare <app-tool-tip [trigger]="expensesChildCare"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveLegalProceedingExpenses" formControlName="haveLegalProceedingExpenses">
-                    Transportation to attend legal proceedings <app-tool-tip [trigger]="expensesLegalTransportation"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveFuneralExpenses" formControlName="haveFuneralExpenses">
-                    Funeral expenses <app-tool-tip [trigger]="expensesFuneral"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveBereavementLeaveExpenses" formControlName="haveBereavementLeaveExpenses">
-                    Bereavement leave <app-tool-tip [trigger]="expensesBereavementLeave"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveLostOfParentalGuidanceExpenses" formControlName="haveLostOfParentalGuidanceExpenses">
-                    Loss of parental guidance <app-tool-tip [trigger]="expensesParentalLoss"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveHomeMakerExpenses" formControlName="haveHomeMakerExpenses">
-                    Homemaker services <app-tool-tip [trigger]="expensesHomemakerServices"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
                     <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses">
-                    Crime scene cleaning <app-tool-tip [trigger]="expensesFamilyCrimeSceneCleaning"></app-tool-tip>
+                    Crime scene cleaning <app-tool-tip [trigger]="expensesWitnessCrimeSceneCleaning"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
@@ -1161,15 +1082,8 @@
                   </label>
                 </app-field>
               </div>
-              <ng-template #expensesVocational><h3>Vocational Services or Training</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li><li>Medical equipment and supplies</li></ul></ng-template>
-              <ng-template #expensesIncomeSupport><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesChildCare><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesLegalTransportation><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesFuneral><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesBereavementLeave><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesParentalLoss><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesHomemakerServices><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesFamilyCrimeSceneCleaning><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
+
+              <ng-template #expensesWitnessCrimeSceneCleaning><h3>Crime Scene Cleaning</h3><h2>NEED FINAL TEXT</h2><p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p><p><strong>Examples:</strong></p><ul><li>Specialized cleaning and disinfecting of contaminated areas</li><li>Replacement of contaminated flooring, wall covering, or other built-in features</li></ul></ng-template>
 
               <p>The following section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
               <h2 class="blue-header">Income Loss Information</h2>
@@ -1436,7 +1350,7 @@
               <app-field [required]="true" [valid]="isFieldValid('declarationInformation.declaredAndSigned')" errorMessage="Please check declaration">
                 <label>
                   <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
-                  I submit this application in support of a claim for benefits available to Immediate Family Members under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
+                  I submit this application in support of a claim for benefits available to Witnesses under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
                 </label>
               </app-field>
 
@@ -1569,7 +1483,7 @@
               <h1>Review & Submit</h1>
             </div>
             <p>Please check the accuracy of the information entered in your application before submitting.</p>
-            <app-ifm-review [group]="form" [parentStepper]="stepper"></app-ifm-review>
+            <app-witness-review [group]="form" [parentStepper]="stepper"></app-witness-review>
           </div>
 
           <div *ngIf="stepper.selectedIndex == 9 && formFullyValidated === false" class="error-summary">
