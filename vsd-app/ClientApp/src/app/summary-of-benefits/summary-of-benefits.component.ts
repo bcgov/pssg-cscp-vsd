@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BenefitLists } from './benefit-list';
 @Component({
@@ -8,7 +8,7 @@ import { BenefitLists } from './benefit-list';
 })
 export class SummaryOfBenefitsDialog implements OnInit {
 
-  benefitList = BenefitLists.BenefitList;
+  benefitList: any;
   applicationType: string;
 
   showVictimBenefits : boolean = false;
@@ -23,20 +23,18 @@ export class SummaryOfBenefitsDialog implements OnInit {
   }
     
   ngOnInit() {
-
     this.applicationType = this.data;
-    console.log(this.data);
-    console.log(this.applicationType);
 
     if (this.applicationType == 'victim') {
       this.benefitList = BenefitLists.VictimBenefitList;
     }
+
     if (this.applicationType == 'ifm') {
       this.benefitList = BenefitLists.IfmBenefitList;
     }
+
     if (this.applicationType == 'witness') {
       this.benefitList = BenefitLists.WitnessBenefitList;
     }
-
   }
 }
