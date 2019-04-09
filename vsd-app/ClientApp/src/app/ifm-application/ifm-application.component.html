@@ -31,11 +31,7 @@
           <p><button class="btn btn-secondary" (click)="showSummaryOfBenefits()">View Summary of Benefits</button></p>
         </div>
       </section>
-            <a (click)="testSnaks()">Show Form Data</a><br /><br />
-      <!--  <p>
-      <a href="#" (click)="testSnaks()">Show Form Data</a><br /><br />
-      <button (click)="markAsTouched(); submitPartialApplication();" class="btn btn-primary">Partial Submit <i class="fas fa-chevron-right"></i></button>
-    </p>-->
+      <a (click)="debugFormData()">Show Form Data</a><br /><br />
     </div>
 
     <div class="col-lg-7 col-sm-12">
@@ -1161,15 +1157,15 @@
                   </label>
                 </app-field>
               </div>
-              <ng-template #expensesVocational><h3>Vocational Services or Training</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li><li>Medical equipment and supplies</li></ul></ng-template>
-              <ng-template #expensesIncomeSupport><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesChildCare><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesLegalTransportation><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesFuneral><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesBereavementLeave><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesParentalLoss><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesHomemakerServices><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
-              <ng-template #expensesFamilyCrimeSceneCleaning><h3>Expense</h3><p>Description</p><p><strong>Examples:</strong></p><ul><li>ONE</li><li>TWO</li><li>THREE</li></ul></ng-template>
+              <ng-template #expensesVocational><h3>Vocational services or expenses</h3><p>Spouses of deceased victims who need training or education to prepare for employment or improve their earning capacity (and who are eligible for income support benefits from CVAP)</p><p><strong>Examples:</strong></p><ul><li>Education and training courses</li><li>Programs to improve skills and qualifications</li><li>Programs to prepare for, or find, employment</li></ul></ng-template>
+              <ng-template #expensesIncomeSupport><h3>Income support</h3><p>Spouses of deceased victim</p><p>Children of deceased victims</p><p>Other immeditate family members of deceased victims if they were financially dependent on the victim</p><p><strong>Examples:</strong></p><ul><li>Monthly payments to assist in financially supporting the immediate family member</li></ul></ng-template>
+              <ng-template #expensesChildCare><h3>Childcare services or expenses (see also under transportation)</h3><p>Spouses of deceased victims who need to pay for childcare because there is no one in the household to share this responsibility</p><p><strong>Examples:</strong></p><ul><li>Childcare</li></ul></ng-template>
+              <ng-template #expensesLegalTransportation><h3>Transportation and related expenses, and transportation related childcare</h3><p>Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p><p>Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death</p><p><strong>Examples:</strong></p><ul><li>Transportation expenses such as bus fare, air fare, mileage expenses</li><li>Meals and accommodation</li><li>Childcare while attending appointments</li></ul></ng-template>
+              <ng-template #expensesFuneral><h3>Funeral Expenses</h3><p>Immediate Family Members of deceased victims who have to pay for funeral and related costs</p><p><strong>Examples:</strong></p><ul><li>Costs involved in the funeral service, burial, cremation or related ceremony</li></ul></ng-template>
+              <ng-template #expensesBereavementLeave><h3>Bereavement leave</h3><p>Immediate Family Members of deceased victims who lose earnings from taking time off work for the funeral or other matters related to the victim’s death</p><p><strong>Examples:</strong></p><ul><li>An amount to help offset the loss of earnings</li></ul></ng-template>
+              <ng-template #expensesParentalLoss><h3>Loss of parental guidance for a minor child</h3><p>Children of deceased victims who were under 19 when their parent was killed</p><p><strong>Examples:</strong></p><ul><li>A set amount as a contribution toward loss of parental guidance</li></ul></ng-template>
+              <ng-template #expensesHomemakerServices><h3>Homemaker services or expenses</h3><p>Spouses of deceased victims who need to pay for homemaker services because there is no one in the household to share household tasks</p><p><strong>Examples:</strong></p><ul><li>Help with shopping, cleaning, cooking, and other household tasks</li></ul></ng-template>
+              <ng-template #expensesFamilyCrimeSceneCleaning><h3>Crime scene cleaning</h3><p>Immediate Family Members of deceased victims who need specialized cleaning of the victim’s home or vehicle, or their own home or vehicle, because the crime was committed there</p><p><strong>Examples:</strong></p><ul><li>Specialized cleaning and disinfecting of contaminated areas</li><li>Replacement of contaminated flooring, wall covering, or other built-in features</li></ul></ng-template>
 
               <p>The following section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
               <h2 class="blue-header">Income Loss Information</h2>
@@ -1579,7 +1575,7 @@
 
           <section class="button-container">
             <div [ngBusy]="[busy3]"></div>
-            <a routerLink="/application-cancelled"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+            <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
             <span style="float: right;">
               <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
               <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>

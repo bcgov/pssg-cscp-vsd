@@ -92,7 +92,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.form = this.buildInvoiceForm();
   }
   
-  testSnaks(): void {
+  debugFormData(): void {
     let formData = {
       InvoiceDetails: this.form.get('invoiceDetails').value
     };

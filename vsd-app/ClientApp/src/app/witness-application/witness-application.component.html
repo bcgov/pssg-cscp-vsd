@@ -31,11 +31,7 @@
           <p><button class="btn btn-secondary" (click)="showSummaryOfBenefits()">View Summary of Benefits</button></p>
         </div>
       </section>
-            <a (click)="testSnaks()">Show Form Data</a><br /><br />
-      <!--  <p>
-      <a href="#" (click)="testSnaks()">Show Form Data</a><br /><br />
-      <button (click)="markAsTouched(); submitPartialApplication();" class="btn btn-primary">Partial Submit <i class="fas fa-chevron-right"></i></button>
-    </p>-->
+      <a (click)="debugFormData()">Show Form Data</a><br /><br />
     </div>
 
     <div class="col-lg-7 col-sm-12">
@@ -1493,7 +1489,7 @@
 
           <section class="button-container">
             <div [ngBusy]="[busy3]"></div>
-            <a routerLink="/application-cancelled"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+            <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
             <span style="float: right;">
               <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
               <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>

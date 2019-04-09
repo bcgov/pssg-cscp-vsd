@@ -334,6 +334,36 @@ export class FormBase {
     control.setValue('');
     control.setValue(value.trim());
   }
+
+  copyPersonalAddressToVictimAddress() {
+    let copyAddress = this.form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value === true;
+    let target = this.form.get('victimInformation.primaryAddress');
+    let source = this.form.get('personalInformation.primaryAddress');
+
+    if (copyAddress) {
+      target.get('line1').patchValue(source.get('line1').value);
+      target.get('line2').patchValue(source.get('line2').value);
+      target.get('city').patchValue(source.get('city').value);
+      target.get('postalCode').patchValue(source.get('postalCode').value);
+      target.get('province').patchValue(source.get('province').value);
+      target.get('country').patchValue(source.get('country').value);
+
+      target.get('line1').disable();
+      target.get('line2').disable();
+      target.get('city').disable();
+      target.get('postalCode').disable();
+      target.get('province').disable();
+      target.get('country').disable();
+    }
+    else {
+      target.get('line1').enable();
+      target.get('line2').enable();
+      target.get('city').enable();
+      target.get('postalCode').enable();
+      target.get('province').enable();
+      target.get('country').enable();
+    }
+  }
 }
 // More custom validation
 // https://stackoverflow.com/questions/38204812/angular2-forms-validator-with-interrelated-fields/40416197#40416197

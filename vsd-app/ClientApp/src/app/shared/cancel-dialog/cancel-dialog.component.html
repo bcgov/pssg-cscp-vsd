@@ -1,0 +1,13 @@
+<mat-dialog-content>
+  <div class="summary-of-benefits">
+    <a (click)="closeMe()" class="float-right close-link">Close Window</a>
+    <h1>Cancel Application</h1>
+    <p><strong>Are you sure?</strong></p>
+    <p>Cancelling this application will result in the loss of all information you've entered so far</p>
+
+    <div class="button-container">
+      <button class="btn btn-secondary" (click)="closeMe()">No, take me back</button>
+      <button class="btn btn-primary float-right" (click)="cancelApplication()">Yes, Cancel Application</button>
+    </div>
+  </div>
+</mat-dialog-content>

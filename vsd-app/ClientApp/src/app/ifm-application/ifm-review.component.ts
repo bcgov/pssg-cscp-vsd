@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-// tslint:disable-next-line:no-duplicate-imports
 import { MatSnackBar } from '@angular/material';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';

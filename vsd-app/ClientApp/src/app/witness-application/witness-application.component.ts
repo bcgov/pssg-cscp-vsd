@@ -13,6 +13,7 @@ import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
+import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
@@ -169,6 +170,16 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
           control.updateValueAndValidity();
         }
       });
+
+    this.form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').valueChanges
+      .subscribe(value => {
+        this.copyPersonalAddressToVictimAddress();
+      });
+
+    this.form.get('personalInformation.primaryAddress').valueChanges
+      .subscribe(value => {
+        this.copyPersonalAddressToVictimAddress();
+      });
   }
 
   showSignPad(group, control): void {
@@ -188,9 +199,18 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     ); 
   }
 
+  verifyCancellation(): void {
+    const verifyDialogConfig = new MatDialogConfig();
+    verifyDialogConfig.disableClose = true;
+    verifyDialogConfig.autoFocus = true;
+    verifyDialogConfig.data = 'witness';
+
+    const verifyDialogRef = this.dialog.open(CancelApplicationDialog, verifyDialogConfig);
+  }
+
   showSummaryOfBenefits(): void {
-    const dialogConfig = new MatDialogConfig();
-    const dialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'witness' });
+    //const summaryDialogConfig = new MatDialogConfig();
+    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'witness' });
   }
 
   getFormGroupName(groupIndex: any) {
@@ -387,7 +407,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     }
   }
 
-  testSnaks(): void {
+  debugFormData(): void {
     let formData = <DynamicsApplicationModel> {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,

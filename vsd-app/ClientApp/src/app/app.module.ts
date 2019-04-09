@@ -51,17 +51,18 @@ import { AdoxioLicenseDataService } from './services/adoxio-license-data.service
 import { PaymentDataService } from './services/payment-data.service';
 import { AppComponent } from './app.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
-import { DynamicsDataService } from './services/dynamics-data.service';
+//import { DynamicsDataService } from './services/dynamics-data.service';
 import { StaticComponent } from './static/static.component';
 import { HomeComponent } from './home/home.component';
 import { SurveyDataService } from './services/survey-data.service';
 import { UserDataService } from './services/user-data.service';
 import { VersionInfoDataService } from './services/version-info-data.service';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { BusinessProfileComponent } from './business-information/business-profile/business-profile.component';
+//import { BusinessProfileComponent } from './business-information/business-profile/business-profile.component';
 import { AddressComponent } from './shared/address/address.component';
 import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefits.component';
+import { CancelApplicationDialog} from './shared/cancel-dialog/cancel-dialog.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { VictimReviewComponent } from './victim-application/victim-review.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
@@ -85,17 +86,18 @@ import { AliasDataService } from './services/alias-data.service';
 import { FieldComponent } from './shared/field/field.component';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
 import { ToolTipTriggerComponent } from './shared/tool-tip/tool-tip.component';
-import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
+//import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
 import { VersionInfoDialog } from './version-info/version-info.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BusinessProfileComponent,
+    //BusinessProfileComponent,
     AddressComponent,
     SignPadDialog,
     SummaryOfBenefitsDialog,
+    CancelApplicationDialog,
     VictimApplicationComponent,
     VictimReviewComponent,
     IfmApplicationComponent,
@@ -114,7 +116,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     FieldComponent,
     QuickExitComponent,
     ToolTipTriggerComponent,
-    ProfileSummaryComponent,
+    //ProfileSummaryComponent,
     TermsAndConditionsComponent,
     VersionInfoDialog,    
   ],
@@ -213,7 +215,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
   ],
   providers: [
     CookieService,
-    DynamicsDataService,
+    //DynamicsDataService,
     SurveyDataService,
     UserDataService,
     AliasDataService,
@@ -231,7 +233,8 @@ import { SignaturePadModule } from 'angular2-signaturepad';
   entryComponents: [
     VersionInfoDialog,
     SignPadDialog,
-    SummaryOfBenefitsDialog
+    SummaryOfBenefitsDialog,
+    CancelApplicationDialog
   ],
   bootstrap: [AppComponent]
 })

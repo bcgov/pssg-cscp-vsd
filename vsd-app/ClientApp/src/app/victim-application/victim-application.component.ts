@@ -13,6 +13,7 @@ import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
+import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
@@ -192,9 +193,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ); 
   }
 
+  verifyCancellation(): void {
+    const verifyDialogConfig = new MatDialogConfig();
+    verifyDialogConfig.disableClose = true;
+    verifyDialogConfig.autoFocus = true;
+    verifyDialogConfig.data = 'witness';
+
+    const verifyDialogRef = this.dialog.open(CancelApplicationDialog, verifyDialogConfig);
+  }
+
   showSummaryOfBenefits(): void {
-    const dialogConfig = new MatDialogConfig();
-    const dialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
+    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
   }
 
   getFormGroupName(groupIndex: any) {
@@ -404,7 +413,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     }
   }
 
-  testSnaks(): void {
+  debugFormData(): void {
     let formData = <DynamicsApplicationModel> {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
