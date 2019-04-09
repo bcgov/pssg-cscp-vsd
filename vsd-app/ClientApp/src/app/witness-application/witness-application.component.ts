@@ -399,8 +399,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       DeclarationInformation: this.form.get('declarationInformation').value,
       AuthorizationInformation: this.form.get('authorizationInformation').value,
     };
-    console.log(formData);
-    //console.log(JSON.stringify(formData));
+    //console.log(formData);
+    console.log(JSON.stringify(formData));
   }
 
   save(): Subject<boolean> {
@@ -574,7 +574,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
             country: [{ value: 'Canada', disabled: false }],
           }),
           signName: [''],
-          signDate: [''],  // REMOVE
           signature: [''],
         }),
       }),
@@ -607,14 +606,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         havePrescriptionDrugExpenses: [false],
 
         // Additional Expenses
-        haveVocationalServicesExpenses: [false],
-        haveIncomeSupportExpenses: [false],
-        haveChildcareExpenses: [false],
-        haveLegalProceedingExpenses: [false],
-        haveFuneralExpenses: [false],
-        haveBereavementLeaveExpenses: [false],
-        haveLostOfParentalGuidanceExpenses: [false],
-        haveHomeMakerExpenses: [false],
         haveCrimeSceneCleaningExpenses: [false],
         noneOfTheAboveExpenses: [''],
 

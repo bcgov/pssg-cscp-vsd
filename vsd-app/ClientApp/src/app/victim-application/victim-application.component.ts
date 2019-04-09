@@ -551,7 +551,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             country: [{ value: 'Canada', disabled: false }],
           }),
           signName: [''],
-          signDate: [''],  // REMOVE
           signature: [''],
         }),
       }),
