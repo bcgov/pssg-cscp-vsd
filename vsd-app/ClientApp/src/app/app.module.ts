@@ -58,7 +58,7 @@ import { SurveyDataService } from './services/survey-data.service';
 import { UserDataService } from './services/user-data.service';
 import { VersionInfoDataService } from './services/version-info-data.service';
 import { NotFoundComponent } from './not-found/not-found.component';
-//import { BusinessProfileComponent } from './business-information/business-profile/business-profile.component';
+import { BusinessProfileComponent } from './business-information/business-profile/business-profile.component';
 import { AddressComponent } from './shared/address/address.component';
 import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefits.component';
@@ -86,14 +86,14 @@ import { AliasDataService } from './services/alias-data.service';
 import { FieldComponent } from './shared/field/field.component';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
 import { ToolTipTriggerComponent } from './shared/tool-tip/tool-tip.component';
-//import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
+import { ProfileSummaryComponent } from './business-information/profile-summary/profile-summary.component';
 import { VersionInfoDialog } from './version-info/version-info.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 
 @NgModule({
   declarations: [
     AppComponent,
-    //BusinessProfileComponent,
+    BusinessProfileComponent,
     AddressComponent,
     SignPadDialog,
     SummaryOfBenefitsDialog,
@@ -116,7 +116,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     FieldComponent,
     QuickExitComponent,
     ToolTipTriggerComponent,
-    //ProfileSummaryComponent,
+    ProfileSummaryComponent,
     TermsAndConditionsComponent,
     VersionInfoDialog,    
   ],

@@ -250,13 +250,12 @@ export class FormBase {
 
     return control.value;
   }
-    
-  public multiValueOrEmpty(): string {
-    var args = Array.prototype.slice.call(arguments)
+
+  public multiValueOrEmpty(values: Array<string>): string {
     var output = [];
 
-    for (var i = 0; i < args.length; i++) {
-      var control = this.valueOrEmpty(args[i]);
+    for (var i = 0; i < values.length; i++) {
+      var control = this.valueOrEmpty(values[i]);
 
       if (control !== "--")
         output.push(control);
@@ -265,12 +264,10 @@ export class FormBase {
     return output.join(' ');
   }
       
-  public datesOrEmpty(): string {
-    var args = Array.prototype.slice.call(arguments)
+  public datesOrEmpty(values: Array<string>): string {
     var output = [];
-
-    for (var i = 0; i < args.length; i++) {
-      var control = this.valueOrEmpty(args[i]);
+    for (var i = 0; i < values.length; i++) {
+      var control = this.valueOrEmpty(values[i]);
 
       if (control !== "--") {
         let formattedDate = _moment(control).format('MMM Do, Y');

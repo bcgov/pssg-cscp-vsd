@@ -45,7 +45,7 @@
       </tr>
       <tr>
         <th>Date of Name Change</th>
-        <td>{{ datesOrEmpty('personalInformation.dateOfNameChange') }}</td>
+        <td>{{ datesOrEmpty(['personalInformation.dateOfNameChange']) }}</td>
       </tr>
     </tbody>
   </table>
@@ -71,7 +71,7 @@
       </tr>
       <tr>
         <th>Birth Date</th>
-        <td>{{ datesOrEmpty('personalInformation.birthDate') }}</td>
+        <td>{{ datesOrEmpty(['personalInformation.birthDate']) }}</td>
       </tr>
       <tr>
         <th>Social Insurance Number (SIN)</th>
@@ -178,7 +178,7 @@
       </tr>
       <tr>
         <th>Date of Name Change</th>
-        <td>{{ datesOrEmpty('victimInformation.dateOfNameChange') }}</td>
+        <td>{{ datesOrEmpty(['victimInformation.dateOfNameChange']) }}</td>
       </tr>
     </tbody>
   </table>
@@ -200,7 +200,7 @@
       </tr>
       <tr>
         <th>Birth Date</th>
-        <td>{{ datesOrEmpty('victimInformation.birthDate') }}</td>
+        <td>{{ datesOrEmpty(['victimInformation.birthDate']) }}</td>
       </tr>
       <tr>
         <th>Social Insurance Number (SIN)</th>
@@ -268,7 +268,7 @@
       <tr>
         <th>When did this crime occur?</th>
         <td>
-          {{ datesOrEmpty('crimeInformation.crimePeriodStart', 'crimeInformation.crimePeriodEnd') }}
+          {{ datesOrEmpty(['crimeInformation.crimePeriodStart', 'crimeInformation.crimePeriodEnd']) }}
         </td>
       </tr>
       <tr>
@@ -279,7 +279,7 @@
         <th>Why you did not apply sooner?</th>
         <td>{{ valueOrEmpty('crimeInformation.whyDidYouNotApplySooner') }} </td>
       </tr>
-      <tr *ngFor="let item of form.get('crimeInformation.crimeLocations').controls; let i = index;">
+      <tr *ngFor="let item of crimeLocations.controls; let i = index;">
         <th><span *ngIf="i <= 0">Crime Location(s)</span></th>
         <td>{{ item.get('location').value }}</td>
       </tr>
@@ -332,11 +332,11 @@
         </tr>
         <tr>
           <th>Date of report</th>
-          <td>{{ datesOrEmpty('crimeInformation.policeReportedDate', 'crimeInformation.policeReportedEndDate') }}</td>
+          <td>{{ datesOrEmpty(['crimeInformation.policeReportedDate', 'crimeInformation.policeReportedEndDate']) }}</td>
         </tr>
       </tbody>
     </table>
-    <table class="table table-striped review-table" *ngFor="let item of form.get('crimeInformation.policeReports').controls; let i = index">
+    <table class="table table-striped review-table" *ngFor="let item of policeReports.controls; let i = index">
       <tbody>
         <tr>
           <th>Police File Number</th>
@@ -355,7 +355,7 @@
     <tbody>
       <tr>
         <th>Offender Name</th>
-        <td>{{ multiValueOrEmpty('crimeInformation.offenderFirstName', 'crimeInformation.offenderMiddleName', 'crimeInformation.offenderLastName') }} </td>
+        <td>{{ multiValueOrEmpty(['crimeInformation.offenderFirstName', 'crimeInformation.offenderMiddleName', 'crimeInformation.offenderLastName']) }} </td>
       </tr>
       <tr>
         <th>Relationship to alleged offender</th>
@@ -376,7 +376,7 @@
       </tr>
     </tbody>
   </table>
-  <table class="table table-striped review-table" *ngFor="let item of form.get('crimeInformation.courtFiles').controls; let i = index">
+  <table class="table table-striped review-table" *ngFor="let item of courtFiles.controls; let i = index">
     <tbody>
       <tr>
         <th>Court File Number</th>
@@ -439,7 +439,7 @@
       </tr>
       <tr>
         <th>Date of treatment</th>
-        <td>{{ datesOrEmpty('medicalInformation.treatedAtHospitalDate') }}</td>
+        <td>{{ datesOrEmpty(['medicalInformation.treatedAtHospitalDate']) }}</td>
       </tr>
       <tr>
         <th>Do you have a medical doctor / clicnic who has been treating you for injuries resulting from the incident?</th>
@@ -455,7 +455,7 @@
       </tr>
       <tr>
         <th>Mailing Address</th>
-        <td>{{ multiValueOrEmpty('medicalInformation.familyDoctorAddressLine1', 'medicalInformation.familyDoctorAddressLine2') }} </td>
+        <td>{{ multiValueOrEmpty(['medicalInformation.familyDoctorAddressLine1', 'medicalInformation.familyDoctorAddressLine2']) }} </td>
       </tr>
       <tr>
         <th>Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?</th>
@@ -463,7 +463,7 @@
       </tr>
     </tbody>
   </table>
-  <table class="table table-striped review-table" *ngFor="let item of form.get('medicalInformation.otherTreatments').controls; let i = index">
+  <table class="table table-striped review-table" *ngFor="let item of otherMedicalTreatments.controls; let i = index">
     <tbody>
       <tr>
         <th>Type</th>
@@ -573,7 +573,7 @@
       </table>
 
       <h3>Income Loss Information</h3>
-      <table class="table table-striped review-table" *ngFor="let item of form.get('expenseInformation.employers').controls; let i = index">
+      <table class="table table-striped review-table" *ngFor="let item of employers.controls; let i = index">
         <tbody>
           <tr>
             <th>Name of Company/Organization</th>
@@ -703,7 +703,7 @@
       </tr>
       <tr>
         <th>Mailing Address</th>
-        <td>{{ multiValueOrEmpty('representativeInformation.representativeAddress.line1') }}</td>
+        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.line1') }}</td>
       </tr>
       <tr *ngIf="valueOrEmpty('representativeInformation.representativeAddress.line2') != '--'">
         <th></th>

@@ -5,14 +5,36 @@
 
       <section class="invoice-questions">
         <div class="submit-content">
-          <h3>Questions about Invoice Submission?</h3>
-          <p>Review the Invoice submission guidelines outlined before submitting. This will open a new window.</p>
-          <p><a [attr.href]="summaryOfBenefitsUrl" target="_blank" class="btn btn-secondary">Invoice Submission Guidelines <i class="fa fa-external-link"></i></a></p>
+          <h3>Questions about submitting invoices?</h3>
+          <p>Review the counselling guidelines outlined before submitting. This will open a new window.</p>
+          <p><a href="https://www2.gov.bc.ca/assets/gov/law-crime-and-justice/criminal-justice/bc-criminal-justice-system/if-victim/publications/cvap-counselling-guidelines.pdf" target="_blank" class="btn btn-secondary">Invoice Submission Guidelines <i class="fa fa-external-link"></i></a></p>
         </div>
       </section>
-      <a (click)="debugFormData()">Show Form Data</a><br /><br />
 
-      </div>
+      <section class="invoice-questions">
+        <div class="submit-content">
+          <h3>CVAP Contact Information</h3>
+          <p>
+            <strong>Office:</strong><br />
+            Toll-free - 1 866 660-3888
+          </p>
+          <p>
+            <strong>Office:</strong><br />
+            Lower Mainland - 604 660-3888
+          </p>
+          <p>
+            <strong>Mailing:</strong><br />
+            PO Box 5550 Station Terminal,<br />Vancouver, B.C.  V6B 1H1
+          </p>
+          <p>
+            <strong>Email:</strong><br />
+            <a href="mailto: cvap@gov.bc.ca">cvap@gov.bc.ca</a>
+          </p>
+        </div>
+      </section>
+
+      <a (click)="debugFormData()">Show Form Data</a><br /><br />
+    </div>
 
       <div class="col-lg-7 col-sm-12">
         <div [formGroup]="form">
@@ -22,9 +44,7 @@
                 <h1>Submit an Invoice</h1>
               </div>
 
-              <h2 class="blue-header">Claim Information</h2>
-
-              <app-field label="Are you a registered counsellor with CVAP?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('crimeInformation.crimePeriodStart')">
+              <app-field label="Are you a registered counsellor with the Crime Victim Assistance Program?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('invoiceDetails.registeredCounsellorWithCvap')">
                 <label class="inline-label">
                   <input type="radio" [value]="true" name="registeredCounsellorWithCvap" formControlName="registeredCounsellorWithCvap">
                   <span>Yes</span>
@@ -35,15 +55,29 @@
                 </label>
               </app-field>
 
+              <h2 class="blue-header">Claim Information</h2>
+
+
               <section *ngIf="form.get('invoiceDetails.registeredCounsellorWithCvap').value === false">
                 <div class="attention">
                   <h3>Register to be a Counsellor</h3>
-                  <p>Please register to be a counsellor before submitting an invoice.</p>
-                  <p><a [attr.href]="summaryOfBenefitsUrl" target="_blank">View the Crime Victim Assisstance Program Counselling Guidelines <i class="fa fa-external-link"></i></a></p>
+                  <p>Please register to be a counsellor before submitting an invoice. Please contact Crime Victim Assistance Program for assistance with Registration.</p>
                 </div>
               </section>
 
+
               <section *ngIf="form.get('invoiceDetails.registeredCounsellorWithCvap').value === true">
+                <app-field label="Do you have a CVAP Counsellor Registration Number?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('invoiceDetails.doYouHaveCvapCounsellorNumber')">
+                  <label class="inline-label">
+                    <input type="radio" [value]="true" name="doYouHaveCvapCounsellorNumber" formControlName="doYouHaveCvapCounsellorNumber">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="false" name="doYouHaveCvapCounsellorNumber" formControlName="doYouHaveCvapCounsellorNumber">
+                    <span>No</span>
+                  </label>
+                </app-field>
+
                 <div class="row">
                   <div class="col-6">
                     <app-field label="Claim Number" [required]="true" [valid]="isFieldValid('invoiceDetails.claimNumber')" errorMessage="Please enter the claim number">

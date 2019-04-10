@@ -353,6 +353,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       invoiceDetails: this.fb.group({
 
         registeredCounsellorWithCvap: ['', Validators.required],
+        doYouHaveCvapCounsellorNumber: ['', Validators.required],
 
         claimNumber: ['', Validators.required],
         claimantsName: ['', Validators.required],
