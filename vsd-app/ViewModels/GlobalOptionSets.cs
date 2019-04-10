@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace Gov.Jag.VictimServices.Public.ViewModels
+namespace Gov.Cscp.VictimServices.Public.ViewModels
 {
 
     public enum Contacttypes

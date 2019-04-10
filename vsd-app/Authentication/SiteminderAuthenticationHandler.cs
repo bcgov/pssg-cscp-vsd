@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Gov.Jag.VictimServices.Public.Models;
-using Gov.Jag.VictimServices.Interfaces;
-using Gov.Jag.VictimServices.Public.Utils;
+using Gov.Cscp.VictimServices.Public.Models;
+using Gov.Cscp.VictimServices.Interfaces;
+using Gov.Cscp.VictimServices.Public.Utils;
 
-namespace Gov.Jag.VictimServices.Public.Authentication
+namespace Gov.Cscp.VictimServices.Public.Authentication
 {
     #region SiteMinder Authentication Options
     /// <summary>

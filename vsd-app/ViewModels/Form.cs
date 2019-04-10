@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gov.Jag.VictimServices.Public.ViewModels
+namespace Gov.Cscp.VictimServices.Public.ViewModels
 {
     public class Form
     {

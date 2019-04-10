@@ -1,8 +1,8 @@
 ﻿using System;
-using Gov.Jag.VictimServices.Public.Models;
+using Gov.Cscp.VictimServices.Public.Models;
 using System.Security.Claims;
 
-namespace Gov.Jag.VictimServices.Public.Authorization
+namespace Gov.Cscp.VictimServices.Public.Authorization
 {
     /// <summary>
     /// Calaims Principal Extension

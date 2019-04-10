@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Gov.Jag.VictimServices.Interfaces;
-using Gov.Jag.VictimServices.Interfaces.Models;
-using Gov.Jag.VictimServices.Public.Authentication;
-using Gov.Jag.VictimServices.Public.Utils;
+using Gov.Cscp.VictimServices.Interfaces;
+using Gov.Cscp.VictimServices.Interfaces.Models;
+using Gov.Cscp.VictimServices.Public.Authentication;
+using Gov.Cscp.VictimServices.Public.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Gov.Jag.VictimServices.Public.Controllers
+namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("login")]
     public class LoginController : Controller

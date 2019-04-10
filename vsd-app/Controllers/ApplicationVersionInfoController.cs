@@ -1,11 +1,11 @@
-﻿using Gov.Jag.VictimServices.Public.ViewModels;
+﻿using Gov.Cscp.VictimServices.Public.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Gov.Jag.VictimServices.Public.Controllers
+namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("api/[controller]")]
     public class ApplicationVersionInfoController : Controller

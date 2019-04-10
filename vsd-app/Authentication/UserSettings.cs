@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
-using Gov.Jag.VictimServices.Public.Models;
+using Gov.Cscp.VictimServices.Public.Models;
 using System;
 
-namespace Gov.Jag.VictimServices.Public.Authentication
+namespace Gov.Cscp.VictimServices.Public.Authentication
 {
     /// <summary>
     /// Object to track and manage the authenticated user session

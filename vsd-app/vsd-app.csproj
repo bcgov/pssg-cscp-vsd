@@ -10,9 +10,9 @@
 
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
-    <RootNamespace>Gov.Jag.VictimServices.Public</RootNamespace>
+    <RootNamespace>Gov.Cscp.VictimServices.Public</RootNamespace>
     <UserSecretsId>ea444fef-9537-4671-aafd-138a4dc8d981</UserSecretsId>
-    <StartupObject>Gov.Jag.VictimServices.Public.Program</StartupObject>
+    <StartupObject>Gov.Cscp.VictimServices.Public.Program</StartupObject>
 	<ProjectGuid>{8FE0A3D0-B466-41E3-91A9-3AB6207C15E5}</ProjectGuid>
   </PropertyGroup>
 
@@ -81,6 +81,7 @@
 
   <ItemGroup>
     <Compile Remove="Authentication\SiteminderAuthenticationHandler.cs" />
+    <Compile Remove="Authentication\UserSettings.cs" />
     <Compile Remove="Controllers\AccountController.cs" />
     <Compile Remove="Controllers\ContactController.cs" />
     <Compile Remove="Controllers\FileController.cs" />
@@ -121,6 +122,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ODataClient.tt</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Authentication\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

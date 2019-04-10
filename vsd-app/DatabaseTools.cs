@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gov.Jag.VictimServices.Public
+namespace Gov.Cscp.VictimServices.Public
 {
     public static class DatabaseTools
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Gov.Jag.VictimServices.Public.JsonObjects
+namespace Gov.Cscp.VictimServices.Public.JsonObjects
 {
     public partial class ApplicationRoot
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Gov.Jag.VictimServices.Public.Models
+namespace Gov.Cscp.VictimServices.Public.Models
 {
     /// <summary>
     /// Role Database Model Extension

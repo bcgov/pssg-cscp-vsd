@@ -1,5 +1,5 @@
-﻿using Gov.Jag.VictimServices.Public.JsonObjects;
-using Gov.Jag.VictimServices.Public.ViewModels;
+﻿using Gov.Cscp.VictimServices.Public.JsonObjects;
+using Gov.Cscp.VictimServices.Public.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +14,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gov.Jag.VictimServices.Public.Controllers
+namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("api/[controller]")]
     public class JusticeController : Controller

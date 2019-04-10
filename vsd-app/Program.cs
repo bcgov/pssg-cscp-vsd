@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Gov.Jag.VictimServices.Public
+namespace Gov.Cscp.VictimServices.Public
 {
     public class Program
     {

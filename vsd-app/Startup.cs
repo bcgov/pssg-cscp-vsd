@@ -1,7 +1,7 @@
-//using Gov.Jag.VictimServices.Interfaces;
-//using Gov.Jag.VictimServices.Public.Authentication;
-using Gov.Jag.VictimServices.Public.Authorization;
-//using Gov.Jag.VictimServices.Public.Models;
+//using Gov.Cscp.VictimServices.Interfaces;
+//using Gov.Cscp.VictimServices.Public.Authentication;
+using Gov.Cscp.VictimServices.Public.Authorization;
+//using Gov.Cscp.VictimServices.Public.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -22,7 +22,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Gov.Jag.VictimServices.Public
+namespace Gov.Cscp.VictimServices.Public
 {
     public class Startup
     {

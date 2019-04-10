@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Gov.Jag.VictimServices.Public.Authorization
+namespace Gov.Cscp.VictimServices.Public.Authorization
 {
     /// <summary>
     /// Allows declarative claims based permissions to be applied to controller methods for authorization.

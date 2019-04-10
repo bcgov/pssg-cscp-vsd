@@ -1,8 +1,8 @@
-﻿using Gov.Jag.VictimServices.Interfaces;
-using Gov.Jag.VictimServices.Interfaces.Models;
-using Gov.Jag.VictimServices.Public.Authentication;
-using Gov.Jag.VictimServices.Public.Models;
-using Gov.Jag.VictimServices.Public.Utils;
+﻿using Gov.Cscp.VictimServices.Interfaces;
+using Gov.Cscp.VictimServices.Interfaces.Models;
+using Gov.Cscp.VictimServices.Public.Authentication;
+using Gov.Cscp.VictimServices.Public.Models;
+using Gov.Cscp.VictimServices.Public.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Gov.Jag.VictimServices.Public.Controllers
+namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("api/[controller]")]
     //[Authorize(Policy = "Business-User")]
@@ -375,7 +375,7 @@ namespace Gov.Jag.VictimServices.Public.Controllers
             }
 
             // get BCeID record for the current user
-            Gov.Jag.VictimServices.Interfaces.BCeIDBusiness bceidBusiness = await _bceid.ProcessBusinessQuery(userSettings.SiteMinderGuid);
+            Gov.Cscp.VictimServices.Interfaces.BCeIDBusiness bceidBusiness = await _bceid.ProcessBusinessQuery(userSettings.SiteMinderGuid);
             var cleanNumber = bceidBusiness?.businessNumber;
             if (cleanNumber != null)
             {

@@ -1,7 +1,7 @@
-﻿using Gov.Jag.VictimServices.Interfaces;
-using Gov.Jag.VictimServices.Interfaces.Models;
-using Gov.Jag.VictimServices.Public.Authentication;
-using Gov.Jag.VictimServices.Public.Models;
+﻿using Gov.Cscp.VictimServices.Interfaces;
+using Gov.Cscp.VictimServices.Interfaces.Models;
+using Gov.Cscp.VictimServices.Public.Authentication;
+using Gov.Cscp.VictimServices.Public.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,9 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Gov.Jag.VictimServices.Interfaces.SharePointFileManager;
+using static Gov.Cscp.VictimServices.Interfaces.SharePointFileManager;
 
-namespace Gov.Jag.VictimServices.Public.Controllers
+namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("api/[controller]")]
     //[Authorize(Policy = "Business-User")]

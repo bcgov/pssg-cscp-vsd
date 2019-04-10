@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Gov.Jag.VictimServices.Public.Models
+namespace Gov.Cscp.VictimServices.Public.Models
 {
     /// <summary>
     /// User Database Model

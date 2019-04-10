@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Gov.Jag.VictimServices.Public.Utils
+namespace Gov.Cscp.VictimServices.Public.Utils
 {
     public class TestUtility
     {
