@@ -5,10 +5,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --source-map --host 0.0.0.0",
-    "build": "ng build --extract-css --base-href /victimservices/ --deploy-url /victimservices/",
-    "builduat": "ng build --extract-css --base-href /uat/victimservices/ --deploy-url /uat/victimservices/",
+    "build": "ng build --extract-css --base-href / --deploy-url /",
+    "builduat": "ng build --extract-css --base-href /uat/ --deploy-url /uat/",
     "buildprod": "ng build --extract-css --base-href / --deploy-url /",
-    "watch": "ng build --watch --extract-css --base-href /victimservices/ --deploy-url /victimservices/",
+    "watch": "ng build --watch --extract-css --base-href / --deploy-url /",
     "build:ssr": "npm run build -- --app=ssr --output-hashing=media",
     "test": "ng test",
     "lint": "ng lint",
