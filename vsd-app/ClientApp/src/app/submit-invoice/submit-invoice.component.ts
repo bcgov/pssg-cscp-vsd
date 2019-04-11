@@ -126,12 +126,14 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   calculateAllTotals(): void {
     let exemptFromGst = this.form.get('invoiceDetails.exemptFromGst').value === true;
+    let hourlyRate = this.form.get('invoiceDetails.counsellingHourlyRate').value;
     const gstRate = exemptFromGst ? 0.00 : 0.05;
 
     let invoiceSubTotal = 0.00;
     let invoiceItems = <FormArray>this.form.get('invoiceDetails.lineItems');
     invoiceItems.controls.forEach(item => {
-      let rowTotal = parseFloat(item.get('sessionHours').value || 0) * parseFloat(item.get('sessionRate').value || 0);
+      let sessionHours = item.get('sessionHours').value || 0;
+      let rowTotal = sessionHours * hourlyRate;
       invoiceSubTotal += rowTotal;
     });
 
@@ -141,14 +143,11 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.invoiceGrandTotal = invoiceSubTotal + invoiceGstTotal;
   }
 
-  createLineItem(type: number = 0, sessionHours: string = '', sessionRate: string = ''): FormGroup {
+  createLineItem(sessionHours: string = ''): FormGroup {
     return this.fb.group({
-      description: ['', Validators.required],
-      counsellingType: [type, Validators.required],
+      counsellingType: [0, Validators.required],  // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
       sessionDate: ['', Validators.required],
       sessionHours: [sessionHours, Validators.required],
-      sessionRate: [sessionRate, Validators.required],
-      sessionAmount: [''],
     });
   }
 
@@ -220,11 +219,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   setLineItems(): void {
     let desiredLines = parseInt(this.form.get('invoiceDetails.settingsNumberOfSessions').value);
-    let desiredType = parseInt(this.form.get('invoiceDetails.settingsCounsellingType').value);
-    let desiredRate = parseFloat(this.form.get('invoiceDetails.settingsCounsellingRate').value);
     let desiredDuration = parseFloat(this.form.get('invoiceDetails.settingsSessionDuration').value);
 
-    let type: number = 0;
     let rate: string = '';
     let duration: string = '';
 
@@ -241,18 +237,12 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       desiredLines = 10;
     }
 
-    //    if (isNumber(desiredType))
-    type = desiredType;
-
-    //if (!isNaN(desiredRate))
-      rate = desiredRate.toString();
-
     //if (!isNaN(desiredDuration))
       duration = desiredDuration.toString();
 
     let i: number; 
     for (i = 0; i < desiredLines; i++) {
-      this.lineItems.push(this.createLineItem(type, duration, rate));
+      this.lineItems.push(this.createLineItem(duration));
     }
 
     this.showRemoveLine = this.lineItems.length > 1;
@@ -354,48 +344,36 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
         registeredCounsellorWithCvap: ['', Validators.required],
         doYouHaveCvapCounsellorNumber: ['', Validators.required],
+        doYouHaveVendorNumberOnFile: ['', Validators.required],
+        doYouHavePaymentMethodOnFile: ['', Validators.required],
+
+        // doYouHaveCvapCounsellorNumber == true
+        counsellorRegistrationNumber: ['', Validators.required],
+
+        // doYouHaveCvapCounsellorNumber == false
+        counsellorFirstName: [''],
+        counsellorLastName: [''],
+        counsellorPhoneNumber: [''],
+        counsellorEmail: [''],
+        counsellorOrganisationName: [''],
+
+        // doYouHaveVendorNumberOnFile == true
+        vendorNumber: [''],
+
+        // doYouHaveVendorNumberOnFile == false
+        vendorName: [''],
+        vendorEmail: [''],
+        vendorPhoneNumber: [''],
 
         claimNumber: ['', Validators.required],
         claimantsName: ['', Validators.required],
         invoiceNumber: ['', Validators.required],
         invoiceDate: ['', Validators.required],
 
-        submittedInvoiceBefore: ['', Validators.required],
-        hasYourAddressChanged: ['', Validators.required],
-
-        payeeFirstName: ['', Validators.required],
-        payeeLastName: ['', Validators.required],
-        payeePhoneNumber: ['', Validators.required],
-        payeeFaxNumber: [''],
-        payeeEmail: ['', [Validators.required, Validators.email]],
-        payeeAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.required, Validators.pattern(postalRegex)]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-
-        organisationNameOfCounseller: ['', Validators.required],
-        organisationName: [''],
-        organisationCounsellorRegistrationNumber: ['', Validators.required],
-        organisationPhoneNumber: ['', Validators.required],
-        organisationFaxNumber: [''],
-        organisationEmail: ['', [Validators.required, Validators.email]],
-        organisationAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.required, Validators.pattern(postalRegex)]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-
-        paymentType: ['', Validators.required],  // EFT: 100000000  Cheque: 100000001  Wire Transfer: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
+        counsellingHourlyRate: [0],
+        descriptionOfServicesProvided: [''],
 
         // Pull these out into a new subsection -- ignore on submission
-        settingsCounsellingType: [''],  // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
         settingsNumberOfSessions: [''],
         settingsCounsellingRate: [''],
         settingsSessionDuration: [''], // , Validators.pattern("/^[0-9]+(\.[0-9]{1,2})?$/")
