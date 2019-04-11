@@ -94,4 +94,11 @@ export class EnumHelper {
     100000003: 'Dentist',
     100000004: 'Other',
   }
+
+  public InvoiceCounsellingType = {
+    0: '--',
+    100000000: 'Counselling Session',
+    100000001: 'Court Supporting Counselling',
+    100000002: 'Psycho-educational sessions',
+  }
 }

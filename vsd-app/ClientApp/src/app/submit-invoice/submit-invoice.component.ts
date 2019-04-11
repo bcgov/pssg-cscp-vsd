@@ -14,6 +14,7 @@ import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
+import { EnumHelper } from '../shared/enums-list';
 
 const moment = _rollupMoment || _moment;
 
@@ -52,7 +53,10 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   busy: Promise<any>;
   busy2: Promise<any>;
   busy3: Promise<any>;
+
   form: FormGroup;
+  enumHelper = new EnumHelper();
+
   formFullyValidated: boolean;
   formSubmitted: boolean = false;
 
@@ -60,10 +64,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   showRemoveLine: boolean = false;
 
-  public currentFormStep: number;
-  public summaryOfBenefitsUrl: string;
-
   public showFormPanel: boolean = true;
+  public showReviewPanel: boolean = false;
   public showSuccessPanel: boolean = false;
   public showCancelPanel: boolean = false;
   
@@ -84,12 +86,11 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     super();
 
     this.formFullyValidated = false;
-    this.currentFormStep = 0;
   }
 
   ngOnInit() {
-    this.summaryOfBenefitsUrl = 'http://gov.bc.ca';
     this.form = this.buildInvoiceForm();
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
   }
   
   debugFormData(): void {
@@ -97,18 +98,42 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       InvoiceDetails: this.form.get('invoiceDetails').value
     };
 
-    console.log(JSON.stringify(formData));
+    //console.log(JSON.stringify(formData));
+    console.log(formData);
+  }
+
+  invoiceEdit(): void {
+    window.scroll(0, 0);
+
+    this.showFormPanel = true;
+    this.showReviewPanel = false;
+    this.showSuccessPanel = false;
+    this.showCancelPanel = false;
+  }
+
+  invoiceReview(): void {
+    window.scroll(0, 0);
+
+    this.showFormPanel = false;
+    this.showReviewPanel = true;
+    this.showSuccessPanel = false;
+    this.showCancelPanel = false;
   }
 
   invoiceSuccess(): void {
+    window.scroll(0, 0);
     this.showFormPanel = false;
+    this.showReviewPanel = false;
     this.showSuccessPanel = true;
     this.showCancelPanel = false;
   }
 
   invoiceCancel($event): void {
+    window.scroll(0, 0);
+
     $event.preventDefault();
     this.showFormPanel = false;
+    this.showReviewPanel = false;
     this.showSuccessPanel = false;
     this.showCancelPanel = true;
   }
@@ -119,7 +144,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   calculateRow(item): string {
-    let rowTotal = parseFloat(item.get('sessionHours').value || 0) * parseFloat(item.get('sessionRate').value || 0);
+    let hourlyRate = parseFloat(this.form.get('invoiceDetails.counsellingHourlyRate').value || 0);
+    let rowTotal = parseFloat(item.get('sessionHours').value || 0) * hourlyRate;
     this.calculateAllTotals();
     return rowTotal.toFixed(2).toString();
   }
@@ -148,6 +174,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       counsellingType: [0, Validators.required],  // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
       sessionDate: ['', Validators.required],
       sessionHours: [sessionHours, Validators.required],
+      sessionAmount: [0],  // used for row calculation, not required for submission - could probably subscribe to value changes on controls that need it
     });
   }
 
@@ -274,6 +301,18 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     );
   }
   
+  reviewInvoice() {
+    this.formSubmitted = true;
+    if (this.form.valid) {
+      this.formFullyValidated = true;
+      this.invoiceReview();
+    } else {
+      console.log("form not validated");
+      this.formFullyValidated = false;
+      this.markAsTouched();
+    }
+  }
+  
   submitInvoice() {
     this.formSubmitted = true;
     if (this.form.valid) {
@@ -301,6 +340,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       PersonalInformation: this.form.get('invoiceDetails').value,
     };
 
+    // This is the wrong action to call...
     this.busy = this.justiceDataService.submitApplication(formData)
         .toPromise()
         .then(res => {
@@ -319,13 +359,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     for (const a in invoiceControls) {
       if (typeof (invoiceControls[a].markAsTouched) === 'function') {
         invoiceControls[a].markAsTouched();
-      }
-    }
-
-    const invoiceAddressControls = (<FormGroup>(this.form.get('invoiceDetails.invoiceAddress'))).controls;
-    for (const b in invoiceAddressControls) {
-      if (typeof (invoiceAddressControls[b].markAsTouched) === 'function') {
-        invoiceAddressControls[b].markAsTouched();
       }
     }
 
@@ -387,3 +420,10 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     });
   }
 }
+/**
+ *
+ * table row binds:
+ * {{ item.get('sessionDate').value }}
+ * {{ enumHelper.InvoiceCounsellingType[valueForEnum(item.get('counsellingType'))] }}
+ * {{ item.get('sessionHours').value }}
+ * /*

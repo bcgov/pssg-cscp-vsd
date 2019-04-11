@@ -1,6 +1,6 @@
 <div class="form-wrapper" style="position: relative;">
   <div [ngBusy]="[busy, busy2]"></div>
-  <div class="row" [formGroup]="form" *ngIf="showFormPanel">
+  <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter">
 
       <section class="invoice-questions">
@@ -32,11 +32,10 @@
           </p>
         </div>
       </section>
-
       <a (click)="debugFormData()">Show Form Data</a><br /><br />
     </div>
-
-      <div class="col-lg-7 col-sm-12">
+    <div class="col-lg-7 col-sm-12">
+      <div *ngIf="showFormPanel">
         <div [formGroup]="form">
           <div *ngIf="dataLoaded || true">
             <div formGroupName="invoiceDetails">
@@ -45,7 +44,6 @@
               </div>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
               <br />
-
               <app-field label="Are you a registered counsellor with the Crime Victim Assistance Program?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('invoiceDetails.registeredCounsellorWithCvap')">
                 <label class="inline-label">
                   <input type="radio" [value]="true" name="registeredCounsellorWithCvap" formControlName="registeredCounsellorWithCvap">
@@ -56,7 +54,6 @@
                   <span>No</span>
                 </label>
               </app-field>
-
               <section *ngIf="form.get('invoiceDetails.registeredCounsellorWithCvap').value === false">
                 <div class="attention">
                   <h3>Register to be a Counsellor</h3>
@@ -64,7 +61,6 @@
                   <p><a href="https://www2.gov.bc.ca/assets/gov/law-crime-and-justice/criminal-justice/bc-criminal-justice-system/if-victim/publications/cvap-counselling-guidelines.pdf" target="_blank">View the Crime Victim Assistance Program Counselling Guidelines <i class="fa fa-external-link"></i></a></p>
                 </div>
               </section>
-
               <section *ngIf="form.get('invoiceDetails.registeredCounsellorWithCvap').value === true">
                 <h3>Counsellor Information</h3>
                 <div class="row">
@@ -83,7 +79,6 @@
                   <div class="col-6">
                   </div>
                 </div>
-
                 <section *ngIf="form.get('invoiceDetails.doYouHaveCvapCounsellorNumber').value === true">
                   <div class="row">
                     <div class="col-6">
@@ -131,8 +126,6 @@
                     </div>
                   </div>
                 </section>
-
-
                 <h3>Vendor Information</h3>
                 <div class="row">
                   <div class="col-6">
@@ -150,7 +143,6 @@
                   <div class="col-6">
                   </div>
                 </div>
-
                 <section *ngIf="form.get('invoiceDetails.doYouHaveVendorNumberOnFile').value === true">
                   <div class="row">
                     <div class="col-6">
@@ -186,8 +178,6 @@
                     </div>
                   </div>
                 </section>
-
-
                 <h3>Payment Method</h3>
                 <div class="row">
                   <div class="col-6">
@@ -205,7 +195,6 @@
                   <div class="col-6">
                   </div>
                 </div>
-
                 <section *ngIf="form.get('invoiceDetails.doYouHavePaymentMethodOnFile').value === false">
                   <div class="attention">
                     <h3>Please submit your payment information</h3>
@@ -213,13 +202,11 @@
                     <p>Contact CVAP using the information on the Contact Information box on the left.</p>
                   </div>
                 </section>
-
                 <section *ngIf="form.get('invoiceDetails.doYouHavePaymentMethodOnFile').value === true">
                   <div class="attention">
                     <h3>The payment method on file will be used</h3>
                     <p>The payment method on file with the Crime Victim Assistance Program will be used. Please contact the Crime Victims Assistance Program should you require any changes to your method of payment.  (Refer to the CVAP Contact Information on the left)</p>
                   </div>
-
                   <h3>Claim Information</h3>
                   <div class="row">
                     <div class="col-6">
@@ -233,7 +220,6 @@
                       </app-field>
                     </div>
                   </div>
-
                   <h3 class="blue-header">Invoice Details</h3>
                   <div class="row">
                     <div class="col-6">
@@ -253,10 +239,13 @@
                     <div class="col-6">
                       <app-field label="What was the counselling hourly rate?" [valid]="isFieldValid('invoiceDetails.counsellingHourlyRate')" [tooltipReference]="counsellingHourlyRateInfo">
                         <select class="form-control fixed-select" formControlName="counsellingHourlyRate">
-                          <option value="0">Select...</option>
-                          <option value="100000000">Counselling Session</option>
-                          <option value="100000001">Court Supporting Counselling</option>
-                          <option value="100000002">Psycho-educational sessions</option>
+                          <option value="0">Select a rate...</option>
+                          <option value="40">$40</option>
+                          <option value="60">$60</option>
+                          <option value="80">$80</option>
+                          <option value="95">$95</option>
+                          <option value="105">$105</option>
+                          <option value="15">$15</option>
                         </select>
                       </app-field>
                       <ng-template #counsellingHourlyRateInfo><strong>Update this text</strong><br />Update content</ng-template>
@@ -271,34 +260,39 @@
                       </app-field>
                     </div>
                   </div>
-
                   <h3>Line Item Settings</h3>
                   <section class="settings-panel">
                     <p>Fill in the fields below and click on <strong>Generate Line Items</strong> to create multiple line items based on the number of sessions you enter. Alternatively, you may add line item details below individually.</p>
                     <div class="row">
-                      <div class="col-6">
+                      <div class="col-5">
                         <app-field label="Number of Sessions" [valid]="isFieldValid('invoiceDetails.settingsNumberOfSessions')" errorMessage="Please enter a number amount">
-                          <input class="form-control number-field" type="number" formControlName="settingsNumberOfSessions" maxlength="5" step="1">
+                          <input class="form-control number-field" type="number" formControlName="settingsNumberOfSessions" maxlength="2" step="1">
                         </app-field>
-
-                        <app-field label="Session Duration" [valid]="isFieldValid('invoiceDetails.settingsSessionDuration')" errorMessage="Please enter hour amount">
-                          <input class="form-control number-field" type="number" formControlName="settingsSessionDuration" maxlength="10" step="0.25" placeholder="hours">
+                      </div>
+                      <div class="col-7">
+                        <app-field label="Session Duration (in ours)" [valid]="isFieldValid('invoiceDetails.settingsSessionDuration')" errorMessage="Please enter hour amount">
+                          <input class="form-control number-field" type="number" formControlName="settingsSessionDuration" maxlength="6" step="0.5" placeholder="hours">
                         </app-field>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-12">
+                      <div class="col-5">
                         <a href="javascript:void(0);" class="btn btn-secondary" (click)="setLineItems()">Generate Line Items</a>
+                      </div>
+                      <div class="col-7">
+                        <p><em>Information filled in on each line below will be reset.</em></p>
                       </div>
                     </div>
                   </section>
-
                   <div class="invoice-items">
                     <div class="item-listing" formArrayName="lineItems" *ngFor="let item of form.get('invoiceDetails.lineItems').controls; let i = index;">
                       <div [formGroupName]="i" class="invoice-item row no-gutter">
                         <div class="col col-3">
+                          <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter date">
+                            <input type="text" class="form-control" formControlName="sessionDate" placeholder="yyyy-mm-dd" />
+                          </app-field>
                         </div>
-                        <div class="col col-2">
+                        <div class="col col-4">
                           <app-field label="Counselling Type" [required]="true" [valid]="isControlValid(item, 'counsellingType')" errorMessage="Select type">
                             <select class="form-control fixed-select" formControlName="counsellingType">
                               <option value="0">Select...</option>
@@ -309,14 +303,10 @@
                           </app-field>
                         </div>
                         <div class="col col-2">
-                          <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter date">
-                            <input type="text" class="form-control" formControlName="sessionDate" placeholder="yyyy-mm-dd" />
+                          <app-field label="Hours" [required]="true" [valid]="isControlValid(item, 'sessionHours')" errorMessage="Enter hours">
+                            <input class="form-control number-field" type="number" step="0.5" formControlName="sessionHours">
                           </app-field>
-                        </div>
-                        <div class="col">
-                          <app-field label="Hrs" [required]="true" [valid]="isControlValid(item, 'sessionHours')" errorMessage="Enter hours">
-                            <input class="form-control number-field" type="number" step="0.25" formControlName="sessionHours">
-                          </app-field>
+                          <input class="form-control number-field" type="hidden" formControlName="sessionAmount" [value]="calculateRow(item)" readonly>
                         </div>
                         <div class="col">
                           <a href="javascript:void(0);" (click)="removeLineItem(i)" *ngIf="showRemoveLine">
@@ -327,15 +317,7 @@
                     </div>
                     <a href="javascript:void(0);" class="btn btn-secondary" (click)="addLineItem()">Add Line</a>
                   </div>
-
                   <div class="form-totals">
-                    <div class="row">
-                      <div class="col text-right">
-                        <label>Sub-total</label>
-                        <span class="amount">$ {{ invoiceSubTotal.toFixed(2).toString() }}</span>
-                      </div>
-                    </div>
-
                     <div class="row">
                       <div class="col text-right">
                         <label>
@@ -347,20 +329,36 @@
                         </label>
                       </div>
                     </div>
-
-                    <div class="row gst" *ngIf="form.get('invoiceDetails.exemptFromGst').value === false">
-                      <div class="col text-right">
-                        <label>GST (Calculated at 5%)</label>
-                        <span class="amount">$ {{ invoiceGstTotal.toFixed(2).toString() }}</span>
-                      </div>
-                    </div>
-
                     <div class="row">
                       <div class="col text-right">
-                        <label>Total</label>
-                        <span class="amount">$ {{ invoiceGrandTotal.toFixed(2).toString() }}</span>
+                        <label>Total Amount:</label>
+                        <app-field label="Total Amount:" [valid]="isFieldValid('invoiceDetails.counsellingHourlyRate')" [tooltipReference]="totalAmountInfo">
+                          <span class="amount">$ {{ invoiceGrandTotal.toFixed(2).toString() }}</span>
+                        </app-field>
+                        <ng-template #totalAmountInfo>
+                          <h3>Calculations for Total Amount</h3>
+                          <p>The total amount will be calculated based on the rate that the counsellor on file is registered for. For reference, the total will be calculatd as follows:</p>
+                          <table class="table table-striped rates-table">
+                            <thead>
+                              <tr>
+                                <th>Rate</th>
+                                <th>Session Hours</th>
+                                <th>Total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr><td>$40</td><td><em>n</em> hours</td><td>$40 x <em>n</em> hrs = total</td></tr>
+                              <tr><td>$60</td><td><em>n</em> hours</td><td>$60 x <em>n</em> hrs = total</td></tr>
+                              <tr><td>$80</td><td><em>n</em> hours</td><td>$80 x <em>n</em> hrs = total</td></tr>
+                              <tr><td>$95</td><td><em>n</em> hours</td><td>$95 x <em>n</em> hrs = total</td></tr>
+                              <tr><td>$105</td><td><em>n</em> hours</td><td>$105 x <em>n</em> hrs = total</td></tr>
+                              <tr><td>$15</td><td><em>n</em> hours</td><td>$15 x <em>n</em> hrs = total</td></tr>
+                            </tbody>
+                          </table>
+                        </ng-template>
                       </div>
                     </div>
+                    <p class="pull-right"><em>If all the above items you have entered are approved you will be eligible to receive the above amount</em></p>
                   </div>
 
                   <section>
@@ -368,7 +366,7 @@
                     <app-field [required]="true" [valid]="isFieldValid('invoiceDetails.declaredAndSigned')" errorMessage="Please check declaration">
                       <label>
                         <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
-                        I submit this invoice for payment in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided on this invoice is true and correct. <span class="error-states">*</span>
+                        I declare the information provided on this invoice to be true and correct. <span class="error-states">*</span>
                       </label>
                     </app-field>
 
@@ -391,7 +389,7 @@
                   <section class="button-container">
                     <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
                     <span style="float: right;">
-                      <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
+                      <button (click)="markAsTouched(); reviewInvoice();" class="btn btn-primary">REVIEW INVOICE <i class="fas fa-chevron-right"></i></button>
                     </span>
                   </section>
                 </section>
@@ -400,30 +398,208 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="container" *ngIf="showSuccessPanel">
-      <div class="row">
-        <div class="col">
-          <div class="page-header">
-            <h1>Thank you for your invoice submission</h1>
+      <div class="container" *ngIf="showReviewPanel">
+        <div class="row">
+          <div class="col">
+            <div class="page-header">
+              <h1>Review and Edit</h1>
+            </div>
+            <p>Please check the accuracy of the information entered in your application before submitting.</p>
+
+            <section>
+              <h3>Counsellor Information</h3>
+              <table class="table table-striped review-table">
+                <tbody>
+                  <tr>
+                    <th>Do you have a CVAP Counsellor Registration Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.doYouHaveCvapCounsellorNumber') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Counsellor Registration Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.counsellorRegistrationNumber') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Counsellor First Name</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.counsellorFirstName') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Counsellor Last Name</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.counsellorLastName') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Phone Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.counsellorPhoneNumber') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Email Address</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.counsellorEmail') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Organization name</th>
+                    <td>{{ datesOrEmpty('invoiceDetails.counsellorOrganisationName') }}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>Vendor Information</h3>
+              <table class="table table-striped review-table">
+                <tbody>
+                  <tr>
+                    <th>Do you have a Vendor number on file?</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.doYouHaveVendorNumberOnFile') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Vendor Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.vendorNumber') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Vendor Name</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.vendorName') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Email Address</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.vendorEmail') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Phone Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.vendorPhoneNumber') }} </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>Payment Method</h3>
+              <table class="table table-striped review-table">
+                <tbody>
+                  <tr>
+                    <th>Is your payment method on file?</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.doYouHavePaymentMethodOnFile') }} </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>Claim Information</h3>
+              <table class="table table-striped review-table">
+                <tbody>
+                  <tr>
+                    <th>Claimant's Name</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.claimantsName') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Claim Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.claimNumber') }} </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h2 class="blue-header">Invoice Details <button (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+              <table class="table table-striped review-table">
+                <tbody>
+                  <tr>
+                    <th>Invoice Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.invoiceNumber') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Invoice Date</th>
+                    <td>{{ datesOrEmpty(['invoiceDetails.invoiceDate']) }} </td>
+                  </tr>
+                  <tr>
+                    <th>Please provide a brief description of the services provided.</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.descriptionOfServicesProvided') }} </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>Line Item Summary</h3>
+              <table class="table table-striped review-table">
+                <tbody>
+                  <tr>
+                    <th>Counselling Rate</th>
+                    <td>${{ valueOrEmpty('invoiceDetails.counsellingHourlyRate') }} </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table class="table table-striped review-table">
+                <thead>
+                  <tr>
+                    <th>SESSION DATES</th>
+                    <th>COUNSELLING TYPE</th>
+                    <th>HOURS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of lineItems.controls;">
+                    <td style="width: 33%">Date</td>
+                    <td style="width: 33%">Counselling type</td>
+                    <td style="width: 33%">Hours</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </section>
+
+            <h2 class="blue-header">Declaration <button (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+            <p>
+              <label class="inline-label">
+                <input *ngIf="form.get('invoiceDetails.declaredAndSigned').value === true" type="checkbox" checked="checked" disabled="disabled" />
+                <input *ngIf="form.get('invoiceDetails.declaredAndSigned').value !== true" type="checkbox" disabled="disabled" />
+                <span>I declare the information provided on this invoice to be true and correct.</span>
+              </label>
+            </p>
+
+            <table class="table table-striped review-table">
+              <tbody>
+                <tr>
+                  <th>Applicant's Signature</th>
+                  <td>
+                    <img class="review-signature" *ngIf="valueOrEmpty('invoiceDetails.signature', '') != ''" src="{{ valueOrEmpty('invoiceDetails.signature', '') }}" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
           </div>
-          <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-          <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
+        </div>
+
+        <div *ngIf="showFormPanel && formFullyValidated === false" class="error-summary">
+          <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+          <span>Some required fields have not been completed</span>
+        </div>
+
+        <section class="button-container">
+          <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
+          <span style="float: right;">
+            <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
+          </span>
+        </section>
+      </div>
+
+      <div class="container" *ngIf="showSuccessPanel">
+        <div class="row">
+          <div class="col">
+            <div class="page-header">
+              <h1>Thank you for your invoice submission</h1>
+            </div>
+            <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+            <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="container" *ngIf="showCancelPanel">
-      <div class="row">
-        <div class="col">
-          <div class="page-header">
-            <h1>Invoice submission cancelled</h1>
+      <div class="container" *ngIf="showCancelPanel">
+        <div class="row">
+          <div class="col">
+            <div class="page-header">
+              <h1>Invoice submission cancelled</h1>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+            <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
           </div>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-          <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
         </div>
       </div>
+
     </div>
   </div>
+</div>
