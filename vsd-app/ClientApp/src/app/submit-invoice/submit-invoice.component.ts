@@ -61,6 +61,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   formSubmitted: boolean = false;
 
   lineItems: FormArray;
+  lineItemsControls: FormArray;
 
   showRemoveLine: boolean = false;
 
@@ -84,13 +85,13 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     private dialog: MatDialog
   ) {
     super();
-
     this.formFullyValidated = false;
   }
 
   ngOnInit() {
     this.form = this.buildInvoiceForm();
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
   }
   
   debugFormData(): void {
@@ -381,7 +382,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         doYouHavePaymentMethodOnFile: ['', Validators.required],
 
         // doYouHaveCvapCounsellorNumber == true
-        counsellorRegistrationNumber: ['', Validators.required],
+        counsellorRegistrationNumber: [''],
 
         // doYouHaveCvapCounsellorNumber == false
         counsellorFirstName: [''],
@@ -420,10 +421,9 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     });
   }
 }
-/**
- *
+/*
  * table row binds:
  * {{ item.get('sessionDate').value }}
  * {{ enumHelper.InvoiceCounsellingType[valueForEnum(item.get('counsellingType'))] }}
  * {{ item.get('sessionHours').value }}
- * /*
+ */

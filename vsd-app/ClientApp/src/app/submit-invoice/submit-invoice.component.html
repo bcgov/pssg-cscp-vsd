@@ -289,7 +289,11 @@
                       <div [formGroupName]="i" class="invoice-item row no-gutter">
                         <div class="col col-3">
                           <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter date">
-                            <input type="text" class="form-control" formControlName="sessionDate" placeholder="yyyy-mm-dd" />
+                            <input type="text" [matDatepicker]="sessionDate_i" placeholder="Session Date" formControlName="sessionDate" (click)="sessionDate_i.open()" >
+                            <span style="display: none;">
+                              <mat-datepicker-toggle matSuffix [for]="sessionDate_i"></mat-datepicker-toggle>
+                            </span>
+                            <mat-datepicker #sessionDate_i></mat-datepicker>
                           </app-field>
                         </div>
                         <div class="col col-4">
@@ -331,7 +335,6 @@
                     </div>
                     <div class="row">
                       <div class="col text-right">
-                        <label>Total Amount:</label>
                         <app-field label="Total Amount:" [valid]="isFieldValid('invoiceDetails.counsellingHourlyRate')" [tooltipReference]="totalAmountInfo">
                           <span class="amount">$ {{ invoiceGrandTotal.toFixed(2).toString() }}</span>
                         </app-field>
@@ -517,6 +520,10 @@
                     <th>Counselling Rate</th>
                     <td>${{ valueOrEmpty('invoiceDetails.counsellingHourlyRate') }} </td>
                   </tr>
+                  <tr>
+                    <th>Exempt from GST</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.exemptFromGst') }} </td>
+                  </tr>
                 </tbody>
               </table>
 
@@ -529,10 +536,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of lineItems.controls;">
-                    <td style="width: 33%">Date</td>
-                    <td style="width: 33%">Counselling type</td>
-                    <td style="width: 33%">Hours</td>
+                  <tr *ngFor="let item of lineItemsControls.controls; let i = index;">
+                    <td style="width: 33%">{{ datesOrEmpty([item.get('sessionDate')]) }}</td>
+                    <td style="width: 33%">{{ enumHelper.InvoiceCounsellingType[valueForEnum(item.get('counsellingType'))] }}</td>
+                    <td style="width: 33%">{{ item.get('sessionHours').value }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -583,7 +590,7 @@
             </div>
             <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-            <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
+            <p><a href="/">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
           </div>
         </div>
       </div>
@@ -595,7 +602,7 @@
               <h1>Invoice submission cancelled</h1>
             </div>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-            <p><a href="#">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
+            <p><a href="/">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
           </div>
         </div>
       </div>

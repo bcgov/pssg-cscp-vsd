@@ -228,8 +228,17 @@ export class FormBase {
     return control.value;
   }
 
-  public valueForEnum(controlName: string): number {
-    var control = this.form.get(controlName);
+  public valueForEnum(controlName: any): number {
+    let control = null;
+
+    if (typeof (controlName) == 'string')
+      control = this.form.get(controlName);
+
+    if (controlName instanceof FormGroup)
+      control = controlName;
+
+    if (controlName instanceof FormControl)
+      control = controlName;
 
     if (control == null || control === undefined || control.value == null || control.value === undefined)
       return 0;
@@ -264,7 +273,7 @@ export class FormBase {
     return output.join(' ');
   }
       
-  public datesOrEmpty(values: Array<string>): string {
+  public datesOrEmpty(values: Array<any>): string {
     var output = [];
     for (var i = 0; i < values.length; i++) {
       var control = this.valueOrEmpty(values[i]);
