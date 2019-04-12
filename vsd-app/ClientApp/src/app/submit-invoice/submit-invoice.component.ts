@@ -99,8 +99,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       InvoiceDetails: this.form.get('invoiceDetails').value
     };
 
-    //console.log(JSON.stringify(formData));
-    console.log(formData);
+    console.log(JSON.stringify(formData));
+    //console.log(formData);
   }
 
   invoiceEdit(): void {
@@ -342,7 +342,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
     const formData = <DynamicsApplicationModel>{
-      PersonalInformation: this.form.get('invoiceDetails').value,
+      InvoiceDetails: this.form.get('invoiceDetails').value,
     };
 
     // This is the wrong action to call...
@@ -425,9 +425,3 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     });
   }
 }
-/*
- * table row binds:
- * {{ item.get('sessionDate').value }}
- * {{ enumHelper.InvoiceCounsellingType[valueForEnum(item.get('counsellingType'))] }}
- * {{ item.get('sessionHours').value }}
- */
