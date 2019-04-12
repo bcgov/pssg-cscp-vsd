@@ -341,17 +341,17 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData = <DynamicsApplicationModel>{
-      InvoiceDetails: this.form.get('invoiceDetails').value,
-    };
+    //const formData = <DynamicsApplicationModel>{
+    //  InvoiceDetails: this.form.get('invoiceDetails').value,
+    //};
 
-    // This is the wrong action to call...
-    this.busy = this.justiceDataService.submitApplication(formData)
-        .toPromise()
-        .then(res => {
-          subResult.next(true);
-        }, err => subResult.next(false));
-    this.busy2 = Promise.resolve(this.busy);
+    //// This is the wrong action to call...
+    //this.busy = this.justiceDataService.submitApplication(formData)
+    //    .toPromise()
+    //    .then(res => {
+    //      subResult.next(true);
+    //    }, err => subResult.next(false));
+    //this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
   }
