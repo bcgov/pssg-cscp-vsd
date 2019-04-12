@@ -204,6 +204,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup) {
         this.validateAllFormFields(control);
+      } else if (control instanceof FormArray) {
+        this.validateAllFormFields(control);
       }
     });
   }
@@ -214,6 +216,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       if (control instanceof FormControl) {
         errors[field] = control.errors;
       } else if (control instanceof FormGroup) {
+        errors[field] = this.getErrors(control);
+      } else if (control instanceof FormArray) {
         errors[field] = this.getErrors(control);
       }
     });

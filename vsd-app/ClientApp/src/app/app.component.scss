@@ -648,8 +648,9 @@ select.form-control {
 
 ::ng-deep .rates-table {
   border-collapse: separate;
-  border-spacing: 3px;
-  border: 1px solid #ccc;
+  border-spacing: 1px;
+  border: 0 !important;
+  ;
 
   tr {
     background-color: #f1f4fa;
@@ -657,18 +658,21 @@ select.form-control {
     th,
     td {
       background-color: #f1f4fa;
-      border: 0 !important;
+      border: #fafafa !important;
     }
 
     th {
-      font-weight: normal;
-      width: 30%;
+      font-weight: 600;
+      width: auto;
+      color: #494949 !important;
+      white-space: nowrap;
     }
 
     td {
-      font-weight: bold;
-      width: 70%;
+      font-weight: 400;
+      width: auto;
       color: #494949 !important;
+      white-space: nowrap;
     }
   }
 

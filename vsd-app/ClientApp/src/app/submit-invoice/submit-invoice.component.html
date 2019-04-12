@@ -288,8 +288,8 @@
                     <div class="item-listing" formArrayName="lineItems" *ngFor="let item of form.get('invoiceDetails.lineItems').controls; let i = index;">
                       <div [formGroupName]="i" class="invoice-item row no-gutter">
                         <div class="col col-3">
-                          <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter date">
-                            <input type="text" [matDatepicker]="sessionDate_i" placeholder="Session Date" formControlName="sessionDate" (click)="sessionDate_i.open()" >
+                          <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter session date">
+                            <input type="text" class="form-control date-picker" [matDatepicker]="sessionDate_i" placeholder="yyyy-mm-dd" formControlName="sessionDate" (click)="sessionDate_i.open()" >
                             <span style="display: none;">
                               <mat-datepicker-toggle matSuffix [for]="sessionDate_i"></mat-datepicker-toggle>
                             </span>
@@ -312,32 +312,34 @@
                           </app-field>
                           <input class="form-control number-field" type="hidden" formControlName="sessionAmount" [value]="calculateRow(item)" readonly>
                         </div>
-                        <div class="col">
-                          <a href="javascript:void(0);" (click)="removeLineItem(i)" *ngIf="showRemoveLine">
-                            <i class="fas fa-trash-alt"></i> Remove
-                          </a>
+                        <div class="col text-right">
+                          <br />
+                          <a href="javascript:void(0);" (click)="removeLineItem(i)" *ngIf="showRemoveLine">Remove</a>
                         </div>
                       </div>
                     </div>
                     <a href="javascript:void(0);" class="btn btn-secondary" (click)="addLineItem()">Add Line</a>
                   </div>
                   <div class="form-totals">
-                    <div class="row">
+                    <div class="row gst">
                       <div class="col text-right">
                         <label>
                           Exempt from GST?
                           <span>
                             <input type="checkbox" [value]="true" name="exemptFromGst" formControlName="exemptFromGst">
-                            Yes
+                            Yes <app-tool-tip [trigger]="gstExemptionInfo"></app-tool-tip>
                           </span>
                         </label>
                       </div>
                     </div>
-                    <div class="row">
+                    <ng-template #gstExemptionInfo><h3>Exempt from GST</h3><p>Only check this if you are a registered psychologist filling out this invoice.</p></ng-template>
+                    <br />
+
+                    <div class="row grand-total">
                       <div class="col text-right">
-                        <app-field label="Total Amount:" [valid]="isFieldValid('invoiceDetails.counsellingHourlyRate')" [tooltipReference]="totalAmountInfo">
-                          <span class="amount">$ {{ invoiceGrandTotal.toFixed(2).toString() }}</span>
-                        </app-field>
+                        <label>
+                          <span>Total Amount:</span><app-tool-tip [trigger]="totalAmountInfo"></app-tool-tip> <span class="amount">$ {{ invoiceGrandTotal.toFixed(2).toString() }}</span>
+                        </label>
                         <ng-template #totalAmountInfo>
                           <h3>Calculations for Total Amount</h3>
                           <p>The total amount will be calculated based on the rate that the counsellor on file is registered for. For reference, the total will be calculatd as follows:</p>

@@ -361,16 +361,19 @@ hr {
     margin-bottom: 15px;
   }
 
-  label {
-    display: block;
-    font-size: 16px;
-    margin-bottom: 0;
-  }
+  .grand-total {
+    label {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 0;
+      font-weight: 600;
+    }
 
-  span.amount {
-    display: block;
-    font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 25px;
+    span.amount {
+      display: inline-block;
+      font-weight: 400;
+      margin-bottom: 25px;
+      margin-left: 4px;
+    }
   }
 }
