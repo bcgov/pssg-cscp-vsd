@@ -420,7 +420,7 @@
                     <option value="100000001">Common Law</option>
                     <option value="100000002">Widowed</option>
                     <option value="100000003">Divorced</option>
-                    <option value="100000004">Seperated</option>
+                    <option value="100000004">Separated</option>
                     <option value="100000005">Single</option>
                   </select>
                 </app-field>
@@ -533,7 +533,7 @@
 
               <app-field label="Is this application being filed within one year of the date of the crime?" errorMessage="Please make a selection" [showChevrons]="false">
                 <label class="inline-label">
-                  <input type="radio" [value]="true" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
+                  <input type="radio" [value]="true" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime" ng-checked="crimeInformation.whenDidCrimeOccur">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">

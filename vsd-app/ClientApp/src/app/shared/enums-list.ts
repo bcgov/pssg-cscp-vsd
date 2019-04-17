@@ -22,7 +22,7 @@ export class EnumHelper {
     100000001: 'Common Law',
     100000002: 'Widowed',
     100000003: 'Divorced',
-    100000004: 'Seperated',
+    100000004: 'Separated',
     100000005: 'Single',
   }
 
