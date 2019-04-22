@@ -84,6 +84,7 @@
     <Compile Remove="Controllers\LoginController.cs" />
     <Compile Remove="Controllers\LogoutController.cs" />
     <Compile Remove="Controllers\UserController.cs" />
+    <Compile Remove="ViewModels\ApplicationModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
