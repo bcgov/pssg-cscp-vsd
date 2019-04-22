@@ -139,35 +139,21 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.showCancelPanel = true;
   }
 
-  calculateRowTotal(event, rowIndex): void {
-    console.log(rowIndex);
-    console.log(event.target.value);
-  }
-
   calculateRow(item): string {
-    let hourlyRate = parseFloat(this.form.get('invoiceDetails.counsellingHourlyRate').value || 0);
-    let rowTotal = parseFloat(item.get('sessionHours').value || 0) * hourlyRate;
+    let rowTotal = parseFloat(item.get('sessionHours').value || 0);
     this.calculateAllTotals();
     return rowTotal.toFixed(2).toString();
   }
 
   calculateAllTotals(): void {
-    let exemptFromGst = this.form.get('invoiceDetails.exemptFromGst').value === true;
-    let hourlyRate = this.form.get('invoiceDetails.counsellingHourlyRate').value;
-    const gstRate = exemptFromGst ? 0.00 : 0.05;
-
     let invoiceSubTotal = 0.00;
     let invoiceItems = <FormArray>this.form.get('invoiceDetails.lineItems');
     invoiceItems.controls.forEach(item => {
       let sessionHours = item.get('sessionHours').value || 0;
-      let rowTotal = sessionHours * hourlyRate;
-      invoiceSubTotal += rowTotal;
+      invoiceSubTotal += sessionHours;
     });
 
-    let invoiceGstTotal = invoiceSubTotal * gstRate;
-    this.invoiceSubTotal = invoiceSubTotal;
-    this.invoiceGstTotal = invoiceGstTotal;
-    this.invoiceGrandTotal = invoiceSubTotal + invoiceGstTotal;
+    this.invoiceGrandTotal = invoiceSubTotal;
   }
 
   createLineItem(sessionHours: string = ''): FormGroup {
@@ -239,8 +225,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
     return formField.controls[field].valid || !formField.controls[field].touched;
   }
-
-
+  
   isChildFieldValid(parent: string, field: string) {
     let formField = this.form.get(parent);
     if (formField == null)
@@ -249,38 +234,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     return formField.get(field).valid || !formField.get(field).touched;
   }
 
-  setLineItems(): void {
-    let desiredLines = parseInt(this.form.get('invoiceDetails.settingsNumberOfSessions').value);
-    let desiredDuration = parseFloat(this.form.get('invoiceDetails.settingsSessionDuration').value);
-
-    let rate: string = '';
-    let duration: string = '';
-
-    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
-    while (this.lineItems.length !== 0) {
-      this.lineItems.removeAt(0)
-    }
-
-    if (isNaN(desiredLines) || desiredLines < 0) {
-      desiredLines = 1;
-    }
-
-    if (isNaN(desiredLines) || desiredLines > 10) {
-      desiredLines = 10;
-    }
-
-    //if (!isNaN(desiredDuration))
-      duration = desiredDuration.toString();
-
-    let i: number; 
-    for (i = 0; i < desiredLines; i++) {
-      this.lineItems.push(this.createLineItem(duration));
-    }
-
-    this.showRemoveLine = this.lineItems.length > 1;
-  }
-
-  addLineItem(): void {
+    addLineItem(): void {
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
     this.lineItems.push(this.createLineItem());
     this.showRemoveLine = this.lineItems.length > 1;
@@ -293,8 +247,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   submitPartialApplication() {
-      this.formFullyValidated = true;
-      this.save().subscribe(
+    this.formFullyValidated = true;
+    this.save().subscribe(
       data => {
         console.log("submitting partial form");
         this.router.navigate(['/application-success']);
@@ -383,7 +337,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         registeredCounsellorWithCvap: ['', Validators.required],
         doYouHaveCvapCounsellorNumber: ['', Validators.required],
         doYouHaveVendorNumberOnFile: ['', Validators.required],
-        doYouHavePaymentMethodOnFile: ['', Validators.required],
 
         // doYouHaveCvapCounsellorNumber == true
         counsellorRegistrationNumber: [''],
@@ -391,9 +344,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         // doYouHaveCvapCounsellorNumber == false
         counsellorFirstName: [''],
         counsellorLastName: [''],
-        counsellorPhoneNumber: [''],
         counsellorEmail: [''],
-        counsellorOrganisationName: [''],
 
         // doYouHaveVendorNumberOnFile == true
         vendorNumber: [''],
@@ -401,20 +352,14 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         // doYouHaveVendorNumberOnFile == false
         vendorName: [''],
         vendorEmail: [''],
-        vendorPhoneNumber: [''],
 
         claimNumber: ['', Validators.required],
         claimantsName: ['', Validators.required],
         invoiceNumber: ['', Validators.required],
         invoiceDate: ['', Validators.required],
 
-        counsellingHourlyRate: [0],
         descriptionOfServicesProvided: [''],
 
-        // Pull these out into a new subsection -- ignore on submission
-        settingsNumberOfSessions: [''],
-        settingsCounsellingRate: [''],
-        settingsSessionDuration: [''], // , Validators.pattern("/^[0-9]+(\.[0-9]{1,2})?$/")
         exemptFromGst: [false],
 
         lineItems: this.fb.array([this.createLineItem()]),
