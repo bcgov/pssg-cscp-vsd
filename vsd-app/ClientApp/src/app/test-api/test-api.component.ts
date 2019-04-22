@@ -41,6 +41,17 @@ export class TestApiComponent extends FormBase implements OnInit {
     );
   }
 
+  fireDynamicsTest(): void {
+    this.busy = this.justiceDataService
+      .getDynamicsTest()
+      .toPromise()
+      .then(result => {
+        this.apiResult = result;
+        console.log('From Dynamics Test:', result);
+      }
+    );
+  }
+
   ngOnInit() {
   }
 }
