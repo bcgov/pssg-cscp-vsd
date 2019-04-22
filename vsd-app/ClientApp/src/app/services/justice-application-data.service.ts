@@ -26,4 +26,8 @@ export class JusticeApplicationDataService {
   public getSampleData() {
     return this.http.get<string>(this.apiPath + 'getdata', { headers: this.headers });
   }
+
+  public getDynamicsTest() {
+    return this.http.get<string>(this.apiPath + 'dynamicstest', { headers: this.headers });
+  }
 }
