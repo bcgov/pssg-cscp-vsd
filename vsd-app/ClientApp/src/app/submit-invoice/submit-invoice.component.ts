@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
-import { Subscription, Observable, Subject, forkJoin } from 'rxjs';
+import { Subject } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -15,8 +15,6 @@ import { JusticeApplicationDataService } from '../services/justice-application-d
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
-
-const moment = _rollupMoment || _moment;
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
@@ -234,7 +232,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     return formField.get(field).valid || !formField.get(field).touched;
   }
 
-    addLineItem(): void {
+  addLineItem(): void {
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
     this.lineItems.push(this.createLineItem());
     this.showRemoveLine = this.lineItems.length > 1;
@@ -246,20 +244,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.showRemoveLine = this.lineItems.length > 1;
   }
 
-  submitPartialApplication() {
-    this.formFullyValidated = true;
-    this.save().subscribe(
-      data => {
-        console.log("submitting partial form");
-        this.router.navigate(['/application-success']);
-      },
-      err => {
-        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application');
-      }
-    );
-  }
-  
   reviewInvoice() {
     this.formSubmitted = true;
     if (this.form.valid) {
@@ -276,16 +260,23 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.formSubmitted = true;
     if (this.form.valid) {
       this.formFullyValidated = true;
-      this.invoiceSuccess();
-      //this.save().subscribe(
-      //data => {
-      //  console.log("submitting");
-      //  this.router.navigate(['/application-success']);
-      //},
-      //err => {
-      //  this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-      //  console.log('Error submitting invoice');
-      //);
+      this.save().subscribe(
+        data => {
+          if (data['IsSuccess'] == true) {
+            console.log(data['IsSuccess']);
+            console.log("submitting");
+            this.invoiceSuccess();
+          }
+          else {
+            this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+            console.log('Error submitting invoice');
+          }
+        },
+        error => {
+          this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+          console.log('Error submitting invoice');
+        }
+      );
     } else {
       console.log("form not validated");
       this.formFullyValidated = false;
@@ -295,17 +286,16 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    //const formData = <DynamicsApplicationModel>{
-    //  InvoiceDetails: this.form.get('invoiceDetails').value,
-    //};
+    const formData = <DynamicsApplicationModel>{
+      InvoiceDetails: this.form.get('invoiceDetails').value,
+    };
 
-    //// This is the wrong action to call...
-    //this.busy = this.justiceDataService.submitApplication(formData)
-    //    .toPromise()
-    //    .then(res => {
-    //      subResult.next(true);
-    //    }, err => subResult.next(false));
-    //this.busy2 = Promise.resolve(this.busy);
+    this.busy = this.justiceDataService.submitCounsellorInvoice(formData)
+        .toPromise()
+        .then(res => {
+          subResult.next(true);
+        }, err => subResult.next(false));
+    this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
   }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Subscription, Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router, NavigationExtras } from '@angular/router';
 import { FormBase } from '../shared/form-base';
 
 @Component({
@@ -20,8 +20,7 @@ export class HomeComponent extends FormBase implements OnInit {
   constructor(
     private titleService: Title,
     private fb: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute)
+    private router: Router)
   {
     super();
   }

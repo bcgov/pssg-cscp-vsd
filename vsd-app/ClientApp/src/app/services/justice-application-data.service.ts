@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ProfileValidation } from '../models/profile-validation.model';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class JusticeApplicationDataService {
@@ -17,6 +14,11 @@ export class JusticeApplicationDataService {
   public submitApplication(applicationModel: DynamicsApplicationModel) {
     console.log('Firing submit call');
     return this.http.post(this.apiPath + 'saveapplication', applicationModel, { headers: this.headers });
+  }
+
+  public submitCounsellorInvoice(invoiceModel: DynamicsApplicationModel) {
+    console.log('Firing invoice submit call');
+    return this.http.post(this.apiPath + 'submitcounsellorinvoice', invoiceModel, { headers: this.headers });
   }
 
   public getSampleCall() {

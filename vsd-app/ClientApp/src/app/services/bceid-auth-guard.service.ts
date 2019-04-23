@@ -19,7 +19,7 @@ export class BCeidAuthGuard implements CanActivate {
         var result = new Subject<boolean>();
         this.userService.getCurrentUser()
             .subscribe(user => {
-                var allowAccess = (user && user.userType == "Business");
+              var allowAccess = false; // user && user. userType == "Business");
                 if (!allowAccess) {
                     this.router.navigate(['/']);
                 }

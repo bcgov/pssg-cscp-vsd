@@ -50,6 +50,30 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Application Save", Message = dynamicsResponse.Result };
             return new JsonResult(result);
         }
+        
+        [HttpPost("submitcounsellorinvoice")]
+        public async Task<IActionResult> SubmitCounsellorInvoice([FromBody] CounsellorInvoiceFormModel model)
+        {
+            if (model == null)
+            {
+                if (ModelState.ErrorCount > 0)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
+                    return new JsonResult(new { IsSuccess = false, Status = "Invoice Save Error", Message = "Errors in binding: " + string.Join(Environment.NewLine, errors) });
+                }
+                else
+                {
+                    return new JsonResult(new { IsSuccess = false, Status = "Invoice Save Error", Message = "Error: Model is null." });
+                }
+            }
+
+            var t = Task.Run(() => CreateInvoiceAction(_configuration, model));
+            t.Wait();
+
+            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
+            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Invoice Save", Message = dynamicsResponse.Result };
+            return new JsonResult(result);
+        }
 
         [HttpGet("getdata")]
         public ActionResult Sample()
@@ -77,21 +101,13 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             HttpClient httpClient = null;
             try
             {
-                var dynamicsOdataUri = configuration["DYNAMICS_ODATAURI"];
-                var ssgUsername = configuration["SSG_USERNAME"];
-                var ssgPassword = configuration["SSG_PASSWORD"];
+                var endpointAction = "vsd_CreateCVAPClaim";
+                httpClient = GetDynamicsHttpClient(configuration, endpointAction);
 
                 var application = model.ToVsdVictimsModel();
                 var applicationJson = JsonConvert.SerializeObject(application);
 
-                httpClient = new HttpClient(new HttpClientHandler { Credentials = new NetworkCredential(ssgUsername, ssgPassword) });
-                httpClient.BaseAddress = new Uri(string.Join("/", dynamicsOdataUri, "vsd_CreateCVAPClaim"));
-                httpClient.Timeout = new TimeSpan(1, 0, 0);  // 1 hour timeout  
-                httpClient.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
-                httpClient.DefaultRequestHeaders.Add("OData-Version", "4.0");
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "vsd_CreateCVAPClaim");
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
                 request.Content = new StringContent(applicationJson, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await httpClient.SendAsync(request);
@@ -109,6 +125,53 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 if (httpClient != null)
                     httpClient.Dispose();
             }
+        }
+        
+        private static async Task<string> CreateInvoiceAction(IConfiguration configuration, CounsellorInvoiceFormModel model)
+        {
+            HttpClient httpClient = null;
+            try
+            {
+                var endpointAction = "vsd_SubmitCounselorInvoice";
+                httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+
+                var invoiceModel = model.ToDynamicsModel();
+                var invoiceJson = JsonConvert.SerializeObject(invoiceModel);
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
+                request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await httpClient.SendAsync(request);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                    return jsonResult;
+                }
+
+                return response.Content.ReadAsStringAsync().Result;
+            }
+            finally
+            {
+                if (httpClient != null)
+                    httpClient.Dispose();
+            }
+        }
+
+        private static HttpClient GetDynamicsHttpClient(IConfiguration configuration, string endpointAction)
+        {
+            HttpClient httpClient;
+            var dynamicsOdataUri = configuration["DYNAMICS_ODATAURI"];
+            var ssgUsername = configuration["SSG_USERNAME"];
+            var ssgPassword = configuration["SSG_PASSWORD"];
+
+            httpClient = new HttpClient(new HttpClientHandler { Credentials = new NetworkCredential(ssgUsername, ssgPassword) });
+            httpClient.BaseAddress = new Uri(string.Join("/", dynamicsOdataUri, endpointAction));
+            httpClient.Timeout = new TimeSpan(1, 0, 0);  // 1 hour timeout  
+            httpClient.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
+            httpClient.DefaultRequestHeaders.Add("OData-Version", "4.0");
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            return httpClient;
         }
 
         private static async Task<string> CreateCaseActionOld(IConfiguration configuration, ApplicationFormModel model)
