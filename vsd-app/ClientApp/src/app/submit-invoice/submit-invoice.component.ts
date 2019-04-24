@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
-import { defaultFormat as _rollupMoment } from 'moment';
 import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 
@@ -29,8 +26,6 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
-
-export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -69,7 +64,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   public showCancelPanel: boolean = false;
   
   invoiceSubTotal: number = 0.00;
-  invoiceGstTotal: number = 0.00;
   invoiceGrandTotal: number = 0.00;
 
   saveFormData: any;
@@ -77,8 +71,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
     public snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
@@ -90,6 +82,71 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.form = this.buildInvoiceForm();
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
     this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
+
+    this.form.get('invoiceDetails.doYouHaveCvapCounsellorNumber')
+      .valueChanges
+      .subscribe(value => {
+        const counsellorRegistrationNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber');
+
+        const counsellorFirstName = this.form.get('invoiceDetails.counsellorFirstName');
+        const counsellorLastName = this.form.get('invoiceDetails.counsellorLastName');
+        const counsellorEmail = this.form.get('invoiceDetails.counsellorEmail');
+
+        counsellorRegistrationNumber.clearValidators();
+        counsellorRegistrationNumber.setErrors(null);
+        counsellorFirstName.clearValidators();
+        counsellorFirstName.setErrors(null);
+        counsellorLastName.clearValidators();
+        counsellorLastName.setErrors(null);
+        counsellorEmail.clearValidators();
+        counsellorEmail.setErrors(null);
+
+        const validateNumber = value === true;
+        if (validateNumber) {
+          counsellorRegistrationNumber.setValidators([Validators.required]);
+        }
+
+        if (!validateNumber) {
+          counsellorFirstName.setValidators([Validators.required]);
+          counsellorLastName.setValidators([Validators.required]);
+          counsellorEmail.setValidators([Validators.required, Validators.email]);
+        }
+
+        counsellorRegistrationNumber.updateValueAndValidity();
+        counsellorFirstName.updateValueAndValidity();
+        counsellorLastName.updateValueAndValidity();
+        counsellorEmail.updateValueAndValidity();
+      });
+
+    this.form.get('invoiceDetails.doYouHaveVendorNumberOnFile')
+      .valueChanges
+      .subscribe(value => {
+        const vendorNumber = this.form.get('invoiceDetails.vendorNumber');
+
+        const vendorName = this.form.get('invoiceDetails.vendorName');
+        const vendorEmail = this.form.get('invoiceDetails.vendorEmail');
+
+        vendorNumber.clearValidators();
+        vendorNumber.setErrors(null);
+        vendorName.clearValidators();
+        vendorName.setErrors(null);
+        vendorEmail.clearValidators();
+        vendorEmail.setErrors(null);
+
+        const validateNumber = value === true;
+        if (validateNumber) {
+          vendorNumber.setValidators([Validators.required]);
+        }
+
+        if (!validateNumber) {
+          vendorName.setValidators([Validators.required]);
+          vendorEmail.setValidators([Validators.required, Validators.email]);
+        }
+
+        vendorNumber.updateValueAndValidity();
+        vendorName.updateValueAndValidity();
+        vendorEmail.updateValueAndValidity();
+      });
   }
   
   debugFormData(): void {
@@ -163,6 +220,18 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     });
   }
 
+  addLineItem(): void {
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItems.push(this.createLineItem());
+    this.showRemoveLine = this.lineItems.length > 1;
+  }
+
+  removeLineItem(index: number): void {
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItems.removeAt(index);
+    this.showRemoveLine = this.lineItems.length > 1;
+  }
+  
   showSignPad(group, control): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -180,68 +249,12 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     );
   }
 
-  validateAllFormFields(formGroup: any) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
-      } else if (control instanceof FormArray) {
-        this.validateAllFormFields(control);
-      }
-    });
-  }
-
-  getErrors(formGroup: any, errors: any = {}) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        errors[field] = control.errors;
-      } else if (control instanceof FormGroup) {
-        errors[field] = this.getErrors(control);
-      } else if (control instanceof FormArray) {
-        errors[field] = this.getErrors(control);
-      }
-    });
-    return errors;
-  }
-
-  isFieldValid(field: string) {
-    let formField = this.form.get(field);
-    if (formField == null)
-      return true;
-
-    return this.form.get(field).valid || !this.form.get(field).touched;
-  }
-
   isControlValid(formControl: FormGroup, field: string) {
     let formField = formControl;
     if (formField == null)
       return true;
 
     return formField.controls[field].valid || !formField.controls[field].touched;
-  }
-  
-  isChildFieldValid(parent: string, field: string) {
-    let formField = this.form.get(parent);
-    if (formField == null)
-      return true;
-
-    return formField.get(field).valid || !formField.get(field).touched;
-  }
-
-  addLineItem(): void {
-    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
-    this.lineItems.push(this.createLineItem());
-    this.showRemoveLine = this.lineItems.length > 1;
-  }
-
-  removeLineItem(index: number): void {
-    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
-    this.lineItems.removeAt(index);
-    this.showRemoveLine = this.lineItems.length > 1;
   }
 
   reviewInvoice() {
@@ -300,24 +313,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     return subResult;
   }
 
-  // marking the form as touched makes the validation messages show
   markAsTouched() {
-    this.form.get('invoiceDetails').markAsTouched();
-
-    const invoiceControls = (<FormGroup>(this.form.get('invoiceDetails'))).controls;
-    for (const a in invoiceControls) {
-      if (typeof (invoiceControls[a].markAsTouched) === 'function') {
-        invoiceControls[a].markAsTouched();
-      }
-    }
-
-    const invoiceItemControls = (<FormGroup>(this.form.get('invoiceDetails.lineItems'))).controls;
-    for (const c in invoiceItemControls) {
-      console.log(c);
-      if (typeof (invoiceItemControls[c].markAsTouched) === 'function') {
-        invoiceItemControls[c].markAsTouched();
-      }
-    }
+    this.validateAllFormFields(this.form.get('invoiceDetails'));
   }
 
   private buildInvoiceForm(): FormGroup {
@@ -352,7 +349,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
         exemptFromGst: [false],
 
-        lineItems: this.fb.array([this.createLineItem()]),
+        lineItems: this.fb.array([this.createLineItem()], Validators.minLength(1)),
 
         declaredAndSigned: ['', Validators.required],
         signature: ['', Validators.required],

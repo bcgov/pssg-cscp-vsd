@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { ValidatorFn, AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { ValidatorFn, AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import * as _moment from 'moment';
 
 export class FormBase {
@@ -83,6 +83,17 @@ export class FormBase {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup) {
         this.validateAllFormFields(control);
+      } else if (control instanceof FormArray) {
+        for (const control1 of control.controls) {
+          if (control1 instanceof FormControl) {
+            control1.markAsTouched({
+              onlySelf: true
+            });
+          }
+          if (control1 instanceof FormGroup) {
+            this.validateAllFormFields(control1);
+          }
+        }
       }
     });
   }
@@ -93,6 +104,8 @@ export class FormBase {
       if (control instanceof FormControl) {
         errors[field] = control.errors;
       } else if (control instanceof FormGroup) {
+        errors[field] = this.getErrors(control);
+      } else if (control instanceof FormArray) {
         errors[field] = this.getErrors(control);
       }
     });
