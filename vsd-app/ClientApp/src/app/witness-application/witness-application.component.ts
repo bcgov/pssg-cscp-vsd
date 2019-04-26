@@ -59,6 +59,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   busy3: Promise<any>;
   form: FormGroup;
   formFullyValidated: boolean;
+  showValidationMessage: boolean;
 
   otherTreatmentItems: FormArray;
   employerItems: FormArray;
@@ -118,6 +119,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       .subscribe(value => {
         let phoneControl = this.form.get('personalInformation.phoneNumber');
         let emailControl = this.form.get('personalInformation.email');
+        let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
         let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
         let addressControls = [
           this.form.get('personalInformation').get('primaryAddress.country'),
@@ -131,6 +133,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         phoneControl.setErrors(null);
         emailControl.clearValidators();
         emailControl.setErrors(null);
+        emailConfirmControl.clearValidators();
+        emailConfirmControl.setErrors(null);
         addressControl.clearValidators();
         addressControl.setErrors(null);
         for (let control of addressControls) {
@@ -145,7 +149,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
           this.emailIsRequired = false;
           this.addressIsRequired = false;
         } else if (contactMethod === 100000001) {
-          emailControl.setValidators([Validators.required, Validators.email]);
+          emailControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
+          emailConfirmControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
           this.phoneIsRequired = false;
           this.emailIsRequired = true;
           this.addressIsRequired = false;
@@ -163,6 +168,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         phoneControl.updateValueAndValidity();
         emailControl.markAsTouched();
         emailControl.updateValueAndValidity();
+        emailConfirmControl.markAsTouched();
+        emailConfirmControl.updateValueAndValidity();
         addressControl.markAsTouched();
         addressControl.updateValueAndValidity();
         for (let control of addressControls) {
@@ -245,10 +252,12 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         }
 
         if (formValid) {
+          this.showValidationMessage = false;
           window.scroll(0, 0);
           stepper.next();
         } else {
           this.validateAllFormFields(formParts);
+          this.showValidationMessage = true;
         }
       }
     }
@@ -338,7 +347,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   createCrimeLocationItem(): FormGroup {
     return this.fb.group({
-      location: ''
+      location: ['', Validators.required]
     });
   }
 
@@ -525,6 +534,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         phoneNumber: [''],
         alternatePhoneNumber: [''],
         email: [''],
+        confirmEmail: [''],
 
         // Bind a subscribe event on this field being true. Change victim primary address when applicant address changes
         mostRecentMailingAddressSameAsPersonal: ['', Validators.required],

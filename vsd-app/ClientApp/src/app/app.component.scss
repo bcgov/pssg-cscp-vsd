@@ -324,6 +324,11 @@ a:active {
     padding-top: 20px;
 }
 
+::ng-deep .btn {
+  .btn-wrappable {
+    white-space: inherit;
+  }
+}
 button.btn-mobile {
     border: none;
     outline: none;
@@ -770,6 +775,18 @@ hr {
   }
   .shorter {
     width: 250px;
+  }
+}
+
+::ng-deep .col-6 {
+  .address-info {
+    .standard {
+      width: 100%;
+    }
+
+    .shorter {
+      width: 65%;
+    }
   }
 }
 
