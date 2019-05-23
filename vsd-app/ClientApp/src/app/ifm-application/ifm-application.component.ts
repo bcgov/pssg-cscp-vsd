@@ -81,9 +81,13 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   public currentFormStep: number;
 
-  phoneIsRequired: boolean;
-  emailIsRequired: boolean;
-  addressIsRequired: boolean;
+  phoneIsRequired: boolean = false;
+  emailIsRequired: boolean = false;
+  addressIsRequired: boolean = false;
+
+  representativePhoneIsRequired: boolean = false;
+  representativeEmailIsRequired: boolean = false;
+  representativeAddressIsRequired: boolean = false;
 
   saveFormData: any;
 
@@ -97,10 +101,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   ) {
     super();
 
-    this.phoneIsRequired = false;
-    this.emailIsRequired = false;
-    this.addressIsRequired = false;
-
     this.formFullyValidated = false;
     this.currentFormStep = 0;
   }
@@ -113,7 +113,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
 
-    /* Need to rework this with the new app-address control */
     this.form.get('personalInformation.preferredMethodOfContact')
       .valueChanges
       .subscribe(value => {
@@ -178,6 +177,20 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         }
       });
 
+    this.form.get('medicalInformation.wereYouTreatedAtHospital')
+      .valueChanges
+      .subscribe(value => {
+        let hospitalControl = this.form.get('medicalInformation.treatedAtHospitalName');
+
+        hospitalControl.clearValidators();
+        hospitalControl.setErrors(null);
+
+        let useValidation = value === true;
+        if (useValidation) {
+          hospitalControl.setValidators([Validators.required]);
+        }
+      });
+
     this.form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').valueChanges
       .subscribe(value => {
         this.copyPersonalAddressToVictimAddress();
@@ -232,6 +245,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   gotoPage(selectPage: MatStepper): void {
     window.scroll(0, 0);
+    this.showValidationMessage = false;
     this.currentFormStep = selectPage.selectedIndex;
   }
 
@@ -294,8 +308,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   
   createEmployerItem(): FormGroup {
     return this.fb.group({
-      employerName: [''],
-      employerPhoneNumber: [''],
+      employerName: ['', Validators.required],
+      employerPhoneNumber: ['', Validators.required],
       employerFirstName: [''],
       employerLastName: [''],
       employerAddress: this.fb.group({
@@ -481,9 +495,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
         birthDate: ['', [Validators.required]],
 
-        sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
         occupation: [''],
 
         preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],  // Phone = 100000000, Email = 100000001, Mail = 100000002
@@ -494,6 +506,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         phoneNumber: [''],
         alternatePhoneNumber: [''],
         email: [''],
+        confirmEmail: [''],
 
         primaryAddress: this.fb.group({
           line1: ['', Validators.required],
@@ -525,9 +538,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
         maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
-        sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
         occupation: [''],
 
         phoneNumber: [''],
@@ -688,13 +699,13 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       }),
 
       declarationInformation: this.fb.group({
-        declaredAndSigned: ['', Validators.required],
+        declaredAndSigned: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
       }),
 
       authorizationInformation: this.fb.group({
-        approvedAuthorityNotification: ['', Validators.required],
-        readAndUnderstoodTermsAndConditions: ['', Validators.required],
+        approvedAuthorityNotification: ['', Validators.requiredTrue],
+        readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
 
         allowCvapStaffSharing: [''],

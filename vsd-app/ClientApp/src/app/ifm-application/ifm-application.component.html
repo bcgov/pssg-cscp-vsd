@@ -35,7 +35,7 @@
     </div>
 
     <div class="col-lg-7 col-sm-12">
-      <div [formGroup]="form">
+      <form [formGroup]="form">
         <div *ngIf="dataLoaded || true">
           <div formGroupName="introduction" *ngIf="this.currentFormStep == 0">
             <div class="page-header">
@@ -244,13 +244,8 @@
                 </app-field>
               </div>
               <div class="col-4">
-                <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="form.get('personalInformation.sinPart1').valid || !form.get('personalInformation.sinPart1').touched" errorMessage="Please enter your SIN">
-                  <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart1">
-                  <span> - </span>
-                  <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
-                  <span> - </span>
-                  <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
-                  <app-tool-tip [trigger]="sinTemplate"></app-tool-tip>
+                <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('personalInformation.sin')" errorMessage="Please enter your SIN" [tooltipReference]="sinTemplate">
+                  <input class="form-control sin-input" maxlength="11" type="text" formControlName="sin">
                   <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
                 </app-field>
               </div>
@@ -325,11 +320,13 @@
             </div>
 
             <div class="row">
-              <div class="col-6">
+              <div class="col-12">
                 <h3>Primary Address</h3>
                 <app-address [group]="form.get('personalInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
               </div>
-              <div class="col-6">
+            </div>
+            <div class="row">
+              <div class="col-12">
                 <h3>Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip></h3>
                 <ng-template #altAddressTemplate>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</ng-template>
                 <app-address [group]="form.get('personalInformation.alternateAddress')" [showChildrenAsRequired]="false"></app-address>
@@ -441,14 +438,9 @@
               </div>
             </div>
 
-            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="form.get('victimInformation.sinPart1').valid || !form.get('victimInformation.sinPart1').touched" errorMessage="Please enter your SIN">
-              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart1">
-              <span> - </span>
-              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
-              <span> - </span>
-              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
-              <app-tool-tip [trigger]="sinTemplate"></app-tool-tip>
-              <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
+            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('victimInformation.sin')" errorMessage="Please enter your SIN" [tooltipReference]="victimSinTemplate">
+              <input class="form-control sin-input" maxlength="11" type="text" formControlName="sin">
+              <ng-template #victimSinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
             </app-field>
 
             <h2 class="blue-header">Victim's Contact Information</h2>
@@ -948,9 +940,9 @@
                 </label>
               </app-field>
               <section *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
-                <app-field label="Name of hospital" [required]="true" [valid]="isFieldValid('medicalInformation.treatedAtHospitalName')" errorMessage="Please selection a hospital">
+                <app-field label="Name of hospital" [required]="true" [valid]="isFieldValid('medicalInformation.treatedAtHospitalName')" errorMessage="Please select a hospital">
                   <select class="form-control standard" formControlName="treatedAtHospitalName">
-                    <option value="0">Select...</option>
+                    <option value="">Select...</option>
                     <option *ngFor="let item of hospitalList">{{ item }}</option>
                   </select>
                 </app-field>
@@ -1591,7 +1583,7 @@
           </span>
         </section>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
