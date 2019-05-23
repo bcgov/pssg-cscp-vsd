@@ -1,31 +1,40 @@
 <div [formGroup]="group" class="address-info">
-  <app-field label="Country" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('country')" errorMessage="Please select your country">
-    <select class="form-control standard" formControlName="country" (change)="updateLocation($event)">
-      <option value="">Choose a country</option>
-      <option *ngFor="let item of countryList" [value]="item.name">
-        {{ item.name }}
-      </option>
-    </select>
-  </app-field>
-  <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('province')" errorMessage="Please select your province/state">
-    <select class="form-control standard" formControlName="province">
-      <option value="">Choose a {{ provinceType }}</option>
-      <option *ngFor="let item of provinceList" [value]="item">
-        {{ item }}
-      </option>
-    </select>
-  </app-field>
-  <app-field label="City" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('city')" errorMessage="Please enter your city">
-    <input class="form-control standard" type="text" formControlName="city">
-  </app-field>
-  <app-field label="Mailing Address" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('line1')" errorMessage="Please enter your mailing address">
-    <input class="form-control standard" type="text" formControlName="line1" placeholder="Street Number, Street Address, PO Box, C/O" />
-  </app-field>
-  <app-field label="Mailing Address Line 2">
-    <input class="form-control standard" type="text" formControlName="line2" placeholder="Apartment, Suite, Building, Floor">
-  </app-field>
-  <app-field label="{{ postalCodeType }}"  [required]="showChildrenAsRequired" [valid]="isSubFieldValid('postalCode')" errorMessage="Please enter your postal code">
-    <input class="form-control shorter" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
-  </app-field>
-  <br />
+  <div class="row">
+    <div class="col col-6">
+      <app-field label="Country" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('country')" errorMessage="Please select your country">
+        <select class="form-control standard" formControlName="country" (change)="updateLocation($event)">
+          <option value="">Choose a country</option>
+          <option *ngFor="let item of countryList" [value]="item.name">
+            {{ item.name }}
+          </option>
+        </select>
+      </app-field>
+      <app-field label="Mailing Address" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('line1')" errorMessage="Please enter your mailing address">
+        <input class="form-control standard" type="text" formControlName="line1" placeholder="Street Number, Street Address, PO Box, C/O" />
+      </app-field>
+      <app-field label="City" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('city')" errorMessage="Please enter your city">
+        <input class="form-control standard" type="text" formControlName="city">
+      </app-field>
+
+    </div>
+    <div class="col col-6">
+      <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('province')" errorMessage="Please select your province/state">
+        <select class="form-control standard" formControlName="province">
+          <option value="">Choose a {{ provinceType }}</option>
+          <option *ngFor="let item of provinceList" [value]="item">
+            {{ item }}
+          </option>
+        </select>
+      </app-field>
+
+      <app-field label="Mailing Address Line 2">
+        <input class="form-control standard" type="text" formControlName="line2" placeholder="Apartment, Suite, Building, Floor">
+      </app-field>
+
+      <app-field label="{{ postalCodeType }}"  [required]="showChildrenAsRequired" [valid]="isSubFieldValid('postalCode')" errorMessage="Please enter your postal code">
+        <input class="form-control shorter" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
+      </app-field>
+    </div>
+  </div>
 </div>
+<br />
