@@ -14,9 +14,7 @@ export class PersonalInformationModel {
   email: string;
   birthDate: Date;
 
-  sinPart1: number | null;
-  sinPart2: number | null;
-  sinPart3: number | null;
+  sin: number | null;
 
   gender: number;
   maritalStatus: number;
