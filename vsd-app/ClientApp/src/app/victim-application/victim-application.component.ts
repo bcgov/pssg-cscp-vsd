@@ -9,10 +9,11 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { defaultFormat as _rollupMoment } from 'moment';
+import { CanDeactivateGuard } from '../services/can-deactivate-guard.service';
 import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
-
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
+import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
@@ -51,7 +52,7 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
   ],
 })
 
-export class VictimApplicationComponent extends FormBase implements OnInit {
+export class VictimApplicationComponent extends FormBase implements OnInit, CanDeactivateGuard {
   currentUser: User;
   dataLoaded = false;
   busy: Promise<any>;
@@ -83,10 +84,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   public currentFormStep: number;
 
-  phoneIsRequired: boolean;
-  emailIsRequired: boolean;
-  addressIsRequired: boolean;
+  phoneIsRequired: boolean = false;
+  emailIsRequired: boolean = false;
+  addressIsRequired: boolean = false;
 
+  representativePhoneIsRequired: boolean = false;
+  representativeEmailIsRequired: boolean = false;
+  representativeAddressIsRequired: boolean = false;
+
+  expenseMinimumMet: boolean = null;
   saveFormData: any;
 
   constructor(
@@ -99,16 +105,38 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   ) {
     super();
 
-    this.phoneIsRequired = false;
-    this.emailIsRequired = false;
-    this.addressIsRequired = false;
-
     this.formFullyValidated = false;
     this.currentFormStep = 0;
   }
 
-  ngOnInit() {
+  canDeactivate() {
+    let formDirty = false;
 
+    formDirty = this.form.dirty && this.form.touched;
+    console.log('Form Dirty: ' + formDirty);
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(DeactivateGuardDialog, dialogConfig);
+    dialogRef.afterClosed().subscribe(
+      data => {
+        console.log(data); 
+        return data;
+      }
+    ); 
+
+    //return verifyDialogRef.navigateAwaySelection$;
+    // if the editName !== this.user.name
+    //    if (this.user.name !== this.editName) {
+    //return window.confirm('Discard changes?');
+    //}
+
+    return false;
+  }
+
+  ngOnInit() {
     let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
 
     this.form = this.buildApplicationForm();
@@ -117,7 +145,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
 
-    /* Need to rework this with the new app-address control */
     this.form.get('personalInformation.preferredMethodOfContact')
       .valueChanges
       .subscribe(value => {
@@ -181,6 +208,204 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           control.updateValueAndValidity();
         }
       });
+
+    this.form.get('medicalInformation.wereYouTreatedAtHospital')
+      .valueChanges
+      .subscribe(value => {
+        let hospitalControl = this.form.get('medicalInformation.treatedAtHospitalName');
+
+        hospitalControl.clearValidators();
+        hospitalControl.setErrors(null);
+
+        let useValidation = value === true;
+        if (useValidation) {
+          hospitalControl.setValidators([Validators.required]);
+        }
+      });
+
+    this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses')
+      .valueChanges
+      .subscribe(value => {
+        let wasEmployed = this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime');
+        let missedWork = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime');
+
+        wasEmployed.clearValidators();
+        wasEmployed.setErrors(null);
+        missedWork.clearValidators();
+        missedWork.setErrors(null);
+        
+        let useValidation = value === true;
+        if (useValidation) {
+          wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
+          missedWork.setValidators([Validators.required]);
+        }
+      });
+
+    this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')
+      .valueChanges
+      .subscribe(value => {
+        let wereYouAtWork = this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident');
+
+        wereYouAtWork.clearValidators();
+        wereYouAtWork.setErrors(null);
+
+        let useValidation = value === 100000000;
+        if (useValidation) {
+          wereYouAtWork.setValidators([Validators.required]);
+        }
+      });
+
+    this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident')
+      .valueChanges
+      .subscribe(value => {
+        let appliedForWorkersComp = this.form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation');
+
+        appliedForWorkersComp.clearValidators();
+        appliedForWorkersComp.setErrors(null);
+
+        let useValidation = value === true;
+        if (useValidation) {
+          appliedForWorkersComp.setValidators([Validators.required]);
+        }
+      });
+
+    this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime')
+      .valueChanges
+      .subscribe(value => {
+        let missedWorkStartDate = this.form.get('employmentIncomeInformation.daysWorkMissedStart');
+        let lostWages = this.form.get('employmentIncomeInformation.didYouLoseWages');
+        let selfEmployed = this.form.get('employmentIncomeInformation.areYouSelfEmployed');
+        let mayContactEmployer = this.form.get('employmentIncomeInformation.mayContactEmployer');
+        let employerControls = this.form.get('employmentIncomeInformation.employers') as FormArray;
+
+        missedWorkStartDate.clearValidators();
+        missedWorkStartDate.setErrors(null);
+        lostWages.clearValidators();
+        lostWages.setErrors(null);
+        selfEmployed.clearValidators();
+        selfEmployed.setErrors(null);
+        mayContactEmployer.clearValidators();
+        mayContactEmployer.setErrors(null);
+        for (let control of employerControls.controls) {
+          let control1 = control.get('employerName');
+          let control2 = control.get('employerPhoneNumber');
+          control1.clearValidators();
+          control1.setErrors(null);
+          control2.clearValidators();
+          control2.setErrors(null);
+        }
+
+        let useValidation = value === true;
+        if (useValidation) {
+          missedWorkStartDate.setValidators([Validators.required]);
+          lostWages.setValidators([Validators.required]);
+          selfEmployed.setValidators([Validators.required]);
+          mayContactEmployer.setValidators([Validators.required]);
+          for (let control of employerControls.controls) {
+            let control1 = control.get('employerName');
+            let control2 = control.get('employerPhoneNumber');
+            control1.setValidators([Validators.required]);
+            control2.setValidators([Validators.required]);
+          }
+        }
+      });
+
+    this.form.get('representativeInformation.completingOnBehalfOf')
+      .valueChanges
+      .subscribe(value => {
+        let representativeFirstName = this.form.get('representativeInformation.representativeFirstName');
+        let representativeLastName = this.form.get('representativeInformation.representativeLastName');
+        let representativePreferredMethodOfContact = this.form.get('representativeInformation.representativePreferredMethodOfContact');
+
+        representativeFirstName.clearValidators();
+        representativeFirstName.setErrors(null);
+        representativeLastName.clearValidators();
+        representativeLastName.setErrors(null);
+        representativePreferredMethodOfContact.clearValidators();
+        representativePreferredMethodOfContact.setErrors(null);
+
+        let useValidation = value === 100000001 || value === 100000002 || value === 100000003;
+        this.setupRepresentativeContactInformation(0);  // Have to clear contact validators on contact method change
+        if (useValidation) {
+          representativeFirstName.setValidators([Validators.required]);
+          representativeLastName.setValidators([Validators.required]);
+          representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
+        }
+      });
+
+    this.form.get('representativeInformation.representativePreferredMethodOfContact')
+      .valueChanges
+      .subscribe(value => {
+        let contactMethod = parseInt(value);
+        this.setupRepresentativeContactInformation(contactMethod);
+      });
+
+    this.form.get('authorizationInformation.allowCvapStaffSharing')
+      .valueChanges
+      .subscribe(value => {
+        let authorizedPersonAuthorizesDiscussion = this.form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion');
+        let authorizedPersonSignature = this.form.get('authorizationInformation.authorizedPersonSignature');
+
+        authorizedPersonAuthorizesDiscussion.clearValidators();
+        authorizedPersonAuthorizesDiscussion.setErrors(null);
+        authorizedPersonSignature.clearValidators();
+        authorizedPersonSignature.setErrors(null);
+
+        let useValidation = value === true;
+        if (useValidation) {
+          authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
+          authorizedPersonSignature.setValidators([Validators.required]);
+        }
+      });
+  }
+
+  setupRepresentativeContactInformation(contactMethod: number): void {
+    let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
+    let emailControl = this.form.get('representativeInformation.representativeEmail');
+    let addressControls = [
+      this.form.get('representativeInformation').get('representativeAddress.country'),
+      this.form.get('representativeInformation').get('representativeAddress.province'),
+      this.form.get('representativeInformation').get('representativeAddress.city'),
+      this.form.get('representativeInformation').get('representativeAddress.line1'),
+      this.form.get('representativeInformation').get('representativeAddress.postalCode'),
+    ];
+
+    phoneControl.clearValidators();
+    phoneControl.setErrors(null);
+    emailControl.clearValidators();
+    emailControl.setErrors(null);
+    for (let control of addressControls) {
+      control.clearValidators();
+      control.setErrors(null);
+    }
+
+    if (contactMethod === 100000000) {
+      phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+      this.representativePhoneIsRequired = true;
+      this.representativeEmailIsRequired = false;
+      this.representativeAddressIsRequired = false;
+    } else if (contactMethod === 100000001) {
+      emailControl.setValidators([Validators.required, Validators.email]);
+      this.representativePhoneIsRequired = false;
+      this.representativeEmailIsRequired = true;
+      this.representativeAddressIsRequired = false;
+    } else if (contactMethod === 100000002) {
+      for (let control of addressControls) {
+        control.setValidators([Validators.required]);
+      }
+      this.representativePhoneIsRequired = false;
+      this.representativeEmailIsRequired = false;
+      this.representativeAddressIsRequired = true;
+    }
+
+    phoneControl.markAsTouched();
+    phoneControl.updateValueAndValidity();
+    emailControl.markAsTouched();
+    emailControl.updateValueAndValidity();
+    for (let control of addressControls) {
+      control.markAsTouched();
+      control.updateValueAndValidity();
+    }
   }
 
   showSignPad(group, control): void {
@@ -218,6 +443,41 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     return elements[groupIndex];
   }
 
+  changeGroupValidity(values: any) : void {
+    let expenseMinimumMet = '';
+    const x = [
+      this.form.get('expenseInformation.haveMedicalExpenses'),
+      this.form.get('expenseInformation.haveDentalExpenses'),
+      this.form.get('expenseInformation.benefitsPrescription'),
+      this.form.get('expenseInformation.havePrescriptionDrugExpenses'),
+      this.form.get('expenseInformation.haveCounsellingExpenses'),
+      this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses'),
+      this.form.get('expenseInformation.havePersonalPropertyLostExpenses'),
+      this.form.get('expenseInformation.haveProtectiveMeasureExpenses'),
+      this.form.get('expenseInformation.haveDisabilityExpenses'),
+      this.form.get('expenseInformation.haveCrimeSceneCleaningExpenses'),
+      this.form.get('expenseInformation.haveOtherExpenses'),
+    ];
+
+    let oneChecked = false;
+    x.forEach(c => {
+      if (oneChecked)
+        return;
+
+      if (c instanceof FormControl) {
+        if (c.value === true)
+          oneChecked = true;
+      }
+    });
+
+    // fake a 'true' as a string
+    expenseMinimumMet = oneChecked ? 'yes' : '';
+
+    this.form.get('expenseInformation').patchValue({
+      minimumExpensesSelected: expenseMinimumMet
+    });
+  }
+
   gotoPageIndex(stepper: MatStepper, selectPage: number): void {
     window.scroll(0, 0);
     stepper.selectedIndex = selectPage;
@@ -226,6 +486,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   gotoPage(selectPage: MatStepper): void {
     window.scroll(0, 0);
+    this.showValidationMessage = false;
     this.currentFormStep = selectPage.selectedIndex;
   }
 
@@ -303,8 +564,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   createEmployerItem(): FormGroup {
     return this.fb.group({
-      employerName: [''],
-      employerPhoneNumber: [''],
+      employerName: ['', Validators.required],
+      employerPhoneNumber: ['', Validators.required],
       employerFirstName: [''],
       employerLastName: [''],
       employerAddress: this.fb.group({
@@ -316,6 +577,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         country: [{ value: 'Canada', disabled: false }],
       })
     });
+  }
+
+  getEmployerItem(index: number): FormControl {
+    return (<FormArray>this.form.get('employmentIncomeInformation.employers')).controls[index] as FormControl;
   }
 
   addCourtInfo(): void {
@@ -485,12 +750,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
         maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
-        sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
         occupation: [''],
 
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],  // Phone = 100000000, Email = 100000001, Mail = 100000002
+        preferredMethodOfContact:
+        [
+          0, [Validators.required, Validators.min(100000000)]
+        ], // Phone = 100000000, Email = 100000001, Mail = 100000002
 
         permissionToContactViaMethod: [false],
         agreeToCvapCommunicationExchange: [''],
@@ -521,19 +787,22 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         typeOfCrime: ['', Validators.required],
 
         unsureOfCrimeDates: [''],
-        whenDidCrimeOccur: [''],  // True = Period of Time, False = Start date only
+        whenDidCrimeOccur: [''], // True = Period of Time, False = Start date only
         crimePeriodStart: ['', Validators.required],
         crimePeriodEnd: [''],
         applicationFiledWithinOneYearFromCrime: [''],
         whyDidYouNotApplySooner: [''],
 
-        crimeLocation: [''],  // REMOVE AFTER DEMO
+        crimeLocation: [''], // REMOVE AFTER DEMO
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.array([]),  // This will be a collection of uploaded files
+        additionalInformationFiles: this.fb.array([]), // This will be a collection of uploaded files
 
-        wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
+        wasReportMadeToPolice:
+        [
+          0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
+        ], // No: 100000000 Yes: 100000001
 
         policeReportedWhichPoliceForce: [''],
         policeReportedMultipleTimes: [''],
@@ -547,11 +816,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         offenderMiddleName: [''],
         offenderLastName: [''],
         offenderRelationship: [''],
-        offenderBeenCharged: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // Yes: 100000000 No: 100000001 Undecided: 100000002
+        offenderBeenCharged:
+        [
+          0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]
+        ], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
         courtFiles: this.fb.array([this.createCourtInfoItem()]),
 
-        haveYouSuedOffender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000   Yes: 100000001
+        haveYouSuedOffender:
+        [
+          0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
+        ], // No: 100000000   Yes: 100000001
         intendToSueOffender: [0], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
         racafInformation: this.fb.group({
@@ -565,7 +840,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             line1: [''],
             line2: [''],
             city: [''],
-            postalCode: [''],  // , [Validators.pattern(postalRegex)]
+            postalCode: [''], // , [Validators.pattern(postalRegex)]
             province: [{ value: 'British Columbia', disabled: false }],
             country: [{ value: 'Canada', disabled: false }],
           }),
@@ -580,7 +855,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         doYouHaveOtherHealthCoverage: ['', Validators.required],
         otherHealthCoverageProviderName: [''],
         otherHealthCoverageExtendedPlanNumber: [''],
-        
+
         wereYouTreatedAtHospital: ['', Validators.required],
         treatedAtHospitalName: [''],
         treatedOutsideBc: [''],
@@ -608,6 +883,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         haveCrimeSceneCleaningExpenses: [false],
         haveOtherExpenses: [false],
         otherSpecificExpenses: [''],
+        minimumExpensesSelected: ['', Validators.required],
 
         haveDisabilityPlanBenefits: [false],
         haveEmploymentInsuranceBenefits: [false],
@@ -618,7 +894,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
-      }),
+      }, { validator: this.requireCheckboxesToBeCheckedValidator }),
       employmentIncomeInformation: this.fb.group({
         wereYouEmployedAtTimeOfCrime: [0], //, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // 100000000 = Yes, 1000000001 = No, 100000002 = Self-Employed
         wereYouAtWorkAtTimeOfIncident: [''], //, Validators.required],
@@ -656,16 +932,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       }),
 
       declarationInformation: this.fb.group({
-        declaredAndSigned: ['', Validators.required],
+        declaredAndSigned: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
       }),
 
       authorizationInformation: this.fb.group({
-        approvedAuthorityNotification: ['', Validators.required],
-        readAndUnderstoodTermsAndConditions: ['', Validators.required],
+        approvedAuthorityNotification: ['', Validators.requiredTrue],
+        readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
 
-        allowCvapStaffSharing: [''],
+        allowCvapStaffSharing: ['', Validators.required],
         authorizedPersonFullName: [''],
         authorizedPersonPhoneNumber: [''],
         authorizedPersonRelationship: [''],

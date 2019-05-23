@@ -35,7 +35,7 @@
     </div>
 
     <div class="col-lg-7 col-sm-12">
-      <div [formGroup]="form">
+      <form [formGroup]="form">
         <div *ngIf="dataLoaded || true">
           <div formGroupName="introduction" *ngIf="this.currentFormStep == 0">
             <div class="page-header">
@@ -231,12 +231,8 @@
               </div>
             </div>
 
-            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="form.get('personalInformation.sinPart1').valid || !form.get('personalInformation.sinPart1').touched" errorMessage="Please enter your SIN" [tooltipReference]="sinTemplate">
-              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart1">
-              <span> - </span>
-              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart2">
-              <span> - </span>
-              <input class="form-control sin-input" maxlength="3" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="sinPart3">
+            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('personalInformation.sin')" errorMessage="Please enter your SIN" [tooltipReference]="sinTemplate">
+              <input class="form-control sin-input" maxlength="11" type="text" formControlName="sin">
               <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
             </app-field>
 
@@ -308,13 +304,14 @@
               </div>
             </div>
 
-
             <div class="row">
-              <div class="col-6">
+              <div class="col-12">
                 <h3>Primary Address</h3>
                 <app-address [group]="form.get('personalInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
               </div>
-              <div class="col-6">
+            </div>
+            <div class="row">
+              <div class="col-12">
                 <h3>Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip></h3>
                 <ng-template #altAddressTemplate>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</ng-template>
                 <app-address [group]="form.get('personalInformation.alternateAddress')" [showChildrenAsRequired]="false"></app-address>
@@ -386,7 +383,7 @@
                   <div class="crime-location-information">
                     <div class="location-listing" formArrayName="crimeLocations" *ngFor="let item of form.get('crimeInformation.crimeLocations').controls; let i = index;">
                       <div [formGroupName]="i" class="crime-location">
-                        <app-field [valid]="isFieldValid(i.crimeLocations')" >
+                        <app-field>
                           <input class="form-control standard" type="text" formControlName="location">
                           <a href="javascript:void(0);" (click)="removeCrimeLocation(i)" *ngIf="showRemoveCrimeLocation">
                             <i class="fas fa-trash-alt"></i> Remove Location
@@ -752,9 +749,9 @@
                 </label>
               </app-field>
               <section *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
-                <app-field label="Name of hospital" [required]="true" [valid]="isFieldValid('medicalInformation.treatedAtHospitalName')" errorMessage="Please selection a hospital">
+                <app-field label="Name of hospital" [required]="true" [valid]="isFieldValid('medicalInformation.treatedAtHospitalName')" errorMessage="Please select a hospital">
                   <select class="form-control standard" formControlName="treatedAtHospitalName">
-                    <option value="0">Select...</option>
+                    <option value="">Select...</option>
                     <option *ngFor="let item of hospitalList">{{ item }}</option>
                   </select>
                 </app-field>
@@ -874,69 +871,69 @@
               <h2 class="blue-header">Benefits Available Through CVAP</h2>
               <p>
                 For a complete list of benefits available through CVAP, please view the <a [routerLink]="" (click)="showSummaryOfBenefits()">Summary of Benefits</a>.<br />
-                <strong>Original reciepts</strong> are required for expenses not covered by your extended health or other insurance plan
+                <strong>Original receipts</strong> are required for expenses not covered by your extended health or other insurance plan
               </p>
               <br />
 
-              <p>Please check all that apply:</p>
+              <p>Please check all that apply (at least one is required):</p>
               <div class="radio-list">
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveMedicalExpenses" formControlName="haveMedicalExpenses">
+                    <input type="checkbox" [value]="true" name="haveMedicalExpenses" formControlName="haveMedicalExpenses" (change)="changeGroupValidity($event)">
                     Medical Expenses <app-tool-tip [trigger]="benefitsMedicalExpenses"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveDentalExpenses" formControlName="haveDentalExpenses">
+                    <input type="checkbox" [value]="true" name="haveDentalExpenses" formControlName="haveDentalExpenses" (change)="changeGroupValidity($event)">
                     Dental Expenses <app-tool-tip [trigger]="benefitsDental"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="havePrescriptionDrugExpenses" formControlName="havePrescriptionDrugExpenses">
+                    <input type="checkbox" [value]="true" name="havePrescriptionDrugExpenses" formControlName="havePrescriptionDrugExpenses" (change)="changeGroupValidity($event)">
                     Prescription drug expenses <app-tool-tip [trigger]="benefitsPrescription"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveCounsellingExpenses" formControlName="haveCounsellingExpenses">
+                    <input type="checkbox" [value]="true" name="haveCounsellingExpenses" formControlName="haveCounsellingExpenses" (change)="changeGroupValidity($event)">
                     Counselling <app-tool-tip [trigger]="benefitsCounselling"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses">
+                    <input type="checkbox" [value]="true" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses" (change)="changeGroupValidity($event)">
                     Lost employment income (reimbursed at minimum wage) <app-tool-tip [trigger]="benefitsLostEmployment"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="havePersonalPropertyLostExpenses" formControlName="havePersonalPropertyLostExpenses">
+                    <input type="checkbox" [value]="true" name="havePersonalPropertyLostExpenses" formControlName="havePersonalPropertyLostExpenses" (change)="changeGroupValidity($event)">
                     Repair or replacement costs of damaged or destroyed personal property that you were wearing at the time of the incident (e.g. eyeglasses, clothing) <app-tool-tip [trigger]="benefitsLostProperty"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveProtectiveMeasureExpenses" formControlName="haveProtectiveMeasureExpenses">
+                    <input type="checkbox" [value]="true" name="haveProtectiveMeasureExpenses" formControlName="haveProtectiveMeasureExpenses" (change)="changeGroupValidity($event)">
                     Protective measures (e.g. moving expenses, security devices) <app-tool-tip [trigger]="benefitsProtective"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveDisabilityExpenses" formControlName="haveDisabilityExpenses">
+                    <input type="checkbox" [value]="true" name="haveDisabilityExpenses" formControlName="haveDisabilityExpenses" (change)="changeGroupValidity($event)">
                     Disability benefits, services or equipment <app-tool-tip [trigger]="benefitsDisability"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses">
+                    <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses" (change)="changeGroupValidity($event)">
                     Crime scene cleaning <app-tool-tip [trigger]="benefitsCrimeScene"></app-tool-tip>
                   </label>
                 </app-field>
                 <app-field>
                   <label>
-                    <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses">
+                    <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeGroupValidity($event)">
                     Other
                   </label>
                   <section *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true" class="pushed">
@@ -945,6 +942,11 @@
                     </app-field>
                   </section>
                 </app-field>
+
+                <app-field [valid]="isFieldValid('expenseInformation.minimumExpensesSelected')" errorMessage="Please select at least one option">
+                  <input type="hidden" name="minimumExpensesSelected" formControlName="minimumExpensesSelected">
+                </app-field>
+
                 <ng-template #benefitsMedicalExpenses><h3>Medical Expenses</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li><li>Medical equipment and supplies</li></ul></ng-template>
                 <ng-template #benefitsDental><h3>Dental Expenses</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li></ul></ng-template>
                 <ng-template #benefitsPrescription><h3>Prescription Drug Expenses</h3><p>Victims who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Medications prescribed by a doctor, dentist, or podiatrist</li></ul></ng-template>
@@ -1127,12 +1129,12 @@
                     <h3>Name & Phone Number</h3>
                     <div class="row">
                       <div class="col-4">
-                        <app-field label="Name of Company / Organization" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a company name">
+                        <app-field label="Name of Company / Organization" [required]="true" [valid]="isArrayFieldValid('employmentIncomeInformation.employers', 'employerName', i)" errorMessage="Please enter a company name">
                           <input type="text" class="form-control" formControlName="employerName">
                         </app-field>
                       </div>
                       <div class="col-4">
-                        <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a contact phone number">
+                        <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isArrayFieldValid('employmentIncomeInformation.employers', 'employerPhoneNumber', i)" errorMessage="Please enter a contact phone number">
                           <input type="text" class="form-control" formControlName="employerPhoneNumber">
                         </app-field>
                       </div>
@@ -1161,7 +1163,7 @@
                 <a href="javascript:void(0);" class="btn btn-secondary" (click)="addEmployer()" *ngIf="showAddEmployer">Add Employer</a>
                 <br /><br />
 
-                <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
+                <app-field label="If you are requesting benefits for lost wages, may we contact your employer?" [valid]="isFieldValid('employmentIncomeInformation.mayContactEmployer')" [required]="true" errorMessage="Please select an option">
                   <label class="inline-label">
                     <input type="radio" [value]="true" name="mayContactEmployer" formControlName="mayContactEmployer">
                     <span>Yes</span>
@@ -1261,7 +1263,7 @@
               </div>
               <div class="row">
                 <div class="col-4">
-                  <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
+                  <app-field label="Phone Number (incl. area code)" [required]="representativePhoneIsRequired" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
                     <input class="form-control" type="text" formControlName="representativePhoneNumber">
                   </app-field>
                 </div>
@@ -1271,15 +1273,14 @@
                   </app-field>
                 </div>
                 <div class="col-4">
-                  <app-field label="Email Address" [required]="true" [valid]="isFieldValid('representativeInformation.representativeEmail')" errorMessage="Please enter an email address">
+                  <app-field label="Email Address" [required]="representativeEmailIsRequired" [valid]="isFieldValid('representativeInformation.representativeEmail')" errorMessage="Please enter an email address">
                     <input class="form-control" type="text" formControlName="representativeEmail" placeholder="myname@email.com">
                   </app-field>
                 </div>
               </div>
 
               <h3>Mailing Address</h3>
-              <app-address [group]="form.get('representativeInformation.representativeAddress')"></app-address>
-
+              <app-address [group]="form.get('representativeInformation.representativeAddress')" [showChildrenAsRequired]="representativeAddressIsRequired"></app-address>
 
               <h2 class="blue-header">Proof of Guardianship/Trusteeship</h2>
               <p>Note: If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship/trusteeship.</p>
@@ -1321,7 +1322,7 @@
             <div class="page-header">
               <h1>Authorization</h1>
             </div>
-            <p>Information suppllied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits.This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. Your application will be returned if this section is not signed and dated. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program at (604) 660-3888 or toll free in B.C. at 1-866-660-3888.</p>
+            <p>Information supplied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits.This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. Your application will be returned if this section is not signed and dated. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program at (604) 660-3888 or toll free in B.C. at 1-866-660-3888.</p>
 
             <section>
               <h2>By signing this section you hereby authorize:</h2>
@@ -1363,10 +1364,9 @@
                   <a class="redo" (click)="showSignPad('authorizationInformation', 'signature')">Redo Signature</a>
                 </div>
               </app-field>
-              <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
 
               <h2 class="blue-header">Optional Authorization</h2>
-              <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?">
+              <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?" [valid]="isFieldValid('authorizationInformation.allowCvapStaffSharing')" errorMessage="Please select an option" [required]="true">
                 <label class="inline-label">
                   <input type="radio" [value]="true" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                   <span>Yes</span>
@@ -1386,7 +1386,7 @@
                     </app-field>
                   </div>
                   <div class="col-4">
-                    <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
+                    <app-field label="Phone Number (incl. area code)" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
                       <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber">
                     </app-field>
                   </div>
@@ -1406,9 +1406,9 @@
                   <div class="col-4"></div>
                 </div>
 
-                <app-address [group]="form.get('authorizationInformation.authorizedPersonAgencyAddress')"></app-address>
+                <app-address [group]="form.get('authorizationInformation.authorizedPersonAgencyAddress')" [showChildrenAsRequired]="false"></app-address>
 
-                <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration">
+                <app-field [valid]="isFieldValid('authorizationInformation.authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration">
                   <label>
                     <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion">
                     I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.
@@ -1424,7 +1424,6 @@
                     <a class="redo" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')">Redo Signature</a>
                   </div>
                 </app-field>
-                <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
               </section>
             </section>
           </div>
@@ -1451,7 +1450,7 @@
             </span>
           </section>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>

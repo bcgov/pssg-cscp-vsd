@@ -71,7 +71,7 @@
       </tr>
       <tr>
         <th>Social Insurance Number (SIN)</th>
-        <td>{{ formatSin('personalInformation.sinPart1', 'personalInformation.sinPart2', 'personalInformation.sinPart3') }}</td>
+        <td>{{ valueOrEmpty('personalInformation.sin') }}</td>
       </tr>
       <tr>
         <th>Gender</th>
