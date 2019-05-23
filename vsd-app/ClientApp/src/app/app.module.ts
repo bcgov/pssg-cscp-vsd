@@ -52,6 +52,7 @@ import { PaymentDataService } from './services/payment-data.service';
 import { AppComponent } from './app.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 //import { DynamicsDataService } from './services/dynamics-data.service';
+import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
 import { StaticComponent } from './static/static.component';
 import { HomeComponent } from './home/home.component';
 import { SurveyDataService } from './services/survey-data.service';
@@ -62,7 +63,8 @@ import { BusinessProfileComponent } from './business-information/business-profil
 import { AddressComponent } from './shared/address/address.component';
 import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefits.component';
-import { CancelApplicationDialog} from './shared/cancel-dialog/cancel-dialog.component';
+import { CancelApplicationDialog } from './shared/cancel-dialog/cancel-dialog.component';
+import { DeactivateGuardDialog } from './shared/guard-dialog/guard-dialog.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { VictimReviewComponent } from './victim-application/victim-review.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
@@ -72,15 +74,19 @@ import { WitnessReviewComponent } from './witness-application/witness-review.com
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
+import { VictimRestitutionComponent } from './victim-restitution/victim-restitution.component';
+import { VictimRestitutionReviewComponent } from './victim-restitution/victim-restitution-review.component';
 import { TestApiComponent } from './test-api/test-api.component';
 import { FileDropModule } from 'ngx-file-drop';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
 import { NgBusyModule } from 'ng-busy';
-import { BsDatepickerModule, AlertModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, AlertModule, BsDropdownModule } from 'ngx-bootstrap';
 import { BCeidAuthGuard } from './services/bceid-auth-guard.service';
 import { metaReducers, reducers } from './app-state/reducers/reducers';
 import { StoreModule } from '@ngrx/store';
+//import { IntlTelInputNgModule } from 'intl-tel-input-ng';
+//import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { TermsAndConditionsComponent } from './lite/terms-and-conditions/terms-and-conditions.component';
 import { AliasDataService } from './services/alias-data.service';
 import { FieldComponent } from './shared/field/field.component';
@@ -98,6 +104,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     SignPadDialog,
     SummaryOfBenefitsDialog,
     CancelApplicationDialog,
+    DeactivateGuardDialog,
     VictimApplicationComponent,
     VictimReviewComponent,
     IfmApplicationComponent,
@@ -107,6 +114,8 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
     SubmitInvoiceComponent,
+    VictimRestitutionComponent,
+    VictimRestitutionReviewComponent,
     TestApiComponent,
     BreadcrumbComponent,
     HomeComponent,
@@ -130,6 +139,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     BrowserAnimationsModule,
     NgBusyModule,
     CdkTableModule,
+
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -164,7 +174,10 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     MatTooltipModule,
     FileDropModule,
     SignaturePadModule,
+    //IntlTelInputNgModule.forRoot(),
+    //NgxIntlTelInputModule,
     TooltipModule.forRoot(),
+//    BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     AlertModule.forRoot()
@@ -216,6 +229,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
   providers: [
     CookieService,
     //DynamicsDataService,
+    CanDeactivateGuard,
     SurveyDataService,
     UserDataService,
     AliasDataService,
@@ -234,7 +248,8 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     VersionInfoDialog,
     SignPadDialog,
     SummaryOfBenefitsDialog,
-    CancelApplicationDialog
+    CancelApplicationDialog,
+    DeactivateGuardDialog
   ],
   bootstrap: [AppComponent]
 })
