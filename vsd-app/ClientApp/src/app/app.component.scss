@@ -4,6 +4,10 @@ $bootstrap-sass-asset-helper: true;
   font-size: 16px;
 }
 
+header {
+  border-bottom: 4px solid #fcba19;
+}
+
 .title {
     font-weight: Semi-bold;
     font-size: 30px;
@@ -517,6 +521,15 @@ h2, h3 {
   }
 }
 
+::ng-deep .error-container {
+  font-size: 15px;
+}
+
+::ng-deep .with-error input,
+::ng-deep .with-error select,
+::ng-deep .with-error textarea {
+  border: 1px solid red;
+}
 .file-upload-placeholder {
   border: 1px dashed #9fb6d9;
   background-color: #f1f4fa;
@@ -539,7 +552,7 @@ textarea.form-control {
   }
 }
 
-select.form-control {
+::ng-deep select.form-control {
   &.standard {
     width: 50%;
   }
@@ -835,4 +848,14 @@ hr {
 
 ::ng-deep .review-signature {
   width: 150px;
+}
+
+::ng-deep table.steps {
+  th {
+    padding-right: 20px;
+  }
+
+  th, td {
+    padding-bottom: 5px;
+  }
 }

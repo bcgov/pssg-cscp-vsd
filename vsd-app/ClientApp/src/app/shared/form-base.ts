@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { ValidatorFn, AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
+import { ValidatorFn, ValidationErrors, AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import * as _moment from 'moment';
 
 export class FormBase {
@@ -11,6 +11,16 @@ export class FormBase {
       return true;
 
     return this.form.get(field).valid || !this.form.get(field).touched;
+  }
+  
+  isArrayFieldValid(formArrayName: string, arrayControl: string, arrayIndex: number) {
+    let formArray = <FormArray>this.form.get(formArrayName);
+    let indexedControl = formArray.controls[arrayIndex];
+    let formField = indexedControl.get(arrayControl);
+    if (formField == null)
+      return true;
+
+    return formField.valid || !formField.touched;
   }
 
   isValidOrNotTouched(field: string) {
@@ -48,6 +58,39 @@ export class FormBase {
       return valueMatchesPattern ? null : { 'regex-missmatch': { value: control.value } };
     };
   }
+
+  public requireCheckboxesToBeCheckedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+    const name = control.get('haveMedicalExpenses');
+    const alterEgo = control.get('haveDentalExpenses');
+
+    return name.value != false && alterEgo.value != false ? { 'identityRevealed': true } : null;
+  };
+
+  //public requireCheckboxesToBeCheckedValidator(minRequired = 1): ValidatorFn {
+  //  console.log("hit validation");
+  //  return function validate(formGroup: FormGroup) {
+  //    let checked = 0;
+  //    console.log(formGroup.toString());
+
+  //    Object.keys(formGroup.controls).forEach(key => {
+  //      const control = formGroup.controls[key];
+
+  //      console.log("key: " + key + " value: " + control.value);
+
+  //      if (control.value === true) {
+  //        checked++;
+  //      }
+  //    });
+
+  //    if (checked < minRequired) {
+  //      return {
+  //        requireCheckboxesToBeChecked: true,
+  //      };
+  //    }
+
+  //    return null;
+  //  };
+  //}
 
   public requiredCheckboxGroupValidator(checkboxFields: string[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
