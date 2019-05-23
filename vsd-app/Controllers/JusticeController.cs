@@ -165,7 +165,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             var ssgUsername = configuration["SSG_USERNAME"];
             var ssgPassword = configuration["SSG_PASSWORD"];
 
-            httpClient = new HttpClient(new HttpClientHandler { Credentials = new NetworkCredential(ssgUsername, ssgPassword) });
+//            httpClient = new HttpClient(new HttpClientHandler { Credentials = new NetworkCredential(ssgUsername, ssgPassword) });
+            httpClient = new HttpClient(new HttpClientHandler { });
             httpClient.BaseAddress = new Uri(string.Join("/", dynamicsOdataUri, endpointAction));
             httpClient.Timeout = new TimeSpan(1, 0, 0);  // 1 hour timeout  
             httpClient.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
