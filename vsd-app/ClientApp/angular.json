@@ -26,7 +26,8 @@
               "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles-font.scss"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           },
           "configurations": {
             "production": {
