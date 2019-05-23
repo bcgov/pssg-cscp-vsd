@@ -32,9 +32,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int gender { get; set; }
         public DateTime? birthDate { get; set; }
         public int maritalStatus { get; set; }
-        public string sinPart1 { get; set; }
-        public string sinPart2 { get; set; }
-        public string sinPart3 { get; set; }
+        public string sin { get; set; }
         public string occupation { get; set; }
         public int preferredMethodOfContact { get; set; }
         public bool permissionToContactViaMethod { get; set; }

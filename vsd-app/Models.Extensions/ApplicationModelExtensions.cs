@@ -31,9 +31,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_applicantsmaritalstatus = model.PersonalInformation.maritalStatus;
 
                 application.Application.vsd_applicantsoccupation = model.PersonalInformation.occupation;
-                // what format does dynamics expect in the JSON?
-                // seems like a 9-digit string would make the most sense for the 'data' side rather than a string with hyphens in it. Hyphens should only be there on display side
-                application.Application.vsd_applicantssocialinsurancenumber = $"{ model.PersonalInformation.sinPart1 }-{ model.PersonalInformation.sinPart2 }-{ model.PersonalInformation.sinPart3}"; ;
+                application.Application.vsd_applicantssocialinsurancenumber = model.PersonalInformation.sin;
 
                 // what format does dynamics expect in the JSON?
                 // currently the Dynamics UI only allows a 10-digit number and uses some fancy input masking to include the parens and hyphens 

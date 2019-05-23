@@ -81,9 +81,13 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   public currentFormStep: number;
 
-  phoneIsRequired: boolean;
-  emailIsRequired: boolean;
-  addressIsRequired: boolean;
+  phoneIsRequired: boolean = false;
+  emailIsRequired: boolean = false;
+  addressIsRequired: boolean = false;
+
+  representativePhoneIsRequired: boolean = false;
+  representativeEmailIsRequired: boolean = false;
+  representativeAddressIsRequired: boolean = false;
 
   saveFormData: any;
 
@@ -97,10 +101,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   ) {
     super();
 
-    this.phoneIsRequired = false;
-    this.emailIsRequired = false;
-    this.addressIsRequired = false;
-
     this.formFullyValidated = false;
     this.currentFormStep = 0;
   }
@@ -113,7 +113,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
 
-    /* Need to rework this with the new app-address control */
     this.form.get('personalInformation.preferredMethodOfContact')
       .valueChanges
       .subscribe(value => {
@@ -178,6 +177,125 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         }
       });
 
+    this.form.get('crimeInformation.victimDeceasedFromCrime')
+      .valueChanges
+      .subscribe(value => {
+        let minimumAdditionalBenefits = this.form.get('expenseInformation.minimumAdditionalBenefitsSelected');
+        let missedWork = this.form.get('expenseInformation.missedWorkDueToDeathOfVictim');
+
+        minimumAdditionalBenefits.clearValidators();
+        minimumAdditionalBenefits.setErrors(null);
+        missedWork.clearValidators();
+        missedWork.setErrors(null);
+
+        let useValidation = value === true;
+        if (useValidation) {
+          minimumAdditionalBenefits.setValidators([Validators.required]);
+          missedWork.setValidators([Validators.required]);
+        }
+        //setTimeout(() => { control.updateValueAndValidity(); })
+        minimumAdditionalBenefits.updateValueAndValidity();
+        missedWork.updateValueAndValidity();
+      });
+
+
+    this.form.get('expenseInformation.missedWorkDueToDeathOfVictim')
+      .valueChanges
+      .subscribe(value => {
+        let didYouLoseWages = this.form.get('expenseInformation.didYouLoseWages');
+        let daysWorkMissedStart = this.form.get('expenseInformation.daysWorkMissedStart');
+        let mayContactEmployer = this.form.get('expenseInformation.mayContactEmployer');
+        let minimumOtherBenefitsSelected = this.form.get('expenseInformation.minimumOtherBenefitsSelected');
+
+        let employerControls = this.form.get('expenseInformation.employers') as FormArray;
+
+        didYouLoseWages.clearValidators();
+        didYouLoseWages.setErrors(null);
+        daysWorkMissedStart.clearValidators();
+        daysWorkMissedStart.setErrors(null);
+        mayContactEmployer.clearValidators();
+        mayContactEmployer.setErrors(null);
+        minimumOtherBenefitsSelected.clearValidators();
+        minimumOtherBenefitsSelected.setErrors(null);
+
+        let useValidation = value === true;
+        if (useValidation) {
+          didYouLoseWages.setValidators([Validators.required]);
+          daysWorkMissedStart.setValidators([Validators.required]);
+          mayContactEmployer.setValidators([Validators.required]);
+          minimumOtherBenefitsSelected.setValidators([Validators.required]);
+        }
+
+        for (let employer of employerControls.controls) {
+          console.log('Employer Control');
+          let employerName = employer.get('employerName');
+          let employerPhoneNumber = employer.get('employerPhoneNumber');
+
+          console.log(employerName);
+          employerName.clearValidators();
+          employerName.setErrors(null);
+          employerPhoneNumber.clearValidators();
+          employerPhoneNumber.setErrors(null);
+
+          if (useValidation) {
+            employerName.setValidators([Validators.required]);
+            employerPhoneNumber.setValidators([Validators.required]);
+          }
+        }
+
+        minimumOtherBenefitsSelected.updateValueAndValidity();
+        //  employers: this.fb.array([this.createEmployerItem()]),
+      });
+
+    this.form.get('representativeInformation.completingOnBehalfOf')
+      .valueChanges
+      .subscribe(value => {
+        let representativeFirstName = this.form.get('representativeInformation.representativeFirstName');
+        let representativeLastName = this.form.get('representativeInformation.representativeLastName');
+        let representativePreferredMethodOfContact = this.form.get('representativeInformation.representativePreferredMethodOfContact');
+
+        representativeFirstName.clearValidators();
+        representativeFirstName.setErrors(null);
+        representativeLastName.clearValidators();
+        representativeLastName.setErrors(null);
+        representativePreferredMethodOfContact.clearValidators();
+        representativePreferredMethodOfContact.setErrors(null);
+
+        let useValidation = value === 100000002 || value === 100000003;
+        this.setupRepresentativeContactInformation(0);  // Have to clear contact validators on contact method change
+        if (useValidation) {
+          representativeFirstName.setValidators([Validators.required]);
+          representativeLastName.setValidators([Validators.required]);
+          representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
+        }
+      });
+
+
+    this.form.get('representativeInformation.representativePreferredMethodOfContact')
+      .valueChanges
+      .subscribe(value => {
+        let contactMethod = parseInt(value);
+        this.setupRepresentativeContactInformation(contactMethod);
+      });
+
+    this.form.get('authorizationInformation.allowCvapStaffSharing')
+      .valueChanges
+      .subscribe(value => {
+        let authorizedPersonAuthorizesDiscussion = this.form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion');
+        let authorizedPersonSignature = this.form.get('authorizationInformation.authorizedPersonSignature');
+
+        authorizedPersonAuthorizesDiscussion.clearValidators();
+        authorizedPersonAuthorizesDiscussion.setErrors(null);
+        authorizedPersonSignature.clearValidators();
+        authorizedPersonSignature.setErrors(null);
+
+        let useValidation = value === true;
+        if (useValidation) {
+          authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
+          authorizedPersonSignature.setValidators([Validators.required]);
+        }
+      });
+
     this.form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').valueChanges
       .subscribe(value => {
         this.copyPersonalAddressToVictimAddress();
@@ -187,6 +305,55 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       .subscribe(value => {
         this.copyPersonalAddressToVictimAddress();
       });
+  }
+
+  setupRepresentativeContactInformation(contactMethod: number): void {
+    let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
+    let emailControl = this.form.get('representativeInformation.representativeEmail');
+    let addressControls = [
+      this.form.get('representativeInformation').get('representativeAddress.country'),
+      this.form.get('representativeInformation').get('representativeAddress.province'),
+      this.form.get('representativeInformation').get('representativeAddress.city'),
+      this.form.get('representativeInformation').get('representativeAddress.line1'),
+      this.form.get('representativeInformation').get('representativeAddress.postalCode'),
+    ];
+
+    phoneControl.clearValidators();
+    phoneControl.setErrors(null);
+    emailControl.clearValidators();
+    emailControl.setErrors(null);
+    for (let control of addressControls) {
+      control.clearValidators();
+      control.setErrors(null);
+    }
+
+    if (contactMethod === 100000000) {
+      phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+      this.representativePhoneIsRequired = true;
+      this.representativeEmailIsRequired = false;
+      this.representativeAddressIsRequired = false;
+    } else if (contactMethod === 100000001) {
+      emailControl.setValidators([Validators.required, Validators.email]);
+      this.representativePhoneIsRequired = false;
+      this.representativeEmailIsRequired = true;
+      this.representativeAddressIsRequired = false;
+    } else if (contactMethod === 100000002) {
+      for (let control of addressControls) {
+        control.setValidators([Validators.required]);
+      }
+      this.representativePhoneIsRequired = false;
+      this.representativeEmailIsRequired = false;
+      this.representativeAddressIsRequired = true;
+    }
+
+    phoneControl.markAsTouched();
+    phoneControl.updateValueAndValidity();
+    emailControl.markAsTouched();
+    emailControl.updateValueAndValidity();
+    for (let control of addressControls) {
+      control.markAsTouched();
+      control.updateValueAndValidity();
+    }
   }
 
   showSignPad(group, control): void {
@@ -225,6 +392,91 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     return elements[groupIndex];
   }
 
+  changeBenefitGroupValidity(values: any): void {
+    let minimumBenefitsMet = '';
+    const x = [
+      this.form.get('expenseInformation.haveCounsellingExpenses'),
+      this.form.get('expenseInformation.haveCounsellingTransportation'),
+      this.form.get('expenseInformation.havePrescriptionDrugExpenses'),
+    ];
+
+    let oneChecked = false;
+    x.forEach(c => {
+      if (oneChecked)
+        return;
+
+      if (c instanceof FormControl) {
+        if (c.value === true)
+          oneChecked = true;
+      }
+    });
+
+    // fake a 'true' as a string
+    minimumBenefitsMet = oneChecked ? 'yes' : '';
+
+    this.form.get('expenseInformation').patchValue({
+      minimumBenefitsSelected: minimumBenefitsMet
+    });
+  }
+  
+  changeAdditionalBenefitGroupValidity(values: any): void {
+    let minimumBenefitsMet = '';
+    const x = [
+      this.form.get('expenseInformation.haveCrimeSceneCleaningExpenses'),
+      this.form.get('expenseInformation.noneOfTheAboveExpenses'),
+    ];
+
+    let oneChecked = false;
+    x.forEach(c => {
+      if (oneChecked)
+        return;
+
+      if (c instanceof FormControl) {
+        if (c.value === true)
+          oneChecked = true;
+      }
+    });
+
+    // fake a 'true' as a string
+    minimumBenefitsMet = oneChecked ? 'yes' : '';
+
+    this.form.get('expenseInformation').patchValue({
+      minimumAdditionalBenefitsSelected: minimumBenefitsMet
+    });
+  }
+
+  changeOtherBenefitGroupValidity(values: any): void {
+    let minimumBenefitsMet = '';
+    const x = [
+      this.form.get('expenseInformation.haveDisabilityPlanBenefits'),
+      this.form.get('expenseInformation.haveEmploymentInsuranceBenefits'),
+      this.form.get('expenseInformation.haveIncomeAssistanceBenefits'),
+      this.form.get('expenseInformation.haveCanadaPensionPlanBenefits'),
+      this.form.get('expenseInformation.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits'),
+      this.form.get('expenseInformation.haveCivilActionBenefits'),
+      this.form.get('expenseInformation.haveOtherBenefits'),
+      this.form.get('expenseInformation.noneOfTheAboveBenefits'),
+    ];
+
+    let oneChecked = false;
+    x.forEach(c => {
+      if (oneChecked)
+        return;
+
+      if (c instanceof FormControl) {
+        if (c.value === true)
+          oneChecked = true;
+      }
+    });
+
+    // fake a 'true' as a string
+    minimumBenefitsMet = oneChecked ? 'yes' : '';
+
+    this.form.get('expenseInformation').patchValue({
+      minimumOtherBenefitsSelected: minimumBenefitsMet
+    });
+  }
+
   gotoPageIndex(stepper: MatStepper, selectPage: number): void {
     window.scroll(0, 0);
     stepper.selectedIndex = selectPage;
@@ -233,6 +485,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   gotoPage(selectPage: MatStepper): void {
     window.scroll(0, 0);
+    this.showValidationMessage = false;
     this.currentFormStep = selectPage.selectedIndex;
   }
 
@@ -482,9 +735,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
         birthDate: ['', [Validators.required]],
 
-        sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
         occupation: [''],
 
         preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],  // Phone = 100000000, Email = 100000001, Mail = 100000002
@@ -495,6 +746,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         phoneNumber: [''],
         alternatePhoneNumber: [''],
         email: [''],
+        confirmEmail: [''],
 
         primaryAddress: this.fb.group({
           line1: ['', Validators.required],
@@ -526,9 +778,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
         maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
-        sinPart1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart2: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        sinPart3: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
         occupation: [''],
 
         phoneNumber: [''],
@@ -615,12 +865,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         otherHealthCoverageProviderName: [''],
         otherHealthCoverageExtendedPlanNumber: [''],
         
-        wereYouTreatedAtHospital: ['', Validators.required],
-        treatedAtHospitalName: [''],
-        treatedOutsideBc: [''],
-        treatedOutsideBcHospitalName: [''],
-        treatedAtHospitalDate: [''],
-
         beingTreatedByFamilyDoctor: ['', Validators.required],
         familyDoctorName: [''],
         familyDoctorPhoneNumber: [''],
@@ -634,12 +878,14 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         haveCounsellingExpenses: [false],
         haveCounsellingTransportation: [false],
         havePrescriptionDrugExpenses: [false],
+        minimumBenefitsSelected: ['', Validators.required],
 
         // Additional Expenses
         haveCrimeSceneCleaningExpenses: [false],
         noneOfTheAboveExpenses: [''],
+        minimumAdditionalBenefitsSelected: [''], // Dynamically required
 
-        missedWorkDueToDeathOfVictim: ['', Validators.required],
+        missedWorkDueToDeathOfVictim: [''], // Dynamically required
 
         didYouLoseWages: [''], //, Validators.required],
         daysWorkMissedStart: [''], //, Validators.required],
@@ -658,6 +904,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
+        minimumOtherBenefitsSelected: [''], // Dynamically required
       }),
 
       representativeInformation: this.fb.group({
@@ -681,16 +928,16 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       }),
 
       declarationInformation: this.fb.group({
-        declaredAndSigned: ['', Validators.required],
+        declaredAndSigned: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
       }),
 
       authorizationInformation: this.fb.group({
-        approvedAuthorityNotification: ['', Validators.required],
-        readAndUnderstoodTermsAndConditions: ['', Validators.required],
+        approvedAuthorityNotification: ['', Validators.requiredTrue],
+        readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
 
-        allowCvapStaffSharing: [''],
+        allowCvapStaffSharing: ['', Validators.required],
         authorizedPersonFullName: [''],
         authorizedPersonPhoneNumber: [''],
         authorizedPersonRelationship: [''],
