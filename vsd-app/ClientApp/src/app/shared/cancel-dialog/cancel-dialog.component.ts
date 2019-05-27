@@ -18,15 +18,15 @@ export class CancelApplicationDialog implements OnInit {
   }
 
   closeMe(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   cancelApplication(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(true);
 
     // Figure out how to pass this application Type to the cancelled page. Or re-work how Cancelled is done.
     //this.route.snapshot.data = this.applicationType;
-    this.router.navigate(['/application-cancelled']);
+    //this.router.navigate(['/application-cancelled']);
 
     console.log('cancel application');
   }

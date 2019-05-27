@@ -380,6 +380,14 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     verifyDialogConfig.data = 'witness';
 
     const verifyDialogRef = this.dialog.open(CancelApplicationDialog, verifyDialogConfig);
+    verifyDialogRef.afterClosed().subscribe(
+      data => {
+        if (data === true) {
+          this.router.navigate(['/application-cancelled']);
+          return;
+        }
+      }
+    );  
   }
 
   showSummaryOfBenefits(): void {

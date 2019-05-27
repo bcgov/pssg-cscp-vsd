@@ -432,6 +432,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     verifyDialogConfig.data = 'witness';
 
     const verifyDialogRef = this.dialog.open(CancelApplicationDialog, verifyDialogConfig);
+    verifyDialogRef.afterClosed().subscribe(
+      data => {
+        if (data === true) {
+          this.router.navigate(['/application-cancelled']);
+          return;
+        }
+      }
+    );  
   }
 
   showSummaryOfBenefits(): void {
