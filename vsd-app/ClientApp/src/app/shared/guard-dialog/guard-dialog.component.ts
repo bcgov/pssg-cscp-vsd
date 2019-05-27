@@ -27,6 +27,10 @@ export class DeactivateGuardDialog implements OnInit {
     this.subject.complete();
   }
 
+  closeMe(): void {
+    this.dialogRef.close(false);
+  }
+
   ngOnInit() {
     
   }
