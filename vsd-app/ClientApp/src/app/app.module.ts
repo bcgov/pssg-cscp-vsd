@@ -76,6 +76,8 @@ import { ApplicationCancelledComponent } from './application-cancelled/applicati
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
 import { VictimRestitutionComponent } from './victim-restitution/victim-restitution.component';
 import { VictimRestitutionReviewComponent } from './victim-restitution/victim-restitution-review.component';
+import { OffenderRestitutionComponent } from './offender-restitution/offender-restitution.component';
+import { OffenderRestitutionReviewComponent } from './offender-restitution/offender-restitution-review.component';
 import { TestApiComponent } from './test-api/test-api.component';
 import { FileDropModule } from 'ngx-file-drop';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -116,6 +118,8 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     SubmitInvoiceComponent,
     VictimRestitutionComponent,
     VictimRestitutionReviewComponent,
+    OffenderRestitutionComponent,
+    OffenderRestitutionReviewComponent,
     TestApiComponent,
     BreadcrumbComponent,
     HomeComponent,

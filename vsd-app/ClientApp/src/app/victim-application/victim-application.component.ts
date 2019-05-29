@@ -20,22 +20,9 @@ import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
+import { MY_FORMATS } from '../shared/enums-list';
 
 const moment = _rollupMoment || _moment;
-
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'YYYY-MM-DD',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 

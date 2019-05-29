@@ -14,9 +14,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             var application = GetApplicationDefaults();
             application.Application.vsd_applicanttype = (int)ApplicationType.Victim;
 
-            // Temporary hijack of this code to just get this wired up -- all of this should auto bind
             if (model == null)
                 return null;
+
             if (model.PersonalInformation != null)
             {
                 application.Application.vsd_applicantsfirstname = model.PersonalInformation.firstName;

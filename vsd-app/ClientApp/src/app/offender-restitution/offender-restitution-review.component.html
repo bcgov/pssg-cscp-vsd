@@ -1,58 +1,31 @@
 <section>
   <h2 class="blue-header">
-    Victim Information <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+    Offender Information <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
   </h2>
   <table class="table table-striped review-table">
     <tbody>
       <tr>
         <th>First Name</th>
-        <td>{{ valueOrEmpty('restitutionInformation.victimFirstName') }} </td>
+        <td>{{ valueOrEmpty('restitutionInformation.offenderFirstName') }} </td>
       </tr>
       <tr>
         <th>Middle Name</th>
-        <td>{{ valueOrEmpty('restitutionInformation.victimMiddleName') }} </td>
+        <td>{{ valueOrEmpty('restitutionInformation.offenderMiddleName') }} </td>
       </tr>
       <tr>
         <th>Last Name</th>
-        <td>{{ valueOrEmpty('restitutionInformation.victimLastName') }} </td>
+        <td>{{ valueOrEmpty('restitutionInformation.offenderLastName') }} </td>
       </tr>
       <tr>
         <th>Birth Date</th>
-        <td>{{ datesOrEmpty(['restitutionInformation.victimBirthDate']) }}</td>
+        <td>{{ datesOrEmpty(['restitutionInformation.offenderGender']) }}</td>
       </tr>
       <tr>
         <th>Gender</th>
-        <td>{{ enumHelper.Gender[valueForEnum('restitutionInformation.victimGender')] }} </td>
+        <td>{{ enumHelper.Gender[valueForEnum('restitutionInformation.offenderBirthDate')] }} </td>
       </tr>
     </tbody>
   </table>
-
-  <section *ngIf="form.get('restitutionInformation.authoriseVictimDesignate').value === true">
-    <h3>Authorized Victim Designate</h3>
-    <table class="table table-striped review-table">
-      <tbody>
-        <tr>
-          <th>First Name</th>
-          <td>{{ valueOrEmpty('restitutionInformation.authorisedDesignateFirstName') }} </td>
-        </tr>
-        <tr>
-          <th>Middle Name</th>
-          <td>{{ valueOrEmpty('restitutionInformation.authorisedDesignateMiddleName') }} </td>
-        </tr>
-        <tr>
-          <th>Last Name</th>
-          <td>{{ valueOrEmpty('restitutionInformation.authorisedDesignateLastName') }} </td>
-        </tr>
-      </tbody>
-    </table>
-    <p>
-      <label class="inline-label">
-        <input *ngIf="form.get('restitutionInformation.authoriseDesignateToActOnBehalf').value === true" type="checkbox" checked="checked" disabled="disabled" />
-        <input *ngIf="form.get('restitutionInformation.authoriseDesignateToActOnBehalf').value !== true" type="checkbox" disabled="disabled" />
-        <span>I hereby authorize to act on my behalf for the purposes of involvement with the Restitution Program which includes personal information pertaining to me.</span>
-      </label>
-    </p>
-  </section>
 
   <h2 class="blue-header">
     Contact Information <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
@@ -120,64 +93,71 @@
 
 
   <h2 class="blue-header">
-    Restitution Order Information <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+    Correctional <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
   </h2>
   <table class="table table-striped review-table">
     <tbody>
       <tr>
-        <th>Offender First Name</th>
-        <td>{{ valueOrEmpty('restitutionInformation.offenderFirstName') }} </td>
+        <th>Parole/Probation Officer First Name</th>
+        <td>{{ valueOrEmpty('restitutionInformation.probationOfficerFirstName') }} </td>
       </tr>
       <tr>
-        <th>Offender Middle Name</th>
-        <td>{{ valueOrEmpty('restitutionInformation.offenderMiddleName') }} </td>
+        <th>Parole/Probation Officer Last Name</th>
+        <td>{{ valueOrEmpty('restitutionInformation.probationOfficerLastName') }} </td>
       </tr>
       <tr>
-        <th>Offender Last Name</th>
-        <td>{{ valueOrEmpty('restitutionInformation.offenderLastName') }} </td>
+        <th>Custody Location (if applicable)</th>
+        <td>{{ valueOrEmpty('restitutionInformation.custodyLocation') }} </td>
       </tr>
       <tr>
-        <th>Relationship to Offender</th>
-        <td>{{ valueOrEmpty('restitutionInformation.offenderRelationship') }} </td>
-      </tr>
-    </tbody>
-  </table>
-  <table class="table table-striped review-table" *ngFor="let item of courtFiles.controls; let i = index">
-    <tbody>
-      <tr>
-        <th>Court File Number</th>
-        <td>{{ valueOrEmpty(item.get('courtFileNumber')) }} </td>
+        <th>Phone Number</th>
+        <td>{{ valueOrEmpty('restitutionInformation.custodyPhoneNumber') }} </td>
       </tr>
       <tr>
-        <th>Court Location</th>
-        <td>{{ valueOrEmpty(item.get('courtLocation')) }} </td>
+        <th>Email Address</th>
+        <td>{{ valueOrEmpty('restitutionInformation.custodyEmailAddress') }} </td>
       </tr>
     </tbody>
   </table>
 
   <h2 class="blue-header">
-    Victim Service Worker <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+    Restitution Order Information <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
   </h2>
-  <table class="table table-striped review-table">
-    <tbody>
-      <tr>
-        <th>Victim Service Worker First Name</th>
-        <td>{{ valueOrEmpty('restitutionInformation.victimServiceWorkerFirstName') }} </td>
-      </tr>
-      <tr>
-        <th>Victim Service Worker Last Name</th>
-        <td>{{ valueOrEmpty('restitutionInformation.victimServiceWorkerLastName') }} </td>
-      </tr>
-      <tr>
-        <th>Program Name</th>
-        <td>{{ valueOrEmpty('restitutionInformation.victimServiceWorkerProgramName') }} </td>
-      </tr>
-      <tr>
-        <th>Email Address</th>
-        <td>{{ valueOrEmpty('restitutionInformation.victimServiceWorkerEmail') }} </td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngFor="let item of restitutionCourtFiles.controls; let i = index">
+    <h3>Court File {{ i + 1 }} </h3>
+    <table class="table table-striped review-table">
+      <tbody>
+        <tr>
+          <th>Court File Number</th>
+          <td>{{ valueOrEmpty(item.get('courtFileNumber')) }} </td>
+        </tr>
+        <tr>
+          <th>Court Location</th>
+          <td>{{ valueOrEmpty(item.get('courtLocation')) }} </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-striped review-table" *ngFor="let victim of item['controls'].victims['controls']; let j = index;">
+      <tbody>
+        <tr>
+          <th>Victim First Name</th>
+          <td>{{ valueOrEmpty(victim.get('firstName')) }} </td>
+        </tr>
+        <tr>
+          <th>Victim Middle Name</th>
+          <td>{{ valueOrEmpty(victim.get('middleName')) }} </td>
+        </tr>
+        <tr>
+          <th>Victim Last Name</th>
+          <td>{{ valueOrEmpty(victim.get('lastName')) }} </td>
+        </tr>
+        <tr>
+          <th>Relationship</th>
+          <td>{{ valueOrEmpty(victim.get('relationship')) }} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <h2 class="blue-header">
     Copy of Restitution Order <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>

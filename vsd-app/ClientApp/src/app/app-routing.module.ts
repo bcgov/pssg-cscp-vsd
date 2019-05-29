@@ -7,6 +7,7 @@ import { IfmApplicationComponent } from './ifm-application/ifm-application.compo
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
 import { VictimRestitutionComponent } from './victim-restitution/victim-restitution.component';
+import { OffenderRestitutionComponent } from './offender-restitution/offender-restitution.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -40,6 +41,11 @@ const routes: Routes = [
   {
     path: 'victim-restitution',
     component: VictimRestitutionComponent,
+    //canDeactivate: [CanDeactivateGuard]
+  },
+  {
+    path: 'offender-restitution',
+    component: OffenderRestitutionComponent,
     //canDeactivate: [CanDeactivateGuard]
   },
   {

@@ -3,7 +3,7 @@
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter">
       <section [ngClass]="currentPanel === 'form' ? 'application-nav' : 'application-nav application-nav-hidden'">
-        <h3>Victim Restitution Application</h3>
+        <h3>Offender Restitution Application</h3>
         <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
           <ng-template matStepperIcon="edit">
             <mat-icon>done</mat-icon>
@@ -11,7 +11,7 @@
           <ng-template matStepperIcon="number">
           </ng-template>
           <mat-step label="Overview"></mat-step>
-          <mat-step label="Victim Restitution Application"></mat-step>
+          <mat-step label="Offender Restitution Application"></mat-step>
           <mat-step label="Review & Submit"></mat-step>
         </mat-vertical-stepper>
       </section>
@@ -44,19 +44,34 @@
         <div *ngIf="currentPanel == 'form'">
           <div formGroupName="introduction" *ngIf="this.currentFormStep == 0">
             <div class="page-header">
-              <h1>Victim Applying to the Restitution Program</h1>
+              <h1>Offender Applying to the Restitution Program</h1>
             </div>
 
             <h3>Who can apply (or be referred) to the Restitution Program?</h3>
             <ul class="list">
-              <li>Are you owed money on a restitution order that has not been paid in full?</li>
-              <li>Was the restitution order issued by an adult criminal court in the province of B.C.?</li>
+              <li>Do you have an unpaid restitution order?</li>
+              <li>Are you over 19 and was your restitution order issued by an adult criminal court in BC?</li>
             </ul>
 
-            <p>If you answered “yes” to these questions, you can apply to the Restitution Program using the online form. If you are unsure of the answer to these questions, please contact the Restitution Program. Note: for some situations, probation officer permission may be required for the Restitution Program to open a file.</p>
+            <p>If you answered “yes” to these questions, you can apply (or be referred by your parole/probation officer) to the Restitution Program using the online form. If you are unsure of the answer to these questions, please contact the Restitution Program. Note: if you have a probation officer, the Restitution Program may need to seek his or her permission before opening a file.</p>
+
+            <h3>What does the Restitution Program do?</h3>
+            <ul class="list">
+              <li>We work to engage the victim(s) named on the restitution order in the Program.</li>
+              <li>Help is available if you owe money on a restitution order</li>
+              <li>We work with you to confirm your intentions for payment are realistic, achievable, and consistent with timely compliance of the order.</li>
+              <li>We accept full or partial restitution order payments (e.g., installments) from you and pay the victim on your behalf.</li>
+              <li>We ensure your payments are distributed equitably on orders with multiple victims.</li>
+              <li>We communicate your progress to your supervising probation or parole officer upon request and to the victim.</li>
+            </ul>
 
             <h3>What are the benefits to working with the Restitution Program?</h3>
-            <p>No appearances in civil or criminal court are required as part of your involvement with the Restitution Program. Contact with the offender is not necessary. Participation helps you collect restitution you are owed.</p>
+            <ul>
+              <li>No appearances in civil or criminal court are required as part of your involvement in the Restitution Program.</li>
+              <li>Initiating payments helps you to demonstrate a willingness to comply with your court order.</li>
+              <li>Your participation may help you to avoid impacts to your credit rating.</li>
+              <li>Working with the Program eliminates the need for you to contact the victim(s) named on the order.</li>
+            </ul>
 
             <h3>What happens after I apply?</h3>
             <p>Once you apply to the Restitution Program:</p>
@@ -64,86 +79,86 @@
             <table class="steps">
               <tr>
                 <th>Step 1:</th>
-                <td>We assess your application to ensure we can facilitate the restitution payments to you.</td>
+                <td>We assess your application to ensure we can facilitate your restitution payments.</td>
               </tr>
               <tr>
                 <th>Step 2:</th>
-                <td>We connect with the offender listed on the restitution order and ask them to work with the Program.</td>
+                <td>We connect with the victim listed on the restitution order and invite them to work with the Program.</td>
               </tr>
               <tr>
                 <th>Step 3:</th>
-                <td>We discuss payment options with the offender to encourage the best plan to comply with the order.</td>
+                <td>We discuss payment options with you to determine the best plan given your current circumstances.</td>
               </tr>
               <tr>
                 <th>Step 4:</th>
-                <td>Payments may begin.</td>
+                <td>You may begin making payments.</td>
               </tr>
               <tr>
                 <th>Step 5:</th>
-                <td>We forward restitution money received from the offender to you and to other victims listed on the restitution order.</td>
+                <td>We forward restitution money received from you to the victim listed on the restitution order.</td>
               </tr>
               <tr>
                 <th>Step 6:</th>
-                <td>We provide “Statements of Restitution Payment” for you to track payment progress.</td>
+                <td>We provide “Statements of Restitution Payment” for your records each time cheques are mailed to the victim.</td>
               </tr>
             </table>
             <p><em>We consider safety concerns of all parties listed on the restitution order on an ongoing basis.</em></p>
 
-            <h3>What else does the Restitution Program do?</h3>
-            <ul class="list">
-              <li>Provides support and information to victims who have unpaid restitution orders;</li>
-              <li>Responds to general inquiries regarding restitution orders;</li>
-              <li>Provides referrals to appropriate resources; and</li>
-              <li>Provides general information regarding collecting on restitution orders through the civil court processes.</li>
-            </ul>
+            <h3>What if I am in federal custody?</h3>
+            <p>While you are in federal custody you can make payments to the Restitution Program from your institutional bank account. We can assist you in getting started.</p>
           </div>
 
           <div formGroupName="restitutionInformation" *ngIf="this.currentFormStep == 1">
             <div class="page-header">
-              <h1>Victim Information & Addresses</h1>
+              <h1>Restitution Program Offender Application</h1>
             </div>
-            <h2 class="blue-header">Victim Information</h2>
+            <p>
+              To apply to the Restitution Program, please complete and sign this application form, then review and submit it.<br />
+              A Restitution caseworker will be in touch with you regarding the next steps.
+            </p>
 
-            <h3>Victim Information</h3>
+            <h2 class="blue-header">Offender Information</h2>
+
+            <h3>Offender Information</h3>
 
             <div class="row">
               <div class="col-4">
-                <app-field label="Victim First Name" [required]="true" [valid]="isFieldValid('restitutionInformation.victimFirstName')" errorMessage="Please enter your first name">
-                  <input class="form-control" type="text" formControlName="victimFirstName" maxlength="100">
+                <app-field label="Offender First Name">
+                  <input class="form-control" type="text" formControlName="offenderFirstName">
                 </app-field>
               </div>
               <div class="col-4">
-                <app-field label="Victim Middle Name" [required]="false" [valid]="isFieldValid('restitutionInformation.victimMiddleName')" errorMessage="Please enter your middle name">
-                  <input class="form-control" type="text" formControlName="victimMiddleName" maxlength="100">
+                <app-field label="Offender Middle Name">
+                  <input class="form-control" type="text" formControlName="offenderMiddleName">
                 </app-field>
               </div>
               <div class="col-4">
-                <app-field label="Victim Last Name" [required]="true" [valid]="isFieldValid('restitutionInformation.victimLastName')" errorMessage="Please enter your last name">
-                  <input class="form-control" type="text" formControlName="victimLastName" maxlength="100">
+                <app-field label="Offender Last Name">
+                  <input class="form-control" type="text" formControlName="offenderLastName">
                 </app-field>
               </div>
             </div>
 
             <div class="row">
               <div class="col-4">
-                <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('restitutionInformation.victimBirthDate')" errorMessage="Please enter your birth date">
-                  <input type="text" class="form-control date-picker" formControlName="victimBirthDate" placeholder="yyyy-mm-dd"
+                <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('restitutionInformation.offenderBirthDate')" errorMessage="Please enter your birth date">
+                  <input type="text" class="form-control date-picker" formControlName="offenderBirthDate" placeholder="yyyy-mm-dd"
                          [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
                   <mat-datepicker #birthDatePicker></mat-datepicker>
                 </app-field>
               </div>
               <div class="col-4">
-                <app-field label="Gender" [required]="true" [valid]="isFieldValid('restitutionInformation.victimGender')" errorMessage="Please select your gender">
+                <app-field label="Gender" [required]="true" [valid]="isFieldValid('restitutionInformation.offenderGender')" errorMessage="Please select your gender">
                   <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="victimGender" formControlName="victimGender">
+                    <input type="radio" [value]="100000000" name="offenderGender" formControlName="offenderGender">
                     <span>M</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="victimGender" formControlName="victimGender">
+                    <input type="radio" [value]="100000001" name="offenderGender" formControlName="offenderGender">
                     <span>F</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="100000002" name="victimGender" formControlName="victimGender">
+                    <input type="radio" [value]="100000002" name="offenderGender" formControlName="offenderGender">
                     <span>X</span>
                   </label>
                 </app-field>
@@ -152,54 +167,8 @@
               </div>
             </div>
 
-            <h3>Authorized Victim Designate</h3>
-            <p>Victims have the option of assigning a designate to communicate with the Restitution Program on their behalf.</p>
-            <div class="row">
-              <div class="col-12">
-                <app-field label="Do you want to authorize someone to be a Victim Designate?" [required]="true" errorMessage="Please make a selection" [showChevrons]="false">
-                  <label class="inline-label">
-                    <input type="radio" [value]="true" name="authoriseVictimDesignate" formControlName="authoriseVictimDesignate">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="false" name="authoriseVictimDesignate" formControlName="authoriseVictimDesignate">
-                    <span>No</span>
-                  </label>
-                </app-field>
-              </div>
-            </div>
-
-            <div class="row" *ngIf="form.get('restitutionInformation.authoriseVictimDesignate').value === true">
-              <div class="col-4">
-                <app-field label="Authorized Designate First Name" [required]="true" [valid]="isFieldValid('restitutionInformation.authorisedDesignateFirstName')" errorMessage="Please enter your first name">
-                  <input class="form-control" type="text" formControlName="authorisedDesignateFirstName" maxlength="100">
-                </app-field>
-              </div>
-              <div class="col-4">
-                <app-field label="Authorized Designate Middle Name" [required]="false" [valid]="isFieldValid('restitutionInformation.authorisedDesignateMiddleName')" errorMessage="Please enter your middle name">
-                  <input class="form-control" type="text" formControlName="authorisedDesignateMiddleName" maxlength="100">
-                </app-field>
-              </div>
-              <div class="col-4">
-                <app-field label="Authorized Designate Last Name" [required]="true" [valid]="isFieldValid('restitutionInformation.authorisedDesignateLastName')" errorMessage="Please enter your last name">
-                  <input class="form-control" type="text" formControlName="authorisedDesignateLastName" maxlength="100">
-                </app-field>
-              </div>
-            </div>
-
-            <div class="row" *ngIf="form.get('restitutionInformation.authoriseVictimDesignate').value === true">
-              <div class="col-12">
-                <app-field>
-                  <label class="inline-label">
-                    <input type="checkbox" style="margin-right: 10px;" formControlName="authoriseDesignateToActOnBehalf" [value]="true">
-                    <span>I hereby authorize to act on my behalf for the purposes of involvement with the Restitution Program which includes personal information pertaining to me.</span>
-                  </label>
-                </app-field>
-              </div>
-            </div>
-
             <h2 class="blue-header">Contact Information</h2>
-            <p>Contact information for the Victim (or the Victim Designate)</p>
+            <p>Contact information for the Offender (or the OFfender Designate)</p>
             <div class="row">
               <div class="col-4">
                 <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('restitutionInformation.preferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
@@ -242,7 +211,7 @@
             </div>
             <div class="row">
               <div class="col-12">
-                <app-field label="May we leave you a detailed message?" [required]="false" errorMessage="Please make a selection" [showChevrons]="false">
+                <app-field label="May we leave you a detailed message?" [required]="true" [valid]="isFieldValid('restitutionInformation.permissionToLeaveDetailedMessage')" errorMessage="Please make a selection" [showChevrons]="false">
                   <label class="inline-label">
                     <input type="radio" [value]="true" name="permissionToLeaveDetailedMessage" formControlName="permissionToLeaveDetailedMessage">
                     <span>Yes</span>
@@ -256,69 +225,16 @@
             </div>
             <br />
 
-            <h2 class="blue-header">Restitution Order Information</h2>
-
+            <h2 class="blue-header">Correctional</h2>
             <div class="row">
               <div class="col-4">
-                <app-field label="Offender First Name">
-                  <input class="form-control" type="text" formControlName="offenderFirstName">
+                <app-field label="Parole/Probation Officer First Name">
+                  <input class="form-control" type="text" formControlName="probationOfficerFirstName">
                 </app-field>
               </div>
               <div class="col-4">
-                <app-field label="Offender Middle Name">
-                  <input class="form-control" type="text" formControlName="offenderMiddleName">
-                </app-field>
-              </div>
-              <div class="col-4">
-                <app-field label="Offender Last Name">
-                  <input class="form-control" type="text" formControlName="offenderLastName">
-                </app-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-4">
-                <app-field label="Relationship to Offender">
-                  <input class="form-control" type="text" formControlName="offenderRelationship">
-                </app-field>
-              </div>
-              <div class="col-8">
-              </div>
-            </div>
-
-            <div class="court-information">
-              <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('restitutionInformation.courtFiles').controls; let i = index;">
-                <div [formGroupName]="i" class="row court-files">
-                  <div class="col-4">
-                    <app-field label="Court File Number">
-                      <input class="form-control" type="text" formControlName="courtFileNumber">
-                    </app-field>
-                  </div>
-                  <div class="col-4">
-                    <app-field label="Court Location">
-                      <input class="form-control" type="text" formControlName="courtLocation">
-                    </app-field>
-                  </div>
-                  <div class="col-4">
-                    <br />
-                    <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">
-                      <i class="fas fa-trash-alt"></i> Remove Court File
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add File Number</a>
-            </div>
-
-            <h2 class="blue-header">Victim Service Worker</h2>
-            <div class="row">
-              <div class="col-4">
-                <app-field label="Victim Service Worker First Name">
-                  <input class="form-control" type="text" formControlName="victimServiceWorkerFirstName">
-                </app-field>
-              </div>
-              <div class="col-4">
-                <app-field label="Victim Service Worker Last Name">
-                  <input class="form-control" type="text" formControlName="victimServiceWorkerLastName">
+                <app-field label="Parole/Probation Officer Last Name">
+                  <input class="form-control" type="text" formControlName="probationOfficerLastName">
                 </app-field>
               </div>
               <div class="col-4">
@@ -326,17 +242,88 @@
             </div>
             <div class="row">
               <div class="col-4">
-                <app-field label="Program Name">
-                  <input class="form-control" type="text" formControlName="victimServiceWorkerProgramName">
+                <app-field label="Custody Location (if applicable)">
+                  <input class="form-control" type="text" formControlName="custodyLocation">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Phone Number">
+                  <input class="form-control" type="text" formControlName="custodyPhoneNumber">
                 </app-field>
               </div>
               <div class="col-4">
                 <app-field label="Email Address">
-                  <input class="form-control" type="text" formControlName="victimServiceWorkerEmail">
+                  <input class="form-control" type="text" formControlName="custodyEmailAddress">
                 </app-field>
               </div>
-              <div class="col-4">
+            </div>
+
+            <h2 class="blue-header">Restitution Order Information</h2>
+
+            <div class="court-information">
+              <div class="court-listing restitution-listing" formArrayName="restitutionCourtFiles" *ngFor="let item of form.get('restitutionInformation.restitutionCourtFiles').controls; let i = index;">
+                <div [formGroupName]="i" class="court-files">
+                  <div class="float-right">
+                    <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">
+                      <i class="fas fa-trash-alt"></i> Remove Court File
+                    </a>
+                  </div>
+                  <h3>Court File {{ i + 1 }}</h3>
+                  <div class="row">
+                    <div class="col-4">
+                      <app-field label="Court File Number">
+                        <input class="form-control" type="text" formControlName="courtFileNumber">
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                      <app-field label="Court Location">
+                        <input class="form-control" type="text" formControlName="courtLocation">
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                    </div>
+                  </div>
+                  <div formArrayName="victims" class="victim-listing">
+                    <div *ngFor="let victim of item['controls'].victims['controls']; let j = index;">
+                      <div [formGroupName]="j" class="victim-info">
+                        <div class="float-right">
+                          <a href="javascript:void(0);" class="remove-victim" (click)="removeVictimName(i, j)" *ngIf="showVictimNameRemove(i)">
+                            Remove Victim Name
+                          </a>
+                        </div>
+                        <div class="row victim-row">
+                          <div class="col-4">
+                            <app-field label="Victim First Name" [required]="true">
+                              <input class="form-control" type="text" formControlName="firstName">
+                            </app-field>
+                          </div>
+                          <div class="col-4">
+                            <app-field label="Victim Middle Name">
+                              <input class="form-control" type="text" formControlName="middleName">
+                            </app-field>
+                          </div>
+                          <div class="col-4">
+                            <app-field label="Victim Last Name" [required]="true">
+                              <input class="form-control" type="text" formControlName="lastName">
+                            </app-field>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-4">
+                            <app-field label="Relationship to Victim">
+                              <input class="form-control" type="text" formControlName="relationship">
+                            </app-field>
+                          </div>
+                          <div class="col-8">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <a href="javascript:void(0);" class="btn btn-link" (click)="addVictimItem(i)">Add Victim Name</a>
+                  </div>
+                </div>
               </div>
+              <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add Court File</a>
             </div>
 
             <h3 class="blue-header">Copy of Restitution Order</h3>
@@ -350,11 +337,11 @@
             <app-field [required]="true" [valid]="isFieldValid('restitutionInformation.declaredAndSigned')" errorMessage="Please check declaration">
               <label>
                 <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
-                I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
+                By signing this form, I am applying to the Restitution Program for assistance in the facilitation of my restitution order and I confirm that I am the individual named on this form. <span class="error-states">*</span>
               </label>
             </app-field>
 
-            <app-field label="Victim Signature" [required]="true" [valid]="isFieldValid('restitutionInformation.signature')" errorMessage="Please provide your digital signature">
+            <app-field label="Offender Signature" [required]="true" [valid]="isFieldValid('restitutionInformation.signature')" errorMessage="Please provide your digital signature">
               <div class="signature-trigger" (click)="showSignPad('restitutionInformation', 'signature')" *ngIf="!hasSignature('restitutionInformation.signature')">
                 <p>Click this box to sign</p>
               </div>
@@ -370,7 +357,7 @@
               <h1>Review & Submit</h1>
             </div>
             <p>Please check the accuracy of the information entered in your application before submitting.</p>
-            <app-victim-restitution-review [group]="form" [parentStepper]="stepper"></app-victim-restitution-review>
+            <app-offender-restitution-review [group]="form" [parentStepper]="stepper"></app-offender-restitution-review>
           </div>
 
           <div *ngIf="showValidationMessage" class="error-summary">
@@ -382,7 +369,7 @@
             <div [ngBusy]="[busy3]"></div>
             <a (click)="verifyCancellation()" *ngIf="stepper.selectedIndex > 0"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
             <span style="float: right;">
-              <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex == 0">CONTINUE TO VICTIM RESTITUTION APPLICATION <i class="fas fa-chevron-right"></i></button>
+              <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex == 0">OFFENDER RESTITUTION APPLICATION <i class="fas fa-chevron-right"></i></button>
               <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex == 1">REVIEW APPLICATION <i class="fas fa-chevron-right"></i></button>
               <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 2">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
             </span>
@@ -396,7 +383,7 @@
                 <h1>Thank you for your submission.</h1>
               </div>
               <h3>You have successfully submitted an application to the Restitution Program if you would like to download a printable version of the application then please click <a href="">here</a>.</h3>
-              <p><a href="/">Click here to return to Victim Restitution Home Page</a></p>
+              <p><a href="/">Click here to return to Offender Restitution Home Page</a></p>
             </div>
           </div>
         </div>
@@ -408,7 +395,7 @@
                 <h1>Restitution submission cancelled</h1>
               </div>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-              <p><a href="/">Click here to return to Victim Restitution Home Page</a></p>
+              <p><a href="/">Click here to return to Offender Restitution Home Page</a></p>
             </div>
           </div>
         </div>

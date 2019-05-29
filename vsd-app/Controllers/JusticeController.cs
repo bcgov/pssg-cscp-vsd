@@ -75,6 +75,30 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             return new JsonResult(result);
         }
 
+        [HttpPost("submitvictimrestitution")]
+        public async Task<IActionResult> SubmitVictimRestitution([FromBody] VictimRestitutionFormModel model)
+        {
+            if (model == null)
+            {
+                if (ModelState.ErrorCount > 0)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
+                    return new JsonResult(new { IsSuccess = false, Status = "Restitution Save Error", Message = "Errors in binding: " + string.Join(Environment.NewLine, errors) });
+                }
+                else
+                {
+                    return new JsonResult(new { IsSuccess = false, Status = "Restitution Save Error", Message = "Error: Model is null." });
+                }
+            }
+
+            var t = Task.Run(() => CreateVictimRestitutionAction(_configuration, model));
+            t.Wait();
+
+            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
+            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Restitution Save", Message = dynamicsResponse.Result };
+            return new JsonResult(result);
+        }
+
         [HttpGet("getdata")]
         public ActionResult Sample()
         {
@@ -137,6 +161,38 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 var invoiceModel = model.ToDynamicsModel();
                 var invoiceJson = JsonConvert.SerializeObject(invoiceModel);
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
+                request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await httpClient.SendAsync(request);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                    return jsonResult;
+                }
+
+                return response.Content.ReadAsStringAsync().Result;
+            }
+            finally
+            {
+                if (httpClient != null)
+                    httpClient.Dispose();
+            }
+        }
+
+        private static async Task<string> CreateVictimRestitutionAction(IConfiguration configuration, VictimRestitutionFormModel model)
+        {
+            HttpClient httpClient = null;
+            try
+            {
+                var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
+                httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+
+                // THIS SHOUDL BECOME IT'S OWN DYNAMICS MODEL
+                var dynamicsModel = model; // model.ToDynamicsModel();
+                var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
                 request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");

@@ -40,28 +40,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string phoneNumber { get; set; }
         public string alternatePhoneNumber { get; set; }
         public string email { get; set; }
-        public Primaryaddress primaryAddress { get; set; }
-        public Alternateaddress alternateAddress { get; set; }
-    }
-
-    public class Primaryaddress
-    {
-        public string line1 { get; set; }
-        public string line2 { get; set; }
-        public string city { get; set; }
-        public string postalCode { get; set; }
-        public string province { get; set; }
-        public string country { get; set; }
-    }
-
-    public class Alternateaddress
-    {
-        public string line1 { get; set; }
-        public string line2 { get; set; }
-        public string city { get; set; }
-        public string postalCode { get; set; }
-        public string province { get; set; }
-        public string country { get; set; }
+        public Address primaryAddress { get; set; }
+        public Address alternateAddress { get; set; }
     }
 
     public class Crimeinformation
@@ -104,19 +84,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string expensesReceived { get; set; }
         public string willBeTakingLegalAction { get; set; }
         public string lawyerOrFirmName { get; set; }
-        public Lawyeraddress lawyerAddress { get; set; }
+        public Address lawyerAddress { get; set; }
         public string signName { get; set; }
         public string signature { get; set; }
-    }
-
-    public class Lawyeraddress
-    {
-        public string line1 { get; set; }
-        public string line2 { get; set; }
-        public string city { get; set; }
-        public string postalCode { get; set; }
-        public string province { get; set; }
-        public string country { get; set; }
     }
 
     public class Crimelocation
@@ -128,12 +98,6 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     {
         public string policeFileNumber { get; set; }
         public string investigatingOfficer { get; set; }
-    }
-
-    public class Courtfile
-    {
-        public string courtFileNumber { get; set; }
-        public string courtLocation { get; set; }
     }
 
     public class Medicalinformation
@@ -162,17 +126,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int providerType { get; set; }
         public string providerName { get; set; }
         public string providerPhoneNumber { get; set; }
-        public Provideraddress providerAddress { get; set; }
-    }
-
-    public class Provideraddress
-    {
-        public string line1 { get; set; }
-        public string line2 { get; set; }
-        public string city { get; set; }
-        public string postalCode { get; set; }
-        public string province { get; set; }
-        public string country { get; set; }
+        public Address providerAddress { get; set; }
     }
 
     public class Expenseinformation
@@ -220,17 +174,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string employerPhoneNumber { get; set; }
         public string employerFirstName { get; set; }
         public string employerLastName { get; set; }
-        public Employeraddress employerAddress { get; set; }
-    }
-
-    public class Employeraddress
-    {
-        public string line1 { get; set; }
-        public string line2 { get; set; }
-        public string city { get; set; }
-        public string postalCode { get; set; }
-        public string province { get; set; }
-        public string country { get; set; }
+        public Address employerAddress { get; set; }
     }
 
     public class Representativeinformation
@@ -243,18 +187,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string representativePhoneNumber { get; set; }
         public string representativeAlternatePhoneNumber { get; set; }
         public string representativeEmail { get; set; }
-        public Representativeaddress representativeAddress { get; set; }
+        public Address representativeAddress { get; set; }
         public object[] legalGuardianFiles { get; set; }
-    }
-
-    public class Representativeaddress
-    {
-        public string line1 { get; set; }
-        public string line2 { get; set; }
-        public string city { get; set; }
-        public string postalCode { get; set; }
-        public string province { get; set; }
-        public string country { get; set; }
     }
 
     public class Declarationinformation
@@ -273,19 +207,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string authorizedPersonPhoneNumber { get; set; }
         public string authorizedPersonRelationship { get; set; }
         public string authorizedPersonAgencyName { get; set; }
-        public Authorizedpersonagencyaddress authorizedPersonAgencyAddress { get; set; }
+        public Address authorizedPersonAgencyAddress { get; set; }
         public string authorizedPersonAuthorizesDiscussion { get; set; }
         public string authorizedPersonSignature { get; set; }
     }
-
-    public class Authorizedpersonagencyaddress
-    {
-        public string line1 { get; set; }
-        public string line2 { get; set; }
-        public string city { get; set; }
-        public string postalCode { get; set; }
-        public string province { get; set; }
-        public string country { get; set; }
-    }
-
 }

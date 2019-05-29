@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -12,7 +12,6 @@ import { defaultFormat as _rollupMoment } from 'moment';
 import { CanDeactivateGuard } from '../services/can-deactivate-guard.service';
 import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
-import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
@@ -26,9 +25,9 @@ const moment = _rollupMoment || _moment;
 export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 
 @Component({
-  selector: 'app-victim-restitution',
-  templateUrl: './victim-restitution.component.html',
-  styleUrls: ['./victim-restitution.component.scss'],
+  selector: 'app-offender-restitution',
+  templateUrl: './offender-restitution.component.html',
+  styleUrls: ['./offender-restitution.component.scss'],
   providers: [
     // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
     // application's root module. We provide it at the component level here, due to limitations of
@@ -38,7 +37,7 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
   ],
 })
 
-export class VictimRestitutionComponent extends FormBase implements OnInit, CanDeactivateGuard {
+export class OffenderRestitutionComponent extends FormBase implements OnInit, CanDeactivateGuard {
   currentUser: User;
   dataLoaded = false;
   busy: Promise<any>;
@@ -164,25 +163,6 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
           control.updateValueAndValidity();
         }
       });
-    
-    this.form.get('restitutionInformation.authoriseVictimDesignate')
-      .valueChanges
-      .subscribe(value => {
-        let firstName = this.form.get('restitutionInformation.authorisedDesignateFirstName');
-        let lastName = this.form.get('restitutionInformation.authorisedDesignateLastName');
-
-        firstName.clearValidators();
-        firstName.setErrors(null);
-        lastName.clearValidators();
-        lastName.setErrors(null);
-
-        let useValidation = value === true;
-        if (useValidation) {
-          firstName.setValidators([Validators.required]);
-          lastName.setValidators([Validators.required]);
-        }
-      });
-
   }
   
   showSignPad(group, control): void {
@@ -206,7 +186,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     const verifyDialogConfig = new MatDialogConfig();
     verifyDialogConfig.disableClose = true;
     verifyDialogConfig.autoFocus = true;
-    verifyDialogConfig.data = 'victimrestitution';
+    verifyDialogConfig.data = 'offender';
 
     const verifyDialogRef = this.dialog.open(CancelApplicationDialog, verifyDialogConfig);
     verifyDialogRef.afterClosed().subscribe(
@@ -262,25 +242,50 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
       }
     }
   }
+  
+  createVictimItem(): FormGroup {
+    return this.fb.group({
+      firstName: ['', Validators.required],
+      middleName: '',
+      lastName: ['', Validators.required],
+      relationship: ['', Validators.required]
+    });
+  }
+
+  addVictimItem(inCourtFile: number): void {
+    const control = (<FormArray>this.form.get('restitutionInformation.restitutionCourtFiles')).at(inCourtFile).get('victims') as FormArray;
+    control.push(this.createVictimItem());
+  }
+
+  removeVictimName(inCourtFile: number, victimNameIndex: number): void {
+    const control = (<FormArray>this.form.get('restitutionInformation.restitutionCourtFiles')).at(inCourtFile).get('victims') as FormArray;
+    control.removeAt(victimNameIndex);
+  }
+
+  showVictimNameRemove(inCourtFile: number): boolean {
+    const control = (<FormArray>this.form.get('restitutionInformation.restitutionCourtFiles')).at(inCourtFile).get('victims') as FormArray;
+    return control.length > 1;
+  }
 
   addCourtInfo(): void {
-    this.courtFileItems = this.form.get('restitutionInformation.courtFiles') as FormArray;
+    this.courtFileItems = this.form.get('restitutionInformation.restitutionCourtFiles') as FormArray;
     this.courtFileItems.push(this.createCourtInfoItem());
-    this.showAddCourtInfo = this.courtFileItems.length < 3;
+    this.showAddCourtInfo = this.courtFileItems.length < 10;
     this.showRemoveCourtInfo = this.courtFileItems.length > 1;
   }
 
   removeCourtInfo(index: number): void {
-    this.courtFileItems = this.form.get('restitutionInformation.courtFiles') as FormArray;
+    this.courtFileItems = this.form.get('restitutionInformation.restitutionCourtFiles') as FormArray;
     this.courtFileItems.removeAt(index);
-    this.showAddCourtInfo = this.courtFileItems.length < 3;
+    this.showAddCourtInfo = this.courtFileItems.length < 10;
     this.showRemoveCourtInfo = this.courtFileItems.length > 1;
   }
 
   createCourtInfoItem(): FormGroup {
     return this.fb.group({
-      courtFileNumber: '',
-      courtLocation: ''
+      courtFileNumber: ['', Validators.required],
+      courtLocation: '',
+      victims: this.fb.array([this.createVictimItem()]),
     });
   }
 
@@ -324,7 +329,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
 
-    this.busy = this.justiceDataService.submitVictimRestitutionApplication(formData)
+    this.busy = this.justiceDataService.submitOffenderRestitutionApplication(formData)
         .toPromise()
         .then(res => {
           subResult.next(true);
@@ -344,18 +349,11 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
       introduction: this.fb.group({
       }),
       restitutionInformation: this.fb.group({
-        victimFirstName: ['', Validators.required],
-        victimMiddleName: [''],
-        victimLastName: ['', Validators.required],
-        victimGender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
-        victimBirthDate: ['', [Validators.required]],
-
-        authoriseVictimDesignate: ['', Validators.required],
-        authorisedDesignateFirstName: [''],
-        authorisedDesignateMiddleName: [''],
-        authorisedDesignateLastName: [''],
-
-        authoriseDesignateToActOnBehalf: [''],
+        offenderFirstName: [''],
+        offenderMiddleName: [''],
+        offenderLastName: [''],
+        offenderGender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
+        offenderBirthDate: ['', [Validators.required]],
 
         preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
 
@@ -372,18 +370,15 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
           country: [{ value: 'Canada', disabled: false }],
         }),
 
-        permissionToLeaveDetailedMessage: [''],
+        permissionToLeaveDetailedMessage: ['', Validators.required],
 
-        offenderFirstName: [''],
-        offenderMiddleName: [''],
-        offenderLastName: [''],
-        offenderRelationship: [''],
-        courtFiles: this.fb.array([this.createCourtInfoItem()]),
+        restitutionCourtFiles: this.fb.array([this.createCourtInfoItem()]),
 
-        victimServiceWorkerFirstName: [''],
-        victimServiceWorkerLastName: [''],
-        victimServiceWorkerProgramName: [''],
-        victimServiceWorkerEmail: [''],
+        probationOfficerFirstName: [''],
+        probationOfficerLastName: [''],
+        custodyLocation: [''],
+        custodyPhoneNumber: [''],
+        custodyEmailAddress: [''],
 
         restitutionOrders: this.fb.array([]),  // This will be a collection of uploaded files
 

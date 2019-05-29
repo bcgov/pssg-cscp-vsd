@@ -12,20 +12,7 @@ import { JusticeApplicationDataService } from '../services/justice-application-d
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
-
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'YYYY-MM-DD',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+import { MY_FORMATS } from '../shared/enums-list';
 
 @Component({
   selector: 'app-submit-invoice',
