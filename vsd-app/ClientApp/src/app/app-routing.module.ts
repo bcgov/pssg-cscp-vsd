@@ -11,7 +11,6 @@ import { OffenderRestitutionComponent } from './offender-restitution/offender-re
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { TestApiComponent } from './test-api/test-api.component';
 
 const routes: Routes = [
   {
@@ -47,10 +46,6 @@ const routes: Routes = [
     path: 'offender-restitution',
     component: OffenderRestitutionComponent,
     //canDeactivate: [CanDeactivateGuard]
-  },
-  {
-    path: 'test-api',
-    component: TestApiComponent,
   },
   {
     path: 'application-cancelled',

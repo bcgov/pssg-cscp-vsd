@@ -43,7 +43,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 }
             }
 
-            var t = Task.Run(() => CreateCaseActionOld(_configuration, model));
+            var t = Task.Run(() => CreateCaseAction(_configuration, model));
             t.Wait();
 
             var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
@@ -99,25 +99,28 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet("getdata")]
-        public ActionResult Sample()
+        [HttpPost("submitoffenderrestitution")]
+        public async Task<IActionResult> SubmitOffenderRestitution([FromBody] OffenderRestitutionFormModel model)
         {
-            // TODO: GetDefaults probably shouldn't be in the extensions class, but I'm not sure where else to put it since the
-            // extensions also need it
-            var application = ApplicationModelExtensions.GetApplicationDefaults();
-            var applicationJson = JsonConvert.SerializeObject(application);
+            if (model == null)
+            {
+                if (ModelState.ErrorCount > 0)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
+                    return new JsonResult(new { IsSuccess = false, Status = "Restitution Save Error", Message = "Errors in binding: " + string.Join(Environment.NewLine, errors) });
+                }
+                else
+                {
+                    return new JsonResult(new { IsSuccess = false, Status = "Restitution Save Error", Message = "Error: Model is null." });
+                }
+            }
 
-            return new JsonResult(applicationJson);
-        }
-
-        [HttpGet("dynamicstest")]
-        public ActionResult TestDynamics()
-        {
-            var model = new ApplicationFormModel();
-            var t = Task.Run(() => CreateCaseAction(_configuration, model));
+            var t = Task.Run(() => CreateOffenderRestitutionAction(_configuration, model));
             t.Wait();
 
-            return new JsonResult(t.Result);
+            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
+            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Restitution Save", Message = dynamicsResponse.Result };
+            return new JsonResult(result);
         }
 
         private static async Task<string> CreateCaseAction(IConfiguration configuration, ApplicationFormModel model)
@@ -190,7 +193,39 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
                 httpClient = GetDynamicsHttpClient(configuration, endpointAction);
 
-                // THIS SHOUDL BECOME IT'S OWN DYNAMICS MODEL
+                // THIS SHOULD BECOME A DYNAMICS MODEL
+                var dynamicsModel = model; // model.ToDynamicsModel();
+                var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
+                request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await httpClient.SendAsync(request);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                    return jsonResult;
+                }
+
+                return response.Content.ReadAsStringAsync().Result;
+            }
+            finally
+            {
+                if (httpClient != null)
+                    httpClient.Dispose();
+            }
+        }
+
+        private static async Task<string> CreateOffenderRestitutionAction(IConfiguration configuration, OffenderRestitutionFormModel model)
+        {
+            HttpClient httpClient = null;
+            try
+            {
+                var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
+                httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+
+                // THIS SHOULD BECOME A DYNAMICS MODEL
                 var dynamicsModel = model; // model.ToDynamicsModel();
                 var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
 
@@ -289,7 +324,6 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     httpClient.Dispose();
             }
         }
-
 
         // Sample error result
         // "message": "{\"@odata.context\":\"https://victimservicesdev.api.crm3.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.vsd_CreateCVAPClaimResponse\",\"IsSuccess\":false,\"Result\":\"Error: Applicant's First Name is required..\"}"

@@ -12,24 +12,19 @@ export class JusticeApplicationDataService {
   constructor(private http: HttpClient) { }
 
   public submitApplication(applicationModel: DynamicsApplicationModel) {
-    console.log('Firing submit call');
     return this.http.post(this.apiPath + 'saveapplication', applicationModel, { headers: this.headers });
   }
 
   public submitCounsellorInvoice(invoiceModel: DynamicsApplicationModel) {
-    console.log('Firing invoice submit call');
     return this.http.post(this.apiPath + 'submitcounsellorinvoice', invoiceModel, { headers: this.headers });
   }
 
   public submitVictimRestitutionApplication(victimModel: DynamicsApplicationModel) {
-    console.log('Firing victim restitution submit call');
     return this.http.post(this.apiPath + 'submitvictimrestitution', victimModel, { headers: this.headers });
   }
 
   public submitOffenderRestitutionApplication(offenderModel: DynamicsApplicationModel) {
-    console.log('Firing offender submit call');
-    // This should target the 'submitoffenderrestitution' action once it is written
-    return this.http.post(this.apiPath + 'submitvictimrestitution', offenderModel, { headers: this.headers });
+    return this.http.post(this.apiPath + 'submitoffenderrestitution', offenderModel, { headers: this.headers });
   }
 
   public getSampleCall() {

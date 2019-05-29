@@ -68,7 +68,6 @@ import { VictimRestitutionComponent } from './victim-restitution/victim-restitut
 import { VictimRestitutionReviewComponent } from './victim-restitution/victim-restitution-review.component';
 import { OffenderRestitutionComponent } from './offender-restitution/offender-restitution.component';
 import { OffenderRestitutionReviewComponent } from './offender-restitution/offender-restitution-review.component';
-import { TestApiComponent } from './test-api/test-api.component';
 import { FileDropModule } from 'ngx-file-drop';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
@@ -105,7 +104,6 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     VictimRestitutionReviewComponent,
     OffenderRestitutionComponent,
     OffenderRestitutionReviewComponent,
-    TestApiComponent,
     BreadcrumbComponent,
     HomeComponent,
     NotFoundComponent,
