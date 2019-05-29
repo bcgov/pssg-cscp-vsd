@@ -14,6 +14,5 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string classid { get; set; }
         public string controltype { get; set; }
         public Boolean required { get; set; }
-        public List<OptionMetadata> options { get; set; }
     }
 }
