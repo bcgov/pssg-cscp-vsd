@@ -654,6 +654,24 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }
     );
   }
+
+  producePDF() {
+    //let formData = <DynamicsApplicationModel>{
+    //  Introduction: this.form.get('introduction').value,
+    //  PersonalInformation: this.form.get('personalInformation').value,
+    //  CrimeInformation: this.form.get('crimeInformation').value,
+    //  MedicalInformation: this.form.get('medicalInformation').value,
+    //  ExpenseInformation: this.form.get('expenseInformation').value,
+    //  EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value,
+    //  RepresentativeInformation: this.form.get('representativeInformation').value,
+    //  DeclarationInformation: this.form.get('declarationInformation').value,
+    //  AuthorizationInformation: this.form.get('authorizationInformation').value,
+    //};
+    //var printString = JSON.stringify(formData);
+    //var wnd = window.open("about:blank", "", "_blank");
+    //wnd.document.write(printString);
+    window.print();
+  }
   
   submitApplication() {
     let formIsValid = this.form.valid;
