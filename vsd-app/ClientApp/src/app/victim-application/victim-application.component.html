@@ -33,7 +33,7 @@
       </section>
     </div>
 
-    <div class="col-lg-7 col-sm-12">
+    <div id="pdfPrintGroup" class="col-lg-7 col-sm-12">
       <form [formGroup]="form">
         <div *ngIf="dataLoaded || true">
           <div formGroupName="introduction" *ngIf="this.currentFormStep == 0">
