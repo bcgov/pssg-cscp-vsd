@@ -12,12 +12,22 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Gov.Cscp.VictimServices.Public.Models.Extensions;
+using System.Collections.Generic;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("api/[controller]")]
     public partial class JusticeController : Controller
     {
+
+        #region Credentials
+        private static string idirName = "";
+        private static string password = "";
+        private static string resource = "";
+        private static string clientId = "";
+        private static string secret = "";
+        #endregion
+
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -129,7 +139,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             try
             {
                 var endpointAction = "vsd_CreateCVAPClaim";
-                httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                await GetDynamicsHttpClientNew(configuration);
 
                 var application = model.ToVsdVictimsModel();
                 var applicationJson = JsonConvert.SerializeObject(application);
@@ -160,7 +171,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             try
             {
                 var endpointAction = "vsd_SubmitCounselorInvoice";
-                httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                await GetDynamicsHttpClientNew(configuration);
 
                 var invoiceModel = model.ToDynamicsModel();
                 var invoiceJson = JsonConvert.SerializeObject(invoiceModel);
@@ -191,8 +203,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             try
             {
                 var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
-                httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-
+                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                await GetDynamicsHttpClientNew(configuration);
+                
                 // THIS SHOULD BECOME A DYNAMICS MODEL
                 var dynamicsModel = model; // model.ToDynamicsModel();
                 var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
@@ -223,7 +236,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             try
             {
                 var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
-                httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                await GetDynamicsHttpClientNew(configuration);
 
                 // THIS SHOULD BECOME A DYNAMICS MODEL
                 var dynamicsModel = model; // model.ToDynamicsModel();
@@ -249,21 +263,91 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
         }
 
+        static async Task GetDynamicsHttpClientNew(IConfiguration configuration)
+        {
+            var client = new HttpClient();
+
+            var dynamicsOdataUri = configuration["DYNAMICS_ODATAURI"];
+            var ssgUsername = configuration["SSG_USERNAME"];
+            var ssgPassword = configuration["SSG_PASSWORD"];
+            var dynamicsID = configuration["DYN_ID"];
+            var dynamicsSecret = configuration["DYN_SECRET"];
+
+            client.DefaultRequestHeaders.Add("x-client-SKU", "PCL.CoreCLR");
+            client.DefaultRequestHeaders.Add("x-client-Ver", "5.1.0.0");
+            client.DefaultRequestHeaders.Add("x-ms-PKeyAuth", "1.0");
+            client.DefaultRequestHeaders.Add("client-request-id", Guid.NewGuid().ToString());
+            client.DefaultRequestHeaders.Add("return-client-request-id", "true");
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            var stsEndpoint = "https://sts4.gov.bc.ca/adfs/oauth2/token";
+
+            var pairs = new List<KeyValuePair<string, string>>
+
+            {
+                //new KeyValuePair<string, string>("resource", resource),
+                new KeyValuePair<string, string>("resource", dynamicsOdataUri),//resource),
+                new KeyValuePair<string, string>("client_id", dynamicsID),//clientId),
+                //new KeyValuePair<string, string>("client_id", clientId),
+                //new KeyValuePair<string, string>("client_secret", secret),
+                new KeyValuePair<string, string>("client_secret", dynamicsSecret),//secret),
+                new KeyValuePair<string, string>("client_info", "1"),
+                new KeyValuePair<string, string>("username", ssgUsername),// idirName),
+                //new KeyValuePair<string, string>("username", idirName),
+                //new KeyValuePair<string, string>("password", password),
+                new KeyValuePair<string, string>("password", ssgPassword),// password),
+                new KeyValuePair<string, string>("scope", "openid"),
+                new KeyValuePair<string, string>("response_mode", "form_post"),
+                new KeyValuePair<string, string>("grant_type", "password")
+             };
+
+            var content = new FormUrlEncodedContent(pairs);
+
+            var _httpResponse = await client.PostAsync(stsEndpoint, content);
+
+            var _responseContent = await _httpResponse.Content.ReadAsStringAsync();
+
+            Dictionary<string, string> result = JsonConvert.DeserializeObject<Dictionary<string, string>>(_responseContent);
+            string token = result["access_token"];
+
+            client = new HttpClient();
+            var Authorization = $"Bearer {token}";
+            client.DefaultRequestHeaders.Add("Authorization", Authorization);
+            client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
+            client.DefaultRequestHeaders.Add("OData-Version", "4.0");
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            string url = "https://spd-spice.dev.jag.gov.bc.ca/api/data/v9.0/accounts";
+
+            HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Get, url);
+
+            var _httpResponse2 = await client.SendAsync(_httpRequest);
+            HttpStatusCode _statusCode = _httpResponse2.StatusCode;
+
+            var _responseString = _httpResponse2.ToString();
+            var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
+
+            Console.Out.WriteLine(_responseContent2);
+        }
+
+
         private static HttpClient GetDynamicsHttpClient(IConfiguration configuration, string endpointAction)
         {
+            // OLD CODE
             HttpClient httpClient;
             var dynamicsOdataUri = configuration["DYNAMICS_ODATAURI"];
             var ssgUsername = configuration["SSG_USERNAME"];
             var ssgPassword = configuration["SSG_PASSWORD"];
 
-//            httpClient = new HttpClient(new HttpClientHandler { Credentials = new NetworkCredential(ssgUsername, ssgPassword) });
-            httpClient = new HttpClient(new HttpClientHandler { });
+            httpClient = new HttpClient(new HttpClientHandler { Credentials = new NetworkCredential(ssgUsername, ssgPassword) });
+            //httpClient = new HttpClient(new HttpClientHandler { });
             httpClient.BaseAddress = new Uri(string.Join("/", dynamicsOdataUri, endpointAction));
             httpClient.Timeout = new TimeSpan(1, 0, 0);  // 1 hour timeout  
             httpClient.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
             httpClient.DefaultRequestHeaders.Add("OData-Version", "4.0");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             return httpClient;
+            // END OLD CODE
         }
 
         private static async Task<string> CreateCaseActionOld(IConfiguration configuration, ApplicationFormModel model)
