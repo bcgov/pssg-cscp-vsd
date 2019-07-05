@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Gov.Cscp.VictimServices.Public.Models.Extensions;
 using System.Collections.Generic;
+using Microsoft.Rest;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -265,69 +266,235 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
         static async Task GetDynamicsHttpClientNew(IConfiguration configuration)
         {
-            var client = new HttpClient();
 
-            var dynamicsOdataUri = configuration["DYNAMICS_ODATAURI"];
-            var ssgUsername = configuration["SSG_USERNAME"];
-            var ssgPassword = configuration["SSG_PASSWORD"];
-            var dynamicsID = configuration["DYN_ID"];
-            var dynamicsSecret = configuration["DYN_SECRET"];
+            var builder = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddUserSecrets<Program>(); // must also define a project guid for secrets in the .cspro – add tag <UserSecretsId> containing a guid
+            var Configuration = builder.Build();
 
-            client.DefaultRequestHeaders.Add("x-client-SKU", "PCL.CoreCLR");
-            client.DefaultRequestHeaders.Add("x-client-Ver", "5.1.0.0");
-            client.DefaultRequestHeaders.Add("x-ms-PKeyAuth", "1.0");
-            client.DefaultRequestHeaders.Add("client-request-id", Guid.NewGuid().ToString());
-            client.DefaultRequestHeaders.Add("return-client-request-id", "true");
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            string dynamicsOdataUri = Configuration["DYNAMICS_ODATA_URI"]; // Dynamics ODATA endpoint
+            string dynamicsJobName = Configuration["DYNAMICS_JOB_NAME"]; // Dynamics Job Name
 
-            var stsEndpoint = "https://sts4.gov.bc.ca/adfs/oauth2/token";
-
-            var pairs = new List<KeyValuePair<string, string>>
-
+            if (string.IsNullOrEmpty(dynamicsOdataUri))
             {
-                //new KeyValuePair<string, string>("resource", resource),
-                new KeyValuePair<string, string>("resource", dynamicsOdataUri),//resource),
-                new KeyValuePair<string, string>("client_id", dynamicsID),//clientId),
-                //new KeyValuePair<string, string>("client_id", clientId),
-                //new KeyValuePair<string, string>("client_secret", secret),
-                new KeyValuePair<string, string>("client_secret", dynamicsSecret),//secret),
-                new KeyValuePair<string, string>("client_info", "1"),
-                new KeyValuePair<string, string>("username", ssgUsername),// idirName),
-                //new KeyValuePair<string, string>("username", idirName),
-                //new KeyValuePair<string, string>("password", password),
-                new KeyValuePair<string, string>("password", ssgPassword),// password),
-                new KeyValuePair<string, string>("scope", "openid"),
-                new KeyValuePair<string, string>("response_mode", "form_post"),
-                new KeyValuePair<string, string>("grant_type", "password")
-             };
+                throw new Exception("Configuration setting DYNAMICS_ODATA_URI is blank.");
+            }
 
-            var content = new FormUrlEncodedContent(pairs);
+            // Cloud - x.dynamics.com
+            string aadTenantId = Configuration["DYNAMICS_AAD_TENANT_ID"]; // Cloud AAD Tenant ID
+            string serverAppIdUri = Configuration["DYNAMICS_SERVER_APP_ID_URI"]; // Cloud Server App ID URI
+            string appRegistrationClientKey = Configuration["DYNAMICS_APP_REG_CLIENT_KEY"]; // Cloud App Registration Client Key
+            string appRegistrationClientId = Configuration["DYNAMICS_APP_REG_CLIENT_ID"]; // Cloud App Registration Client Id
 
-            var _httpResponse = await client.PostAsync(stsEndpoint, content);
+            // One Premise ADFS (2016)
+            string adfsOauth2Uri = Configuration["ADFS_OAUTH2_URI"]; // ADFS OAUTH2 URI - usually /adfs/oauth2/token on STS
+            string applicationGroupResource = Configuration["DYNAMICS_APP_GROUP_RESOURCE"]; // ADFS 2016 Application Group resource (URI)
+            string applicationGroupClientId = Configuration["DYNAMICS_APP_GROUP_CLIENT_ID"]; // ADFS 2016 Application Group Client ID
+            string applicationGroupSecret = Configuration["DYNAMICS_APP_GROUP_SECRET"]; // ADFS 2016 Application Group Secret
+            string serviceAccountUsername = Configuration["DYNAMICS_USERNAME"]; // Service account username
+            string serviceAccountPassword = Configuration["DYNAMICS_PASSWORD"]; // Service account password
 
-            var _responseContent = await _httpResponse.Content.ReadAsStringAsync();
+            // API Gateway to NTLM user.  This is used in v8 environments.  Note that the SSG Username and password are not the same as the NTLM user.
+            string ssgUsername = Configuration["SSG_USERNAME"];  // BASIC authentication username
+            string ssgPassword = Configuration["SSG_PASSWORD"];  // BASIC authentication password
 
-            Dictionary<string, string> result = JsonConvert.DeserializeObject<Dictionary<string, string>>(_responseContent);
-            string token = result["access_token"];
+            ServiceClientCredentials serviceClientCredentials = null;
+            if (!string.IsNullOrEmpty(appRegistrationClientId) && !string.IsNullOrEmpty(appRegistrationClientKey) && !string.IsNullOrEmpty(serverAppIdUri) && !string.IsNullOrEmpty(aadTenantId))
+            // Cloud authentication - using an App Registration's client ID, client key.  Add the App Registration to Dynamics as an Application User.
+            {
+                var authenticationContext = new AuthenticationContext(
+                "https://login.windows.net/" + aadTenantId);
+                ClientCredential clientCredential = new ClientCredential(appRegistrationClientId, appRegistrationClientKey);
+                var task = authenticationContext.AcquireTokenAsync(serverAppIdUri, clientCredential);
+                task.Wait();
+                var authenticationResult = task.Result;
+                string token = authenticationResult.CreateAuthorizationHeader().Substring("Bearer ".Length);
+                serviceClientCredentials = new TokenCredentials(token);
+            }
+            if (!string.IsNullOrEmpty(adfsOauth2Uri) &&
+                        !string.IsNullOrEmpty(applicationGroupResource) &&
+                        !string.IsNullOrEmpty(applicationGroupClientId) &&
+                        !string.IsNullOrEmpty(applicationGroupSecret) &&
+                        !string.IsNullOrEmpty(serviceAccountUsername) &&
+                        !string.IsNullOrEmpty(serviceAccountPassword))
+            // ADFS 2016 authentication - using an Application Group Client ID and Secret, plus service account credentials.
+            {
+                // create a new HTTP client that is just used to get a token.
+                var stsClient = new HttpClient();
 
-            client = new HttpClient();
-            var Authorization = $"Bearer {token}";
-            client.DefaultRequestHeaders.Add("Authorization", Authorization);
-            client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
-            client.DefaultRequestHeaders.Add("OData-Version", "4.0");
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
+                //stsClient.DefaultRequestHeaders.Add("x-client-SKU", "PCL.CoreCLR");
+                //stsClient.DefaultRequestHeaders.Add("x-client-Ver", "5.1.0.0");
+                //stsClient.DefaultRequestHeaders.Add("x-ms-PKeyAuth", "1.0");
 
-            string url = "https://spd-spice.dev.jag.gov.bc.ca/api/data/v9.0/accounts";
+                stsClient.DefaultRequestHeaders.Add("client-request-id", Guid.NewGuid().ToString());
+                stsClient.DefaultRequestHeaders.Add("return-client-request-id", "true");
+                stsClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-            HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Get, url);
+                // Construct the body of the request
+                var pairs = new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("resource", applicationGroupResource),
+                    new KeyValuePair<string, string>("client_id", applicationGroupClientId),
+                    new KeyValuePair<string, string>("client_secret", applicationGroupSecret),
+                    new KeyValuePair<string, string>("username", serviceAccountUsername),
+                    new KeyValuePair<string, string>("password", serviceAccountPassword),
+                    new KeyValuePair<string, string>("scope", "openid"),
+                    new KeyValuePair<string, string>("response_mode", "form_post"),
+                    new KeyValuePair<string, string>("grant_type", "password")
+                 };
 
-            var _httpResponse2 = await client.SendAsync(_httpRequest);
-            HttpStatusCode _statusCode = _httpResponse2.StatusCode;
+                // This will also set the content type of the request
+                var content = new FormUrlEncodedContent(pairs);
+                // send the request to the ADFS server
+                var _httpResponse = stsClient.PostAsync(adfsOauth2Uri, content).GetAwaiter().GetResult();
+                var _responseContent = _httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                // response should be in JSON format.
+                try
+                {
+                    Dictionary<string, string> result = JsonConvert.DeserializeObject<Dictionary<string, string>>(_responseContent);
+                    string token = result["access_token"];
+                    // set the bearer token.
+                    serviceClientCredentials = new TokenCredentials(token);
 
-            var _responseString = _httpResponse2.ToString();
-            var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
 
-            Console.Out.WriteLine(_responseContent2);
+                    // Code to perform Scheduled task
+                    var client = new HttpClient();
+                    client.DefaultRequestHeaders.Add("x-client-SKU", "PCL.CoreCLR");
+                    client.DefaultRequestHeaders.Add("x-client-Ver", "5.1.0.0");
+                    client.DefaultRequestHeaders.Add("x-ms-PKeyAuth", "1.0");
+                    client.DefaultRequestHeaders.Add("client-request-id", Guid.NewGuid().ToString());
+                    client.DefaultRequestHeaders.Add("return-client-request-id", "true");
+                    client.DefaultRequestHeaders.Add("Accept", "application/json");
+
+                    client = new HttpClient();
+                    var Authorization = $"Bearer {token}";
+                    client.DefaultRequestHeaders.Add("Authorization", Authorization);
+                    client.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
+                    client.DefaultRequestHeaders.Add("OData-Version", "4.0");
+                    client.DefaultRequestHeaders.Add("Accept", "application/json");
+                    //client.DefaultRequestHeaders.Add("content-type", "application/json");
+                    //client.DefaultRequestHeaders.Add("Content-Type", "application/json; charset=utf-8");
+
+                    string url = dynamicsOdataUri + dynamicsJobName;
+
+                    HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
+                    _httpRequest.Content = new StringContent("{}", System.Text.Encoding.UTF8, "application/json");
+
+                    var _httpResponse2 = await client.SendAsync(_httpRequest);
+                    HttpStatusCode _statusCode = _httpResponse2.StatusCode;
+
+                    var _responseString = _httpResponse2.ToString();
+                    var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
+
+                    Console.Out.WriteLine(_responseString);
+                    Console.Out.WriteLine(_responseContent2);
+
+                    // End of scheduled task
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message + " " + _responseContent);
+                }
+
+            }
+            else if (!string.IsNullOrEmpty(ssgUsername) && !string.IsNullOrEmpty(ssgPassword))
+            // Authenticate using BASIC authentication - used for API Gateways with BASIC authentication.  Add the NTLM user associated with the API gateway entry to Dynamics as a user.            
+            {
+                serviceClientCredentials = new BasicAuthenticationCredentials()
+                {
+                    UserName = ssgUsername,
+                    Password = ssgPassword
+                };
+            }
+            else
+            {
+                throw new Exception("No configured connection to Dynamics.");
+            }
+
+            //IDynamicsClient client = new DynamicsClient(new Uri(dynamicsOdataUri), serviceClientCredentials);
+
+            //// set the native client URI.  This is required if you have a reverse proxy or IFD in place and the native URI is different from your access URI.
+            //if (string.IsNullOrEmpty(Configuration["DYNAMICS_NATIVE_ODATA_URI"]))
+            //{
+            //    client.NativeBaseUri = new Uri(Configuration["DYNAMICS_ODATA_URI"]);
+            //}
+            //else
+            //{
+            //    client.NativeBaseUri = new Uri(Configuration["DYNAMICS_NATIVE_ODATA_URI"]);
+            //}
+
+            //return client;
+
+
+
+
+
+
+
+
+            //var client = new HttpClient();
+
+            //var dynamicsOdataUri = configuration["DYNAMICS_ODATAURI"];
+            //var ssgUsername = configuration["SSG_USERNAME"];
+            //var ssgPassword = configuration["SSG_PASSWORD"];
+            //var dynamicsID = configuration["DYN_ID"];
+            //var dynamicsSecret = configuration["DYN_SECRET"];
+
+            //client.DefaultRequestHeaders.Add("x-client-SKU", "PCL.CoreCLR");
+            //client.DefaultRequestHeaders.Add("x-client-Ver", "5.1.0.0");
+            //client.DefaultRequestHeaders.Add("x-ms-PKeyAuth", "1.0");
+            //client.DefaultRequestHeaders.Add("client-request-id", Guid.NewGuid().ToString());
+            //client.DefaultRequestHeaders.Add("return-client-request-id", "true");
+            //client.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            //var stsEndpoint = "https://sts4.gov.bc.ca/adfs/oauth2/token";
+
+            //var pairs = new List<KeyValuePair<string, string>>
+
+            //{
+            //    //new KeyValuePair<string, string>("resource", resource),
+            //    new KeyValuePair<string, string>("resource", dynamicsOdataUri),//resource),
+            //    new KeyValuePair<string, string>("client_id", dynamicsID),//clientId),
+            //    //new KeyValuePair<string, string>("client_id", clientId),
+            //    //new KeyValuePair<string, string>("client_secret", secret),
+            //    new KeyValuePair<string, string>("client_secret", dynamicsSecret),//secret),
+            //    new KeyValuePair<string, string>("client_info", "1"),
+            //    new KeyValuePair<string, string>("username", ssgUsername),// idirName),
+            //    //new KeyValuePair<string, string>("username", idirName),
+            //    //new KeyValuePair<string, string>("password", password),
+            //    new KeyValuePair<string, string>("password", ssgPassword),// password),
+            //    new KeyValuePair<string, string>("scope", "openid"),
+            //    new KeyValuePair<string, string>("response_mode", "form_post"),
+            //    new KeyValuePair<string, string>("grant_type", "password")
+            // };
+
+            //var content = new FormUrlEncodedContent(pairs);
+
+            //var _httpResponse = await client.PostAsync(stsEndpoint, content);
+
+            //var _responseContent = await _httpResponse.Content.ReadAsStringAsync();
+
+            //Dictionary<string, string> result = JsonConvert.DeserializeObject<Dictionary<string, string>>(_responseContent);
+            //string token = result["access_token"];
+
+            //client = new HttpClient();
+            //var Authorization = $"Bearer {token}";
+            //client.DefaultRequestHeaders.Add("Authorization", Authorization);
+            //client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
+            //client.DefaultRequestHeaders.Add("OData-Version", "4.0");
+            //client.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            //string url = "https://spd-spice.dev.jag.gov.bc.ca/api/data/v9.0/accounts";
+
+            //HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Get, url);
+
+            //var _httpResponse2 = await client.SendAsync(_httpRequest);
+            //HttpStatusCode _statusCode = _httpResponse2.StatusCode;
+
+            //var _responseString = _httpResponse2.ToString();
+            //var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
+
+            //Console.Out.WriteLine(_responseContent2);
         }
 
 
