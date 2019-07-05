@@ -139,12 +139,12 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             HttpClient httpClient = null;
             try
             {
-                var endpointAction = "vsd_CreateCVAPClaim";
-                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration);
-
                 var application = model.ToVsdVictimsModel();
                 var applicationJson = JsonConvert.SerializeObject(application);
+
+                var endpointAction = "vsd_CreateCVAPClaim";
+                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                await GetDynamicsHttpClientNew(configuration, applicationJson);
 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
                 request.Content = new StringContent(applicationJson, Encoding.UTF8, "application/json");
@@ -171,12 +171,12 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             HttpClient httpClient = null;
             try
             {
-                var endpointAction = "vsd_SubmitCounselorInvoice";
-                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration);
-
                 var invoiceModel = model.ToDynamicsModel();
                 var invoiceJson = JsonConvert.SerializeObject(invoiceModel);
+
+                var endpointAction = "vsd_SubmitCounselorInvoice";
+                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                await GetDynamicsHttpClientNew(configuration, invoiceJson);
 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
                 request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
@@ -203,14 +203,14 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             HttpClient httpClient = null;
             try
             {
-                var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
-                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration);
-                
                 // THIS SHOULD BECOME A DYNAMICS MODEL
                 var dynamicsModel = model; // model.ToDynamicsModel();
                 var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
 
+                var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
+                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                await GetDynamicsHttpClientNew(configuration, invoiceJson);
+                
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
                 request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
 
@@ -238,7 +238,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
                 //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration);
+                await GetDynamicsHttpClientNew(configuration, endpointAction);
 
                 // THIS SHOULD BECOME A DYNAMICS MODEL
                 var dynamicsModel = model; // model.ToDynamicsModel();
@@ -264,7 +264,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
         }
 
-        static async Task GetDynamicsHttpClientNew(IConfiguration configuration)
+        static async Task GetDynamicsHttpClientNew(IConfiguration configuration, String model)
         {
 
             var builder = new ConfigurationBuilder()
@@ -379,6 +379,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                     HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
                     _httpRequest.Content = new StringContent("{}", System.Text.Encoding.UTF8, "application/json");
+
+                    // THIS SHOULD BECOME A DYNAMICS MODEL
+                    var dynamicsModel = model; // model.ToDynamicsModel();
+                    var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
+
+                    _httpRequest.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+
+
+
 
                     var _httpResponse2 = await client.SendAsync(_httpRequest);
                     HttpStatusCode _statusCode = _httpResponse2.StatusCode;
