@@ -378,13 +378,14 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     string url = dynamicsOdataUri + dynamicsJobName;
 
                     HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
-                    _httpRequest.Content = new StringContent("{}", System.Text.Encoding.UTF8, "application/json");
+                    _httpRequest.Content = new StringContent(model, Encoding.UTF8, "application/json");
+                    //_httpRequest.Content = new StringContent(model);
 
-                    // THIS SHOULD BECOME A DYNAMICS MODEL
-                    var dynamicsModel = model; // model.ToDynamicsModel();
-                    var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
-
-                    _httpRequest.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+//                    // THIS SHOULD BECOME A DYNAMICS MODEL
+//                    var dynamicsModel = model; // model.ToDynamicsModel();
+//                    var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
+//
+//                    _httpRequest.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
 
 
 
