@@ -24,10 +24,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_applicantslastname = model.PersonalInformation.lastName;
                 application.Application.vsd_otherfirstname = model.PersonalInformation.otherFirstName;
                 application.Application.vsd_otherlastname = model.PersonalInformation.otherLastName;
-                application.Application.vsd_dateofnamechange = model.PersonalInformation.dateOfNameChange;
+                if (model.PersonalInformation.dateOfNameChange.HasValue)
+                {
+                    application.Application.vsd_dateofnamechange = model.PersonalInformation.dateOfNameChange;
+                }
 
                 application.Application.vsd_applicantsgendercode = model.PersonalInformation.gender;
-                application.Application.vsd_applicantsbirthdate = model.PersonalInformation.birthDate.Value;
+                if (model.PersonalInformation.birthDate.HasValue)
+                {
+                    application.Application.vsd_applicantsbirthdate = model.PersonalInformation.birthDate.Value;
+                }
                 application.Application.vsd_applicantsmaritalstatus = model.PersonalInformation.maritalStatus;
 
                 application.Application.vsd_applicantsoccupation = model.PersonalInformation.occupation;
@@ -68,8 +74,14 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             if (model.CrimeInformation != null)
             {
                 application.Application.vsd_cvap_typeofcrime = model.CrimeInformation.typeOfCrime;
-                application.Application.vsd_cvap_crimestartdate = model.CrimeInformation.crimePeriodStart;
-                application.Application.vsd_cvap_crimeenddate = model.CrimeInformation.crimePeriodEnd;
+                if (model.CrimeInformation.crimePeriodStart.HasValue)
+                {
+                    application.Application.vsd_cvap_crimestartdate = model.CrimeInformation.crimePeriodStart;
+                }
+                if (model.CrimeInformation.crimePeriodEnd.HasValue)
+                {
+                    application.Application.vsd_cvap_crimeenddate = model.CrimeInformation.crimePeriodEnd;
+                }
                 application.Application.vsd_cvap_reasontoapplylate = model.CrimeInformation.whyDidYouNotApplySooner; // TODO: Verify mapping - I think it's right but just different names
                 application.Application.vsd_cvap_crimelocations = model.CrimeInformation.crimeLocation;
                 application.Application.vsd_cvap_crimedetails = model.CrimeInformation.crimeDetails;
@@ -85,8 +97,14 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
                 application.Application.vsd_cvap_reportedtopolice = model.CrimeInformation.wasReportMadeToPolice;
                 application.Application.vsd_cvap_policedetachment = model.CrimeInformation.policeReportedWhichPoliceForce;
-                application.Application.vsd_cvap_policereportingstartdate = model.CrimeInformation.policeReportedDate;
-                application.Application.vsd_cvap_policereportingenddate = model.CrimeInformation.policeReportedEndDate;
+                if (model.CrimeInformation.policeReportedDate.HasValue)
+                {
+                    application.Application.vsd_cvap_policereportingstartdate = model.CrimeInformation.policeReportedDate;
+                }
+                if (model.CrimeInformation.policeReportedEndDate.HasValue)
+                {
+                    application.Application.vsd_cvap_policereportingenddate = model.CrimeInformation.policeReportedEndDate;
+                }
                 application.Application.vsd_cvap_crimereportedto = model.CrimeInformation.noPoliceReportIdentification; // TODO: verify mapping - I think it's right, but different names
 
                 application.PoliceFileNumberCollection = model.CrimeInformation.policeReports.Select(r => new Policefilenumbercollection
@@ -138,7 +156,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_applicantsextendedhealthnumber = model.MedicalInformation.otherHealthCoverageExtendedPlanNumber; // TODO: verify mapping, "other" seems weird here
 
                 application.Application.vsd_cvap_treatmenthospitalname = model.MedicalInformation.treatedAtHospitalName;
-                application.Application.vsd_cvap_treatmentdate = model.MedicalInformation.treatedAtHospitalDate;
+                if (model.MedicalInformation.treatedAtHospitalDate.HasValue)
+                {
+                    application.Application.vsd_cvap_treatmentdate = model.MedicalInformation.treatedAtHospitalDate;
+                }
 
                 application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
                 {
@@ -168,10 +189,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             if (model.ExpenseInformation != null)
             {
                 // what are we doing here? some kind of CSV string for all of the selected expenses/benefits? seems bonkers...
-                application.Application.vsd_cvap_benefitsrequested = model.ExpenseInformation.haveCrimeSceneCleaningExpenses.ToString();
+                //application.Application.vsd_cvap_benefitsrequested = model.ExpenseInformation.haveCrimeSceneCleaningExpenses.ToString();
                 application.Application.vsd_cvap_benefitsrequestedother = model.ExpenseInformation.otherSpecificExpenses;
 
-                application.Application.vsd_cvap_otherbenefits = model.ExpenseInformation.haveDisabilityPlanBenefits.ToString();
+                //application.Application.vsd_cvap_otherbenefits = model.ExpenseInformation.haveDisabilityPlanBenefits.ToString();
                 application.Application.vsd_cvap_otherbenefitsother = model.ExpenseInformation.otherSpecificBenefits;
             }
 
@@ -182,8 +203,14 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_ifmatworkduringcrime = model.EmploymentIncomeInformation.wereYouEmployedAtTimeOfCrime;
                 application.Application.vsd_cvap_ifmwcbclaimnumber = model.EmploymentIncomeInformation.workersCompensationClaimNumber;
                 application.Application.vsd_cvap_ifmmissedwork = 1; //model.EmploymentIncomeInformation.didYouMissWorkDueToCrime; // todo: fix bool mapping
-                application.Application.vsd_cvap_ifmmissedworkstart = model.EmploymentIncomeInformation.daysWorkMissedStart;
-                application.Application.vsd_cvap_ifmmissedworkend = model.EmploymentIncomeInformation.daysWorkMissedEnd;
+                if (model.EmploymentIncomeInformation.daysWorkMissedStart.HasValue)
+                {
+                    application.Application.vsd_cvap_ifmmissedworkstart = model.EmploymentIncomeInformation.daysWorkMissedStart;
+                }
+                if (model.EmploymentIncomeInformation.daysWorkMissedEnd.HasValue)
+                {
+                    application.Application.vsd_cvap_ifmmissedworkend = model.EmploymentIncomeInformation.daysWorkMissedEnd;
+                }
                 application.Application.vsd_cvap_ifmlostwages = 1; //model.EmploymentIncomeInformation.didYouLoseWages; // todo: fix bool mapping
                 application.Application.vsd_cvap_ifmselfemployed = 1; //model.EmploymentIncomeInformation.areYouSelfEmployed; // todo: fix bool mapping
                 application.Application.vsd_cvap_ifmcontactemployer = 1; //model.EmploymentIncomeInformation.mayContactEmployer; // todo: fix bool mapping
@@ -209,7 +236,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             application.Application.vsd_cvap_optionalauthorization = 0; // TODO: where does this come from?
             application.Application.vsd_optionalauthorizationsignature = ""; // TODO: where does this come from?
 
-            application.DocumentCollection = new Documentcollection[1]; // TODO: bind collection
+            //application.DocumentCollection = new Documentcollection[1]; // TODO: bind collection
             
 
             return application;

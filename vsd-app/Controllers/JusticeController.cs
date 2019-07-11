@@ -140,7 +140,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             try
             {
                 var application = model.ToVsdVictimsModel();
-                var applicationJson = JsonConvert.SerializeObject(application);
+                JsonSerializerSettings settings = new JsonSerializerSettings();
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                var applicationJson = JsonConvert.SerializeObject(application, settings);
+                applicationJson = applicationJson.Replace("odatatype", "@odata.type");
+                //applicationJson = applicationJson.Replace(@"\\"", "\"");
 
                 var endpointAction = "vsd_CreateCVAPClaim";
                 //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
