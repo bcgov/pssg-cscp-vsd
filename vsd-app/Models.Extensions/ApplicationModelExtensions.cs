@@ -89,11 +89,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
                 // TODO: Fix file mapping
                 // how does the uploading work? is our array a list of file ids? Look them up and extract appropriate data...
-                application.DocumentCollection = model.CrimeInformation.additionalInformationFiles.Select(f => new Documentcollection
-                {
-                    body = "ALLTHEBYTES",
-                    filename = "tempfile.txt"
-                }).ToArray();
+                //application.DocumentCollection = model.CrimeInformation.additionalInformationFiles.Select(f => new Documentcollection
+                //{
+                //    body = "ALLTHEBYTES",
+                //    filename = "tempfile.txt"
+                //}).ToArray();
 
                 application.Application.vsd_cvap_reportedtopolice = model.CrimeInformation.wasReportMadeToPolice;
                 application.Application.vsd_cvap_policedetachment = model.CrimeInformation.policeReportedWhichPoliceForce;
@@ -131,12 +131,12 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
                 if (model.CrimeInformation.racafInformation != null)
                 {
-                    application.Application.vsd_racaf_appliedforrestitution = 1; //model.CrimeInformation.racafInformation.applyToCourtForMoneyFromOffender; // todo: fix bool mapping
+                    application.Application.vsd_racaf_appliedforrestitution = model.CrimeInformation.racafInformation.applyToCourtForMoneyFromOffender; 
                     application.Application.vsd_racaf_requestedexpenses = model.CrimeInformation.racafInformation.expensesRequested;
-                    application.Application.vsd_racaf_expensesawarded = 1; //model.CrimeInformation.racafInformation.expensesAwarded; // todo: fix bool mapping
-                    application.Application.vsd_racaf_amountreceived = 1; //model.CrimeInformation.racafInformation.expensesReceived; // todo: fix bool mapping
+                    application.Application.vsd_racaf_expensesawarded = model.CrimeInformation.racafInformation.expensesAwarded; 
+                    application.Application.vsd_racaf_amountreceived = model.CrimeInformation.racafInformation.expensesReceived; 
 
-                    application.Application.vsd_racaf_legalactiontaken = 1; //model.CrimeInformation.racafInformation.willBeTakingLegalAction; // todo: fix bool mapping
+                    application.Application.vsd_racaf_legalactiontaken = model.CrimeInformation.racafInformation.willBeTakingLegalAction;
                     application.Application.vsd_racaf_lawyerorfirmname = model.CrimeInformation.racafInformation.lawyerOrFirmName;
                     application.Application.vsd_racaf_lawyeraddressline1 = model.CrimeInformation.racafInformation.lawyerAddress?.line1;
                     application.Application.vsd_racaf_lawyeraddressline2 = model.CrimeInformation.racafInformation.lawyerAddress?.line2;
@@ -179,7 +179,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     vsd_lastname = "", // TODO: We don't collect a split name here
                     vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
                     vsd_email = "", // TODO: We don't collect an email here
-                    vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
+                    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
                     vsd_relationship1 = "", // TODO: We don't collect a relationship here
 
                 }).ToArray();
@@ -200,9 +200,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             {
                 // what is with all the "ifm" stuff?
                 application.Application.vsd_cvap_ifmemployedduringcrime = model.EmploymentIncomeInformation.wereYouEmployedAtTimeOfCrime; 
-                application.Application.vsd_cvap_ifmatworkduringcrime = model.EmploymentIncomeInformation.wereYouEmployedAtTimeOfCrime;
+                application.Application.vsd_cvap_ifmatworkduringcrime = model.EmploymentIncomeInformation.wereYouAtWorkAtTimeOfIncident;
                 application.Application.vsd_cvap_ifmwcbclaimnumber = model.EmploymentIncomeInformation.workersCompensationClaimNumber;
-                application.Application.vsd_cvap_ifmmissedwork = 1; //model.EmploymentIncomeInformation.didYouMissWorkDueToCrime; // todo: fix bool mapping
+                application.Application.vsd_cvap_ifmmissedwork = model.EmploymentIncomeInformation.didYouMissWorkDueToCrime;
                 if (model.EmploymentIncomeInformation.daysWorkMissedStart.HasValue)
                 {
                     application.Application.vsd_cvap_ifmmissedworkstart = model.EmploymentIncomeInformation.daysWorkMissedStart;
@@ -211,14 +211,17 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     application.Application.vsd_cvap_ifmmissedworkend = model.EmploymentIncomeInformation.daysWorkMissedEnd;
                 }
-                application.Application.vsd_cvap_ifmlostwages = 1; //model.EmploymentIncomeInformation.didYouLoseWages; // todo: fix bool mapping
-                application.Application.vsd_cvap_ifmselfemployed = 1; //model.EmploymentIncomeInformation.areYouSelfEmployed; // todo: fix bool mapping
-                application.Application.vsd_cvap_ifmcontactemployer = 1; //model.EmploymentIncomeInformation.mayContactEmployer; // todo: fix bool mapping
+                application.Application.vsd_cvap_ifmlostwages = model.EmploymentIncomeInformation.didYouLoseWages;
+                if (model.EmploymentIncomeInformation.areYouSelfEmployed > 0)
+                {
+                    application.Application.vsd_cvap_ifmselfemployed = model.EmploymentIncomeInformation.areYouSelfEmployed;
+                }
+                application.Application.vsd_cvap_ifmcontactemployer = model.EmploymentIncomeInformation.mayContactEmployer; 
             }
 
             if (model.RepresentativeInformation != null)
             {
-                application.Application.vsd_cvap_onbehalfofdeclaration = 1; //model.RepresentativeInformation.completingOnBehalfOf; // TODO: fix types
+                application.Application.vsd_cvap_onbehalfofdeclaration = model.RepresentativeInformation.completingOnBehalfOf;
             }
 
             if (model.DeclarationInformation!= null)
@@ -228,13 +231,13 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
             if (model.AuthorizationInformation != null)
             {
-                application.Application.vsd_cvap_onbehalfofdeclaration = 1; //model.RepresentativeInformation.completingOnBehalfOf; // TODO: fix types
+                application.Application.vsd_cvap_onbehalfofdeclaration = model.RepresentativeInformation.completingOnBehalfOf;
                 application.Application.vsd_authorizationsignature = model.AuthorizationInformation.signature;
             }
 
-            application.Application.vsd_applicantssignature = ""; // TODO: where does this come from?
-            application.Application.vsd_cvap_optionalauthorization = 0; // TODO: where does this come from?
-            application.Application.vsd_optionalauthorizationsignature = ""; // TODO: where does this come from?
+            application.Application.vsd_applicantssignature = model.AuthorizationInformation.signature; // TODO: where does this come from?
+            //application.Application.vsd_cvap_optionalauthorization = 0; // TODO: where does this come from?
+            //application.Application.vsd_optionalauthorizationsignature = ""; // TODO: where does this come from?
 
             //application.DocumentCollection = new Documentcollection[1]; // TODO: bind collection
             

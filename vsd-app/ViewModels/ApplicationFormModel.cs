@@ -78,11 +78,11 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Racafinformation
     {
-        public string applyToCourtForMoneyFromOffender { get; set; }
+        public int? applyToCourtForMoneyFromOffender { get; set; }
         public string expensesRequested { get; set; }
-        public string expensesAwarded { get; set; }
-        public string expensesReceived { get; set; }
-        public string willBeTakingLegalAction { get; set; }
+        public float? expensesAwarded { get; set; }
+        public float? expensesReceived { get; set; }
+        public int? willBeTakingLegalAction { get; set; }
         public string lawyerOrFirmName { get; set; }
         public Address lawyerAddress { get; set; }
         public string signName { get; set; }
@@ -156,16 +156,16 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     public class Employmentincomeinformation
     {
         public int wereYouEmployedAtTimeOfCrime { get; set; }
-        public string wereYouAtWorkAtTimeOfIncident { get; set; }
+        public int wereYouAtWorkAtTimeOfIncident { get; set; }
         public string haveYouAppliedForWorkersCompensation { get; set; }
         public string workersCompensationClaimNumber { get; set; }
-        public string didYouMissWorkDueToCrime { get; set; }
+        public int didYouMissWorkDueToCrime { get; set; }
         public DateTime? daysWorkMissedStart { get; set; }
         public DateTime? daysWorkMissedEnd { get; set; }
-        public string didYouLoseWages { get; set; }
-        public string areYouSelfEmployed { get; set; }
+        public int? didYouLoseWages { get; set; }
+        public int? areYouSelfEmployed { get; set; }
         public Employer[] employers { get; set; }
-        public string mayContactEmployer { get; set; }
+        public int? mayContactEmployer { get; set; }
     }
 
     public class Employer
@@ -179,11 +179,11 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Representativeinformation
     {
-        public object completingOnBehalfOf { get; set; }
+        public int? completingOnBehalfOf { get; set; }
         public string representativeFirstName { get; set; }
         public string representativeMiddleName { get; set; }
         public string representativeLastName { get; set; }
-        public int representativePreferredMethodOfContact { get; set; }
+        public int? representativePreferredMethodOfContact { get; set; }
         public string representativePhoneNumber { get; set; }
         public string representativeAlternatePhoneNumber { get; set; }
         public string representativeEmail { get; set; }

@@ -8,7 +8,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public Courtinfocollection[] CourtInfoCollection { get; set; }
         public Policefilenumbercollection[] PoliceFileNumberCollection { get; set; }
         public Providercollection[] ProviderCollection { get; set; }
-        public Documentcollection[] DocumentCollection { get; set; }
+        //public Documentcollection[] DocumentCollection { get; set; }
     }
 
     public class Application
@@ -71,12 +71,12 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public int vsd_cvap_isoffendersued { get; set; }
         public int vsd_cvap_intentiontosueoffender { get; set; }
 
-        public int vsd_racaf_appliedforrestitution { get; set; }
+        public int? vsd_racaf_appliedforrestitution { get; set; }
         public string vsd_racaf_requestedexpenses { get; set; }
-        public float vsd_racaf_expensesawarded { get; set; }
-        public float vsd_racaf_amountreceived { get; set; }
+        public float? vsd_racaf_expensesawarded { get; set; }
+        public float? vsd_racaf_amountreceived { get; set; }
 
-        public int vsd_racaf_legalactiontaken { get; set; }
+        public int? vsd_racaf_legalactiontaken { get; set; }
         public string vsd_racaf_lawyerorfirmname { get; set; }
         public string vsd_racaf_lawyeraddressline1 { get; set; }
         public string vsd_racaf_lawyeraddressline2 { get; set; }
@@ -105,14 +105,14 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public int vsd_cvap_ifmmissedwork { get; set; }
         public DateTime? vsd_cvap_ifmmissedworkstart { get; set; }
         public DateTime? vsd_cvap_ifmmissedworkend { get; set; }
-        public int vsd_cvap_ifmlostwages { get; set; }
-        public int vsd_cvap_ifmselfemployed { get; set; }
-        public int vsd_cvap_ifmcontactemployer { get; set; }
+        public int? vsd_cvap_ifmlostwages { get; set; }
+        public int? vsd_cvap_ifmselfemployed { get; set; }
+        public int? vsd_cvap_ifmcontactemployer { get; set; }
 
-        public int vsd_cvap_onbehalfofdeclaration { get; set; }
+        public int? vsd_cvap_onbehalfofdeclaration { get; set; }
         public string vsd_applicantssignature { get; set; }
         public string vsd_authorizationsignature { get; set; }
-        public int vsd_cvap_optionalauthorization { get; set; }
+        public int? vsd_cvap_optionalauthorization { get; set; }
         public string vsd_optionalauthorizationsignature { get; set; }
     }
 
