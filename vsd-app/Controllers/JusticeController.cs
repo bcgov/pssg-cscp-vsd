@@ -176,7 +176,10 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             try
             {
                 var invoiceModel = model.ToDynamicsModel();
-                var invoiceJson = JsonConvert.SerializeObject(invoiceModel);
+                JsonSerializerSettings settings = new JsonSerializerSettings();
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                var invoiceJson = JsonConvert.SerializeObject(invoiceModel, settings);
+                invoiceJson = invoiceJson.Replace("odatatype", "@odata.type");
 
                 var endpointAction = "vsd_SubmitCounselorInvoice";
                 //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
