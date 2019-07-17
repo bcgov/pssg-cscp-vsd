@@ -161,18 +161,18 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         }
 
         let contactMethod = parseInt(value);
-        if (contactMethod === 100000000) {
+        if (contactMethod === 2) {
           phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
           this.phoneIsRequired = true;
           this.emailIsRequired = false;
           this.addressIsRequired = false;
-        } else if (contactMethod === 100000001) {
+        } else if (contactMethod === 1) {
           emailControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
           emailConfirmControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
           this.phoneIsRequired = false;
           this.emailIsRequired = true;
           this.addressIsRequired = false;
-        } else if (contactMethod === 100000002) {
+        } else if (contactMethod === 4) {
           addressControl.setValidators([Validators.required]);
           for (let control of addressControls) {
             control.setValidators([Validators.required]);
@@ -224,7 +224,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         let useValidation = value === true;
         if (useValidation) {
           wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
-          missedWork.setValidators([Validators.required]);
+          missedWork.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
         }
       });
 
@@ -773,10 +773,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
         occupation: [''],
 
-        preferredMethodOfContact:
-        [
-          0, [Validators.required, Validators.min(100000000)]
-        ], // Phone = 100000000, Email = 100000001, Mail = 100000002
+        preferredMethodOfContact: [1, [Validators.required, Validators.min(1), Validators.max(4)]], // Phone = 2, Email = 1, Mail = 4
 
         permissionToContactViaMethod: [false],
         agreeToCvapCommunicationExchange: [''],
@@ -850,11 +847,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         intendToSueOffender: [0], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
         racafInformation: this.fb.group({
-          applyToCourtForMoneyFromOffender: [''],
+          applyToCourtForMoneyFromOffender: [null, [Validators.min(100000000), Validators.max(100000002)]],
           expensesRequested: [''],
-          expensesAwarded: [''],
-          expensesReceived: [''],
-          willBeTakingLegalAction: [''],
+          expensesAwarded: [null],
+          expensesReceived: [null],
+          willBeTakingLegalAction: [null, [Validators.min(100000000), Validators.max(100000002)]],
           lawyerOrFirmName: [''],
           lawyerAddress: this.fb.group({
             line1: [''],
@@ -917,26 +914,26 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }, { validator: this.requireCheckboxesToBeCheckedValidator }),
       employmentIncomeInformation: this.fb.group({
         wereYouEmployedAtTimeOfCrime: [0], //, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // 100000000 = Yes, 1000000001 = No, 100000002 = Self-Employed
-        wereYouAtWorkAtTimeOfIncident: [''], //, Validators.required],
+        wereYouAtWorkAtTimeOfIncident: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
         haveYouAppliedForWorkersCompensation: [''],//, Validators.required],
         workersCompensationClaimNumber: [''],
-        didYouMissWorkDueToCrime: [''], //, Validators.required],
+        didYouMissWorkDueToCrime: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
         daysWorkMissedStart: [''], //, Validators.required],
         daysWorkMissedEnd: [''],
-        didYouLoseWages: [''], //, Validators.required],
+        didYouLoseWages: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
 
-        areYouSelfEmployed: [''],
+        areYouSelfEmployed: [null, [Validators.min(100000000), Validators.max(100000001)]],
         employers: this.fb.array([this.createEmployerItem()]),
 
-        mayContactEmployer: [''],
+        mayContactEmployer: [null, [Validators.min(100000000), Validators.max(100000001)]],
       }),
 
       representativeInformation: this.fb.group({
-        completingOnBehalfOf: [0, [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
+        completingOnBehalfOf: [null, [Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
         representativeFirstName: [''], //, Validators.required],
         representativeMiddleName: [''],
         representativeLastName: [''], //, Validators.required],
-        representativePreferredMethodOfContact: [0],   // Phone = 100000000, Email = 100000001, Mail = 100000002
+        representativePreferredMethodOfContact: [null, [Validators.min(100000000), Validators.max(100000002)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
         representativePhoneNumber: [''],
         representativeAlternatePhoneNumber: [''],
         representativeEmail: [''], //, [Validators.required, Validators.email]],

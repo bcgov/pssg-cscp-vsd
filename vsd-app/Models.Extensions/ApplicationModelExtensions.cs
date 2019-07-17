@@ -161,29 +161,29 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_treatmentdate = model.MedicalInformation.treatedAtHospitalDate;
                 }
 
-                application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
-                {
-                    vsd_name = t.providerName,
-                    vsd_phonenumber = t.providerPhoneNumber,
+                //application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
+                //{
+                //    vsd_name = t.providerName,
+                //    vsd_phonenumber = t.providerPhoneNumber,
 
-                    vsd_addressline1 = t.providerAddress?.line1,
-                    vsd_addressline2 = t.providerAddress?.line2,
-                    vsd_city = t.providerAddress?.city,
-                    vsd_province = t.providerAddress?.province,
-                    vsd_country = t.providerAddress?.country,
-                    vsd_postalcode = t.providerAddress?.postalCode,
+                //    vsd_addressline1 = t.providerAddress?.line1,
+                //    vsd_addressline2 = t.providerAddress?.line2,
+                //    vsd_city = t.providerAddress?.city,
+                //    vsd_province = t.providerAddress?.province,
+                //    vsd_country = t.providerAddress?.country,
+                //    vsd_postalcode = t.providerAddress?.postalCode,
 
-                    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
-                    vsd_firstname = "", // TODO: We don't collect a split name here
-                    vsd_middlename = "", // TODO: We don't collect a split name here
-                    vsd_lastname = "", // TODO: We don't collect a split name here
-                    vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
-                    vsd_email = "", // TODO: We don't collect an email here
-                    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
-                    vsd_relationship1 = "", // TODO: We don't collect a relationship here
+                //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
+                //    vsd_firstname = "", // TODO: We don't collect a split name here
+                //    vsd_middlename = "", // TODO: We don't collect a split name here
+                //    vsd_lastname = "", // TODO: We don't collect a split name here
+                //    vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
+                //    vsd_email = "", // TODO: We don't collect an email here
+                //    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
+                //    //vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact, // TODO: This isn't correct either
+                //    vsd_relationship1 = "", // TODO: We don't collect a relationship here
 
-                }).ToArray();
-
+                //}).ToArray();
             }
 
             if (model.ExpenseInformation != null)
@@ -278,15 +278,15 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         vsd_courtlocation = "Victoria"
                     }
                 }.ToArray(),
-                ProviderCollection = new List<Providercollection>
-                {
-                    new Providercollection
-                    {
-                        vsd_name = "Mr. Smith",
-                        // TODO: Don't know where this field went
-                        // VsdType = 100000000
-                    }
-                }.ToArray()
+                //ProviderCollection = new List<Providercollection>
+                //{
+                //    new Providercollection
+                //    {
+                //        vsd_name = "Mr. Smith",
+                //        // TODO: Don't know where this field went
+                //        // VsdType = 100000000
+                //    }
+                //}.ToArray()
             };
         }
     }

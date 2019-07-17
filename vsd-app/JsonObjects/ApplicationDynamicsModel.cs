@@ -100,7 +100,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_otherbenefitsother { get; set; }
 
         public int vsd_cvap_ifmemployedduringcrime { get; set; }
-        public int vsd_cvap_ifmatworkduringcrime { get; set; }
+        public int? vsd_cvap_ifmatworkduringcrime { get; set; }
         public string vsd_cvap_ifmwcbclaimnumber { get; set; }
         public int vsd_cvap_ifmmissedwork { get; set; }
         public DateTime? vsd_cvap_ifmmissedworkstart { get; set; }
@@ -146,7 +146,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_country { get; set; }
         public string vsd_firstname { get; set; }
         public string vsd_lastname { get; set; }
-        public int vsd_preferredmethodofcontact { get; set; }
+        public int? vsd_preferredmethodofcontact { get; set; }
         public string vsd_alternatephonenumber { get; set; }
         public string vsd_middlename { get; set; }
     }

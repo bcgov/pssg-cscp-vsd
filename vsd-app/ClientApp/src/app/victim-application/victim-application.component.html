@@ -241,9 +241,9 @@
                 <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('personalInformation.preferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
                   <select class="form-control" formControlName="preferredMethodOfContact">
                     <option value="0">Select...</option>
-                    <option value="100000000">Phone Call</option>
-                    <option value="100000001">Email</option>
-                    <option value="100000002">Mail</option>
+                    <option value="2">Phone Call</option>
+                    <option value="1">Email</option>
+                    <option value="4">Mail</option>
                   </select>
                 </app-field>
               </div>
@@ -1033,22 +1033,22 @@
                 <h2 class="blue-header">Income Loss Information</h2>
                 <app-field label="Were you employed when the crime occured?" [valid]="isFieldValid('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')" [required]="true" errorMessage="Please select an option">
                   <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
+                    <input type="radio" [value]="100000001" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
                     <span>Yes</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
+                    <input type="radio" [value]="100000000" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
                     <span>No</span>
                   </label>
                 </app-field>
-                <section *ngIf="form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 100000000 || form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 100000002">
+                <section *ngIf="form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 100000001 || form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 100000002">
                   <app-field label="Were you at work at the time of the incident?" [valid]="isFieldValid('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident')" [required]="true" errorMessage="Please select an option">
                     <label class="inline-label">
-                      <input type="radio" [value]="true" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
+                      <input type="radio" [value]="100000001" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
                       <span>Yes</span>
                     </label>
                     <label class="inline-label">
-                      <input type="radio" [value]="false" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
+                      <input type="radio" [value]="100000000" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
                       <span>No</span>
                     </label>
                   </app-field>
@@ -1056,11 +1056,11 @@
                 <section *ngIf="form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').value === true">
                   <app-field label="Have you applied for Worker's Compensation Benefits?" [valid]="isFieldValid('employmentIncomeInformation.haveYouAppliedForWorkersCompensation')" [required]="true" errorMessage="Please select an option">
                     <label class="inline-label">
-                      <input type="radio" [value]="true" name="haveYouAppliedForWorkersCompensation" formControlName="haveYouAppliedForWorkersCompensation">
+                      <input type="radio" [value]="100000001" name="haveYouAppliedForWorkersCompensation" formControlName="haveYouAppliedForWorkersCompensation">
                       <span>Yes</span>
                     </label>
                     <label class="inline-label">
-                      <input type="radio" [value]="false" name="haveYouAppliedForWorkersCompensation" formControlName="haveYouAppliedForWorkersCompensation">
+                      <input type="radio" [value]="100000000" name="haveYouAppliedForWorkersCompensation" formControlName="haveYouAppliedForWorkersCompensation">
                       <span>No</span>
                     </label>
                   </app-field>
@@ -1072,15 +1072,15 @@
                 </section>
                 <app-field label="As a result of any crime-related injuries, did you miss work?" [valid]="isFieldValid('employmentIncomeInformation.didYouMissWorkDueToCrime')" [required]="true" errorMessage="Please select an option">
                   <label class="inline-label">
-                    <input type="radio" [value]="true" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
+                    <input type="radio" [value]="100000001" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
                     <span>Yes</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="false" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
+                    <input type="radio" [value]="100000000" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
                     <span>No</span>
                   </label>
                 </app-field>
-                <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === true">
+                <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === 100000001">
                   <app-field label="Please provide days of work missed" [valid]="isFieldValid('employmentIncomeInformation.daysWorkMissedStart')" [required]="true" errorMessage="Please select an option">
                     <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd"
                            [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
@@ -1092,29 +1092,29 @@
                   </app-field>
                   <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="isFieldValid('employmentIncomeInformation.didYouLoseWages')" [required]="true" errorMessage="Please select an option">
                     <label class="inline-label">
-                      <input type="radio" [value]="true" name="didYouLoseWages" formControlName="didYouLoseWages">
+                      <input type="radio" [value]="100000001" name="didYouLoseWages" formControlName="didYouLoseWages">
                       <span>Yes</span>
                     </label>
                     <label class="inline-label">
-                      <input type="radio" [value]="false" name="didYouLoseWages" formControlName="didYouLoseWages">
+                      <input type="radio" [value]="100000000" name="didYouLoseWages" formControlName="didYouLoseWages">
                       <span>No</span>
                     </label>
                   </app-field>
                   <ng-template #lostWagesTemplate><p><strong>Lost wages or income</strong></p><p>If you are claiming for lost wages or income, we will need to verify your employment</p></ng-template>
                 </section>
               </section>
-              <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === true">
+              <section *ngIf="form.get('employmentIncomeInformation.didYouLoseWages').value === 100000001">
                 <h2 class="blue-header">Employer Information</h2>
                 <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
                 <br />
 
                 <app-field label="Are you self employed?" [valid]="isFieldValid('employmentIncomeInformation.areYouSelfEmployed')" [required]="true" errorMessage="Please select an option">
                   <label class="inline-label">
-                    <input type="radio" [value]="true" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
+                    <input type="radio" [value]="100000001" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
                     <span>Yes</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="false" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
+                    <input type="radio" [value]="100000000" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
                     <span>No</span>
                   </label>
                 </app-field>
@@ -1164,11 +1164,11 @@
 
                 <app-field label="If you are requesting benefits for lost wages, may we contact your employer?" [valid]="isFieldValid('employmentIncomeInformation.mayContactEmployer')" [required]="true" errorMessage="Please select an option">
                   <label class="inline-label">
-                    <input type="radio" [value]="true" name="mayContactEmployer" formControlName="mayContactEmployer">
+                    <input type="radio" [value]="100000001" name="mayContactEmployer" formControlName="mayContactEmployer">
                     <span>Yes</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="false" name="mayContactEmployer" formControlName="mayContactEmployer">
+                    <input type="radio" [value]="100000000" name="mayContactEmployer" formControlName="mayContactEmployer">
                     <span>No</span>
                   </label>
                 </app-field>
@@ -1249,8 +1249,8 @@
                   <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('representativeInformation.representativePreferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
                     <select class="form-control" formControlName="representativePreferredMethodOfContact">
                       <option value="0">Select...</option>
-                      <option value="100000000">Phone Call</option>
-                      <option value="100000001">Email</option>
+                      <option value="100000000">Email</option>
+                      <option value="100000001">Phone Call</option>
                       <option value="100000002">Mail</option>
                     </select>
                   </app-field>

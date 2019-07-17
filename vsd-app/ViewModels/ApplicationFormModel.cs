@@ -156,7 +156,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     public class Employmentincomeinformation
     {
         public int wereYouEmployedAtTimeOfCrime { get; set; }
-        public int wereYouAtWorkAtTimeOfIncident { get; set; }
+        public int? wereYouAtWorkAtTimeOfIncident { get; set; }
         public string haveYouAppliedForWorkersCompensation { get; set; }
         public string workersCompensationClaimNumber { get; set; }
         public int didYouMissWorkDueToCrime { get; set; }
