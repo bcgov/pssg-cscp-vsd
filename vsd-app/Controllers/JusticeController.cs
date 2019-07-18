@@ -144,11 +144,10 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 settings.NullValueHandling = NullValueHandling.Ignore;
                 var applicationJson = JsonConvert.SerializeObject(application, settings);
                 applicationJson = applicationJson.Replace("odatatype", "@odata.type");
-                //applicationJson = applicationJson.Replace(@"\\"", "\"");
 
                 var endpointAction = "vsd_CreateCVAPClaim";
                 //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration, applicationJson);
+                await GetDynamicsHttpClientNew(configuration, applicationJson, endpointAction);
 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
                 request.Content = new StringContent(applicationJson, Encoding.UTF8, "application/json");
@@ -183,7 +182,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 var endpointAction = "vsd_SubmitCounselorInvoice";
                 //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration, invoiceJson);
+                await GetDynamicsHttpClientNew(configuration, invoiceJson, endpointAction);
 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
                 request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
@@ -216,7 +215,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
                 //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration, invoiceJson);
+                await GetDynamicsHttpClientNew(configuration, invoiceJson, endpointAction);
                 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
                 request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
@@ -243,9 +242,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             HttpClient httpClient = null;
             try
             {
+                var offenderRestitution = model;
+                JsonSerializerSettings settings = new JsonSerializerSettings();
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                var offenderRestitutionJson = JsonConvert.SerializeObject(offenderRestitution, settings);
+                offenderRestitutionJson = offenderRestitutionJson.Replace("odatatype", "@odata.type");
+
                 var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
                 //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration, endpointAction);
+                await GetDynamicsHttpClientNew(configuration, offenderRestitutionJson, endpointAction);
 
                 // THIS SHOULD BECOME A DYNAMICS MODEL
                 var dynamicsModel = model; // model.ToDynamicsModel();
@@ -271,7 +276,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
         }
 
-        static async Task GetDynamicsHttpClientNew(IConfiguration configuration, String model)
+        static async Task GetDynamicsHttpClientNew(IConfiguration configuration, String model, String endPointName)
         {
 
             var builder = new ConfigurationBuilder()
@@ -280,7 +285,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             var Configuration = builder.Build();
 
             string dynamicsOdataUri = Configuration["DYNAMICS_ODATA_URI"]; // Dynamics ODATA endpoint
-            string dynamicsJobName = Configuration["DYNAMICS_JOB_NAME"]; // Dynamics Job Name
+            string dynamicsJobName = endPointName;// Configuration["DYNAMICS_JOB_NAME"]; // Dynamics Job Name
 
             if (string.IsNullOrEmpty(dynamicsOdataUri))
             {
