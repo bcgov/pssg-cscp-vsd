@@ -11,7 +11,7 @@
           <p>To begin your application, select the option below that applies to you. If you are applying on behalf of one of the following, the following page will ask for your relationship to the person you are applying on behalf of.</p>
 
           <div [formGroup]="form">
-            <app-field label="Please select the application form that applies to you." (change)="updateForm($event)">
+            <app-field label="Please select the application form that applies to you." (change)="updateForm($event)" [required]="true">
               <select class="form-control" style="width: 350px;" formControlName="applicationType">
                 <option value="0">Select...</option>
                 <option value="100000002">Victim Application</option>
@@ -40,7 +40,7 @@
               </div>
 
               <section class="radio-list per-line">
-                <app-field label="I am:">
+                <app-field label="I am:" [required]="true">
                   <label>
                     <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
                     Completing this application for myself
@@ -61,25 +61,26 @@
               </section>
 
               <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
-                <label>Did the crime occur in BC</label>
-                <br />
-                <table style="width: 100%" class="out-of-line">
-                  <tr>
-                    <td class="lead-cell">
-                      <label class="inline-label">
-                        <input type="radio" [value]="true" name="wasCrimeInBC" formControlName="wasCrimeInBC">
-                        <span>Yes</span>
-                      </label>
-                      <label class="inline-label">
-                        <input type="radio" [value]="false" name="wasCrimeInBC" formControlName="wasCrimeInBC">
-                        <span>No</span>
-                      </label>
-                    </td>
-                    <td class="error-cell was-in-bc-warning" *ngIf="form.get('wasCrimeInBC').value === false">
-                      CVAP only accepts applications for crimes that have occurred in BC. Please click <a href="#" class="fake-link">here</a>to apply to your provincial assistance program or call CVAP toll free at 1-866-660-3888 if you have any questions.
-                    </td>
-                  </tr>
-                </table>
+                <app-field label="Did the crime occur in BC" [required]="true">
+                  <br />
+                  <table style="width: 100%" class="out-of-line">
+                    <tr>
+                      <td class="lead-cell">
+                        <label class="inline-label">
+                          <input type="radio" [value]="true" name="wasCrimeInBC" formControlName="wasCrimeInBC">
+                          <span>Yes</span>
+                        </label>
+                        <label class="inline-label">
+                          <input type="radio" [value]="false" name="wasCrimeInBC" formControlName="wasCrimeInBC">
+                          <span>No</span>
+                        </label>
+                      </td>
+                      <td class="error-cell was-in-bc-warning" *ngIf="form.get('wasCrimeInBC').value === false">
+                        CVAP only accepts applications for crimes that have occurred in BC. Please click <a href="#" class="fake-link">here</a>to apply to your provincial assistance program or call CVAP toll free at 1-866-660-3888 if you have any questions.
+                      </td>
+                    </tr>
+                  </table>
+                </app-field>
               </section>
 
               <section class="button-container">
