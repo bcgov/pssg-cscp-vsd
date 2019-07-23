@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, NavigationExtras } from '@angular/router';
 import { FormBase } from '../shared/form-base';
+import { CanDeactivateGuard } from '../services/can-deactivate-guard.service';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +17,7 @@ export class HomeComponent extends FormBase implements OnInit {
 
   public selectedApplicationType: number = 0;
   public selectedApplicationName: string;
+  showValidationMessage: boolean;
 
   constructor(
     private titleService: Title,
@@ -65,8 +67,14 @@ export class HomeComponent extends FormBase implements OnInit {
     return '';
   }
 
+  // marking the form as touched makes the validation messages show
+  markAsTouched() {
+    this.form.markAsTouched();
+  }
+
   gotoApplication() : void {
     if (this.form.valid) {
+      this.showValidationMessage = false;
       let applicationType = parseInt(this.form.get('applicationType').value);
       let behalfOf = parseInt(this.form.get('completingOnBehalfOf').value);
 
@@ -91,6 +99,7 @@ export class HomeComponent extends FormBase implements OnInit {
 
       this.router.navigate([routeUrl], navigationExtras);
     } else {
+      this.showValidationMessage = true;
       console.log("form not validated");
     }
   }

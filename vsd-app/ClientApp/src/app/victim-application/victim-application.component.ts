@@ -682,7 +682,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   
   submitApplication() {
     let formIsValid = this.form.valid;
-    //let formIsValid = true;
+    //let formIsValid = true;showValidationMessage
     if (formIsValid) {
       this.formFullyValidated = true;
       this.save().subscribe(

@@ -83,8 +83,13 @@
                 </app-field>
               </section>
 
+              <div *ngIf="showValidationMessage" class="error-summary">
+                <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+                <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
+              </div>
+
               <section class="button-container">
-                <button (click)="gotoApplication();" [disabled]="!canProceedWithApplication()" class="btn btn-primary pull-right">CONTINUE TO {{ selectedApplicationName }} <i class="fas fa-chevron-right"></i></button>
+                <button (click)="markAsTouched(); gotoApplication();" class="btn btn-primary pull-right">CONTINUE TO {{ selectedApplicationName }} <i class="fas fa-chevron-right"></i></button>
               </section>
             </div>
           </div>
