@@ -19,7 +19,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string authorisedDesignateFirstName { get; set; }
         public string authorisedDesignateMiddleName { get; set; }
         public string authorisedDesignateLastName { get; set; }
-        public bool authoriseDesignateToActOnBehalf { get; set; }
+        public bool? authoriseDesignateToActOnBehalf { get; set; }
 
         public int preferredMethodOfContact { get; set; }
         public string phoneNumber { get; set; }
