@@ -15,4 +15,10 @@
         public string courtFileNumber { get; set; }
         public string courtLocation { get; set; }
     }
+
+    public class Providerfile
+    {
+        public string firstName { get; set; }
+        public string relationship { get; set; }
+    }
 }

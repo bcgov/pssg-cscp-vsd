@@ -24,7 +24,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
 
         public int vsd_applicantsgendercode { get; set; }
         public DateTime? vsd_applicantsbirthdate { get; set; }
-        public int vsd_applicantsmaritalstatus { get; set; }
+        public int? vsd_applicantsmaritalstatus { get; set; }
 
         public string vsd_applicantsoccupation { get; set; }
         public string vsd_applicantssocialinsurancenumber { get; set; }
@@ -56,7 +56,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_crimedetails { get; set; }
         public string vsd_cvap_injuries { get; set; }
 
-        public int vsd_cvap_reportedtopolice { get; set; }
+        public int? vsd_cvap_reportedtopolice { get; set; }
         public string vsd_cvap_policedetachment { get; set; }
         public DateTime? vsd_cvap_policereportingstartdate { get; set; }
         public DateTime? vsd_cvap_policereportingenddate { get; set; }
@@ -67,9 +67,9 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_offenderlastname { get; set; }
 
         public string vsd_cvap_relationshiptooffender { get; set; }
-        public int vsd_cvap_isoffendercharged { get; set; }
-        public int vsd_cvap_isoffendersued { get; set; }
-        public int vsd_cvap_intentiontosueoffender { get; set; }
+        public int? vsd_cvap_isoffendercharged { get; set; }
+        public int? vsd_cvap_isoffendersued { get; set; }
+        public int? vsd_cvap_intentiontosueoffender { get; set; }
 
         public int? vsd_racaf_appliedforrestitution { get; set; }
         public string vsd_racaf_requestedexpenses { get; set; }
@@ -99,10 +99,10 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_otherbenefits { get; set; }
         public string vsd_cvap_otherbenefitsother { get; set; }
 
-        public int vsd_cvap_ifmemployedduringcrime { get; set; }
+        public int? vsd_cvap_ifmemployedduringcrime { get; set; }
         public int? vsd_cvap_ifmatworkduringcrime { get; set; }
         public string vsd_cvap_ifmwcbclaimnumber { get; set; }
-        public int vsd_cvap_ifmmissedwork { get; set; }
+        public int? vsd_cvap_ifmmissedwork { get; set; }
         public DateTime? vsd_cvap_ifmmissedworkstart { get; set; }
         public DateTime? vsd_cvap_ifmmissedworkend { get; set; }
         public int? vsd_cvap_ifmlostwages { get; set; }

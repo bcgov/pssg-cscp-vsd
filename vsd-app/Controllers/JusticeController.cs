@@ -210,25 +210,28 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             try
             {
                 // THIS SHOULD BECOME A DYNAMICS MODEL
-                var dynamicsModel = model; // model.ToDynamicsModel();
-                var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
+                var dynamicsModel = model.ToVictimRestitutionModel(); // model.ToDynamicsModel();
+                JsonSerializerSettings settings = new JsonSerializerSettings();
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                var invoiceJson = JsonConvert.SerializeObject(dynamicsModel, settings);
+                invoiceJson = invoiceJson.Replace("odatatype", "@odata.type");
 
-                var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
-                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration, invoiceJson, endpointAction);
-                
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
-                request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+                var endpointAction = "vsd_CreateRestitutionCase";
+                var tuple = await GetDynamicsHttpClientNew(configuration, invoiceJson, endpointAction);
 
-                HttpResponseMessage response = await httpClient.SendAsync(request);
+                //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
+                //request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                //HttpResponseMessage response = await httpClient.SendAsync(request);
+
+                //if (response.StatusCode == HttpStatusCode.OK)
+                if (tuple.Item1 == (int)HttpStatusCode.OK)
                 {
-                    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                    var jsonResult = tuple.Item2.Content.ReadAsStringAsync().Result;// response.Content.ReadAsStringAsync().Result;
                     return jsonResult;
                 }
 
-                return response.Content.ReadAsStringAsync().Result;
+                return tuple.Item2.Content.ReadAsStringAsync().Result;// response.Content.ReadAsStringAsync().Result;
             }
             finally
             {
@@ -276,7 +279,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
         }
 
-        static async Task GetDynamicsHttpClientNew(IConfiguration configuration, String model, String endPointName)
+        static async Task<Tuple<int, HttpResponseMessage>> GetDynamicsHttpClientNew(IConfiguration configuration, String model, String endPointName)
         {
 
             var builder = new ConfigurationBuilder()
@@ -411,10 +414,12 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     Console.Out.WriteLine(_responseString);
                     Console.Out.WriteLine(_responseContent2);
 
+                    return new Tuple<int, HttpResponseMessage>((int)_statusCode, _httpResponse2);
                     // End of scheduled task
                 }
                 catch (Exception e)
                 {
+                    return new Tuple<int, HttpResponseMessage>(100, null);
                     throw new Exception(e.Message + " " + _responseContent);
                 }
 
@@ -517,6 +522,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             //var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
 
             //Console.Out.WriteLine(_responseContent2);
+            return new Tuple<int, HttpResponseMessage>(100, null);
         }
 
 
