@@ -55,12 +55,12 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 vsd_courtlocation = f.courtLocation
             }).ToArray();
 
-            application.ProviderCollection = model.RestitutionInformation.providerFiles.Select(t => new Providercollection
-            {
-                vsd_firstname = t.firstName,
-                vsd_relationship1 = t.relationship,
+            //application.ProviderCollection = model.RestitutionInformation.providerFiles.Select(t => new Providercollection
+            //{
+            //    vsd_firstname = t.firstName,
+            //    vsd_relationship1 = t.relationship,
 
-            }).ToArray();
+            //}).ToArray();
 
             return application;
         }
