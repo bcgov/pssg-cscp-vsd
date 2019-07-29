@@ -55,24 +55,28 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 vsd_courtlocation = f.courtLocation
             }).ToArray();
 
-            application.ProviderCollection = model.RestitutionInformation.providerFiles.Select(t => new Providercollection
-            {
-                vsd_name = "",
-                vsd_phonenumber = "",
-                vsd_addressline1 = "",
-                vsd_addressline2 = "",
-                vsd_city = "",
-                vsd_province = "",
-                vsd_postalcode = "",
-                vsd_email = "",
-                vsd_firstname = t.firstName,
-                vsd_relationship1 = t.relationship,
-                vsd_country = "",
-                vsd_lastname = "",
-                vsd_preferredmethodofcontact = null,
-                vsd_alternatephonenumber = "",
-                vsd_middlename = "",
-            }).ToArray();
+            // TODO: For some reason when this is moved to OpenShift, it doesn't work. 
+            // Error Message: System.AggregateException: One or more errors occurred. (Value cannot be null.
+            // Parameter name: source) --->System.ArgumentNullException: Value cannot be null.
+            // Parameter name: source
+            //application.ProviderCollection = model.RestitutionInformation.providerFiles.Select(t => new Providercollection
+            //{
+            //    vsd_name = "",
+            //    vsd_phonenumber = "",
+            //    vsd_addressline1 = "",
+            //    vsd_addressline2 = "",
+            //    vsd_city = "",
+            //    vsd_province = "",
+            //    vsd_postalcode = "",
+            //    vsd_email = "",
+            //    vsd_firstname = t.firstName,
+            //    vsd_relationship1 = t.relationship,
+            //    vsd_country = "",
+            //    vsd_lastname = "",
+            //    vsd_preferredmethodofcontact = null,
+            //    vsd_alternatephonenumber = "",
+            //    vsd_middlename = "",
+            //}).ToArray();
 
             return application;
         }
