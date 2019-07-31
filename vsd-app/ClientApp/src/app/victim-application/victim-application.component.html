@@ -286,7 +286,7 @@
             </div>
             <div class="row">
               <div class="col-5">
-                <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('personalInformation.confirmEmail')" errorMessage="Please confirm your email address">
+                <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('personalInformation.confirmEmail') && email === confirmEmail" errorMessage="Please confirm your email address">
                   <input class="form-control" type="text" (blur)="trimValue(form.get('personalInformation.confirmEmail'))" formControlName="confirmEmail" maxlength="100">
                 </app-field>
               </div>

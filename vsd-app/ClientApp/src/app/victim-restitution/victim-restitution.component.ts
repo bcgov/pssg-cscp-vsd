@@ -134,16 +134,16 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
         }
 
         let contactMethod = parseInt(value);
-        if (contactMethod === 100000000) {
+        if (contactMethod === 2) {
           phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
           this.phoneIsRequired = true;
           this.emailIsRequired = false;
           this.addressIsRequired = false;
-        } else if (contactMethod === 100000001) {
+        } else if (contactMethod === 1) {
           this.phoneIsRequired = false;
           this.emailIsRequired = true;
           this.addressIsRequired = false;
-        } else if (contactMethod === 100000002) {
+        } else if (contactMethod === 4) {
           addressControl.setValidators([Validators.required]);
           for (let control of addressControls) {
             control.setValidators([Validators.required]);
@@ -284,6 +284,20 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     });
   }
 
+  createDocumentItem(): FormGroup {
+    return this.fb.group({
+      data: 'test',
+      fileName: 'test.txt'
+    });
+  }
+
+  createProviderItem(): FormGroup {
+    return this.fb.group({
+      firstName: '',
+      relationship: ''
+    });
+  }
+
   submitApplication() {
     let formIsValid = this.form.valid;
     //let formIsValid = true;
@@ -357,7 +371,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
         authoriseDesignateToActOnBehalf: [''],
 
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
+        preferredMethodOfContact: [1, [Validators.required, Validators.min(1), Validators.max(4)]], // Phone = 2, Email = 1, Mail = 4
 
         phoneNumber: [''],
         alternatePhoneNumber: [''],
@@ -385,10 +399,12 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
         victimServiceWorkerProgramName: [''],
         victimServiceWorkerEmail: [''],
 
-        restitutionOrders: this.fb.array([]),  // This will be a collection of uploaded files
+        restitutionOrders: this.fb.array([this.createDocumentItem()]),  // This will be a collection of uploaded files
 
         declaredAndSigned: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
+
+        providerFiles: this.fb.array([this.createProviderItem()]),
       })
     });
   }
