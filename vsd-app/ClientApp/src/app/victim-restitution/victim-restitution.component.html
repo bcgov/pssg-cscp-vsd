@@ -340,7 +340,8 @@
 
             <h3 class="blue-header">Copy of Restitution Order</h3>
             <app-field label="Where possible, please include a copy of the Restitution Order when submitting this application.">
-              <div class="file-upload-placeholder">
+              <div class="file-upload-trigger" (click)="showFileUploader('restitutionInformation', 'restitutionOrders')">
+                <p>Click this box to upload file</p>
                 [upload functionality goes here]
               </div>
             </app-field>

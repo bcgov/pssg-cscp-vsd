@@ -15,6 +15,7 @@ import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
+import { FileUploaderComponent } from '../shared/file-uploader/file-uploader.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
@@ -200,6 +201,25 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
         );
       }
     ); 
+  }
+
+  showFileUploader(group, control): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '600px';
+    dialogConfig.height = '600px';
+
+    const dialogRef = this.dialog.open(FileUploaderComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(
+      data => {
+        var patchObject = {};
+        patchObject[control] = data;
+        this.form.get(group).patchValue(
+          patchObject
+        );
+      }
+    );
   }
 
   verifyCancellation(): void {

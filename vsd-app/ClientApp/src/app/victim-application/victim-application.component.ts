@@ -212,7 +212,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
     this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses')
       .valueChanges
-      .subscribe(value => {
+      .subscribe(checked => {
         let wasEmployed = this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime');
         let missedWork = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime');
 
@@ -221,8 +221,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         missedWork.clearValidators();
         missedWork.setErrors(null);
         
-        let useValidation = value === true;
-        if (useValidation) {
+        let useValidation = checked === true;
+        if (useValidation && wasEmployed.enabled) {
           wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
           missedWork.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
         }
@@ -913,11 +913,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         noneOfTheAboveBenefits: [false],
       }, { validator: this.requireCheckboxesToBeCheckedValidator }),
       employmentIncomeInformation: this.fb.group({
-        wereYouEmployedAtTimeOfCrime: [0], //, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // 100000000 = Yes, 1000000001 = No, 100000002 = Self-Employed
+        wereYouEmployedAtTimeOfCrime: [null, [Validators.min(100000000), Validators.max(100000001)]], //, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // 100000000 = Yes, 1000000001 = No, 100000002 = Self-Employed
         wereYouAtWorkAtTimeOfIncident: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
-        haveYouAppliedForWorkersCompensation: [''],//, Validators.required],
+        haveYouAppliedForWorkersCompensation: [null, [Validators.min(100000000), Validators.max(100000001)]],//, Validators.required],
         workersCompensationClaimNumber: [''],
-        didYouMissWorkDueToCrime: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
+        didYouMissWorkDueToCrime: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
         daysWorkMissedStart: [''], //, Validators.required],
         daysWorkMissedEnd: [''],
         didYouLoseWages: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],

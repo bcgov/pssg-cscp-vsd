@@ -355,6 +355,21 @@ hr {
 ::ng-deep .tooltip-icon {
 }
 
+::ng-deep .file-upload-trigger {
+  width: 385px;
+  padding: 40px 0;
+  border: 1px solid #9fb6d9;
+  background-color: #f1f4fa;
+  color: #9fb6d9;
+  text-align: center;
+  border-radius: 4px;
+
+  p {
+    margin: 0;
+    font-size: 0.95em;
+  }
+}
+
 
 ::ng-deep .signature-trigger {
   width: 385px;

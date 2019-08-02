@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { UploadEvent, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
 import { Http, Headers, Response } from '@angular/http';
 import { FileSystemItem } from '../../models/file-system-item.model';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MatDialogRef } from '@angular/material';
 
 export interface DropdownOption {
   id: string;
@@ -29,13 +30,14 @@ export class FileUploaderComponent implements OnInit {
   Math = Math;
   public files: FileSystemItem[] = [];
 
+  @ViewChild(FileUploaderComponent) fileUploaderComponent: FileUploaderComponent;
+
   // TODO: move http call to a service
   constructor(private http: Http) {
   }
 
   ngOnInit(): void {
     this.attachmentURL = `api/file/${this.entityId}/attachments/${this.entityName}`;
-
     this.getUploadedFileData();
   }
 

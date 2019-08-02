@@ -7,7 +7,7 @@ export class FormBase {
 
   isFieldValid(field: string) {
     let formField = this.form.get(field);
-    if (formField == null)
+    if (formField.value == null)
       return true;
 
     return this.form.get(field).valid || !this.form.get(field).touched;
