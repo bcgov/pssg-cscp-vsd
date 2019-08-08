@@ -73,7 +73,7 @@ export class HomeComponent extends FormBase implements OnInit {
   }
 
   gotoApplication() : void {
-    if (this.form.valid) {
+    if (this.form.valid && this.form.get('wasCrimeInBC').value === true) {
       this.showValidationMessage = false;
       let applicationType = parseInt(this.form.get('applicationType').value);
       let behalfOf = parseInt(this.form.get('completingOnBehalfOf').value);
