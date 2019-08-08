@@ -378,7 +378,7 @@
 
               <section>
                 <h3>Crime Location(s)</h3>
-                <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeLocations')" label="Please provide the city/town in BC where the crime took place. If the crime occured over a period of time in more than one location, please provide the names of all locations" errorMessage="Please enter at least one location">
+                <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeLocations')" label="Please provide the city/town in BC where the crime took place. If the crime occured over a period of time in more than one location, please enter one location per box" errorMessage="Please enter at least one location">
                   <div class="crime-location-information">
                     <div class="location-listing" formArrayName="crimeLocations" *ngFor="let item of form.get('crimeInformation.crimeLocations').controls; let i = index;">
                       <div [formGroupName]="i" class="crime-location">
