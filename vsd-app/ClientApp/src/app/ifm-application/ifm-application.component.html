@@ -588,11 +588,11 @@
                   <mat-datepicker #dateOfDeathPicker></mat-datepicker>
                 </app-field>
 
-                <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeDetails')" label="Please briefly describe how the incident occured, in your own words. Please complete this section even if you have filed a police report." errorMessage="Please detail crime">
+                <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeDetails')" label="To the best of your ability, please describe the offence. (Maximum 250 words)" errorMessage="Please provide details of crime">
                   <textarea class="form-control bigger" formControlName="crimeDetails"></textarea>
                 </app-field>
 
-                <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeInjuries')" label="Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness)." errorMessage="Please detail injuries">
+                <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeInjuries')" label="Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 250 words)" errorMessage="Please provide details of injuries">
                   <textarea class="form-control standard" formControlName="crimeInjuries"></textarea>
                 </app-field>
 
