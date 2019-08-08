@@ -222,7 +222,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         missedWork.setErrors(null);
         
         let useValidation = checked === true;
-        if (useValidation && wasEmployed.enabled) {
+        if (useValidation) {
           wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
           missedWork.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
         }

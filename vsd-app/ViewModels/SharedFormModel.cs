@@ -21,4 +21,10 @@
         public string firstName { get; set; }
         public string relationship { get; set; }
     }
+
+    public class Uploadfile
+    {
+        public string body { get; set; }
+        public string fileName { get; set; }
+    }
 }

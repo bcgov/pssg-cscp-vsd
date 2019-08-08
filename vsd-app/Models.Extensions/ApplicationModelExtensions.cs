@@ -199,7 +199,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             if (model.EmploymentIncomeInformation != null)
             {
                 // what is with all the "ifm" stuff?
-                application.Application.vsd_cvap_ifmemployedduringcrime = model.EmploymentIncomeInformation.wereYouEmployedAtTimeOfCrime; 
+                if (model.EmploymentIncomeInformation.wereYouEmployedAtTimeOfCrime.HasValue)
+                {
+                    application.Application.vsd_cvap_ifmemployedduringcrime = model.EmploymentIncomeInformation.wereYouEmployedAtTimeOfCrime;
+                }
                 application.Application.vsd_cvap_ifmatworkduringcrime = model.EmploymentIncomeInformation.wereYouAtWorkAtTimeOfIncident;
                 application.Application.vsd_cvap_ifmwcbclaimnumber = model.EmploymentIncomeInformation.workersCompensationClaimNumber;
                 application.Application.vsd_cvap_ifmmissedwork = model.EmploymentIncomeInformation.didYouMissWorkDueToCrime;
