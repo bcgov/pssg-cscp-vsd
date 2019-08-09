@@ -770,7 +770,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
         maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
-        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
+        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
         preferredMethodOfContact: [1, [Validators.required, Validators.min(1), Validators.max(4)]], // Phone = 2, Email = 1, Mail = 4

@@ -9,10 +9,53 @@ export class FormBase {
     let formField = this.form.get(field);
     if (formField.value == null)
       return true;
+    if (field == 'personalInformation.sin')
+      return this.validateSIN(formField.value);
+      //return true;
 
     return this.form.get(field).valid || !this.form.get(field).touched;
   }
-  
+
+  validateSIN(sin) {
+    var check, even, tot;
+
+    // Allow blank SIN
+    if (sin === '') {
+      return true;
+    }
+
+    if (typeof sin === 'number') {
+      sin = sin.toString();
+    }
+
+    if (sin.length === 9) {
+      // convert to an array & pop off the check digit
+      sin = sin.split('');
+      check = +sin.pop();
+
+      even = sin
+        // take the digits at the even indices
+        .filter(function (_, i) { return i % 2; })
+        // multiply them by two
+        .map(function (n) { return n * 2; })
+        // and split them into individual digits
+        .join('').split('');
+
+      tot = sin
+        // take the digits at the odd indices
+        .filter(function (_, i) { return !(i % 2); })
+        // concatenate them with the transformed numbers above
+        .concat(even)
+        // it's currently an array of strings; we want numbers
+        .map(function (n) { return +n; })
+        // and take the sum
+        .reduce(function (acc, cur) { return acc + cur; });
+
+      // compare the result against the check digit
+      return check === (10 - (tot % 10)) % 10;
+    } else return false;// throw sin + ' is not a valid sin number.';
+}
+
   isArrayFieldValid(formArrayName: string, arrayControl: string, arrayIndex: number) {
     let formArray = <FormArray>this.form.get(formArrayName);
     let indexedControl = formArray.controls[arrayIndex];
