@@ -1,3 +1,11 @@
-<p>
-  test works!
-</p>
+<div class="row">
+  <div class="col">
+    File upload
+    <input #files type="file" (change)="onFilesAdded($event.target.files)">
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    {{file|json}}
+  </div>
+</div>
