@@ -127,7 +127,7 @@
               <div class="col-4">
                 <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('restitutionInformation.victimBirthDate')" errorMessage="Please enter your birth date">
                   <input type="text" class="form-control date-picker" formControlName="victimBirthDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
+                    [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
                   <mat-datepicker #birthDatePicker></mat-datepicker>
                 </app-field>
               </div>
@@ -340,10 +340,8 @@
 
             <h3 class="blue-header">Copy of Restitution Order</h3>
             <app-field label="Where possible, please include a copy of the Restitution Order when submitting this application.">
-              <div class="file-upload-trigger" (click)="showFileUploader('restitutionInformation', 'restitutionOrders')">
-                <p>Click this box to upload file</p>
-                [upload functionality goes here]
-              </div>
+              <p>Click this box to upload file</p>
+              <app-file-uploader-box></app-file-uploader-box>
             </app-field>
 
             <h2 class="blue-header">Declaration & Signature</h2>
@@ -417,4 +415,3 @@
     </div>
   </div>
 </div>
-

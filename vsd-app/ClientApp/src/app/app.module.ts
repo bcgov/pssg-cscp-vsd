@@ -83,6 +83,7 @@ import { ToolTipTriggerComponent } from './shared/tool-tip/tool-tip.component';
 import { VersionInfoDialog } from './version-info/version-info.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { TestComponent } from './test/test.component';
+import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +116,8 @@ import { TestComponent } from './test/test.component';
     ToolTipTriggerComponent,
     TermsAndConditionsComponent,
     VersionInfoDialog,
-    TestComponent,    
+    TestComponent,
+    FileUploaderBoxComponent,    
   ],
   imports: [
     BrowserModule,
