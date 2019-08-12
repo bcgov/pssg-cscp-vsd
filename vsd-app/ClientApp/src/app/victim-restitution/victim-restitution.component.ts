@@ -61,7 +61,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
   phoneIsRequired: boolean = false;
   emailIsRequired: boolean = false;
-  addressIsRequired: boolean = false;
+  addressIsRequired: boolean = true; // Always true
 
   saveFormData: any;
 
@@ -139,11 +139,11 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
           phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
           this.phoneIsRequired = true;
           this.emailIsRequired = false;
-          this.addressIsRequired = false;
+          this.addressIsRequired = true; // Always true
         } else if (contactMethod === 1) {
           this.phoneIsRequired = false;
           this.emailIsRequired = true;
-          this.addressIsRequired = false;
+          this.addressIsRequired = true; // Always true
         } else if (contactMethod === 4) {
           addressControl.setValidators([Validators.required]);
           for (let control of addressControls) {

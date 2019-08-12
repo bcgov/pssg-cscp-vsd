@@ -73,7 +73,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   phoneIsRequired: boolean = false;
   emailIsRequired: boolean = false;
-  addressIsRequired: boolean = false;
+  addressIsRequired: boolean = true; // Always required
 
   representativePhoneIsRequired: boolean = false;
   representativeEmailIsRequired: boolean = false;
@@ -153,11 +153,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         emailControl.setErrors(null);
         emailConfirmControl.clearValidators();
         emailConfirmControl.setErrors(null);
-        addressControl.clearValidators();
-        addressControl.setErrors(null);
+        //addressControl.clearValidators();
+        //addressControl.setErrors(null);
+        //for (let control of addressControls) {
+          //control.clearValidators();
+       //   control.setErrors(null);
+        //}
+        addressControl.setValidators([Validators.required]);
         for (let control of addressControls) {
-          control.clearValidators();
-          control.setErrors(null);
+          control.setValidators([Validators.required]);
         }
 
         let contactMethod = parseInt(value);
@@ -165,21 +169,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
           this.phoneIsRequired = true;
           this.emailIsRequired = false;
-          this.addressIsRequired = false;
+          this.addressIsRequired = true; // Always true
         } else if (contactMethod === 1) {
           emailControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
           emailConfirmControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
           this.phoneIsRequired = false;
           this.emailIsRequired = true;
-          this.addressIsRequired = false;
+          this.addressIsRequired = true; // Always true
         } else if (contactMethod === 4) {
-          addressControl.setValidators([Validators.required]);
-          for (let control of addressControls) {
-            control.setValidators([Validators.required]);
-          }
           this.phoneIsRequired = false;
           this.emailIsRequired = false;
-          this.addressIsRequired = true;
+          this.addressIsRequired = true; // Always true
         }
 
         phoneControl.markAsTouched();
