@@ -1,11 +1,24 @@
 <div class="row">
   <div class="col">
-    File upload
-    <input #files type="file" (change)="onFilesAdded($event.target.files)">
+    File upload<br>
+    <!-- This ugly button gets hidden and a fake click is used instead. -->
+    <input #files id="files" type="file" style="display: none" (change)="onFilesAdded($event.target.files)" multiple>
+    <button mat-raised-button (click)="fakeBrowseClick()">Browse...</button>
   </div>
 </div>
 <div class="row">
   <div class="col">
-    {{file|json}}
+    <mat-chip-list>
+      <mat-chip *ngFor="let fileName of fileNameList; let i=index" [selectable]="true"
+        [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
+        {{fileName}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
   </div>
 </div>
+<pre>
+  This many files attached: {{fileList.length}}
+  {{fileNameList|json}}
+  {{fileList[0]}}
+</pre>
