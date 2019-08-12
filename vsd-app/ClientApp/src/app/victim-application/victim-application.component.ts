@@ -153,11 +153,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         emailControl.setErrors(null);
         emailConfirmControl.clearValidators();
         emailConfirmControl.setErrors(null);
-        addressControl.clearValidators();
-        addressControl.setErrors(null);
+        //addressControl.clearValidators();
+        //addressControl.setErrors(null);
+        //for (let control of addressControls) {
+          //control.clearValidators();
+       //   control.setErrors(null);
+        //}
+        addressControl.setValidators([Validators.required]);
         for (let control of addressControls) {
-          control.clearValidators();
-          control.setErrors(null);
+          control.setValidators([Validators.required]);
         }
 
         let contactMethod = parseInt(value);
@@ -173,10 +177,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           this.emailIsRequired = true;
           this.addressIsRequired = true; // Always true
         } else if (contactMethod === 4) {
-          addressControl.setValidators([Validators.required]);
-          for (let control of addressControls) {
-            control.setValidators([Validators.required]);
-          }
           this.phoneIsRequired = false;
           this.emailIsRequired = false;
           this.addressIsRequired = true; // Always true
