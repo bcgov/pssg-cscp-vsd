@@ -11,6 +11,7 @@ import { OffenderRestitutionComponent } from './offender-restitution/offender-re
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,10 @@ const routes: Routes = [
   {
     path: 'application-success',
     component: ApplicationSuccessComponent,
+  },
+  {
+    path: 'test',
+    component: TestComponent,
   },
   { path: '**', component: NotFoundComponent }
 ];
