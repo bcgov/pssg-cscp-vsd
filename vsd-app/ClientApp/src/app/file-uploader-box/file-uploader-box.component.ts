@@ -41,14 +41,14 @@ export class FileUploaderBoxComponent implements OnInit {
         if (this.fileCollection.fileName.indexOf(files.item(i).name) >= 0) {
           // save the result over the old result
           this.fileCollection.fileData[this.fileCollection.fileName.indexOf(files.item(i).name)] = reader.result.toString();
-          console.log('Overwriting old file');
+          // console.log('Overwriting old file');
           // emit the updated bundle
           this.emitBundle();
         } else {
           // push a fresh file name and file contents
           this.fileCollection.fileName.push(files.item(i).name);
           this.fileCollection.fileData.push(reader.result.toString());
-          console.log('Adding new file');
+          // console.log('Adding new file');
           // emit the updated bundle
           this.emitBundle();
         }
@@ -57,7 +57,7 @@ export class FileUploaderBoxComponent implements OnInit {
     }
   }
   removeItem(index: number): void {
-    console.log('Remove Item');
+    // console.log('Remove Item');
     this.fileCollection.fileName.splice(index, 1);
     this.fileCollection.fileData.splice(index, 1);
     // emit the updated bundle

@@ -8,11 +8,12 @@ import { FileBundle } from '../models/file-bundle';
 })
 export class TestComponent implements OnInit {
   constructor() { }
-
+  bundlesOfFun: FileBundle = null;
   ngOnInit() { }
 
   onFileBundle(fileBundle: FileBundle) {
-    alert('Bundles of fun');
+    this.bundlesOfFun = fileBundle;
+    // console.log(fileBundle);
   }
 
 }
