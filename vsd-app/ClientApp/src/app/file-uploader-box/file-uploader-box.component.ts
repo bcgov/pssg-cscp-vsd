@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 import { FileBundle } from '../models/file-bundle';
 
 @Component({
@@ -7,12 +7,13 @@ import { FileBundle } from '../models/file-bundle';
   styleUrls: ['./file-uploader-box.component.css']
 })
 export class FileUploaderBoxComponent implements OnInit {
-
+  // collect the element reference frin the child so that we can access native parts of the files element
   @ViewChild('files')
   myInputVariable: ElementRef;
 
   @Output() fileBundle = new EventEmitter<FileBundle>();
 
+  @Input() initialValues;
   fileCollection: FileBundle = {
     // list of file names (same order as file array)
     fileName: [],
@@ -23,6 +24,15 @@ export class FileUploaderBoxComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    // sanity check the included data. they must be the same length and there must be more than 0 files
+    if (
+      this.initialValues &&
+      this.initialValues.fileName.length === this.initialValues.fileData.length &&
+      this.initialValues.fileName.length > 0
+    ) {
+      this.fileCollection.fileData = this.initialValues.fileData;
+      this.fileCollection.fileName = this.initialValues.fileName;
+    }
   }
 
   fakeBrowseClick(): void {
