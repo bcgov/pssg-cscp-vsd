@@ -341,15 +341,15 @@
             <h3 class="blue-header">Copy of Restitution Order</h3>
             <app-field label="Where possible, please include a copy of the Restitution Order when submitting this application.">
               <p>Click this box to upload file</p>
-              <app-file-uploader-box></app-file-uploader-box>
             </app-field>
+            <app-file-uploader-box (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
 
             <h2 class="blue-header">Declaration & Signature</h2>
             <app-field [required]="true" [valid]="isFieldValid('restitutionInformation.declaredAndSigned')" errorMessage="Please check declaration">
               <label>
                 <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
                 I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
-              </label>
+              </label>`
             </app-field>
 
             <app-field label="Victim Signature" [required]="true" [valid]="isFieldValid('restitutionInformation.signature')" errorMessage="Please provide your digital signature">

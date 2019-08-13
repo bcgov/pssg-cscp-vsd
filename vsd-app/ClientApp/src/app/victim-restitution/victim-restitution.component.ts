@@ -21,6 +21,7 @@ import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
+import { FileBundle } from '../models/file-bundle';
 
 const moment = _rollupMoment || _moment;
 
@@ -92,10 +93,10 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     const dialogRef = this.dialog.open(DeactivateGuardDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        console.log(data); 
+        console.log(data);
         return data;
       }
-    ); 
+    );
 
     //return verifyDialogRef.navigateAwaySelection$;
     // if the editName !== this.user.name
@@ -165,7 +166,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
           control.updateValueAndValidity();
         }
       });
-    
+
     this.form.get('restitutionInformation.authoriseVictimDesignate')
       .valueChanges
       .subscribe(value => {
@@ -185,7 +186,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
       });
 
   }
-  
+
   showSignPad(group, control): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -200,7 +201,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
           patchObject
         );
       }
-    ); 
+    );
   }
 
   showFileUploader(group, control): void {
@@ -236,7 +237,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
           return;
         }
       }
-    );  
+    );
   }
 
   getFormGroupName(groupIndex: any) {
@@ -346,7 +347,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   }
 
   debugFormData(): void {
-    let formData = <DynamicsApplicationModel> {
+    let formData = <DynamicsApplicationModel>{
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
     console.log(JSON.stringify(formData));
@@ -359,10 +360,10 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     };
 
     this.busy = this.justiceDataService.submitVictimRestitutionApplication(formData)
-        .toPromise()
-        .then(res => {
-          subResult.next(true);
-        }, err => subResult.next(false));
+      .toPromise()
+      .then(res => {
+        subResult.next(true);
+      }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
@@ -373,7 +374,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     this.form.markAsTouched();
   }
 
-  private buildApplicationForm() : FormGroup {
+  private buildApplicationForm(): FormGroup {
     return this.fb.group({
       introduction: this.fb.group({
       }),
@@ -427,6 +428,10 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
         providerFiles: this.fb.array([this.createProviderItem()]),
       })
     });
+  }
+
+  onFileBundle(fileBundle: FileBundle) {
+    alert('Bundles!');
   }
 }
 

@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { FileBundle } from '../models/file-bundle';
 
 @Component({
   selector: 'app-file-uploader-box',
@@ -10,47 +11,71 @@ export class FileUploaderBoxComponent implements OnInit {
   @ViewChild('files')
   myInputVariable: ElementRef;
 
-  // base64 encoded file turned into a string
-  fileNameList = [];
-  fileList = [];
+  @Output() fileBundle = new EventEmitter<FileBundle>();
+
+  fileCollection: FileBundle = {
+    // list of file names (same order as file array)
+    fileName: [],
+    // base64 encoded file turned into a string
+    fileData: []
+  };
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  fakeBrowseClick() {
+  fakeBrowseClick(): void {
     // the UI element for the native element is completely useless and ugly so we hide it and fake the user click.
     this.myInputVariable.nativeElement.click();
     console.log('Native button is clicked.');
   }
 
-  onFilesAdded(files: FileList) {
+  onFilesAdded(files: FileList): void {
     // for each file added we go through the same conversion process.
     for (let i = 0; i < files.length; i++) {
       // convert the file to base64 for upload
       const reader: FileReader = new FileReader();
       reader.readAsDataURL(files.item(i));
       reader.onload = () => {
-        if (this.fileNameList.indexOf(files.item(i).name) >= 0) {
+        if (this.fileCollection.fileName.indexOf(files.item(i).name) >= 0) {
           // save the result over the old result
-          this.fileList[this.fileNameList.indexOf(files.item(i).name)] = reader.result;
+          this.fileCollection.fileData[this.fileCollection.fileName.indexOf(files.item(i).name)] = reader.result.toString();
           console.log('Overwriting old file');
+          // emit the updated bundle
+          this.emitBundle();
         } else {
           // push a fresh file name and file contents
-          this.fileNameList.push(files.item(i).name);
-          this.fileList.push(reader.result);
+          this.fileCollection.fileName.push(files.item(i).name);
+          this.fileCollection.fileData.push(reader.result.toString());
           console.log('Adding new file');
+          // emit the updated bundle
+          this.emitBundle();
         }
       };
       reader.onerror = error => console.log('Error: ', error);
-
     }
-    // this.resetFiles();
   }
-  removeItem(index: number) {
+  removeItem(index: number): void {
     console.log('Remove Item');
-    this.fileNameList.splice(index, 1);
-    this.fileList.splice(index, 1);
+    this.fileCollection.fileName.splice(index, 1);
+    this.fileCollection.fileData.splice(index, 1);
+    // emit the updated bundle
+    this.emitBundle();
   }
+  emitBundle() {
+    // when needed emit the file bundle
+    this.fileBundle.emit(this.fileCollection);
+  }
+
+  // downloadFile() {
+  //   // TODO: when downloading a file this may work.
+  //   // make an anchor for downloading
+  //   const a = document.createElement('a');
+  //   a.id = this.fileCollection.fileName[0]; // optional?
+  //   a.download = this.fileCollection.fileName[0];
+  //   a.href = this.fileCollection.fileData[0];
+  //   a.dataset.downloadurl = [a.download, a.href].join(':');
+  //   a.click();
+  // }
 }

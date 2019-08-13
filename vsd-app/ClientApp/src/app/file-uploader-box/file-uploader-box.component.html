@@ -6,10 +6,10 @@
     <button type="button" mat-raised-button (click)="fakeBrowseClick()">Browse...</button>
   </div>
 </div>
-<div class="row">
+<div class="row mt-2">
   <div class="col">
     <mat-chip-list>
-      <mat-chip *ngFor="let fileName of fileNameList; let i=index" [selectable]="true"
+      <mat-chip *ngFor="let fileName of fileCollection.fileName; let i=index" [selectable]="true"
         [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
         {{fileName}}
         <mat-icon matChipRemove>cancel</mat-icon>
@@ -18,7 +18,7 @@
   </div>
 </div>
 <pre>
-    This many files attached: {{fileList.length}}
-    {{fileNameList|json}}
-    {{fileList[0]}}
-  </pre>
+  This many files attached: {{fileCollection.fileData.length}}
+  {{fileCollection.fileName|json}}
+  {{fileCollection.fileData[0]}}
+</pre>
