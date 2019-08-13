@@ -184,8 +184,8 @@
   </h2>
   <table class="table table-striped review-table">
     <tbody>
-      <tr>
-        <th>Placeholder File Preview</th>
+      <tr *ngFor="let fileName of restitutionOrders.fileName">
+        <th>{{fileName}}</th>
       </tr>
     </tbody>
   </table>

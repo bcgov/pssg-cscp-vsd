@@ -349,7 +349,7 @@
               <label>
                 <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
                 I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
-              </label>`
+              </label>
             </app-field>
 
             <app-field label="Victim Signature" [required]="true" [valid]="isFieldValid('restitutionInformation.signature')" errorMessage="Please provide your digital signature">
@@ -368,7 +368,7 @@
               <h1>Review & Submit</h1>
             </div>
             <p>Please check the accuracy of the information entered in your application before submitting.</p>
-            <app-victim-restitution-review [group]="form" [parentStepper]="stepper"></app-victim-restitution-review>
+            <app-victim-restitution-review [group]="form" [restitutionOrders]="restitutionOrders" [parentStepper]="stepper"></app-victim-restitution-review>
           </div>
 
           <div *ngIf="showValidationMessage" class="error-summary">

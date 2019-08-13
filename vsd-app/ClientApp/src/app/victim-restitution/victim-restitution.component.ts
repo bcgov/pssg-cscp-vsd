@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+// import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -12,7 +12,7 @@ import { defaultFormat as _rollupMoment } from 'moment';
 import { CanDeactivateGuard } from '../services/can-deactivate-guard.service';
 import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
-import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
+// import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { FileUploaderComponent } from '../shared/file-uploader/file-uploader.component';
@@ -54,23 +54,25 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
   enumHelper = new EnumHelper();
 
-  showAddCourtInfo: boolean = true;
-  showRemoveCourtInfo: boolean = false;
+  showAddCourtInfo = true;
+  showRemoveCourtInfo = false;
 
   public currentFormStep: number;
-  public currentPanel: string = 'form';  // 'form', 'success', or 'cancel'
+  public currentPanel = 'form';  // 'form', 'success', or 'cancel'
 
-  phoneIsRequired: boolean = false;
-  emailIsRequired: boolean = false;
-  addressIsRequired: boolean = true; // Always true
+  phoneIsRequired = false;
+  emailIsRequired = false;
+  addressIsRequired = true; // Always true
 
   saveFormData: any;
 
+  // a placeholder for the files the user may atttach
+  restitutionOrders: FileBundle;
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
+    // private router: Router,
+    // private route: ActivatedRoute,
     public snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
@@ -78,6 +80,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
     this.formFullyValidated = false;
     this.currentFormStep = 0;
+    this.restitutionOrders = { fileName: [], fileData: [] };
   }
 
   canDeactivate() {
@@ -98,11 +101,11 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
       }
     );
 
-    //return verifyDialogRef.navigateAwaySelection$;
+    // return verifyDialogRef.navigateAwaySelection$;
     // if the editName !== this.user.name
     //    if (this.user.name !== this.editName) {
-    //return window.confirm('Discard changes?');
-    //}
+    // return window.confirm('Discard changes?');
+    // }
 
     return false;
   }
@@ -113,10 +116,10 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     this.form.get('restitutionInformation.preferredMethodOfContact')
       .valueChanges
       .subscribe(value => {
-        let phoneControl = this.form.get('restitutionInformation.phoneNumber');
-        let emailControl = this.form.get('restitutionInformation.email');
-        let addressControl = this.form.get('restitutionInformation').get('mailingAddress.line1');
-        let addressControls = [
+        const phoneControl = this.form.get('restitutionInformation.phoneNumber');
+        const emailControl = this.form.get('restitutionInformation.email');
+        const addressControl = this.form.get('restitutionInformation').get('mailingAddress.line1');
+        const addressControls = [
           this.form.get('restitutionInformation').get('mailingAddress.country'),
           this.form.get('restitutionInformation').get('mailingAddress.province'),
           this.form.get('restitutionInformation').get('mailingAddress.city'),
@@ -130,12 +133,12 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
         emailControl.setErrors(null);
         addressControl.clearValidators();
         addressControl.setErrors(null);
-        for (let control of addressControls) {
+        for (const control of addressControls) {
           control.clearValidators();
           control.setErrors(null);
         }
 
-        let contactMethod = parseInt(value);
+        const contactMethod = parseInt(value);
         if (contactMethod === 2) {
           phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
           this.phoneIsRequired = true;
@@ -147,7 +150,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
           this.addressIsRequired = true; // Always true
         } else if (contactMethod === 4) {
           addressControl.setValidators([Validators.required]);
-          for (let control of addressControls) {
+          for (const control of addressControls) {
             control.setValidators([Validators.required]);
           }
           this.phoneIsRequired = false;
@@ -161,7 +164,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
         emailControl.updateValueAndValidity();
         addressControl.markAsTouched();
         addressControl.updateValueAndValidity();
-        for (let control of addressControls) {
+        for (const control of addressControls) {
           control.markAsTouched();
           control.updateValueAndValidity();
         }
@@ -170,15 +173,15 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     this.form.get('restitutionInformation.authoriseVictimDesignate')
       .valueChanges
       .subscribe(value => {
-        let firstName = this.form.get('restitutionInformation.authorisedDesignateFirstName');
-        let lastName = this.form.get('restitutionInformation.authorisedDesignateLastName');
+        const firstName = this.form.get('restitutionInformation.authorisedDesignateFirstName');
+        const lastName = this.form.get('restitutionInformation.authorisedDesignateLastName');
 
         firstName.clearValidators();
         firstName.setErrors(null);
         lastName.clearValidators();
         lastName.setErrors(null);
 
-        let useValidation = value === true;
+        const useValidation = value === true;
         if (useValidation) {
           firstName.setValidators([Validators.required]);
           lastName.setValidators([Validators.required]);
@@ -195,7 +198,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     const dialogRef = this.dialog.open(SignPadDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        var patchObject = {};
+        let patchObject = {};
         patchObject[control] = data;
         this.form.get(group).patchValue(
           patchObject
@@ -214,7 +217,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     const dialogRef = this.dialog.open(FileUploaderComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        var patchObject = {};
+        let patchObject = {};
         patchObject[control] = data;
         this.form.get(group).patchValue(
           patchObject
@@ -241,7 +244,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   }
 
   getFormGroupName(groupIndex: any) {
-    let elements: Array<string> = ['introduction', 'restitutionInformation'];
+    const elements: Array<string> = ['introduction', 'restitutionInformation'];
     return elements[groupIndex];
   }
 
@@ -259,14 +262,14 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
   gotoNextStep(stepper: MatStepper): void {
     if (stepper != null) {
-      var desiredFormIndex = stepper.selectedIndex;
-      var formGroupName = this.getFormGroupName(desiredFormIndex);
+      let desiredFormIndex = stepper.selectedIndex;
+      let formGroupName = this.getFormGroupName(desiredFormIndex);
 
       this.formFullyValidated = this.form.valid;
 
       if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
-        var formParts = this.form.get(formGroupName);
-        var formValid = true;
+        let formParts = this.form.get(formGroupName);
+        let formValid = true;
 
         if (formParts != null) {
           formValid = formParts.valid;
@@ -320,16 +323,15 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   }
 
   submitApplication() {
-    let formIsValid = this.form.valid;
-    //let formIsValid = true;
+    const formIsValid = this.form.valid;
+    // let formIsValid = true;
     if (formIsValid) {
       this.formFullyValidated = true;
       this.save().subscribe(
         data => {
           if (data['IsSuccess'] == true) {
             this.currentPanel = 'success';
-          }
-          else {
+          } else {
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
           }
@@ -340,14 +342,14 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
         }
       );
     } else {
-      console.log("form not validated");
+      console.log('form not validated');
       this.formFullyValidated = false;
       this.markAsTouched();
     }
   }
 
   debugFormData(): void {
-    let formData = <DynamicsApplicationModel>{
+    const formData = <DynamicsApplicationModel>{
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
     console.log(JSON.stringify(formData));
@@ -431,7 +433,8 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   }
 
   onFileBundle(fileBundle: FileBundle) {
-    alert('Bundles!');
+    // save the files submitted from the component for attachment into the submitted form.
+    this.restitutionOrders = fileBundle;
   }
 }
 

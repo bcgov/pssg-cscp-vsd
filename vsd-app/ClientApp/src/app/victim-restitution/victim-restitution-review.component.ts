@@ -4,6 +4,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { MatSnackBar } from '@angular/material';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
+import { FileBundle } from '../models/file-bundle';
 
 @Component({
   selector: 'app-victim-restitution-review',
@@ -17,9 +18,9 @@ export class VictimRestitutionReviewComponent extends FormBase implements OnInit
 
   @Input() group: FormGroup;
   @Input() parentStepper: MatStepper;
-    
+  @Input() restitutionOrders: FileBundle; // the collection of files that was submitted in the victim-restitution component
   courtFiles: FormArray;
-  
+
   constructor(
     public snackBar: MatSnackBar,
   ) {
@@ -30,7 +31,7 @@ export class VictimRestitutionReviewComponent extends FormBase implements OnInit
     this.form = this.group;
     this.courtFiles = this.form.get('restitutionInformation.courtFiles') as FormArray;
   }
-  
+
   gotoPageIndex(selectPage: number): void {
     window.scroll(0, 0);
     this.parentStepper.selectedIndex = selectPage;
