@@ -1,6 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FileBundle } from '../models/file-bundle';
-
 @Component({
   selector: 'app-test',
   templateUrl: './test.component.html',
@@ -8,12 +6,6 @@ import { FileBundle } from '../models/file-bundle';
 })
 export class TestComponent implements OnInit {
   constructor() { }
-  bundlesOfFun: FileBundle = null;
   ngOnInit() { }
-
-  onFileBundle(fileBundle: FileBundle) {
-    this.bundlesOfFun = fileBundle;
-    // console.log(fileBundle);
-  }
 
 }
