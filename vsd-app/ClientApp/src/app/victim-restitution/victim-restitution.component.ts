@@ -10,7 +10,7 @@ import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { defaultFormat as _rollupMoment } from 'moment';
 import { CanDeactivateGuard } from '../services/can-deactivate-guard.service';
-import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 // import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
@@ -57,17 +57,15 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   showAddCourtInfo = true;
   showRemoveCourtInfo = false;
 
+  // This form uses an integer to track which "step" it is on
   public currentFormStep: number;
+  // current panel shows messages about state of the form
   public currentPanel = 'form';  // 'form', 'success', or 'cancel'
 
   phoneIsRequired = false;
   emailIsRequired = false;
   addressIsRequired = true; // Always true
 
-  saveFormData: any;
-
-  // a placeholder for the files the user may atttach
-  restitutionOrders: FileBundle;
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -76,11 +74,11 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     public snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
+    // super contains validators
     super();
 
     this.formFullyValidated = false;
     this.currentFormStep = 0;
-    this.restitutionOrders = { fileName: [], fileData: [] };
   }
 
   canDeactivate() {
@@ -190,35 +188,20 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
   }
 
-  showSignPad(group, control): void {
-    const dialogConfig = new MatDialogConfig();
+  showSignPad(group: string, control: string): void {
+    // the group is the form group that we are interested in
+    // control is the form control that we are interested in
+    const dialogConfig: MatDialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
-    const dialogRef = this.dialog.open(SignPadDialog, dialogConfig);
+    const dialogRef: MatDialogRef<SignPadDialog, any> = this.dialog.open(SignPadDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        let patchObject = {};
+        const patchObject = {};
+        // assign the data from the dialog to the property. In this case it is 'signature'
         patchObject[control] = data;
-        this.form.get(group).patchValue(
-          patchObject
-        );
-      }
-    );
-  }
-
-  showFileUploader(group, control): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = false;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '600px';
-    dialogConfig.height = '600px';
-
-    const dialogRef = this.dialog.open(FileUploaderComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(
-      data => {
-        let patchObject = {};
-        patchObject[control] = data;
+        // get the form group and patch the value with the data c
         this.form.get(group).patchValue(
           patchObject
         );
@@ -308,11 +291,14 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     });
   }
 
-  createDocumentItem(): FormGroup {
-    return this.fb.group({
-      data: 'test',
-      fileName: 'test.txt'
-    });
+  // createDocumentItem(): FormGroup {
+  //   return this.fb.group({
+  //     fileData, fileName
+  //   });
+  // }
+
+  setFileBundle() {
+    // this.form.patchValue()
   }
 
   createProviderItem(): FormGroup {
@@ -415,14 +401,14 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
         offenderMiddleName: [''],
         offenderLastName: [''],
         offenderRelationship: [''],
-        courtFiles: this.fb.array([this.createCourtInfoItem()]),
+        courtFiles: this.fb.array([]),
 
         victimServiceWorkerFirstName: [''],
         victimServiceWorkerLastName: [''],
         victimServiceWorkerProgramName: [''],
         victimServiceWorkerEmail: [''],
 
-        restitutionOrders: this.fb.array([this.createDocumentItem()]),  // This will be a collection of uploaded files
+        restitutionOrders: [''],
 
         declaredAndSigned: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
@@ -434,7 +420,11 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
   onFileBundle(fileBundle: FileBundle) {
     // save the files submitted from the component for attachment into the submitted form.
-    this.restitutionOrders = fileBundle;
+    const patchObject = {};
+    patchObject['restitutionOrders'] = fileBundle;
+    this.form.get('restitutionInformation').patchValue(
+      patchObject
+    );
   }
 }
 

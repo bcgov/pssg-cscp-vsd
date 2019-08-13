@@ -343,7 +343,6 @@
               <p>Click this box to upload file</p>
             </app-field>
             <app-file-uploader-box (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
-
             <h2 class="blue-header">Declaration & Signature</h2>
             <app-field [required]="true" [valid]="isFieldValid('restitutionInformation.declaredAndSigned')" errorMessage="Please check declaration">
               <label>
@@ -368,7 +367,7 @@
               <h1>Review & Submit</h1>
             </div>
             <p>Please check the accuracy of the information entered in your application before submitting.</p>
-            <app-victim-restitution-review [group]="form" [restitutionOrders]="restitutionOrders" [parentStepper]="stepper"></app-victim-restitution-review>
+            <app-victim-restitution-review [group]="form" [parentStepper]="stepper"></app-victim-restitution-review>
           </div>
 
           <div *ngIf="showValidationMessage" class="error-summary">
