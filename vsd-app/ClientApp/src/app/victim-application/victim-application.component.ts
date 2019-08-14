@@ -132,6 +132,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
 
+    const sameEmail: ValidatorFn = (fg: FormGroup) => {
+      const origEmail = fg.get('email').value;
+      const confEmail = fg.get('confirmEmail').value;
+
+      return origEmail == confEmail ? null : { sameEmail: true };
+    }
+
     this.form.get('personalInformation.preferredMethodOfContact')
       .valueChanges
       .subscribe(value => {
@@ -171,8 +178,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           this.emailIsRequired = false;
           this.addressIsRequired = true; // Always true
         } else if (contactMethod === 1) {
-          emailControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
-          emailConfirmControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
+          emailControl.setValidators([Validators.required, sameEmail]); // need to add validator to check these two are the same
+          emailConfirmControl.setValidators([Validators.required, sameEmail]); // need to add validator to check these two are the same
           this.phoneIsRequired = false;
           this.emailIsRequired = true;
           this.addressIsRequired = true; // Always true

@@ -561,7 +561,7 @@
                 <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add Additional Court Information</a>
               </div>
 
-              <app-field label="Have you sued the alleged offender(s)?" [required]="true" [valid]="isFieldValid('crimeInformation.haveYouSuedOffender')" errorMessage="Please make a selection">
+              <app-field label="Have you sued the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('crimeInformation.haveYouSuedOffender')" errorMessage="Please make a selection">
                 <label class="inline-label">
                   <input type="radio" [value]="100000001" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
                   <span>Yes</span>
@@ -572,7 +572,7 @@
                 </label>
               </app-field>
               <section *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === 100000000">
-                <app-field label="Do you intend to sue the alleged offender?">
+                <app-field label="Do you intend to sue the Person(s) Responsible?">
                   <label class="inline-label">
                     <input type="radio" [value]="100000000" name="intendToSueOffender" formControlName="intendToSueOffender">
                     <span>Yes</span>
