@@ -51,11 +51,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
             // TODO: Fix file mapping
             // how does the uploading work? is our array a list of file ids? Look them up and extract appropriate data...
-            application.DocumentCollection = model.RestitutionInformation.restitutionOrders.Select(g => new Documentcollection
-            {
-                body = g.body,
-                filename = g.fileName
-            }).ToArray();
+            //application.DocumentCollection = model.RestitutionInformation.restitutionOrders.Select(g => new Documentcollection
+            //{
+            //    body = g.body,
+            //    filename = g.fileName
+            //}).ToArray();
 
             application.CourtInfoCollection = model.RestitutionInformation.courtFiles.Select(f => new Courtinfocollection
             {

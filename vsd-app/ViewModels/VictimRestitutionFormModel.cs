@@ -39,7 +39,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string victimServiceWorkerProgramName { get; set; }
         public string victimServiceWorkerEmail { get; set; }
 
-        public Uploadfile[] restitutionOrders { get; set; }
+        //public Uploadfile[] restitutionOrders { get; set; }
 
         public Providerfile[] providerFiles { get; set; }
 
