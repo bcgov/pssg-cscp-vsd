@@ -82,6 +82,8 @@ import { QuickExitComponent } from './quick-exit/quick-exit.component';
 import { ToolTipTriggerComponent } from './shared/tool-tip/tool-tip.component';
 import { VersionInfoDialog } from './version-info/version-info.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
+import { TestComponent } from './test/test.component';
+import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +115,9 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     QuickExitComponent,
     ToolTipTriggerComponent,
     TermsAndConditionsComponent,
-    VersionInfoDialog,    
+    VersionInfoDialog,
+    TestComponent,
+    FileUploaderBoxComponent,    
   ],
   imports: [
     BrowserModule,

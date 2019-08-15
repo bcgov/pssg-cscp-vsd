@@ -154,7 +154,6 @@
       </tr>
     </tbody>
   </table>
-
   <h2 class="blue-header">
     Victim Service Worker <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
   </h2>
@@ -182,10 +181,11 @@
   <h2 class="blue-header">
     Copy of Restitution Order <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
   </h2>
+  <!-- <pre>{{ valueOrEmpty('restitutionInformation.restitutionOrders')|json}}</pre> -->
   <table class="table table-striped review-table">
     <tbody>
-      <tr>
-        <th>Placeholder File Preview</th>
+      <tr *ngFor="let fileName of form.value.restitutionInformation.restitutionOrders.fileName">
+        <th>{{fileName}}</th>
       </tr>
     </tbody>
   </table>
