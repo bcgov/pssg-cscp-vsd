@@ -1,2 +1,2 @@
 #!/bin/bash
-docker-compose exec embc-app-frontend sh
+docker exec -it victims-app-frontend sh
