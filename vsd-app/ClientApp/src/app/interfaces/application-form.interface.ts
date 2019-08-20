@@ -119,7 +119,18 @@ export interface EmploymentIncomeInformation {
   workersCompensationClaimNumber: string;
   employers: Employer[];
 }
-export interface RepresentativeInformation { }
+export interface RepresentativeInformation {
+  completingOnBehalfOf?: number;
+  representativePreferredMethodOfContact?: number;
+  representativeFirstName: string;
+  representativeMiddleName: string;
+  representativeLastName: string;
+  representativePhoneNumber: string;
+  representativeAlternatePhoneNumber: string;
+  representativeEmail: string;
+  representativeAddress: Address;
+  legalGuardianFiles: Object[];
+}
 export interface DeclarationInformation { }
 export interface AuthorizationInformation { }
 
