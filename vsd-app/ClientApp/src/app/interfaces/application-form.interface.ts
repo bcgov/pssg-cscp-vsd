@@ -13,20 +13,20 @@ export interface Introduction {
   understoodInformation: string;
 }
 export interface PersonalInformation {
+  permissionToContactViaMethod: boolean;
+  gender: number;
+  maritalStatus: number;
+  preferredMethodOfContact: number;
+  dateOfNameChange?: Date;
+  birthDate?: Date;
   firstName: string;
   middleName: string;
   lastName: string;
   iHaveOtherNames: string;
   otherFirstName: string;
   otherLastName: string;
-  dateOfNameChange?: Date;
-  gender: number;
-  birthDate?: Date;
-  maritalStatus: number;
   sin: string;
   occupation: string;
-  preferredMethodOfContact: number;
-  permissionToContactViaMethod: boolean;
   agreeToCvapCommunicationExchange: string;
   phoneNumber: string;
   alternatePhoneNumber: string;
