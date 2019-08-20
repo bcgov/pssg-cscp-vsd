@@ -15,9 +15,8 @@ import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 // import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
-import { FileUploaderComponent } from '../shared/file-uploader/file-uploader.component';
+// import { FileUploaderComponent } from '../shared/file-uploader/file-uploader.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
@@ -336,7 +335,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   }
 
   debugFormData(): void {
-    const formData = <DynamicsApplicationModel>{
+    const formData: VictimRestitution = {
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
     console.log(JSON.stringify(formData));

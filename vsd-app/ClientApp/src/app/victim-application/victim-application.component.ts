@@ -16,7 +16,6 @@ import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benef
 import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
@@ -664,7 +663,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   producePDF() {
-    //let formData = <DynamicsApplicationModel>{
+    //let formData = {
     //  Introduction: this.form.get('introduction').value,
     //  PersonalInformation: this.form.get('personalInformation').value,
     //  CrimeInformation: this.form.get('crimeInformation').value,
@@ -716,7 +715,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   convertFormToDynamics(): void {
-    let formData = <DynamicsApplicationModel>{
+    let formData: Application = {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,

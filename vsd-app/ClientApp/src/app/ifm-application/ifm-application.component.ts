@@ -15,7 +15,6 @@ import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
@@ -426,7 +425,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   debugFormData(): void {
-    let formData = <DynamicsApplicationModel>{
+    let formData: Application = {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       VictimInformation: this.form.get('victimInformation').value,

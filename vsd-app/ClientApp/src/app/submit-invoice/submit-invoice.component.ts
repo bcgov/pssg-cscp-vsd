@@ -9,7 +9,6 @@ import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
