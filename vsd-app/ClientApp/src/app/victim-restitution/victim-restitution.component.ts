@@ -22,6 +22,7 @@ import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { FileBundle } from '../models/file-bundle';
+import { VictimRestitution } from '../interfaces/victim-restitution.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -343,7 +344,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData = <DynamicsApplicationModel>{
+    const formData: VictimRestitution = <VictimRestitution>{
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
 

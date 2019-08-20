@@ -3,6 +3,7 @@ import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApplicationForm } from '../interfaces/application-form.interface';
 import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { VictimRestitution } from '../interfaces/victim-restitution.interface';
 
 @Injectable()
 export class JusticeApplicationDataService {
@@ -21,7 +22,7 @@ export class JusticeApplicationDataService {
     return this.http.post(this.apiPath + 'submitcounsellorinvoice', counsellorInvoice, { headers: this.headers });
   }
 
-  public submitVictimRestitutionApplication(victimModel: DynamicsApplicationModel) {
+  public submitVictimRestitutionApplication(victimModel: VictimRestitution) {
     return this.http.post(this.apiPath + 'submitvictimrestitution', victimModel, { headers: this.headers });
   }
 
