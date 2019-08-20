@@ -1,7 +1,7 @@
 import { Address } from "./address.interface";
 import { Courtfile } from "./files.interface";
 
-export interface ApplicationForm {
+export interface Application {
   Introduction: Introduction;
   PersonalInformation: PersonalInformation;
   CrimeInformation: CrimeInformation;
@@ -38,7 +38,6 @@ export interface PersonalInformation {
   primaryAddress: Address;
   alternateAddress: Address;
 }
-
 export interface CrimeInformation {
   unsureOfCrimeDates: string;
   whenDidCrimeOccur: string;
@@ -153,15 +152,15 @@ export interface AuthorizationInformation {
   authorizedPersonAgencyAddress: Address;
 }
 
-export interface Crimelocation {
+interface Crimelocation {
   location: string;
 }
-export interface Policereport {
+interface Policereport {
   policeFileNumber: string;
   investigatingOfficer: string;
 }
 
-export interface Racafinformation {
+interface Racafinformation {
   applyToCourtForMoneyFromOffender?: number;
   expensesRequested: string;
   expensesAwarded?: number;
@@ -172,20 +171,20 @@ export interface Racafinformation {
   signName: string;
   signature: string;
 }
-export interface Othertreatment {
+interface Othertreatment {
   providerType: number;
   providerName: string;
   providerPhoneNumber: string;
   providerAddress: Address;
 }
-export interface Employer {
+interface Employer {
   employerName: string;
   employerPhoneNumber: string;
   employerFirstName: string;
   employerLastName: string;
   employerAddress: Address;
 }
-export interface VictimInformation {
+interface VictimInformation {
   firstName: string;
   middleName?: string;
   lastName: string;

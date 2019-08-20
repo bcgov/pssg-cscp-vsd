@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ApplicationForm } from '../interfaces/application-form.interface';
+import { Application } from '../interfaces/application.interface';
 import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 import { VictimRestitution } from '../interfaces/victim-restitution.interface';
 
@@ -14,8 +14,8 @@ export class JusticeApplicationDataService {
 
   constructor(private http: HttpClient) { }
 
-  public submitApplication(applicationForm: ApplicationForm) {
-    return this.http.post(this.apiPath + 'saveapplication', applicationForm, { headers: this.headers });
+  public submitApplication(application: Application) {
+    return this.http.post(this.apiPath + 'saveapplication', application, { headers: this.headers });
   }
 
   public submitCounsellorInvoice(counsellorInvoice: CounsellorInvoice) {

@@ -20,7 +20,7 @@ import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
-import { ApplicationForm } from '../interfaces/application-form.interface';
+import { Application } from '../interfaces/application.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -443,7 +443,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData: ApplicationForm = {
+    const formData: Application = {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       VictimInformation: this.form.get('victimInformation').value,
