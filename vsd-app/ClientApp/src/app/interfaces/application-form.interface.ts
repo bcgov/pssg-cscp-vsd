@@ -84,7 +84,28 @@ export interface MedicalInformation {
   hadOtherTreatments: string;
   otherTreatments: Othertreatment[];
 }
-export interface ExpenseInformation { }
+export interface ExpenseInformation {
+  haveMedicalExpenses: boolean;
+  haveDentalExpenses: boolean;
+  havePrescriptionDrugExpenses: boolean;
+  haveCounsellingExpenses: boolean;
+  haveLostEmploymentIncomeExpenses: boolean;
+  havePersonalPropertyLostExpenses: boolean;
+  haveProtectiveMeasureExpenses: boolean;
+  haveDisabilityExpenses: boolean;
+  haveOtherExpenses: boolean;
+  haveDisabilityPlanBenefits: boolean;
+  haveEmploymentInsuranceBenefits: boolean;
+  haveIncomeAssistanceBenefits: boolean;
+  haveCanadaPensionPlanBenefits: boolean;
+  haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: boolean;
+  haveCivilActionBenefits: boolean;
+  haveOtherBenefits: boolean;
+  noneOfTheAboveBenefits: boolean;
+  haveCrimeSceneCleaningExpenses: string;
+  otherSpecificExpenses: string;
+  otherSpecificBenefits: string;
+}
 export interface EmploymentIncomeInformation { }
 export interface RepresentativeInformation { }
 export interface DeclarationInformation { }
