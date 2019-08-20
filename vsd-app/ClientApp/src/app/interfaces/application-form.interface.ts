@@ -65,7 +65,25 @@ export interface CrimeInformation {
   racafInformation: Racafinformation;
   additionalInformationFiles: Object[];
 }
-export interface MedicalInformation { }
+export interface MedicalInformation {
+  doYouHaveMedicalServicesCoverage: string;
+  personalHealthNumber: string;
+  doYouHaveOtherHealthCoverage: string;
+  otherHealthCoverageProviderName: string;
+  otherHealthCoverageExtendedPlanNumber: string;
+  wereYouTreatedAtHospital: string;
+  treatedAtHospitalName: string;
+  treatedOutsideBc: string;
+  treatedOutsideBcHospitalName: string;
+  treatedAtHospitalDate?: Date;
+  beingTreatedByFamilyDoctor: string;
+  familyDoctorName: string;
+  familyDoctorPhoneNumber: string;
+  familyDoctorAddressLine1: string;
+  familyDoctorAddressLine2: string;
+  hadOtherTreatments: string;
+  otherTreatments: Othertreatment[];
+}
 export interface ExpenseInformation { }
 export interface EmploymentIncomeInformation { }
 export interface RepresentativeInformation { }
@@ -102,4 +120,10 @@ interface Racafinformation {
   lawyerAddress: Address;
   signName: string;
   signature: string;
+}
+interface Othertreatment {
+  providerType: number;
+  providerName: string;
+  providerPhoneNumber: string;
+  providerAddress: Address;
 }
