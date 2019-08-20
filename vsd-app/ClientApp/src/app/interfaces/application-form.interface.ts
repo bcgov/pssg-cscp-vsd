@@ -131,10 +131,23 @@ export interface RepresentativeInformation {
   representativeAddress: Address;
   legalGuardianFiles: Object[];
 }
-export interface DeclarationInformation { }
-export interface AuthorizationInformation { }
-
-// -SHARED-
+export interface DeclarationInformation {
+  declaredAndSigned: string;
+  signature: string;
+}
+export interface AuthorizationInformation {
+  approvedAuthorityNotification: string;
+  readAndUnderstoodTermsAndConditions: string;
+  signature: string;
+  allowCvapStaffSharing: string;
+  authorizedPersonFullName: string;
+  authorizedPersonPhoneNumber: string;
+  authorizedPersonRelationship: string;
+  authorizedPersonAgencyName: string;
+  authorizedPersonAuthorizesDiscussion: string;
+  authorizedPersonSignature: string;
+  authorizedPersonAgencyAddress: Address;
+}
 export interface Address {
   line1: string;
   line2: string;
