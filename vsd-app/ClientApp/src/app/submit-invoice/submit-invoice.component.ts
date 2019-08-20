@@ -286,7 +286,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData: CounsellorInvoice = <CounsellorInvoice>{
+    const formData: CounsellorInvoice = {
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
 

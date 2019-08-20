@@ -343,7 +343,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData: VictimRestitution = <VictimRestitution>{
+    const formData: VictimRestitution = {
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
 

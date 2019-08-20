@@ -732,7 +732,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData: Application = <Application>{
+    const formData: Application = {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
