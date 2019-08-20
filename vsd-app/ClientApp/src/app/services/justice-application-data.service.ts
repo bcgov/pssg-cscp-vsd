@@ -8,7 +8,7 @@ export class JusticeApplicationDataService {
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  
+
   constructor(private http: HttpClient) { }
 
   public submitApplication(applicationModel: DynamicsApplicationModel) {
