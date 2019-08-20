@@ -117,7 +117,7 @@ import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.
     TermsAndConditionsComponent,
     VersionInfoDialog,
     TestComponent,
-    FileUploaderBoxComponent,    
+    FileUploaderBoxComponent,
   ],
   imports: [
     BrowserModule,
@@ -166,7 +166,7 @@ import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.
     //IntlTelInputNgModule.forRoot(),
     //NgxIntlTelInputModule,
     TooltipModule.forRoot(),
-//    BsDropdownModule.forRoot(),
+    //    BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
     AlertModule.forRoot()
   ],

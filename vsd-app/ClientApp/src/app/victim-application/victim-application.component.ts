@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
-import { Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -41,13 +40,11 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
 
 export class VictimApplicationComponent extends FormBase implements OnInit, CanDeactivateGuard {
   currentUser: User;
-  dataLoaded = false;
   busy: Promise<any>;
   busy2: Promise<any>;
   busy3: Promise<any>;
   form: FormGroup;
   showValidationMessage: boolean;
-
   otherTreatmentItems: FormArray;
   employerItems: FormArray;
   courtFileItems: FormArray;
@@ -124,18 +121,19 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   ngOnInit() {
     let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
 
-    this.form = this.buildApplicationForm();
+    // initialize the form
+    this.buildApplicationForm();
 
     this.form.get('representativeInformation').patchValue({
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
 
-    const sameEmail: ValidatorFn = (fg: FormGroup) => {
-      const origEmail = fg.get('email').value;
-      const confEmail = fg.get('confirmEmail').value;
+    // const sameEmail: ValidatorFn = (fg: FormGroup) => {
+    //   const origEmail = fg.get('email').value;
+    //   const confEmail = fg.get('confirmEmail').value;
 
-      return origEmail == confEmail ? null : { sameEmail: true };
-    }
+    //   return origEmail == confEmail ? null : { sameEmail: true };
+    // }
 
     this.form.get('personalInformation.preferredMethodOfContact')
       .valueChanges
@@ -176,8 +174,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           this.emailIsRequired = false;
           this.addressIsRequired = true; // Always true
         } else if (contactMethod === 1) {
-          emailControl.setValidators([Validators.required, sameEmail]); // need to add validator to check these two are the same
-          emailConfirmControl.setValidators([Validators.required, sameEmail]); // need to add validator to check these two are the same
+          emailControl.setValidators([Validators.required]); // need to add validator to check these two are the same
+          emailConfirmControl.setValidators([Validators.required]); // need to add validator to check these two are the same
           this.phoneIsRequired = false;
           this.emailIsRequired = true;
           this.addressIsRequired = true; // Always true
@@ -736,10 +734,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.markAsTouched();
   }
 
-  private buildApplicationForm(): FormGroup {
-    return this.fb.group({
+  private buildApplicationForm(): void {
+    this.form = this.fb.group({
       introduction: this.fb.group({
-        understoodInformation: ['', Validators.requiredTrue]
+        understoodInformation: [null, Validators.requiredTrue]
       }),
       personalInformation: this.fb.group({
         firstName: ['', Validators.required],
