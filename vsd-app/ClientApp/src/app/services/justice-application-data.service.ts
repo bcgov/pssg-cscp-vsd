@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApplicationForm } from '../interfaces/application-form.interface';
+import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 
 @Injectable()
 export class JusticeApplicationDataService {
@@ -16,8 +17,8 @@ export class JusticeApplicationDataService {
     return this.http.post(this.apiPath + 'saveapplication', applicationForm, { headers: this.headers });
   }
 
-  public submitCounsellorInvoice(invoiceModel: DynamicsApplicationModel) {
-    return this.http.post(this.apiPath + 'submitcounsellorinvoice', invoiceModel, { headers: this.headers });
+  public submitCounsellorInvoice(counsellorInvoice: CounsellorInvoice) {
+    return this.http.post(this.apiPath + 'submitcounsellorinvoice', counsellorInvoice, { headers: this.headers });
   }
 
   public submitVictimRestitutionApplication(victimModel: DynamicsApplicationModel) {
