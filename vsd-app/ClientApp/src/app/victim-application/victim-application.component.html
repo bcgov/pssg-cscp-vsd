@@ -177,8 +177,7 @@
                 </div>
                 <div class="col-4">
                   <app-field label="Date of Name Change">
-                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="dateOfNameChangePicker" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
                     <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
                   </app-field>
                 </div>
@@ -205,8 +204,7 @@
             <div class="row">
               <div class="col-4">
                 <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('personalInformation.birthDate')" errorMessage="Please enter your birth date">
-                  <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
                   <mat-datepicker #birthDatePicker></mat-datepicker>
                 </app-field>
               </div>
@@ -311,7 +309,8 @@
             </div>
             <div class="row">
               <div class="col-12">
-                <h3>Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip></h3>
+                <h3>Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
+                </h3>
                 <ng-template #altAddressTemplate>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</ng-template>
                 <app-address [group]="form.get('personalInformation.alternateAddress')" [showChildrenAsRequired]="false"></app-address>
               </div>
@@ -346,13 +345,11 @@
 
               <section>
                 <app-field label="Date(s) of crime" [required]="true" [valid]="isFieldValid('crimeInformation.crimePeriodStart')" errorMessage="Please enter the crime date">
-                  <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" (click)="crimePeriodStartPicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" (click)="crimePeriodStartPicker.open()" readonly>
                   <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
                   <span *ngIf="form.get('crimeInformation.whenDidCrimeOccur').value === true">
                     <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" (click)="crimePeriodEndDatePicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" (click)="crimePeriodEndDatePicker.open()" readonly>
                     <mat-datepicker #crimePeriodEndDatePicker></mat-datepicker>
                   </span>
                 </app-field>
@@ -446,13 +443,11 @@
                 </app-field>
 
                 <app-field label="Date report was made to the police.">
-                  <input type="text" class="form-control date-picker" formControlName="policeReportedDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="policeReportedDatePicker" (focus)="policeReportedDatePicker.open()" (click)="policeReportedDatePicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="policeReportedDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedDatePicker" (focus)="policeReportedDatePicker.open()" (click)="policeReportedDatePicker.open()" readonly>
                   <mat-datepicker #policeReportedDatePicker></mat-datepicker>
                   <span *ngIf="form.get('crimeInformation.policeReportedMultipleTimes').value === true">
                     <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
                     <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
                   </span>
                 </app-field>
@@ -695,7 +690,8 @@
             <section>
               <h2 class="blue-header">Coverage</h2>
 
-              <h3>Medical Services Coverage <app-tool-tip [trigger]="mspcTemplate"></app-tool-tip></h3>
+              <h3>Medical Services Coverage <app-tool-tip [trigger]="mspcTemplate"></app-tool-tip>
+              </h3>
               <ng-template #mspcTemplate><strong>Health Plan / Dental Plan Coverage</strong><br />CVAP will only pay expenses or provide benefits that are not already covered by your existing health or dental plan</ng-template>
 
               <app-field label="Do you have medical services coverage? (e.g. a BC Services Card or BC Care Card)" [valid]="isFieldValid('medicalInformation.doYouHaveMedicalServicesCoverage')" [required]="true" errorMessage="Please select an option">
@@ -769,8 +765,7 @@
                 </section>
 
                 <app-field label="Date of treatment">
-                  <input type="text" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
                   <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
                 </app-field>
               </section>
@@ -946,15 +941,95 @@
                   <input type="hidden" name="minimumExpensesSelected" formControlName="minimumExpensesSelected">
                 </app-field>
 
-                <ng-template #benefitsMedicalExpenses><h3>Medical Expenses</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li><li>Medical equipment and supplies</li></ul></ng-template>
-                <ng-template #benefitsDental><h3>Dental Expenses</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li></ul></ng-template>
-                <ng-template #benefitsPrescription><h3>Prescription Drug Expenses</h3><p>Victims who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Medications prescribed by a doctor, dentist, or podiatrist</li></ul></ng-template>
-                <ng-template #benefitsCounselling><h3>Counselling</h3><p>For all victims of crime</p><p><strong>Examples:</strong></p><ul><li>Counselling Sessions</li><li>Psycho-educational sessions to others who support the victim</li></ul></ng-template>
-                <ng-template #benefitsLostEmployment><h3>Lost Employment Income (reimbursed at minimum wage)</h3><p>Victims whose injuries have a long-term effect on their ability to work and who did not have a job when the crime occurred (special eligibility issues for minors)</p><p><strong>Examples:</strong></p><ul><li>Monthly payments to assist in financially supporting the victim</li></ul></ng-template>
-                <ng-template #benefitsLostProperty><h3>Damaged or destroyed personal property</h3><p>Victims whose eyeglasses/contacts, disability aids, or articles of clothing were damaged or destroyed because of the crime</p><p><strong>Repair or replacement of:</strong></p><ul><li>Eyeglass frames</li><li>Prescription lenses</li><li>Various types of disability aids</li><li>Clothing</li></ul></ng-template>
-                <ng-template #benefitsProtective><h3>Protective Measures</h3><p>Victims who need healthcare because of their injuries from the crime</p><p><strong>Examples:</strong></p><ul><li>Ambulence or emergency transportation</li><li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li><li>Health care services at a facility</li></ul></ng-template>
-                <ng-template #benefitsDisability><h3>Disability benefits, services or equipment</h3><p>Victims who need disability aids because of their injuries from the crime, to reduce the effects of the injuries, improve their quality of life, and assist in daily living</p><p><strong>Examples:</strong></p><ul><li>Mobility aids</li><li>Communication aids</li><li>Vision aids</li><li>Specialized clothing</li><li>Prostheses and orthoses</li><li>Other equipment or supplies</li></ul></ng-template>
-                <ng-template #benefitsCrimeScene><h3>Crime Scene Cleaning</h3><p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p><p><strong>Examples:</strong></p><ul><li>Specialized cleaning and disinfecting of contaminated areas</li><li>Replacement of contaminated flooring, wall covering, or other built-in features</li></ul></ng-template>
+                <ng-template #benefitsMedicalExpenses>
+                  <h3>Medical Expenses</h3>
+                  <p>Victims who need healthcare because of their injuries from the crime</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Ambulence or emergency transportation</li>
+                    <li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li>
+                    <li>Health care services at a facility</li>
+                    <li>Medical equipment and supplies</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsDental>
+                  <h3>Dental Expenses</h3>
+                  <p>Victims who need healthcare because of their injuries from the crime</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Ambulence or emergency transportation</li>
+                    <li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li>
+                    <li>Health care services at a facility</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsPrescription>
+                  <h3>Prescription Drug Expenses</h3>
+                  <p>Victims who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Medications prescribed by a doctor, dentist, or podiatrist</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsCounselling>
+                  <h3>Counselling</h3>
+                  <p>For all victims of crime</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Counselling Sessions</li>
+                    <li>Psycho-educational sessions to others who support the victim</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsLostEmployment>
+                  <h3>Lost Employment Income (reimbursed at minimum wage)</h3>
+                  <p>Victims whose injuries have a long-term effect on their ability to work and who did not have a job when the crime occurred (special eligibility issues for minors)</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Monthly payments to assist in financially supporting the victim</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsLostProperty>
+                  <h3>Damaged or destroyed personal property</h3>
+                  <p>Victims whose eyeglasses/contacts, disability aids, or articles of clothing were damaged or destroyed because of the crime</p>
+                  <p><strong>Repair or replacement of:</strong></p>
+                  <ul>
+                    <li>Eyeglass frames</li>
+                    <li>Prescription lenses</li>
+                    <li>Various types of disability aids</li>
+                    <li>Clothing</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsProtective>
+                  <h3>Protective Measures</h3>
+                  <p>Victims who need healthcare because of their injuries from the crime</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Ambulence or emergency transportation</li>
+                    <li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li>
+                    <li>Health care services at a facility</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsDisability>
+                  <h3>Disability benefits, services or equipment</h3>
+                  <p>Victims who need disability aids because of their injuries from the crime, to reduce the effects of the injuries, improve their quality of life, and assist in daily living</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Mobility aids</li>
+                    <li>Communication aids</li>
+                    <li>Vision aids</li>
+                    <li>Specialized clothing</li>
+                    <li>Prostheses and orthoses</li>
+                    <li>Other equipment or supplies</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsCrimeScene>
+                  <h3>Crime Scene Cleaning</h3>
+                  <p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Specialized cleaning and disinfecting of contaminated areas</li>
+                    <li>Replacement of contaminated flooring, wall covering, or other built-in features</li>
+                  </ul>
+                </ng-template>
               </div>
             </section>
             <section>
@@ -1023,12 +1098,12 @@
               <h1 (click)="checkform()">Employment Income</h1>
             </div>
             <section *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
-              <p>This section provides information regarding employment information.  This information is only necessary if you are requesting benefits for lost employment income.</p>
+              <p>This section provides information regarding employment information. This information is only necessary if you are requesting benefits for lost employment income.</p>
               <p><strong>You have not requested lost employment income benefits.</strong> Go back to Expense & Loss Information to request this particular benefit, or continue to the next section.</p>
             </section>
 
             <section *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
-              <p>This section provides information regarding employment information.  This information is necessary if you are requesting benefits for lost employment income.</p>
+              <p>This section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
               <section>
                 <h2 class="blue-header">Income Loss Information</h2>
                 <app-field label="Were you employed when the crime occured?" [valid]="isFieldValid('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')" [required]="true" errorMessage="Please select an option">
@@ -1082,12 +1157,10 @@
                 </app-field>
                 <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === 100000001">
                   <app-field label="Please provide days of work missed" [valid]="isFieldValid('employmentIncomeInformation.daysWorkMissedStart')" [required]="true" errorMessage="Please select an option">
-                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
                     <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
                     <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
                     <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
                   </app-field>
                   <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="isFieldValid('employmentIncomeInformation.didYouLoseWages')" [required]="true" errorMessage="Please select an option">
@@ -1100,7 +1173,10 @@
                       <span>No</span>
                     </label>
                   </app-field>
-                  <ng-template #lostWagesTemplate><p><strong>Lost wages or income</strong></p><p>If you are claiming for lost wages or income, we will need to verify your employment</p></ng-template>
+                  <ng-template #lostWagesTemplate>
+                    <p><strong>Lost wages or income</strong></p>
+                    <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
+                  </ng-template>
                 </section>
               </section>
               <section *ngIf="form.get('employmentIncomeInformation.didYouLoseWages').value === 100000001">
@@ -1194,10 +1270,10 @@
                 </label>
                 <br />
                 <label>
-                    <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                    A Victim Service Worker or other person helping a victim complete this application
-                  </label>
-                  <br />
+                  <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                  A Victim Service Worker or other person helping a victim complete this application
+                </label>
+                <br />
                 <label>
                   <input type="radio" [value]="100000002" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
                   A parent completing this application for my minor child (19 and below)
@@ -1292,7 +1368,7 @@
             <div class="page-header">
               <h1>Declaration</h1>
             </div>
-            <p>Information supplied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>.  Any information collected will be used only for the purposes of adjudicating your claim for benefits.</p>
+            <p>Information supplied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits.</p>
             <p>By signing this section you declare that the information you have provided on this application is true and correct. It is an offence to provide false or misleading information on this application and may lead to prosecution. If it is discovered at a lter time that false or misleading information has been provided on this application form, you may be rquired to repay to CVAP any benefits received.</p>
 
             <section>
@@ -1451,5 +1527,10 @@
         </div>
       </form>
     </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <pre>{{form.value|json}}</pre>
   </div>
 </div>

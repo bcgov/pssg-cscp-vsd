@@ -20,7 +20,7 @@ import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
-import { Application } from '../interfaces/application.interface';
+import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -46,7 +46,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   busy2: Promise<any>;
   busy3: Promise<any>;
   form: FormGroup;
-  formFullyValidated: boolean;
   showValidationMessage: boolean;
 
   otherTreatmentItems: FormArray;
@@ -92,7 +91,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   ) {
     super();
 
-    this.formFullyValidated = false;
     this.currentFormStep = 0;
   }
 
@@ -498,8 +496,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       var desiredFormIndex = stepper.selectedIndex;
       var formGroupName = this.getFormGroupName(desiredFormIndex);
 
-      this.formFullyValidated = this.form.valid;
-
       if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
         var formParts = this.form.get(formGroupName);
         var formValid = true;
@@ -649,17 +645,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
 
   submitPartialApplication() {
-    this.formFullyValidated = true;
-    this.save().subscribe(
-      data => {
-        console.log("submitting partial form");
-        this.router.navigate(['/application-success']);
-      },
-      err => {
-        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application');
-      }
-    );
+    this.justiceDataService.submitApplication(this.harvestForm())
+      .subscribe(
+        data => {
+          console.log("submitting partial form");
+          this.router.navigate(['/application-success']);
+        },
+        err => {
+          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+          console.log('Error submitting application');
+        }
+      );
   }
 
   producePDF() {
@@ -688,70 +684,51 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   submitApplication() {
-    let formIsValid = this.form.valid;
     //let formIsValid = true;showValidationMessage
-    if (formIsValid) {
-      this.formFullyValidated = true;
-      this.save().subscribe(
-        data => {
-          if (data['IsSuccess'] == true) {
-            this.router.navigate(['/application-success']);
-          }
-          else {
+    if (this.form.valid) {
+      this.justiceDataService.submitApplication(this.harvestForm())
+        .subscribe(
+          data => {
+            if (data['IsSuccess'] == true) {
+              this.router.navigate(['/application-success']);
+            }
+            else {
+              this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              console.log('Error submitting application');
+            }
+          },
+          error => {
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
           }
-        },
-        error => {
-          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-          console.log('Error submitting application');
-        }
-      );
+        );
     } else {
       console.log("form not validated");
-      this.formFullyValidated = false;
       this.markAsTouched();
     }
   }
 
-  convertFormToDynamics(): void {
-    let formData: Application = {
-      Introduction: this.form.get('introduction').value,
-      PersonalInformation: this.form.get('personalInformation').value,
-      CrimeInformation: this.form.get('crimeInformation').value,
-      MedicalInformation: this.form.get('medicalInformation').value,
-      ExpenseInformation: this.form.get('expenseInformation').value,
-      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value,
-      RepresentativeInformation: this.form.get('representativeInformation').value,
-      DeclarationInformation: this.form.get('declarationInformation').value,
-      AuthorizationInformation: this.form.get('authorizationInformation').value,
-    };
-    //console.log(formData);
-    console.log(JSON.stringify(formData));
+  harvestForm(): Application {
+    return {
+      Introduction: this.form.get('introduction').value as Introduction,
+      PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
+      CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
+      MedicalInformation: this.form.get('medicalInformation').value as MedicalInformation,
+      ExpenseInformation: this.form.get('expenseInformation').value as ExpenseInformation,
+      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value as EmploymentIncomeInformation,
+      RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
+      DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
+      AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
+    } as Application;
   }
 
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
-    const formData: Application = {
-      Introduction: this.form.get('introduction').value,
-      PersonalInformation: this.form.get('personalInformation').value,
-      CrimeInformation: this.form.get('crimeInformation').value,
-      MedicalInformation: this.form.get('medicalInformation').value,
-      ExpenseInformation: this.form.get('expenseInformation').value,
-      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value,
-      RepresentativeInformation: this.form.get('representativeInformation').value,
-      DeclarationInformation: this.form.get('declarationInformation').value,
-      AuthorizationInformation: this.form.get('authorizationInformation').value,
-    };
 
-    this.busy = this.justiceDataService.submitApplication(formData)
-      .toPromise()
-      .then(res => {
-        subResult.next(true);
-      }, err => subResult.next(false));
-    this.busy2 = Promise.resolve(this.busy);
-
-    return subResult;
+  save(): void {
+    this.justiceDataService.submitApplication(this.harvestForm())
+      .subscribe(
+        data => { },
+        err => { }
+      );
   }
 
   // marking the form as touched makes the validation messages show
@@ -780,15 +757,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
-        preferredMethodOfContact: [1, [Validators.required, Validators.min(1), Validators.max(4)]], // Phone = 2, Email = 1, Mail = 4
+        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(4)]], // Phone = 2, Email = 1, Mail = 4
 
         permissionToContactViaMethod: [false],
         agreeToCvapCommunicationExchange: [''],
 
         phoneNumber: [''],
         alternatePhoneNumber: [''],
-        email: [''],
-        confirmEmail: [''],
+        email: ['', [Validators.required]],
+        confirmEmail: ['', [Validators.required]],
 
         primaryAddress: this.fb.group({
           line1: ['', Validators.required],
