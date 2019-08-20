@@ -106,13 +106,25 @@ export interface ExpenseInformation {
   otherSpecificExpenses: string;
   otherSpecificBenefits: string;
 }
-export interface EmploymentIncomeInformation { }
+export interface EmploymentIncomeInformation {
+  wereYouEmployedAtTimeOfCrime?: number;
+  wereYouAtWorkAtTimeOfIncident?: number;
+  didYouMissWorkDueToCrime: number;
+  didYouLoseWages?: number;
+  areYouSelfEmployed?: number;
+  mayContactEmployer?: number;
+  daysWorkMissedStart?: Date;
+  daysWorkMissedEnd?: Date;
+  haveYouAppliedForWorkersCompensation: string;
+  workersCompensationClaimNumber: string;
+  employers: Employer[];
+}
 export interface RepresentativeInformation { }
 export interface DeclarationInformation { }
 export interface AuthorizationInformation { }
 
 // -SHARED-
-interface Address {
+export interface Address {
   line1: string;
   line2: string;
   city: string;
@@ -120,18 +132,18 @@ interface Address {
   province: string;
   country: string;
 }
-interface Crimelocation {
+export interface Crimelocation {
   location: string;
 }
-interface Policereport {
+export interface Policereport {
   policeFileNumber: string;
   investigatingOfficer: string;
 }
-interface Courtfile {
+export interface Courtfile {
   courtFileNumber: string;
   courtLocation: string;
 }
-interface Racafinformation {
+export interface Racafinformation {
   applyToCourtForMoneyFromOffender?: number;
   expensesRequested: string;
   expensesAwarded?: number;
@@ -142,9 +154,16 @@ interface Racafinformation {
   signName: string;
   signature: string;
 }
-interface Othertreatment {
+export interface Othertreatment {
   providerType: number;
   providerName: string;
   providerPhoneNumber: string;
   providerAddress: Address;
+}
+export interface Employer {
+  employerName: string;
+  employerPhoneNumber: string;
+  employerFirstName: string;
+  employerLastName: string;
+  employerAddress: Address;
 }
