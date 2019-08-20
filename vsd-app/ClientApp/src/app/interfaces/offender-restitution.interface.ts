@@ -25,12 +25,12 @@ interface OffenderRestitutionInformation {
   permissionToLeaveDetailedMessage: boolean;
   declaredAndSigned: boolean;
 }
-export interface OffenderRestitutionCourtFile {
+interface OffenderRestitutionCourtFile {
   courtFileNumber: string;
   courtLocation: string;
   victims: Victim[];
 }
-export interface Victim {
+interface Victim {
   firstName: string;
   middleName: string;
   lastName: string;
