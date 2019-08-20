@@ -20,6 +20,7 @@ import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
+import { ApplicationForm } from '../interfaces/application-form.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -203,7 +204,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
           patchObject
         );
       }
-    ); 
+    );
   }
 
   verifyCancellation(): void {
@@ -220,7 +221,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
           return;
         }
       }
-    );  
+    );
   }
 
   showSummaryOfBenefits(): void {
@@ -300,7 +301,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       }),
     });
   }
-  
+
   createEmployerItem(): FormGroup {
     return this.fb.group({
       employerName: ['', Validators.required],
@@ -338,7 +339,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       courtLocation: ''
     });
   }
-  
+
   addCrimeLocation(): void {
     this.crimeLocationItems = this.form.get('crimeInformation.crimeLocations') as FormArray;
     this.crimeLocationItems.push(this.createCrimeLocationItem());
@@ -382,8 +383,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
 
   submitPartialApplication() {
-      this.formFullyValidated = true;
-      this.save().subscribe(
+    this.formFullyValidated = true;
+    this.save().subscribe(
       data => {
         console.log("submitting partial form");
         this.router.navigate(['/application-success']);
@@ -394,7 +395,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       }
     );
   }
-  
+
   submitApplication() {
     let formIsValid = this.form.valid;
     //let formIsValid = true;
@@ -425,7 +426,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   debugFormData(): void {
-    let formData = <DynamicsApplicationModel> {
+    let formData = <DynamicsApplicationModel>{
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       VictimInformation: this.form.get('victimInformation').value,
@@ -442,7 +443,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData = <DynamicsApplicationModel>{
+    const formData: ApplicationForm = {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       VictimInformation: this.form.get('victimInformation').value,
@@ -455,10 +456,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     };
 
     this.busy = this.justiceDataService.submitApplication(formData)
-        .toPromise()
-        .then(res => {
-          subResult.next(true);
-        }, err => subResult.next(false));
+      .toPromise()
+      .then(res => {
+        subResult.next(true);
+      }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
@@ -469,7 +470,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     this.form.markAsTouched();
   }
 
-  private buildApplicationForm() : FormGroup {
+  private buildApplicationForm(): FormGroup {
     return this.fb.group({
       introduction: this.fb.group({
         understoodInformation: ['', Validators.requiredTrue]
@@ -619,7 +620,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         doYouHaveOtherHealthCoverage: ['', Validators.required],
         otherHealthCoverageProviderName: [''],
         otherHealthCoverageExtendedPlanNumber: [''],
-        
+
         wereYouTreatedAtHospital: ['', Validators.required],
         treatedAtHospitalName: [''],
         treatedOutsideBc: [''],

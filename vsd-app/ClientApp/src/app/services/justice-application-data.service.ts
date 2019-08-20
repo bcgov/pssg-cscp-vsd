@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApplicationForm } from '../interfaces/application-form.interface';
 
 @Injectable()
 export class JusticeApplicationDataService {
@@ -11,8 +12,8 @@ export class JusticeApplicationDataService {
 
   constructor(private http: HttpClient) { }
 
-  public submitApplication(applicationModel: DynamicsApplicationModel) {
-    return this.http.post(this.apiPath + 'saveapplication', applicationModel, { headers: this.headers });
+  public submitApplication(applicationForm: ApplicationForm) {
+    return this.http.post(this.apiPath + 'saveapplication', applicationForm, { headers: this.headers });
   }
 
   public submitCounsellorInvoice(invoiceModel: DynamicsApplicationModel) {

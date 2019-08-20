@@ -1,13 +1,14 @@
 export interface ApplicationForm {
   Introduction: Introduction;
-  Personalinformation: PersonalInformation;
-  Crimeinformation: CrimeInformation;
-  Medicalinformation: MedicalInformation;
-  Expenseinformation: ExpenseInformation;
-  Employmentincomeinformation: EmploymentIncomeInformation;
-  Representativeinformation: RepresentativeInformation;
-  Declarationinformation: DeclarationInformation;
-  Authorizationinformation: AuthorizationInformation;
+  PersonalInformation: PersonalInformation;
+  CrimeInformation: CrimeInformation;
+  MedicalInformation: MedicalInformation;
+  ExpenseInformation: ExpenseInformation;
+  EmploymentIncomeInformation?: EmploymentIncomeInformation;// optional: not in ifm-application but found in victim application
+  RepresentativeInformation: RepresentativeInformation;
+  DeclarationInformation: DeclarationInformation;
+  AuthorizationInformation: AuthorizationInformation;
+  VictimInformation?: VictimInformation;// optional: not in ifm-application but found in victim application
 }
 export interface Introduction {
   understoodInformation: string;
@@ -190,4 +191,22 @@ export interface Employer {
   employerFirstName: string;
   employerLastName: string;
   employerAddress: Address;
+}
+export interface VictimInformation {
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  iHaveOtherNames?: string;
+  otherFirstName?: string;
+  otherLastName?: string;
+  dateOfNameChange?: string;
+  gender: number;
+  birthDate: string;
+  sin: string;
+  occupation?: string;
+  phoneNumber?: string;
+  alternatePhoneNumber?: string;
+  email?: string;
+  confirmEmail?: string;
+  mostRecentMailingAddressSameAsPersonal: string;
 }

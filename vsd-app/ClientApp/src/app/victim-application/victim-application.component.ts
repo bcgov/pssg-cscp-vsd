@@ -21,6 +21,7 @@ import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
+import { ApplicationForm } from '../interfaces/application-form.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -732,7 +733,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData = <DynamicsApplicationModel>{
+    const formData: ApplicationForm = <ApplicationForm>{
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
