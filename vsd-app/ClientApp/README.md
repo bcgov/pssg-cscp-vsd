@@ -14,6 +14,8 @@ Run `npm install` in `jag-lcrb-carla-public\cllc-public-app\ClientApp`. To reins
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+Optionally you can install the application locally with only docker by running `./docker-compose.sh` in bash then running `./docker-start.sh`. The docker compose file sets a volume so changes in this directory will trigger rebuilds in the docker container. The main beneit of doing this in development is that you can focus on targeting a specific Angular and Node version. If a version of node is installed on the development machine it doesn't have to match the targeted version.
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
