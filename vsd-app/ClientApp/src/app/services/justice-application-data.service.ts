@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Application } from '../interfaces/application.interface';
+import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { VictimRestitution } from '../interfaces/victim-restitution.interface';
+import { OffenderRestitution } from '../interfaces/offender-restitution.interface';
 
 @Injectable()
 export class JusticeApplicationDataService {
@@ -8,23 +11,23 @@ export class JusticeApplicationDataService {
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  
+
   constructor(private http: HttpClient) { }
 
-  public submitApplication(applicationModel: DynamicsApplicationModel) {
-    return this.http.post(this.apiPath + 'saveapplication', applicationModel, { headers: this.headers });
+  public submitApplication(application: Application) {
+    return this.http.post(this.apiPath + 'saveapplication', application, { headers: this.headers });
   }
 
-  public submitCounsellorInvoice(invoiceModel: DynamicsApplicationModel) {
-    return this.http.post(this.apiPath + 'submitcounsellorinvoice', invoiceModel, { headers: this.headers });
+  public submitCounsellorInvoice(counsellorInvoice: CounsellorInvoice) {
+    return this.http.post(this.apiPath + 'submitcounsellorinvoice', counsellorInvoice, { headers: this.headers });
   }
 
-  public submitVictimRestitutionApplication(victimModel: DynamicsApplicationModel) {
-    return this.http.post(this.apiPath + 'submitvictimrestitution', victimModel, { headers: this.headers });
+  public submitVictimRestitutionApplication(victimRestitution: VictimRestitution) {
+    return this.http.post(this.apiPath + 'submitvictimrestitution', victimRestitution, { headers: this.headers });
   }
 
-  public submitOffenderRestitutionApplication(offenderModel: DynamicsApplicationModel) {
-    return this.http.post(this.apiPath + 'submitoffenderrestitution', offenderModel, { headers: this.headers });
+  public submitOffenderRestitutionApplication(offenderRestitution: OffenderRestitution) {
+    return this.http.post(this.apiPath + 'submitoffenderrestitution', offenderRestitution, { headers: this.headers });
   }
 
   public getSampleCall() {

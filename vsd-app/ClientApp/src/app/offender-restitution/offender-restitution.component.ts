@@ -15,10 +15,10 @@ import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
+import { OffenderRestitution } from '../interfaces/offender-restitution.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -90,10 +90,10 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
     const dialogRef = this.dialog.open(DeactivateGuardDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        console.log(data); 
+        console.log(data);
         return data;
       }
-    ); 
+    );
 
     //return verifyDialogRef.navigateAwaySelection$;
     // if the editName !== this.user.name
@@ -164,7 +164,7 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
         }
       });
   }
-  
+
   showSignPad(group, control): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -179,7 +179,7 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
           patchObject
         );
       }
-    ); 
+    );
   }
 
   verifyCancellation(): void {
@@ -196,7 +196,7 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
           return;
         }
       }
-    );  
+    );
   }
 
   getFormGroupName(groupIndex: any) {
@@ -242,7 +242,7 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
       }
     }
   }
-  
+
   createVictimItem(): FormGroup {
     return this.fb.group({
       firstName: ['', Validators.required],
@@ -317,7 +317,7 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
   }
 
   debugFormData(): void {
-    let formData = <DynamicsApplicationModel> {
+    let formData: OffenderRestitution = {
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
     console.log(JSON.stringify(formData));
@@ -325,15 +325,15 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData = <DynamicsApplicationModel>{
+    const formData: OffenderRestitution = {
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
 
     this.busy = this.justiceDataService.submitOffenderRestitutionApplication(formData)
-        .toPromise()
-        .then(res => {
-          subResult.next(true);
-        }, err => subResult.next(false));
+      .toPromise()
+      .then(res => {
+        subResult.next(true);
+      }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
@@ -344,7 +344,7 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
     this.form.markAsTouched();
   }
 
-  private buildApplicationForm() : FormGroup {
+  private buildApplicationForm(): FormGroup {
     return this.fb.group({
       introduction: this.fb.group({
       }),

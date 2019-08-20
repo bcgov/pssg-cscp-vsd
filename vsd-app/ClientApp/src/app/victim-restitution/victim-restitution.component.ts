@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 // import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -15,13 +15,13 @@ import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 // import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
-import { FileUploaderComponent } from '../shared/file-uploader/file-uploader.component';
+// import { FileUploaderComponent } from '../shared/file-uploader/file-uploader.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { FileBundle } from '../models/file-bundle';
+import { VictimRestitution } from '../interfaces/victim-restitution.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -335,7 +335,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   }
 
   debugFormData(): void {
-    const formData = <DynamicsApplicationModel>{
+    const formData: VictimRestitution = {
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
     console.log(JSON.stringify(formData));
@@ -343,7 +343,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData = <DynamicsApplicationModel>{
+    const formData: VictimRestitution = {
       RestitutionInformation: this.form.get('restitutionInformation').value,
     };
 
