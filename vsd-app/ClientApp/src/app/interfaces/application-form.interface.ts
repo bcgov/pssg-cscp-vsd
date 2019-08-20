@@ -1,3 +1,6 @@
+import { Address } from "./address.interface";
+import { Courtfile } from "./files.interface";
+
 export interface ApplicationForm {
   Introduction: Introduction;
   PersonalInformation: PersonalInformation;
@@ -149,14 +152,7 @@ export interface AuthorizationInformation {
   authorizedPersonSignature: string;
   authorizedPersonAgencyAddress: Address;
 }
-export interface Address {
-  line1: string;
-  line2: string;
-  city: string;
-  postalCode: string;
-  province: string;
-  country: string;
-}
+
 export interface Crimelocation {
   location: string;
 }
@@ -164,10 +160,7 @@ export interface Policereport {
   policeFileNumber: string;
   investigatingOfficer: string;
 }
-export interface Courtfile {
-  courtFileNumber: string;
-  courtLocation: string;
-}
+
 export interface Racafinformation {
   applyToCourtForMoneyFromOffender?: number;
   expensesRequested: string;
