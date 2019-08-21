@@ -65,7 +65,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   showAddProvider: boolean = true;
   showRemoveProvider: boolean = false;
 
-  public currentFormStep: number;
+  public currentFormStep: number = 0; // form flow. Which step are we on?
 
   phoneIsRequired: boolean = false;
   emailIsRequired: boolean = false;
@@ -87,11 +87,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     private dialog: MatDialog, // popup to show static content
   ) {
     super();
-
-    this.currentFormStep = 0;
   }
 
   canDeactivate() {
+    // TODO: IDK. It seems like this is part of a system to detect if a user backs away from a page.
     let formDirty = false;
 
     formDirty = this.form.dirty && this.form.touched;
@@ -561,7 +560,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     representativePreferredMethodOfContact.setErrors(null);
 
     let useValidation = responseCode === 100000001 || responseCode === 100000002 || responseCode === 100000003;
-    this.setupRepresentativeContactInformation(0);  // Have to clear contact validators on contact method change
+    this.setRepresentativePreferredMethodOfContact(0);  // Have to clear contact validators on contact method change
     if (useValidation) {
       representativeFirstName.setValidators([Validators.required]);
       representativeLastName.setValidators([Validators.required]);
@@ -651,15 +650,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }
     );
   }
-
-
-
   getFormGroupName(groupIndex: any) {
     let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     return elements[groupIndex];
   }
-
   changeGroupValidity(values: any): void {
+    // whenever an expenseInformation checkbox is changed we
+    // set whether the minimum expenses value is met into part of the form that isn't user editable.
     let expenseMinimumMet = '';
     const x = [
       this.form.get('expenseInformation.haveMedicalExpenses'),
@@ -674,39 +671,39 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       this.form.get('expenseInformation.haveCrimeSceneCleaningExpenses'),
       this.form.get('expenseInformation.haveOtherExpenses'),
     ];
-
+    //determine if one of the checkboxes is true
     let oneChecked = false;
     x.forEach(c => {
+      // TODO: This should always return if not null because truthy. Second if should never trigger?
       if (oneChecked)
         return;
-
       if (c instanceof FormControl) {
         if (c.value === true)
           oneChecked = true;
       }
     });
-
     // fake a 'true' as a string
     expenseMinimumMet = oneChecked ? 'yes' : '';
-
     this.form.get('expenseInformation').patchValue({
       minimumExpensesSelected: expenseMinimumMet
     });
   }
 
   gotoPageIndex(stepper: MatStepper, selectPage: number): void {
+    // TODO: Cannot find where this method is called.
     window.scroll(0, 0);
     stepper.selectedIndex = selectPage;
     this.currentFormStep = selectPage;
   }
-
   gotoPage(selectPage: MatStepper): void {
+    // When a user clicks on the stepper this is triggered
     window.scroll(0, 0);
     this.showValidationMessage = false;
     this.currentFormStep = selectPage.selectedIndex;
   }
 
   gotoNextStep(stepper: MatStepper): void {
+    // when a user clicks the continue button we move them to the next part of the form
     //    console.log(this.currentFormStep);
     if (stepper != null) {
       var desiredFormIndex = stepper.selectedIndex;
