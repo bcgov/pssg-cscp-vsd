@@ -133,48 +133,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     });
 
     // subscribe to form changes to set the form in various ways
-    this.form.get('personalInformation.preferredMethodOfContact')
-      .valueChanges.subscribe(selectVal => this.setPreferredContactMethod(parseInt(selectVal)));
-
-    this.form.get('medicalInformation.wereYouTreatedAtHospital')
-      .valueChanges.subscribe(yesNo => this.setHospitalTreatment(yesNo));
-
-    this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses')
-      .valueChanges.subscribe(isChecked => this.setLostEmploymentIncomeExpenses(isChecked));
-
-    this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')
-      .valueChanges.subscribe(responseCode => this.setEmployedAtCrimeTime(responseCode));
-
-    this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident')
-      .valueChanges.subscribe(isChecked => this.setInjuredAtWork(isChecked));
-
-    this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime')
-      .valueChanges.subscribe(value => this.setMissedWorkDueToCrime(value));
-
-    this.form.get('representativeInformation.completingOnBehalfOf')
-      .valueChanges.subscribe(value => this.setCompletingOnBehalfOf(value));
-
-    // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
-    this.form.get('representativeInformation.representativePreferredMethodOfContact')
-      .valueChanges.subscribe(responseCode => this.setRepresentativePreferredMethodOfContact(parseInt(responseCode)));
-
-    this.form.get('authorizationInformation.allowCvapStaffSharing')
-      .valueChanges
-      .subscribe(value => {
-        let authorizedPersonAuthorizesDiscussion = this.form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion');
-        let authorizedPersonSignature = this.form.get('authorizationInformation.authorizedPersonSignature');
-
-        authorizedPersonAuthorizesDiscussion.clearValidators();
-        authorizedPersonAuthorizesDiscussion.setErrors(null);
-        authorizedPersonSignature.clearValidators();
-        authorizedPersonSignature.setErrors(null);
-
-        let useValidation = value === true;
-        if (useValidation) {
-          authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
-          authorizedPersonSignature.setValidators([Validators.required]);
-        }
-      });
+    this.form.get('personalInformation.preferredMethodOfContact').valueChanges.subscribe(() => this.setPreferredContactMethod());
+    this.form.get('medicalInformation.wereYouTreatedAtHospital').valueChanges.subscribe(() => this.setHospitalTreatment());
+    this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').valueChanges.subscribe(() => this.setLostEmploymentIncomeExpenses());
+    this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').valueChanges.subscribe(() => this.setEmployedAtCrimeTime());
+    this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').valueChanges.subscribe(() => this.setInjuredAtWork());
+    this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').valueChanges.subscribe(() => this.setMissedWorkDueToCrime());
+    this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setCompletingOnBehalfOf());
+    this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRepresentativePreferredMethodOfContact());
+    this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setCvapStaffSharing());
   }
 
   buildApplicationForm(): void {
@@ -401,10 +368,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }),
     });
     // set default contact method
-    this.setPreferredContactMethod(0);
+    this.setPreferredContactMethod();
   }
   // -----------METHODS TO ADJUST FORM STATE ---------------------------------
-  setPreferredContactMethod(contactMethod: number): void {
+  setPreferredContactMethod(): void {
+    let contactMethod = parseInt(this.form.get('personalInformation.preferredMethodOfContact').value);
+    if (typeof contactMethod != 'number') alert('Set preferred contact method should be a number but is not for some reason.');
+    // maybe the form initializes with null?
+    if (!contactMethod) contactMethod = 0;
     let phoneControl = this.form.get('personalInformation.phoneNumber');
     let emailControl = this.form.get('personalInformation.email');
     let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
@@ -423,12 +394,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     emailControl.setErrors(null);
     emailConfirmControl.clearValidators();
     emailConfirmControl.setErrors(null);
-    //addressControl.clearValidators();
-    //addressControl.setErrors(null);
-    //for (let control of addressControls) {
-    //control.clearValidators();
-    //   control.setErrors(null);
-    //}
     addressControl.setValidators([Validators.required]);
     for (let control of addressControls) {
       control.setValidators([Validators.required]);
@@ -464,7 +429,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       control.updateValueAndValidity();
     }
   }
-  setHospitalTreatment(yesNo: boolean = false): void {
+  setHospitalTreatment(): void {
+    const yesNo: boolean = this.form.get('medicalInformation.wereYouTreatedAtHospital').value;
+    if (typeof yesNo != 'boolean') alert('Set hospital treatment should be a boolean but is not for some reason.');
+
     // Did you go to a hospital?
     let hospitalControl = this.form.get('medicalInformation.treatedAtHospitalName');
     // get rid of old validators
@@ -475,7 +443,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       hospitalControl.setValidators([Validators.required]);
     }
   }
-  setLostEmploymentIncomeExpenses(isChecked: boolean = false): void {
+  setLostEmploymentIncomeExpenses(): void {
+    const isChecked: boolean = this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value;
+    if (typeof isChecked != 'boolean') alert('Set lost employment income expenses should be a boolean but is not for some reason.');
+
     let wasEmployed = this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime');
     let missedWork = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime');
 
@@ -489,7 +460,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       missedWork.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
     }
   }
-  setEmployedAtCrimeTime(responseCode: number): void {
+  setEmployedAtCrimeTime(): void {
+    const responseCode: number = this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value;
+    if (typeof responseCode != 'number') alert('Set representative preferred contact method should be a number but is not for some reason.');
     let wereYouAtWork = this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident');
 
     wereYouAtWork.clearValidators();
@@ -500,8 +473,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       wereYouAtWork.setValidators([Validators.required]);
     }
   }
+  setInjuredAtWork(): void {
+    const isChecked: boolean = this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').value;
+    if (typeof isChecked != 'boolean') alert('Set injured at work should be a boolean but is not for some reason.');
 
-  setInjuredAtWork(isChecked: boolean): void {
     let appliedForWorkersComp = this.form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation');
 
     appliedForWorkersComp.clearValidators();
@@ -512,7 +487,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       appliedForWorkersComp.setValidators([Validators.required]);
     }
   }
-  setMissedWorkDueToCrime(isChecked: boolean): void {
+  setMissedWorkDueToCrime(): void {
+    const isChecked = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value;
+    if (typeof isChecked != 'boolean') alert('Set missed work due to crime should be a boolean but is not for some reason.');
+
     let missedWorkStartDate = this.form.get('employmentIncomeInformation.daysWorkMissedStart');
     let lostWages = this.form.get('employmentIncomeInformation.didYouLoseWages');
     let selfEmployed = this.form.get('employmentIncomeInformation.areYouSelfEmployed');
@@ -550,7 +528,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }
     }
   }
-  setCompletingOnBehalfOf(responseCode: number): void {
+  setCompletingOnBehalfOf(): void {
+    const responseCode: number = this.form.get('representativeInformation.completingOnBehalfOf').value;
+    if (typeof responseCode != 'number') alert('Set representative preferred contact method should be a number but is not for some reason.');
     let representativeFirstName = this.form.get('representativeInformation.representativeFirstName');
     let representativeLastName = this.form.get('representativeInformation.representativeLastName');
     let representativePreferredMethodOfContact = this.form.get('representativeInformation.representativePreferredMethodOfContact');
@@ -563,14 +543,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     representativePreferredMethodOfContact.setErrors(null);
 
     let useValidation = responseCode === 100000001 || responseCode === 100000002 || responseCode === 100000003;
-    this.setRepresentativePreferredMethodOfContact(0);  // Have to clear contact validators on contact method change
+    this.setRepresentativePreferredMethodOfContact();  // Have to clear contact validators on contact method change
     if (useValidation) {
       representativeFirstName.setValidators([Validators.required]);
       representativeLastName.setValidators([Validators.required]);
       representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
     }
   }
-  setRepresentativePreferredMethodOfContact(responseCode: number): void {
+  setRepresentativePreferredMethodOfContact(): void {
+    // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
+    const responseCode: number = parseInt(this.form.get('representativeInformation.representativePreferredMethodOfContact').value);
+    if (typeof responseCode != 'number') alert('Set representative preferred contact method should be a number but is not for some reason.');
     let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
     let emailControl = this.form.get('representativeInformation.representativeEmail');
     let addressControls = [
@@ -618,6 +601,25 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       control.updateValueAndValidity();
     }
   }
+  setCvapStaffSharing() {
+    const isChecked: boolean = this.form.get('authorizationInformation.allowCvapStaffSharing').value;
+    if (typeof isChecked != 'boolean') alert('Set CVAP Staff Sharing should be a boolean but is not for some reason.');
+
+    let authorizedPersonAuthorizesDiscussion = this.form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion');
+    let authorizedPersonSignature = this.form.get('authorizationInformation.authorizedPersonSignature');
+
+    authorizedPersonAuthorizesDiscussion.clearValidators();
+    authorizedPersonAuthorizesDiscussion.setErrors(null);
+    authorizedPersonSignature.clearValidators();
+    authorizedPersonSignature.setErrors(null);
+
+    let useValidation = isChecked === true;
+    if (useValidation) {
+      authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
+      authorizedPersonSignature.setValidators([Validators.required]);
+    }
+  }
+
   showSummaryOfBenefits(): void {
     const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
   }
@@ -957,5 +959,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.markAsTouched();
   }
 
+  setRequiredFields() {
+    // set all form validation
 
+  }
 }
