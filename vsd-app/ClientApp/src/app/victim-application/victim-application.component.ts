@@ -43,7 +43,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   busy: Promise<any>;
   busy2: Promise<any>;
   busy3: Promise<any>;
-  form: FormGroup;
+  // form: FormGroup; // form is defined as a FormGroup in the FormBase
   showValidationMessage: boolean;
   otherTreatmentItems: FormArray;
   employerItems: FormArray;
@@ -84,7 +84,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog, // popup to show static content
   ) {
     super();
 
@@ -118,217 +118,44 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     return false;
   }
 
+
   ngOnInit() {
-    let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
 
     // initialize the form
     this.buildApplicationForm();
 
+    // check the route for info about a person filling it in on their behalf
+    // TODO: if the user changes this can they spoof an agent?
+    let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
     this.form.get('representativeInformation').patchValue({
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
 
-    // const sameEmail: ValidatorFn = (fg: FormGroup) => {
-    //   const origEmail = fg.get('email').value;
-    //   const confEmail = fg.get('confirmEmail').value;
-
-    //   return origEmail == confEmail ? null : { sameEmail: true };
-    // }
-
+    // subscribe to form changes to set the form in various ways
     this.form.get('personalInformation.preferredMethodOfContact')
-      .valueChanges
-      .subscribe(value => {
-        let phoneControl = this.form.get('personalInformation.phoneNumber');
-        let emailControl = this.form.get('personalInformation.email');
-        let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
-        let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
-        let addressControls = [
-          this.form.get('personalInformation').get('primaryAddress.country'),
-          this.form.get('personalInformation').get('primaryAddress.province'),
-          this.form.get('personalInformation').get('primaryAddress.city'),
-          this.form.get('personalInformation').get('primaryAddress.line1'),
-          this.form.get('personalInformation').get('primaryAddress.postalCode'),
-        ];
-
-        phoneControl.clearValidators();
-        phoneControl.setErrors(null);
-        emailControl.clearValidators();
-        emailControl.setErrors(null);
-        emailConfirmControl.clearValidators();
-        emailConfirmControl.setErrors(null);
-        //addressControl.clearValidators();
-        //addressControl.setErrors(null);
-        //for (let control of addressControls) {
-        //control.clearValidators();
-        //   control.setErrors(null);
-        //}
-        addressControl.setValidators([Validators.required]);
-        for (let control of addressControls) {
-          control.setValidators([Validators.required]);
-        }
-
-        let contactMethod = parseInt(value);
-        if (contactMethod === 2) {
-          phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-          this.phoneIsRequired = true;
-          this.emailIsRequired = false;
-          this.addressIsRequired = true; // Always true
-        } else if (contactMethod === 1) {
-          emailControl.setValidators([Validators.required]); // need to add validator to check these two are the same
-          emailConfirmControl.setValidators([Validators.required]); // need to add validator to check these two are the same
-          this.phoneIsRequired = false;
-          this.emailIsRequired = true;
-          this.addressIsRequired = true; // Always true
-        } else if (contactMethod === 4) {
-          this.phoneIsRequired = false;
-          this.emailIsRequired = false;
-          this.addressIsRequired = true; // Always true
-        }
-
-        phoneControl.markAsTouched();
-        phoneControl.updateValueAndValidity();
-        emailControl.markAsTouched();
-        emailControl.updateValueAndValidity();
-        emailConfirmControl.markAsTouched();
-        emailConfirmControl.updateValueAndValidity();
-        addressControl.markAsTouched();
-        addressControl.updateValueAndValidity();
-        for (let control of addressControls) {
-          control.markAsTouched();
-          control.updateValueAndValidity();
-        }
-      });
+      .valueChanges.subscribe(selectVal => this.setPreferredContactMethod(parseInt(selectVal)));
 
     this.form.get('medicalInformation.wereYouTreatedAtHospital')
-      .valueChanges
-      .subscribe(value => {
-        let hospitalControl = this.form.get('medicalInformation.treatedAtHospitalName');
-
-        hospitalControl.clearValidators();
-        hospitalControl.setErrors(null);
-
-        let useValidation = value === true;
-        if (useValidation) {
-          hospitalControl.setValidators([Validators.required]);
-        }
-      });
+      .valueChanges.subscribe(yesNo => this.setHospitalTreatment(yesNo));
 
     this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses')
-      .valueChanges
-      .subscribe(checked => {
-        let wasEmployed = this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime');
-        let missedWork = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime');
-
-        wasEmployed.clearValidators();
-        wasEmployed.setErrors(null);
-        missedWork.clearValidators();
-        missedWork.setErrors(null);
-
-        let useValidation = checked === true;
-        if (useValidation) {
-          wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
-          missedWork.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
-        }
-      });
+      .valueChanges.subscribe(isChecked => this.setLostEmploymentIncomeExpenses(isChecked));
 
     this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')
-      .valueChanges
-      .subscribe(value => {
-        let wereYouAtWork = this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident');
-
-        wereYouAtWork.clearValidators();
-        wereYouAtWork.setErrors(null);
-
-        let useValidation = value === 100000000;
-        if (useValidation) {
-          wereYouAtWork.setValidators([Validators.required]);
-        }
-      });
+      .valueChanges.subscribe(responseCode => this.setEmployedAtCrimeTime(responseCode));
 
     this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident')
-      .valueChanges
-      .subscribe(value => {
-        let appliedForWorkersComp = this.form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation');
-
-        appliedForWorkersComp.clearValidators();
-        appliedForWorkersComp.setErrors(null);
-
-        let useValidation = value === true;
-        if (useValidation) {
-          appliedForWorkersComp.setValidators([Validators.required]);
-        }
-      });
+      .valueChanges.subscribe(isChecked => this.setInjuredAtWork(isChecked));
 
     this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime')
-      .valueChanges
-      .subscribe(value => {
-        let missedWorkStartDate = this.form.get('employmentIncomeInformation.daysWorkMissedStart');
-        let lostWages = this.form.get('employmentIncomeInformation.didYouLoseWages');
-        let selfEmployed = this.form.get('employmentIncomeInformation.areYouSelfEmployed');
-        let mayContactEmployer = this.form.get('employmentIncomeInformation.mayContactEmployer');
-        let employerControls = this.form.get('employmentIncomeInformation.employers') as FormArray;
-
-        missedWorkStartDate.clearValidators();
-        missedWorkStartDate.setErrors(null);
-        lostWages.clearValidators();
-        lostWages.setErrors(null);
-        selfEmployed.clearValidators();
-        selfEmployed.setErrors(null);
-        mayContactEmployer.clearValidators();
-        mayContactEmployer.setErrors(null);
-        for (let control of employerControls.controls) {
-          let control1 = control.get('employerName');
-          let control2 = control.get('employerPhoneNumber');
-          control1.clearValidators();
-          control1.setErrors(null);
-          control2.clearValidators();
-          control2.setErrors(null);
-        }
-
-        let useValidation = value === true;
-        if (useValidation) {
-          missedWorkStartDate.setValidators([Validators.required]);
-          lostWages.setValidators([Validators.required]);
-          selfEmployed.setValidators([Validators.required]);
-          mayContactEmployer.setValidators([Validators.required]);
-          for (let control of employerControls.controls) {
-            let control1 = control.get('employerName');
-            let control2 = control.get('employerPhoneNumber');
-            control1.setValidators([Validators.required]);
-            control2.setValidators([Validators.required]);
-          }
-        }
-      });
+      .valueChanges.subscribe(value => this.setMissedWorkDueToCrime(value));
 
     this.form.get('representativeInformation.completingOnBehalfOf')
-      .valueChanges
-      .subscribe(value => {
-        let representativeFirstName = this.form.get('representativeInformation.representativeFirstName');
-        let representativeLastName = this.form.get('representativeInformation.representativeLastName');
-        let representativePreferredMethodOfContact = this.form.get('representativeInformation.representativePreferredMethodOfContact');
+      .valueChanges.subscribe(value => this.setCompletingOnBehalfOf(value));
 
-        representativeFirstName.clearValidators();
-        representativeFirstName.setErrors(null);
-        representativeLastName.clearValidators();
-        representativeLastName.setErrors(null);
-        representativePreferredMethodOfContact.clearValidators();
-        representativePreferredMethodOfContact.setErrors(null);
-
-        let useValidation = value === 100000001 || value === 100000002 || value === 100000003;
-        this.setupRepresentativeContactInformation(0);  // Have to clear contact validators on contact method change
-        if (useValidation) {
-          representativeFirstName.setValidators([Validators.required]);
-          representativeLastName.setValidators([Validators.required]);
-          representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
-        }
-      });
-
+    // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
     this.form.get('representativeInformation.representativePreferredMethodOfContact')
-      .valueChanges
-      .subscribe(value => {
-        let contactMethod = parseInt(value);
-        this.setupRepresentativeContactInformation(contactMethod);
-      });
+      .valueChanges.subscribe(responseCode => this.setRepresentativePreferredMethodOfContact(parseInt(responseCode)));
 
     this.form.get('authorizationInformation.allowCvapStaffSharing')
       .valueChanges
@@ -349,7 +176,399 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       });
   }
 
-  setupRepresentativeContactInformation(contactMethod: number): void {
+  buildApplicationForm(): void {
+    this.form = this.fb.group({
+      introduction: this.fb.group({
+        understoodInformation: [null, Validators.requiredTrue]
+      }),
+      personalInformation: this.fb.group({
+        firstName: ['', Validators.required],
+        middleName: [''],
+        lastName: ['', Validators.required],
+
+        iHaveOtherNames: [''],
+        otherFirstName: [''],
+        otherLastName: [''],
+        dateOfNameChange: [''],
+
+        gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
+        birthDate: ['', [Validators.required]],
+        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
+        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
+        occupation: [''],
+
+        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(4)]], // Phone = 2, Email = 1, Mail = 4
+
+        permissionToContactViaMethod: [false],
+        agreeToCvapCommunicationExchange: [''],
+
+        phoneNumber: [''],
+        alternatePhoneNumber: [''],
+        email: ['', [Validators.required]],
+        confirmEmail: ['', [Validators.required]],
+
+        primaryAddress: this.fb.group({
+          line1: ['', Validators.required],
+          line2: [''],
+          city: ['', Validators.required],
+          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+        alternateAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          city: [''],
+          postalCode: [''],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+      }),
+      crimeInformation: this.fb.group({
+        typeOfCrime: ['', Validators.required],
+
+        unsureOfCrimeDates: [''],
+        whenDidCrimeOccur: [''], // True = Period of Time, False = Start date only
+        crimePeriodStart: ['', Validators.required],
+        crimePeriodEnd: [''],
+        applicationFiledWithinOneYearFromCrime: [''],
+        whyDidYouNotApplySooner: [''],
+
+        crimeLocation: [''], // REMOVE AFTER DEMO
+        crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
+        crimeDetails: ['', Validators.required],
+        crimeInjuries: ['', Validators.required],
+        additionalInformationFiles: this.fb.array([]), // This will be a collection of uploaded files
+
+        wasReportMadeToPolice:
+          [
+            0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
+          ], // No: 100000000 Yes: 100000001
+
+        policeReportedWhichPoliceForce: [''],
+        policeReportedMultipleTimes: [''],
+        policeReportedDate: [''],
+        policeReportedEndDate: [''],
+        policeReports: this.fb.array([this.createPoliceReport()]),
+
+        noPoliceReportIdentification: [''],
+
+        offenderFirstName: [''],
+        offenderMiddleName: [''],
+        offenderLastName: [''],
+        offenderRelationship: [''],
+        offenderBeenCharged:
+          [
+            0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]
+          ], // Yes: 100000000 No: 100000001 Undecided: 100000002
+
+        courtFiles: this.fb.array([this.createCourtInfoItem()]),
+
+        haveYouSuedOffender:
+          [
+            0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
+          ], // No: 100000000   Yes: 100000001
+        intendToSueOffender: [0], // Yes: 100000000 No: 100000001 Undecided: 100000002
+
+        racafInformation: this.fb.group({
+          applyToCourtForMoneyFromOffender: [null, [Validators.min(100000000), Validators.max(100000002)]],
+          expensesRequested: [''],
+          expensesAwarded: [null],
+          expensesReceived: [null],
+          willBeTakingLegalAction: [null, [Validators.min(100000000), Validators.max(100000002)]],
+          lawyerOrFirmName: [''],
+          lawyerAddress: this.fb.group({
+            line1: [''],
+            line2: [''],
+            city: [''],
+            postalCode: [''], // , [Validators.pattern(postalRegex)]
+            province: [{ value: 'British Columbia', disabled: false }],
+            country: [{ value: 'Canada', disabled: false }],
+          }),
+          signName: [''],
+          signature: [''],
+        }),
+      }),
+      medicalInformation: this.fb.group({
+        doYouHaveMedicalServicesCoverage: ['', Validators.required],
+        personalHealthNumber: [''],
+
+        doYouHaveOtherHealthCoverage: ['', Validators.required],
+        otherHealthCoverageProviderName: [''],
+        otherHealthCoverageExtendedPlanNumber: [''],
+
+        wereYouTreatedAtHospital: ['', Validators.required],
+        treatedAtHospitalName: [''],
+        treatedOutsideBc: [''],
+        treatedOutsideBcHospitalName: [''],
+        treatedAtHospitalDate: [''],
+
+        beingTreatedByFamilyDoctor: ['', Validators.required],
+        familyDoctorName: [''],
+        familyDoctorPhoneNumber: [''],
+        familyDoctorAddressLine1: [''],
+        familyDoctorAddressLine2: [''],
+
+        hadOtherTreatments: ['', Validators.required],
+        otherTreatments: this.fb.array([this.createTreatmentItem()]),
+      }),
+      expenseInformation: this.fb.group({
+        haveMedicalExpenses: [false],
+        haveDentalExpenses: [false],
+        havePrescriptionDrugExpenses: [false],
+        haveCounsellingExpenses: [false],
+        haveLostEmploymentIncomeExpenses: [false],
+        havePersonalPropertyLostExpenses: [false],
+        haveProtectiveMeasureExpenses: [false],
+        haveDisabilityExpenses: [false],
+        haveCrimeSceneCleaningExpenses: [false],
+        haveOtherExpenses: [false],
+        otherSpecificExpenses: [''],
+        minimumExpensesSelected: ['', Validators.required],
+
+        haveDisabilityPlanBenefits: [false],
+        haveEmploymentInsuranceBenefits: [false],
+        haveIncomeAssistanceBenefits: [false],
+        haveCanadaPensionPlanBenefits: [false],
+        haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
+        haveCivilActionBenefits: [false],
+        haveOtherBenefits: [false],
+        otherSpecificBenefits: [''],
+        noneOfTheAboveBenefits: [false],
+      }, { validator: this.requireCheckboxesToBeCheckedValidator }),
+      employmentIncomeInformation: this.fb.group({
+        wereYouEmployedAtTimeOfCrime: [null, [Validators.min(100000000), Validators.max(100000001)]], //, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // 100000000 = Yes, 1000000001 = No, 100000002 = Self-Employed
+        wereYouAtWorkAtTimeOfIncident: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
+        haveYouAppliedForWorkersCompensation: [null, [Validators.min(100000000), Validators.max(100000001)]],//, Validators.required],
+        workersCompensationClaimNumber: [''],
+        didYouMissWorkDueToCrime: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
+        daysWorkMissedStart: [''], //, Validators.required],
+        daysWorkMissedEnd: [''],
+        didYouLoseWages: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
+
+        areYouSelfEmployed: [null, [Validators.min(100000000), Validators.max(100000001)]],
+        employers: this.fb.array([this.createEmployerItem()]),
+
+        mayContactEmployer: [null, [Validators.min(100000000), Validators.max(100000001)]],
+      }),
+
+      representativeInformation: this.fb.group({
+        completingOnBehalfOf: [null, [Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
+        representativeFirstName: [''], //, Validators.required],
+        representativeMiddleName: [''],
+        representativeLastName: [''], //, Validators.required],
+        representativePreferredMethodOfContact: [null, [Validators.min(100000000), Validators.max(100000002)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
+        representativePhoneNumber: [''],
+        representativeAlternatePhoneNumber: [''],
+        representativeEmail: [''], //, [Validators.required, Validators.email]],
+        representativeAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          city: [''],
+          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+        legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
+      }),
+
+      declarationInformation: this.fb.group({
+        declaredAndSigned: ['', Validators.requiredTrue],
+        signature: ['', Validators.required],
+      }),
+
+      authorizationInformation: this.fb.group({
+        approvedAuthorityNotification: ['', Validators.requiredTrue],
+        readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
+        signature: ['', Validators.required],
+
+        allowCvapStaffSharing: ['', Validators.required],
+        authorizedPersonFullName: [''],
+        authorizedPersonPhoneNumber: [''],
+        authorizedPersonRelationship: [''],
+        authorizedPersonAgencyName: [''],
+        authorizedPersonAgencyAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          city: [''],
+          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+        authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
+        authorizedPersonSignature: [''], //, Validators.required],
+      }),
+    });
+    // set default contact method
+    this.setPreferredContactMethod(0);
+  }
+  // -----------METHODS TO ADJUST FORM STATE ---------------------------------
+  setPreferredContactMethod(contactMethod: number): void {
+    let phoneControl = this.form.get('personalInformation.phoneNumber');
+    let emailControl = this.form.get('personalInformation.email');
+    let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
+    let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
+    let addressControls = [
+      this.form.get('personalInformation').get('primaryAddress.country'),
+      this.form.get('personalInformation').get('primaryAddress.province'),
+      this.form.get('personalInformation').get('primaryAddress.city'),
+      this.form.get('personalInformation').get('primaryAddress.line1'),
+      this.form.get('personalInformation').get('primaryAddress.postalCode'),
+    ];
+
+    phoneControl.clearValidators();
+    phoneControl.setErrors(null);
+    emailControl.clearValidators();
+    emailControl.setErrors(null);
+    emailConfirmControl.clearValidators();
+    emailConfirmControl.setErrors(null);
+    //addressControl.clearValidators();
+    //addressControl.setErrors(null);
+    //for (let control of addressControls) {
+    //control.clearValidators();
+    //   control.setErrors(null);
+    //}
+    addressControl.setValidators([Validators.required]);
+    for (let control of addressControls) {
+      control.setValidators([Validators.required]);
+    }
+
+    if (contactMethod === 2) {
+      phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+      this.phoneIsRequired = true;
+      this.emailIsRequired = false;
+      this.addressIsRequired = true; // Always true
+    } else if (contactMethod === 1) {
+      emailControl.setValidators([Validators.required]); // need to add validator to check these two are the same
+      emailConfirmControl.setValidators([Validators.required]); // need to add validator to check these two are the same
+      this.phoneIsRequired = false;
+      this.emailIsRequired = true;
+      this.addressIsRequired = true; // Always true
+    } else if (contactMethod === 4) {
+      this.phoneIsRequired = false;
+      this.emailIsRequired = false;
+      this.addressIsRequired = true; // Always true
+    }
+
+    phoneControl.markAsTouched();
+    phoneControl.updateValueAndValidity();
+    emailControl.markAsTouched();
+    emailControl.updateValueAndValidity();
+    emailConfirmControl.markAsTouched();
+    emailConfirmControl.updateValueAndValidity();
+    addressControl.markAsTouched();
+    addressControl.updateValueAndValidity();
+    for (let control of addressControls) {
+      control.markAsTouched();
+      control.updateValueAndValidity();
+    }
+  }
+  setHospitalTreatment(yesNo: boolean = false): void {
+    // Did you go to a hospital?
+    let hospitalControl = this.form.get('medicalInformation.treatedAtHospitalName');
+    // get rid of old validators
+    hospitalControl.clearValidators();
+    hospitalControl.setErrors(null);
+    // if yes the hospital part is required
+    if (yesNo) {
+      hospitalControl.setValidators([Validators.required]);
+    }
+  }
+  setLostEmploymentIncomeExpenses(isChecked: boolean = false): void {
+    let wasEmployed = this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime');
+    let missedWork = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime');
+
+    wasEmployed.clearValidators();
+    wasEmployed.setErrors(null);
+    missedWork.clearValidators();
+    missedWork.setErrors(null);
+
+    if (isChecked) {
+      wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
+      missedWork.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
+    }
+  }
+  setEmployedAtCrimeTime(responseCode: number): void {
+    let wereYouAtWork = this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident');
+
+    wereYouAtWork.clearValidators();
+    wereYouAtWork.setErrors(null);
+
+    // if value matches encoded
+    if (responseCode === 100000000) {
+      wereYouAtWork.setValidators([Validators.required]);
+    }
+  }
+  setInjuredAtWork(isChecked: boolean): void {
+    let appliedForWorkersComp = this.form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation');
+
+    appliedForWorkersComp.clearValidators();
+    appliedForWorkersComp.setErrors(null);
+
+    let useValidation = isChecked === true;
+    if (useValidation) {
+      appliedForWorkersComp.setValidators([Validators.required]);
+    }
+  }
+  setMissedWorkDueToCrime(isChecked: boolean): void {
+    let missedWorkStartDate = this.form.get('employmentIncomeInformation.daysWorkMissedStart');
+    let lostWages = this.form.get('employmentIncomeInformation.didYouLoseWages');
+    let selfEmployed = this.form.get('employmentIncomeInformation.areYouSelfEmployed');
+    let mayContactEmployer = this.form.get('employmentIncomeInformation.mayContactEmployer');
+    let employerControls = this.form.get('employmentIncomeInformation.employers') as FormArray;
+
+    missedWorkStartDate.clearValidators();
+    missedWorkStartDate.setErrors(null);
+    lostWages.clearValidators();
+    lostWages.setErrors(null);
+    selfEmployed.clearValidators();
+    selfEmployed.setErrors(null);
+    mayContactEmployer.clearValidators();
+    mayContactEmployer.setErrors(null);
+    for (let control of employerControls.controls) {
+      let control1 = control.get('employerName');
+      let control2 = control.get('employerPhoneNumber');
+      control1.clearValidators();
+      control1.setErrors(null);
+      control2.clearValidators();
+      control2.setErrors(null);
+    }
+
+    let useValidation = isChecked === true;
+    if (useValidation) {
+      missedWorkStartDate.setValidators([Validators.required]);
+      lostWages.setValidators([Validators.required]);
+      selfEmployed.setValidators([Validators.required]);
+      mayContactEmployer.setValidators([Validators.required]);
+      for (let control of employerControls.controls) {
+        let control1 = control.get('employerName');
+        let control2 = control.get('employerPhoneNumber');
+        control1.setValidators([Validators.required]);
+        control2.setValidators([Validators.required]);
+      }
+    }
+  }
+  setCompletingOnBehalfOf(responseCode: number): void {
+    let representativeFirstName = this.form.get('representativeInformation.representativeFirstName');
+    let representativeLastName = this.form.get('representativeInformation.representativeLastName');
+    let representativePreferredMethodOfContact = this.form.get('representativeInformation.representativePreferredMethodOfContact');
+
+    representativeFirstName.clearValidators();
+    representativeFirstName.setErrors(null);
+    representativeLastName.clearValidators();
+    representativeLastName.setErrors(null);
+    representativePreferredMethodOfContact.clearValidators();
+    representativePreferredMethodOfContact.setErrors(null);
+
+    let useValidation = responseCode === 100000001 || responseCode === 100000002 || responseCode === 100000003;
+    this.setupRepresentativeContactInformation(0);  // Have to clear contact validators on contact method change
+    if (useValidation) {
+      representativeFirstName.setValidators([Validators.required]);
+      representativeLastName.setValidators([Validators.required]);
+      representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
+    }
+  }
+  setRepresentativePreferredMethodOfContact(responseCode: number): void {
     let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
     let emailControl = this.form.get('representativeInformation.representativeEmail');
     let addressControls = [
@@ -369,17 +588,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       control.setErrors(null);
     }
 
-    if (contactMethod === 100000000) {
+    if (responseCode === 100000000) {
       phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
       this.representativePhoneIsRequired = true;
       this.representativeEmailIsRequired = false;
       this.representativeAddressIsRequired = false;
-    } else if (contactMethod === 100000001) {
+    } else if (responseCode === 100000001) {
       emailControl.setValidators([Validators.required, Validators.email]);
       this.representativePhoneIsRequired = false;
       this.representativeEmailIsRequired = true;
       this.representativeAddressIsRequired = false;
-    } else if (contactMethod === 100000002) {
+    } else if (responseCode === 100000002) {
       for (let control of addressControls) {
         control.setValidators([Validators.required]);
       }
@@ -397,7 +616,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       control.updateValueAndValidity();
     }
   }
-
+  showSummaryOfBenefits(): void {
+    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
+  }
   showSignPad(group, control): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -414,7 +635,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }
     );
   }
-
   verifyCancellation(): void {
     const verifyDialogConfig = new MatDialogConfig();
     verifyDialogConfig.disableClose = true;
@@ -432,9 +652,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     );
   }
 
-  showSummaryOfBenefits(): void {
-    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
-  }
+
 
   getFormGroupName(groupIndex: any) {
     let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
@@ -734,228 +952,5 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.markAsTouched();
   }
 
-  private buildApplicationForm(): void {
-    this.form = this.fb.group({
-      introduction: this.fb.group({
-        understoodInformation: [null, Validators.requiredTrue]
-      }),
-      personalInformation: this.fb.group({
-        firstName: ['', Validators.required],
-        middleName: [''],
-        lastName: ['', Validators.required],
 
-        iHaveOtherNames: [''],
-        otherFirstName: [''],
-        otherLastName: [''],
-        dateOfNameChange: [''],
-
-        gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
-        birthDate: ['', [Validators.required]],
-        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
-        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
-        occupation: [''],
-
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(4)]], // Phone = 2, Email = 1, Mail = 4
-
-        permissionToContactViaMethod: [false],
-        agreeToCvapCommunicationExchange: [''],
-
-        phoneNumber: [''],
-        alternatePhoneNumber: [''],
-        email: ['', [Validators.required]],
-        confirmEmail: ['', [Validators.required]],
-
-        primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        alternateAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-      }),
-      crimeInformation: this.fb.group({
-        typeOfCrime: ['', Validators.required],
-
-        unsureOfCrimeDates: [''],
-        whenDidCrimeOccur: [''], // True = Period of Time, False = Start date only
-        crimePeriodStart: ['', Validators.required],
-        crimePeriodEnd: [''],
-        applicationFiledWithinOneYearFromCrime: [''],
-        whyDidYouNotApplySooner: [''],
-
-        crimeLocation: [''], // REMOVE AFTER DEMO
-        crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
-        crimeDetails: ['', Validators.required],
-        crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.array([]), // This will be a collection of uploaded files
-
-        wasReportMadeToPolice:
-          [
-            0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
-          ], // No: 100000000 Yes: 100000001
-
-        policeReportedWhichPoliceForce: [''],
-        policeReportedMultipleTimes: [''],
-        policeReportedDate: [''],
-        policeReportedEndDate: [''],
-        policeReports: this.fb.array([this.createPoliceReport()]),
-
-        noPoliceReportIdentification: [''],
-
-        offenderFirstName: [''],
-        offenderMiddleName: [''],
-        offenderLastName: [''],
-        offenderRelationship: [''],
-        offenderBeenCharged:
-          [
-            0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]
-          ], // Yes: 100000000 No: 100000001 Undecided: 100000002
-
-        courtFiles: this.fb.array([this.createCourtInfoItem()]),
-
-        haveYouSuedOffender:
-          [
-            0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
-          ], // No: 100000000   Yes: 100000001
-        intendToSueOffender: [0], // Yes: 100000000 No: 100000001 Undecided: 100000002
-
-        racafInformation: this.fb.group({
-          applyToCourtForMoneyFromOffender: [null, [Validators.min(100000000), Validators.max(100000002)]],
-          expensesRequested: [''],
-          expensesAwarded: [null],
-          expensesReceived: [null],
-          willBeTakingLegalAction: [null, [Validators.min(100000000), Validators.max(100000002)]],
-          lawyerOrFirmName: [''],
-          lawyerAddress: this.fb.group({
-            line1: [''],
-            line2: [''],
-            city: [''],
-            postalCode: [''], // , [Validators.pattern(postalRegex)]
-            province: [{ value: 'British Columbia', disabled: false }],
-            country: [{ value: 'Canada', disabled: false }],
-          }),
-          signName: [''],
-          signature: [''],
-        }),
-      }),
-      medicalInformation: this.fb.group({
-        doYouHaveMedicalServicesCoverage: ['', Validators.required],
-        personalHealthNumber: [''],
-
-        doYouHaveOtherHealthCoverage: ['', Validators.required],
-        otherHealthCoverageProviderName: [''],
-        otherHealthCoverageExtendedPlanNumber: [''],
-
-        wereYouTreatedAtHospital: ['', Validators.required],
-        treatedAtHospitalName: [''],
-        treatedOutsideBc: [''],
-        treatedOutsideBcHospitalName: [''],
-        treatedAtHospitalDate: [''],
-
-        beingTreatedByFamilyDoctor: ['', Validators.required],
-        familyDoctorName: [''],
-        familyDoctorPhoneNumber: [''],
-        familyDoctorAddressLine1: [''],
-        familyDoctorAddressLine2: [''],
-
-        hadOtherTreatments: ['', Validators.required],
-        otherTreatments: this.fb.array([this.createTreatmentItem()]),
-      }),
-      expenseInformation: this.fb.group({
-        haveMedicalExpenses: [false],
-        haveDentalExpenses: [false],
-        havePrescriptionDrugExpenses: [false],
-        haveCounsellingExpenses: [false],
-        haveLostEmploymentIncomeExpenses: [false],
-        havePersonalPropertyLostExpenses: [false],
-        haveProtectiveMeasureExpenses: [false],
-        haveDisabilityExpenses: [false],
-        haveCrimeSceneCleaningExpenses: [false],
-        haveOtherExpenses: [false],
-        otherSpecificExpenses: [''],
-        minimumExpensesSelected: ['', Validators.required],
-
-        haveDisabilityPlanBenefits: [false],
-        haveEmploymentInsuranceBenefits: [false],
-        haveIncomeAssistanceBenefits: [false],
-        haveCanadaPensionPlanBenefits: [false],
-        haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
-        haveCivilActionBenefits: [false],
-        haveOtherBenefits: [false],
-        otherSpecificBenefits: [''],
-        noneOfTheAboveBenefits: [false],
-      }, { validator: this.requireCheckboxesToBeCheckedValidator }),
-      employmentIncomeInformation: this.fb.group({
-        wereYouEmployedAtTimeOfCrime: [null, [Validators.min(100000000), Validators.max(100000001)]], //, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // 100000000 = Yes, 1000000001 = No, 100000002 = Self-Employed
-        wereYouAtWorkAtTimeOfIncident: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
-        haveYouAppliedForWorkersCompensation: [null, [Validators.min(100000000), Validators.max(100000001)]],//, Validators.required],
-        workersCompensationClaimNumber: [''],
-        didYouMissWorkDueToCrime: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
-        daysWorkMissedStart: [''], //, Validators.required],
-        daysWorkMissedEnd: [''],
-        didYouLoseWages: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
-
-        areYouSelfEmployed: [null, [Validators.min(100000000), Validators.max(100000001)]],
-        employers: this.fb.array([this.createEmployerItem()]),
-
-        mayContactEmployer: [null, [Validators.min(100000000), Validators.max(100000001)]],
-      }),
-
-      representativeInformation: this.fb.group({
-        completingOnBehalfOf: [null, [Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
-        representativeFirstName: [''], //, Validators.required],
-        representativeMiddleName: [''],
-        representativeLastName: [''], //, Validators.required],
-        representativePreferredMethodOfContact: [null, [Validators.min(100000000), Validators.max(100000002)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
-        representativePhoneNumber: [''],
-        representativeAlternatePhoneNumber: [''],
-        representativeEmail: [''], //, [Validators.required, Validators.email]],
-        representativeAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
-      }),
-
-      declarationInformation: this.fb.group({
-        declaredAndSigned: ['', Validators.requiredTrue],
-        signature: ['', Validators.required],
-      }),
-
-      authorizationInformation: this.fb.group({
-        approvedAuthorityNotification: ['', Validators.requiredTrue],
-        readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
-        signature: ['', Validators.required],
-
-        allowCvapStaffSharing: ['', Validators.required],
-        authorizedPersonFullName: [''],
-        authorizedPersonPhoneNumber: [''],
-        authorizedPersonRelationship: [''],
-        authorizedPersonAgencyName: [''],
-        authorizedPersonAgencyAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
-        authorizedPersonSignature: [''], //, Validators.required],
-      }),
-    });
-  }
 }

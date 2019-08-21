@@ -896,7 +896,7 @@
               </app-field>
               <app-field>
                 <label>
-                  <input type="checkbox" [value]="true" [checked]="haveLostEmploymentIncomeExpenses.checked" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses" (change)="changeGroupValidity($event)">
+                  <input type="checkbox" #haveLostEmploymentIncomeExpenses [value]="true" [checked]="haveLostEmploymentIncomeExpenses.checked||false" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses" (change)="changeGroupValidity($event)">
                   Lost employment income (reimbursed at minimum wage) <app-tool-tip [trigger]="benefitsLostEmployment"></app-tool-tip>
                 </label>
               </app-field>
