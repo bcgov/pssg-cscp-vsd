@@ -650,10 +650,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }
     );
   }
-  getFormGroupName(groupIndex: any) {
-    let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
-    return elements[groupIndex];
-  }
+
   changeGroupValidity(values: any): void {
     // whenever an expenseInformation checkbox is changed we
     // set whether the minimum expenses value is met into part of the form that isn't user editable.
@@ -704,10 +701,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   gotoNextStep(stepper: MatStepper): void {
     // when a user clicks the continue button we move them to the next part of the form
-    //    console.log(this.currentFormStep);
+    let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     if (stepper != null) {
-      var desiredFormIndex = stepper.selectedIndex;
-      var formGroupName = this.getFormGroupName(desiredFormIndex);
+      var desiredFormIndex: number = stepper.selectedIndex;
+      var formGroupName = elements[desiredFormIndex];
 
       if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
         var formParts = this.form.get(formGroupName);
