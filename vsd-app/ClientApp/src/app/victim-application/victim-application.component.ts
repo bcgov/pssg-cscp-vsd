@@ -78,6 +78,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   expenseMinimumMet: boolean = null;
   saveFormData: any;
 
+  matchingEmail: string; // this is the value of the email that both email fields should match.
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -498,6 +500,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       wereYouAtWork.setValidators([Validators.required]);
     }
   }
+
   setInjuredAtWork(isChecked: boolean): void {
     let appliedForWorkersComp = this.form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation');
 
@@ -727,6 +730,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   addProvider(): void {
+    // add a medical treatment provider to the list
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
     this.otherTreatmentItems.push(this.createTreatmentItem());
     this.showAddProvider = this.otherTreatmentItems.length < 5;
@@ -734,6 +738,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   removeProvider(index: number): void {
+    // when the user clicks to remove the medical provider this removes the provider at the index clicked
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
     this.otherTreatmentItems.removeAt(index);
     this.showAddProvider = this.otherTreatmentItems.length < 5;
@@ -741,6 +746,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   createTreatmentItem(): FormGroup {
+    // make a form group for insertion into the form
     return this.fb.group({
       providerType: [0],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
       providerName: [''],
@@ -757,6 +763,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   addEmployer(): void {
+    // add an employer to the list
     this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
     this.employerItems.push(this.createEmployerItem());
     this.showAddEmployer = this.employerItems.length < 5;
@@ -764,6 +771,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   removeEmployer(index: number): void {
+    // remove the employer from the list of employers
     this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
     this.employerItems.removeAt(index);
     this.showAddEmployer = this.employerItems.length < 5;
@@ -771,6 +779,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   createEmployerItem(): FormGroup {
+    // create an employer form group when the user clicks to add a new one.
     return this.fb.group({
       employerName: ['', Validators.required],
       employerPhoneNumber: ['', Validators.required],
@@ -788,6 +797,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   getEmployerItem(index: number): FormControl {
+    // TODO: this appears to be unused.
+    // collect item from the employer array.
     return (<FormArray>this.form.get('employmentIncomeInformation.employers')).controls[index] as FormControl;
   }
 
