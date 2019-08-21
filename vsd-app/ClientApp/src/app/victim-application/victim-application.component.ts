@@ -86,7 +86,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
-    private dialog: MatDialog, // popup to show static content
+    private matDialog: MatDialog, // popup to show static content
   ) {
     super();
   }
@@ -102,7 +102,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
-    const dialogRef = this.dialog.open(DeactivateGuardDialog, dialogConfig);
+    const dialogRef = this.matDialog.open(DeactivateGuardDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
         console.log(data);
@@ -373,22 +373,30 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
 
   showSummaryOfBenefits(): void {
-    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
+    const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
   }
   showSignPad(group, control): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
-    const dialogRef = this.dialog.open(SignPadDialog, dialogConfig);
+    const dialogRef = this.matDialog.open(SignPadDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        var patchObject = {};
-        patchObject[control] = data;
-        this.form.get(group).patchValue(
-          patchObject
-        );
-      }
+        // TODO: This timeout is required so the page structure doesn't explode after the signature is filled.
+        // why is this is like this. Leaving the patch in there.
+        // I suspect that maybe converting the signature to png needs to finish before proceeding
+        // Maybe this will fix itself as the form is cleaned up.
+        // This actually breaks the whole page layout on closing the signature box if removed. WHAAAA
+        setTimeout(() => {
+          var patchObject = {};
+          patchObject[control] = data;
+          this.form.get(group).patchValue(
+            patchObject
+          );
+        }, 1)
+      },
+      err => console.log(err)
     );
   }
   verifyCancellation(): void {
@@ -397,14 +405,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     verifyDialogConfig.autoFocus = true;
     verifyDialogConfig.data = 'witness';
 
-    const verifyDialogRef = this.dialog.open(CancelApplicationDialog, verifyDialogConfig);
+    const verifyDialogRef = this.matDialog.open(CancelApplicationDialog, verifyDialogConfig);
     verifyDialogRef.afterClosed().subscribe(
       data => {
         if (data === true) {
           this.router.navigate(['/application-cancelled']);
           return;
         }
-      }
+      },
+      err => { console.log(err) }
     );
   }
 
