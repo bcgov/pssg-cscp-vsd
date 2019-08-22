@@ -896,7 +896,7 @@
               </app-field>
               <app-field>
                 <label>
-                  <input type="checkbox" #haveLostEmploymentIncomeExpenses [value]="true" [checked]="haveLostEmploymentIncomeExpenses.checked||false" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses" (change)="changeGroupValidity($event)">
+                  <input type="checkbox" [value]="true" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses" (change)="changeGroupValidity($event)">
                   Lost employment income (reimbursed at minimum wage) <app-tool-tip [trigger]="benefitsLostEmployment"></app-tool-tip>
                 </label>
               </app-field>
@@ -1093,7 +1093,7 @@
         </div>
         <div formGroupName="employmentIncomeInformation" *ngIf="this.currentFormStep == 5">
           <div class="page-header">
-            <h1 (click)="checkform()">Employment Income</h1>
+            <h1>Employment Income</h1>
           </div>
           <section *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
             <p>This section provides information regarding employment information. This information is only necessary if you are requesting benefits for lost employment income.</p>

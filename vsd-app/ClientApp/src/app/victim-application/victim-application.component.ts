@@ -371,7 +371,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.setPreferredContactMethod();
   }
 
-
   showSummaryOfBenefits(): void {
     const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
   }
@@ -468,23 +467,36 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   gotoNextStep(stepper: MatStepper): void {
     // when a user clicks the continue button we move them to the next part of the form
     let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
+
     if (stepper != null) {
-      var desiredFormIndex: number = stepper.selectedIndex;
-      var formGroupName = elements[desiredFormIndex];
+      // the stepper indexes match our form indexes
+      const desiredFormIndex: number = stepper.selectedIndex;
+      // get the text value of the form index
+      const formGroupName = elements[desiredFormIndex];
+      console.log(`Form for validation is ${formGroupName}.`);
+      // be sure that the stepper is in range
+      if (desiredFormIndex >= 0 && desiredFormIndex < elements.length) {
+        // collect the matching form group from the form
+        const formParts = this.form.get(formGroupName);
+        // TODO: how do we know this is true?
+        let formValid = true;
 
-      if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
-        var formParts = this.form.get(formGroupName);
-        var formValid = true;
-
+        // if there is a form returned with the name
         if (formParts != null) {
+          // collect the validity of it
           formValid = formParts.valid;
+          console.log(formParts);
+        } else {
+          alert('That was a null form. Nothing to validate')
         }
 
         if (formValid) {
+          console.log('Form is valid so proceeding to next step.')
           this.showValidationMessage = false;
           window.scroll(0, 0);
           stepper.next();
         } else {
+          console.log('Form is not valid rerun the validation and show the validation message.')
           this.validateAllFormFields(formParts);
           this.showValidationMessage = true;
         }
@@ -721,6 +733,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
   // -----------METHODS TO ADJUST FORM STATE ---------------------------------
   setPreferredContactMethod(): void {
+    // responsible for setting preferred contact information for the person filling out the form
+
     let contactMethod = parseInt(this.form.get('personalInformation.preferredMethodOfContact').value);
     if (typeof contactMethod != 'number') console.log('Set preferred contact method should be a number but is not for some reason. ' + typeof contactMethod);
     // maybe the form initializes with null?
@@ -793,27 +807,36 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     }
   }
   setLostEmploymentIncomeExpenses(): void {
+    // if the employment income expenses are set to true
+    // the employed when crime occured should become required
+    // the as a result of any crime related injuries did you miss work should become required.
     const isChecked: boolean = this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === 'true';
     if (typeof isChecked != 'boolean') console.log('Set lost employment income expenses should be a boolean but is not for some reason. ' + typeof isChecked);
 
+    //
     let wasEmployed = this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime');
     let missedWork = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime');
 
-    wasEmployed.clearValidators();
-    wasEmployed.setErrors(null);
-    missedWork.clearValidators();
-    missedWork.setErrors(null);
-
     if (isChecked) {
+      // clear existing validators
+      wasEmployed.clearValidators();
+      wasEmployed.setErrors(null);
+      missedWork.clearValidators();
+      missedWork.setErrors(null);
+      // set validators
       wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
       missedWork.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
+    } else {
+      wasEmployed.clearValidators();
+      wasEmployed.setErrors(null);
+      missedWork.clearValidators();
+      missedWork.setErrors(null);
     }
   }
   setEmployedAtCrimeTime(): void {
     const responseCode: number = parseInt(this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value);
     if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
     let wereYouAtWork = this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident');
-
     wereYouAtWork.clearValidators();
     wereYouAtWork.setErrors(null);
 
@@ -822,7 +845,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       wereYouAtWork.setValidators([Validators.required]);
     }
   }
-  setInjuredAtWork(): void {
+  setIncidentAtWork(): void {
     const isChecked: boolean = this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').value === 'true';
     if (typeof isChecked != 'boolean') console.log('Set injured at work should be a boolean but is not for some reason. ' + typeof isChecked);
 
@@ -972,10 +995,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     // set all form validation
     this.setCompletingOnBehalfOf();
     this.setCvapStaffSharing();
-    this.setEmployedAtCrimeTime();
     this.setHospitalTreatment();
-    this.setInjuredAtWork();
     this.setLostEmploymentIncomeExpenses();
+    this.setEmployedAtCrimeTime();
+    this.setIncidentAtWork();
     this.setMissedWorkDueToCrime();
     this.setPreferredContactMethod();
     this.setRepresentativePreferredMethodOfContact();
