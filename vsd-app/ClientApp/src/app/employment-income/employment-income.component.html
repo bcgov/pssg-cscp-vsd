@@ -28,18 +28,19 @@
       </app-field>
     </div>
 
-    <!-- <div class="form-group">
-      <app-field label="As a result of any crime-related injuries, did you miss work?" [valid]="employedAtCrimeTime" [required]="true" errorMessage="Please select an option">
-        <label for="atWorkAtCrimeTimeYes" class="inline-label">
-          <input #employedAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouAtWorkAtTimeOfIncident" [value]='100000001' name="atWorkAtCrimeTimeYes" required>
+    <div class="form-group">
+      <app-field label="As a result of any crime-related injuries, did you miss work?" [valid]="missedWork" [required]="true" errorMessage="Please select an option">
+        <label for="missedWorkYes" class="inline-label">
+          <input #missedWork type="radio" [(ngModel)]="eiInfo.didYouMissWorkDueToCrime" [value]='100000001' name="missedWorkYes" required>
           <span>Yes</span>
         </label>
-        <label for="atWorkAtCrimeTimeNo" class="inline-label">
-          <input #employedAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouAtWorkAtTimeOfIncident" [value]='100000000' name="atWorkAtCrimeTimeNo" required>
+        <label for="missedWorkNo" class="inline-label">
+          <input #missedWork type="radio" [(ngModel)]="eiInfo.didYouMissWorkDueToCrime" [value]='100000000' name="missedWorkNo" required>
           <span>No</span>
         </label>
       </app-field>
-    </div> -->
+    </div>
+
   </form>
 </section>
 Valid: {{eiInfoForm.form.valid}}
