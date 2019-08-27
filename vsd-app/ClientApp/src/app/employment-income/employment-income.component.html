@@ -15,7 +15,7 @@
       </app-field>
     </div>
     <!-- If you have answered yes to the first question then you must answer -->
-    <div class="form-group">
+    <div class="form-group" *ngIf="eiInfo.wereYouEmployedAtTimeOfCrime===100000001">
       <app-field label="Were you at work at the time of the incident?" [valid]="atWorkAtCrimeTime" [required]="true" errorMessage="Please select an option">
         <label for="atWorkAtCrimeTimeYes" class="inline-label">
           <input #atWorkAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouAtWorkAtTimeOfIncident" [value]='100000001' name="atWorkAtCrimeTimeYes" required>
@@ -39,36 +39,43 @@
         </label>
       </app-field>
     </div>
-    <div class="form-group">
-      <app-field label="Please provide days of work missed" [valid]="eiInfo.daysWorkMissedStart && eiInfo.daysWorkMissedEnd" [required]="true" errorMessage="Please select an option">
-        <input type="text" name="daysWorkMissedStart" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly required>
-        <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
-        <span> - </span>
-        <input type="text" name="daysWorkMissedEnd" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly required>
-        <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
-      </app-field>
-    </div>
-    <div class="form-group">
-      <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="eiInfo.didYouLoseWages" [required]="true" errorMessage="Please select an option">
-        <label for="lostWagesYes" class="inline-label">
-          <input #lostWages type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000001' name="lostWagesYes" required>
-          <span>Yes</span>
-        </label>
-        <label for="lostWagesNo" class="inline-label">
-          <input #lostWages type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000000' name="lostWagesNo" required>
-          <span>No</span>
-        </label>
-      </app-field>
-      <ng-template #lostWagesTemplate>
-        <p><strong>Lost wages or income</strong></p>
-        <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
-      </ng-template>
-    </div>
-
+    <span *ngIf="eiInfo.didYouMissWorkDueToCrime===100000001">
+      <div class="form-group">
+        <section>
+          <app-field label="Please provide days of work missed" [valid]="eiInfo.daysWorkMissedStart && eiInfo.daysWorkMissedEnd" [required]="true" errorMessage="Please select an option">
+            <input type="text" name="daysWorkMissedStart" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly required>
+            <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
+            <span> - </span>
+            <input type="text" name="daysWorkMissedEnd" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly required>
+            <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+          </app-field>
+        </section>
+      </div>
+      <div class="form-group">
+        <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="eiInfo.didYouLoseWages" [required]="true" errorMessage="Please select an option">
+          <label for="lostWagesYes" class="inline-label">
+            <input #lostWages type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000001' name="lostWagesYes" required>
+            <span>Yes</span>
+          </label>
+          <label for="lostWagesNo" class="inline-label">
+            <input #lostWages type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000000' name="lostWagesNo" required>
+            <span>No</span>
+          </label>
+        </app-field>
+        <ng-template #lostWagesTemplate>
+          <p><strong>Lost wages or income</strong></p>
+          <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
+        </ng-template>
+      </div>
+    </span>
   </form>
+  <span *ngIf="eiInfo.didYouLoseWages===100000001">
+
+    Employer information form here.
+
+  </span>
 </section>
-Valid: {{eiInfoForm.form.valid}}
-<pre>{{eiInfo|json}}</pre>
+Valid:{{eiInfoForm.form.valid}}
 <!-- <p>This section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
 <section>
   <h2 class="blue-header">Income Loss Information</h2>
