@@ -39,6 +39,7 @@
         </label>
       </app-field>
     </div>
+    <!-- span because hide/show spans multiple form groups -->
     <span *ngIf="eiInfo.didYouMissWorkDueToCrime===100000001">
       <div class="form-group">
         <section>
@@ -68,12 +69,24 @@
         </ng-template>
       </div>
     </span>
+    <!-- If the employee lost wages we need to collect the information in the employee information area -->
+    <span *ngIf="eiInfo.didYouLoseWages===100000001">
+      <h2 class="blue-header">Employer Information</h2>
+      <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
+      <div class="form-group">
+        <app-field label="Are you self employed?" [valid]="eiInfo.areYouSelfEmployed" [required]="true" errorMessage="Please select an option">
+          <label for="selfEmployedYes" class="inline-label">
+            <input #selfEmployed type="radio" [(ngModel)]="eiInfo.areYouSelfEmployed" [value]='100000001' name="selfEmployedYes" required>
+            <span>Yes</span>
+          </label>
+          <label for="selfEmployedNo" class="inline-label">
+            <input #selfEmployed type="radio" [(ngModel)]="eiInfo.areYouSelfEmployed" [value]='100000000' name="selfEmployedNo" required>
+            <span>No</span>
+          </label>
+        </app-field>
+      </div>
+    </span>
   </form>
-  <span *ngIf="eiInfo.didYouLoseWages===100000001">
-
-    Employer information form here.
-
-  </span>
 </section>
 Valid:{{eiInfoForm.form.valid}}
 <pre>{{eiInfo|json}}</pre>
