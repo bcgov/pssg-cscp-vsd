@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { EmploymentIncomeInformation, Employer } from '../interfaces/application.interface';
 import { Address } from '../interfaces/address.interface';
+import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 
 class EiInfoForm implements EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime: number; // 100000001==yes 100000000==no
@@ -83,7 +84,7 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
   @Input() disabled = false; // TODO: disable the fields in the component when needed.
 
   phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-
+  countryList = COUNTRIES_ADDRESS;
   constructor() {
     this.eiInfo = new EiInfoForm();
   }

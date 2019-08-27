@@ -114,16 +114,40 @@
         </div>
         <h3>Mailing Address</h3>
         <div class="form-row">
-          <!-- country option  -->
-          <!-- province option -->
+          <div class="col">
+            <!-- country option  -->
+            <app-field label="Country" [required]="true" [valid]="employer.employerAddress.country" errorMessage="Please select your country">
+              <select name="{{'employerCountry_'+i.toString()}}" [(ngModel)]="employer.employerAddress.country" class="form-control">
+                <option value="">Choose a country</option>
+                <option *ngFor="let item of countryList" [value]="item.name">
+                  {{ item.name }}
+                </option>
+              </select>
+            </app-field>
+          </div>
+          <div class="col">
+
+          </div>
         </div>
         <div class="form-row">
-          <!-- mailing address 1 field  -->
-          <!-- mailing address 2 field -->
+          <div class="col">
+            <!-- mailing address 1 field  -->
+
+          </div>
+          <div class="col">
+            <!-- mailing address 2 field -->
+
+          </div>
         </div>
         <div class="form-row">
-          <!-- city -->
-          <!-- postal -->
+          <div class="col">
+            <!-- city -->
+
+          </div>
+          <div class="col">
+            <!-- postal -->
+
+          </div>
         </div>
         <!-- Add employer button -->
         <!-- May we contact your employer radio button -->
