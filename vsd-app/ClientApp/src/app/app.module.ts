@@ -84,6 +84,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { TestComponent } from './test/test.component';
 import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
+import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.
     VersionInfoDialog,
     TestComponent,
     FileUploaderBoxComponent,
+    EmploymentIncomeComponent,
   ],
   imports: [
     BrowserModule,

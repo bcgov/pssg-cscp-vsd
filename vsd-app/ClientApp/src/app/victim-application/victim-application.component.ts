@@ -80,6 +80,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   matchingEmail: string; // this is the value of the email that both email fields should match.
 
+  // a field that represents the current employment income information state
+  employmentIncomeInformation: EmploymentIncomeInformation;
+
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,

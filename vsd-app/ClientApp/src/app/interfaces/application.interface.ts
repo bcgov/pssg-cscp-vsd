@@ -116,9 +116,9 @@ export interface EmploymentIncomeInformation {
   didYouLoseWages?: number;
   areYouSelfEmployed?: number;
   mayContactEmployer?: number;
+  haveYouAppliedForWorkersCompensation: number;
   daysWorkMissedStart?: Date;
   daysWorkMissedEnd?: Date;
-  haveYouAppliedForWorkersCompensation: string;
   workersCompensationClaimNumber: string;
   employers: Employer[];
 }
@@ -177,7 +177,7 @@ interface Othertreatment {
   providerPhoneNumber: string;
   providerAddress: Address;
 }
-interface Employer {
+export interface Employer {
   employerName: string;
   employerPhoneNumber: string;
   employerFirstName: string;
