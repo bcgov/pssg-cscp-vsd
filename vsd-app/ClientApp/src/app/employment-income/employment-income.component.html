@@ -15,7 +15,7 @@
       </app-field>
     </div>
     <!-- If you have answered yes to the first question then you must answer -->
-    <div class="form-group" *ngIf="eiInfo.wereYouEmployedAtTimeOfCrime===100000001">
+    <div class="form-group">
       <app-field label="Were you at work at the time of the incident?" [valid]="atWorkAtCrimeTime" [required]="true" errorMessage="Please select an option">
         <label for="atWorkAtCrimeTimeYes" class="inline-label">
           <input #atWorkAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouAtWorkAtTimeOfIncident" [value]='100000001' name="atWorkAtCrimeTimeYes" required>
@@ -27,7 +27,6 @@
         </label>
       </app-field>
     </div>
-
     <div class="form-group">
       <app-field label="As a result of any crime-related injuries, did you miss work?" [valid]="missedWork" [required]="true" errorMessage="Please select an option">
         <label for="missedWorkYes" class="inline-label">
@@ -40,7 +39,15 @@
         </label>
       </app-field>
     </div>
-
+    <div class="form-group">
+      <app-field label="Please provide days of work missed" [valid]="eiInfo.daysWorkMissedStart && eiInfo.daysWorkMissedEnd" [required]="true" errorMessage="Please select an option">
+        <input type="text" name="daysWorkMissedStart" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly required>
+        <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
+        <span> - </span>
+        <input type="text" name="daysWorkMissedEnd" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly required>
+        <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+      </app-field>
+    </div>
   </form>
 </section>
 Valid: {{eiInfoForm.form.valid}}
