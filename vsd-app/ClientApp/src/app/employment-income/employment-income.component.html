@@ -86,14 +86,53 @@
         </app-field>
       </div>
 
-      <div class="form-group" *ngFor="let employer of eiInfo.employers">
+      <span *ngFor="let employer of eiInfo.employers; let i = index">
+        <h3>Name &amp; Phone Number</h3>
+        <div class="form-row">
+          <div class="col">
+            <app-field label="Name of Company / Organization" [valid]="employer.employerName" [required]="true" errorMessage="Please include an employer name">
+              <input id="{{'employerName_'+i.toString()}}" class="form-control" name="{{'employerName_'+i.toString()}}" type="text" [(ngModel)]="employer.employerName" required>
+            </app-field>
+          </div>
+          <div class="col">
+            <app-field label="Phone Number of Contact Person" [valid]="employer.employerPhoneNumber" [required]="true" errorMessage="Please include an employer phone number">
+              <input id="{{'employerPhoneNumber_'+i.toString()}}" class="form-control" name="{{'employerPhoneNumber_'+i.toString()}}" type="text" [(ngModel)]="employer.employerPhoneNumber" required>
+            </app-field>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col">
+            <app-field label="Employer First Name" [required]="false" errorMessage="Please include your employer's given name">
+              <input id="{{'employerFirstName_'+i.toString()}}" class="form-control" name="{{'employerFirstName_'+i.toString()}}" type="text" [(ngModel)]="employer.employerFirstName">
+            </app-field>
+          </div>
+          <div class="col">
+            <app-field label="Employer Last Name" [required]="false" errorMessage="Please include your employer's last name">
+              <input id="{{'employerLastName_'+i.toString()}}" class="form-control" name="{{'employerLastName_'+i.toString()}}" type="text" [(ngModel)]="employer.employerLastName">
+            </app-field>
+          </div>
+        </div>
+        <h3>Mailing Address</h3>
+        <div class="form-row">
+          <!-- country option  -->
+          <!-- province option -->
+        </div>
+        <div class="form-row">
+          <!-- mailing address 1 field  -->
+          <!-- mailing address 2 field -->
+        </div>
+        <div class="form-row">
+          <!-- city -->
+          <!-- postal -->
+        </div>
+        <!-- Add employer button -->
+        <!-- May we contact your employer radio button -->
         <pre>{{employer|json}}</pre>
-      </div>
+      </span>
     </span>
   </form>
 </section>
 Valid:{{eiInfoForm.form.valid}}
-<pre>{{eiInfo|json}}</pre>
 <!-- <p>This section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
 <section>
   <h2 class="blue-header">Income Loss Information</h2>

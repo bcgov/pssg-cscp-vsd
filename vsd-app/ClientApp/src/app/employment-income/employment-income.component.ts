@@ -82,6 +82,8 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
   @Output() valueChange = new EventEmitter<EmploymentIncomeInformation>();
   @Input() disabled = false; // TODO: disable the fields in the component when needed.
 
+  phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
   constructor() {
     this.eiInfo = new EiInfoForm();
   }
