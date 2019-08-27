@@ -5,11 +5,11 @@
     <div class="form-group">
       <app-field label="Were you employed when the crime occured?" [valid]="employedAtCrimeTime" [required]="true" errorMessage="Please select an option">
         <label for="employedArCrimeTimeYes" class="inline-label">
-          <input #employedAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouEmployedAtTimeOfCrime" [value]='100000001' name="employedAtCrimeTimeYes" required>
+          <input #employedAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouEmployedAtTimeOfCrime" [value]='100000001' name="employedAtCrimeTimeYes" id="employedAtCrimeTimeYes" required>
           <span>Yes</span>
         </label>
         <label for="employedAtCrimeTimeNo" class="inline-label">
-          <input #employedAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouEmployedAtTimeOfCrime" [value]='100000000' name="employedAtCrimeTimeNo" required>
+          <input #employedAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouEmployedAtTimeOfCrime" [value]='100000000' name="employedAtCrimeTimeNo" id="employedAtCrimeTimeNo" required>
           <span>No</span>
         </label>
       </app-field>
@@ -18,11 +18,11 @@
     <div class="form-group" *ngIf="eiInfo.wereYouEmployedAtTimeOfCrime===100000001">
       <app-field label="Were you at work at the time of the incident?" [valid]="atWorkAtCrimeTime" [required]="true" errorMessage="Please select an option">
         <label for="atWorkAtCrimeTimeYes" class="inline-label">
-          <input #atWorkAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouAtWorkAtTimeOfIncident" [value]='100000001' name="atWorkAtCrimeTimeYes" required>
+          <input #atWorkAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouAtWorkAtTimeOfIncident" [value]='100000001' name="atWorkAtCrimeTimeYes" id="atWorkAtCrimeTimeYes" required>
           <span>Yes</span>
         </label>
         <label for="atWorkAtCrimeTimeNo" class="inline-label">
-          <input #atWorkAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouAtWorkAtTimeOfIncident" [value]='100000000' name="atWorkAtCrimeTimeNo" required>
+          <input #atWorkAtCrimeTime type="radio" [(ngModel)]="eiInfo.wereYouAtWorkAtTimeOfIncident" [value]='100000000' name="atWorkAtCrimeTimeNo" id="atWorkAtCrimeTimeNo" required>
           <span>No</span>
         </label>
       </app-field>
@@ -30,11 +30,11 @@
     <div class="form-group">
       <app-field label="As a result of any crime-related injuries, did you miss work?" [valid]="missedWork" [required]="true" errorMessage="Please select an option">
         <label for="missedWorkYes" class="inline-label">
-          <input #missedWork type="radio" [(ngModel)]="eiInfo.didYouMissWorkDueToCrime" [value]='100000001' name="missedWorkYes" required>
+          <input #missedWork type="radio" [(ngModel)]="eiInfo.didYouMissWorkDueToCrime" [value]='100000001' name="missedWorkYes" id="missedWorkYes" required>
           <span>Yes</span>
         </label>
         <label for="missedWorkNo" class="inline-label">
-          <input #missedWork type="radio" [(ngModel)]="eiInfo.didYouMissWorkDueToCrime" [value]='100000000' name="missedWorkNo" required>
+          <input #missedWork type="radio" [(ngModel)]="eiInfo.didYouMissWorkDueToCrime" [value]='100000000' name="missedWorkNo" id="missedWorkNo" required>
           <span>No</span>
         </label>
       </app-field>
@@ -55,11 +55,11 @@
       <div class="form-group">
         <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="eiInfo.didYouLoseWages" [required]="true" errorMessage="Please select an option">
           <label for="lostWagesYes" class="inline-label">
-            <input type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000001' name="lostWagesYes" required>
+            <input type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000001' name="lostWagesYes" id="lostWagesYes" required>
             <span>Yes</span>
           </label>
           <label for="lostWagesNo" class="inline-label">
-            <input type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000000' name="lostWagesNo" required>
+            <input type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000000' name="lostWagesNo" id="lostWagesNo" required>
             <span>No</span>
           </label>
         </app-field>
@@ -76,14 +76,18 @@
       <div class="form-group">
         <app-field label="Are you self employed?" [valid]="eiInfo.areYouSelfEmployed" [required]="true" errorMessage="Please select an option">
           <label for="selfEmployedYes" class="inline-label">
-            <input #selfEmployed type="radio" [(ngModel)]="eiInfo.areYouSelfEmployed" [value]='100000001' name="selfEmployedYes" required>
+            <input #selfEmployed type="radio" [(ngModel)]="eiInfo.areYouSelfEmployed" [value]='100000001' name="selfEmployedYes" id="selfEmployedYes" required>
             <span>Yes</span>
           </label>
           <label for="selfEmployedNo" class="inline-label">
-            <input #selfEmployed type="radio" [(ngModel)]="eiInfo.areYouSelfEmployed" [value]='100000000' name="selfEmployedNo" required>
+            <input #selfEmployed type="radio" [(ngModel)]="eiInfo.areYouSelfEmployed" [value]='100000000' name="selfEmployedNo" id="selfEmployedNo" required>
             <span>No</span>
           </label>
         </app-field>
+      </div>
+
+      <div class="form-group" *ngFor="let employer of eiInfo.employers">
+        <pre>{{employer|json}}</pre>
       </div>
     </span>
   </form>
