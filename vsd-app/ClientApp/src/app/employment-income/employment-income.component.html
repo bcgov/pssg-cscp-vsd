@@ -54,11 +54,11 @@
       <div class="form-group">
         <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="eiInfo.didYouLoseWages" [required]="true" errorMessage="Please select an option">
           <label for="lostWagesYes" class="inline-label">
-            <input #lostWages type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000001' name="lostWagesYes" required>
+            <input type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000001' name="lostWagesYes" required>
             <span>Yes</span>
           </label>
           <label for="lostWagesNo" class="inline-label">
-            <input #lostWages type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000000' name="lostWagesNo" required>
+            <input type="radio" [(ngModel)]="eiInfo.didYouLoseWages" [value]='100000000' name="lostWagesNo" required>
             <span>No</span>
           </label>
         </app-field>
@@ -76,6 +76,7 @@
   </span>
 </section>
 Valid:{{eiInfoForm.form.valid}}
+<pre>{{eiInfo|json}}</pre>
 <!-- <p>This section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
 <section>
   <h2 class="blue-header">Income Loss Information</h2>
