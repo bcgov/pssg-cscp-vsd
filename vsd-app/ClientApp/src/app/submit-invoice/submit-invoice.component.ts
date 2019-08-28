@@ -255,15 +255,16 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       this.markAsTouched();
     }
   }
-  
+
   submitInvoice() {
     this.formSubmitted = true;
     if (this.form.valid) {
       this.formFullyValidated = true;
       this.save().subscribe(
         data => {
-          if (data['IsSuccess'] == true) {
-            console.log(data['IsSuccess']);
+          console.log (data);
+          if (data['isSuccess'] == true) {
+            console.log(data['isSuccess']);
             console.log("submitting");
             this.invoiceSuccess();
           }
@@ -275,7 +276,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         error => {
           this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           console.log('Error submitting invoice');
-        }
+        },
+        () => {}
       );
     } else {
       console.log("form not validated");
@@ -284,17 +286,22 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     }
   }
 
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
+  save(): Subject<{}> {
+    const subResult = new Subject<{}>();
     const formData = <DynamicsApplicationModel>{
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
 
+    //this.justiceDataService.submitCounsellorInvoice(formData).subscribe
+    //  (res => {
+    //    console.log(res);
+    //      subResult.next(res);
+    //    }, err => subResult.next(false));
     this.busy = this.justiceDataService.submitCounsellorInvoice(formData)
-        .toPromise()
-        .then(res => {
-          subResult.next(true);
-        }, err => subResult.next(false));
+      .toPromise()
+      .then(res => {
+        subResult.next(res);
+      }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
