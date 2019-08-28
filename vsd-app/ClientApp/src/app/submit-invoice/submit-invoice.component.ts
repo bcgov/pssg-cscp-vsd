@@ -292,12 +292,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     const formData = <CounsellorInvoice>{
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
-
-    //this.justiceDataService.submitCounsellorInvoice(formData).subscribe
-    //  (res => {
-    //    console.log(res);
-    //      subResult.next(res);
-    //    }, err => subResult.next(false));
     this.busy = this.justiceDataService.submitCounsellorInvoice(formData)
       .toPromise()
       .then(res => {
