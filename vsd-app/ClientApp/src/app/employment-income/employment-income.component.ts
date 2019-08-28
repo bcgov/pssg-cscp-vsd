@@ -85,7 +85,7 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
   @Input() disabled = false; // TODO: disable the fields in the component when needed.
 
   phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-
+  postalRegex = /^[A-Za-z][0-9][A-Za-z][ ]?[0-9][A-Za-z][0-9]$/;
   // handy expose keys for iteration
   objectKeys = Object.keys;
   countryList = COUNTRIES_ADDRESS_2;

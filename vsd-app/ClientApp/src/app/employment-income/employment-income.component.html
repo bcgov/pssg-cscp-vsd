@@ -72,6 +72,7 @@
     <!-- If the employee lost wages we need to collect the information in the employee information area -->
     <span *ngIf="eiInfo.didYouLoseWages===100000001">
       <h2 class="blue-header">Employer Information</h2>
+
       <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
       <div class="form-group">
         <app-field label="Are you self employed?" [valid]="eiInfo.areYouSelfEmployed" [required]="true" errorMessage="Please select an option">
@@ -87,7 +88,10 @@
       </div>
 
       <span *ngFor="let employer of eiInfo.employers; let i = index">
-        <h2>{{employer.employerName|titlecase}}</h2>
+        <span *ngIf="eiInfo.employers.length>1">
+          <h2>{{employer.employerName|titlecase}}</h2>
+          <hr>
+        </span>
         <h3>Name &amp; Phone Number</h3>
         <div class="form-row">
           <div class="col">
@@ -186,10 +190,9 @@
             </label>
           </app-field>
         </div>
-        <!-- Add employer button -->
-        <!-- May we contact your employer radio button -->
-        <pre>{{employer|json}}</pre>
       </span>
+      <!-- Add employer button -->
+      <button class="btn btn-secondary" (click)="addEmployer()">Add Employer</button>
     </span>
   </form>
 </section>
