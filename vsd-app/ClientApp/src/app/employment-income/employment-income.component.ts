@@ -41,6 +41,7 @@ class EmployerForm implements Employer {
   employerFirstName: string;
   employerLastName: string;
   employerAddress: AddressForm;
+  contactable: boolean;
   constructor(employer?: Employer) {
     if (employer) {
       this.employerName = employer.employerName || null;

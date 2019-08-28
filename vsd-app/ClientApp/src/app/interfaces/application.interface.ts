@@ -183,6 +183,7 @@ export interface Employer {
   employerFirstName: string;
   employerLastName: string;
   employerAddress: Address;
+  contactable: boolean;
 }
 interface VictimInformation {
   firstName: string;
