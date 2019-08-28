@@ -13,6 +13,7 @@ import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -288,7 +289,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   save(): Subject<{}> {
     const subResult = new Subject<{}>();
-    const formData = <DynamicsApplicationModel>{
+    const formData = <CounsellorInvoice>{
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
 
