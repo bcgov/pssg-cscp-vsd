@@ -805,9 +805,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     if (typeof isChecked != 'boolean') console.log('Set lost employment income expenses should be a boolean but is not for some reason. ' + typeof isChecked);
 
     let employmentIncomeInformation = this.form.get('employmentIncomeInformation');
-    //
-    // let wasEmployed = this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime');
-    // let missedWork = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime');
 
     if (isChecked) {
       employmentIncomeInformation.clearValidators();
@@ -817,21 +814,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       employmentIncomeInformation.clearValidators();
       employmentIncomeInformation.setErrors(null);
     }
-    // if (isChecked) {
-    //   // clear existing validators
-    //   wasEmployed.clearValidators();
-    //   wasEmployed.setErrors(null);
-    //   missedWork.clearValidators();
-    //   missedWork.setErrors(null);
-    //   // set validators
-    //   wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
-    //   missedWork.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
-    // } else {
-    //   wasEmployed.clearValidators();
-    //   wasEmployed.setErrors(null);
-    //   missedWork.clearValidators();
-    //   missedWork.setErrors(null);
-    // }
   }
   setEmployedAtCrimeTime(): void {
     const responseCode: number = parseInt(this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value);
@@ -996,7 +978,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.setCompletingOnBehalfOf();
     this.setCvapStaffSharing();
     this.setHospitalTreatment();
-    this.setLostEmploymentIncomeExpenses();
+    // this.setLostEmploymentIncomeExpenses();
     // this.setEmployedAtCrimeTime();
     // this.setIncidentAtWork();
     // this.setMissedWorkDueToCrime();
