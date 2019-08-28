@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { EmploymentIncomeInformation, Employer } from '../interfaces/application.interface';
 import { Address } from '../interfaces/address.interface';
 import { COUNTRIES_ADDRESS_2, iCountry } from '../shared/address/country-list';
 
-class EiInfoForm implements EmploymentIncomeInformation {
+export class EiInfoForm implements EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime: number; // 100000001==yes 100000000==no
   wereYouAtWorkAtTimeOfIncident: number; // 100000001==yes 100000000==no
   didYouMissWorkDueToCrime: number; // 100000001==yes 100000000==no
@@ -73,11 +73,16 @@ class AddressForm implements Address {
     }
   }
 }
-
+const EMPLOYMENT_INCOME_PROVIDER = {
+  provide: NG_VALUE_ACCESSOR,
+  useExisting: forwardRef(() => EmploymentIncomeComponent),
+  multi: true
+};
 @Component({
   selector: 'app-employment-income',
   templateUrl: './employment-income.component.html',
-  styleUrls: ['./employment-income.component.scss']
+  styleUrls: ['./employment-income.component.scss'],
+  providers: [EMPLOYMENT_INCOME_PROVIDER]
 })
 export class EmploymentIncomeComponent implements ControlValueAccessor {
   @Input() value: EmploymentIncomeInformation;
@@ -91,7 +96,8 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
   countryList = COUNTRIES_ADDRESS_2;
 
   constructor() {
-    this.eiInfo = new EiInfoForm();
+    console.log(this.value);
+    this.eiInfo = new EiInfoForm(this.value);
   }
 
   eiInfo: EmploymentIncomeInformation;
@@ -117,14 +123,16 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
   }
 
   validate(validationState: boolean) {
-    //TODO: remove all parts that may not fit the business logic. (They changed their mind on a flag, added an answer so a blank element that shouldn't exist does exist. :-( ))
-    // cleanFormData();
-    // this is triggered when any form changes are made
-    // if (validationState) {
-    // TODO: the validation state can emit when the user meets minimum requirements so this should be cleaned before sent back
-    this.propagateModelChange();
-    // }
+    //TODO: remove all parts that may not fit the business logic. They could have changed their mind on a flag, added an answer so a blank element that shouldn't exist does exist.
+    if (validationState) {
+      // TODO: the validation state can emit when the user meets minimum requirements so this should be cleaned before sent back
+      this.propagateModelChange();
+    } else {
+      this.valueChange.emit(null);
+    }
   }
+
+
   /**********ControlValueAccessor interface needs these***********/
   // This is a placeholder method that we use to emit changes back to the form.
   onChange = (_: any) => { };
@@ -147,7 +155,9 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
       this.onTouched();
     }
 
-    this.valueChange.emit(this.eiInfo)
+    // emit changes
+    this.valueChange.emit(this.eiInfo);
+    this.onChange(this.eiInfo);
   }
 
 }
