@@ -16,11 +16,11 @@ import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benef
 import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
+import { Application } from '../interfaces/application.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -109,10 +109,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     const dialogRef = this.dialog.open(DeactivateGuardDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
-        console.log(data); 
+        console.log(data);
         return data;
       }
-    ); 
+    );
 
     //return verifyDialogRef.navigateAwaySelection$;
     // if the editName !== this.user.name
@@ -163,8 +163,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         //addressControl.clearValidators();
         //addressControl.setErrors(null);
         //for (let control of addressControls) {
-          //control.clearValidators();
-       //   control.setErrors(null);
+        //control.clearValidators();
+        //   control.setErrors(null);
         //}
         addressControl.setValidators([Validators.required]);
         for (let control of addressControls) {
@@ -227,7 +227,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         wasEmployed.setErrors(null);
         missedWork.clearValidators();
         missedWork.setErrors(null);
-        
+
         let useValidation = checked === true;
         if (useValidation) {
           wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
@@ -416,7 +416,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           patchObject
         );
       }
-    ); 
+    );
   }
 
   verifyCancellation(): void {
@@ -433,7 +433,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           return;
         }
       }
-    );  
+    );
   }
 
   showSummaryOfBenefits(): void {
@@ -445,7 +445,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     return elements[groupIndex];
   }
 
-  changeGroupValidity(values: any) : void {
+  changeGroupValidity(values: any): void {
     let expenseMinimumMet = '';
     const x = [
       this.form.get('expenseInformation.haveMedicalExpenses'),
@@ -493,7 +493,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   gotoNextStep(stepper: MatStepper): void {
-//    console.log(this.currentFormStep);
+    //    console.log(this.currentFormStep);
     if (stepper != null) {
       var desiredFormIndex = stepper.selectedIndex;
       var formGroupName = this.getFormGroupName(desiredFormIndex);
@@ -549,7 +549,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }),
     });
   }
-  
+
   addEmployer(): void {
     this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
     this.employerItems.push(this.createEmployerItem());
@@ -605,7 +605,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       courtLocation: ''
     });
   }
-  
+
   addCrimeLocation(): void {
     this.crimeLocationItems = this.form.get('crimeInformation.crimeLocations') as FormArray;
     this.crimeLocationItems.push(this.createCrimeLocationItem());
@@ -649,8 +649,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
 
   submitPartialApplication() {
-      this.formFullyValidated = true;
-      this.save().subscribe(
+    this.formFullyValidated = true;
+    this.save().subscribe(
       data => {
         console.log("submitting partial form");
         this.router.navigate(['/application-success']);
@@ -663,7 +663,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   producePDF() {
-    //let formData = <DynamicsApplicationModel>{
+    //let formData = {
     //  Introduction: this.form.get('introduction').value,
     //  PersonalInformation: this.form.get('personalInformation').value,
     //  CrimeInformation: this.form.get('crimeInformation').value,
@@ -686,7 +686,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     w.print();
     //w.close();
   }
-  
+
   submitApplication() {
     let formIsValid = this.form.valid;
     //let formIsValid = true;showValidationMessage
@@ -714,8 +714,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     }
   }
 
-  debugFormData(): void {
-    let formData = <DynamicsApplicationModel> {
+  convertFormToDynamics(): void {
+    let formData: Application = {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
@@ -732,7 +732,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   save(): Subject<boolean> {
     const subResult = new Subject<boolean>();
-    const formData = <DynamicsApplicationModel>{
+    const formData: Application = {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
@@ -745,10 +745,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     };
 
     this.busy = this.justiceDataService.submitApplication(formData)
-        .toPromise()
-        .then(res => {
-          subResult.next(true);
-        }, err => subResult.next(false));
+      .toPromise()
+      .then(res => {
+        subResult.next(true);
+      }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
@@ -759,7 +759,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.markAsTouched();
   }
 
-  private buildApplicationForm() : FormGroup {
+  private buildApplicationForm(): FormGroup {
     return this.fb.group({
       introduction: this.fb.group({
         understoodInformation: ['', Validators.requiredTrue]
@@ -824,9 +824,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         additionalInformationFiles: this.fb.array([]), // This will be a collection of uploaded files
 
         wasReportMadeToPolice:
-        [
-          0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
-        ], // No: 100000000 Yes: 100000001
+          [
+            0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
+          ], // No: 100000000 Yes: 100000001
 
         policeReportedWhichPoliceForce: [''],
         policeReportedMultipleTimes: [''],
@@ -841,16 +841,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         offenderLastName: [''],
         offenderRelationship: [''],
         offenderBeenCharged:
-        [
-          0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]
-        ], // Yes: 100000000 No: 100000001 Undecided: 100000002
+          [
+            0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]
+          ], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
         courtFiles: this.fb.array([this.createCourtInfoItem()]),
 
         haveYouSuedOffender:
-        [
-          0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
-        ], // No: 100000000   Yes: 100000001
+          [
+            0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
+          ], // No: 100000000   Yes: 100000001
         intendToSueOffender: [0], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
         racafInformation: this.fb.group({

@@ -9,10 +9,10 @@ import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
+import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -49,7 +49,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   public showReviewPanel: boolean = false;
   public showSuccessPanel: boolean = false;
   public showCancelPanel: boolean = false;
-  
+
   invoiceSubTotal: number = 0.00;
   invoiceGrandTotal: number = 0.00;
 
@@ -135,7 +135,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         vendorEmail.updateValueAndValidity();
       });
   }
-  
+
   debugFormData(): void {
     let formData = {
       InvoiceDetails: this.form.get('invoiceDetails').value
@@ -218,7 +218,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.lineItems.removeAt(index);
     this.showRemoveLine = this.lineItems.length > 1;
   }
-  
+
   showSignPad(group, control): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;

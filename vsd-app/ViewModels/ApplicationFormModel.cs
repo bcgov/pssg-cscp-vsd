@@ -13,6 +13,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Representativeinformation RepresentativeInformation { get; set; }
         public Declarationinformation DeclarationInformation { get; set; }
         public Authorizationinformation AuthorizationInformation { get; set; }
+        // TODO: Missing VictimInformation
     }
 
     public class Introduction
