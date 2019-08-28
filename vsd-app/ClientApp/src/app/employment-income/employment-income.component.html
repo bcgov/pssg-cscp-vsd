@@ -116,17 +116,30 @@
         <div class="form-row">
           <div class="col">
             <!-- country option  -->
-            <app-field label="Country" [required]="true" [valid]="employer.employerAddress.country" errorMessage="Please select your country">
+            <app-field label="Country" [required]="true" [valid]="employer.employerAddress?.country" errorMessage="Please select your country">
               <select name="{{'employerCountry_'+i.toString()}}" [(ngModel)]="employer.employerAddress.country" class="form-control">
-                <option value="">Choose a country</option>
-                <option *ngFor="let item of countryList" [value]="item.name">
-                  {{ item.name }}
+                <option value="null">Choose a country</option>
+                <option *ngFor="let key of objectKeys(countryList)" [ngValue]="key">
+                  {{ key }}
                 </option>
               </select>
             </app-field>
           </div>
           <div class="col">
-
+            <!-- THIS IS NOT OPTIMAL. Country list is not iterable malformed peice of sweet code. -->
+            <app-field *ngIf="employer.employerAddress.country" [label]="getCountryProperty(employer.employerAddress.country,'areaType')" [required]="true" [valid]="employer.employerAddress?.province" errorMessage="Please select your {{getCountryProperty(employer.employerAddress.country,'areaType')|lowercase}}.">
+              <select name="{{'employerProvince_'+i.toString()}}" [(ngModel)]="employer.employerAddress.province" class="form-control">
+                <option value="null">Choose a {{getCountryProperty(employer.employerAddress.country,'areaType')|lowercase}}</option>
+                <option *ngFor="let province of getCountryProperty(employer.employerAddress.country,'areas')" [value]="province">
+                  {{ province }}
+                </option>
+              </select>
+            </app-field>
+            <app-field *ngIf="!employer.employerAddress.country" label="Province" [required]="true" [valid]="false" errorMessage="Please select your province.">
+              <select name="placeholder" class="form-control" disabled>
+                <option value="">Choose a province</option>
+              </select>
+            </app-field>
           </div>
         </div>
         <div class="form-row">

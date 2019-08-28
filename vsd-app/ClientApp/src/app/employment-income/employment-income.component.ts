@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { EmploymentIncomeInformation, Employer } from '../interfaces/application.interface';
 import { Address } from '../interfaces/address.interface';
-import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
+import { COUNTRIES_ADDRESS_2, iCountry } from '../shared/address/country-list';
 
 class EiInfoForm implements EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime: number; // 100000001==yes 100000000==no
@@ -59,8 +59,8 @@ class AddressForm implements Address {
   line2: string;
   city: string;
   postalCode: string;
-  province: string;
-  country: string;
+  province: string = null; // made null so option can select default
+  country: string = null;
   constructor(address?) {
     if (address) {
       this.line1 = address.line1 || null;
@@ -84,13 +84,22 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
   @Input() disabled = false; // TODO: disable the fields in the component when needed.
 
   phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-  countryList = COUNTRIES_ADDRESS;
+
+  // handy expose keys for iteration
+  objectKeys = Object.keys;
+  countryList = COUNTRIES_ADDRESS_2;
+
   constructor() {
     this.eiInfo = new EiInfoForm();
   }
 
   eiInfo: EmploymentIncomeInformation;
-
+  getCountryProperty(country: string, properyName: string): any {
+    if (!country) country = 'Canada';
+    if (!properyName) properyName = 'areaType';
+    // return 'Province' by default.
+    return this.countryList[country][properyName];
+  }
   addEmployer() {
     this.eiInfo.employers.push(new EmployerForm());
   }
@@ -110,9 +119,10 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
     //TODO: remove all parts that may not fit the business logic. (They changed their mind on a flag, added an answer so a blank element that shouldn't exist does exist. :-( ))
     // cleanFormData();
     // this is triggered when any form changes are made
-    if (validationState) {
-      this.propagateModelChange();
-    }
+    // if (validationState) {
+    // TODO: the validation state can emit when the user meets minimum requirements so this should be cleaned before sent back
+    this.propagateModelChange();
+    // }
   }
   /**********ControlValueAccessor interface needs these***********/
   // This is a placeholder method that we use to emit changes back to the form.
