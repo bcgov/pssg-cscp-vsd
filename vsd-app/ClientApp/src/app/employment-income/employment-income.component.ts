@@ -95,10 +95,7 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
   objectKeys = Object.keys;
   countryList = COUNTRIES_ADDRESS_2;
 
-  constructor() {
-    console.log(this.value);
-    this.eiInfo = new EiInfoForm(this.value);
-  }
+  constructor() { }
 
   eiInfo: EmploymentIncomeInformation;
   getCountryProperty(country: string, properyName: string): any {
@@ -146,8 +143,9 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
 
   // This allows Angular to disable this component.
   setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
-  writeValue(val: any): void {
+  writeValue(val: EmploymentIncomeInformation): void {
     // setter for the
+    this.eiInfo = new EiInfoForm(val);
   }
   propagateModelChange(touched = true): void {
     // mark the form field as touched
