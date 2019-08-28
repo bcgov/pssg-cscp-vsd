@@ -87,6 +87,7 @@
       </div>
 
       <span *ngFor="let employer of eiInfo.employers; let i = index">
+        <h2>{{employer.employerName|titlecase}}</h2>
         <h3>Name &amp; Phone Number</h3>
         <div class="form-row">
           <div class="col">
@@ -118,7 +119,7 @@
             <!-- country option  -->
             <app-field label="Country" [required]="true" [valid]="employer.employerAddress?.country" errorMessage="Please select your country">
               <select name="{{'employerCountry_'+i.toString()}}" [(ngModel)]="employer.employerAddress.country" class="form-control">
-                <option value="null">Choose a country</option>
+                <option value="">Choose a country</option>
                 <option *ngFor="let key of objectKeys(countryList)" [ngValue]="key">
                   {{ key }}
                 </option>
@@ -129,15 +130,15 @@
             <!-- THIS IS NOT OPTIMAL. Country list is not iterable malformed peice of sweet code. -->
             <app-field *ngIf="employer.employerAddress.country" [label]="getCountryProperty(employer.employerAddress.country,'areaType')" [required]="true" [valid]="employer.employerAddress?.province" errorMessage="Please select your {{getCountryProperty(employer.employerAddress.country,'areaType')|lowercase}}.">
               <select name="{{'employerProvince_'+i.toString()}}" [(ngModel)]="employer.employerAddress.province" class="form-control">
-                <option value="null">Choose a {{getCountryProperty(employer.employerAddress.country,'areaType')|lowercase}}</option>
+                <option [value]="null">Choose a {{getCountryProperty(employer.employerAddress.country,'areaType')|lowercase}}</option>
                 <option *ngFor="let province of getCountryProperty(employer.employerAddress.country,'areas')" [value]="province">
                   {{ province }}
                 </option>
               </select>
             </app-field>
             <app-field *ngIf="!employer.employerAddress.country" label="Province" [required]="true" [valid]="false" errorMessage="Please select your province.">
-              <select name="placeholder" class="form-control" disabled>
-                <option value="">Choose a province</option>
+              <select name="{{'employerProvince_'+i.toString()}}" class="form-control" [ngModel]="employer.employerAddress.country" disabled>
+                <option [value]="null">Choose a province</option>
               </select>
             </app-field>
           </div>
@@ -159,11 +160,18 @@
         <div class="form-row">
           <div class="col">
             <!-- city -->
-
+            <app-field label="City" [required]="false" errorMessage="Please include the city">
+              <input id="{{'employerCity_'+i.toString()}}" class="form-control" name="{{'employerCity_'+i.toString()}}" type="text" [(ngModel)]="employer.employerAddress.city">
+            </app-field>
           </div>
           <div class="col">
             <!-- postal -->
-
+            <app-field *ngIf="!employer.employerAddress.country" label="Postal Code" [required]="false" errorMessage="Please include the postal code">
+              <input id="{{'employerPostal_'+i.toString()}}" class="form-control" name="{{'employerPostal_'+i.toString()}}" type="text" disabled>
+            </app-field>
+            <app-field *ngIf="employer.employerAddress.country" label="Postal Code" [required]="false" errorMessage="Please include the postal code">
+              <input id="{{'employerPostal_'+i.toString()}}" class="form-control" name="{{'employerPostal_'+i.toString()}}" type="text" [(ngModel)]="employer.employerAddress.postalCode">
+            </app-field>
           </div>
         </div>
         <!-- Add employer button -->
