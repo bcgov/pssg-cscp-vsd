@@ -13,6 +13,7 @@ import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -262,8 +263,9 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       this.formFullyValidated = true;
       this.save().subscribe(
         data => {
-          if (data['IsSuccess'] == true) {
-            console.log(data['IsSuccess']);
+          console.log (data);
+          if (data['isSuccess'] == true) {
+            console.log(data['isSuccess']);
             console.log("submitting");
             this.invoiceSuccess();
           }
@@ -275,7 +277,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         error => {
           this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           console.log('Error submitting invoice');
-        }
+        },
+        () => {}
       );
     } else {
       console.log("form not validated");
@@ -284,16 +287,15 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     }
   }
 
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
-    const formData: CounsellorInvoice = {
+  save(): Subject<{}> {
+    const subResult = new Subject<{}>();
+    const formData = <CounsellorInvoice>{
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
-
     this.busy = this.justiceDataService.submitCounsellorInvoice(formData)
       .toPromise()
       .then(res => {
-        subResult.next(true);
+        subResult.next(res);
       }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
 

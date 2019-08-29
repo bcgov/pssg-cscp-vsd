@@ -1,4 +1,5 @@
 using Gov.Cscp.VictimServices.Public.ViewModels;
+using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -81,8 +82,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             var t = Task.Run(() => CreateInvoiceAction(_configuration, model));
             t.Wait();
 
-            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
-            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Invoice Save", Message = dynamicsResponse.Result };
+            string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
+            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
+            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Invoice Save", Message = dynamicsResponse.Result };
             return new JsonResult(result);
         }
 
@@ -169,7 +171,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
         }
         
-        private static async Task<string> CreateInvoiceAction(IConfiguration configuration, CounsellorInvoiceFormModel model)
+        private static async Task<String> CreateInvoiceAction(IConfiguration configuration, CounsellorInvoiceFormModel model)
         {
             HttpClient httpClient = null;
             try
@@ -181,21 +183,29 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 invoiceJson = invoiceJson.Replace("odatatype", "@odata.type");
 
                 var endpointAction = "vsd_SubmitCounselorInvoice";
-                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration, invoiceJson, endpointAction);
+                var tuple = await GetDynamicsHttpClientNew(configuration, invoiceJson, endpointAction);
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
-                request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+                //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
+                //request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await httpClient.SendAsync(request);
+                //HttpResponseMessage response = await httpClient.SendAsync(request);
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var jsonResult = response.Content.ReadAsStringAsync().Result;
-                    return jsonResult;
-                }
+                //if (response.StatusCode == HttpStatusCode.OK)
+                //{
+                //    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                //    return jsonResult;
+                //}
 
-                return response.Content.ReadAsStringAsync().Result;
+                //return response.Content.ReadAsStringAsync().Result;
+
+                string tempResult = tuple.Item1.ToString();
+
+                DynamicsResponse dynamicsResponse = new DynamicsResponse();
+                dynamicsResponse.IsSuccess = true;
+                dynamicsResponse.Result = tempResult;
+                dynamicsResponse.odatacontext = tuple.Item2.ToString();
+
+                return dynamicsResponse.Result;
             }
             finally
             {
@@ -611,6 +621,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             public string odatacontext { get; set; }
             public bool IsSuccess { get; set; }
+            public bool IsCompletedSuccessfully { get; set; }
             public string Result { get; set; }
         }
     }
