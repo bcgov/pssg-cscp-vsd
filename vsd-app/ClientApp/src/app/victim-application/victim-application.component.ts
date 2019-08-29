@@ -141,9 +141,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.get('personalInformation.preferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('medicalInformation.wereYouTreatedAtHospital').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').valueChanges.subscribe(() => this.setRequiredFields());
-    // this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').valueChanges.subscribe(() => this.setRequiredFields());
-    // this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').valueChanges.subscribe(() => this.setRequiredFields());
-    // this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields());
@@ -978,10 +975,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.setCompletingOnBehalfOf();
     this.setCvapStaffSharing();
     this.setHospitalTreatment();
-    // this.setLostEmploymentIncomeExpenses();
-    // this.setEmployedAtCrimeTime();
-    // this.setIncidentAtWork();
-    // this.setMissedWorkDueToCrime();
     this.setPreferredContactMethod();
     this.setRepresentativePreferredMethodOfContact();
   }
