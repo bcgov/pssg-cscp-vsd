@@ -694,7 +694,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       this.formFullyValidated = true;
       this.save().subscribe(
         data => {
-          if (data['IsSuccess'] == true) {
+          if (data['isSuccess'] == true) {
             this.router.navigate(['/application-success']);
           }
           else {
@@ -730,8 +730,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     console.log(JSON.stringify(formData));
   }
 
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
+  save(): Subject<{}> {
+    const subResult = new Subject<{}>();
     const formData: Application = {
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
@@ -744,14 +744,28 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       AuthorizationInformation: this.form.get('authorizationInformation').value,
     };
 
+
     this.busy = this.justiceDataService.submitApplication(formData)
       .toPromise()
       .then(res => {
-        subResult.next(true);
+        subResult.next(res);
       }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
+
+
+
+
+
+    //this.busy = this.justiceDataService.submitApplication(formData)
+    //  .toPromise()
+    //  .then(res => {
+    //    subResult.next(true);
+    //  }, err => subResult.next(false));
+    //this.busy2 = Promise.resolve(this.busy);
+
+    //return subResult;
   }
 
   // marking the form as touched makes the validation messages show

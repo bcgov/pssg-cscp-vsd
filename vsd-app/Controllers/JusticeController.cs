@@ -58,8 +58,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             var t = Task.Run(() => CreateCaseAction(_configuration, model));
             t.Wait();
 
-            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
-            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Application Save", Message = dynamicsResponse.Result };
+            string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
+            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
+            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Application Save", Message = dynamicsResponse.Result };
             return new JsonResult(result);
         }
         
@@ -149,20 +150,29 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 var endpointAction = "vsd_CreateCVAPClaim";
                 //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration, applicationJson, endpointAction);
+                var tuple = await GetDynamicsHttpClientNew(configuration, applicationJson, endpointAction);
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
-                request.Content = new StringContent(applicationJson, Encoding.UTF8, "application/json");
+                //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
+                //request.Content = new StringContent(applicationJson, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await httpClient.SendAsync(request);
+                //HttpResponseMessage response = await httpClient.SendAsync(request);
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var jsonResult = response.Content.ReadAsStringAsync().Result;
-                    return jsonResult;
-                }
+                //if (response.StatusCode == HttpStatusCode.OK)
+                //{
+                //    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                //    return jsonResult;
+                //}
 
-                return response.Content.ReadAsStringAsync().Result;
+                //return response.Content.ReadAsStringAsync().Result;
+                string tempResult = tuple.Item1.ToString();
+
+                DynamicsResponse dynamicsResponse = new DynamicsResponse();
+                dynamicsResponse.IsSuccess = true;
+                dynamicsResponse.Result = tempResult;
+                dynamicsResponse.odatacontext = tuple.Item2.ToString();
+
+                return dynamicsResponse.Result;
+
             }
             finally
             {
