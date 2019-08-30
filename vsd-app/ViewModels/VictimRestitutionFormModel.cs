@@ -5,6 +5,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     public class VictimRestitutionFormModel
     {
         public VictimRestitutionInformation RestitutionInformation { get; set; }
+        public DocumentCollectioninformation[] DocumentCollectionInformation { get; set; }
     }
 
     public class VictimRestitutionInformation
