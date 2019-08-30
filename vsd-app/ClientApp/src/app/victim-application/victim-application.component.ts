@@ -685,7 +685,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       this.justiceDataService.submitApplication(this.harvestForm())
         .subscribe(
           data => {
-            if (data['IsSuccess'] == true) {
+            if (data['isSuccess'] == true) {
               this.router.navigate(['/application-success']);
             }
             else {

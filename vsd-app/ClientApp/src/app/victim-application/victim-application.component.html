@@ -441,242 +441,294 @@
                 </label>
               </app-field>
 
-              <app-field label="Date report was made to the police.">
-                <input type="text" class="form-control date-picker" formControlName="policeReportedDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedDatePicker" (focus)="policeReportedDatePicker.open()" (click)="policeReportedDatePicker.open()" readonly>
-                <mat-datepicker #policeReportedDatePicker></mat-datepicker>
-                <span *ngIf="form.get('crimeInformation.policeReportedMultipleTimes').value === true">
-                  <span> - </span>
-                  <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
-                  <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
-                </span>
-              </app-field>
+              <section>
+                <h2 class="blue-header">Accused & Court Information</h2>
+                <h3>Name of the Accused <span>(if known)</span></h3>
 
-              <div class="police-report-information">
-                <div class="police-report-listing" formArrayName="policeReports" *ngFor="let item of form.get('crimeInformation.policeReports').controls; let i = index;">
-                  <div [formGroupName]="i" class="row police-report">
+                <div class="row">
+                  <div class="col-4">
+                    <app-field label="First Name">
+                      <input class="form-control" type="text" formControlName="offenderFirstName">
+                    </app-field>
+                  </div>
+                  <div class="col-4">
+                    <app-field label="Middle Name">
+                      <input class="form-control" type="text" formControlName="offenderMiddleName">
+                    </app-field>
+                  </div>
+                  <div class="col-4">
+                    <app-field label="Last Name">
+                      <input class="form-control" type="text" formControlName="offenderLastName">
+                    </app-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-4">
+                    <app-field label="Relationship to the Accused (if any)">
+                      <input class="form-control" type="text" formControlName="offenderRelationship">
+                    </app-field>
+                  </div>
+                  <div class="col-8">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <app-field label="Has this person been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
+                      <label class="inline-label">
+                        <input type="radio" [value]="100000000" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                        <span>Yes</span>
+                      </label>
+                      <label class="inline-label">
+                        <input type="radio" [value]="100000001" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                        <span>No</span>
+                      </label>
+                      <label class="inline-label">
+                        <input type="radio" [value]="100000002" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                        <span>Unknown</span>
+                      </label>
+                    </app-field>
+                  </div>
+                  <div class="col-6">
+                  </div>
+                </div>
+
+                <app-field label="Date report was made to the police.">
+                  <input type="text" class="form-control date-picker" formControlName="policeReportedDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedDatePicker" (focus)="policeReportedDatePicker.open()" (click)="policeReportedDatePicker.open()" readonly>
+                  <mat-datepicker #policeReportedDatePicker></mat-datepicker>
+                  <span *ngIf="form.get('crimeInformation.policeReportedMultipleTimes').value === true">
+                    <span> - </span>
+                    <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
+                    <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
+                  </span>
+                </app-field>
+
+                <div class="police-report-information">
+                  <div class="police-report-listing" formArrayName="policeReports" *ngFor="let item of form.get('crimeInformation.policeReports').controls; let i = index;">
+                    <div [formGroupName]="i" class="row police-report">
+                      <div class="col-4">
+                        <app-field label="Police File Number (if known)" [tooltipReference]="policeFileNumber">
+                          <input class="form-control" type="text" formControlName="policeFileNumber">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                        <app-field label="Name of investigating officer (if known)">
+                          <input class="form-control" type="text" formControlName="investigatingOfficer">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                        <br />
+                        <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport">
+                          <i class="fas fa-trash-alt"></i> Remove
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-template #policeFileNumber><strong>Police File Number</strong><br />This information is needed by CVAP to access the police report about the incident.</ng-template>
+                  <a href="javascript:void(0);" class="btn btn-secondary" (click)="addPoliceReport()" *ngIf="showAddPoliceReport">Add Police File Number</a>
+                </div>
+              </section>
+            </section>
+
+            <section>
+              <h2 class="blue-header">Offender & Court Information</h2>
+              <h3>Person who allegedly committed the crime <span>(if known)</span></h3>
+
+              <div class="row">
+                <div class="col-4">
+                  <app-field label="First Name">
+                    <input class="form-control" type="text" formControlName="offenderFirstName">
+                  </app-field>
+                </div>
+                <div class="col-4">
+                  <app-field label="Middle Name">
+                    <input class="form-control" type="text" formControlName="offenderMiddleName">
+                  </app-field>
+                </div>
+                <div class="col-4">
+                  <app-field label="Last Name">
+                    <input class="form-control" type="text" formControlName="offenderLastName">
+                  </app-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <app-field label="Relationship to the alleged offender (if any)">
+                    <input class="form-control" type="text" formControlName="offenderRelationship">
+                  </app-field>
+                </div>
+                <div class="col-8">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <app-field label="Has the alleged offender been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000000" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                      <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000001" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                      <span>No</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000002" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                      <span>Unknown</span>
+                    </label>
+                  </app-field>
+                </div>
+                <div class="col-6">
+                </div>
+              </div>
+
+              <h3>Court Information</h3>
+              <div class="court-information">
+                <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('crimeInformation.courtFiles').controls; let i = index;">
+                  <div [formGroupName]="i" class="row court-files">
                     <div class="col-4">
-                      <app-field label="Police File Number (if known)" [tooltipReference]="policeFileNumber">
-                        <input class="form-control" type="text" formControlName="policeFileNumber">
+                      <app-field label="Court File Number (if known)" [tooltipReference]="courtFileNumber">
+                        <input class="form-control" type="text" formControlName="courtFileNumber">
                       </app-field>
                     </div>
                     <div class="col-4">
-                      <app-field label="Name of investigating officer (if known)">
-                        <input class="form-control" type="text" formControlName="investigatingOfficer">
+                      <app-field label="Court Location">
+                        <input class="form-control" type="text" formControlName="courtLocation">
                       </app-field>
                     </div>
                     <div class="col-4">
                       <br />
-                      <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport">
-                        <i class="fas fa-trash-alt"></i> Remove
+                      <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">
+                        <i class="fas fa-trash-alt"></i> Remove Court File and Location
                       </a>
                     </div>
                   </div>
                 </div>
-                <ng-template #policeFileNumber><strong>Police File Number</strong><br />This information is needed by CVAP to access the police report about the incident.</ng-template>
-                <a href="javascript:void(0);" class="btn btn-secondary" (click)="addPoliceReport()" *ngIf="showAddPoliceReport">Add Police File Number</a>
+                <ng-template #courtFileNumber><strong>Court File Number</strong><br />This information is needed by CVAP to access court records about the incident.</ng-template>
+                <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add Additional Court Information</a>
               </div>
-            </section>
-          </section>
 
-          <section>
-            <h2 class="blue-header">Offender & Court Information</h2>
-            <h3>Person who allegedly committed the crime <span>(if known)</span></h3>
-
-            <div class="row">
-              <div class="col-4">
-                <app-field label="First Name">
-                  <input class="form-control" type="text" formControlName="offenderFirstName">
-                </app-field>
-              </div>
-              <div class="col-4">
-                <app-field label="Middle Name">
-                  <input class="form-control" type="text" formControlName="offenderMiddleName">
-                </app-field>
-              </div>
-              <div class="col-4">
-                <app-field label="Last Name">
-                  <input class="form-control" type="text" formControlName="offenderLastName">
-                </app-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-4">
-                <app-field label="Relationship to the alleged offender (if any)">
-                  <input class="form-control" type="text" formControlName="offenderRelationship">
-                </app-field>
-              </div>
-              <div class="col-8">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <app-field label="Has the alleged offender been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-                    <span>No</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000002" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-                    <span>Unknown</span>
-                  </label>
-                </app-field>
-              </div>
-              <div class="col-6">
-              </div>
-            </div>
-
-            <h3>Court Information</h3>
-            <div class="court-information">
-              <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('crimeInformation.courtFiles').controls; let i = index;">
-                <div [formGroupName]="i" class="row court-files">
-                  <div class="col-4">
-                    <app-field label="Court File Number (if known)" [tooltipReference]="courtFileNumber">
-                      <input class="form-control" type="text" formControlName="courtFileNumber">
-                    </app-field>
-                  </div>
-                  <div class="col-4">
-                    <app-field label="Court Location">
-                      <input class="form-control" type="text" formControlName="courtLocation">
-                    </app-field>
-                  </div>
-                  <div class="col-4">
-                    <br />
-                    <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">
-                      <i class="fas fa-trash-alt"></i> Remove Court File and Location
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <ng-template #courtFileNumber><strong>Court File Number</strong><br />This information is needed by CVAP to access court records about the incident.</ng-template>
-              <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add Additional Court Information</a>
-            </div>
-
-            <app-field label="Have you sued the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('crimeInformation.haveYouSuedOffender')" errorMessage="Please make a selection">
-              <label class="inline-label">
-                <input type="radio" [value]="100000001" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
-                <span>Yes</span>
-              </label>
-              <label class="inline-label">
-                <input type="radio" [value]="100000000" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
-                <span>No</span>
-              </label>
-            </app-field>
-            <section *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === 100000000">
-              <app-field label="Do you intend to sue the Person(s) Responsible?">
+              <app-field label="Have you sued the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('crimeInformation.haveYouSuedOffender')" errorMessage="Please make a selection">
                 <label class="inline-label">
-                  <input type="radio" [value]="100000000" name="intendToSueOffender" formControlName="intendToSueOffender">
+                  <input type="radio" [value]="100000001" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="100000001" name="intendToSueOffender" formControlName="intendToSueOffender">
+                  <input type="radio" [value]="100000000" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
                   <span>No</span>
                 </label>
-                <label class="inline-label">
-                  <input type="radio" [value]="100000002" name="intendToSueOffender" formControlName="intendToSueOffender">
-                  <span>Undecided</span>
-                </label>
               </app-field>
-            </section>
-
-            <!-- RACAF FORM -->
-            <section *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === 100000001 || form.get('crimeInformation.intendToSueOffender').value === 100000000">
-
-              <div formGroupName="racafInformation">
-                <h2 class="blue-header">Restitution and Civil Action</h2>
-
-                <p><strong>Please note:</strong></p>
-                <p>You are not required to take legal action (a civil action or lawsuit) against anyone responsible for injury or loss. However, if you have taken legal action or intend to do so, we need to know this.</p>
-                <p>Signing this form does not mean that you agree with the decision on the claim, and does not affect your right to request a reconsideration or reassessment of that decision.</p>
-                <hr />
-
-                <h3>Restitution</h3>
-                <p><strong>Restitution</strong> refers to money that an offender is ordered to pay a victim, to help cover the victim’s monetary loss. Restitution is ordered by a judge in a criminal court as part of the offender’s sentence.</p>
-                <br />
-
-                <app-field label="Did you apply to the court for money from the offender?">
+              <section *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === 100000000">
+                <app-field label="Do you intend to sue the Person(s) Responsible?">
                   <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                    <input type="radio" [value]="100000000" name="intendToSueOffender" formControlName="intendToSueOffender">
                     <span>Yes</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                    <input type="radio" [value]="100000001" name="intendToSueOffender" formControlName="intendToSueOffender">
                     <span>No</span>
                   </label>
                   <label class="inline-label">
-                    <input type="radio" [value]="100000002" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
-                    <span>Not Applicable (No trial/conviction)</span>
+                    <input type="radio" [value]="100000002" name="intendToSueOffender" formControlName="intendToSueOffender">
+                    <span>Undecided</span>
                   </label>
                 </app-field>
+              </section>
 
-                <section *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === 100000000">
-                  <app-field label="If yes, what expenses did you ask to be covered?">
-                    <input class="form-control standard" type="text" formControlName="expensesRequested">
+              <!-- RACAF FORM -->
+              <section *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === 100000001 || form.get('crimeInformation.intendToSueOffender').value === 100000000">
+
+                <div formGroupName="racafInformation">
+                  <h2 class="blue-header">Restitution and Civil Action</h2>
+
+                  <p><strong>Please note:</strong></p>
+                  <p>You are not required to take legal action (a civil action or lawsuit) against anyone responsible for injury or loss. However, if you have taken legal action or intend to do so, we need to know this.</p>
+                  <p>Signing this form does not mean that you agree with the decision on the claim, and does not affect your right to request a reconsideration or reassessment of that decision.</p>
+                  <hr />
+
+                  <h3>Restitution</h3>
+                  <p><strong>Restitution</strong> refers to money that an offender is ordered to pay a victim, to help cover the victim’s monetary loss. Restitution is ordered by a judge in a criminal court as part of the offender’s sentence.</p>
+                  <br />
+
+                  <app-field label="Did you apply to the court for money from the offender?">
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000000" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                      <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000001" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                      <span>No</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000002" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                      <span>Not Applicable (No trial/conviction)</span>
+                    </label>
                   </app-field>
 
-                  <app-field label="Amount awarded by the judge">
-                    <input class="form-control standard" type="number" formControlName="expensesAwarded">
+                  <section *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === 100000000">
+                    <app-field label="If yes, what expenses did you ask to be covered?">
+                      <input class="form-control standard" type="text" formControlName="expensesRequested">
+                    </app-field>
+
+                    <app-field label="Amount awarded by the judge">
+                      <input class="form-control standard" type="number" formControlName="expensesAwarded">
+                    </app-field>
+
+                    <app-field label="Amount received">
+                      <input class="form-control standard" type="number" formControlName="expensesReceived">
+                    </app-field>
+                  </section>
+
+                  <h3>Civil Action</h3>
+                  <p><strong>Civil action</strong> refers to taking legal action against, or suing, a person or party responsible for the claimant’s injury or loss.</p>
+
+                  <app-field label="Have you taken, or will you be taking, legal action?">
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000000" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+                      <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000001" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+                      <span>No</span>
+                    </label>
+                    <label class="inline-label">
+                      <input type="radio" [value]="100000002" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+                      <span>Unsure</span>
+                    </label>
                   </app-field>
 
-                  <app-field label="Amount received">
-                    <input class="form-control standard" type="number" formControlName="expensesReceived">
+                  <h3>Lawyer Information</h3>
+                  <p>Please provide the name and address of your lawyer or law firm: </p>
+
+                  <app-field label="Lawyer or Law Firm Name">
+                    <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
                   </app-field>
-                </section>
 
-                <h3>Civil Action</h3>
-                <p><strong>Civil action</strong> refers to taking legal action against, or suing, a person or party responsible for the claimant’s injury or loss.</p>
+                  <app-field label="Law Firm or Office Address">
+                  </app-field>
 
-                <app-field label="Have you taken, or will you be taking, legal action?">
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
-                    <span>No</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000002" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
-                    <span>Unsure</span>
-                  </label>
-                </app-field>
+                  <app-address [group]="form.get('crimeInformation.racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
 
-                <h3>Lawyer Information</h3>
-                <p>Please provide the name and address of your lawyer or law firm: </p>
+                  <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
+                  <div class="terms">
+                    <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following:</p>
+                    <ol class="list">
+                      <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
+                      <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
+                      <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
+                      <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
+                    </ol>
+                  </div>
 
-                <app-field label="Lawyer or Law Firm Name">
-                  <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
-                </app-field>
-
-                <app-field label="Law Firm or Office Address">
-                </app-field>
-
-                <app-address [group]="form.get('crimeInformation.racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
-
-                <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
-                <div class="terms">
-                  <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following:</p>
-                  <ol class="list">
-                    <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
-                    <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
-                    <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
-                    <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
-                  </ol>
+                  <app-field label="Applicant's Signature" [required]="true" [valid]="form.get('crimeInformation.racafInformation.signature').valid || !form.get('crimeInformation.racafInformation.signature').touched" errorMessage="Please provide your digital signature">
+                    <div class="signature-trigger" (click)="showSignPad('crimeInformation.racafInformation', 'signature')" *ngIf="!hasSignature('crimeInformation.racafInformation.signature')">
+                      <p>Click this box to sign</p>
+                    </div>
+                    <div *ngIf="hasSignature('crimeInformation.racafInformation.signature')" class="signature-preview">
+                      <img src="{{ valueOrEmpty('crimeInformation.racafInformation.signature') }}" />
+                      <a class="redo" (click)="showSignPad('crimeInformation.racafInformation', 'signature')">Redo Signature</a>
+                    </div>
+                  </app-field>
                 </div>
-
-                <app-field label="Applicant's Signature" [required]="true" [valid]="form.get('crimeInformation.racafInformation.signature').valid || !form.get('crimeInformation.racafInformation.signature').touched" errorMessage="Please provide your digital signature">
-                  <div class="signature-trigger" (click)="showSignPad('crimeInformation.racafInformation', 'signature')" *ngIf="!hasSignature('crimeInformation.racafInformation.signature')">
-                    <p>Click this box to sign</p>
-                  </div>
-                  <div *ngIf="hasSignature('crimeInformation.racafInformation.signature')" class="signature-preview">
-                    <img src="{{ valueOrEmpty('crimeInformation.racafInformation.signature') }}" />
-                    <a class="redo" (click)="showSignPad('crimeInformation.racafInformation', 'signature')">Redo Signature</a>
-                  </div>
-                </app-field>
-              </div>
+              </section>
             </section>
           </section>
         </div>
