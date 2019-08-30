@@ -7,11 +7,10 @@ export class FormBase {
 
   isFieldValid(field: string) {
     let formField = this.form.get(field);
-    if (formField.value == null)
+    if (formField.value === null)
       return true;
-    if (field == 'personalInformation.sin')
+    if (field === 'personalInformation.sin')
       return this.validateSIN(formField.value);
-      //return true;
 
     return this.form.get(field).valid || !this.form.get(field).touched;
   }
@@ -54,7 +53,7 @@ export class FormBase {
       // compare the result against the check digit
       return check === (10 - (tot % 10)) % 10;
     } else return false;// throw sin + ' is not a valid sin number.';
-}
+  }
 
   isArrayFieldValid(formArrayName: string, arrayControl: string, arrayIndex: number) {
     let formArray = <FormArray>this.form.get(formArrayName);
@@ -160,7 +159,7 @@ export class FormBase {
       return control.value ? null : { 'required': { value: control.value } };
     };
   }
-  
+
   validateAllFormFields(formGroup: any) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
@@ -312,15 +311,15 @@ export class FormBase {
       return emptyValue;
 
     var value = control.value;
-    
-    if (typeof(value) == 'string' && value.length == 0)
+
+    if (typeof (value) == 'string' && value.length == 0)
       return emptyValue;
 
-    if (typeof(value) == 'number' && value == 0) {
+    if (typeof (value) == 'number' && value == 0) {
       return emptyValue;
     }
 
-    if (typeof(value) == 'boolean') {
+    if (typeof (value) == 'boolean') {
       return value ? 'Yes' : 'No';
     }
 
@@ -371,7 +370,7 @@ export class FormBase {
 
     return output.join(' ');
   }
-      
+
   public datesOrEmpty(values: Array<any>): string {
     var output = [];
     for (var i = 0; i < values.length; i++) {
@@ -403,7 +402,7 @@ export class FormBase {
   public displayMailingAddress(addressControl: any): string {
     let control = null;
 
-    if (typeof(addressControl) == 'string')
+    if (typeof (addressControl) == 'string')
       control = this.form.get(addressControl);
 
     if (addressControl instanceof FormGroup)
