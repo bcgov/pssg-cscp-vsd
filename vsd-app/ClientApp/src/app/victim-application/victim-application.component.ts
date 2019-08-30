@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, FormControl, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -80,6 +80,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   matchingEmail: string; // this is the value of the email that both email fields should match.
 
+  // a field that represents the current employment income information state
+  employmentIncomeInformation: EmploymentIncomeInformation;
+
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -136,9 +140,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.get('personalInformation.preferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('medicalInformation.wereYouTreatedAtHospital').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields());
@@ -191,7 +192,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
-      }),
+      }, { validator: this.matchingEmails('email', 'confirmEmail') }),
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
 
@@ -304,21 +305,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
       }, { validator: this.requireCheckboxesToBeCheckedValidator }),
-      employmentIncomeInformation: this.fb.group({
-        wereYouEmployedAtTimeOfCrime: [null, [Validators.min(100000000), Validators.max(100000001)]], //, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // 100000000 = Yes, 1000000001 = No, 100000002 = Self-Employed
-        wereYouAtWorkAtTimeOfIncident: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
-        haveYouAppliedForWorkersCompensation: [null, [Validators.min(100000000), Validators.max(100000001)]],//, Validators.required],
-        workersCompensationClaimNumber: [''],
-        didYouMissWorkDueToCrime: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
-        daysWorkMissedStart: [''], //, Validators.required],
-        daysWorkMissedEnd: [''],
-        didYouLoseWages: [null, [Validators.min(100000000), Validators.max(100000001)]], //, Validators.required],
-
-        areYouSelfEmployed: [null, [Validators.min(100000000), Validators.max(100000001)]],
-        employers: this.fb.array([this.createEmployerItem()]),
-
-        mayContactEmployer: [null, [Validators.min(100000000), Validators.max(100000001)]],
-      }),
+      employmentIncomeInformation: [null, Validators.required],
 
       representativeInformation: this.fb.group({
         completingOnBehalfOf: [null, [Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
@@ -813,24 +800,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     const isChecked: boolean = this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === 'true';
     if (typeof isChecked != 'boolean') console.log('Set lost employment income expenses should be a boolean but is not for some reason. ' + typeof isChecked);
 
-    //
-    let wasEmployed = this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime');
-    let missedWork = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime');
+    let employmentIncomeInformation = this.form.get('employmentIncomeInformation');
 
     if (isChecked) {
-      // clear existing validators
-      wasEmployed.clearValidators();
-      wasEmployed.setErrors(null);
-      missedWork.clearValidators();
-      missedWork.setErrors(null);
-      // set validators
-      wasEmployed.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
-      missedWork.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000001)]);
+      employmentIncomeInformation.clearValidators();
+      employmentIncomeInformation.setErrors(null);
+      employmentIncomeInformation.setValidators([Validators.required]);
     } else {
-      wasEmployed.clearValidators();
-      wasEmployed.setErrors(null);
-      missedWork.clearValidators();
-      missedWork.setErrors(null);
+      employmentIncomeInformation.clearValidators();
+      employmentIncomeInformation.setErrors(null);
     }
   }
   setEmployedAtCrimeTime(): void {
@@ -996,11 +974,46 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.setCompletingOnBehalfOf();
     this.setCvapStaffSharing();
     this.setHospitalTreatment();
-    this.setLostEmploymentIncomeExpenses();
-    this.setEmployedAtCrimeTime();
-    this.setIncidentAtWork();
-    this.setMissedWorkDueToCrime();
     this.setPreferredContactMethod();
     this.setRepresentativePreferredMethodOfContact();
+  }
+
+  matchingEmailValidator() {
+    // this is an ugly validator. Do not reuse please.
+
+    // get fields
+    const email: AbstractControl = this.form.get('personalInformation.email')
+    const emailString: string = email.value.toString().toLowerCase();
+    const confirmEmail: AbstractControl = this.form.get('personalInformation.confirmEmail');
+    const confirmEmailString: string = confirmEmail.value.toString().toLowerCase();
+
+    // get field 2
+    // update the validity/error status of both fields
+    if (emailString === confirmEmailString) {
+      // validation passes. Return null and set both controls to valid.
+      console.log(emailString + " = " + confirmEmailString);
+      email.setErrors(null);
+      // email.markAsTouched();
+      confirmEmail.setErrors(null);
+    } else {
+      // mismatched
+      console.log('They do not match');
+      // email.markAsTouched();
+      email.setErrors({ mismatched: true });
+      confirmEmail.setErrors({ mismatched: true });
+    }
+
+  };
+  matchingEmails(emailKey: string, confirmEmailKey: string) {
+    return (group: FormGroup): { [key: string]: any } => {
+      let email = group.controls[emailKey];
+      let confirmEmail = group.controls[confirmEmailKey];
+
+      if (email.value !== confirmEmail.value) {
+        return {
+          mismatchedEmails: true
+        };
+      }
+    }
   }
 }
