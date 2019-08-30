@@ -676,8 +676,8 @@
             </section>
 
             <section>
-              <h2 class="blue-header">Offender & Court Information</h2>
-              <h3>Person who allegedly committed the crime <span>(if known)</span></h3>
+              <h2 class="blue-header">Accused & Court Information</h2>
+              <h3>Name of the Accused <span>(if known)</span></h3>
 
               <div class="row">
                 <div class="col-4">
@@ -698,7 +698,7 @@
               </div>
               <div class="row">
                 <div class="col-4">
-                  <app-field label="Relationship to the alleged offender (if any)">
+                  <app-field label="Relationship to the Accused (if any)">
                     <input class="form-control" type="text" formControlName="offenderRelationship">
                   </app-field>
                 </div>
@@ -707,7 +707,7 @@
               </div>
               <div class="row">
                 <div class="col-6">
-                  <app-field label="Has the alleged offender been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
+                  <app-field label="Has this person been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
                     <label class="inline-label">
                       <input type="radio" [value]="100000000" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                       <span>Yes</span>
