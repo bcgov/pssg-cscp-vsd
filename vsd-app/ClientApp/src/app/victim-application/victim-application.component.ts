@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, FormControl, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -20,7 +20,6 @@ import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
-import { EiInfoForm } from '../employment-income/employment-income.component';
 
 const moment = _rollupMoment || _moment;
 
@@ -193,7 +192,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
-      }),
+      }, { validator: this.matchingEmails('email', 'confirmEmail') }),
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
 
@@ -977,5 +976,44 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.setHospitalTreatment();
     this.setPreferredContactMethod();
     this.setRepresentativePreferredMethodOfContact();
+  }
+
+  matchingEmailValidator() {
+    // this is an ugly validator. Do not reuse please.
+
+    // get fields
+    const email: AbstractControl = this.form.get('personalInformation.email')
+    const emailString: string = email.value.toString().toLowerCase();
+    const confirmEmail: AbstractControl = this.form.get('personalInformation.confirmEmail');
+    const confirmEmailString: string = confirmEmail.value.toString().toLowerCase();
+
+    // get field 2
+    // update the validity/error status of both fields
+    if (emailString === confirmEmailString) {
+      // validation passes. Return null and set both controls to valid.
+      console.log(emailString + " = " + confirmEmailString);
+      email.setErrors(null);
+      // email.markAsTouched();
+      confirmEmail.setErrors(null);
+    } else {
+      // mismatched
+      console.log('They do not match');
+      // email.markAsTouched();
+      email.setErrors({ mismatched: true });
+      confirmEmail.setErrors({ mismatched: true });
+    }
+
+  };
+  matchingEmails(emailKey: string, confirmEmailKey: string) {
+    return (group: FormGroup): { [key: string]: any } => {
+      let email = group.controls[emailKey];
+      let confirmEmail = group.controls[confirmEmailKey];
+
+      if (email.value !== confirmEmail.value) {
+        return {
+          mismatchedEmails: true
+        };
+      }
+    }
   }
 }

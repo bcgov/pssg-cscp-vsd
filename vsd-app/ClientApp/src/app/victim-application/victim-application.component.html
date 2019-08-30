@@ -275,7 +275,7 @@
           <div class="row">
             <div class="col-5">
               <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('personalInformation.email')" errorMessage="Please enter your email address">
-                <input class="form-control" type="text" (blur)="trimValue(form.get('personalInformation.email'))" formControlName="email" maxlength="100">
+                <input class="form-control" type="text" (blur)="trimValue(form.get('personalInformation.email'))" (input)="matchingEmailValidator()" formControlName="email" maxlength="100">
               </app-field>
             </div>
             <div class="col-7">
@@ -283,8 +283,8 @@
           </div>
           <div class="row">
             <div class="col-5">
-              <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('personalInformation.confirmEmail') && email === confirmEmail" errorMessage="Please confirm your email address">
-                <input class="form-control" type="text" (blur)="trimValue(form.get('personalInformation.confirmEmail'))" formControlName="confirmEmail" maxlength="100">
+              <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('personalInformation.confirmEmail')" errorMessage="Please confirm your email address">
+                <input class="form-control" type="text" (blur)="trimValue(form.get('personalInformation.confirmEmail'))" (input)="matchingEmailValidator()" formControlName="confirmEmail" maxlength="100">
               </app-field>
             </div>
             <div class="col-7">
