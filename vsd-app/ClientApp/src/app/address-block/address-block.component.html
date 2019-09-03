@@ -1,10 +1,8 @@
 <form #genericAddressForm="ngForm" (change)="validate(genericAddressForm.form.valid)">
-
-  <h3>Mailing Address</h3>
   <div class="form-row">
     <div class="col">
       <!-- country option  -->
-      <app-field label="Country" [required]="required" [valid]="country.valid && country.touched" errorMessage="Please select your country">
+      <app-field label="Country" [required]="required" [valid]="country.valid" errorMessage="Please select your country">
         <select name="country" [(ngModel)]="addressForm.country" (change)="changeCountry()" #country="ngModel" class="form-control" required>
           <option *ngFor="let key of objectKeys(countryList)" [ngValue]="key">
             {{ key }}
@@ -14,14 +12,14 @@
     </div>
     <div class="col">
       <!-- THIS IS NOT OPTIMAL. Country list is not iterable malformed peice of sweet code. -->
-      <app-field *ngIf="addressForm.country && (addressForm.country==='Canada' || addressForm.country==='United States of America')" [label]="getCountryProperty(addressForm.country,'areaType')" [required]="required" [valid]="province.valid && province.touched" errorMessage="Please select your {{getCountryProperty(addressForm.country,'areaType')|lowercase}}.">
+      <app-field *ngIf="addressForm.country && (addressForm.country==='Canada' || addressForm.country==='United States of America')" [label]="getCountryProperty(addressForm.country,'areaType')" [required]="required" [valid]="province.valid" errorMessage="Please select your {{getCountryProperty(addressForm.country,'areaType')|lowercase}}.">
         <select name="province" #province="ngModel" [(ngModel)]="addressForm.province" class="form-control" required>
           <option *ngFor="let province of getCountryProperty(addressForm.country,'areas')" [value]="province">
             {{ province }}
           </option>
         </select>
       </app-field>
-      <app-field *ngIf="addressForm.country && !(addressForm.country==='Canada' || addressForm.country==='United States of America')" [label]="getCountryProperty(addressForm.country,'areaType')" [required]="false" errorMessage="Please enter your province.">
+      <app-field *ngIf="addressForm.country && !(addressForm.country==='Canada' || addressForm.country==='United States of America')" [label]="getCountryProperty(addressForm.country,'areaType')" [required]="false" errorMessage="Please enter your province or state.">
         <input id="province" class="form-control" name="province" #province="ngModel" type="text" [(ngModel)]="addressForm.province">
       </app-field>
       <app-field *ngIf="!addressForm.country" label="Province" [required]="required" [valid]="province.valid" errorMessage="Please select your province.">
@@ -61,12 +59,12 @@
         <input id="postal" class="form-control" name="postal" #postal="ngModel" type="text" [(ngModel)]="addressForm.postalCode">
       </app-field>
       <app-field *ngIf="addressForm.country && addressForm.country==='Canada'" label="Postal Code" [required]="required" errorMessage="Please include the postal code">
-        <input id="postal" class="form-control" name="postal" #postal="ngModel" [pattern]="postalRegex" type="text" [(ngModel)]="addressForm.postalCode">
+        <input id="postal" class="form-control" name="postal" #postal="ngModel" type="text" [(ngModel)]="addressForm.postalCode">
       </app-field>
     </div>
   </div>
 </form>
-<pre *ngIf="addressForm">
+<!-- <pre *ngIf="addressForm">
   Valid: {{genericAddressForm.form.valid}}
   {{addressForm|json}}
-</pre>
+</pre> -->

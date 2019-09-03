@@ -85,7 +85,6 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 import { TestComponent } from './test/test.component';
 import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
 import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
-import { ContactInformationComponent } from './contact-information/contact-information.component';
 import { AddressBlockComponent } from './address-block/address-block.component';
 
 @NgModule({
@@ -122,7 +121,6 @@ import { AddressBlockComponent } from './address-block/address-block.component';
     TestComponent,
     FileUploaderBoxComponent,
     EmploymentIncomeComponent,
-    ContactInformationComponent,
     AddressBlockComponent,
   ],
   imports: [

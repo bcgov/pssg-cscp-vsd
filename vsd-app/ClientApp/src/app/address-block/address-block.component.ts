@@ -42,8 +42,10 @@ export class AddressBlockComponent implements OnInit {
 
   ngOnInit() {
     if (this.value) {
+      // initialize the form from a value
       this.addressForm = new AddressForm(this.value);
     } else {
+      // initialize the form from a blank object
       this.addressForm = new AddressForm();
     }
   }
@@ -63,11 +65,6 @@ export class AddressBlockComponent implements OnInit {
   /** This validation is triggered whenever the form is changed. */
   validate(validationState: boolean) {
     //TODO: remove all parts that may not fit the business logic. They could have changed their mind on a flag, added an answer so a blank element that shouldn't exist does exist.
-    if (validationState) {
-      // TODO: the validation state can emit when the user meets minimum requirements so this should be cleaned before sent back
-      this.valueChange.emit(this.addressForm);
-    } else {
-      this.valueChange.emit(null);
-    }
+    this.valueChange.emit(this.addressForm);
   }
 }

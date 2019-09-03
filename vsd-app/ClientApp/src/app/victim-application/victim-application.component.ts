@@ -974,7 +974,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.setCompletingOnBehalfOf();
     this.setCvapStaffSharing();
     this.setHospitalTreatment();
-    this.setPreferredContactMethod();
+    // this.setPreferredContactMethod();
     this.setRepresentativePreferredMethodOfContact();
   }
 
