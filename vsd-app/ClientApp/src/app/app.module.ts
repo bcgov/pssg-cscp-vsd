@@ -86,6 +86,7 @@ import { TestComponent } from './test/test.component';
 import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
 import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
 import { ContactInformationComponent } from './contact-information/contact-information.component';
+import { AddressBlockComponent } from './address-block/address-block.component';
 
 @NgModule({
   declarations: [
@@ -122,6 +123,7 @@ import { ContactInformationComponent } from './contact-information/contact-infor
     FileUploaderBoxComponent,
     EmploymentIncomeComponent,
     ContactInformationComponent,
+    AddressBlockComponent,
   ],
   imports: [
     BrowserModule,
