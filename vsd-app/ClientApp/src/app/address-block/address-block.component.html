@@ -21,10 +21,10 @@
           </option>
         </select>
       </app-field>
-      <app-field *ngIf="addressForm.country && !(addressForm.country==='Canada' || addressForm.country==='United States of America')" [label]="getCountryProperty(addressForm.country,'areaType')" [required]="required" [valid]="province.valid && province.touched" errorMessage="Please select your {{getCountryProperty(addressForm.country,'areaType')|lowercase}}.">
+      <app-field *ngIf="addressForm.country && !(addressForm.country==='Canada' || addressForm.country==='United States of America')" [label]="getCountryProperty(addressForm.country,'areaType')" [required]="false" errorMessage="Please enter your province.">
         <input id="province" class="form-control" name="province" #province="ngModel" type="text" [(ngModel)]="addressForm.province">
       </app-field>
-      <app-field *ngIf="!addressForm.country" label="Province" [required]="true" [valid]="province.valid" errorMessage="Please select your province.">
+      <app-field *ngIf="!addressForm.country" label="Province" [required]="required" [valid]="province.valid" errorMessage="Please select your province.">
         <select name="province" #province="ngModel" class="form-control" [ngModel]="addressForm.country" disabled>
           <option [value]="null">Choose a province</option>
         </select>
