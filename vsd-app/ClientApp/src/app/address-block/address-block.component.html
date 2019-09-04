@@ -1,9 +1,49 @@
-<form #genericAddressForm="ngForm" (change)="validate(genericAddressForm.form.valid)">
+<div [formGroup]="addressForm">
   <div class="form-row">
     <div class="col">
-      <!-- country option  -->
+      <app-field label="Country" [required]="required" [valid]=" !(country.invalid && (country.dirty||country.touched))" errorMessage="Please select a country.">
+        <input formControlName="country" id="country" class="form-control" name="country" type="text" [required]="required" (change)="setCountryName(country.value)">
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="Province" [required]="required" [valid]="!(province.invalid && (province.dirty||province.touched))" errorMessage="Please select a province.">
+        <input formControlName="province" id="province" class="form-control" name="province" type="text" [required]="required">
+      </app-field>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col">
+      <app-field label="Mailing Address Line 1" [valid]=" !(line1.invalid && (line1.dirty||line1.touched))" errorMessage="Please enter line 1 of your mailing address.">
+        <input formControlName="line1" id="line1" class="form-control" name="line1" type="text" [required]="required">
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="Mailing Address Line 2" [valid]="true" errorMessage="Please enter line 2 of your mailing address.">
+        <input formControlName="line2" id="line2" class="form-control" name="line2" type="text">
+      </app-field>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col">
+      <app-field label="City" [valid]=" !(city.invalid && (city.dirty||city.touched))" errorMessage="Please enter a city.">
+        <input formControlName="city" id="city" class="form-control" name="city" type="text" [required]="required">
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="Postal Code" [valid]="!(postalCode.invalid && (postalCode.dirty||postalCode.touched))" errorMessage="Please enter your {{currentCountry.postalCodeName | lowercase}}.">
+        <input formControlName="postalCode" id="postalCode" class="form-control" name="postalCode" type="text" [placeholder]="currentCountry.postalCodeSample" [required]="required">
+      </app-field>
+    </div>
+  </div>
+</div>
+{{currentCountry|json}}
+<!-- Valid:{{addressForm.valid}} -->
+<!-- <pre>{{addressForm.value|json}}</pre> -->
+<!-- <form #genericAddressForm="ngForm" (change)="validate(genericAddressForm.form.valid)">
+  <div class="form-row">
+    <div class="col">
       <app-field label="Country" [required]="required" [valid]="country.valid" errorMessage="Please select your country">
-        <select name="country" [(ngModel)]="addressForm.country" (change)="changeCountry()" #country="ngModel" class="form-control" required>
+        <select name="country" [(ngModel)]="addressForm.country" (change)="changeCountry()" #country="ngModel" class="form-control" [required]="required">
           <option *ngFor="let key of objectKeys(countryList)" [ngValue]="key">
             {{ key }}
           </option>
@@ -11,15 +51,14 @@
       </app-field>
     </div>
     <div class="col">
-      <!-- THIS IS NOT OPTIMAL. Country list is not iterable malformed peice of sweet code. -->
       <app-field *ngIf="addressForm.country && (addressForm.country==='Canada' || addressForm.country==='United States of America')" [label]="getCountryProperty(addressForm.country,'areaType')" [required]="required" [valid]="province.valid" errorMessage="Please select your {{getCountryProperty(addressForm.country,'areaType')|lowercase}}.">
-        <select name="province" #province="ngModel" [(ngModel)]="addressForm.province" class="form-control" required>
+        <select name="province" #province="ngModel" [(ngModel)]="addressForm.province" class="form-control" [required]="required">
           <option *ngFor="let province of getCountryProperty(addressForm.country,'areas')" [value]="province">
             {{ province }}
           </option>
         </select>
       </app-field>
-      <app-field *ngIf="addressForm.country && !(addressForm.country==='Canada' || addressForm.country==='United States of America')" [label]="getCountryProperty(addressForm.country,'areaType')" [required]="false" errorMessage="Please enter your province or state.">
+      <app-field *ngIf="addressForm.country && !(addressForm.country==='Canada' || addressForm.country==='United States of America')" [label]="getCountryProperty(addressForm.country,'areaType')" [required]="required" errorMessage="Please enter your province or state.">
         <input id="province" class="form-control" name="province" #province="ngModel" type="text" [(ngModel)]="addressForm.province">
       </app-field>
       <app-field *ngIf="!addressForm.country" label="Province" [required]="required" [valid]="province.valid" errorMessage="Please select your province.">
@@ -31,13 +70,11 @@
   </div>
   <div class="form-row">
     <div class="col">
-      <!-- mailing address 1 field  -->
       <app-field label="Mailing address line 1" [required]="false" errorMessage="Please include your mailing address">
         <input id="line1" class="form-control" name="line1" #line1="ngModel" type="text" [(ngModel)]="addressForm.line1">
       </app-field>
     </div>
     <div class="col">
-      <!-- mailing address 2 field -->
       <app-field label="Mailing address line 2" [required]="false" errorMessage="Please include your mailing address">
         <input id="line2" class="form-control" name="line2" #line2="ngModel" type="text" [(ngModel)]="addressForm.line2">
       </app-field>
@@ -45,13 +82,11 @@
   </div>
   <div class="form-row">
     <div class="col">
-      <!-- city -->
       <app-field label="City" [required]="false" errorMessage="Please include the city">
         <input id="city" class="form-control" name="city" #city="ngModel" type="text" [(ngModel)]="addressForm.city">
       </app-field>
     </div>
     <div class="col">
-      <!-- postal -->
       <app-field *ngIf="!addressForm.country" label="Postal Code" [required]="false" errorMessage="Please include the postal code">
         <input id="postal" class="form-control" name="postal" type="text" disabled>
       </app-field>
@@ -63,7 +98,7 @@
       </app-field>
     </div>
   </div>
-</form>
+</form> -->
 <!-- <pre *ngIf="addressForm">
   Valid: {{genericAddressForm.form.valid}}
   {{addressForm|json}}

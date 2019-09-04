@@ -1,6 +1,8 @@
-<!-- <form [formGroup]="form"> -->
-<app-address-block [(value)]="addressOutputter"></app-address-block>
-<!-- </form> -->
-<!-- Parent form is valid.{{form.valid}}
-{{form.value|json}} -->
-{{addressOutputter|json}}
+<form [formGroup]="personalInfoForm" (ngSubmit)="submit()">
+  <h2>Primary Address</h2>
+  <app-address-block formControlName="primaryAddress" id="primary" [required]="true"></app-address-block>
+  <h2>Alternate Address</h2>
+  <app-address-block formControlName="alternateAddress" id="alternate"></app-address-block>
+</form>
+Valid:{{personalInfoForm.valid}}
+<pre>{{personalInfoForm.value|json}}</pre>

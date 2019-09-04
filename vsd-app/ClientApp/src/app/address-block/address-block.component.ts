@@ -1,70 +1,118 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostBinding, forwardRef, OnDestroy } from '@angular/core';
 import { Address } from '../interfaces/address.interface';
-import { COUNTRIES_ADDRESS_2 } from '../shared/address/country-list';
-
-
-class AddressForm implements Address {
-  line1: string;
-  line2: string;
-  city: string;
-  postalCode: string;
-  province: string = null; // made null so option can select default
-  country: string = null;
-  constructor(address?) {
-    if (address) {
-      this.line1 = address.line1 || null;
-      this.line2 = address.line2 || null;
-      this.city = address.city || null;
-      this.postalCode = address.postalCode || null;
-      this.province = address.province || null;
-      this.country = address.country || null;
-    }
-  }
-}
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { Subscription, BehaviorSubject } from 'rxjs';
+import { COUNTRIES_ADDRESS_2, iCountry } from '../shared/address/country-list';
 
 @Component({
   selector: 'app-address-block',
   templateUrl: './address-block.component.html',
   styleUrls: ['./address-block.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AddressBlockComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AddressBlockComponent),
+      multi: true,
+    }
+  ]
 })
-export class AddressBlockComponent implements OnInit {
-  @Input() value: Address;
-  @Output() valueChange = new EventEmitter<Address>();
-  @Input() disabled = false; // TODO: disable the fields in the component when needed.
-  @Input() required = false;
-  // handy expose keys for iteration
-  objectKeys = Object.keys;
-  countryList = COUNTRIES_ADDRESS_2;
-  postalRegex = /^[A-Za-z][0-9][A-Za-z][ ]?[0-9][A-Za-z][0-9]$/;
+export class AddressBlockComponent implements ControlValueAccessor, OnDestroy {
+  // is this control required?
+  @Input() required: boolean = false;
 
-  addressForm: AddressForm;
-  constructor() { }
+  addressForm: FormGroup;
+  subscriptions: Subscription[] = [];
 
-  ngOnInit() {
-    if (this.value) {
-      // initialize the form from a value
-      this.addressForm = new AddressForm(this.value);
+  currentCountry: iCountry;
+
+  get value(): Address {
+    return this.addressForm.value;
+  }
+  set value(value: Address) {
+    this.addressForm.setValue(value);
+    this.onChange(value);
+    this.onTouched();
+  }
+  constructor(private formBuilder: FormBuilder) {
+    // build the formbuilder form
+    this.buildForm();
+
+    // set defaults
+    this.setCountryName('Canada');
+
+    this.subscriptions.push(
+      // any time the inner form changes update the parent of any change
+      this.addressForm.valueChanges.subscribe(value => {
+        this.onChange(value);
+        this.onTouched();
+      })
+    );
+  }
+
+  // This is dumb but required
+  get country(): AbstractControl { return this.addressForm.get('country'); }
+  get city(): AbstractControl { return this.addressForm.get('city'); }
+  get province(): AbstractControl { return this.addressForm.get('province'); }
+  get postalCode(): AbstractControl { return this.addressForm.get('postalCode'); }
+  get line1(): AbstractControl { return this.addressForm.get('line1'); }
+
+  buildForm() {
+    // use form builder to build the correct form
+    if (this.required) {
+      // create the form in a way that makes filling it out required
+      this.addressForm = this.formBuilder.group({
+        country: ['', Validators.required],
+        city: ['', Validators.required],
+        province: ['', Validators.required],
+        postalCode: ['', Validators.required],
+        line1: ['', Validators.required],
+        line2: [''],
+      });
     } else {
-      // initialize the form from a blank object
-      this.addressForm = new AddressForm();
+      // create the form in a not-required way
+      this.addressForm = this.formBuilder.group({
+        country: [''],
+        city: [''],
+        province: [''],
+        postalCode: [''],
+        line1: [''],
+        line2: [''],
+      });
+    }
+  }
+  setCountryName(country: string) {
+    // get the country of interest
+    this.currentCountry = COUNTRIES_ADDRESS_2[country];
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
+  onChange: any = () => { };
+  onTouched: any = () => { };
+
+  registerOnChange(fn) {
+    this.onChange = fn;
+  }
+
+  writeValue(value) {
+    if (value) {
+      this.value = value;
     }
   }
 
-  getCountryProperty(country: string, properyName: string): any {
-    // Helper for country properties
-    if (!country) country = 'Canada';
-    if (!properyName) properyName = 'areaType';
-    // return 'Province' by default.
-    return this.countryList[country][properyName];
+  registerOnTouched(fn) {
+    this.onTouched = fn;
   }
 
-  changeCountry() {
-    this.addressForm.postalCode = null;
-    this.addressForm.province = null;
-  }
-  /** This validation is triggered whenever the form is changed. */
-  validate(validationState: boolean) {
-    //TODO: remove all parts that may not fit the business logic. They could have changed their mind on a flag, added an answer so a blank element that shouldn't exist does exist.
-    this.valueChange.emit(this.addressForm);
+  // communicate the inner form validation to the parent form
+  validate(_: FormControl) {
+    return this.addressForm.valid ? null : { profile: { valid: false, }, };
   }
 }
