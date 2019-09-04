@@ -28,6 +28,7 @@ export class AddressBlockComponent implements ControlValueAccessor, OnDestroy {
   addressForm: FormGroup;
   subscriptions: Subscription[] = [];
 
+  countries: string[];
   currentCountry: iCountry;
 
   get value(): Address {
@@ -43,6 +44,7 @@ export class AddressBlockComponent implements ControlValueAccessor, OnDestroy {
     this.buildForm();
 
     // set defaults
+    this.countries = Object.keys(COUNTRIES_ADDRESS_2);
     this.setCountryName('Canada');
 
     this.subscriptions.push(

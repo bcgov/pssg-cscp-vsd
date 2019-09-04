@@ -3,6 +3,11 @@
     <div class="col">
       <app-field label="Country" [required]="required" [valid]=" !(country.invalid && (country.dirty||country.touched))" errorMessage="Please select a country.">
         <input formControlName="country" id="country" class="form-control" name="country" type="text" [required]="required" (change)="setCountryName(country.value)">
+        <select name="country" formControlName (change)="setCountryName(country.value)" class="form-control" [required]="required">
+          <option *ngFor="let country of countries" [value]="country">
+            {{ country }}
+          </option>
+        </select>
       </app-field>
     </div>
     <div class="col">
@@ -36,7 +41,7 @@
     </div>
   </div>
 </div>
-{{currentCountry|json}}
+{{countries|json}}
 <!-- Valid:{{addressForm.valid}} -->
 <!-- <pre>{{addressForm.value|json}}</pre> -->
 <!-- <form #genericAddressForm="ngForm" (change)="validate(genericAddressForm.form.valid)">
