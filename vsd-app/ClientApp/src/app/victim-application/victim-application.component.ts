@@ -83,6 +83,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   // a field that represents the current employment income information state
   employmentIncomeInformation: EmploymentIncomeInformation;
 
+  //
+  get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -176,22 +178,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         email: ['', [Validators.required]],
         confirmEmail: ['', [Validators.required]],
 
-        primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        alternateAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
+        primaryAddress: [''],
+        alternateAddress: [''],
       }, { validator: this.matchingEmails('email', 'confirmEmail') }),
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
