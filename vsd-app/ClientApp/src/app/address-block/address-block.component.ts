@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostBinding, forwardRef, OnDestroy } from '@angular/core';
+import { Component, Input, forwardRef, OnDestroy } from '@angular/core';
 import { Address } from '../interfaces/address.interface';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { Subscription, BehaviorSubject } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { COUNTRIES_ADDRESS_2, iCountry } from '../shared/address/country-list';
 
 @Component({
@@ -88,8 +88,16 @@ export class AddressBlockComponent implements ControlValueAccessor, OnDestroy {
     }
   }
   setCountryName(country: string) {
-    // get the country of interest
-    this.currentCountry = COUNTRIES_ADDRESS_2[country];
+    if (country) {
+      // get the country of interest
+      this.currentCountry = COUNTRIES_ADDRESS_2[country];
+      // clear the existing value of the province and postal code.
+      this.addressForm.get('province').setValue('');
+      this.addressForm.get('postalCode').setValue('');
+    } else {
+      // no country supplied? Default is Canada
+      this.setCountryName('Canada');
+    }
   }
 
   ngOnDestroy() {
