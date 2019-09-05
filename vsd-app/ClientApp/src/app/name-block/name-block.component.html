@@ -1,8 +1,8 @@
 <div [formGroup]="nameForm">
   <div class="form-row">
     <div class="col">
-      <app-field label="First Name" [required]="required" [valid]="!(firstName.invalid && (firstName.dirty||firstName.touched))" errorMessage="Please enter your first name">
-        <input class="form-control" type="text" formControlName="firstName">
+      <app-field label="First Name" [required]="required" [valid]="isValid(firstName)" errorMessage="Please enter your first name">
+        <input class="form-control" type="text" formControlName="firstName" [required]="required">
       </app-field>
     </div>
     <div class="col">
@@ -11,8 +11,8 @@
       </app-field>
     </div>
     <div class="col">
-      <app-field label="Last Name" [required]="required" [valid]="!(lastName.invalid && (lastName.dirty||lastName.touched))" errorMessage="Please enter your last name">
-        <input class="form-control" type="text" formControlName="lastName">
+      <app-field label="Last Name" [required]="required" [valid]="isValid(lastName)" errorMessage="Please enter your last name">
+        <input class="form-control" type="text" formControlName="lastName" [required]="required">
       </app-field>
     </div>
   </div>

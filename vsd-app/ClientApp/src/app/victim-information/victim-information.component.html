@@ -27,6 +27,62 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col">
+      <h3>Other Details</h3>
+      <div class="form-row">
+        <div class="col">
+          <app-field label="Gender" [required]="true" [valid]="isValid(gender)" errorMessage="Please select your gender">
+            <label class="inline-label">
+              <input type="radio" value="m" name="gender" formControlName="gender">
+              <span>M</span>
+            </label>
+            <label class="inline-label">
+              <input type="radio" value="f" name="gender" formControlName="gender">
+              <span>F</span>
+            </label>
+            <label class="inline-label">
+              <input type="radio" value="x" name="gender" formControlName="gender">
+              <span>X</span>
+            </label>
+          </app-field>
+        </div>
+        <div class="col">
+          <!-- This needs work to manipulate the data -->
+          <app-field label="Birthdate" [required]="true" [valid]="isValid(birthDate)" errorMessage="Please enter your birth date">
+            <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()">
+            <mat-datepicker #birthDatePicker></mat-datepicker>
+          </app-field>
+        </div>
+        <div class="col">
+          <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="true" errorMessage="Please enter a valid SIN" [tooltipReference]="sinTemplate">
+            <input class="form-control sin-input" maxlength="11" type="text" formControlName="sin">
+            <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong></ng-template>
+          </app-field>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col">
+          <app-field label="Marital Status" [required]="true" [valid]="isValid(maritalStatus)" errorMessage="Please select your marital status">
+            <select class="form-control" formControlName="maritalStatus">
+              <option value="married">Married</option>
+              <option value="common_law">Common Law</option>
+              <option value="widowed">Widowed</option>
+              <option value="divorced">Divorced</option>
+              <option value="seperated">Separated</option>
+              <option value="single">Single</option>
+            </select>
+          </app-field>
+        </div>
+        <div class="col">
+          <app-field label="Occupation" [required]="false" [valid]="true" errorMessage="Please enter your occupation">
+            <input class="form-control" type="text" formControlName="occupation">
+          </app-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Address area. -->
   <div class="row">
     <div class="col">
@@ -42,6 +98,7 @@
       <app-address-block formControlName="alternateAddress"></app-address-block>
     </div>
   </div>
+
 
   <!-- <div class="row">
     <div class="col-4">

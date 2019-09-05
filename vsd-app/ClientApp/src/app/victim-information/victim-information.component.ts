@@ -48,24 +48,28 @@ export class VictimInformationComponent implements ControlValueAccessor, OnDestr
       })
     );
   }
-
+  isValid(control: AbstractControl): boolean {
+    return !(control.invalid && (control.dirty || control.touched))
+  }
   // getters for the template to grab form values
-  get iHaveOtherNames() { return this.piForm.get('iHaveOtherNames'); }
-
+  get iHaveOtherNames(): AbstractControl { return this.piForm.get('iHaveOtherNames'); }
+  get gender(): AbstractControl { return this.piForm.get('gender'); }
+  get birthDate(): AbstractControl { return this.piForm.get('birthDate'); }
+  get maritalStatus(): AbstractControl { return this.piForm.get('maritalStatus'); }
   buildForm() {
     // use form builder to build the correct form
     this.piForm = this.formBuilder.group({
       // permissionToContactViaMethod: [''],
-      // gender: ['', Validators.required],
-      // maritalStatus: [''],
       // preferredMethodOfContact: ['', Validators.required],
       // dateOfNameChange: [''],
-      // birthDate: [''],
       name: ['', Validators.required],
-      alias: [''],
       iHaveOtherNames: [''],
-      // sin: [''],
-      // occupation: [''],
+      alias: [''],
+      gender: ['', Validators.required],
+      birthDate: ['', Validators.required],
+      sin: [''],
+      maritalStatus: ['', Validators.required],
+      occupation: [''],
       // agreeToCvapCommunicationExchange: [''],
       // phoneNumber: [''],
       // alternatePhoneNumber: [''],

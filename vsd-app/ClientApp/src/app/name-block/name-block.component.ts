@@ -38,6 +38,12 @@ export class NameBlockComponent implements ControlValueAccessor, OnDestroy {
     this.onChange(value);
     this.onTouched();
   }
+
+  // this prevents us from doing the same logic over and over in the template
+  isValid(control: AbstractControl): boolean {
+    return !(control.invalid && (control.dirty || control.touched))
+  }
+  // template getters
   get firstName(): AbstractControl { return this.nameForm.get('firstName'); }
   get middleName(): AbstractControl { return this.nameForm.get('middleName'); }
   get lastName(): AbstractControl { return this.nameForm.get('lastName'); }
