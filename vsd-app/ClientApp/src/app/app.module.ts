@@ -88,6 +88,7 @@ import { EmploymentIncomeComponent } from './employment-income/employment-income
 import { AddressBlockComponent } from './address-block/address-block.component';
 import { VictimInformationComponent } from './victim-information/victim-information.component';
 import { NameBlockComponent } from './name-block/name-block.component';
+import { DatePickerComponent } from './date-picker/date-picker.component';
 
 @NgModule({
   declarations: [
@@ -126,6 +127,7 @@ import { NameBlockComponent } from './name-block/name-block.component';
     AddressBlockComponent,
     VictimInformationComponent,
     NameBlockComponent,
+    DatePickerComponent,
   ],
   imports: [
     BrowserModule,

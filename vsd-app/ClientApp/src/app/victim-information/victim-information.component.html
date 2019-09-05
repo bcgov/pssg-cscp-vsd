@@ -7,7 +7,7 @@
   </div>
   <div class="row">
     <div class="col">
-      <!-- TODO: Standard bootstrap is borked here. Should be like this. -->
+      <!-- TODO: Standard bootstrap is borked for checkboxes here. Should be like this. -->
       <!-- <div class="form-check">
         <input formControlName="iHaveOtherNames" class="form-check-input" type="checkbox" value="" id="alias">
         <label class="form-check-label" for="alias">
@@ -26,7 +26,7 @@
       <app-name-block formControlName="alias"></app-name-block>
       <div class="form-row">
         <div class="col-4">
-          <app-field label="Date of Name Change" [required]="false" [valid]="true" errorMessage="Please the date of the name change">
+          <app-field label="Date of Name Change" [required]="false" [valid]="true" errorMessage="Please select the date of the name change">
             <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="nameChangePicker" (focus)="nameChangePicker.open()" (click)="nameChangePicker.open()">
             <mat-datepicker #nameChangePicker></mat-datepicker>
           </app-field>
