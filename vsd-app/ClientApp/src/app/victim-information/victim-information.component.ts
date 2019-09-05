@@ -1,6 +1,5 @@
 import { Component, OnInit, forwardRef, OnDestroy, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { AddressBlockComponent } from '../address-block/address-block.component';
 import { Subscription } from 'rxjs';
 import { PersonalInformation } from '../interfaces/application.interface';
 
@@ -11,12 +10,12 @@ import { PersonalInformation } from '../interfaces/application.interface';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AddressBlockComponent),
+      useExisting: forwardRef(() => VictimInformationComponent),
       multi: true
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AddressBlockComponent),
+      useExisting: forwardRef(() => VictimInformationComponent),
       multi: true,
     }
   ]
