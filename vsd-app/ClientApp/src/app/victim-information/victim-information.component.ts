@@ -49,9 +49,8 @@ export class VictimInformationComponent implements ControlValueAccessor, OnDestr
     );
   }
 
-  get firstName(): AbstractControl { return this.piForm.get('firstName'); }
-  get middleName(): AbstractControl { return this.piForm.get('middleName'); }
-  get lastName(): AbstractControl { return this.piForm.get('lastName'); }
+  // getters for the template to grab form values
+  get iHaveOtherNames() { return this.piForm.get('iHaveOtherNames'); }
 
   buildForm() {
     // use form builder to build the correct form
@@ -62,12 +61,9 @@ export class VictimInformationComponent implements ControlValueAccessor, OnDestr
       // preferredMethodOfContact: ['', Validators.required],
       // dateOfNameChange: [''],
       // birthDate: [''],
-      firstName: ['', Validators.required],
-      middleName: [''],
-      lastName: ['', Validators.required],
-      // iHaveOtherNames: [''],
-      // otherFirstName: [''],
-      // otherLastName: [''],
+      name: ['', Validators.required],
+      alias: [''],
+      iHaveOtherNames: [''],
       // sin: [''],
       // occupation: [''],
       // agreeToCvapCommunicationExchange: [''],

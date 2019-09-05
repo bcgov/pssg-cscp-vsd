@@ -1,21 +1,32 @@
 <div [formGroup]="piForm">
-  <div class="form-row">
+  <div class="row">
     <div class="col">
-      <app-field label="First Name" [required]="true" [valid]="!(firstName.invalid && (firstName.dirty||firstName.touched))" errorMessage="Please enter your first name">
-        <input class="form-control" type="text" formControlName="firstName">
-      </app-field>
-    </div>
-    <div class="col">
-      <app-field label="Middle Name" [required]="false" [valid]="true" errorMessage="Please enter your middle name">
-        <input class="form-control" type="text" formControlName="middleName">
-      </app-field>
-    </div>
-    <div class="col">
-      <app-field label="Last Name" [required]="true" [valid]="!(lastName.invalid && (lastName.dirty||lastName.touched))" errorMessage="Please enter your last name">
-        <input class="form-control" type="text" formControlName="lastName">
-      </app-field>
+      <h3>Name</h3>
+      <app-name-block formControlName="name" [required]="true"></app-name-block>
     </div>
   </div>
+  <div class="row">
+    <div class="col">
+      <!-- TODO: Standard bootstrap is borked here. Should be like this. -->
+      <!-- <div class="form-check">
+        <input formControlName="iHaveOtherNames" class="form-check-input" type="checkbox" value="" id="alias">
+        <label class="form-check-label" for="alias">
+          I also go by other names (e.g. nickname, maiden name, alias)
+        </label>
+      </div> -->
+      <label class="inline-label">
+        <input type="checkbox" formControlName="iHaveOtherNames" value="">
+        <span>I also go by other names (e.g. nickname, maiden name, alias) </span>
+      </label>
+    </div>
+  </div>
+  <div *ngIf="iHaveOtherNames.value" class="row">
+    <div class="col">
+      <h3>Other Names Used</h3>
+      <app-name-block formControlName="alias"></app-name-block>
+    </div>
+  </div>
+
   <!-- Address area. -->
   <div class="row">
     <div class="col">

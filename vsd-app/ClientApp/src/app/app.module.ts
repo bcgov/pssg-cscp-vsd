@@ -87,6 +87,7 @@ import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.
 import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
 import { AddressBlockComponent } from './address-block/address-block.component';
 import { VictimInformationComponent } from './victim-information/victim-information.component';
+import { NameBlockComponent } from './name-block/name-block.component';
 
 @NgModule({
   declarations: [
@@ -124,6 +125,7 @@ import { VictimInformationComponent } from './victim-information/victim-informat
     EmploymentIncomeComponent,
     AddressBlockComponent,
     VictimInformationComponent,
+    NameBlockComponent,
   ],
   imports: [
     BrowserModule,
