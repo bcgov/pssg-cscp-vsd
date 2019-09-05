@@ -1,5 +1,5 @@
 <form [formGroup]="applicationForm" (ngSubmit)="submit()">
-  <!-- <app-victim-information formControlName="personalInformation"></app-victim-information> -->
+  <app-victim-information formControlName="personalInformation"></app-victim-information>
 </form>
 Valid:{{applicationForm.valid}}
 <pre>{{applicationForm.value|json}}</pre>

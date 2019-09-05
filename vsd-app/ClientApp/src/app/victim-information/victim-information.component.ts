@@ -1,5 +1,5 @@
-import { Component, OnInit, forwardRef, OnDestroy, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PersonalInformation } from '../interfaces/application.interface';
 
@@ -22,9 +22,6 @@ import { PersonalInformation } from '../interfaces/application.interface';
 })
 export class VictimInformationComponent implements ControlValueAccessor, OnDestroy {
 
-  // is this control required?
-  @Input() required: boolean = false;
-
   piForm: FormGroup;
   subscriptions: Subscription[] = [];
 
@@ -37,9 +34,7 @@ export class VictimInformationComponent implements ControlValueAccessor, OnDestr
     this.onTouched();
   }
 
-  constructor(
-    private formBuilder: FormBuilder
-  ) {
+  constructor(private formBuilder: FormBuilder) {
     // build the formbuilder form
     this.buildForm();
 
@@ -54,32 +49,34 @@ export class VictimInformationComponent implements ControlValueAccessor, OnDestr
     );
   }
 
+  get firstName(): AbstractControl { return this.piForm.get('firstName'); }
+  get middleName(): AbstractControl { return this.piForm.get('middleName'); }
+  get lastName(): AbstractControl { return this.piForm.get('lastName'); }
+
   buildForm() {
     // use form builder to build the correct form
-
-    // create the form in a not-required way
     this.piForm = this.formBuilder.group({
-      permissionToContactViaMethod: [''],
-      gender: ['', Validators.required],
-      maritalStatus: [''],
-      preferredMethodOfContact: ['', Validators.required],
-      dateOfNameChange: [''],
-      birthDate: [''],
+      // permissionToContactViaMethod: [''],
+      // gender: ['', Validators.required],
+      // maritalStatus: [''],
+      // preferredMethodOfContact: ['', Validators.required],
+      // dateOfNameChange: [''],
+      // birthDate: [''],
       firstName: ['', Validators.required],
       middleName: [''],
       lastName: ['', Validators.required],
-      iHaveOtherNames: [''],
-      otherFirstName: [''],
-      otherLastName: [''],
-      sin: [''],
-      occupation: [''],
-      agreeToCvapCommunicationExchange: [''],
-      phoneNumber: [''],
-      alternatePhoneNumber: [''],
-      email: [''],
-      primaryAddress: [''],
+      // iHaveOtherNames: [''],
+      // otherFirstName: [''],
+      // otherLastName: [''],
+      // sin: [''],
+      // occupation: [''],
+      // agreeToCvapCommunicationExchange: [''],
+      // phoneNumber: [''],
+      // alternatePhoneNumber: [''],
+      // email: [''],
+      primaryAddress: ['', Validators.required],
       alternateAddress: [''],
-    }, { validator: this.matchingEmailValidator('email', 'confirmEmail') });
+    });
   }
   matchingEmailValidator(emailKey: string, confirmEmailKey: string) {
     return (group: FormGroup): { [key: string]: any } => {

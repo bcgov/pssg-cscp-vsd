@@ -1,9 +1,38 @@
-<!-- <div [formGroup]="piForm"> -->
+<div [formGroup]="piForm">
+  <div class="form-row">
+    <div class="col">
+      <app-field label="First Name" [required]="true" [valid]="!(firstName.invalid && (firstName.dirty||firstName.touched))" errorMessage="Please enter your first name">
+        <input class="form-control" type="text" formControlName="firstName">
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="Middle Name" [required]="false" [valid]="true" errorMessage="Please enter your middle name">
+        <input class="form-control" type="text" formControlName="middleName">
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="Last Name" [required]="true" [valid]="!(lastName.invalid && (lastName.dirty||lastName.touched))" errorMessage="Please enter your last name">
+        <input class="form-control" type="text" formControlName="lastName">
+      </app-field>
+    </div>
+  </div>
+  <!-- Address area. -->
+  <div class="row">
+    <div class="col">
+      <h3>Primary Address</h3>
+      <app-address-block formControlName="primaryAddress" [required]="true"></app-address-block>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h3>Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
+      </h3>
+      <ng-template #altAddressTemplate>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</ng-template>
+      <app-address-block formControlName="alternateAddress"></app-address-block>
+    </div>
+  </div>
 
-<h2 class="blue-header">Victim Information</h2>
-<h3>Applicant Name</h3>
-
-<!-- <div class="row">
+  <!-- <div class="row">
     <div class="col-4">
       <app-field label="First Name" [required]="true" [valid]="isFieldValid('personalInformation.firstName')" errorMessage="Please enter your first name">
         <input class="form-control" type="text" formControlName="firstName" maxlength="100">
@@ -185,6 +214,5 @@
     </div>
   </div>
   -->
-<!-- </div> -->
+</div>
 <!-- <pre>{{piForm.value|json}}</pre> -->
-Works
