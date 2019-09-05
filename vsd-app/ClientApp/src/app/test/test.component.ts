@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-test',
@@ -7,19 +7,18 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./test.component.css']
 })
 export class TestComponent implements OnInit {
-  personalInfoForm: FormGroup;
+  applicationForm: FormGroup;
   constructor(
     private fb: FormBuilder
   ) { }
 
   ngOnInit() {
-    this.personalInfoForm = this.fb.group({
-      primaryAddress: [null, Validators.required],
-      alternateAddress: [null],
+    this.applicationForm = this.fb.group({
+      personalInformation: ['']
     });
   }
 
   submit() {
-    console.log(`Value: ${this.personalInfoForm.controls.mySwitch.value}`);
+    console.log(`Value: ${this.applicationForm.controls.mySwitch.value}`);
   }
 }

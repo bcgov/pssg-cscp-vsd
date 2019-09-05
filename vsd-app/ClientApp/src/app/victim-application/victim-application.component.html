@@ -129,6 +129,7 @@
           <div class="page-header">
             <h1>Victim Information & Addresses</h1>
           </div>
+          <!-- //////////////////////////////For rehoming below//////////////////////////////// -->
           <h2 class="blue-header">Victim Information</h2>
           <h3>Applicant Name</h3>
 
@@ -303,7 +304,6 @@
             <div class="col-12">
               <h3>Primary Address</h3>
               <app-address-block formControlName="primaryAddress" [required]="preferredMethodOfContact.value === '4'"></app-address-block>
-              <!-- <app-address [group]="form.get('personalInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address> -->
             </div>
           </div>
           <div class="row">
@@ -314,6 +314,7 @@
               <app-address-block formControlName="alternateAddress"></app-address-block>
             </div>
           </div>
+          <!-- //////////////////////////////For rehoming above//////////////////////////////// -->
         </div>
 
         <div formGroupName="crimeInformation" *ngIf="this.currentFormStep == 2">
