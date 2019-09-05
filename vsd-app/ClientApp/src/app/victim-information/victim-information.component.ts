@@ -56,14 +56,15 @@ export class VictimInformationComponent implements ControlValueAccessor, OnDestr
   get gender(): AbstractControl { return this.piForm.get('gender'); }
   get birthDate(): AbstractControl { return this.piForm.get('birthDate'); }
   get maritalStatus(): AbstractControl { return this.piForm.get('maritalStatus'); }
+  get dateOfNameChange(): AbstractControl { return this.piForm.get('dateOfNameChange'); }
   buildForm() {
     // use form builder to build the correct form
     this.piForm = this.formBuilder.group({
       // permissionToContactViaMethod: [''],
       // preferredMethodOfContact: ['', Validators.required],
-      // dateOfNameChange: [''],
       name: ['', Validators.required],
       iHaveOtherNames: [''],
+      dateOfNameChange: [''],
       alias: [''],
       gender: ['', Validators.required],
       birthDate: ['', Validators.required],

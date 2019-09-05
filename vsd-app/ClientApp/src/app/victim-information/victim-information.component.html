@@ -24,6 +24,14 @@
     <div class="col">
       <h3>Other Names Used</h3>
       <app-name-block formControlName="alias"></app-name-block>
+      <div class="form-row">
+        <div class="col-4">
+          <app-field label="Date of Name Change" [required]="false" [valid]="true" errorMessage="Please the date of the name change">
+            <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="nameChangePicker" (focus)="nameChangePicker.open()" (click)="nameChangePicker.open()">
+            <mat-datepicker #nameChangePicker></mat-datepicker>
+          </app-field>
+        </div>
+      </div>
     </div>
   </div>
 
