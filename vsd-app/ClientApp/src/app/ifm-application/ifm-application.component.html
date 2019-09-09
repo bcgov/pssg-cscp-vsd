@@ -177,8 +177,7 @@
                 </div>
                 <div class="col-4">
                   <app-field label="Date of Name Change">
-                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="dateOfNameChangePicker" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
                     <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
                   </app-field>
                 </div>
@@ -232,8 +231,7 @@
             <div class="row">
               <div class="col-4">
                 <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('personalInformation.birthDate')" errorMessage="Please enter your birth date">
-                  <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" [max]="todaysDate" [min]="oldestHuman" (click)="birthDatePicker.open()" readonly>
                   <mat-datepicker #birthDatePicker></mat-datepicker>
                 </app-field>
               </div>
@@ -326,7 +324,8 @@
             </div>
             <div class="row">
               <div class="col-12">
-                <h3>Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip></h3>
+                <h3>Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
+                </h3>
                 <ng-template #altAddressTemplate>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</ng-template>
                 <app-address [group]="form.get('personalInformation.alternateAddress')" [showChildrenAsRequired]="false"></app-address>
               </div>
@@ -384,8 +383,7 @@
                 </div>
                 <div class="col-4">
                   <app-field label="Date of Name Change">
-                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="dateOfNameChangePicker" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
                     <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
                   </app-field>
                 </div>
@@ -412,8 +410,7 @@
             <div class="row">
               <div class="col-4">
                 <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('victimInformation.birthDate')" errorMessage="Please enter your birth date">
-                  <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
                   <mat-datepicker #birthDatePicker></mat-datepicker>
                 </app-field>
               </div>
@@ -519,13 +516,11 @@
 
               <section>
                 <app-field label="Date(s) of crime" [required]="true" [valid]="isFieldValid('crimeInformation.crimePeriodStart')" errorMessage="Please enter the crime date">
-                  <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" (click)="crimePeriodStartPicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" (click)="crimePeriodStartPicker.open()" readonly>
                   <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
                   <span *ngIf="form.get('crimeInformation.whenDidCrimeOccur').value === true">
                     <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" (click)="crimePeriodEndDatePicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" (click)="crimePeriodEndDatePicker.open()" readonly>
                     <mat-datepicker #crimePeriodEndDatePicker></mat-datepicker>
                   </span>
                 </app-field>
@@ -583,8 +578,7 @@
                 </app-field>
 
                 <app-field label="Date of Death" *ngIf="form.get('crimeInformation.victimDeceasedFromCrime').value === true">
-                  <input type="text" class="form-control date-picker" formControlName="dateOfDeath" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="dateOfDeathPicker" (focus)="dateOfDeathPicker.open()" (click)="dateOfDeathPicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="dateOfDeath" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfDeathPicker" (focus)="dateOfDeathPicker.open()" (click)="dateOfDeathPicker.open()" readonly>
                   <mat-datepicker #dateOfDeathPicker></mat-datepicker>
                 </app-field>
 
@@ -637,13 +631,11 @@
                 </app-field>
 
                 <app-field label="Date report was made to the police.">
-                  <input type="text" class="form-control date-picker" formControlName="policeReportedDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="policeReportedDatePicker" (focus)="policeReportedDatePicker.open()" (click)="policeReportedDatePicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="policeReportedDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedDatePicker" (focus)="policeReportedDatePicker.open()" (click)="policeReportedDatePicker.open()" readonly>
                   <mat-datepicker #policeReportedDatePicker></mat-datepicker>
                   <span *ngIf="form.get('crimeInformation.policeReportedMultipleTimes').value === true">
                     <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd"
-                           [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
                     <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
                   </span>
                 </app-field>
@@ -886,7 +878,8 @@
             <section>
               <h2 class="blue-header">Coverage</h2>
 
-              <h3>Medical Services Coverage <app-tool-tip [trigger]="mspcTemplate"></app-tool-tip></h3>
+              <h3>Medical Services Coverage <app-tool-tip [trigger]="mspcTemplate"></app-tool-tip>
+              </h3>
               <ng-template #mspcTemplate><strong>Health Plan / Dental Plan Coverage</strong><br />CVAP will only pay expenses or provide benefits that are not already covered by your existing health or dental plan</ng-template>
 
               <app-field label="Do you have medical services coverage? (e.g. a BC Services Card or BC Care Card)" [valid]="isFieldValid('medicalInformation.doYouHaveMedicalServicesCoverage')" [required]="true" errorMessage="Please select an option">
@@ -960,8 +953,7 @@
                 </section>
 
                 <app-field label="Date of treatment">
-                  <input type="text" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
                   <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
                 </app-field>
               </section>
@@ -1086,12 +1078,36 @@
                   </label>
                 </app-field>
 
-                <ng-template #benefitsCounsellingTransportation><h3>Transportation to obtain counselling</h3><p>For Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p><p>Also for Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death.</p><p><strong>Examples:</strong></p><ul><li>Transportation expenses such as bus fare, air fare, mileage expenses</li><li>Meals and accommodation</li><li>Childcare while attending appointments</li></ul></ng-template>
-                <ng-template #benefitsPrescription><h3>Prescription Drug Expenses</h3><p>For Immediate Family Members who need prescription drugs to recover from the psychological injury caused by the crime</p><p><strong>Examples:</strong></p><ul><li>Medications prescribed by a doctor</li></ul></ng-template>
-                <ng-template #benefitsCounselling><h3>Counselling</h3><p>For Immediate Family Members who need counselling to recover from the psychological injury caused by the crime</p><p><strong>Examples:</strong></p><ul><li>Counselling Sessions</li></ul></ng-template>
+                <ng-template #benefitsCounsellingTransportation>
+                  <h3>Transportation to obtain counselling</h3>
+                  <p>For Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p>
+                  <p>Also for Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death.</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Transportation expenses such as bus fare, air fare, mileage expenses</li>
+                    <li>Meals and accommodation</li>
+                    <li>Childcare while attending appointments</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsPrescription>
+                  <h3>Prescription Drug Expenses</h3>
+                  <p>For Immediate Family Members who need prescription drugs to recover from the psychological injury caused by the crime</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Medications prescribed by a doctor</li>
+                  </ul>
+                </ng-template>
+                <ng-template #benefitsCounselling>
+                  <h3>Counselling</h3>
+                  <p>For Immediate Family Members who need counselling to recover from the psychological injury caused by the crime</p>
+                  <p><strong>Examples:</strong></p>
+                  <ul>
+                    <li>Counselling Sessions</li>
+                  </ul>
+                </ng-template>
               </div>
             </section>
-            
+
             <section *ngIf="form.get('crimeInformation.victimDeceasedFromCrime').value == true">
               <h2 class="blue-header">Additional Benefits</h2>
               <p>If the victim is deceased as a result of the crime, please indicate which additional expenses or benefits you wish to claim (at least one is required):</p>
@@ -1157,15 +1173,86 @@
                   </label>
                 </app-field>
               </div>
-              <ng-template #expensesVocational><h3>Vocational services or expenses</h3><p>Spouses of deceased victims who need training or education to prepare for employment or improve their earning capacity (and who are eligible for income support benefits from CVAP)</p><p><strong>Examples:</strong></p><ul><li>Education and training courses</li><li>Programs to improve skills and qualifications</li><li>Programs to prepare for, or find, employment</li></ul></ng-template>
-              <ng-template #expensesIncomeSupport><h3>Income support</h3><p>Spouses of deceased victim</p><p>Children of deceased victims</p><p>Other immeditate family members of deceased victims if they were financially dependent on the victim</p><p><strong>Examples:</strong></p><ul><li>Monthly payments to assist in financially supporting the immediate family member</li></ul></ng-template>
-              <ng-template #expensesChildCare><h3>Childcare services or expenses (see also under transportation)</h3><p>Spouses of deceased victims who need to pay for childcare because there is no one in the household to share this responsibility</p><p><strong>Examples:</strong></p><ul><li>Childcare</li></ul></ng-template>
-              <ng-template #expensesLegalTransportation><h3>Transportation and related expenses, and transportation related childcare</h3><p>Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p><p>Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death</p><p><strong>Examples:</strong></p><ul><li>Transportation expenses such as bus fare, air fare, mileage expenses</li><li>Meals and accommodation</li><li>Childcare while attending appointments</li></ul></ng-template>
-              <ng-template #expensesFuneral><h3>Funeral Expenses</h3><p>Immediate Family Members of deceased victims who have to pay for funeral and related costs</p><p><strong>Examples:</strong></p><ul><li>Costs involved in the funeral service, burial, cremation or related ceremony</li></ul></ng-template>
-              <ng-template #expensesBereavementLeave><h3>Bereavement leave</h3><p>Immediate Family Members of deceased victims who lose earnings from taking time off work for the funeral or other matters related to the victim’s death</p><p><strong>Examples:</strong></p><ul><li>An amount to help offset the loss of earnings</li></ul></ng-template>
-              <ng-template #expensesParentalLoss><h3>Loss of parental guidance for a minor child</h3><p>Children of deceased victims who were under 19 when their parent was killed</p><p><strong>Examples:</strong></p><ul><li>A set amount as a contribution toward loss of parental guidance</li></ul></ng-template>
-              <ng-template #expensesHomemakerServices><h3>Homemaker services or expenses</h3><p>Spouses of deceased victims who need to pay for homemaker services because there is no one in the household to share household tasks</p><p><strong>Examples:</strong></p><ul><li>Help with shopping, cleaning, cooking, and other household tasks</li></ul></ng-template>
-              <ng-template #expensesFamilyCrimeSceneCleaning><h3>Crime scene cleaning</h3><p>Immediate Family Members of deceased victims who need specialized cleaning of the victim’s home or vehicle, or their own home or vehicle, because the crime was committed there</p><p><strong>Examples:</strong></p><ul><li>Specialized cleaning and disinfecting of contaminated areas</li><li>Replacement of contaminated flooring, wall covering, or other built-in features</li></ul></ng-template>
+              <ng-template #expensesVocational>
+                <h3>Vocational services or expenses</h3>
+                <p>Spouses of deceased victims who need training or education to prepare for employment or improve their earning capacity (and who are eligible for income support benefits from CVAP)</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                  <li>Education and training courses</li>
+                  <li>Programs to improve skills and qualifications</li>
+                  <li>Programs to prepare for, or find, employment</li>
+                </ul>
+              </ng-template>
+              <ng-template #expensesIncomeSupport>
+                <h3>Income support</h3>
+                <p>Spouses of deceased victim</p>
+                <p>Children of deceased victims</p>
+                <p>Other immeditate family members of deceased victims if they were financially dependent on the victim</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                  <li>Monthly payments to assist in financially supporting the immediate family member</li>
+                </ul>
+              </ng-template>
+              <ng-template #expensesChildCare>
+                <h3>Childcare services or expenses (see also under transportation)</h3>
+                <p>Spouses of deceased victims who need to pay for childcare because there is no one in the household to share this responsibility</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                  <li>Childcare</li>
+                </ul>
+              </ng-template>
+              <ng-template #expensesLegalTransportation>
+                <h3>Transportation and related expenses, and transportation related childcare</h3>
+                <p>Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p>
+                <p>Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                  <li>Transportation expenses such as bus fare, air fare, mileage expenses</li>
+                  <li>Meals and accommodation</li>
+                  <li>Childcare while attending appointments</li>
+                </ul>
+              </ng-template>
+              <ng-template #expensesFuneral>
+                <h3>Funeral Expenses</h3>
+                <p>Immediate Family Members of deceased victims who have to pay for funeral and related costs</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                  <li>Costs involved in the funeral service, burial, cremation or related ceremony</li>
+                </ul>
+              </ng-template>
+              <ng-template #expensesBereavementLeave>
+                <h3>Bereavement leave</h3>
+                <p>Immediate Family Members of deceased victims who lose earnings from taking time off work for the funeral or other matters related to the victim’s death</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                  <li>An amount to help offset the loss of earnings</li>
+                </ul>
+              </ng-template>
+              <ng-template #expensesParentalLoss>
+                <h3>Loss of parental guidance for a minor child</h3>
+                <p>Children of deceased victims who were under 19 when their parent was killed</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                  <li>A set amount as a contribution toward loss of parental guidance</li>
+                </ul>
+              </ng-template>
+              <ng-template #expensesHomemakerServices>
+                <h3>Homemaker services or expenses</h3>
+                <p>Spouses of deceased victims who need to pay for homemaker services because there is no one in the household to share household tasks</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                  <li>Help with shopping, cleaning, cooking, and other household tasks</li>
+                </ul>
+              </ng-template>
+              <ng-template #expensesFamilyCrimeSceneCleaning>
+                <h3>Crime scene cleaning</h3>
+                <p>Immediate Family Members of deceased victims who need specialized cleaning of the victim’s home or vehicle, or their own home or vehicle, because the crime was committed there</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                  <li>Specialized cleaning and disinfecting of contaminated areas</li>
+                  <li>Replacement of contaminated flooring, wall covering, or other built-in features</li>
+                </ul>
+              </ng-template>
 
               <p>The following section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
               <h2 class="blue-header">Income Loss Information</h2>
@@ -1183,12 +1270,10 @@
 
               <section *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === true">
                 <app-field label="Please provide days of work missed" [valid]="isFieldValid('expenseInformation.daysWorkMissedStart')" [required]="true" errorMessage="Please select an option">
-                  <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
                   <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
                   <span> - </span>
-                  <input type="text" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd"
-                         [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
                   <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
                 </app-field>
                 <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="isFieldValid('expenseInformation.didYouLoseWages')" [required]="true" errorMessage="Please select an option">
@@ -1201,7 +1286,10 @@
                     <span>No</span>
                   </label>
                 </app-field>
-                <ng-template #lostWagesTemplate><p><strong>Lost wages or income</strong></p><p>If you are claiming for lost wages or income, we will need to verify your employment</p></ng-template>
+                <ng-template #lostWagesTemplate>
+                  <p><strong>Lost wages or income</strong></p>
+                  <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
+                </ng-template>
 
                 <h3 class="blue-header">Employer Information</h3>
                 <div class="employers" formArrayName="employers" *ngFor="let item of form.get('expenseInformation.employers').controls; let i = index;">
@@ -1424,7 +1512,7 @@
             <div class="page-header">
               <h1>Declaration</h1>
             </div>
-            <p>Information supplied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>.  Any information collected will be used only for the purposes of adjudicating your claim for benefits.</p>
+            <p>Information supplied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits.</p>
             <p>By signing this section you declare that the information you have provided on this application is true and correct. It is an offence to provide false or misleading information on this application and may lead to prosecution. If it is discovered at a lter time that false or misleading information has been provided on this application form, you may be rquired to repay to CVAP any benefits received.</p>
 
             <section>
@@ -1448,139 +1536,139 @@
             </section>
           </div>
 
-        <div formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8">
-          <div class="page-header">
-            <h1>Authorization</h1>
-          </div>
-          <p>Information suppllied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits.This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. Your application will be returned if this section is not signed and dated. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program at (604) 660-3888 or toll free in B.C. at 1-866-660-3888.</p>
+          <div formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8">
+            <div class="page-header">
+              <h1>Authorization</h1>
+            </div>
+            <p>Information suppllied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits.This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. Your application will be returned if this section is not signed and dated. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program at (604) 660-3888 or toll free in B.C. at 1-866-660-3888.</p>
 
-          <section>
-            <h2>By signing this section you hereby authorize:</h2>
-            <ol class="list punctuated">
-              <li><span>The doctor, dentist, optometrist, chiropractor, or other health care progressional who treated my injuries (physical and/or psychological) to give the Crime Victim Assistance Program, on request, medical or other reports regarding my injuries, treatment or other information relevant to this application;</span></li>
-              <li><span>The police or other law enforcement authorities to give the Crime Victim Assistance Program, on request, a copy of police reports, statements, incident reports or other information relevant to this application;</span></li>
-              <li><span>The Workers' Compensation Board of BC or other authority from which the victim received or will receive or will be eligible to receieve payments from provincial, federal or other jurisdictions funds to give the Crime Victim Assistance Program, on request, information relevant to this application.</span></li>
-              <li><span>My employer(s) or similar authority to give the Crime Victim Assistance Program, on request, information as to my employment earnings, benefits or other information relevant to this application;</span></li>
-              <li><span>Any accident, disability, sickness, life insurance/assurance company or private pension scheme or extended health benefits scheme from which payments or services were received or wlil be received to give the Crime Victim Assistance Program, on request, information relevant to this application;</span></li>
-              <li><span>Human Resources and Skills Development Canada or Aboriginal Affairs and Northern Development Canada or any other authority from which payments were received or will be received to give the Crime Victim Assistance Program, on request information relevant to this application;</span></li>
-              <li><span>The Canada Employment Insurance Commission or the Canada Pension Plan or similar employment insurance and pension plans from other jurisdictions, to give the Crime Victim Assistance Program, on request, information as to benefits received or to be received relevant to this application; and,</span></li>
-              <li><span>Canada Revenue Agency or other similar agency in any other jurisdiction, to give the Crime Victim Assistance Program, upon request information as to my employment income.</span></li>
-              <li><span>The Ministry of Children and Family Development (MCFD) to give the Crime Victim Assistance Program, on request, a copy of information relevant to this application.</span></li>
-            </ol>
-          </section>
+            <section>
+              <h2>By signing this section you hereby authorize:</h2>
+              <ol class="list punctuated">
+                <li><span>The doctor, dentist, optometrist, chiropractor, or other health care progressional who treated my injuries (physical and/or psychological) to give the Crime Victim Assistance Program, on request, medical or other reports regarding my injuries, treatment or other information relevant to this application;</span></li>
+                <li><span>The police or other law enforcement authorities to give the Crime Victim Assistance Program, on request, a copy of police reports, statements, incident reports or other information relevant to this application;</span></li>
+                <li><span>The Workers' Compensation Board of BC or other authority from which the victim received or will receive or will be eligible to receieve payments from provincial, federal or other jurisdictions funds to give the Crime Victim Assistance Program, on request, information relevant to this application.</span></li>
+                <li><span>My employer(s) or similar authority to give the Crime Victim Assistance Program, on request, information as to my employment earnings, benefits or other information relevant to this application;</span></li>
+                <li><span>Any accident, disability, sickness, life insurance/assurance company or private pension scheme or extended health benefits scheme from which payments or services were received or wlil be received to give the Crime Victim Assistance Program, on request, information relevant to this application;</span></li>
+                <li><span>Human Resources and Skills Development Canada or Aboriginal Affairs and Northern Development Canada or any other authority from which payments were received or will be received to give the Crime Victim Assistance Program, on request information relevant to this application;</span></li>
+                <li><span>The Canada Employment Insurance Commission or the Canada Pension Plan or similar employment insurance and pension plans from other jurisdictions, to give the Crime Victim Assistance Program, on request, information as to benefits received or to be received relevant to this application; and,</span></li>
+                <li><span>Canada Revenue Agency or other similar agency in any other jurisdiction, to give the Crime Victim Assistance Program, upon request information as to my employment income.</span></li>
+                <li><span>The Ministry of Children and Family Development (MCFD) to give the Crime Victim Assistance Program, on request, a copy of information relevant to this application.</span></li>
+              </ol>
+            </section>
 
-          <section>
-            <h2 class="blue-header">Standard Authorization & Signature</h2>
-            <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.approvedAuthorityNotification')" errorMessage="Please check declaration">
-              <label>
-                <input type="checkbox" [value]="true" name="approvedAuthorityNotification" formControlName="approvedAuthorityNotification">
-                I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the <em>Crime Victim Assistance Act</em>. <span class="error-states">*</span>
-              </label>
-            </app-field>
-
-            <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.readAndUnderstoodTermsAndConditions')" errorMessage="Please check declaration">
-              <label>
-                <input type="checkbox" [value]="true" name="readAndUnderstoodTermsAndConditions" formControlName="readAndUnderstoodTermsAndConditions">
-                I have read and understood the above information <span class="error-states">*</span>
-              </label>
-            </app-field>
-
-            <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('authorizationInformation.signature')" errorMessage="Please provide your digital signature">
-              <div class="signature-trigger" (click)="showSignPad('authorizationInformation', 'signature')" *ngIf="!hasSignature('authorizationInformation.signature')">
-                <p>Click this box to sign</p>
-              </div>
-              <div *ngIf="hasSignature('authorizationInformation.signature')" class="signature-preview">
-                <img src="{{ valueOrEmpty('authorizationInformation.signature') }}" />
-                <a class="redo" (click)="showSignPad('authorizationInformation', 'signature')">Redo Signature</a>
-              </div>
-            </app-field>
-            <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
-
-            <h2 class="blue-header">Optional Authorization</h2>
-            <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?">
-              <label class="inline-label">
-                <input type="radio" [value]="true" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
-                <span>Yes</span>
-              </label>
-              <label class="inline-label">
-                <input type="radio" [value]="false" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
-                <span>No</span>
-              </label>
-            </app-field>
-
-            <section *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === true">
-              <h3>Authorized Person</h3>
-              <div class="row">
-                <div class="col-4">
-                  <app-field label="Full Name">
-                    <input class="form-control" type="text" formControlName="authorizedPersonFullName">
-                  </app-field>
-                </div>
-                <div class="col-4">
-                  <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber">
-                  </app-field>
-                </div>
-                <div class="col-4"></div>
-              </div>
-              <div class="row">
-                <div class="col-4">
-                  <app-field label="Relationship to you (applicant)">
-                    <input class="form-control" type="text" formControlName="authorizedPersonRelationship">
-                  </app-field>
-                </div>
-                <div class="col-4">
-                  <app-field label="Agency Name">
-                    <input class="form-control" type="text" formControlName="authorizedPersonAgencyName">
-                  </app-field>
-                </div>
-                <div class="col-4"></div>
-              </div>
-
-              <app-address [group]="form.get('authorizationInformation.authorizedPersonAgencyAddress')"></app-address>
-
-              <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration">
+            <section>
+              <h2 class="blue-header">Standard Authorization & Signature</h2>
+              <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.approvedAuthorityNotification')" errorMessage="Please check declaration">
                 <label>
-                  <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion">
-                  I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.
+                  <input type="checkbox" [value]="true" name="approvedAuthorityNotification" formControlName="approvedAuthorityNotification">
+                  I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the <em>Crime Victim Assistance Act</em>. <span class="error-states">*</span>
                 </label>
               </app-field>
 
-              <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonSignature')" errorMessage="Please provide your digital signature">
-                <div class="signature-trigger" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')" *ngIf="!hasSignature('authorizationInformation.authorizedPersonSignature')">
+              <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.readAndUnderstoodTermsAndConditions')" errorMessage="Please check declaration">
+                <label>
+                  <input type="checkbox" [value]="true" name="readAndUnderstoodTermsAndConditions" formControlName="readAndUnderstoodTermsAndConditions">
+                  I have read and understood the above information <span class="error-states">*</span>
+                </label>
+              </app-field>
+
+              <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('authorizationInformation.signature')" errorMessage="Please provide your digital signature">
+                <div class="signature-trigger" (click)="showSignPad('authorizationInformation', 'signature')" *ngIf="!hasSignature('authorizationInformation.signature')">
                   <p>Click this box to sign</p>
                 </div>
-                <div *ngIf="hasSignature('authorizationInformation.authorizedPersonSignature')" class="signature-preview">
-                  <img src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature') }}" />
-                  <a class="redo" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')">Redo Signature</a>
+                <div *ngIf="hasSignature('authorizationInformation.signature')" class="signature-preview">
+                  <img src="{{ valueOrEmpty('authorizationInformation.signature') }}" />
+                  <a class="redo" (click)="showSignPad('authorizationInformation', 'signature')">Redo Signature</a>
                 </div>
               </app-field>
               <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
+
+              <h2 class="blue-header">Optional Authorization</h2>
+              <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <span>No</span>
+                </label>
+              </app-field>
+
+              <section *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === true">
+                <h3>Authorized Person</h3>
+                <div class="row">
+                  <div class="col-4">
+                    <app-field label="Full Name">
+                      <input class="form-control" type="text" formControlName="authorizedPersonFullName">
+                    </app-field>
+                  </div>
+                  <div class="col-4">
+                    <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
+                      <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber">
+                    </app-field>
+                  </div>
+                  <div class="col-4"></div>
+                </div>
+                <div class="row">
+                  <div class="col-4">
+                    <app-field label="Relationship to you (applicant)">
+                      <input class="form-control" type="text" formControlName="authorizedPersonRelationship">
+                    </app-field>
+                  </div>
+                  <div class="col-4">
+                    <app-field label="Agency Name">
+                      <input class="form-control" type="text" formControlName="authorizedPersonAgencyName">
+                    </app-field>
+                  </div>
+                  <div class="col-4"></div>
+                </div>
+
+                <app-address [group]="form.get('authorizationInformation.authorizedPersonAgencyAddress')"></app-address>
+
+                <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration">
+                  <label>
+                    <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion">
+                    I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.
+                  </label>
+                </app-field>
+
+                <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonSignature')" errorMessage="Please provide your digital signature">
+                  <div class="signature-trigger" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')" *ngIf="!hasSignature('authorizationInformation.authorizedPersonSignature')">
+                    <p>Click this box to sign</p>
+                  </div>
+                  <div *ngIf="hasSignature('authorizationInformation.authorizedPersonSignature')" class="signature-preview">
+                    <img src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature') }}" />
+                    <a class="redo" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')">Redo Signature</a>
+                  </div>
+                </app-field>
+                <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
+              </section>
             </section>
-          </section>
-        </div>
-
-        <div *ngIf="this.currentFormStep == 9">
-          <div class="page-header">
-            <h1>Review & Submit</h1>
           </div>
-          <p>Please check the accuracy of the information entered in your application before submitting.</p>
-          <app-ifm-review [group]="form" [parentStepper]="stepper"></app-ifm-review>
-        </div>
 
-        <div *ngIf="showValidationMessage" class="error-summary">
-          <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
-          <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
-        </div>
+          <div *ngIf="this.currentFormStep == 9">
+            <div class="page-header">
+              <h1>Review & Submit</h1>
+            </div>
+            <p>Please check the accuracy of the information entered in your application before submitting.</p>
+            <app-ifm-review [group]="form" [parentStepper]="stepper"></app-ifm-review>
+          </div>
 
-        <section class="button-container">
-          <div [ngBusy]="[busy3]"></div>
-          <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
-          <span style="float: right;">
-            <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
-            <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
-          </span>
-        </section>
+          <div *ngIf="showValidationMessage" class="error-summary">
+            <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+            <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
+          </div>
+
+          <section class="button-container">
+            <div [ngBusy]="[busy3]"></div>
+            <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+            <span style="float: right;">
+              <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
+              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
+            </span>
+          </section>
         </div>
       </form>
     </div>
