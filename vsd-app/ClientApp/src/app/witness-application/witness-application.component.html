@@ -379,7 +379,7 @@
             <div class="row">
               <div class="col-4">
                 <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('victimInformation.birthDate')" errorMessage="Please enter birth date">
-                  <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" [min]="oldestHuman" [max]="todaysDate" (click)="birthDatePicker.open()" readonly>
                   <mat-datepicker #birthDatePicker></mat-datepicker>
                 </app-field>
               </div>
