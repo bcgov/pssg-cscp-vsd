@@ -58,7 +58,7 @@
         <div class="col">
           <!-- This needs work to manipulate the data -->
           <app-field label="Birthdate" [required]="true" [valid]="isValid(birthDate)" errorMessage="Please enter your birth date">
-            <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()">
+            <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" [min]="oldestHuman" [max]="todaysDate" (click)="birthDatePicker.open()">
             <mat-datepicker #birthDatePicker></mat-datepicker>
           </app-field>
         </div>

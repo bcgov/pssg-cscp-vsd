@@ -24,7 +24,8 @@ export class VictimInformationComponent implements ControlValueAccessor, OnDestr
 
   piForm: FormGroup;
   subscriptions: Subscription[] = [];
-
+  todaysDate = new Date(); // for the birthdate validation
+  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
   get value(): PersonalInformation {
     return this.piForm.value;
   }
