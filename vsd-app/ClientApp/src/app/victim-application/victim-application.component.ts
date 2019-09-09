@@ -79,7 +79,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   saveFormData: any;
 
   matchingEmail: string; // this is the value of the email that both email fields should match.
-
+  todaysDate = new Date(); // for the birthdate validation
+  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
   // a field that represents the current employment income information state
   employmentIncomeInformation: EmploymentIncomeInformation;
 
