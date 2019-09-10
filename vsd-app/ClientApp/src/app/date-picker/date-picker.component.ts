@@ -1,4 +1,6 @@
-import { Component, OnInit, forwardRef, OnDestroy, Input } from '@angular/core';
+//TODO: This component hasn't been used in the app so it is disposeable right now and is untested. I had to change context. -Curtis
+
+import { Component, forwardRef, OnDestroy, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
