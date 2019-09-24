@@ -85,6 +85,10 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 import { TestComponent } from './test/test.component';
 import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
 import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
+import { AddressBlockComponent } from './address-block/address-block.component';
+import { VictimInformationComponent } from './victim-information/victim-information.component';
+import { NameBlockComponent } from './name-block/name-block.component';
+import { DatePickerComponent } from './date-picker/date-picker.component';
 
 @NgModule({
   declarations: [
@@ -120,6 +124,10 @@ import { EmploymentIncomeComponent } from './employment-income/employment-income
     TestComponent,
     FileUploaderBoxComponent,
     EmploymentIncomeComponent,
+    AddressBlockComponent,
+    VictimInformationComponent,
+    NameBlockComponent,
+    DatePickerComponent,
   ],
   imports: [
     BrowserModule,
