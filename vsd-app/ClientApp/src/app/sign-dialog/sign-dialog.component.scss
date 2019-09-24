@@ -1,0 +1,9 @@
+::ng-deep .signature-pad {
+  canvas {
+    border: 1px solid #666;
+  }
+
+  p.instructions {
+    max-width: 600px;
+  }
+}

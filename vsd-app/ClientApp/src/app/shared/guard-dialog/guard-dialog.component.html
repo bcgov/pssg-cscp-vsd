@@ -1,0 +1,13 @@
+<mat-dialog-content>
+  <div class="summary-of-benefits">
+    <a (click)="closeMe()" class="float-right close-link">Close Window</a>
+    <h1>Navigate Away?</h1>
+    <p><strong>Are you sure?</strong></p>
+    <p>Navigating away from this application will result in the loss of all information you've entered so far</p>
+
+    <div class="button-container">
+      <button class="btn btn-secondary" (click)="choose(true)">Navigate Away</button>
+      <button class="btn btn-primary float-right" (click)="choose(false)">Stay</button>
+    </div>
+  </div>
+</mat-dialog-content>
