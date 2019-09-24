@@ -309,13 +309,14 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   }
 
   submitApplication() {
-    const formIsValid = this.form.valid;
+    //const formIsValid = this.form.valid;
     // let formIsValid = true;
-    if (formIsValid) {
+    if (this.form.valid) {
       this.formFullyValidated = true;
       this.save().subscribe(
         data => {
-          if (data['IsSuccess'] == true) {
+          console.log(data);
+          if (data['isSuccess'] == true) {
             this.currentPanel = 'success';
           } else {
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
@@ -337,20 +338,22 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   debugFormData(): void {
     const formData: VictimRestitution = {
       RestitutionInformation: this.form.get('restitutionInformation').value,
+      DocumentCollectionInformation: this.form.get('documentInformation').value,
     };
     console.log(JSON.stringify(formData));
   }
 
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
-    const formData: VictimRestitution = {
+  save(): Subject<{}> {
+    const subResult = new Subject<{}>();
+    const formData = <VictimRestitution>{
       RestitutionInformation: this.form.get('restitutionInformation').value,
+      DocumentCollectionInformation: this.form.get('documentInformation').value,
     };
 
     this.busy = this.justiceDataService.submitVictimRestitutionApplication(formData)
       .toPromise()
       .then(res => {
-        subResult.next(true);
+        subResult.next(res);
       }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
 
@@ -414,6 +417,10 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
         signature: ['', Validators.required],
 
         providerFiles: this.fb.array([this.createProviderItem()]),
+      }),
+      documentInformation: this.fb.group({
+        filename: [''], // fileName
+        body: [''], // fileData
       })
     });
   }
@@ -421,10 +428,20 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   onFileBundle(fileBundle: FileBundle) {
     // save the files submitted from the component for attachment into the submitted form.
     const patchObject = {};
-    patchObject['restitutionOrders'] = fileBundle;
-    this.form.get('restitutionInformation').patchValue(
-      patchObject
-    );
+    patchObject['documentInformation'] = fileBundle;
+    this.form.get('documentInformation.filename').patchValue(fileBundle.fileName[0]);
+    var splitValues = fileBundle.fileData[0].split(',');
+
+    //this.form.get('documentInformation.body').patchValue(fileBundle.fileData[0]);
+    this.form.get('documentInformation.body').patchValue(splitValues[1]);
+
+    fileBundle = fileBundle;
+
+    //this.form.get('documentInformation.filename')[0].value = fileBundle.fileName[0];
+    //this.form.get('documentInformation.body')[0].value = fileBundle.fileData[0];
+
+//      patchObject
+//    );
   }
 }
 

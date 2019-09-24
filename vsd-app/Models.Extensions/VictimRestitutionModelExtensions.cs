@@ -51,17 +51,46 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
             // TODO: Fix file mapping
             // how does the uploading work? is our array a list of file ids? Look them up and extract appropriate data...
-            //application.DocumentCollection = model.RestitutionInformation.restitutionOrders.Select(g => new Documentcollection
-            //{
-            //    body = g.body,
-            //    filename = g.fileName
-            //}).ToArray();
-
-            application.CourtInfoCollection = model.RestitutionInformation.courtFiles.Select(f => new Courtinfocollection
+            try
             {
-                vsd_courtfilenumber = f.courtFileNumber,
-                vsd_courtlocation = f.courtLocation
-            }).ToArray();
+                if (model.DocumentCollectionInformation != null)
+                {
+                    Documentcollection tempDocumentCollection = new Documentcollection();
+                    tempDocumentCollection.body = model.DocumentCollectionInformation.body;
+                    tempDocumentCollection.filename = model.DocumentCollectionInformation.fileName;
+                    application.DocumentCollection = new Documentcollection[1];
+                    application.DocumentCollection[0] = tempDocumentCollection;
+
+
+
+                    //application.DocumentCollection[1].body = model.DocumentCollectionInformation.body;
+                    //application.DocumentCollection[1].filename = model.DocumentCollectionInformation.fileName;
+
+                    //application.DocumentCollection = model.DocumentCollectionInformation.Select(g => new Documentcollection
+                    //{
+                    //    body = g.body,
+                    //    filename = g.fileName
+                    //}).ToArray();
+                }
+            }
+            catch (Exception e)
+            {
+                string errormessage = e.Message;
+            }
+
+
+            if (model.RestitutionInformation.courtFiles != null)
+            {
+                if (model.RestitutionInformation.courtFiles.Count() > 0)
+                {
+                    application.CourtInfoCollection = model.RestitutionInformation.courtFiles.Select(f => new Courtinfocollection
+                    {
+                        vsd_courtfilenumber = f.courtFileNumber,
+                        vsd_courtlocation = f.courtLocation
+                    }).ToArray();
+                }
+            }
+
 
             // TODO: For some reason when this is moved to OpenShift, it doesn't work. 
             // Error Message: System.AggregateException: One or more errors occurred. (Value cannot be null.

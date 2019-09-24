@@ -108,8 +108,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             var t = Task.Run(() => CreateVictimRestitutionAction(_configuration, model));
             t.Wait();
 
-            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
-            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Restitution Save", Message = dynamicsResponse.Result };
+            string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
+            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
+            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Restitution Save", Message = dynamicsResponse.Result };
             return new JsonResult(result);
         }
 
@@ -239,19 +240,28 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 var endpointAction = "vsd_CreateRestitutionCase";
                 var tuple = await GetDynamicsHttpClientNew(configuration, invoiceJson, endpointAction);
 
-                //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
-                //request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+                ////HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
+                ////request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
 
-                //HttpResponseMessage response = await httpClient.SendAsync(request);
+                ////HttpResponseMessage response = await httpClient.SendAsync(request);
 
-                //if (response.StatusCode == HttpStatusCode.OK)
-                if (tuple.Item1 == (int)HttpStatusCode.OK)
-                {
-                    var jsonResult = tuple.Item2.Content.ReadAsStringAsync().Result;// response.Content.ReadAsStringAsync().Result;
-                    return jsonResult;
-                }
+                ////if (response.StatusCode == HttpStatusCode.OK)
+                //if (tuple.Item1 == (int)HttpStatusCode.OK)
+                //{
+                //    var jsonResult = tuple.Item2.Content.ReadAsStringAsync().Result;// response.Content.ReadAsStringAsync().Result;
+                //    return jsonResult;
+                //}
 
-                return tuple.Item2.Content.ReadAsStringAsync().Result;// response.Content.ReadAsStringAsync().Result;
+                //return tuple.Item2.Content.ReadAsStringAsync().Result;// response.Content.ReadAsStringAsync().Result;
+                string tempResult = tuple.Item1.ToString();
+
+                DynamicsResponse dynamicsResponse = new DynamicsResponse();
+                dynamicsResponse.IsSuccess = (tempResult == "200");// true;
+                dynamicsResponse.Result = tempResult;
+                dynamicsResponse.odatacontext = tuple.Item2.ToString();
+
+                return dynamicsResponse.Result;
+
             }
             finally
             {
@@ -414,13 +424,16 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                     HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
                     _httpRequest.Content = new StringContent(model, Encoding.UTF8, "application/json");
+                    //_httpRequest.Content = new StringContent(System.IO.File.ReadAllText(@"C:\Temp\VSD-RestSampleData3.txt"), Encoding.UTF8, "application/json");
+                    
+
                     //_httpRequest.Content = new StringContent(model);
 
-//                    // THIS SHOULD BECOME A DYNAMICS MODEL
-//                    var dynamicsModel = model; // model.ToDynamicsModel();
-//                    var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
-//
-//                    _httpRequest.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+                    //                    // THIS SHOULD BECOME A DYNAMICS MODEL
+                    //                    var dynamicsModel = model; // model.ToDynamicsModel();
+                    //                    var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
+                    //
+                    //                    _httpRequest.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
 
 
 

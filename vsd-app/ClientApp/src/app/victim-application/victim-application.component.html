@@ -275,7 +275,7 @@
           <div class="row">
             <div class="col-5">
               <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('personalInformation.email')" errorMessage="Please enter your email address">
-                <input class="form-control" type="text" (blur)="trimValue(form.get('personalInformation.email'))" formControlName="email" maxlength="100">
+                <input class="form-control" type="text" (blur)="trimValue(form.get('personalInformation.email'))" (input)="matchingEmailValidator()" formControlName="email" maxlength="100">
               </app-field>
             </div>
             <div class="col-7">
@@ -283,8 +283,8 @@
           </div>
           <div class="row">
             <div class="col-5">
-              <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('personalInformation.confirmEmail') && email === confirmEmail" errorMessage="Please confirm your email address">
-                <input class="form-control" type="text" (blur)="trimValue(form.get('personalInformation.confirmEmail'))" formControlName="confirmEmail" maxlength="100">
+              <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('personalInformation.confirmEmail')" errorMessage="Please confirm your email address">
+                <input class="form-control" type="text" (blur)="trimValue(form.get('personalInformation.confirmEmail'))" (input)="matchingEmailValidator()" formControlName="confirmEmail" maxlength="100">
               </app-field>
             </div>
             <div class="col-7">
@@ -530,8 +530,8 @@
             </section>
 
             <section>
-              <h2 class="blue-header">Offender & Court Information</h2>
-              <h3>Person who allegedly committed the crime <span>(if known)</span></h3>
+              <h2 class="blue-header">Accused & Court Information</h2>
+              <h3>Name of the Accused <span>(if known)</span></h3>
 
               <div class="row">
                 <div class="col-4">
@@ -552,7 +552,7 @@
               </div>
               <div class="row">
                 <div class="col-4">
-                  <app-field label="Relationship to the alleged offender (if any)">
+                  <app-field label="Relationship to the Accused (if any)">
                     <input class="form-control" type="text" formControlName="offenderRelationship">
                   </app-field>
                 </div>
@@ -561,7 +561,7 @@
               </div>
               <div class="row">
                 <div class="col-6">
-                  <app-field label="Has the alleged offender been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
+                  <app-field label="Has this person been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
                     <label class="inline-label">
                       <input type="radio" [value]="100000000" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                       <span>Yes</span>
@@ -1143,163 +1143,38 @@
             </div>
           </section>
         </div>
-        <div formGroupName="employmentIncomeInformation" *ngIf="this.currentFormStep == 5">
+        <div *ngIf="this.currentFormStep == 5">
           <div class="page-header">
             <h1>Employment Income</h1>
           </div>
-          <section *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
-            <p>This section provides information regarding employment information. This information is only necessary if you are requesting benefits for lost employment income.</p>
-            <p><strong>You have not requested lost employment income benefits.</strong> Go back to Expense & Loss Information to request this particular benefit, or continue to the next section.</p>
-          </section>
+          <span *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
 
-          <section *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
-            <p>This section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
             <section>
-              <h2 class="blue-header">Income Loss Information</h2>
-              <app-field label="Were you employed when the crime occured?" [valid]="isFieldValid('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')" [required]="true" errorMessage="Please select an option">
-                <label class="inline-label">
-                  <input type="radio" [value]="100000001" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
-                  <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                  <input type="radio" [value]="100000000" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
-                  <span>No</span>
-                </label>
-              </app-field>
-              <section *ngIf="form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 100000001 || form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value === 100000002">
-                <app-field label="Were you at work at the time of the incident?" [valid]="isFieldValid('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident')" [required]="true" errorMessage="Please select an option">
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
-                    <span>No</span>
-                  </label>
-                </app-field>
-              </section>
-              <section *ngIf="form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').value === true">
-                <app-field label="Have you applied for Worker's Compensation Benefits?" [valid]="isFieldValid('employmentIncomeInformation.haveYouAppliedForWorkersCompensation')" [required]="true" errorMessage="Please select an option">
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="haveYouAppliedForWorkersCompensation" formControlName="haveYouAppliedForWorkersCompensation">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="haveYouAppliedForWorkersCompensation" formControlName="haveYouAppliedForWorkersCompensation">
-                    <span>No</span>
-                  </label>
-                </app-field>
-                <section *ngIf="form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation').value === true">
-                  <app-field label="What is your Worker's Compensation Benefits claim number?">
-                    <input class="form-control standard" type="text" formControlName="workersCompensationClaimNumber">
-                  </app-field>
-                </section>
-              </section>
-              <app-field label="As a result of any crime-related injuries, did you miss work?" [valid]="isFieldValid('employmentIncomeInformation.didYouMissWorkDueToCrime')" [required]="true" errorMessage="Please select an option">
-                <label class="inline-label">
-                  <input type="radio" [value]="100000001" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
-                  <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                  <input type="radio" [value]="100000000" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
-                  <span>No</span>
-                </label>
-              </app-field>
-              <section *ngIf="form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === 100000001">
-                <app-field label="Please provide days of work missed" [valid]="isFieldValid('employmentIncomeInformation.daysWorkMissedStart')" [required]="true" errorMessage="Please select an option">
-                  <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
-                  <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
-                  <span> - </span>
-                  <input type="text" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
-                  <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
-                </app-field>
-                <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="isFieldValid('employmentIncomeInformation.didYouLoseWages')" [required]="true" errorMessage="Please select an option">
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="didYouLoseWages" formControlName="didYouLoseWages">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="didYouLoseWages" formControlName="didYouLoseWages">
-                    <span>No</span>
-                  </label>
-                </app-field>
-                <ng-template #lostWagesTemplate>
-                  <p><strong>Lost wages or income</strong></p>
-                  <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
-                </ng-template>
-              </section>
+              <p>This section provides information regarding employment information. This information is only necessary if you are requesting benefits for lost employment income.</p>
+              <p><strong>You have not requested lost employment income benefits.</strong> Go back to Expense & Loss Information to request this particular benefit, or continue to the next section.</p>
             </section>
-            <section *ngIf="form.get('employmentIncomeInformation.didYouLoseWages').value === 100000001">
-              <h2 class="blue-header">Employer Information</h2>
-              <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
-              <br />
-
-              <app-field label="Are you self employed?" [valid]="isFieldValid('employmentIncomeInformation.areYouSelfEmployed')" [required]="true" errorMessage="Please select an option">
-                <label class="inline-label">
-                  <input type="radio" [value]="100000001" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
-                  <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                  <input type="radio" [value]="100000000" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
-                  <span>No</span>
-                </label>
-              </app-field>
-
-              <div class="employers" formArrayName="employers" *ngFor="let item of form.get('employmentIncomeInformation.employers').controls; let i = index;">
-                <div [formGroupName]="i" class="employer">
-                  <a href="javascript:void(0);" (click)="removeEmployer(i)" class="float-right" *ngIf="showRemoveEmployer">
-                    <i class="fas fa-trash-alt"></i> Delete Employer
-                  </a>
-
-                  <h3>Name & Phone Number</h3>
-                  <div class="row">
-                    <div class="col-4">
-                      <app-field label="Name of Company / Organization" [required]="true" [valid]="isArrayFieldValid('employmentIncomeInformation.employers', 'employerName', i)" errorMessage="Please enter a company name">
-                        <input type="text" class="form-control" formControlName="employerName">
-                      </app-field>
-                    </div>
-                    <div class="col-4">
-                      <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isArrayFieldValid('employmentIncomeInformation.employers', 'employerPhoneNumber', i)" errorMessage="Please enter a contact phone number">
-                        <input type="text" class="form-control" formControlName="employerPhoneNumber">
-                      </app-field>
-                    </div>
-                    <div class="col-4">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-4">
-                      <app-field label="Employer First Name">
-                        <input type="text" class="form-control" formControlName="employerFirstName">
-                      </app-field>
-                    </div>
-                    <div class="col-4">
-                      <app-field label="Employer Last name">
-                        <input type="text" class="form-control" formControlName="employerLastName">
-                      </app-field>
-                    </div>
-                    <div class="col-4">
-                    </div>
-                  </div>
-
-                  <h3>Mailing Address</h3>
-                  <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="false"></app-address>
-                </div>
-              </div>
-              <a href="javascript:void(0);" class="btn btn-secondary" (click)="addEmployer()" *ngIf="showAddEmployer">Add Employer</a>
-              <br /><br />
-
-              <app-field label="If you are requesting benefits for lost wages, may we contact your employer?" [valid]="isFieldValid('employmentIncomeInformation.mayContactEmployer')" [required]="true" errorMessage="Please select an option">
-                <label class="inline-label">
-                  <input type="radio" [value]="100000001" name="mayContactEmployer" formControlName="mayContactEmployer">
-                  <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                  <input type="radio" [value]="100000000" name="mayContactEmployer" formControlName="mayContactEmployer">
-                  <span>No</span>
-                </label>
-              </app-field>
+            <section class="button-container">
+              <div [ngBusy]="[busy3]"></div>
+              <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+              <span style="float: right;">
+                <button (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+              </span>
             </section>
-          </section>
+          </span>
+          <span *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
+            <section>
+              <!-- Fun fact. This component supports two way binding -->
+              <app-employment-income formControlName="employmentIncomeInformation"></app-employment-income>
+            </section>
+            <section class="button-container">
+              <div [ngBusy]="[busy3]"></div>
+              <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+              <span style="float: right;">
+                <button *ngIf="!form.get('employmentIncomeInformation').valid" [disabled]="true" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+                <button *ngIf="form.get('employmentIncomeInformation').valid===true" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+              </span>
+            </section>
+          </span>
         </div>
         <div formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6">
           <div class="page-header">
@@ -1418,7 +1293,6 @@
           </div>
           <p>Information supplied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits.</p>
           <p>By signing this section you declare that the information you have provided on this application is true and correct. It is an offence to provide false or misleading information on this application and may lead to prosecution. If it is discovered at a lter time that false or misleading information has been provided on this application form, you may be rquired to repay to CVAP any benefits received.</p>
-
           <section>
             <h2 class="blue-header">Declaration & Signature</h2>
             <app-field [required]="true" [valid]="isFieldValid('declarationInformation.declaredAndSigned')" errorMessage="Please check declaration">
@@ -1563,9 +1437,10 @@
 
         <section class="button-container">
           <div [ngBusy]="[busy3]"></div>
-          <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+          <!-- Stepper page 5 is employment information. The one page has a validation problem. I have spent 32+ hours trying to find it and am giving up and making a hack. -->
+          <a (click)="verifyCancellation()" *ngIf="stepper.selectedIndex!=5"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span style="float: right;">
-            <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
+            <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9 &&stepper.selectedIndex!=5">CONTINUE<i class="fas fa-chevron-right"></i></button>
             <button (click)="markAsTouched(); producePDF();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>&nbsp;
             <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
           </span>
@@ -1576,6 +1451,6 @@
 </div>
 <!-- <div class="row">
   <div class="col">
-    <pre>{{form.value|json}}</pre>
+    <pre>{{form.value['employmentIncomeInformation']|json}}</pre>
   </div>
 </div> -->
