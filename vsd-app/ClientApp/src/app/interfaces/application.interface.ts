@@ -1,5 +1,6 @@
 import { Address } from "./address.interface";
 import { Courtfile } from "./files.interface";
+import { DocumentCollectioninformation } from "./victim-restitution.interface";
 
 export interface Application {
   Introduction: Introduction;
@@ -66,7 +67,7 @@ export interface CrimeInformation {
   policeReports: Policereport[];
   courtFiles: Courtfile[];
   racafInformation: Racafinformation;
-  additionalInformationFiles: Object[];
+  additionalInformationFiles: DocumentCollectioninformation[];
 }
 export interface MedicalInformation {
   doYouHaveMedicalServicesCoverage: string;

@@ -425,18 +425,6 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
                     _httpRequest.Content = new StringContent(model, Encoding.UTF8, "application/json");
                     //_httpRequest.Content = new StringContent(System.IO.File.ReadAllText(@"C:\Temp\VSD-RestSampleData3.txt"), Encoding.UTF8, "application/json");
-                    
-
-                    //_httpRequest.Content = new StringContent(model);
-
-                    //                    // THIS SHOULD BECOME A DYNAMICS MODEL
-                    //                    var dynamicsModel = model; // model.ToDynamicsModel();
-                    //                    var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
-                    //
-                    //                    _httpRequest.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
-
-
-
 
                     var _httpResponse2 = await client.SendAsync(_httpRequest);
                     HttpStatusCode _statusCode = _httpResponse2.StatusCode;

@@ -13,7 +13,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Representativeinformation RepresentativeInformation { get; set; }
         public Declarationinformation DeclarationInformation { get; set; }
         public Authorizationinformation AuthorizationInformation { get; set; }
-        public DocumentCollectioninformation[] DocumentCollectionInformation { get; set; }
+        //public DocumentCollectioninformation[] DocumentCollectionInformation { get; set; }
         // TODO: Missing VictimInformation
     }
 
@@ -59,7 +59,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Crimelocation[] crimeLocations { get; set; }
         public string crimeDetails { get; set; }
         public string crimeInjuries { get; set; }
-        public object[] additionalInformationFiles { get; set; }
+        public DocumentCollectioninformation additionalInformationFiles { get; set; }
         public int wasReportMadeToPolice { get; set; }
         public string policeReportedWhichPoliceForce { get; set; }
         public string policeReportedMultipleTimes { get; set; }
