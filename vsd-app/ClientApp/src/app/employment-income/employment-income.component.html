@@ -88,10 +88,13 @@
       </div>
 
       <span *ngFor="let employer of eiInfo.employers; let i = index">
-        <span *ngIf="eiInfo.employers.length>1">
+        <div *ngIf="eiInfo.employers.length>1">
+          <a href="javascript:void(0);" (click)="removeEmployer(i)" class="float-right">
+            <i class="fas fa-trash-alt"></i> Delete Employer
+          </a>
           <h2>{{employer.employerName|titlecase}}</h2>
-          <hr>
-        </span>
+        </div>
+
         <h3>Name &amp; Phone Number</h3>
         <div class="form-row">
           <div class="col">

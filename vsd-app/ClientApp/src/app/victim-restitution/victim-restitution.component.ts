@@ -66,6 +66,9 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   emailIsRequired = false;
   addressIsRequired = true; // Always true
 
+  todaysDate = new Date(); // for the birthdate validation
+  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,

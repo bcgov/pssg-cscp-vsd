@@ -63,6 +63,9 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
 
   saveFormData: any;
 
+  todaysDate = new Date(); // for the birthdate validation
+  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,

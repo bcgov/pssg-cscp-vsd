@@ -1,22 +1,24 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+
 @Component({
   selector: 'app-test',
   templateUrl: './test.component.html',
   styleUrls: ['./test.component.css']
 })
 export class TestComponent implements OnInit {
-  form: FormGroup = null;
-
+  applicationForm: FormGroup;
   constructor(
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) { }
+
   ngOnInit() {
-    this.initializeForm();
+    this.applicationForm = this.fb.group({
+      personalInformation: ['']
+    });
   }
-  initializeForm() {
-    this.form = this.fb.group({
-      employmentIncomeInformation: [null, Validators.required]
-    })
+
+  submit() {
+    console.log(`Value: ${this.applicationForm.controls.mySwitch.value}`);
   }
 }

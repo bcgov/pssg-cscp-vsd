@@ -80,10 +80,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   saveFormData: any;
 
   matchingEmail: string; // this is the value of the email that both email fields should match.
-
+  todaysDate = new Date(); // for the birthdate validation
+  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
   // a field that represents the current employment income information state
   employmentIncomeInformation: EmploymentIncomeInformation;
 
+  //
+  get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -177,22 +180,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         email: ['', [Validators.required]],
         confirmEmail: ['', [Validators.required]],
 
-        primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        alternateAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
+        primaryAddress: [''],
+        alternateAddress: [''],
       }, { validator: this.matchingEmails('email', 'confirmEmail') }),
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
@@ -740,14 +729,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     let phoneControl = this.form.get('personalInformation.phoneNumber');
     let emailControl = this.form.get('personalInformation.email');
     let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
-    let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
-    let addressControls = [
-      this.form.get('personalInformation').get('primaryAddress.country'),
-      this.form.get('personalInformation').get('primaryAddress.province'),
-      this.form.get('personalInformation').get('primaryAddress.city'),
-      this.form.get('personalInformation').get('primaryAddress.line1'),
-      this.form.get('personalInformation').get('primaryAddress.postalCode'),
-    ];
 
     phoneControl.clearValidators();
     phoneControl.setErrors(null);
@@ -755,10 +736,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     emailControl.setErrors(null);
     emailConfirmControl.clearValidators();
     emailConfirmControl.setErrors(null);
-    addressControl.setValidators([Validators.required]);
-    for (let control of addressControls) {
-      control.setValidators([Validators.required]);
-    }
 
     if (contactMethod === 2) {
       phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
@@ -783,12 +760,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     emailControl.updateValueAndValidity();
     emailConfirmControl.markAsTouched();
     emailConfirmControl.updateValueAndValidity();
-    addressControl.markAsTouched();
-    addressControl.updateValueAndValidity();
-    for (let control of addressControls) {
-      control.markAsTouched();
-      control.updateValueAndValidity();
-    }
   }
   setHospitalTreatment(): void {
     const yesNo: boolean = this.form.get('medicalInformation.wereYouTreatedAtHospital').value === 'true';
@@ -985,7 +956,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.setCompletingOnBehalfOf();
     this.setCvapStaffSharing();
     this.setHospitalTreatment();
-    this.setPreferredContactMethod();
+    // this.setPreferredContactMethod();
     this.setRepresentativePreferredMethodOfContact();
   }
 
