@@ -334,12 +334,10 @@
 
             <app-field label="Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates." errorMessage="Please make a selection" [showChevrons]="false">
               <label class="inline-label">
-                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates">
-                <span>I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 2001 - Dec 2002).</em></span>
+                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 2001 - Dec 2002).</em>
               </label>
               <label class="inline-label">
-                <input type="checkbox" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
-                <span>Crime occurred over a period of time</span>
+                <input type="checkbox" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur"> Crime occurred over a period of time
               </label>
             </app-field>
 
@@ -347,7 +345,7 @@
               <app-field label="Date(s) of crime" [required]="true" [valid]="isFieldValid('crimeInformation.crimePeriodStart')" errorMessage="Please enter the crime date">
                 <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" (click)="crimePeriodStartPicker.open()" readonly>
                 <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
-                <span *ngIf="form.get('crimeInformation.whenDidCrimeOccur').value === true">
+                <span *ngIf="form.get('crimeInformation.whenDidCrimeOccur').value === true || form.get('crimeInformation.unsureOfCrimeDates').value === true">
                   <span> - </span>
                   <input type="text" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" (click)="crimePeriodEndDatePicker.open()" readonly>
                   <mat-datepicker #crimePeriodEndDatePicker></mat-datepicker>
