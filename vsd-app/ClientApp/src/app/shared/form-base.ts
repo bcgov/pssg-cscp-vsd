@@ -102,6 +102,8 @@ export class FormBase {
   }
 
   public requireCheckboxesToBeCheckedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+    // This is causing a failure of validation if both Medical and Dental are selected. So commenting out. But why was this here in the first place??? (JT)
+    // Removed from victim-application.component.ts(Line 300)
     const name = control.get('haveMedicalExpenses');
     const alterEgo = control.get('haveDentalExpenses');
 

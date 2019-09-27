@@ -297,7 +297,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
-      }, { validator: this.requireCheckboxesToBeCheckedValidator }),
+      }, ),//{ validator: this.requireCheckboxesToBeCheckedValidator }),
       employmentIncomeInformation: [null, Validators.required],
 
       representativeInformation: this.fb.group({
