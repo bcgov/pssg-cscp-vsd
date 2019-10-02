@@ -493,7 +493,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
         birthDate: ['', [Validators.required]],
 
-        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
+        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
         preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],  // Phone = 100000000, Email = 100000001, Mail = 100000002
@@ -536,7 +536,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
         maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
-        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
+        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
         phoneNumber: [''],
