@@ -208,11 +208,90 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
             if (model.ExpenseInformation != null)
             {
-                // what are we doing here? some kind of CSV string for all of the selected expenses/benefits? seems bonkers...
-                //application.Application.vsd_cvap_benefitsrequested = model.ExpenseInformation.haveCrimeSceneCleaningExpenses.ToString();
+                // Build Expenses CSV String
+                string tempExpenses = "";
+                if (model.ExpenseInformation.haveMedicalExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000000,";
+                }
+                if (model.ExpenseInformation.haveDentalExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000001,";
+                }
+                if (model.ExpenseInformation.havePrescriptionDrugExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000002,";
+                }
+                if (model.ExpenseInformation.haveCounsellingExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000003,";
+                }
+                if (model.ExpenseInformation.haveLostEmploymentIncomeExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000004,";
+                }
+                if (model.ExpenseInformation.havePersonalPropertyLostExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000005,";
+                }
+                if (model.ExpenseInformation.haveProtectiveMeasureExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000006,";
+                }
+                if (model.ExpenseInformation.haveDisabilityExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000007,";
+                }
+                if (model.ExpenseInformation.haveCrimeSceneCleaningExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000008,";
+                }
+                if (model.ExpenseInformation.haveOtherExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000009,";
+                }
+                if (tempExpenses.Length > 0)
+                {
+                    tempExpenses = tempExpenses.Substring(0, tempExpenses.Length - 1);
+                    application.Application.vsd_cvap_benefitsrequested = tempExpenses;
+                }
                 application.Application.vsd_cvap_benefitsrequestedother = model.ExpenseInformation.otherSpecificExpenses;
 
-                //application.Application.vsd_cvap_otherbenefits = model.ExpenseInformation.haveDisabilityPlanBenefits.ToString();
+                // Build Benefits CSV String
+                string tempBenefits = "";
+                if (model.ExpenseInformation.haveDisabilityPlanBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000000,";
+                }
+                if (model.ExpenseInformation.haveEmploymentInsuranceBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000001,";
+                }
+                if (model.ExpenseInformation.haveIncomeAssistanceBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000002,";
+                }
+                if (model.ExpenseInformation.haveCanadaPensionPlanBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000003,";
+                }
+                if (model.ExpenseInformation.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000004,";
+                }
+                if (model.ExpenseInformation.haveCivilActionBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000005,";
+                }
+                if (model.ExpenseInformation.haveOtherBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000006,";
+                }
+                if (tempBenefits.Length > 0)
+                {
+                    tempBenefits = tempBenefits.Substring(0, tempBenefits.Length - 1);
+                    application.Application.vsd_cvap_otherbenefits = tempBenefits;
+                }
                 application.Application.vsd_cvap_otherbenefitsother = model.ExpenseInformation.otherSpecificBenefits;
             }
 

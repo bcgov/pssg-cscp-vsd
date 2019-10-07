@@ -141,7 +141,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public bool havePersonalPropertyLostExpenses { get; set; }
         public bool haveProtectiveMeasureExpenses { get; set; }
         public bool haveDisabilityExpenses { get; set; }
-        public string haveCrimeSceneCleaningExpenses { get; set; }
+        public bool haveCrimeSceneCleaningExpenses { get; set; }
         public bool haveOtherExpenses { get; set; }
         public string otherSpecificExpenses { get; set; }
         public bool haveDisabilityPlanBenefits { get; set; }
