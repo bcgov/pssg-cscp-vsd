@@ -87,15 +87,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_crimedetails = model.CrimeInformation.crimeDetails;
                 application.Application.vsd_cvap_injuries = model.CrimeInformation.crimeInjuries;
 
-                // TODO: Fix file mapping
-                // how does the uploading work? is our array a list of file ids? Look them up and extract appropriate data...
-//                application.DocumentCollection = model.DocumentCollectionInformation.Select(f => new Documentcollection
-//                {
-//                    body = f.body,
-//                    filename = f.fileName
-//                }).ToArray();
-
-
+                // Include upload file
                 try
                 {
                     if (model.CrimeInformation.additionalInformationFiles != null)
@@ -111,9 +103,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     string errormessage = e.Message;
                 }
-
-
-
 
                 application.Application.vsd_cvap_reportedtopolice = model.CrimeInformation.wasReportMadeToPolice;
                 application.Application.vsd_cvap_policedetachment = model.CrimeInformation.policeReportedWhichPoliceForce;
@@ -181,18 +170,18 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_treatmentdate = model.MedicalInformation.treatedAtHospitalDate;
                 }
 
-                //application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
-                //{
-                //    vsd_name = t.providerName,
-                //    vsd_phonenumber = t.providerPhoneNumber,
+                application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
+                {
+                    vsd_name = t.providerName,
+                    vsd_phonenumber = t.providerPhoneNumber,
 
-                //    vsd_addressline1 = t.providerAddress?.line1,
-                //    vsd_addressline2 = t.providerAddress?.line2,
-                //    vsd_city = t.providerAddress?.city,
-                //    vsd_province = t.providerAddress?.province,
-                //    vsd_country = t.providerAddress?.country,
-                //    vsd_postalcode = t.providerAddress?.postalCode,
-
+                    vsd_addressline1 = t.providerAddress.line1,
+                    vsd_addressline2 = t.providerAddress.line2,
+                    vsd_city = t.providerAddress.city,
+                    vsd_province = t.providerAddress.province,
+                    vsd_country = t.providerAddress.country,
+                    vsd_postalcode = t.providerAddress.postalCode,
+                    vsd_relationship1 = t.providerType.ToString(),
                 //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
                 //    vsd_firstname = "", // TODO: We don't collect a split name here
                 //    vsd_middlename = "", // TODO: We don't collect a split name here
@@ -203,7 +192,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 //    //vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact, // TODO: This isn't correct either
                 //    vsd_relationship1 = "", // TODO: We don't collect a relationship here
 
-                //}).ToArray();
+                }).ToArray();
             }
 
             if (model.ExpenseInformation != null)
