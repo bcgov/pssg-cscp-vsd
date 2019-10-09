@@ -836,7 +836,7 @@
                 <input class="form-control standard" type="text" formControlName="familyDoctorName">
               </app-field>
               <app-field label="Phone Number (incl. area code)">
-                <input class="form-control standard" type="text" formControlName="familyDoctorPhoneNumber">
+                <input class="form-control standard" maxlength="10" type="text" formControlName="familyDoctorPhoneNumber">
               </app-field>
               <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
                 <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
@@ -870,7 +870,7 @@
                     </div>
                     <div class="col-4">
                       <app-field label="Phone number (incl. area code)">
-                        <input type="text" class="form-control" formControlName="providerPhoneNumber">
+                        <input type="text" maxlength="10" class="form-control" formControlName="providerPhoneNumber">
                       </app-field>
                     </div>
                   </div>
@@ -1260,12 +1260,12 @@
             <div class="row">
               <div class="col-4">
                 <app-field label="Phone Number (incl. area code)" [required]="representativePhoneIsRequired" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
-                  <input class="form-control" type="text" formControlName="representativePhoneNumber">
+                  <input class="form-control" maxlength="10" type="text" formControlName="representativePhoneNumber">
                 </app-field>
               </div>
               <div class="col-4">
                 <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeInformation.representativeAlternatePhoneNumber')" errorMessage="Please enter a phone number">
-                  <input class="form-control" type="text" formControlName="representativeAlternatePhoneNumber">
+                  <input class="form-control" maxlength="10" type="text" formControlName="representativeAlternatePhoneNumber">
                 </app-field>
               </div>
               <div class="col-4">
@@ -1380,7 +1380,7 @@
                 </div>
                 <div class="col-4">
                   <app-field label="Phone Number (incl. area code)" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber">
+                    <input class="form-control" maxlength="10" type="text" formControlName="authorizedPersonPhoneNumber">
                   </app-field>
                 </div>
                 <div class="col-4"></div>
