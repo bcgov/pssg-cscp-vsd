@@ -306,8 +306,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   createEmployerItem(): FormGroup {
     return this.fb.group({
-      employerName: ['', Validators.required],
-      employerPhoneNumber: ['', Validators.required],
+      employerName: [''],//, Validators.required],
+      employerPhoneNumber: [''],//, Validators.required],
       employerFirstName: [''],
       employerLastName: [''],
       employerAddress: this.fb.group({
@@ -548,10 +548,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         mostRecentMailingAddressSameAsPersonal: ['', Validators.required],
 
         primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
+          line1: [''],//, Validators.required],
           line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+          city: [''],//, Validators.required],
+          postalCode: ['', [Validators.pattern(postalRegex)]],//, Validators.required]],
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
@@ -658,7 +658,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         haveCrimeSceneCleaningExpenses: [false],
         noneOfTheAboveExpenses: [''],
 
-        missedWorkDueToDeathOfVictim: ['', Validators.required],
+        missedWorkDueToDeathOfVictim: [''],//, Validators.required],
 
         didYouLoseWages: [''], //, Validators.required],
         daysWorkMissedStart: [''], //, Validators.required],

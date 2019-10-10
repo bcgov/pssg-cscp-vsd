@@ -92,11 +92,14 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     if (model.CrimeInformation.additionalInformationFiles != null)
                     {
-                        Documentcollection tempDocumentCollection = new Documentcollection();
-                        tempDocumentCollection.body = model.CrimeInformation.additionalInformationFiles.body;
-                        tempDocumentCollection.filename = model.CrimeInformation.additionalInformationFiles.fileName;
-                        application.DocumentCollection = new Documentcollection[1];
-                        application.DocumentCollection[0] = tempDocumentCollection;
+                        if (model.CrimeInformation.additionalInformationFiles.fileName.Length > 0)
+                        {
+                            Documentcollection tempDocumentCollection = new Documentcollection();
+                            tempDocumentCollection.body = model.CrimeInformation.additionalInformationFiles.body;
+                            tempDocumentCollection.filename = model.CrimeInformation.additionalInformationFiles.fileName;
+                            application.DocumentCollection = new Documentcollection[1];
+                            application.DocumentCollection[0] = tempDocumentCollection;
+                        }
                     }
                 }
                 catch (Exception e)
