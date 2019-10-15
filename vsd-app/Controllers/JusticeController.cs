@@ -149,22 +149,10 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 var applicationJson = JsonConvert.SerializeObject(application, settings);
                 applicationJson = applicationJson.Replace("odatatype", "@odata.type");
 
+                // Get results into the tuple
                 var endpointAction = "vsd_CreateCVAPClaim";
-                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
                 var tuple = await GetDynamicsHttpClientNew(configuration, applicationJson, endpointAction);
 
-                //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
-                //request.Content = new StringContent(applicationJson, Encoding.UTF8, "application/json");
-
-                //HttpResponseMessage response = await httpClient.SendAsync(request);
-
-                //if (response.StatusCode == HttpStatusCode.OK)
-                //{
-                //    var jsonResult = response.Content.ReadAsStringAsync().Result;
-                //    return jsonResult;
-                //}
-
-                //return response.Content.ReadAsStringAsync().Result;
                 string tempResult = tuple.Item1.ToString();
 
                 DynamicsResponse dynamicsResponse = new DynamicsResponse();

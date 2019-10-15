@@ -479,10 +479,11 @@
                 </app-field>
               </div>
             </div>
-            <div class="row">
-              <div class="col-6">
-                <app-address [group]="form.get('victimInformation.primaryAddress')" [showChildrenAsRequired]="mostRecentMailingAddressSameAsPersonal.Value == false"></app-address>
-              </div>
+              <div class="row">
+                <div class="col-6">
+                  <app-address [group]="form.get('victimInformation.primaryAddress')"></app-address>
+                  <!--<app-address [group]="form.get('victimInformation.primaryAddress')" [showChildrenAsRequired]="mostRecentMailingAddressSameAsPersonal.Value == false"></app-address>-->
+                </div>
               <div class="col-6">
               </div>
             </div>
