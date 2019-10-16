@@ -592,10 +592,11 @@
                 </app-field>
 
                 <app-field label="If you have any additional information, please upload it below">
-                  <div class="file-upload-placeholder">
+                  <!--<div class="file-upload-placeholder">
                     [upload functionality goes here]
-                  </div>
+                  </div>-->
                 </app-field>
+                <app-file-uploader-box [initialValues]="form.value.crimeInformation.additionalInformation" (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
               </section>
             </section>
 
