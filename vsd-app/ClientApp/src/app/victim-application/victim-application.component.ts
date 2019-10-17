@@ -197,11 +197,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.array([]),//{
-        //additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
-        //  filename: [''], // fileName
-        //  body: [''], // fileData
-        //}), // This will be a collection of uploaded files
+        //additionalInformationFiles: this.fb.array([]),//{
+        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
+          filename: [''], // fileName
+          body: [''], // fileData
+        }), // This will be a collection of uploaded files
 
         wasReportMadeToPolice:
           [

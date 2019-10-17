@@ -635,10 +635,11 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.array([]),//{
-//          filename: [''], // fileName
-//          body: [''], // fileData
-//        }),  // This will be a collection of uploaded files
+        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
+          filename: [''], // fileName
+          body: [''], // fileData
+        }), // This will be a collection of uploaded files
+        //additionalInformationFiles: this.fb.array([]),
 
         wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
 
