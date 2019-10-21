@@ -83,7 +83,18 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_crimeenddate = model.CrimeInformation.crimePeriodEnd;
                 }
                 application.Application.vsd_cvap_reasontoapplylate = model.CrimeInformation.whyDidYouNotApplySooner; // TODO: Verify mapping - I think it's right but just different names
-                application.Application.vsd_cvap_crimelocations = model.CrimeInformation.crimeLocation;
+
+                // Add Crime Locations as an array separated by line feeds
+                if (model.CrimeInformation.crimeLocations.Count() > 0)
+                {
+                    string tempOutput = "";
+                    foreach(Crimelocation tempCrimeLocation in model.CrimeInformation.crimeLocations)
+                        {
+                        tempOutput = tempOutput + tempCrimeLocation.location + "\r\n";
+                    }
+                    application.Application.vsd_cvap_crimelocations = tempOutput.Substring(0, tempOutput.Length - 2);
+                }
+
                 application.Application.vsd_cvap_crimedetails = model.CrimeInformation.crimeDetails;
                 application.Application.vsd_cvap_injuries = model.CrimeInformation.crimeInjuries;
 

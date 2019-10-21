@@ -263,32 +263,41 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             HttpClient httpClient = null;
             try
             {
-                var offenderRestitution = model;
+                var offenderRestitution = model.ToOffenderRestitutionModel();
                 JsonSerializerSettings settings = new JsonSerializerSettings();
                 settings.NullValueHandling = NullValueHandling.Ignore;
                 var offenderRestitutionJson = JsonConvert.SerializeObject(offenderRestitution, settings);
                 offenderRestitutionJson = offenderRestitutionJson.Replace("odatatype", "@odata.type");
 
-                var endpointAction = "vsd_RESTITUTIONMAPPINGNEEDED";
+                var endpointAction = "vsd_CreateRestitutionCase"; // TODO: Is this the same as Victim Restitution???
                 //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
-                await GetDynamicsHttpClientNew(configuration, offenderRestitutionJson, endpointAction);
+                var tuple = await GetDynamicsHttpClientNew(configuration, offenderRestitutionJson, endpointAction);
 
-                // THIS SHOULD BECOME A DYNAMICS MODEL
-                var dynamicsModel = model; // model.ToDynamicsModel();
-                var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
+                //// THIS SHOULD BECOME A DYNAMICS MODEL
+                //var dynamicsModel = model; // model.ToDynamicsModel();
+                //var invoiceJson = JsonConvert.SerializeObject(dynamicsModel);
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
-                request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
+                //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointAction);
+                //request.Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await httpClient.SendAsync(request);
+                //HttpResponseMessage response = await httpClient.SendAsync(request);
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var jsonResult = response.Content.ReadAsStringAsync().Result;
-                    return jsonResult;
-                }
+                //if (response.StatusCode == HttpStatusCode.OK)
+                //{
+                //    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                //    return jsonResult;
+                //}
 
-                return response.Content.ReadAsStringAsync().Result;
+                //return response.Content.ReadAsStringAsync().Result;
+                string tempResult = tuple.Item1.ToString();
+
+                DynamicsResponse dynamicsResponse = new DynamicsResponse();
+                dynamicsResponse.IsSuccess = (tempResult == "200");// true;
+                dynamicsResponse.Result = tempResult;
+                dynamicsResponse.odatacontext = tuple.Item2.ToString();
+
+                return dynamicsResponse.Result;
+
             }
             finally
             {
