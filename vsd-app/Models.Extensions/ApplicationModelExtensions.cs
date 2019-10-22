@@ -130,11 +130,18 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
                 application.Application.vsd_cvap_crimereportedto = model.CrimeInformation.noPoliceReportIdentification; // TODO: verify mapping - I think it's right, but different names
 
-                application.PoliceFileNumberCollection = model.CrimeInformation.policeReports.Select(r => new Policefilenumbercollection
+                // Setup policeFiles, don't show if there isn't any
+                if (model.CrimeInformation.policeReports != null)
                 {
-                    vsd_investigatingpoliceofficername = r.investigatingOfficer,
-                    vsd_policefilenumber = r.policeFileNumber
-                }).ToArray();
+                    if (model.CrimeInformation.policeReports[0].policeFileNumber.Length > 0)
+                    {
+                        application.PoliceFileNumberCollection = model.CrimeInformation.policeReports.Select(r => new Policefilenumbercollection
+                        {
+                            vsd_investigatingpoliceofficername = r.investigatingOfficer,
+                            vsd_policefilenumber = r.policeFileNumber
+                        }).ToArray();
+                    }
+                }
 
                 application.Application.vsd_cvap_offenderfirstname = model.CrimeInformation.offenderFirstName;
                 application.Application.vsd_cvap_offendermiddlename = model.CrimeInformation.offenderMiddleName;
@@ -143,11 +150,18 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_relationshiptooffender = model.CrimeInformation.offenderRelationship;
                 application.Application.vsd_cvap_isoffendercharged = model.CrimeInformation.offenderBeenCharged;
 
-                application.CourtInfoCollection = model.CrimeInformation.courtFiles.Select(f => new Courtinfocollection
+                // Setup courtFiles, don't show if there isn't any
+                if (model.CrimeInformation.courtFiles != null)
                 {
-                    vsd_courtfilenumber = f.courtFileNumber,
-                    vsd_courtlocation = f.courtLocation
-                }).ToArray();
+                    if (model.CrimeInformation.courtFiles[0].courtFileNumber.Length > 0)
+                    {
+                        application.CourtInfoCollection = model.CrimeInformation.courtFiles.Select(f => new Courtinfocollection
+                        {
+                            vsd_courtfilenumber = f.courtFileNumber,
+                            vsd_courtlocation = f.courtLocation
+                        }).ToArray();
+                    }
+                }
 
                 application.Application.vsd_cvap_isoffendersued = model.CrimeInformation.haveYouSuedOffender;
                 application.Application.vsd_cvap_intentiontosueoffender = model.CrimeInformation.intendToSueOffender;
@@ -184,29 +198,35 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_treatmentdate = model.MedicalInformation.treatedAtHospitalDate;
                 }
 
-                application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
+                // Setup otherTreatments, don't show if there isn't any
+                if (model.MedicalInformation.otherTreatments != null)
                 {
-                    vsd_name = t.providerName,
-                    vsd_phonenumber = t.providerPhoneNumber,
+                    if (model.MedicalInformation.otherTreatments[0].providerName.Length > 0)
+                    {
+                        application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
+                        {
+                            vsd_name = t.providerName,
+                            vsd_phonenumber = t.providerPhoneNumber,
 
-                    vsd_addressline1 = t.providerAddress.line1,
-                    vsd_addressline2 = t.providerAddress.line2,
-                    vsd_city = t.providerAddress.city,
-                    vsd_province = t.providerAddress.province,
-                    vsd_country = t.providerAddress.country,
-                    vsd_postalcode = t.providerAddress.postalCode,
-                    vsd_relationship1 = t.providerType.ToString(),
-                //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
-                //    vsd_firstname = "", // TODO: We don't collect a split name here
-                //    vsd_middlename = "", // TODO: We don't collect a split name here
-                //    vsd_lastname = "", // TODO: We don't collect a split name here
-                //    vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
-                //    vsd_email = "", // TODO: We don't collect an email here
-                //    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
-                //    //vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact, // TODO: This isn't correct either
-                //    vsd_relationship1 = "", // TODO: We don't collect a relationship here
-
-                }).ToArray();
+                            vsd_addressline1 = t.providerAddress.line1,
+                            vsd_addressline2 = t.providerAddress.line2,
+                            vsd_city = t.providerAddress.city,
+                            vsd_province = t.providerAddress.province,
+                            vsd_country = t.providerAddress.country,
+                            vsd_postalcode = t.providerAddress.postalCode,
+                            vsd_relationship1 = t.providerType.ToString(),
+                            //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
+                            //    vsd_firstname = "", // TODO: We don't collect a split name here
+                            //    vsd_middlename = "", // TODO: We don't collect a split name here
+                            //    vsd_lastname = "", // TODO: We don't collect a split name here
+                            //    vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
+                            //    vsd_email = "", // TODO: We don't collect an email here
+                            //    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
+                            //    //vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact, // TODO: This isn't correct either
+                            //    vsd_relationship1 = "", // TODO: We don't collect a relationship here
+                        }).ToArray();
+                    }
+                }
             }
 
             if (model.ExpenseInformation != null)
