@@ -229,6 +229,32 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
             }
 
+            if (model.EmploymentIncomeInformation.employers.Count() > 0)
+            {
+                Providercollection[] tempProviderCollection;
+                //application.ProviderCollection
+                tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
+                {
+                    vsd_name = f.employerName,
+                    vsd_phonenumber = f.employerPhoneNumber,
+                    vsd_addressline1 = f.employerAddress.line1,
+                    vsd_addressline2 = f.employerAddress.line2,
+                    vsd_city = f.employerAddress.city,
+                    vsd_province = f.employerAddress.province,
+                    vsd_postalcode = f.employerAddress.postalCode,
+                    vsd_country = f.employerAddress.country,
+                    vsd_firstname = f.employerFirstName,
+                    vsd_lastname = f.employerLastName,
+                    vsd_relationship1 = "100000005", // TODO: This is just an assumption, looking for confirmation from Mano
+                }).ToArray();
+
+                Providercollection[] tempCombinedCollection = new Providercollection[application.ProviderCollection.Count() + tempProviderCollection.Count()];
+                Array.Copy(application.ProviderCollection, tempCombinedCollection, application.ProviderCollection.Count());
+                Array.Copy(tempProviderCollection, 0, tempCombinedCollection, application.ProviderCollection.Count(), tempProviderCollection.Count());
+                application.ProviderCollection = tempCombinedCollection;
+
+            }
+
             if (model.ExpenseInformation != null)
             {
                 // Build Expenses CSV String
