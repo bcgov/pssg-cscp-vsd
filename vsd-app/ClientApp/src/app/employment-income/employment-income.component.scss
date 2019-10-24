@@ -1,0 +1,14 @@
+input.form-control {
+  &.standard {
+    width: 50%;
+  }
+
+  &.date-picker {
+    width: 200px;
+    background-color: #fff;
+  }
+
+  &.bigger {
+    width: 75%;
+  }
+}

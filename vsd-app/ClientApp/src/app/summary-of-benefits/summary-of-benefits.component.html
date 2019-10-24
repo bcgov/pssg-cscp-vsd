@@ -1,0 +1,40 @@
+<mat-dialog-content>
+  <div class="summary-of-benefits">
+    <a (click)="closeMe()" class="float-right close-link">Close Window</a>
+    <div *ngIf="applicationType == 'victim'">
+      <h1>Summary of Benefits for Victims</h1>
+      <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
+    </div>
+    <div *ngIf="applicationType == 'ifm'">
+      <h1>Summary of Benefits for Immediate Family Members</h1>
+      <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
+    </div>
+    <div *ngIf="applicationType == 'witness'">
+      <h1>Summary of Benefits for Witnesses</h1>
+      <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
+    </div>
+    <section *ngFor="let item of benefitList;">
+      <div class="row">
+        <div class="col-12 benefit-title">
+          <h4>{{ item.title }}</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6 benefit-target">
+          <p>
+            <strong>For:</strong><br />
+            {{ item.target }}
+          </p>
+        </div>
+        <div class="col-6 benefit-examples">
+          <p><strong>Examples:</strong></p>
+          <ul class="list">
+            <li *ngFor="let example of item.examples;">
+              {{ example }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</mat-dialog-content>

@@ -1,0 +1,194 @@
+<section>
+  <h2 class="blue-header">
+    Offender Information <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+  </h2>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>First Name</th>
+        <td>{{ valueOrEmpty('restitutionInformation.offenderFirstName') }} </td>
+      </tr>
+      <tr>
+        <th>Middle Name</th>
+        <td>{{ valueOrEmpty('restitutionInformation.offenderMiddleName') }} </td>
+      </tr>
+      <tr>
+        <th>Last Name</th>
+        <td>{{ valueOrEmpty('restitutionInformation.offenderLastName') }} </td>
+      </tr>
+      <tr>
+        <th>Birth Date</th>
+        <td>{{ datesOrEmpty(['restitutionInformation.offenderGender']) }}</td>
+      </tr>
+      <tr>
+        <th>Gender</th>
+        <td>{{ enumHelper.Gender[valueForEnum('restitutionInformation.offenderBirthDate')] }} </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="blue-header">
+    Contact Information <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+  </h2>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Preferred Method of Contact</th>
+        <td>{{ enumHelper.PreferredMethodOfContact[valueForEnum('restitutionInformation.preferredMethodOfContact')]  }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Mailing Address</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Country</th>
+        <td>{{ valueOrEmpty('restitutionInformation.mailingAddress.country') }} </td>
+      </tr>
+      <tr>
+        <th>Mailing Address</th>
+        <td>{{ valueOrEmpty('restitutionInformation.mailingAddress.line1') }} </td>
+      </tr>
+      <tr *ngIf="valueOrEmpty('restitutionInformation.mailingAddress.line2') != '--'">
+        <th></th>
+        <td>{{ valueOrEmpty('restitutionInformation.mailingAddress.line2') }} </td>
+      </tr>
+      <tr>
+        <th>City</th>
+        <td>{{ valueOrEmpty('restitutionInformation.mailingAddress.city') }} </td>
+      </tr>
+      <tr>
+        <th>Province</th>
+        <td>{{ valueOrEmpty('restitutionInformation.mailingAddress.province') }} </td>
+      </tr>
+      <tr>
+        <th>Postal Code</th>
+        <td>{{ valueOrEmpty('restitutionInformation.mailingAddress.postalCode') }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Communication</h3>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Primary Phone Number</th>
+        <td>{{ valueOrEmpty('restitutionInformation.phoneNumber') }} </td>
+      </tr>
+      <tr>
+        <th>Alternate Phone Number</th>
+        <td>{{ valueOrEmpty('restitutionInformation.alternatePhoneNumber') }} </td>
+      </tr>
+      <tr>
+        <th>Email Address</th>
+        <td>{{ valueOrEmpty('restitutionInformation.email') }} </td>
+      </tr>
+      <tr>
+        <th>May we leave you a detailed message?</th>
+        <td>{{ valueOrEmpty('restitutionInformation.permissionToLeaveDetailedMessage') }} </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <h2 class="blue-header">
+    Correctional <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+  </h2>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Parole/Probation Officer First Name</th>
+        <td>{{ valueOrEmpty('restitutionInformation.probationOfficerFirstName') }} </td>
+      </tr>
+      <tr>
+        <th>Parole/Probation Officer Last Name</th>
+        <td>{{ valueOrEmpty('restitutionInformation.probationOfficerLastName') }} </td>
+      </tr>
+      <tr>
+        <th>Custody Location (if applicable)</th>
+        <td>{{ valueOrEmpty('restitutionInformation.custodyLocation') }} </td>
+      </tr>
+      <tr>
+        <th>Phone Number</th>
+        <td>{{ valueOrEmpty('restitutionInformation.custodyPhoneNumber') }} </td>
+      </tr>
+      <tr>
+        <th>Email Address</th>
+        <td>{{ valueOrEmpty('restitutionInformation.custodyEmailAddress') }} </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="blue-header">
+    Restitution Order Information <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+  </h2>
+  <div *ngFor="let item of restitutionCourtFiles.controls; let i = index">
+    <h3>Court File {{ i + 1 }} </h3>
+    <table class="table table-striped review-table">
+      <tbody>
+        <tr>
+          <th>Court File Number</th>
+          <td>{{ valueOrEmpty(item.get('courtFileNumber')) }} </td>
+        </tr>
+        <tr>
+          <th>Court Location</th>
+          <td>{{ valueOrEmpty(item.get('courtLocation')) }} </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-striped review-table" *ngFor="let victim of item['controls'].victims['controls']; let j = index;">
+      <tbody>
+        <tr>
+          <th>Victim First Name</th>
+          <td>{{ valueOrEmpty(victim.get('firstName')) }} </td>
+        </tr>
+        <tr>
+          <th>Victim Middle Name</th>
+          <td>{{ valueOrEmpty(victim.get('middleName')) }} </td>
+        </tr>
+        <tr>
+          <th>Victim Last Name</th>
+          <td>{{ valueOrEmpty(victim.get('lastName')) }} </td>
+        </tr>
+        <tr>
+          <th>Relationship</th>
+          <td>{{ valueOrEmpty(victim.get('relationship')) }} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="blue-header">
+    Copy of Restitution Order <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+  </h2>
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Placeholder File Preview</th>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2 class="blue-header">Declaration <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+  <p>
+    <label class="inline-label">
+      <input *ngIf="form.get('restitutionInformation.declaredAndSigned').value === true" type="checkbox" checked="checked" disabled="disabled" />
+      <input *ngIf="form.get('restitutionInformation.declaredAndSigned').value !== true" type="checkbox" disabled="disabled" />
+      <span>By signing this form, I am applying to the Restitution Program for assistance in the facilitation of my restitution order and I confirm that I am the individual named on this form (or the parent/guardian/legal representative of the victim named on this form). Where applicable, I give permission to the Restitution Program to release information to the Victim Designate I have named above.</span>
+    </label>
+  </p>
+
+  <table class="table table-striped review-table">
+    <tbody>
+      <tr>
+        <th>Applicant's Signature</th>
+        <td>
+          <img class="review-signature" *ngIf="valueOrEmpty('restitutionInformation.signature', '') != ''" src="{{ valueOrEmpty('restitutionInformation.signature', '') }}" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
