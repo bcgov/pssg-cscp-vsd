@@ -274,7 +274,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             }
 
             // Add medical doctor information
-            if (model.MedicalInformation.familyDoctorName != null)
+            if (model.MedicalInformation.familyDoctorName.Length > 0) // Only do this if there is something in this field
             {
                 Providercollection[] tempProviderCollection = new Providercollection[1];
                 tempProviderCollection[0] = new Providercollection();
