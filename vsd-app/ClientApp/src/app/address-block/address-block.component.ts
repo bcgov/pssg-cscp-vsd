@@ -68,9 +68,9 @@ export class AddressBlockComponent implements ControlValueAccessor, OnDestroy {
     if (this.required) {
       // create the form in a way that makes filling it out required
       this.addressForm = this.formBuilder.group({
-        country: ['', Validators.required],
+        country: ['Canada', Validators.required],
         city: ['', Validators.required],
-        province: ['', Validators.required],
+        province: ['British Columbia', Validators.required],
         postalCode: ['', Validators.required],
         line1: ['', Validators.required],
         line2: [''],
@@ -78,9 +78,9 @@ export class AddressBlockComponent implements ControlValueAccessor, OnDestroy {
     } else {
       // create the form in a not-required way
       this.addressForm = this.formBuilder.group({
-        country: [''],
+        country: ['Canada'],
         city: [''],
-        province: [''],
+        province: ['British Columbia'],
         postalCode: [''],
         line1: [''],
         line2: [''],
@@ -92,7 +92,12 @@ export class AddressBlockComponent implements ControlValueAccessor, OnDestroy {
       // get the country of interest
       this.currentCountry = COUNTRIES_ADDRESS_2[country];
       // clear the existing value of the province and postal code.
-      this.addressForm.get('province').setValue('');
+      if (country = 'Canada') {
+        this.addressForm.get('province').setValue('British Columbia');
+      }
+      else {
+        this.addressForm.get('province').setValue('');
+      }
       this.addressForm.get('postalCode').setValue('');
     } else {
       // no country supplied? Default is Canada

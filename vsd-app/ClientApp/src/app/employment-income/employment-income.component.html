@@ -104,7 +104,7 @@
           </div>
           <div class="col">
             <app-field label="Phone Number of Contact Person" [valid]="employer.employerPhoneNumber" [required]="true" errorMessage="Please include an employer phone number">
-              <input id="{{'employerPhoneNumber_'+i.toString()}}" class="form-control" name="{{'employerPhoneNumber_'+i.toString()}}" type="text" [(ngModel)]="employer.employerPhoneNumber" required>
+              <input id="{{'employerPhoneNumber_'+i.toString()}}" class="form-control" maxlength="10" name="{{'employerPhoneNumber_'+i.toString()}}" type="text" [(ngModel)]="employer.employerPhoneNumber" required>
             </app-field>
           </div>
         </div>

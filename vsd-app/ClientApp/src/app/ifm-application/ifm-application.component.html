@@ -242,7 +242,7 @@
               </div>
               <div class="col-4">
                 <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('personalInformation.sin')" errorMessage="Please enter your SIN" [tooltipReference]="sinTemplate">
-                  <input class="form-control sin-input" maxlength="11" type="text" formControlName="sin">
+                  <input class="form-control sin-input" maxlength="9" type="text" formControlName="sin">
                   <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
                 </app-field>
               </div>
@@ -435,7 +435,7 @@
             </div>
 
             <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('victimInformation.sin')" errorMessage="Please enter your SIN" [tooltipReference]="victimSinTemplate">
-              <input class="form-control sin-input" maxlength="11" type="text" formControlName="sin">
+              <input class="form-control sin-input" maxlength="9" type="text" formControlName="sin">
               <ng-template #victimSinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
             </app-field>
 
@@ -479,10 +479,11 @@
                 </app-field>
               </div>
             </div>
-            <div class="row">
-              <div class="col-6">
-                <app-address [group]="form.get('victimInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
-              </div>
+              <div class="row">
+                <div class="col-6">
+                  <app-address [group]="form.get('victimInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
+                  <!--<app-address [group]="form.get('victimInformation.primaryAddress')" [showChildrenAsRequired]="mostRecentMailingAddressSameAsPersonal.Value == false"></app-address>-->
+                </div>
               <div class="col-6">
               </div>
             </div>
@@ -591,10 +592,11 @@
                 </app-field>
 
                 <app-field label="If you have any additional information, please upload it below">
-                  <div class="file-upload-placeholder">
+                  <!--<div class="file-upload-placeholder">
                     [upload functionality goes here]
-                  </div>
+                  </div>-->
                 </app-field>
+                <app-file-uploader-box [initialValues]="form.value.crimeInformation.additionalInformation" (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
               </section>
             </section>
 
@@ -932,13 +934,6 @@
                 </label>
               </app-field>
               <section *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
-                <app-field label="Name of hospital" [required]="true" [valid]="isFieldValid('medicalInformation.treatedAtHospitalName')" errorMessage="Please select a hospital">
-                  <select class="form-control standard" formControlName="treatedAtHospitalName">
-                    <option value="">Select...</option>
-                    <option *ngFor="let item of hospitalList">{{ item }}</option>
-                  </select>
-                </app-field>
-
                 <app-field>
                   <label class="inline-label">
                     <input type="checkbox" style="margin-right: 10px;" formControlName="treatedOutsideBc" [value]="true">
@@ -946,102 +941,111 @@
                   </label>
                 </app-field>
 
-                <section *ngIf="form.get('medicalInformation.treatedOutsideBc').value === true">
-                  <app-field label="Please enter the name of the hospital below">
-                    <input class="form-control standard" type="text" formControlName="treatedOutsideBcHospitalName">
+                <section *ngIf="form.get('medicalInformation.treatedOutsideBc').value != true">
+                  <app-field label="Name of hospital" [required]="true" [valid]="isFieldValid('medicalInformation.treatedAtHospitalName')" errorMessage="Please select a hospital">
+                    <select class="form-control standard" formControlName="treatedAtHospitalName">
+                      <option value="">Select...</option>
+                      <option *ngFor="let item of hospitalList">{{ item }}</option>
+                    </select>
                   </app-field>
                 </section>
 
-                <app-field label="Date of treatment">
-                  <input type="text" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
-                  <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
-                </app-field>
-              </section>
+                  <section *ngIf="form.get('medicalInformation.treatedOutsideBc').value === true">
+                    <app-field label="Please enter the name, city and Province/State of the hospital below">
+                      <input class="form-control standard" type="text" formControlName="treatedOutsideBcHospitalName">
+                    </app-field>
+                  </section>
 
-              <h3>Family Doctor Information</h3>
-              <app-field label="Do you have a medical doctor / clicnic who has been treating you for injuries resulting from the incident?" [valid]="isFieldValid('medicalInformation.beingTreatedByFamilyDoctor')" [required]="true" errorMessage="Please select an option">
-                <label class="inline-label">
-                  <input type="radio" [value]="true" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
-                  <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                  <input type="radio" [value]="false" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
-                  <span>No</span>
-                </label>
-              </app-field>
-              <section *ngIf="form.get('medicalInformation.beingTreatedByFamilyDoctor').value === true">
-                <app-field label="Name of Medical Doctor/Clinic">
-                  <input class="form-control standard" type="text" formControlName="familyDoctorName">
-                </app-field>
-                <app-field label="Phone Number (incl. area code)">
-                  <input class="form-control standard" type="text" formControlName="familyDoctorPhoneNumber">
-                </app-field>
-                <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
-                  <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
-                  <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine2" placeholder="Address Line 2"><br />
-                </app-field>
-              </section>
+                  <app-field label="Date of Initial treatment">
+                    <input type="text" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
+                    <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
+                  </app-field>
+                </section>
 
-              <h3>Other Treatment Information</h3>
-              <app-field label="Do you have a counsellor/therapist who has been treating you as a result of the incident?" [valid]="isFieldValid('medicalInformation.hadOtherTreatments')" [required]="true" errorMessage="Please select an option">
-                <label class="inline-label">
-                  <input type="radio" [value]="true" name="hadOtherTreatments" formControlName="hadOtherTreatments">
-                  <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                  <input type="radio" [value]="false" name="hadOtherTreatments" formControlName="hadOtherTreatments">
-                  <span>No</span>
-                </label>
-              </app-field>
-              <section *ngIf="form.get('medicalInformation.hadOtherTreatments').value === true">
-                <div class="other-treatments" formArrayName="otherTreatments" *ngFor="let item of form.get('medicalInformation.otherTreatments').controls; let i = index;">
-                  <div [formGroupName]="i" class="other-treatment">
-                    <a href="javascript:void(0);" (click)="removeProvider(i)" class="float-right" *ngIf="showRemoveProvider">
-                      <i class="fas fa-trash-alt"></i> Delete Provider
-                    </a>
-                    <h3>Provider {{ i + 1 }}</h3>
-                    <div class="row">
-                      <div class="col-4">
-                        <app-field label="Provider name">
-                          <input type="text" class="form-control" formControlName="providerName">
+                <h3>Family Doctor Information</h3>
+                <app-field label="Do you have a medical doctor / clicnic who has been treating you for injuries resulting from the incident?" [valid]="isFieldValid('medicalInformation.beingTreatedByFamilyDoctor')" [required]="true" errorMessage="Please select an option">
+                  <label class="inline-label">
+                    <input type="radio" [value]="true" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="false" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
+                    <span>No</span>
+                  </label>
+                </app-field>
+                <section *ngIf="form.get('medicalInformation.beingTreatedByFamilyDoctor').value === true">
+                  <app-field label="Name of Medical Doctor/Clinic">
+                    <input class="form-control standard" type="text" formControlName="familyDoctorName">
+                  </app-field>
+                  <app-field label="Phone Number (incl. area code)">
+                    <input class="form-control standard" maxlength="10" type="text" formControlName="familyDoctorPhoneNumber">
+                  </app-field>
+                  <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
+                    <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
+                    <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine2" placeholder="Address Line 2"><br />
+                  </app-field>
+                </section>
+
+                <h3>Other Treatment Information</h3>
+                <app-field label="Do you have a counsellor/therapist who has been treating you as a result of the incident?" [valid]="isFieldValid('medicalInformation.hadOtherTreatments')" [required]="true" errorMessage="Please select an option">
+                  <label class="inline-label">
+                    <input type="radio" [value]="true" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="false" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                    <span>No</span>
+                  </label>
+                </app-field>
+                <section *ngIf="form.get('medicalInformation.hadOtherTreatments').value === true">
+                  <div class="other-treatments" formArrayName="otherTreatments" *ngFor="let item of form.get('medicalInformation.otherTreatments').controls; let i = index;">
+                    <div [formGroupName]="i" class="other-treatment">
+                      <a href="javascript:void(0);" (click)="removeProvider(i)" class="float-right" *ngIf="showRemoveProvider">
+                        <i class="fas fa-trash-alt"></i> Delete Provider
+                      </a>
+                      <h3>Provider {{ i + 1 }}</h3>
+                      <div class="row">
+                        <div class="col-4">
+                          <app-field label="Provider name">
+                            <input type="text" class="form-control" formControlName="providerName">
+                          </app-field>
+                        </div>
+                        <div class="col-4">
+                          <app-field label="Phone number (incl. area code)">
+                            <input type="text" maxlength="10" class="form-control" formControlName="providerPhoneNumber">
+                          </app-field>
+                        </div>
+                      </div>
+                      <div>
+                        <app-field label="Type of provider">
+                          <label class="inline-label">
+                            <input type="radio" [value]="100000001" name="providerType" formControlName="providerType">
+                            <span>Specialist</span>
+                          </label>
+
+                          <label class="inline-label">
+                            <input type="radio" [value]="100000002" name="providerType" formControlName="providerType">
+                            <span>Counsellor / Psychologist</span>
+                          </label>
+
+                          <label class="inline-label">
+                            <input type="radio" [value]="100000003" name="providerType" formControlName="providerType">
+                            <span>Dentist</span>
+                          </label>
+
+                          <label class="inline-label">
+                            <input type="radio" [value]="100000004" name="providerType" formControlName="providerType">
+                            <span>Other</span>
+                          </label>
                         </app-field>
                       </div>
-                      <div class="col-4">
-                        <app-field label="Phone number (incl. area code)">
-                          <input type="text" class="form-control" formControlName="providerPhoneNumber">
-                        </app-field>
-                      </div>
+
+                      <app-address [group]="item.get('providerAddress')" [showChildrenAsRequired]="false"></app-address>
                     </div>
-                    <div>
-                      <app-field label="Type of provider">
-                        <label class="inline-label">
-                          <input type="radio" [value]="100000001" name="providerType" formControlName="providerType">
-                          <span>Specialist</span>
-                        </label>
-
-                        <label class="inline-label">
-                          <input type="radio" [value]="100000002" name="providerType" formControlName="providerType">
-                          <span>Counsellor / Psychologist</span>
-                        </label>
-
-                        <label class="inline-label">
-                          <input type="radio" [value]="100000003" name="providerType" formControlName="providerType">
-                          <span>Dentist</span>
-                        </label>
-
-                        <label class="inline-label">
-                          <input type="radio" [value]="100000004" name="providerType" formControlName="providerType">
-                          <span>Other</span>
-                        </label>
-                      </app-field>
-                    </div>
-
-                    <app-address [group]="item.get('providerAddress')" [showChildrenAsRequired]="false"></app-address>
                   </div>
-                </div>
-                <a href="javascript:void(0);" class="btn btn-secondary" (click)="addProvider()" *ngIf="showAddProvider">Add a Provider</a>
+                  <a href="javascript:void(0);" class="btn btn-secondary" (click)="addProvider()" *ngIf="showAddProvider">Add a Provider</a>
+                </section>
               </section>
-            </section>
 
           </div>
           <div formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5">
@@ -1052,7 +1056,7 @@
             <section>
               <h2 class="blue-header">Benefits Available Through CVAP</h2>
               <p>
-                For a complete list of benefits available through CVAP, please view the <a [routerLink]="" (click)="showSummaryOfBenefits()">Summary of Benefits</a>.<br />
+                For a list of benefits available through CVAP, please view the <a [routerLink]="" (click)="showSummaryOfBenefits()">Summary of Benefits</a>.<br />
                 <strong>Original reciepts</strong> are required for expenses not covered by your extended health or other insurance plan
               </p>
               <br />
@@ -1302,7 +1306,7 @@
                       </div>
                       <div class="col-4">
                         <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a contact phone number">
-                          <input type="text" class="form-control" formControlName="employerPhoneNumber">
+                          <input type="text" maxlength="10" class="form-control" formControlName="employerPhoneNumber">
                         </app-field>
                       </div>
                       <div class="col-4">
@@ -1481,12 +1485,12 @@
               <div class="row">
                 <div class="col-4">
                   <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" type="text" formControlName="representativePhoneNumber">
+                    <input class="form-control" maxlength="10" type="text" formControlName="representativePhoneNumber">
                   </app-field>
                 </div>
                 <div class="col-4">
                   <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeInformation.representativeAlternatePhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" type="text" formControlName="representativeAlternatePhoneNumber">
+                    <input class="form-control" maxlength="10" type="text" formControlName="representativeAlternatePhoneNumber">
                   </app-field>
                 </div>
                 <div class="col-4">
@@ -1606,7 +1610,7 @@
                   </div>
                   <div class="col-4">
                     <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
-                      <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber">
+                      <input class="form-control" maxlength="10" type="text" formControlName="authorizedPersonPhoneNumber">
                     </app-field>
                   </div>
                   <div class="col-4"></div>

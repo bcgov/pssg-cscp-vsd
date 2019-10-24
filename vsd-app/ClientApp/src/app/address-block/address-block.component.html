@@ -34,7 +34,7 @@
       </app-field>
     </div>
     <div class="col">
-      <app-field label="{{currentCountry.areaType}}" [required]="required" [valid]="!(postalCode.invalid && (postalCode.dirty||postalCode.touched))" errorMessage="Please enter your {{currentCountry.postalCodeName | lowercase}}.">
+      <app-field label="{{currentCountry.postalCodeName}}" [required]="required" [valid]="!(postalCode.invalid && (postalCode.dirty||postalCode.touched))" errorMessage="Please enter your {{currentCountry.postalCodeName | lowercase}}.">
         <input formControlName="postalCode" id="postalCode" class="form-control" name="postalCode" type="text" [placeholder]="currentCountry.postalCodeSample" [required]="required">
       </app-field>
     </div>

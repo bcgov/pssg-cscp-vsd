@@ -4,10 +4,11 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 {
     public class OffenderRestitutionFormModel
     {
-        public Restitutioninformation RestitutionInformation { get; set; }
+        public OffenderRestitutionInformation RestitutionInformation { get; set; }
+        public DocumentCollectioninformation DocumentCollectionInformation { get; set; }
     }
 
-    public class Restitutioninformation
+    public class OffenderRestitutionInformation
     {
         public string offenderFirstName { get; set; }
         public string offenderMiddleName { get; set; }
@@ -26,7 +27,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string custodyLocation { get; set; }
         public string custodyPhoneNumber { get; set; }
         public string custodyEmailAddress { get; set; }
-        public object[] restitutionOrders { get; set; }
+        //public object[] restitutionOrders { get; set; }
         public bool declaredAndSigned { get; set; }
         public string signature { get; set; }
     }

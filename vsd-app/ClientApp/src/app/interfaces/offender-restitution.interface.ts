@@ -1,7 +1,9 @@
 import { Address } from "./address.interface";
+import { DocumentCollectioninformation } from "./victim-restitution.interface";
 
 export interface OffenderRestitution {
   RestitutionInformation: OffenderRestitutionInformation;
+  DocumentCollectionInformation: DocumentCollectioninformation;
 }
 interface OffenderRestitutionInformation {
   offenderFirstName: string;

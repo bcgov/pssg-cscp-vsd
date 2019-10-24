@@ -20,6 +20,7 @@ import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
+import { FileBundle } from '../models/file-bundle';
 
 const moment = _rollupMoment || _moment;
 
@@ -196,7 +197,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.array([]), // This will be a collection of uploaded files
+        //additionalInformationFiles: this.fb.array([]),//{
+        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
+          filename: [''], // fileName
+          body: [''], // fileData
+        }), // This will be a collection of uploaded files
 
         wasReportMadeToPolice:
           [
@@ -293,7 +298,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
-      }, { validator: this.requireCheckboxesToBeCheckedValidator }),
+      }, ),//{ validator: this.requireCheckboxesToBeCheckedValidator }),
       employmentIncomeInformation: [null, Validators.required],
 
       representativeInformation: this.fb.group({
@@ -591,6 +596,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   createCrimeLocationItem(): FormGroup {
     return this.fb.group({
       location: ['', Validators.required]
+    });
+  }
+
+  createAdditionalInformationFiles(): FormGroup {
+    return this.fb.group({
+      filename: [''],
+      body: ['']
     });
   }
 
@@ -987,4 +999,30 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }
     }
   }
+  onFileBundle(fileBundle: FileBundle) {
+    try {
+      // save the files submitted from the component for attachment into the submitted form.
+      const patchObject = {};
+      patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;
+      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileBundle.fileName[0]);
+      var splitValues = fileBundle.fileData[0].split(',');
+
+      //this.form.get('documentInformation.body').patchValue(fileBundle.fileData[0]);
+      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(splitValues[1]);
+
+      //this.form.get('crimeInformation.additionalInformationFiles').value['0'].filename = fileBundle.fileName[0];
+      //var splitValues = fileBundle.fileData[0].split(',');
+      //this.form.get('crimeInformation.additionalInformationFiles').value['0'].body = splitValues[1];
+
+      fileBundle = fileBundle;
+    }
+    catch (e) {
+      console.log(e);
+    }
+
+
+
+
+  }
+
 }
