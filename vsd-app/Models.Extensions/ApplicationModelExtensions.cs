@@ -254,28 +254,21 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.ProviderCollection = tempCombinedCollection;
             }
 
-            try
+            // Add medical doctor information
+            if (model.MedicalInformation.familyDoctorName != null)
             {
-                // Add medical doctor information
-                if (model.MedicalInformation.familyDoctorName != null)
-                {
-                    Providercollection[] tempProviderCollection = new Providercollection[1];
-                    tempProviderCollection[0] = new Providercollection();
-                    tempProviderCollection[0].vsd_name = model.MedicalInformation.familyDoctorName;
-                    tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
-                    tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddressLine1;
-                    tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddressLine2;
-                    tempProviderCollection[0].vsd_relationship1 = "100000000"; // TODO: This is just an assumption, looking for confirmation from Mano
+                Providercollection[] tempProviderCollection = new Providercollection[1];
+                tempProviderCollection[0] = new Providercollection();
+                tempProviderCollection[0].vsd_name = model.MedicalInformation.familyDoctorName;
+                tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
+                tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddressLine1;
+                tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddressLine2;
+                tempProviderCollection[0].vsd_relationship1 = "100000000"; // TODO: This is just an assumption, looking for confirmation from Mano
 
-                    Providercollection[] tempCombinedCollection = new Providercollection[application.ProviderCollection.Count() + tempProviderCollection.Count()];
-                    Array.Copy(application.ProviderCollection, tempCombinedCollection, application.ProviderCollection.Count());
-                    Array.Copy(tempProviderCollection, 0, tempCombinedCollection, application.ProviderCollection.Count(), tempProviderCollection.Count());
-                    application.ProviderCollection = tempCombinedCollection;
-                }
-            }
-            catch (Exception e)
-            {
-                string errormessage = e.Message;
+                Providercollection[] tempCombinedCollection = new Providercollection[application.ProviderCollection.Count() + tempProviderCollection.Count()];
+                Array.Copy(application.ProviderCollection, tempCombinedCollection, application.ProviderCollection.Count());
+                Array.Copy(tempProviderCollection, 0, tempCombinedCollection, application.ProviderCollection.Count(), tempProviderCollection.Count());
+                application.ProviderCollection = tempCombinedCollection;
             }
 
             if (model.ExpenseInformation != null)
