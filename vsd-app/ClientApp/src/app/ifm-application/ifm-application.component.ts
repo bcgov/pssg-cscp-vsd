@@ -597,7 +597,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
-        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
+        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
         sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 

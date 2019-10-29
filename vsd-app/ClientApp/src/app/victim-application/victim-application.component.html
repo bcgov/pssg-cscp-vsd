@@ -217,6 +217,7 @@
                   <option value="100000003">Divorced</option>
                   <option value="100000004">Separated</option>
                   <option value="100000005">Single</option>
+                  <option value="100000006">Prefer not to answer</option>
                 </select>
               </app-field>
             </div>
@@ -346,14 +347,14 @@
 
             <app-field label="Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates." errorMessage="Please make a selection" [showChevrons]="false">
               <label class="inline-label">
-                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 2001 - Dec 2002).</em>
+                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
               </label>
               <label class="inline-label">
                 <input type="checkbox" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur"> Crime occurred over a period of time
               </label>
             </app-field>
 
-            <app-field label="Is this application being filed within one year of the date of the crime?" errorMessage="Please make a selection" [showChevrons]="false">
+            <app-field label="Is this application being filed within one year of the date of the crime?" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
               <label class="inline-label">
                 <input type="radio" [value]="true" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
                 <span>Yes</span>
@@ -437,6 +438,41 @@
                   <span>Multiple reports made to police over time</span>
                 </label>
               </app-field>
+
+              <app-field label="Date report was made to the police.">
+                <input type="text" class="form-control date-picker" formControlName="policeReportedDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedDatePicker" (focus)="policeReportedDatePicker.open()" (click)="policeReportedDatePicker.open()" readonly>
+                <mat-datepicker #policeReportedDatePicker></mat-datepicker>
+                <span *ngIf="form.get('crimeInformation.policeReportedMultipleTimes').value === true">
+                  <span> - </span>
+                  <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
+                  <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
+                </span>
+              </app-field>
+
+              <div class="police-report-information">
+                <div class="police-report-listing" formArrayName="policeReports" *ngFor="let item of form.get('crimeInformation.policeReports').controls; let i = index;">
+                  <div [formGroupName]="i" class="row police-report">
+                    <div class="col-4">
+                      <app-field label="Police File Number (if known)" [tooltipReference]="policeFileNumber">
+                        <input class="form-control" type="text" formControlName="policeFileNumber">
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                      <app-field label="Name of investigating officer (if known)">
+                        <input class="form-control" type="text" formControlName="investigatingOfficer">
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                      <br />
+                      <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport">
+                        <i class="fas fa-trash-alt"></i> Remove
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <ng-template #policeFileNumber><strong>Police File Number</strong><br />This information is needed by CVAP to access the police report about the incident.</ng-template>
+                <a href="javascript:void(0);" class="btn btn-secondary" (click)="addPoliceReport()" *ngIf="showAddPoliceReport">Add Police File Number</a>
+              </div>
             </section>
 
             <section>
@@ -490,94 +526,58 @@
                 </div>
               </div>
 
-              <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000001">
-                <app-field label="Date report was made to the police.">
-                  <input type="text" class="form-control date-picker" formControlName="policeReportedDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedDatePicker" (focus)="policeReportedDatePicker.open()" (click)="policeReportedDatePicker.open()" readonly>
-                  <mat-datepicker #policeReportedDatePicker></mat-datepicker>
-                  <span *ngIf="form.get('crimeInformation.policeReportedMultipleTimes').value === true">
-                    <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
-                    <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
-                  </span>
-                </app-field>
-
-                <div class="police-report-information">
-                  <div class="police-report-listing" formArrayName="policeReports" *ngFor="let item of form.get('crimeInformation.policeReports').controls; let i = index;">
-                    <div [formGroupName]="i" class="row police-report">
-                      <div class="col-4">
-                        <app-field label="Police File Number (if known)" [tooltipReference]="policeFileNumber">
-                          <input class="form-control" type="text" formControlName="policeFileNumber">
-                        </app-field>
-                      </div>
-                      <div class="col-4">
-                        <app-field label="Name of investigating officer (if known)">
-                          <input class="form-control" type="text" formControlName="investigatingOfficer">
-                        </app-field>
-                      </div>
-                      <div class="col-4">
-                        <br />
-                        <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport">
-                          <i class="fas fa-trash-alt"></i> Remove
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <ng-template #policeFileNumber><strong>Police File Number</strong><br />This information is needed by CVAP to access the police report about the incident.</ng-template>
-                  <a href="javascript:void(0);" class="btn btn-secondary" (click)="addPoliceReport()" *ngIf="showAddPoliceReport">Add Police File Number</a>
-                </div>
-              </section>
               <!--</section>
 
-  <section>-->
+    <section>-->
               <!--<h2 class="blue-header">Accused & Court Information</h2>
-  <h3>Name of the Accused <span>(if known)</span></h3>
+    <h3>Name of the Accused <span>(if known)</span></h3>
 
-  <div class="row">
-    <div class="col-4">
-      <app-field label="First Name">
-        <input class="form-control" type="text" formControlName="offenderFirstName">
-      </app-field>
+    <div class="row">
+      <div class="col-4">
+        <app-field label="First Name">
+          <input class="form-control" type="text" formControlName="offenderFirstName">
+        </app-field>
+      </div>
+      <div class="col-4">
+        <app-field label="Middle Name">
+          <input class="form-control" type="text" formControlName="offenderMiddleName">
+        </app-field>
+      </div>
+      <div class="col-4">
+        <app-field label="Last Name">
+          <input class="form-control" type="text" formControlName="offenderLastName">
+        </app-field>
+      </div>
     </div>
-    <div class="col-4">
-      <app-field label="Middle Name">
-        <input class="form-control" type="text" formControlName="offenderMiddleName">
-      </app-field>
+    <div class="row">
+      <div class="col-4">
+        <app-field label="Relationship to the Accused (if any)">
+          <input class="form-control" type="text" formControlName="offenderRelationship">
+        </app-field>
+      </div>
+      <div class="col-8">
+      </div>
     </div>
-    <div class="col-4">
-      <app-field label="Last Name">
-        <input class="form-control" type="text" formControlName="offenderLastName">
-      </app-field>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-4">
-      <app-field label="Relationship to the Accused (if any)">
-        <input class="form-control" type="text" formControlName="offenderRelationship">
-      </app-field>
-    </div>
-    <div class="col-8">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-6">
-      <app-field label="Has this person been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
-        <label class="inline-label">
-          <input type="radio" [value]="100000000" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-          <span>Yes</span>
-        </label>
-        <label class="inline-label">
-          <input type="radio" [value]="100000001" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-          <span>No</span>
-        </label>
-        <label class="inline-label">
-          <input type="radio" [value]="100000002" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-          <span>Unknown</span>
-        </label>
-      </app-field>
-    </div>
-    <div class="col-6">
-    </div>
-  </div>-->
+    <div class="row">
+      <div class="col-6">
+        <app-field label="Has this person been charged?" [required]="true" [valid]="isFieldValid('crimeInformation.offenderBeenCharged')" errorMessage="Please make a selection">
+          <label class="inline-label">
+            <input type="radio" [value]="100000000" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+            <span>Yes</span>
+          </label>
+          <label class="inline-label">
+            <input type="radio" [value]="100000001" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+            <span>No</span>
+          </label>
+          <label class="inline-label">
+            <input type="radio" [value]="100000002" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+            <span>Unknown</span>
+          </label>
+        </app-field>
+      </div>
+      <div class="col-6">
+      </div>
+    </div>-->
 
               <h3>Court Information</h3>
               <div class="court-information">
@@ -823,7 +823,7 @@
             </section>
 
               <h3>Family Doctor Information</h3>
-              <app-field label="Do you have a medical doctor / clicnic who has been treating you for injuries resulting from the incident?" [valid]="isFieldValid('medicalInformation.beingTreatedByFamilyDoctor')" [required]="true" errorMessage="Please select an option">
+              <app-field label="Do you have a medical doctor / clinic who has been treating you for injuries resulting from the incident?" [valid]="isFieldValid('medicalInformation.beingTreatedByFamilyDoctor')" [required]="true" errorMessage="Please select an option">
                 <label class="inline-label">
                   <input type="radio" [value]="true" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
                   <span>Yes</span>

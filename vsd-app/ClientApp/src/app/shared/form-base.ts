@@ -401,6 +401,37 @@ export class FormBase {
     return control1 + '-' + control2 + '-' + control3;
   }
 
+  public displayMailingSubAddress(addressControl: any): string {
+    let control = null;
+
+    if (typeof (addressControl) == 'string')
+      control = this.form.get(addressControl);
+
+    if (addressControl instanceof FormGroup)
+      control = addressControl;
+
+    let line1 = control.value.line1 || '';
+    let line2 = control.value.line2 || '';
+    let city = control.value.city || '';
+    let postalCode = control.value.postalCode || '';
+    let province = control.value.province || '';
+    let country = control.value.country || '';
+
+    let address = line1 + '<br />';
+    if (line2 != '')
+      address += line2 + '<br />';
+    if (city != '')
+      address += city + '<br />';
+    if (province != '')
+      address += province + '<br />';
+    if (country != '')
+      address += country + '<br />';
+    if (postalCode != '')
+      address += postalCode;
+
+    return address;
+  }
+
   public displayMailingAddress(addressControl: any): string {
     let control = null;
 
