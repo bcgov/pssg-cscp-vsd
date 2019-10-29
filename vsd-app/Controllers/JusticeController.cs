@@ -156,11 +156,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 string tempResult = tuple.Item1.ToString();
 
                 DynamicsResponse dynamicsResponse = new DynamicsResponse();
-                dynamicsResponse.IsSuccess = true;
+                dynamicsResponse.IsSuccess = (tempResult == "200"); // Only return true if we get a 200 back from the server
                 dynamicsResponse.Result = tempResult;
                 dynamicsResponse.odatacontext = tuple.Item2.ToString();
 
-                return dynamicsResponse.Result;
+                return dynamicsResponse.odatacontext;
 
             }
             finally

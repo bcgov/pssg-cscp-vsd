@@ -92,28 +92,8 @@
   <table class="table table-striped review-table">
     <tbody>
       <tr>
-        <th>Country</th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddress.country') }} </td>
-      </tr>
-      <tr>
-        <th>Mailing Address</th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddress.line1') }} </td>
-      </tr>
-      <tr *ngIf="valueOrEmpty('personalInformation.primaryAddress.line2') != '--'">
-        <th></th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddress.line2') }} </td>
-      </tr>
-      <tr>
-        <th>City</th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddress.city') }} </td>
-      </tr>
-      <tr>
-        <th>Province</th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddress.province') }} </td>
-      </tr>
-      <tr>
-        <th>Postal Code</th>
-        <td>{{ valueOrEmpty('personalInformation.primaryAddress.postalCode') }}</td>
+        <th>Primary Address</th>
+        <td><span [innerHTML]="displayMailingSubAddress('personalInformation.primaryAddress')"></span></td>
       </tr>
     </tbody>
   </table>
@@ -122,28 +102,8 @@
   <table class="table table-striped review-table">
     <tbody>
       <tr>
-        <th>Country</th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddress.country') }} </td>
-      </tr>
-      <tr>
-        <th>Mailing Address</th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddress.line1') }} </td>
-      </tr>
-      <tr *ngIf="valueOrEmpty('personalInformation.alternateAddress.line2') != '--'">
-        <th></th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddress.line2') }} </td>
-      </tr>
-      <tr>
-        <th>City</th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddress.city') }} </td>
-      </tr>
-      <tr>
-        <th>Province</th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddress.province') }} </td>
-      </tr>
-      <tr>
-        <th>Postal Code</th>
-        <td>{{ valueOrEmpty('personalInformation.alternateAddress.postalCode') }}</td>
+        <th>Alternate Address</th>
+        <td><span [innerHTML]="displayMailingSubAddress('personalInformation.alternateAddress')"></span></td>
       </tr>
     </tbody>
   </table>
