@@ -190,7 +190,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         whenDidCrimeOccur: [''], // True = Period of Time, False = Start date only
         crimePeriodStart: ['', Validators.required],
         crimePeriodEnd: [''],
-        applicationFiledWithinOneYearFromCrime: [''],
+        applicationFiledWithinOneYearFromCrime: ['', Validators.required],
         whyDidYouNotApplySooner: [''],
 
         crimeLocation: [''], // REMOVE AFTER DEMO

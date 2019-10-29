@@ -354,7 +354,7 @@
               </label>
             </app-field>
 
-            <app-field label="Is this application being filed within one year of the date of the crime?" errorMessage="Please make a selection" [showChevrons]="false">
+            <app-field label="Is this application being filed within one year of the date of the crime?" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
               <label class="inline-label">
                 <input type="radio" [value]="true" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
                 <span>Yes</span>
