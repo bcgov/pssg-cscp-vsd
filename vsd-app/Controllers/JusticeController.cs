@@ -157,6 +157,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 DynamicsResponse dynamicsResponse = new DynamicsResponse();
                 dynamicsResponse.IsSuccess = (tempResult == "200"); // Only return true if we get a 200 back from the server
+
                 dynamicsResponse.Result = tempResult;
                 dynamicsResponse.odatacontext = tuple.Item2.ToString();
 

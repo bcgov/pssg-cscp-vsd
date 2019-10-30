@@ -170,7 +170,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(4)]], // Phone = 2, Email = 1, Mail = 4
+        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(100000002)]], // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
 
         permissionToContactViaMethod: [false],
         agreeToCvapCommunicationExchange: [''],
