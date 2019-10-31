@@ -51,6 +51,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   courtFileItems: FormArray;
   crimeLocationItems: FormArray;
   policeReportItems: FormArray;
+  submitting: boolean = false; // this controls the button state for
 
   hospitalList = HOSPITALS;
   enumHelper = new EnumHelper();
@@ -298,7 +299,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
-      }, ),//{ validator: this.requireCheckboxesToBeCheckedValidator }),
+      }),//{ validator: this.requireCheckboxesToBeCheckedValidator }),
       employmentIncomeInformation: [null, Validators.required],
 
       representativeInformation: this.fb.group({
@@ -669,6 +670,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   submitApplication() {
     //let formIsValid = true;showValidationMessage
+    // show the button as submitting and disable it
+    this.submitting = true;
     if (this.form.valid) {
       this.justiceDataService.submitApplication(this.harvestForm())
         .subscribe(
@@ -677,16 +680,22 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
               this.router.navigate(['/application-success']);
             }
             else {
+              // re-enable the button
+              this.submitting = false;
               this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
             }
           },
           error => {
+            // re-enable the button
+            this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
           }
         );
     } else {
+      // re-enable the button
+      this.submitting = false;
       console.log("form not validated");
       this.markAsTouched();
     }
