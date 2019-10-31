@@ -859,7 +859,7 @@
               </h3>
               <ng-template #mspcTemplate><strong>Health Plan / Dental Plan Coverage</strong><br />CVAP will only pay expenses or provide benefits that are not already covered by your existing health or dental plan</ng-template>
 
-              <app-field label="Do you have medical services coverage? (e.g. a BC Services Card or BC Care Card)" [valid]="isFieldValid('medicalInformation.doYouHaveMedicalServicesCoverage')" [required]="true" errorMessage="Please select an option">
+              <app-field label="Do you have provincial medical services coverage? (e.g. a BC Services Card or BC Care Card)" [valid]="isFieldValid('medicalInformation.doYouHaveMedicalServicesCoverage')" [required]="true" errorMessage="Please select an option">
                 <label class="inline-label">
                   <input type="radio" [value]="true" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage">
                   <span>Yes</span>
