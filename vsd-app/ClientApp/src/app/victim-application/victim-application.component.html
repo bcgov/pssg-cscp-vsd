@@ -858,11 +858,11 @@
             <h3>Other Treatment Information</h3>
             <app-field label="Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?" [valid]="isFieldValid('medicalInformation.hadOtherTreatments')" [required]="true" errorMessage="Please select an option">
               <label class="inline-label">
-                <input type="radio" [value]="true" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                <input type="radio" (click)="addProvider()" [value]="true" name="hadOtherTreatments" formControlName="hadOtherTreatments">
                 <span>Yes</span>
               </label>
               <label class="inline-label">
-                <input type="radio" [value]="false" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                <input type="radio" (click)="clearProviders()" [value]="false" name="hadOtherTreatments" formControlName="hadOtherTreatments">
                 <span>No</span>
               </label>
             </app-field>
