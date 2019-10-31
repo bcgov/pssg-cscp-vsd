@@ -336,6 +336,22 @@
 
             <h3>Crime Date(s)</h3>
 
+            <app-field label="Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates." errorMessage="Please make a selection" [showChevrons]="false">
+              <label class="inline-label">
+                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
+              </label>
+              <app-field label="Crime occurred over a period of time" errorMessage="Please make a selection" [showChevrons]="false">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
+                  <span>No</span>
+                </label>
+              </app-field>
+            </app-field>
+
             <section>
               <app-field label="Date(s) of crime" [required]="true" [valid]="isFieldValid('crimeInformation.crimePeriodStart')" errorMessage="Please enter the crime date">
                 <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" (click)="crimePeriodStartPicker.open()" readonly>
@@ -347,15 +363,6 @@
                 </span>
               </app-field>
             </section>
-
-            <app-field label="Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates." errorMessage="Please make a selection" [showChevrons]="false">
-              <label class="inline-label">
-                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
-              </label>
-              <label class="inline-label">
-                <input type="checkbox" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur"> Crime occurred over a period of time
-              </label>
-            </app-field>
 
             <app-field label="Is this application being filed within one year of the date of the crime?" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
               <label class="inline-label">
