@@ -485,16 +485,16 @@
                   <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates">
                   <span>I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em></span>
                 </label>
-                <app-field label="Crime occurred over a period of time" errorMessage="Please make a selection" [showChevrons]="false">
-                  <label class="inline-label">
-                    <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
-                    <span>Yes</span>
-                  </label>
-                  <label class="inline-label">
-                    <input type="radio" [value]="false" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
-                    <span>No</span>
-                  </label>
-                </app-field>
+              </app-field>
+              <app-field label="Crime occurred over a period of time" errorMessage="Please make a selection" [showChevrons]="false">
+                <label class="inline-label">
+                  <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="false" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
+                  <span>No</span>
+                </label>
               </app-field>
 
               <section>
