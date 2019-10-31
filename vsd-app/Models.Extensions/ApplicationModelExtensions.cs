@@ -230,46 +230,49 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             }
 
             // Add employer information to Provider collection
-            if (model.EmploymentIncomeInformation.employers.Count() > 0)
+            if (model.EmploymentIncomeInformation != null)
             {
-                if (model.EmploymentIncomeInformation.employers[0].employerFirstName != null)
+                if (model.EmploymentIncomeInformation.employers.Count() > 0)
                 {
-                    Providercollection[] tempProviderCollection;
-                    tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
+                    if (model.EmploymentIncomeInformation.employers[0].employerFirstName != null)
                     {
-                        vsd_name = f.employerName,
-                        vsd_phonenumber = f.employerPhoneNumber,
-                        vsd_addressline1 = f.employerAddress.line1,
-                        vsd_addressline2 = f.employerAddress.line2,
-                        vsd_city = f.employerAddress.city,
-                        vsd_province = f.employerAddress.province,
-                        vsd_postalcode = f.employerAddress.postalCode,
-                        vsd_country = f.employerAddress.country,
-                        vsd_firstname = f.employerFirstName,
-                        vsd_lastname = f.employerLastName,
-                        vsd_relationship1 = "100000005", // TODO: This is just an assumption, looking for confirmation from Mano
-                    }).ToArray();
+                        Providercollection[] tempProviderCollection;
+                        tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
+                        {
+                            vsd_name = f.employerName,
+                            vsd_phonenumber = f.employerPhoneNumber,
+                            vsd_addressline1 = f.employerAddress.line1,
+                            vsd_addressline2 = f.employerAddress.line2,
+                            vsd_city = f.employerAddress.city,
+                            vsd_province = f.employerAddress.province,
+                            vsd_postalcode = f.employerAddress.postalCode,
+                            vsd_country = f.employerAddress.country,
+                            vsd_firstname = f.employerFirstName,
+                            vsd_lastname = f.employerLastName,
+                            vsd_relationship1 = "100000005", // TODO: This is just an assumption, looking for confirmation from Mano
+                        }).ToArray();
 
-                    int tempProviderCount = 0;
-                    if (application.ProviderCollection == null)
-                    {
-                        tempProviderCount = 0;
+                        int tempProviderCount = 0;
+                        if (application.ProviderCollection == null)
+                        {
+                            tempProviderCount = 0;
+                        }
+                        else
+                        {
+                            tempProviderCount = application.ProviderCollection.Count();
+                        }
+                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                        if (application.ProviderCollection == null)
+                        {
+                            tempCombinedCollection = tempProviderCollection;
+                        }
+                        else
+                        {
+                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                        }
+                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                        application.ProviderCollection = tempCombinedCollection;
                     }
-                    else
-                    {
-                        tempProviderCount = application.ProviderCollection.Count();
-                    }
-                    Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                    if (application.ProviderCollection == null)
-                    {
-                        tempCombinedCollection = tempProviderCollection;
-                    }
-                    else
-                    {
-                        Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                    }
-                    Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                    application.ProviderCollection = tempCombinedCollection;
                 }
             }
 
