@@ -703,16 +703,16 @@
                       <span>Unsure</span>
                     </label>
                   </app-field>
+                  <span *ngIf="form.value.crimeInformation.racafInformation.willBeTakingLegalAction===100000000">
+                    <h3>Lawyer Information</h3>
+                    <p>Please provide the name and address of your lawyer or law firm: </p>
 
-                  <h3>Lawyer Information</h3>
-                  <p>Please provide the name and address of your lawyer or law firm: </p>
+                    <app-field label="Lawyer or Law Firm Name">
+                      <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
+                    </app-field>
 
-                  <app-field label="Lawyer or Law Firm Name">
-                    <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
-                  </app-field>
-
-                  <app-address [group]="form.get('crimeInformation.racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
-
+                    <app-address [group]="form.get('crimeInformation.racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
+                  </span>
                   <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
                   <div class="terms">
                     <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following:</p>
