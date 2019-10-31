@@ -282,6 +282,13 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     this.showAddProvider = this.otherTreatmentItems.length < 5;
     this.showRemoveProvider = this.otherTreatmentItems.length > 1;
   }
+  clearProviders(): void {
+    // remove all providers
+    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
+    while (this.otherTreatmentItems.length > 0) {
+      this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
+    }
+  }
 
   removeProvider(index: number): void {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;

@@ -997,11 +997,11 @@
               <h3>Other Treatment Information</h3>
               <app-field label="Do you have a counsellor/therapist who has been treating you as a result of the incident?" [valid]="isFieldValid('medicalInformation.hadOtherTreatments')" [required]="true" errorMessage="Please select an option">
                 <label class="inline-label">
-                  <input type="radio" [value]="true" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                  <input type="radio" [value]="true" (click)="addProvider()" name="hadOtherTreatments" formControlName="hadOtherTreatments">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="false" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                  <input type="radio" [value]="false" (click)="clearProviders()" name="hadOtherTreatments" formControlName="hadOtherTreatments">
                   <span>No</span>
                 </label>
               </app-field>
