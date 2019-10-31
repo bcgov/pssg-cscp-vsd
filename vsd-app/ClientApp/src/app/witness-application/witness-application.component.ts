@@ -532,7 +532,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   createTreatmentItem(): FormGroup {
     return this.fb.group({
       providerType: [0],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
-      providerName: [''],
+      providerName: ['', Validators.required],
       providerPhoneNumber: [''],
       providerAddress: this.fb.group({
         line1: [''],
