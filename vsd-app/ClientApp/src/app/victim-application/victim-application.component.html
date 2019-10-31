@@ -704,16 +704,16 @@
                       <span>Unsure</span>
                     </label>
                   </app-field>
+                  <span *ngIf="form.value.crimeInformation.racafInformation.willBeTakingLegalAction===100000000">
+                    <h3>Lawyer Information</h3>
+                    <p>Please provide the name and address of your lawyer or law firm: </p>
 
-                  <h3>Lawyer Information</h3>
-                  <p>Please provide the name and address of your lawyer or law firm: </p>
+                    <app-field label="Lawyer or Law Firm Name">
+                      <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
+                    </app-field>
 
-                  <app-field label="Lawyer or Law Firm Name">
-                    <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
-                  </app-field>
-
-                  <app-address [group]="form.get('crimeInformation.racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
-
+                    <app-address [group]="form.get('crimeInformation.racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
+                  </span>
                   <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
                   <div class="terms">
                     <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following:</p>
@@ -875,7 +875,7 @@
                   <h3>Provider {{ i + 1 }}</h3>
                   <div class="row">
                     <div class="col-4">
-                      <app-field label="Provider name">
+                      <app-field label="Provider name" [required]="true">
                         <input type="text" class="form-control" formControlName="providerName">
                       </app-field>
                     </div>
@@ -1451,7 +1451,8 @@
           <span style="float: right;">
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9 &&stepper.selectedIndex!=5">CONTINUE<i class="fas fa-chevron-right"></i></button>
             <button (click)="markAsTouched(); producePDF();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>&nbsp;
-            <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
+            <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="!submitting && stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
+            <button class="btn btn-primary disabled" *ngIf="submitting && stepper.selectedIndex == 9">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button>
           </span>
         </section>
       </form>
