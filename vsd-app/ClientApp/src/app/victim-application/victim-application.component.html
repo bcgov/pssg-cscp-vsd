@@ -336,6 +336,22 @@
 
             <h3>Crime Date(s)</h3>
 
+            <app-field label="Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates." errorMessage="Please make a selection" [showChevrons]="false">
+              <label class="inline-label">
+                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
+              </label>
+            </app-field>
+            <app-field label="Crime occurred over a period of time" errorMessage="Please make a selection" [showChevrons]="false">
+              <label class="inline-label">
+                <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
+                <span>Yes</span>
+              </label>
+              <label class="inline-label">
+                <input type="radio" [value]="false" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
+                <span>No</span>
+              </label>
+            </app-field>
+
             <section>
               <app-field label="Date(s) of crime" [required]="true" [valid]="isFieldValid('crimeInformation.crimePeriodStart')" errorMessage="Please enter the crime date">
                 <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" (click)="crimePeriodStartPicker.open()" readonly>
@@ -347,15 +363,6 @@
                 </span>
               </app-field>
             </section>
-
-            <app-field label="Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates." errorMessage="Please make a selection" [showChevrons]="false">
-              <label class="inline-label">
-                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
-              </label>
-              <label class="inline-label">
-                <input type="checkbox" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur"> Crime occurred over a period of time
-              </label>
-            </app-field>
 
             <app-field label="Is this application being filed within one year of the date of the crime?" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
               <label class="inline-label">
@@ -665,7 +672,7 @@
                     </label>
                   </app-field>
 
-                  <section *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === 100000000">
+                  <!-- <section *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === 100000000">
                     <app-field label="If yes, what expenses did you ask to be covered?">
                       <input class="form-control standard" type="text" formControlName="expensesRequested">
                     </app-field>
@@ -677,7 +684,7 @@
                     <app-field label="Amount received">
                       <input class="form-control standard" type="number" formControlName="expensesReceived">
                     </app-field>
-                  </section>
+                  </section> -->
 
                   <h3>Civil Action</h3>
                   <p><strong>Civil action</strong> refers to taking legal action against, or suing, a person or party responsible for the claimant’s injury or loss.</p>
@@ -702,9 +709,6 @@
 
                   <app-field label="Lawyer or Law Firm Name">
                     <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
-                  </app-field>
-
-                  <app-field label="Law Firm or Office Address">
                   </app-field>
 
                   <app-address [group]="form.get('crimeInformation.racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
@@ -748,7 +752,7 @@
             </h3>
             <ng-template #mspcTemplate><strong>Health Plan / Dental Plan Coverage</strong><br />CVAP will only pay expenses or provide benefits that are not already covered by your existing health or dental plan</ng-template>
 
-            <app-field label="Do you have medical services coverage? (e.g. a BC Services Card or BC Care Card)" [valid]="isFieldValid('medicalInformation.doYouHaveMedicalServicesCoverage')" [required]="true" errorMessage="Please select an option">
+            <app-field label="Do you have provincial medical services coverage? (e.g. a BC Services Card or BC Care Card)" [valid]="isFieldValid('medicalInformation.doYouHaveMedicalServicesCoverage')" [required]="true" errorMessage="Please select an option">
               <label class="inline-label">
                 <input type="radio" [value]="true" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage">
                 <span>Yes</span>
@@ -826,7 +830,7 @@
               </app-field>
             </section>
 
-            <h3>Family Doctor Information</h3>
+            <h3>Doctor Information</h3>
             <app-field label="Do you have a medical doctor / clinic who has been treating you for injuries resulting from the incident?" [valid]="isFieldValid('medicalInformation.beingTreatedByFamilyDoctor')" [required]="true" errorMessage="Please select an option">
               <label class="inline-label">
                 <input type="radio" [value]="true" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
