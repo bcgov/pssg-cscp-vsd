@@ -274,7 +274,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         familyDoctorAddressLine2: [''],
 
         hadOtherTreatments: ['', Validators.required],
-        otherTreatments: this.fb.array([this.createTreatmentItem()]),
+        otherTreatments: this.fb.array([]),
       }),
       expenseInformation: this.fb.group({
         haveMedicalExpenses: [false],
@@ -492,6 +492,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.otherTreatmentItems.push(this.createTreatmentItem());
     this.showAddProvider = this.otherTreatmentItems.length < 5;
     this.showRemoveProvider = this.otherTreatmentItems.length > 1;
+  }
+  clearProviders(): void {
+    // remove all providers
+    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
+    while (this.otherTreatmentItems.length > 0) {
+      this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
+    }
   }
 
   removeProvider(index: number): void {
@@ -1028,10 +1035,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     catch (e) {
       console.log(e);
     }
-
-
-
-
   }
 
+  clearTreatments() {
+
+  }
 }
