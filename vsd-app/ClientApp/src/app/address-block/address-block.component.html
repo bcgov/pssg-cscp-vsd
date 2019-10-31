@@ -1,0 +1,42 @@
+<div [formGroup]="addressForm">
+  <div class="form-row">
+    <div class="col">
+      <app-field label="Country" [required]="required" [valid]=" !(country.invalid && (country.dirty||country.touched))" errorMessage="Please select a country.">
+        <select formControlName="country" name="country" id="country" (change)="setCountryName(country.value)" class="form-control" [required]="required">
+          <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+        </select>
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="{{currentCountry.areaType}}" [required]="required" [valid]="!(province.invalid && (province.dirty||province.touched))" errorMessage="Please select a {{currentCountry.areaType|lowercase}}.">
+        <select formControlName="province" name="province" id="province" class="form-control" [required]="required">
+          <option *ngFor="let province of currentCountry.areas" [value]="province">{{ province }}</option>
+        </select>
+      </app-field>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col">
+      <app-field label="Mailing Address Line 1" [required]="required" [valid]=" !(line1.invalid && (line1.dirty||line1.touched))" errorMessage="Please enter line 1 of your mailing address.">
+        <input formControlName="line1" id="line1" class="form-control" name="line1" type="text" [required]="required">
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="Mailing Address Line 2" [valid]="true" errorMessage="Please enter line 2 of your mailing address.">
+        <input formControlName="line2" id="line2" class="form-control" name="line2" type="text">
+      </app-field>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col">
+      <app-field label="City" [required]="required" [valid]=" !(city.invalid && (city.dirty||city.touched))" errorMessage="Please enter a city.">
+        <input formControlName="city" id="city" class="form-control" name="city" type="text" [required]="required">
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="{{currentCountry.postalCodeName}}" [required]="required" [valid]="!(postalCode.invalid && (postalCode.dirty||postalCode.touched))" errorMessage="Please enter your {{currentCountry.postalCodeName | lowercase}}.">
+        <input formControlName="postalCode" id="postalCode" class="form-control" name="postalCode" type="text" [placeholder]="currentCountry.postalCodeSample" [required]="required">
+      </app-field>
+    </div>
+  </div>
+</div>

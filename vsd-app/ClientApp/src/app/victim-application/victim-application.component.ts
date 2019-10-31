@@ -20,6 +20,7 @@ import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
+import { FileBundle } from '../models/file-bundle';
 
 const moment = _rollupMoment || _moment;
 
@@ -50,6 +51,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   courtFileItems: FormArray;
   crimeLocationItems: FormArray;
   policeReportItems: FormArray;
+  submitting: boolean = false; // this controls the button state for
 
   hospitalList = HOSPITALS;
   enumHelper = new EnumHelper();
@@ -79,10 +81,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   saveFormData: any;
 
   matchingEmail: string; // this is the value of the email that both email fields should match.
-
+  todaysDate = new Date(); // for the birthdate validation
+  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
   // a field that represents the current employment income information state
   employmentIncomeInformation: EmploymentIncomeInformation;
 
+  //
+  get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -162,11 +167,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
-        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
+        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
         sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(4)]], // Phone = 2, Email = 1, Mail = 4
+        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(100000002)]], // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
 
         permissionToContactViaMethod: [false],
         agreeToCvapCommunicationExchange: [''],
@@ -176,22 +181,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         email: ['', [Validators.required]],
         confirmEmail: ['', [Validators.required]],
 
-        primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        alternateAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
+        primaryAddress: [''],
+        alternateAddress: [''],
       }, { validator: this.matchingEmails('email', 'confirmEmail') }),
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
@@ -200,14 +191,18 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         whenDidCrimeOccur: [''], // True = Period of Time, False = Start date only
         crimePeriodStart: ['', Validators.required],
         crimePeriodEnd: [''],
-        applicationFiledWithinOneYearFromCrime: [''],
+        applicationFiledWithinOneYearFromCrime: ['', Validators.required],
         whyDidYouNotApplySooner: [''],
 
         crimeLocation: [''], // REMOVE AFTER DEMO
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.array([]), // This will be a collection of uploaded files
+        //additionalInformationFiles: this.fb.array([]),//{
+        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
+          filename: [''], // fileName
+          body: [''], // fileData
+        }), // This will be a collection of uploaded files
 
         wasReportMadeToPolice:
           [
@@ -279,7 +274,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         familyDoctorAddressLine2: [''],
 
         hadOtherTreatments: ['', Validators.required],
-        otherTreatments: this.fb.array([this.createTreatmentItem()]),
+        otherTreatments: this.fb.array([]),
       }),
       expenseInformation: this.fb.group({
         haveMedicalExpenses: [false],
@@ -304,7 +299,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
-      }, { validator: this.requireCheckboxesToBeCheckedValidator }),
+      }),//{ validator: this.requireCheckboxesToBeCheckedValidator }),
       employmentIncomeInformation: [null, Validators.required],
 
       representativeInformation: this.fb.group({
@@ -498,6 +493,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.showAddProvider = this.otherTreatmentItems.length < 5;
     this.showRemoveProvider = this.otherTreatmentItems.length > 1;
   }
+  clearProviders(): void {
+    // remove all providers
+    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
+    while (this.otherTreatmentItems.length > 0) {
+      this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
+    }
+  }
 
   removeProvider(index: number): void {
     // when the user clicks to remove the medical provider this removes the provider at the index clicked
@@ -511,7 +513,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     // make a form group for insertion into the form
     return this.fb.group({
       providerType: [0],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
-      providerName: [''],
+      providerName: ['', Validators.required],
       providerPhoneNumber: [''],
       providerAddress: this.fb.group({
         line1: [''],
@@ -605,6 +607,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     });
   }
 
+  createAdditionalInformationFiles(): FormGroup {
+    return this.fb.group({
+      filename: [''],
+      body: ['']
+    });
+  }
+
   addPoliceReport(): void {
     this.policeReportItems = this.form.get('crimeInformation.policeReports') as FormArray;
     this.policeReportItems.push(this.createPoliceReport());
@@ -668,6 +677,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   submitApplication() {
     //let formIsValid = true;showValidationMessage
+    // show the button as submitting and disable it
+    this.submitting = true;
     if (this.form.valid) {
       this.justiceDataService.submitApplication(this.harvestForm())
         .subscribe(
@@ -676,16 +687,22 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
               this.router.navigate(['/application-success']);
             }
             else {
+              // re-enable the button
+              this.submitting = false;
               this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
             }
           },
           error => {
+            // re-enable the button
+            this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
           }
         );
     } else {
+      // re-enable the button
+      this.submitting = false;
       console.log("form not validated");
       this.markAsTouched();
     }
@@ -729,14 +746,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     let phoneControl = this.form.get('personalInformation.phoneNumber');
     let emailControl = this.form.get('personalInformation.email');
     let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
-    let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
-    let addressControls = [
-      this.form.get('personalInformation').get('primaryAddress.country'),
-      this.form.get('personalInformation').get('primaryAddress.province'),
-      this.form.get('personalInformation').get('primaryAddress.city'),
-      this.form.get('personalInformation').get('primaryAddress.line1'),
-      this.form.get('personalInformation').get('primaryAddress.postalCode'),
-    ];
 
     phoneControl.clearValidators();
     phoneControl.setErrors(null);
@@ -744,10 +753,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     emailControl.setErrors(null);
     emailConfirmControl.clearValidators();
     emailConfirmControl.setErrors(null);
-    addressControl.setValidators([Validators.required]);
-    for (let control of addressControls) {
-      control.setValidators([Validators.required]);
-    }
 
     if (contactMethod === 2) {
       phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
@@ -772,12 +777,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     emailControl.updateValueAndValidity();
     emailConfirmControl.markAsTouched();
     emailConfirmControl.updateValueAndValidity();
-    addressControl.markAsTouched();
-    addressControl.updateValueAndValidity();
-    for (let control of addressControls) {
-      control.markAsTouched();
-      control.updateValueAndValidity();
-    }
   }
   setHospitalTreatment(): void {
     const yesNo: boolean = this.form.get('medicalInformation.wereYouTreatedAtHospital').value === 'true';
@@ -974,7 +973,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.setCompletingOnBehalfOf();
     this.setCvapStaffSharing();
     this.setHospitalTreatment();
-    this.setPreferredContactMethod();
+    // this.setPreferredContactMethod();
     this.setRepresentativePreferredMethodOfContact();
   }
 
@@ -1014,6 +1013,27 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           mismatchedEmails: true
         };
       }
+    }
+  }
+  onFileBundle(fileBundle: FileBundle) {
+    try {
+      // save the files submitted from the component for attachment into the submitted form.
+      const patchObject = {};
+      patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;
+      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileBundle.fileName[0]);
+      var splitValues = fileBundle.fileData[0].split(',');
+
+      //this.form.get('documentInformation.body').patchValue(fileBundle.fileData[0]);
+      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(splitValues[1]);
+
+      //this.form.get('crimeInformation.additionalInformationFiles').value['0'].filename = fileBundle.fileName[0];
+      //var splitValues = fileBundle.fileData[0].split(',');
+      //this.form.get('crimeInformation.additionalInformationFiles').value['0'].body = splitValues[1];
+
+      fileBundle = fileBundle;
+    }
+    catch (e) {
+      console.log(e);
     }
   }
 }

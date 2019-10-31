@@ -83,17 +83,40 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_crimeenddate = model.CrimeInformation.crimePeriodEnd;
                 }
                 application.Application.vsd_cvap_reasontoapplylate = model.CrimeInformation.whyDidYouNotApplySooner; // TODO: Verify mapping - I think it's right but just different names
-                application.Application.vsd_cvap_crimelocations = model.CrimeInformation.crimeLocation;
+
+                // Add Crime Locations as an array separated by line feeds
+                if (model.CrimeInformation.crimeLocations.Count() > 0)
+                {
+                    string tempOutput = "";
+                    foreach(Crimelocation tempCrimeLocation in model.CrimeInformation.crimeLocations)
+                        {
+                        tempOutput = tempOutput + tempCrimeLocation.location + "\r\n";
+                    }
+                    application.Application.vsd_cvap_crimelocations = tempOutput.Substring(0, tempOutput.Length - 2);
+                }
+
                 application.Application.vsd_cvap_crimedetails = model.CrimeInformation.crimeDetails;
                 application.Application.vsd_cvap_injuries = model.CrimeInformation.crimeInjuries;
 
-                // TODO: Fix file mapping
-                // how does the uploading work? is our array a list of file ids? Look them up and extract appropriate data...
-                application.DocumentCollection = model.DocumentCollectionInformation.Select(f => new Documentcollection
+                // Include upload file
+                try
                 {
-                    body = f.body,
-                    filename = f.fileName
-                }).ToArray();
+                    if (model.CrimeInformation.additionalInformationFiles != null)
+                    {
+                        if (model.CrimeInformation.additionalInformationFiles.fileName.Length > 0)
+                        {
+                            Documentcollection tempDocumentCollection = new Documentcollection();
+                            tempDocumentCollection.body = model.CrimeInformation.additionalInformationFiles.body;
+                            tempDocumentCollection.filename = model.CrimeInformation.additionalInformationFiles.fileName;
+                            application.DocumentCollection = new Documentcollection[1];
+                            application.DocumentCollection[0] = tempDocumentCollection;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    string errormessage = e.Message;
+                }
 
                 application.Application.vsd_cvap_reportedtopolice = model.CrimeInformation.wasReportMadeToPolice;
                 application.Application.vsd_cvap_policedetachment = model.CrimeInformation.policeReportedWhichPoliceForce;
@@ -107,11 +130,18 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
                 application.Application.vsd_cvap_crimereportedto = model.CrimeInformation.noPoliceReportIdentification; // TODO: verify mapping - I think it's right, but different names
 
-                application.PoliceFileNumberCollection = model.CrimeInformation.policeReports.Select(r => new Policefilenumbercollection
+                // Setup policeFiles, don't show if there isn't any
+                if (model.CrimeInformation.policeReports != null)
                 {
-                    vsd_investigatingpoliceofficername = r.investigatingOfficer,
-                    vsd_policefilenumber = r.policeFileNumber
-                }).ToArray();
+                    if (model.CrimeInformation.policeReports[0].policeFileNumber.Length > 0)
+                    {
+                        application.PoliceFileNumberCollection = model.CrimeInformation.policeReports.Select(r => new Policefilenumbercollection
+                        {
+                            vsd_investigatingpoliceofficername = r.investigatingOfficer,
+                            vsd_policefilenumber = r.policeFileNumber
+                        }).ToArray();
+                    }
+                }
 
                 application.Application.vsd_cvap_offenderfirstname = model.CrimeInformation.offenderFirstName;
                 application.Application.vsd_cvap_offendermiddlename = model.CrimeInformation.offenderMiddleName;
@@ -120,11 +150,18 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_relationshiptooffender = model.CrimeInformation.offenderRelationship;
                 application.Application.vsd_cvap_isoffendercharged = model.CrimeInformation.offenderBeenCharged;
 
-                application.CourtInfoCollection = model.CrimeInformation.courtFiles.Select(f => new Courtinfocollection
+                // Setup courtFiles, don't show if there isn't any
+                if (model.CrimeInformation.courtFiles != null)
                 {
-                    vsd_courtfilenumber = f.courtFileNumber,
-                    vsd_courtlocation = f.courtLocation
-                }).ToArray();
+                    if (model.CrimeInformation.courtFiles[0].courtFileNumber.Length > 0)
+                    {
+                        application.CourtInfoCollection = model.CrimeInformation.courtFiles.Select(f => new Courtinfocollection
+                        {
+                            vsd_courtfilenumber = f.courtFileNumber,
+                            vsd_courtlocation = f.courtLocation
+                        }).ToArray();
+                    }
+                }
 
                 application.Application.vsd_cvap_isoffendersued = model.CrimeInformation.haveYouSuedOffender;
                 application.Application.vsd_cvap_intentiontosueoffender = model.CrimeInformation.intendToSueOffender;
@@ -161,38 +198,203 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_treatmentdate = model.MedicalInformation.treatedAtHospitalDate;
                 }
 
-                //application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
-                //{
-                //    vsd_name = t.providerName,
-                //    vsd_phonenumber = t.providerPhoneNumber,
+                // Setup otherTreatments, don't show if there isn't any
+                if (model.MedicalInformation.otherTreatments != null)
+                {
+                    if (model.MedicalInformation.otherTreatments[0].providerName.Length > 0)
+                    {
+                        application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
+                        {
+                            vsd_name = t.providerName,
+                            vsd_phonenumber = t.providerPhoneNumber,
 
-                //    vsd_addressline1 = t.providerAddress?.line1,
-                //    vsd_addressline2 = t.providerAddress?.line2,
-                //    vsd_city = t.providerAddress?.city,
-                //    vsd_province = t.providerAddress?.province,
-                //    vsd_country = t.providerAddress?.country,
-                //    vsd_postalcode = t.providerAddress?.postalCode,
+                            vsd_addressline1 = t.providerAddress.line1,
+                            vsd_addressline2 = t.providerAddress.line2,
+                            vsd_city = t.providerAddress.city,
+                            vsd_province = t.providerAddress.province,
+                            vsd_country = t.providerAddress.country,
+                            vsd_postalcode = t.providerAddress.postalCode,
+                            vsd_relationship1 = t.providerType.ToString(),
+                            //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
+                            //    vsd_firstname = "", // TODO: We don't collect a split name here
+                            //    vsd_middlename = "", // TODO: We don't collect a split name here
+                            //    vsd_lastname = "", // TODO: We don't collect a split name here
+                            //    vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
+                            //    vsd_email = "", // TODO: We don't collect an email here
+                            //    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
+                            //    //vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact, // TODO: This isn't correct either
+                            //    vsd_relationship1 = "", // TODO: We don't collect a relationship here
+                        }).ToArray();
+                    }
+                }
+            }
 
-                //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
-                //    vsd_firstname = "", // TODO: We don't collect a split name here
-                //    vsd_middlename = "", // TODO: We don't collect a split name here
-                //    vsd_lastname = "", // TODO: We don't collect a split name here
-                //    vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
-                //    vsd_email = "", // TODO: We don't collect an email here
-                //    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
-                //    //vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact, // TODO: This isn't correct either
-                //    vsd_relationship1 = "", // TODO: We don't collect a relationship here
+            // Add employer information to Provider collection
+            if (model.EmploymentIncomeInformation != null)
+            {
+                if (model.EmploymentIncomeInformation.employers.Count() > 0)
+                {
+                    if (model.EmploymentIncomeInformation.employers[0].employerFirstName != null)
+                    {
+                        Providercollection[] tempProviderCollection;
+                        tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
+                        {
+                            vsd_name = f.employerName,
+                            vsd_phonenumber = f.employerPhoneNumber,
+                            vsd_addressline1 = f.employerAddress.line1,
+                            vsd_addressline2 = f.employerAddress.line2,
+                            vsd_city = f.employerAddress.city,
+                            vsd_province = f.employerAddress.province,
+                            vsd_postalcode = f.employerAddress.postalCode,
+                            vsd_country = f.employerAddress.country,
+                            vsd_firstname = f.employerFirstName,
+                            vsd_lastname = f.employerLastName,
+                            vsd_relationship1 = "100000005", // TODO: This is just an assumption, looking for confirmation from Mano
+                        }).ToArray();
 
-                //}).ToArray();
+                        int tempProviderCount = 0;
+                        if (application.ProviderCollection == null)
+                        {
+                            tempProviderCount = 0;
+                        }
+                        else
+                        {
+                            tempProviderCount = application.ProviderCollection.Count();
+                        }
+                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                        if (application.ProviderCollection == null)
+                        {
+                            tempCombinedCollection = tempProviderCollection;
+                        }
+                        else
+                        {
+                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                        }
+                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                        application.ProviderCollection = tempCombinedCollection;
+                    }
+                }
+            }
+
+            // Add medical doctor information
+            if (model.MedicalInformation.familyDoctorName.Length > 0) // Only do this if there is something in this field
+            {
+                Providercollection[] tempProviderCollection = new Providercollection[1];
+                tempProviderCollection[0] = new Providercollection();
+                tempProviderCollection[0].vsd_name = model.MedicalInformation.familyDoctorName;
+                tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
+                tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddressLine1;
+                tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddressLine2;
+                tempProviderCollection[0].vsd_relationship1 = "100000000"; // TODO: This is just an assumption, looking for confirmation from Mano
+
+                int tempProviderCount = 0;
+                if (application.ProviderCollection == null)
+                {
+                    tempProviderCount = 0;
+                }
+                else
+                {
+                    tempProviderCount = application.ProviderCollection.Count();
+                }
+                Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                if (application.ProviderCollection == null)
+                {
+                    tempCombinedCollection = tempProviderCollection;
+                }
+                else
+                {
+                    Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                }
+                Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                application.ProviderCollection = tempCombinedCollection;
             }
 
             if (model.ExpenseInformation != null)
             {
-                // what are we doing here? some kind of CSV string for all of the selected expenses/benefits? seems bonkers...
-                //application.Application.vsd_cvap_benefitsrequested = model.ExpenseInformation.haveCrimeSceneCleaningExpenses.ToString();
+                // Build Expenses CSV String
+                string tempExpenses = "";
+                if (model.ExpenseInformation.haveMedicalExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000000,";
+                }
+                if (model.ExpenseInformation.haveDentalExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000001,";
+                }
+                if (model.ExpenseInformation.havePrescriptionDrugExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000002,";
+                }
+                if (model.ExpenseInformation.haveCounsellingExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000003,";
+                }
+                if (model.ExpenseInformation.haveLostEmploymentIncomeExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000004,";
+                }
+                if (model.ExpenseInformation.havePersonalPropertyLostExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000005,";
+                }
+                if (model.ExpenseInformation.haveProtectiveMeasureExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000006,";
+                }
+                if (model.ExpenseInformation.haveDisabilityExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000007,";
+                }
+                if (model.ExpenseInformation.haveCrimeSceneCleaningExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000008,";
+                }
+                if (model.ExpenseInformation.haveOtherExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000009,";
+                }
+                if (tempExpenses.Length > 0)
+                {
+                    tempExpenses = tempExpenses.Substring(0, tempExpenses.Length - 1);
+                    application.Application.vsd_cvap_benefitsrequested = tempExpenses;
+                }
                 application.Application.vsd_cvap_benefitsrequestedother = model.ExpenseInformation.otherSpecificExpenses;
 
-                //application.Application.vsd_cvap_otherbenefits = model.ExpenseInformation.haveDisabilityPlanBenefits.ToString();
+                // Build Benefits CSV String
+                string tempBenefits = "";
+                if (model.ExpenseInformation.haveDisabilityPlanBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000000,";
+                }
+                if (model.ExpenseInformation.haveEmploymentInsuranceBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000001,";
+                }
+                if (model.ExpenseInformation.haveIncomeAssistanceBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000002,";
+                }
+                if (model.ExpenseInformation.haveCanadaPensionPlanBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000003,";
+                }
+                if (model.ExpenseInformation.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000004,";
+                }
+                if (model.ExpenseInformation.haveCivilActionBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000005,";
+                }
+                if (model.ExpenseInformation.haveOtherBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000006,";
+                }
+                if (tempBenefits.Length > 0)
+                {
+                    tempBenefits = tempBenefits.Substring(0, tempBenefits.Length - 1);
+                    application.Application.vsd_cvap_otherbenefits = tempBenefits;
+                }
                 application.Application.vsd_cvap_otherbenefitsother = model.ExpenseInformation.otherSpecificBenefits;
             }
 

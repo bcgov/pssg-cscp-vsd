@@ -102,6 +102,8 @@ export class FormBase {
   }
 
   public requireCheckboxesToBeCheckedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+    // This is causing a failure of validation if both Medical and Dental are selected. So commenting out. But why was this here in the first place??? (JT)
+    // Removed from victim-application.component.ts(Line 300)
     const name = control.get('haveMedicalExpenses');
     const alterEgo = control.get('haveDentalExpenses');
 
@@ -397,6 +399,37 @@ export class FormBase {
       return '--';
 
     return control1 + '-' + control2 + '-' + control3;
+  }
+
+  public displayMailingSubAddress(addressControl: any): string {
+    let control = null;
+
+    if (typeof (addressControl) == 'string')
+      control = this.form.get(addressControl);
+
+    if (addressControl instanceof FormGroup)
+      control = addressControl;
+
+    let line1 = control.value.line1 || '';
+    let line2 = control.value.line2 || '';
+    let city = control.value.city || '';
+    let postalCode = control.value.postalCode || '';
+    let province = control.value.province || '';
+    let country = control.value.country || '';
+
+    let address = line1 + '<br />';
+    if (line2 != '')
+      address += line2 + '<br />';
+    if (city != '')
+      address += city + '<br />';
+    if (province != '')
+      address += province + '<br />';
+    if (country != '')
+      address += country + '<br />';
+    if (postalCode != '')
+      address += postalCode;
+
+    return address;
   }
 
   public displayMailingAddress(addressControl: any): string {

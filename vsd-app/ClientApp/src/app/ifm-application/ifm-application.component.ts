@@ -19,7 +19,8 @@ import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
-import { Application } from '../interfaces/application.interface';
+import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
+import { FileBundle } from '../models/file-bundle';
 
 const moment = _rollupMoment || _moment;
 
@@ -47,6 +48,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   form: FormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
+  submitting: boolean = false; // this controls the button state for
 
   otherTreatmentItems: FormArray;
   employerItems: FormArray;
@@ -77,6 +79,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   representativeAddressIsRequired: boolean = false;
 
   saveFormData: any;
+
+  todaysDate = new Date(); // for the birthdate validation
+  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -277,6 +282,13 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     this.showAddProvider = this.otherTreatmentItems.length < 5;
     this.showRemoveProvider = this.otherTreatmentItems.length > 1;
   }
+  clearProviders(): void {
+    // remove all providers
+    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
+    while (this.otherTreatmentItems.length > 0) {
+      this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
+    }
+  }
 
   removeProvider(index: number): void {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
@@ -288,7 +300,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   createTreatmentItem(): FormGroup {
     return this.fb.group({
       providerType: [0],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
-      providerName: [''],
+      providerName: ['', Validators.required],
       providerPhoneNumber: [''],
       providerAddress: this.fb.group({
         line1: [''],
@@ -303,8 +315,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   createEmployerItem(): FormGroup {
     return this.fb.group({
-      employerName: ['', Validators.required],
-      employerPhoneNumber: ['', Validators.required],
+      employerName: [''],//, Validators.required],
+      employerPhoneNumber: [''],//, Validators.required],
       employerFirstName: [''],
       employerLastName: [''],
       employerAddress: this.fb.group({
@@ -380,49 +392,95 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     });
   }
 
-
   submitPartialApplication() {
-    this.formFullyValidated = true;
-    this.save().subscribe(
-      data => {
-        console.log("submitting partial form");
-        this.router.navigate(['/application-success']);
-      },
-      err => {
-        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application');
-      }
-    );
-  }
-
-  submitApplication() {
-    let formIsValid = this.form.valid;
-    //let formIsValid = true;
-    if (formIsValid) {
-      this.formFullyValidated = true;
-      this.save().subscribe(
+    this.justiceDataService.submitApplication(this.harvestForm())
+      .subscribe(
         data => {
-          if (data['IsSuccess'] == true) {
-            console.log(data['IsSuccess']);
-            console.log("submitting");
-            this.router.navigate(['/application-success']);
-          }
-          else {
-            this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-            console.log('Error submitting application');
-          }
+          console.log("submitting partial form");
+          this.router.navigate(['/application-success']);
         },
-        error => {
+        err => {
           this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           console.log('Error submitting application');
         }
       );
+  }
+
+  //submitPartialApplication() {
+  //  this.formFullyValidated = true;
+  //  this.save().subscribe(
+  //    data => {
+  //      console.log("submitting partial form");
+  //      this.router.navigate(['/application-success']);
+  //    },
+  //    err => {
+  //      this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+  //      console.log('Error submitting application');
+  //    }
+  //  );
+  //}
+
+  submitApplication() {
+    //let formIsValid = true;showValidationMessage
+    // show the button as submitting and disable it
+    this.submitting = true;
+    if (this.form.valid) {
+      this.justiceDataService.submitApplication(this.harvestForm())
+        .subscribe(
+          data => {
+            if (data['isSuccess'] == true) {
+              this.router.navigate(['/application-success']);
+            }
+            else {
+              // re-enable the button
+              this.submitting = false;
+              this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              console.log('Error submitting application');
+            }
+          },
+          error => {
+            // re-enable the button
+            this.submitting = false;
+            this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+            console.log('Error submitting application');
+          }
+        );
     } else {
+      // re-enable the button
+      this.submitting = false;
       console.log("form not validated");
-      this.formFullyValidated = false;
       this.markAsTouched();
     }
   }
+
+  //submitApplication() {
+  //  let formIsValid = this.form.valid;
+  //  //let formIsValid = true;
+  //  if (formIsValid) {
+  //    this.formFullyValidated = true;
+  //    this.save().subscribe(
+  //      data => {
+  //        if (data['IsSuccess'] == true) {
+  //          console.log(data['IsSuccess']);
+  //          console.log("submitting");
+  //          this.router.navigate(['/application-success']);
+  //        }
+  //        else {
+  //          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+  //          console.log('Error submitting application');
+  //        }
+  //      },
+  //      error => {
+  //        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+  //        console.log('Error submitting application');
+  //      }
+  //    );
+  //  } else {
+  //    console.log("form not validated");
+  //    this.formFullyValidated = false;
+  //    this.markAsTouched();
+  //  }
+  //}
 
   debugFormData(): void {
     let formData: Application = {
@@ -432,6 +490,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       CrimeInformation: this.form.get('crimeInformation').value,
       MedicalInformation: this.form.get('medicalInformation').value,
       ExpenseInformation: this.form.get('expenseInformation').value,
+      EmploymentIncomeInformation: null,
       RepresentativeInformation: this.form.get('representativeInformation').value,
       DeclarationInformation: this.form.get('declarationInformation').value,
       AuthorizationInformation: this.form.get('authorizationInformation').value,
@@ -440,29 +499,51 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     console.log(JSON.stringify(formData));
   }
 
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
-    const formData: Application = {
-      Introduction: this.form.get('introduction').value,
-      PersonalInformation: this.form.get('personalInformation').value,
-      VictimInformation: this.form.get('victimInformation').value,
-      CrimeInformation: this.form.get('crimeInformation').value,
-      MedicalInformation: this.form.get('medicalInformation').value,
-      ExpenseInformation: this.form.get('expenseInformation').value,
-      RepresentativeInformation: this.form.get('representativeInformation').value,
-      DeclarationInformation: this.form.get('declarationInformation').value,
-      AuthorizationInformation: this.form.get('authorizationInformation').value,
-    };
-
-    this.busy = this.justiceDataService.submitApplication(formData)
-      .toPromise()
-      .then(res => {
-        subResult.next(true);
-      }, err => subResult.next(false));
-    this.busy2 = Promise.resolve(this.busy);
-
-    return subResult;
+  harvestForm(): Application {
+    return {
+      Introduction: this.form.get('introduction').value as Introduction,
+      PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
+      CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
+      MedicalInformation: this.form.get('medicalInformation').value as MedicalInformation,
+      ExpenseInformation: this.form.get('expenseInformation').value as ExpenseInformation,
+      EmploymentIncomeInformation: null as EmploymentIncomeInformation, // There is no EmploymentIncomeInformation in IFM
+      RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
+      DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
+      AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
+    } as Application;
   }
+
+  save(): void {
+    this.justiceDataService.submitApplication(this.harvestForm())
+      .subscribe(
+        data => { },
+        err => { }
+      );
+  }
+
+  //save(): Subject<boolean> {
+  //  const subResult = new Subject<boolean>();
+  //  const formData: Application = {
+  //    Introduction: this.form.get('introduction').value,
+  //    PersonalInformation: this.form.get('personalInformation').value,
+  //    VictimInformation: this.form.get('victimInformation').value,
+  //    CrimeInformation: this.form.get('crimeInformation').value,
+  //    MedicalInformation: this.form.get('medicalInformation').value,
+  //    ExpenseInformation: this.form.get('expenseInformation').value,
+  //    RepresentativeInformation: this.form.get('representativeInformation').value,
+  //    DeclarationInformation: this.form.get('declarationInformation').value,
+  //    AuthorizationInformation: this.form.get('authorizationInformation').value,
+  //  };
+
+  //  this.busy = this.justiceDataService.submitApplication(formData)
+  //    .toPromise()
+  //    .then(res => {
+  //      subResult.next(true);
+  //    }, err => subResult.next(false));
+  //  this.busy2 = Promise.resolve(this.busy);
+
+  //  return subResult;
+  //}
 
   // marking the form as touched makes the validation messages show
   markAsTouched() {
@@ -490,7 +571,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
         birthDate: ['', [Validators.required]],
 
-        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
+        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
         preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],  // Phone = 100000000, Email = 100000001, Mail = 100000002
@@ -532,8 +613,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
-        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
-        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
+        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
+        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
         phoneNumber: [''],
@@ -545,10 +626,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         mostRecentMailingAddressSameAsPersonal: ['', Validators.required],
 
         primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
+          line1: [''],//, Validators.required],
           line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+          city: [''],//, Validators.required],
+          postalCode: ['', [Validators.pattern(postalRegex)]],//, Validators.required]],
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
@@ -570,7 +651,11 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.array([]),  // This will be a collection of uploaded files
+        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
+          filename: [''], // fileName
+          body: [''], // fileData
+        }), // This will be a collection of uploaded files
+        //additionalInformationFiles: this.fb.array([]),
 
         wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
 
@@ -652,7 +737,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         haveCrimeSceneCleaningExpenses: [false],
         noneOfTheAboveExpenses: [''],
 
-        missedWorkDueToDeathOfVictim: ['', Validators.required],
+        missedWorkDueToDeathOfVictim: [''],//, Validators.required],
 
         didYouLoseWages: [''], //, Validators.required],
         daysWorkMissedStart: [''], //, Validators.required],
@@ -720,5 +805,22 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         authorizedPersonSignature: [''], //, Validators.required],
       }),
     });
+  }
+
+  onFileBundle(fileBundle: FileBundle) {
+    try {
+      // save the files submitted from the component for attachment into the submitted form.
+      const patchObject = {};
+      patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;
+      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileBundle.fileName[0]);
+      var splitValues = fileBundle.fileData[0].split(',');
+
+      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(splitValues[1]);
+
+      fileBundle = fileBundle;
+    }
+    catch (e) {
+      console.log(e);
+    }
   }
 }

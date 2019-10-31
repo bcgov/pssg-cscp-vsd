@@ -3,6 +3,7 @@ import { Courtfile, ProviderFile } from "./files.interface";
 
 export interface VictimRestitution {
   RestitutionInformation: VictimRestitutionInformation;
+  DocumentCollectionInformation: DocumentCollectioninformation;
 }
 export interface VictimRestitutionInformation {
   victimFirstName: string;
@@ -41,4 +42,10 @@ export interface VictimRestitutionInformation {
 
   declaredAndSigned: boolean;
   signature: string;
+
+}
+
+export interface DocumentCollectioninformation {
+  filename: string;
+  body: string;
 }

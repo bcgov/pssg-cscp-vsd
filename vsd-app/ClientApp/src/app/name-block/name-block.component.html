@@ -1,0 +1,19 @@
+<div [formGroup]="nameForm">
+  <div class="form-row">
+    <div class="col">
+      <app-field label="First Name" [required]="required" [valid]="isValid(firstName)" errorMessage="Please enter your first name">
+        <input class="form-control" type="text" formControlName="firstName" [required]="required">
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="Middle Name" [required]="false" [valid]="true" errorMessage="Please enter your middle name">
+        <input class="form-control" type="text" formControlName="middleName">
+      </app-field>
+    </div>
+    <div class="col">
+      <app-field label="Last Name" [required]="required" [valid]="isValid(lastName)" errorMessage="Please enter your last name">
+        <input class="form-control" type="text" formControlName="lastName" [required]="required">
+      </app-field>
+    </div>
+  </div>
+</div>

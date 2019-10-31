@@ -1,5 +1,7 @@
 import { Address } from "./address.interface";
 import { Courtfile } from "./files.interface";
+import { NameBlock } from "../name-block/name-block.component";
+import { DocumentCollectioninformation } from "./victim-restitution.interface";
 
 export interface Application {
   Introduction: Introduction;
@@ -23,12 +25,9 @@ export interface PersonalInformation {
   preferredMethodOfContact: number;
   dateOfNameChange?: Date;
   birthDate?: Date;
-  firstName: string;
-  middleName: string;
-  lastName: string;
+  name: NameBlock;
   iHaveOtherNames: string;
-  otherFirstName: string;
-  otherLastName: string;
+  alias: NameBlock;
   sin: string;
   occupation: string;
   agreeToCvapCommunicationExchange: string;
@@ -66,7 +65,7 @@ export interface CrimeInformation {
   policeReports: Policereport[];
   courtFiles: Courtfile[];
   racafInformation: Racafinformation;
-  additionalInformationFiles: Object[];
+  additionalInformationFiles: DocumentCollectioninformation[];
 }
 export interface MedicalInformation {
   doYouHaveMedicalServicesCoverage: string;

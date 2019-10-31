@@ -19,6 +19,7 @@ import { FormBase } from '../shared/form-base';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { OffenderRestitution } from '../interfaces/offender-restitution.interface';
+import { FileBundle } from '../models/file-bundle';
 
 const moment = _rollupMoment || _moment;
 
@@ -62,6 +63,9 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
   addressIsRequired: boolean = false;
 
   saveFormData: any;
+
+  todaysDate = new Date(); // for the birthdate validation
+  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -319,25 +323,43 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
   debugFormData(): void {
     let formData: OffenderRestitution = {
       RestitutionInformation: this.form.get('restitutionInformation').value,
+      DocumentCollectionInformation: this.form.get('documentInformation').value,
     };
     console.log(JSON.stringify(formData));
   }
 
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
-    const formData: OffenderRestitution = {
+  save(): Subject<{}> {
+    const subResult = new Subject<{}>();
+    const formData = <OffenderRestitution>{
       RestitutionInformation: this.form.get('restitutionInformation').value,
+      DocumentCollectionInformation: this.form.get('documentInformation').value,
     };
 
     this.busy = this.justiceDataService.submitOffenderRestitutionApplication(formData)
       .toPromise()
       .then(res => {
-        subResult.next(true);
+        subResult.next(res);
       }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
   }
+
+  //save(): Subject<boolean> {
+  //  const subResult = new Subject<boolean>();
+  //  const formData: OffenderRestitution = {
+  //    RestitutionInformation: this.form.get('restitutionInformation').value,
+  //  };
+
+  //  this.busy = this.justiceDataService.submitOffenderRestitutionApplication(formData)
+  //    .toPromise()
+  //    .then(res => {
+  //      subResult.next(true);
+  //    }, err => subResult.next(false));
+  //  this.busy2 = Promise.resolve(this.busy);
+
+  //  return subResult;
+  //}
 
   // marking the form as touched makes the validation messages show
   markAsTouched() {
@@ -362,10 +384,10 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
         email: [''],
 
         mailingAddress: this.fb.group({
-          line1: ['', Validators.required],
+          line1: [''],//, Validators.required],
           line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+          city: [''],//, Validators.required],
+          postalCode: ['', [Validators.pattern(postalRegex)]],//, Validators.required]],
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
@@ -384,8 +406,25 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
 
         declaredAndSigned: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
+      }),
+      documentInformation: this.fb.group({
+        filename: [''], // fileName
+        body: [''], // fileData
       })
     });
   }
+
+  onFileBundle(fileBundle: FileBundle) {
+    // save the files submitted from the component for attachment into the submitted form.
+    const patchObject = {};
+    patchObject['documentInformation'] = fileBundle;
+    this.form.get('documentInformation.filename').patchValue(fileBundle.fileName[0]);
+    var splitValues = fileBundle.fileData[0].split(',');
+
+    this.form.get('documentInformation.body').patchValue(splitValues[1]);
+
+    fileBundle = fileBundle;
+  }
+
 }
 

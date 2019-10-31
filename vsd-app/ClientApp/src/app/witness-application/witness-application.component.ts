@@ -47,6 +47,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   form: FormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
+  submitting: boolean = false; // this controls the button state for
 
   otherTreatmentItems: FormArray;
   employerItems: FormArray;
@@ -77,6 +78,9 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   representativeAddressIsRequired: boolean = false;
 
   saveFormData: any;
+
+  todaysDate = new Date(); // for the birthdate validation
+  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -517,6 +521,13 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     this.showAddProvider = this.otherTreatmentItems.length < 5;
     this.showRemoveProvider = this.otherTreatmentItems.length > 1;
   }
+  clearProviders(): void {
+    // remove all providers
+    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
+    while (this.otherTreatmentItems.length > 0) {
+      this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
+    }
+  }
 
   removeProvider(index: number): void {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
@@ -528,7 +539,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   createTreatmentItem(): FormGroup {
     return this.fb.group({
       providerType: [0],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
-      providerName: [''],
+      providerName: ['', Validators.required],
       providerPhoneNumber: [''],
       providerAddress: this.fb.group({
         line1: [''],
@@ -636,9 +647,9 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   }
 
   submitApplication() {
-    let formIsValid = this.form.valid;
-    //let formIsValid = true;
-    if (formIsValid) {
+    // show the button as submitting and disable it
+    this.submitting = true;
+    if (this.form.valid) {
       this.formFullyValidated = true;
       this.save().subscribe(
         data => {
@@ -648,16 +659,22 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
             this.router.navigate(['/application-success']);
           }
           else {
+            // re-enable the button
+            this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
           }
         },
         error => {
+          // re-enable the button
+          this.submitting = false;
           this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           console.log('Error submitting application');
         }
       );
     } else {
+      // re-enable the button
+      this.submitting = false;
       console.log("form not validated");
       this.formFullyValidated = false;
       this.markAsTouched();
@@ -772,7 +789,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
-        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000005)]],
+        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
         sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
         occupation: [''],
 

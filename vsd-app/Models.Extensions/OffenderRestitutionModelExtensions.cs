@@ -7,9 +7,9 @@ using Gov.Cscp.VictimServices.Public.Infrastructure;
 
 namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 {
-    public static class VictimRestitutionModelExtensions
+    public static class OffenderRestitutionModelExtensions
     {
-        public static VictimRestitutionDynamicsModel ToVictimRestitutionModel(this VictimRestitutionFormModel model)
+        public static OffenderRestitutionDynamicsModel ToOffenderRestitutionModel(this OffenderRestitutionFormModel model)
         {
             var application = GetApplicationDefaults();
 
@@ -18,15 +18,15 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
             if (model.RestitutionInformation != null)
             {
-                application.Application.vsd_applicantsfirstname = model.RestitutionInformation.victimFirstName;
-                application.Application.vsd_applicantsmiddlename = model.RestitutionInformation.victimMiddleName;
-                application.Application.vsd_applicantslastname = model.RestitutionInformation.victimLastName;
-                if (model.RestitutionInformation.victimBirthDate.HasValue)
-                {
-                    application.Application.vsd_applicantsbirthdate = model.RestitutionInformation.victimBirthDate.Value;
-                }
-                application.Application.vsd_applicantsgendercode = model.RestitutionInformation.victimGender;
-                application.Application.vsd_applicantspreferredmethodofcontact = model.RestitutionInformation.preferredMethodOfContact;
+                //application.Application.vsd_applicantsfirstname = model.RestitutionInformation.victimFirstName;
+                //application.Application.vsd_applicantsmiddlename = model.RestitutionInformation.victimMiddleName;
+                //application.Application.vsd_applicantslastname = model.RestitutionInformation.victimLastName;
+                //if (model.RestitutionInformation.victimBirthDate.HasValue)
+                //{
+                //    application.Application.vsd_applicantsbirthdate = model.RestitutionInformation.victimBirthDate.Value;
+                //}
+                //application.Application.vsd_applicantsgendercode = model.RestitutionInformation.victimGender;
+                //application.Application.vsd_applicantspreferredmethodofcontact = model.RestitutionInformation.preferredMethodOfContact;
                 application.Application.vsd_applicantsprimaryphonenumber = model.RestitutionInformation.phoneNumber;
                 application.Application.vsd_applicantsalternatephonenumber = model.RestitutionInformation.alternatePhoneNumber;
                 application.Application.vsd_applicantsemail = model.RestitutionInformation.email;
@@ -44,7 +44,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_offenderfirstname = model.RestitutionInformation.offenderFirstName;
                 application.Application.vsd_cvap_offendermiddlename = model.RestitutionInformation.offenderMiddleName;
                 application.Application.vsd_cvap_offenderlastname = model.RestitutionInformation.offenderLastName;
-                application.Application.vsd_cvap_relationshiptooffender = model.RestitutionInformation.offenderRelationship;
+                //application.Application.vsd_cvap_relationshiptooffender = model.RestitutionInformation.offenderRelationship;
 
                 application.Application.vsd_applicantssignature = model.RestitutionInformation.signature; // TODO: where does this come from?
             }
@@ -79,17 +79,17 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             }
 
 
-            if (model.RestitutionInformation.courtFiles != null)
-            {
-                if (model.RestitutionInformation.courtFiles.Count() > 0)
-                {
-                    application.CourtInfoCollection = model.RestitutionInformation.courtFiles.Select(f => new Courtinfocollection
-                    {
-                        vsd_courtfilenumber = f.courtFileNumber,
-                        vsd_courtlocation = f.courtLocation
-                    }).ToArray();
-                }
-            }
+            //if (model.RestitutionInformation.courtFiles != null)
+            //{
+            //    if (model.RestitutionInformation.courtFiles.Count() > 0)
+            //    {
+            //        application.CourtInfoCollection = model.RestitutionInformation.courtFiles.Select(f => new Courtinfocollection
+            //        {
+            //            vsd_courtfilenumber = f.courtFileNumber,
+            //            vsd_courtlocation = f.courtLocation
+            //        }).ToArray();
+            //    }
+            //}
 
 
             // TODO: For some reason when this is moved to OpenShift, it doesn't work. 
@@ -118,9 +118,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             return application;
         }
 
-        public static VictimRestitutionDynamicsModel GetApplicationDefaults()
+        public static OffenderRestitutionDynamicsModel GetApplicationDefaults()
         {
-            return new VictimRestitutionDynamicsModel
+            return new OffenderRestitutionDynamicsModel
             {
                 Application = new Application
                 {
