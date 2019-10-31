@@ -1,0 +1,416 @@
+<div class="form-wrapper" style="position: relative;">
+  <div [ngBusy]="[busy, busy2]"></div>
+  <div class="row" [formGroup]="form">
+    <div class="col-lg-3 col-sm-12 application-gutter">
+      <section [ngClass]="currentPanel === 'form' ? 'application-nav' : 'application-nav application-nav-hidden'">
+        <h3>Victim Restitution Application</h3>
+        <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
+          <ng-template matStepperIcon="edit">
+            <mat-icon>done</mat-icon>
+          </ng-template>
+          <ng-template matStepperIcon="number">
+          </ng-template>
+          <mat-step label="Overview"></mat-step>
+          <mat-step label="Victim Restitution Application"></mat-step>
+          <mat-step label="Review & Submit"></mat-step>
+        </mat-vertical-stepper>
+      </section>
+
+      <section class="submit-container learn-benefits">
+        <div class="submit-content">
+          <h2>Restitution Program Contact Information</h2>
+          <p>
+            Restitution Program<br />
+            Ministry of Public Safety & Solicitor General<br />
+            PO Box 5550 Station Terminal<br />
+            Vancouver, B.C. V6B 1H1
+          </p>
+          <p>
+            <strong>Lower Mainland:</strong> 604-660-4898<br />
+            <strong>Toll Free:</strong> 1-844-660-4898<br />
+            <strong>Fax:</strong> 604-660-5340
+          </p>
+          <p>
+            <strong>Email:</strong><br />
+            <a href="mailto: restitution@gov.bc.ca">restitution@gov.bc.ca</a>
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-lg-7 col-sm-12">
+      <form [formGroup]="form">
+        <div *ngIf="currentPanel == 'form'">
+          <div formGroupName="introduction" *ngIf="this.currentFormStep == 0">
+            <div class="page-header">
+              <h1>Victim Applying to the Restitution Program</h1>
+            </div>
+
+            <h3>Who can apply (or be referred) to the Restitution Program?</h3>
+            <ul class="list">
+              <li>Are you owed money on a restitution order that has not been paid in full?</li>
+              <li>Was the restitution order issued by an adult criminal court in the province of B.C.?</li>
+            </ul>
+
+            <p>If you answered “yes” to these questions, you can apply to the Restitution Program using the online form. If you are unsure of the answer to these questions, please contact the Restitution Program. Note: for some situations, probation officer permission may be required for the Restitution Program to open a file.</p>
+
+            <h3>What are the benefits to working with the Restitution Program?</h3>
+            <p>No appearances in civil or criminal court are required as part of your involvement with the Restitution Program. Contact with the offender is not necessary. Participation helps you collect restitution you are owed.</p>
+
+            <h3>What happens after I apply?</h3>
+            <p>Once you apply to the Restitution Program:</p>
+
+            <table class="steps">
+              <tr>
+                <th>Step 1:</th>
+                <td>We assess your application to ensure we can facilitate the restitution payments to you.</td>
+              </tr>
+              <tr>
+                <th>Step 2:</th>
+                <td>We connect with the offender listed on the restitution order and ask them to work with the Program.</td>
+              </tr>
+              <tr>
+                <th>Step 3:</th>
+                <td>We discuss payment options with the offender to encourage the best plan to comply with the order.</td>
+              </tr>
+              <tr>
+                <th>Step 4:</th>
+                <td>Payments may begin.</td>
+              </tr>
+              <tr>
+                <th>Step 5:</th>
+                <td>We forward restitution money received from the offender to you and to other victims listed on the restitution order.</td>
+              </tr>
+              <tr>
+                <th>Step 6:</th>
+                <td>We provide “Statements of Restitution Payment” for you to track payment progress.</td>
+              </tr>
+            </table>
+            <p><em>We consider safety concerns of all parties listed on the restitution order on an ongoing basis.</em></p>
+
+            <h3>What else does the Restitution Program do?</h3>
+            <ul class="list">
+              <li>Provides support and information to victims who have unpaid restitution orders;</li>
+              <li>Responds to general inquiries regarding restitution orders;</li>
+              <li>Provides referrals to appropriate resources; and</li>
+              <li>Provides general information regarding collecting on restitution orders through the civil court processes.</li>
+            </ul>
+          </div>
+
+          <div formGroupName="restitutionInformation" *ngIf="this.currentFormStep == 1">
+            <div class="page-header">
+              <h1>Victim Information & Addresses</h1>
+            </div>
+            <h2 class="blue-header">Victim Information</h2>
+
+            <h3>Victim Information</h3>
+
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Victim First Name" [required]="true" [valid]="isFieldValid('restitutionInformation.victimFirstName')" errorMessage="Please enter your first name">
+                  <input class="form-control" type="text" formControlName="victimFirstName" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Victim Middle Name" [required]="false" [valid]="isFieldValid('restitutionInformation.victimMiddleName')" errorMessage="Please enter your middle name">
+                  <input class="form-control" type="text" formControlName="victimMiddleName" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Victim Last Name" [required]="true" [valid]="isFieldValid('restitutionInformation.victimLastName')" errorMessage="Please enter your last name">
+                  <input class="form-control" type="text" formControlName="victimLastName" maxlength="100">
+                </app-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('restitutionInformation.victimBirthDate')" errorMessage="Please enter your birth date">
+                  <input type="text" class="form-control date-picker" formControlName="victimBirthDate" placeholder="yyyy-mm-dd"
+                    [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" readonly>
+                  <mat-datepicker #birthDatePicker></mat-datepicker>
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Gender" [required]="true" [valid]="isFieldValid('restitutionInformation.victimGender')" errorMessage="Please select your gender">
+                  <label class="inline-label">
+                    <input type="radio" [value]="100000000" name="victimGender" formControlName="victimGender">
+                    <span>M</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="100000001" name="victimGender" formControlName="victimGender">
+                    <span>F</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="100000002" name="victimGender" formControlName="victimGender">
+                    <span>X</span>
+                  </label>
+                </app-field>
+              </div>
+              <div class="col-4">
+              </div>
+            </div>
+
+            <h3>Authorized Victim Designate</h3>
+            <p>Victims have the option of assigning a designate to communicate with the Restitution Program on their behalf.</p>
+            <div class="row">
+              <div class="col-12">
+                <app-field label="Do you want to authorize someone to be a Victim Designate?" [required]="true" errorMessage="Please make a selection" [showChevrons]="false">
+                  <label class="inline-label">
+                    <input type="radio" [value]="true" name="authoriseVictimDesignate" formControlName="authoriseVictimDesignate">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="false" name="authoriseVictimDesignate" formControlName="authoriseVictimDesignate">
+                    <span>No</span>
+                  </label>
+                </app-field>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="form.get('restitutionInformation.authoriseVictimDesignate').value === true">
+              <div class="col-4">
+                <app-field label="Authorized Designate First Name" [required]="true" [valid]="isFieldValid('restitutionInformation.authorisedDesignateFirstName')" errorMessage="Please enter your first name">
+                  <input class="form-control" type="text" formControlName="authorisedDesignateFirstName" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Authorized Designate Middle Name" [required]="false" [valid]="isFieldValid('restitutionInformation.authorisedDesignateMiddleName')" errorMessage="Please enter your middle name">
+                  <input class="form-control" type="text" formControlName="authorisedDesignateMiddleName" maxlength="100">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Authorized Designate Last Name" [required]="true" [valid]="isFieldValid('restitutionInformation.authorisedDesignateLastName')" errorMessage="Please enter your last name">
+                  <input class="form-control" type="text" formControlName="authorisedDesignateLastName" maxlength="100">
+                </app-field>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="form.get('restitutionInformation.authoriseVictimDesignate').value === true">
+              <div class="col-12">
+                <app-field>
+                  <label class="inline-label">
+                    <input type="checkbox" style="margin-right: 10px;" formControlName="authoriseDesignateToActOnBehalf" [value]="true">
+                    <span>I hereby authorize to act on my behalf for the purposes of involvement with the Restitution Program which includes personal information pertaining to me.</span>
+                  </label>
+                </app-field>
+              </div>
+            </div>
+
+            <h2 class="blue-header">Contact Information</h2>
+            <p>Contact information for the Victim (or the Victim Designate)</p>
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('restitutionInformation.preferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
+                  <select class="form-control" formControlName="preferredMethodOfContact">
+                    <option value="0">Select...</option>
+                    <option value="2">Phone Call</option>
+                    <option value="1">Email</option>
+                    <option value="4">Mail</option>
+                  </select>
+                </app-field>
+              </div>
+              <div class="col-8">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <h3>Mailing Address</h3>
+                <app-address [group]="form.get('restitutionInformation.mailingAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
+              </div>
+            </div>
+
+            <h3>Communication</h3>
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('restitutionInformation.phoneNumber')" errorMessage="Please enter your phone number">
+                  <input class="form-control" maxlength="10" type="text" formControlName="phoneNumber">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('restitutionInformation.alternatePhoneNumber')" errorMessage="Please enter your phone number">
+                  <input class="form-control" maxlength="10" type="text" formControlName="alternatePhoneNumber">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('restitutionInformation.email')" errorMessage="Please enter your email address">
+                  <input class="form-control" type="text" (blur)="trimValue(form.get('restitutionInformation.email'))" formControlName="email" maxlength="100">
+                </app-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <app-field label="May we leave you a detailed message?" [required]="false" errorMessage="Please make a selection" [showChevrons]="false">
+                  <label class="inline-label">
+                    <input type="radio" [value]="true" name="permissionToLeaveDetailedMessage" formControlName="permissionToLeaveDetailedMessage">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="false" name="permissionToLeaveDetailedMessage" formControlName="permissionToLeaveDetailedMessage">
+                    <span>No</span>
+                  </label>
+                </app-field>
+              </div>
+            </div>
+            <br />
+
+            <h2 class="blue-header">Restitution Order Information</h2>
+
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Offender First Name">
+                  <input class="form-control" type="text" formControlName="offenderFirstName">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Offender Middle Name">
+                  <input class="form-control" type="text" formControlName="offenderMiddleName">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Offender Last Name">
+                  <input class="form-control" type="text" formControlName="offenderLastName">
+                </app-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Relationship to Offender">
+                  <input class="form-control" type="text" formControlName="offenderRelationship">
+                </app-field>
+              </div>
+              <div class="col-8">
+              </div>
+            </div>
+
+            <div class="court-information">
+              <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('restitutionInformation.courtFiles').controls; let i = index;">
+                <div [formGroupName]="i" class="row court-files">
+                  <div class="col-4">
+                    <app-field label="Court File Number">
+                      <input class="form-control" type="text" formControlName="courtFileNumber">
+                    </app-field>
+                  </div>
+                  <div class="col-4">
+                    <app-field label="Court Location">
+                      <input class="form-control" type="text" formControlName="courtLocation">
+                    </app-field>
+                  </div>
+                  <div class="col-4">
+                    <br />
+                    <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">
+                      <i class="fas fa-trash-alt"></i> Remove Court File
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add File Number</a>
+            </div>
+
+            <h2 class="blue-header">Victim Service Worker</h2>
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Victim Service Worker First Name">
+                  <input class="form-control" type="text" formControlName="victimServiceWorkerFirstName">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Victim Service Worker Last Name">
+                  <input class="form-control" type="text" formControlName="victimServiceWorkerLastName">
+                </app-field>
+              </div>
+              <div class="col-4">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Program Name">
+                  <input class="form-control" type="text" formControlName="victimServiceWorkerProgramName">
+                </app-field>
+              </div>
+              <div class="col-4">
+                <app-field label="Email Address">
+                  <input class="form-control" type="text" formControlName="victimServiceWorkerEmail">
+                </app-field>
+              </div>
+              <div class="col-4">
+              </div>
+            </div>
+
+            <h3 class="blue-header">Copy of Restitution Order</h3>
+            <app-field label="Where possible, please include a copy of the Restitution Order when submitting this application.">
+              <p>Click this box to upload file</p>
+            </app-field>
+            <app-file-uploader-box [initialValues]="form.value.restitutionInformation.restitutionOrders" (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
+            <h2 class="blue-header">Declaration & Signature</h2>
+            <app-field [required]="true" [valid]="isFieldValid('restitutionInformation.declaredAndSigned')" errorMessage="Please check declaration">
+              <label>
+                <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
+                I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
+              </label>
+            </app-field>
+
+            <app-field label="Victim Signature" [required]="true" [valid]="isFieldValid('restitutionInformation.signature')" errorMessage="Please provide your digital signature">
+              <div class="signature-trigger" (click)="showSignPad('restitutionInformation', 'signature')" *ngIf="!hasSignature('restitutionInformation.signature')">
+                <p>Click this box to sign</p>
+              </div>
+              <div *ngIf="hasSignature('restitutionInformation.signature')" class="signature-preview">
+                <img src="{{ valueOrEmpty('restitutionInformation.signature') }}" />
+                <a class="redo" (click)="showSignPad('restitutionInformation', 'signature')">Redo Signature</a>
+              </div>
+            </app-field>
+          </div>
+
+          <div *ngIf="this.currentFormStep == 2">
+            <div class="page-header">
+              <h1>Review & Submit</h1>
+            </div>
+            <p>Please check the accuracy of the information entered in your application before submitting.</p>
+            <app-victim-restitution-review [group]="form" [parentStepper]="stepper"></app-victim-restitution-review>
+          </div>
+
+          <div *ngIf="showValidationMessage" class="error-summary">
+            <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+            <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
+          </div>
+
+          <section class="button-container">
+            <div [ngBusy]="[busy3]"></div>
+            <a (click)="verifyCancellation()" *ngIf="stepper.selectedIndex > 0"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+            <span style="float: right;">
+              <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex == 0">CONTINUE TO VICTIM RESTITUTION APPLICATION <i class="fas fa-chevron-right"></i></button>
+              <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex == 1">REVIEW APPLICATION <i class="fas fa-chevron-right"></i></button>
+              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 2">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
+            </span>
+          </section>
+        </div>
+
+        <div class="container" *ngIf="currentPanel == 'success'">
+          <div class="row">
+            <div class="col">
+              <div class="page-header">
+                <h1>Thank you for your submission.</h1>
+              </div>
+              <h3>You have successfully submitted an application to the Restitution Program if you would like to download a printable version of the application then please click <a href="">here</a>.</h3>
+              <p><a href="/">Click here to return to Victim Restitution Home Page</a></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="container" *ngIf="currentPanel == 'cancel'">
+          <div class="row">
+            <div class="col">
+              <div class="page-header">
+                <h1>Restitution submission cancelled</h1>
+              </div>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+              <p><a href="/">Click here to return to Victim Restitution Home Page</a></p>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

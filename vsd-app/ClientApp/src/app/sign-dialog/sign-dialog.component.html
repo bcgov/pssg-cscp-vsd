@@ -1,0 +1,13 @@
+<mat-dialog-content>
+  <h2 class="mat-dialog-title">
+    Input your Digital Signature
+  </h2>
+  <section class="signature-pad">
+    <p class="instructions">Please draw your signature using your mouse pointer or your finger if you are using a mobile device.</p>
+    <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()"></signature-pad>
+  </section>
+  <div class="button-container">
+    <button class="btn btn-secondary" (click)="clearSignature()">Clear</button>
+    <button class="btn btn-primary float-right" (click)="acceptSignature()">Accept</button>
+  </div>
+</mat-dialog-content>

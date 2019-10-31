@@ -1,0 +1,911 @@
+$bootstrap-sass-asset-helper: true;
+// @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+::ng-deep body {
+  font-size: 16px;
+}
+
+header {
+  border-bottom: 4px solid #fcba19;
+}
+
+.title {
+  font-weight: Semi-bold;
+  font-size: 30px;
+  color: #fff;
+}
+
+::ng-deep .no-gutter {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.no-gutter > [class*="col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.app-header {
+  .top-menu {
+    padding-left: 30px;
+    padding-right: 30px;
+    margin: 0;
+  }
+}
+
+::ng-deep .angular-click-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media (max-width: 575.98px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .app-header {
+    padding-top: 10px;
+  }
+
+  .app-content {
+    padding-left: 2%;
+  }
+}
+
+.label-beta {
+  color: #ffffff;
+  background-color: none;
+  border: 2px solid #337ab7;
+  vertical-align: middle;
+  padding-bottom: 3px;
+}
+
+.sign {
+  color: #ffffff;
+  background-color: none;
+  float: right;
+  padding-top: 20px;
+  font-size: 17px;
+}
+
+.app-outer {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100%;
+}
+
+.body {
+  font-size: 18px;
+  background: #f1f1f1;
+  color: #494949;
+}
+
+.app-content {
+  background: #fff;
+  display: flex;
+  flex: 1 0 auto;
+  flex-flow: row nowrap;
+}
+
+.app-main {
+  background: #fff;
+  flex: auto;
+  padding-bottom: 60px;
+}
+
+.sidebar-left,
+.sidebar-right {
+  display: block;
+  flex: none;
+  position: relative;
+  transition: width 0.2s linear;
+  width: 280px;
+
+  &.insert-hidden {
+    width: 0;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #494949;
+  font-weight: 600
+}
+
+.jumbotron {
+  background-color: rgba(248, 186, 50, 0.13);
+  border-left-color: rgb(248, 73, 73);
+  border-left-width: 7px;
+
+  h1 {
+    font-size: 45px;
+    font-weight: 600;
+  }
+}
+
+.navbar-footer {
+  background-color: #003366
+}
+
+.version-info {
+  float: right;
+  margin-top: 10px;
+}
+
+div.c1 li.c2 a {
+  color: #fff;
+}
+
+/*-----main nav-----*/
+
+.navigationRibbon {
+  /* -webkit-box-shadow: 0px 3px 3px 1px rgba(51, 51, 51, 0.5);
+    -moz-box-shadow: 0px 3px 3px 1px rgba(51, 51, 51, 0.5);
+    box-shadow: 0px 3px 3px 1px rgba(51, 51, 51, 0.5); */
+  border-top: 1px solid #fcba19;
+  width: 100%;
+}
+
+.navigationRibbon a {
+  display: table-cell;
+  text-align: left;
+  vertical-align: middle;
+  padding: 15px 20px;
+  position: relative;
+  font-size: 14px;
+}
+
+.navigationRibbon .level2Navigation {
+  background-color: #38598a;
+}
+
+.navigationRibbon .level3Navigation {
+  background-color: #5475a7
+}
+
+/* unvisited link */
+
+a:link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* visited link */
+
+a:visited {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600
+}
+
+/* mouse over link */
+
+a:hover {
+  color: #fff;
+  text-decoration: underline;
+  font-weight: 600
+}
+
+/* selected link */
+
+a:active {
+  color: #fff;
+  text-decoration: underline;
+  font-weight: 900;
+}
+
+/* Fixed sidenav, full height */
+
+.sidenav {
+  height: 100%;
+  width: 200px;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #596c93;
+  overflow-x: hidden;
+  padding-top: 20px;
+  margin-right: 25px;
+  font-weight: normal;
+}
+
+/* Style the sidenav links and the dropdown button */
+
+.sidenav a,
+.dropdown-btn {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 16px;
+  color: #fff;
+  display: block;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: right;
+  padding-right: 30px;
+  font-weight: 500;
+}
+
+/* On mouse-over */
+
+.sidenav a:hover,
+.dropdown-btn:hover {
+  color: #fff;
+  text-decoration: underline;
+  background-color: #415273;
+  font-weight: 400
+}
+
+.signin {
+  color: #fff;
+  font-size: 16px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-wrapper {
+  margin-left: -15px;
+  width: 200px;
+  background-color: #c6cdda;
+  margin-right: 30px;
+  padding-top: 20px
+}
+
+.sidebar-nav {
+  width: 200px;
+  list-style: none;
+}
+
+.sidebar-nav li {
+  text-indent: 0px;
+  line-height: 40px
+}
+
+.sidebar-nav li a {
+  display: block;
+  text-decoration: none;
+  color: #000;
+  margin-left: -20px;
+  font-weight: 200;
+}
+
+.sidebar-nav li a:hover {
+  text-decoration: underline;
+  color: #000;
+  margin-left: -40px;
+  padding-left: 20px;
+  background-color: #efefef;
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+  text-decoration: none
+}
+
+.sidebar-nav > .sidebar-brand {
+  height: 65px;
+  font-size: 18px;
+  line-height: 60px
+}
+
+.sidebar-nav > .sidebar-brand a {
+  color: #999999
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+  color: #fff;
+  background: none;
+}
+
+.nav-container {
+  display: flex;
+  flex: 1 0 auto;
+  flex-flow: row nowrap;
+  padding-right: 60px !important; // width: 99%;
+  // max-width: 1600px;
+  // // min-width: 910px;
+  // margin: auto;
+}
+
+.top-menu {
+  justify-content: flex-start;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.nav-link {
+  font-weight: 600 !important;
+  color: white !important;
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+  cursor: pointer;
+}
+
+.sign-container {
+  padding-right: 15px;
+}
+
+.not-supported-browser {
+  padding-top: 20px;
+}
+
+::ng-deep .btn {
+  .btn-wrappable {
+    white-space: inherit;
+  }
+}
+
+button.btn-mobile {
+  border: none;
+  outline: none;
+  background: #ddd;
+}
+
+::ng-deep .page-header h1 {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+h3 span {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.page-header h1 {
+  border-bottom: 3px solid #f2f2f2;
+  padding-bottom: 10px;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+}
+
+h2, h3 {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+::ng-deep h2.blue-header {
+  margin-bottom: 25px;
+}
+
+::ng-deep label {
+  font-weight: 400;
+}
+
+::ng-deep .application-gutter {
+  position: relative;
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+::ng-deep .application-nav {
+  .mat-step-label {
+    white-space: initial;
+  }
+
+  .mat-step-text-label {
+    text-overflow: initial;
+    overflow: auto;
+    color: #ccc;
+  }
+
+  .mat-step-header .mat-step-label.mat-step-label-active .mat-step-text-label {
+    color: #21527E;
+  }
+
+  .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-text-label {
+    color: #21527E;
+    font-weight: 700;
+  }
+
+  .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-icon {
+    background-color: #21527E;
+  }
+
+  .mat-vertical-content {
+    padding: 0 24px 0 24px;
+  }
+
+  .mat-vertical-stepper-header {
+    padding: 8px 0 !important;
+  }
+
+  .mat-vertical-content-container {
+    margin-left: 12px;
+  }
+
+  .mat-vertical-stepper-header .mat-step-icon {
+    border: 2px #4e719b solid;
+    background-color: #fff;
+  }
+
+  .mat-stepper-vertical-line::before {
+    top: -8px;
+    bottom: -16px;
+    left: -1px;
+    border-left: 2px solid #ccc;
+  }
+}
+
+::ng-deep .application-nav-hidden {
+  display: none !important;
+}
+
+::ng-deep .tooltip-icon .fa {
+  color: #21527E;
+  margin-left: 2px;
+}
+
+::ng-deep .tooltip.in {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+::ng-deep .tooltip.right .tooltip-arrow {
+  left: -3px;
+  margin-top: -2px;
+  border-width: 15px 15px 15px 0;
+  border-right-color: #21527E;
+}
+
+::ng-deep .tooltip.right .tooltip-arrow::before {
+  display: none;
+}
+
+/*::ng-deep .bs-tooltip-auto[x-placement^=right] .arrow::before,
+::ng-deep .bs-tooltip-right .arrow::before {
+  display: none;
+}*/
+
+::ng-deep .tooltip-inner {
+  min-width: 300px;
+  max-width: 425px;
+  padding: 12px 20px;
+  color: #fff;
+  text-align: left;
+  font-size: 14px;
+  background-color: #21527E;
+  border-radius: 0;
+  border-bottom: 3px solid #FCBA19;
+
+  h3 {
+    color: #fff;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  padding {
+    line-height: 1.2em;
+  }
+
+  ul {
+    padding-left: 14px;
+
+    li {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.learn-benefits {
+  margin-top: 50px;
+}
+
+::ng-deep .attention {
+  background-color: #f1f4fa;
+  margin: 20px 0;
+  padding: 1em;
+
+  h3 {
+    margin-top: 10px !important;
+  }
+
+  p {
+    margin-bottom: 0 !important;
+  }
+}
+
+::ng-deep ul.list li {
+  margin-bottom: 5px;
+}
+
+::ng-deep ol.list {
+
+  li {
+    margin-bottom: 15px;
+  }
+
+  &.punctuated li {
+    font-weight: 600;
+
+    span {
+      font-weight: 400;
+    }
+  }
+}
+
+::ng-deep .error-container {
+  font-size: 15px;
+}
+
+::ng-deep .with-error input,
+::ng-deep .with-error select,
+::ng-deep .with-error textarea {
+  border: 1px solid red;
+}
+
+.file-upload-placeholder {
+  border: 1px dashed #9fb6d9;
+  background-color: #f1f4fa;
+  padding: 20px;
+  text-align: center;
+}
+
+::ng-deep .form-control {
+  font-size: 16px;
+}
+
+textarea.form-control {
+  &.standard {
+    width: 75%;
+    height: 100px;
+  }
+
+  &.bigger {
+    width: 75%;
+    height: 200px;
+  }
+}
+
+::ng-deep select.form-control {
+  &.standard {
+    width: 50%;
+  }
+}
+
+::ng-deep .inline-label {
+  span {
+    display: inline-block;
+    padding-left: 5px;
+    margin-right: 15px;
+    font-weight: normal;
+  }
+}
+
+::ng-deep .court-information {
+  margin-bottom: 24px;
+
+  .court-listing {
+    .court-files {
+      padding: 0 0 15px;
+    }
+
+    .court-files a {
+      margin-left: 25px;
+    }
+
+    .court-files:last-child {
+      padding-bottom: 0;
+    }
+
+    &.restitution-listing {
+      background-color: #e1e8f2;
+      padding: 15px;
+      margin-bottom: 5px;
+
+      h3 {
+        font-size: 18px;
+        margin-top: 0;
+      }
+
+      .btn-link {
+        margin-left: 0 !important;
+        padding-left: 0;
+        text-transform: uppercase;
+      }
+    }
+
+    &.restitution-listing:nth-child(even) {
+      background-color: #f1f4fa;
+    }
+
+    .victim-info {
+      border-top: 1px solid #fff;
+      padding-top: 15px;
+
+      .remove-victim {
+        font-size: 14px;
+      }
+
+      .victim-row {
+        clear: right;
+        padding-top: 10px;
+      }
+    }
+
+    .victim-listing > div:first-child .victim-info {
+      border-top: 0;
+    }
+  }
+}
+
+.other-treatments {
+  margin-bottom: 10px;
+
+  .other-treatment {
+    background-color: #eee;
+    padding: 15px;
+  }
+
+  &:nth-child(even) .other-treatment {
+    background-color: #fff;
+  }
+}
+
+::ng-deep .radio-list {
+  label {
+    font-weight: normal;
+    margin-bottom: 5px;
+  }
+
+  input[type=checkbox],
+  input[type=radio] {
+    margin-right: 5px;
+  }
+
+  &.per-line label {
+    display: block;
+  }
+
+  &.per-line label:first-child {
+    display: inline-block;
+  }
+}
+
+::ng-deep .radio-list .app-field {
+  margin-bottom: 5px;
+}
+
+::ng-deep .terms {
+  input[type=text] {
+    margin-left: 15px;
+  }
+
+  ol {
+    padding-left: 12px;
+
+    li {
+      padding-left: 1em;
+    }
+  }
+}
+
+.review-table {
+  border-collapse: separate;
+  border-spacing: 3px;
+
+  tr {
+    background-color: #f1f4fa;
+
+    th,
+    td {
+      //background-color: #e1e8f2;
+      border: 0 !important;
+    }
+
+    th {
+      font-weight: normal;
+      width: 30%;
+    }
+
+    td {
+      font-weight: bold;
+      width: 70%;
+    }
+  }
+
+  &.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #e1e8f2;
+  }
+}
+
+::ng-deep .rates-table {
+  border-collapse: separate;
+  border-spacing: 1px;
+  border: 0 !important;
+  ;
+
+  tr {
+    background-color: #f1f4fa;
+
+    th,
+    td {
+      background-color: #f1f4fa;
+      border: #fafafa !important;
+    }
+
+    th {
+      font-weight: 600;
+      width: auto;
+      color: #494949 !important;
+      white-space: nowrap;
+    }
+
+    td {
+      font-weight: 400;
+      width: auto;
+      color: #494949 !important;
+      white-space: nowrap;
+    }
+  }
+
+  &.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #e1e8f2;
+  }
+}
+
+.label {
+  font-size: 16px;
+  font-weight: normal;
+  color: #000;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-left: -8px;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+.step {
+  border-bottom: 2px solid #FCBA19;
+}
+
+.button-container {
+  position: relative;
+  margin: 30px 0 15px;
+
+  .btn {
+    margin-left: 0 !important;
+  }
+}
+
+.submitted-header {
+  background-color: rgba(56, 89, 138, 1);
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  color: #fff !important;
+}
+
+.submitted-header h2 {
+  color: #fff !important;
+}
+
+.submitted-content {
+  background-color: #eee;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.submit-container {
+  background-color: #38598A;
+  border-bottom: solid 4px #FFCC00;
+  color: #fff;
+  margin-bottom: 20px;
+  padding: 30px;
+  padding-top: 20px;
+
+  h2 {
+    color: #fff;
+  }
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #337AB7;
+  color: #000 !important;
+}
+
+::ng-deep .mat-calendar-body-cell-content {
+  color: #54708b;
+}
+
+::ng-deep .mat-calendar-header {
+  background-color: #337AB7;
+  color: #fff;
+}
+
+::ng-deep .tooltip-icon {
+}
+
+::ng-deep .address-info {
+  .standard {
+    width: 400px;
+  }
+
+  .shorter {
+    width: 250px;
+  }
+}
+
+::ng-deep .col-6 {
+  .address-info {
+    .standard {
+      width: 100%;
+    }
+
+    .shorter {
+      width: 65%;
+    }
+  }
+}
+
+::ng-deep .signature-trigger {
+  width: 385px;
+  padding: 40px 0;
+  border: 1px solid #9fb6d9;
+  background-color: #f1f4fa;
+  color: #9fb6d9;
+  text-align: center;
+  border-radius: 4px;
+
+  p {
+    margin: 0;
+    font-size: 0.95em;
+  }
+}
+
+::ng-deep .signature-preview {
+  img {
+    width: 300px;
+    height: 100px;
+  }
+
+  a.redo {
+    display: block;
+    cursor: pointer;
+  }
+
+  a.redo:hover {
+    text-decoration: underline;
+  }
+}
+
+::ng-deep .review-btn {
+  float: right;
+  padding: 0;
+  color: #fff;
+  font-size: 16px;
+  margin-top: -3px;
+
+  i {
+    margin-right: 4px;
+  }
+}
+
+::ng-deep .review-signature {
+  width: 150px;
+}
+
+::ng-deep table.steps {
+  th {
+    padding-right: 20px;
+  }
+
+  th, td {
+    padding-bottom: 5px;
+  }
+}
