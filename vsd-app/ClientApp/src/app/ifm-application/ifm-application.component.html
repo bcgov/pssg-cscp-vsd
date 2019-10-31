@@ -585,11 +585,11 @@
                 </app-field>
 
                 <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeDetails')" label="To the best of your ability, please describe the offence. (Maximum 250 words)" errorMessage="Please provide details of crime">
-                  <textarea class="form-control bigger" formControlName="crimeDetails"></textarea>
+                  <textarea class="form-control bigger" formControlName="crimeDetails" maxlength="2000"></textarea>
                 </app-field>
 
                 <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeInjuries')" label="Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 250 words)" errorMessage="Please provide details of injuries">
-                  <textarea class="form-control standard" formControlName="crimeInjuries"></textarea>
+                  <textarea class="form-control standard" formControlName="crimeInjuries" maxlength="2000"></textarea>
                 </app-field>
 
                 <app-field label="If you have any additional information, please upload it below">
