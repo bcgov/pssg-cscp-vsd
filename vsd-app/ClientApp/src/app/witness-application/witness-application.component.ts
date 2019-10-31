@@ -47,6 +47,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   form: FormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
+  submitting: boolean = false; // this controls the button state for
 
   otherTreatmentItems: FormArray;
   employerItems: FormArray;
@@ -639,9 +640,9 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   }
 
   submitApplication() {
-    let formIsValid = this.form.valid;
-    //let formIsValid = true;
-    if (formIsValid) {
+    // show the button as submitting and disable it
+    this.submitting = true;
+    if (this.form.valid) {
       this.formFullyValidated = true;
       this.save().subscribe(
         data => {
@@ -651,16 +652,22 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
             this.router.navigate(['/application-success']);
           }
           else {
+            // re-enable the button
+            this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
           }
         },
         error => {
+          // re-enable the button
+          this.submitting = false;
           this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           console.log('Error submitting application');
         }
       );
     } else {
+      // re-enable the button
+      this.submitting = false;
       console.log("form not validated");
       this.formFullyValidated = false;
       this.markAsTouched();
