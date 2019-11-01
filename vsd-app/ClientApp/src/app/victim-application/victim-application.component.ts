@@ -46,6 +46,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   busy3: Promise<any>;
   // form: FormGroup; // form is defined as a FormGroup in the FormBase
   showValidationMessage: boolean;
+  familyDoctorNameItem: FormControl;
   otherTreatmentItems: FormArray;
   employerItems: FormArray;
   courtFileItems: FormArray;
@@ -484,6 +485,18 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         }
       }
     }
+  }
+
+  addDoctor(): void {
+    this.familyDoctorNameItem = this.form.get('medicalInformation.familyDoctorName') as FormControl;
+    this.familyDoctorNameItem.enable();
+    this.familyDoctorNameItem.setValidators([Validators.required]);// .validator = Validators.required;
+  }
+
+  clearDoctor(): void {
+    this.familyDoctorNameItem = this.form.get('medicalInformation.familyDoctorName') as FormControl;
+    this.familyDoctorNameItem.disable();
+    this.familyDoctorNameItem.setValidators(null);
   }
 
   addProvider(): void {

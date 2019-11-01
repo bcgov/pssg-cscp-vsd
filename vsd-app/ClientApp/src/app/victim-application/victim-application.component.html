@@ -836,16 +836,16 @@
             <h3>Doctor Information</h3>
             <app-field label="Do you have a medical doctor / clinic who has been treating you for injuries resulting from the incident?" [valid]="isFieldValid('medicalInformation.beingTreatedByFamilyDoctor')" [required]="true" errorMessage="Please select an option">
               <label class="inline-label">
-                <input type="radio" [value]="true" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
+                <input type="radio" (click)="addDoctor()" [value]="true" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
                 <span>Yes</span>
               </label>
               <label class="inline-label">
-                <input type="radio" [value]="false" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
+                <input type="radio" (click)="clearDoctor()" [value]="false" name="beingTreatedByFamilyDoctor" formControlName="beingTreatedByFamilyDoctor">
                 <span>No</span>
               </label>
             </app-field>
             <section *ngIf="form.get('medicalInformation.beingTreatedByFamilyDoctor').value === true">
-              <app-field label="Name of Medical Doctor/Clinic">
+              <app-field label="Name of Medical Doctor/Clinic" [required]="true">
                 <input class="form-control standard" type="text" formControlName="familyDoctorName">
               </app-field>
               <app-field label="Phone Number (incl. area code)">
