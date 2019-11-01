@@ -1036,8 +1036,4 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       console.log(e);
     }
   }
-
-  clearTreatments() {
-
-  }
 }

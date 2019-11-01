@@ -526,11 +526,11 @@
 
               <section>
                 <app-field label="Date(s) of crime" [required]="true" [valid]="isFieldValid('crimeInformation.crimePeriodStart')" errorMessage="Please enter the crime date">
-                  <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" (click)="crimePeriodStartPicker.open()" readonly>
+                  <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" [max]="todaysDate" (click)="crimePeriodStartPicker.open()" readonly>
                   <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
                   <span *ngIf="form.get('crimeInformation.whenDidCrimeOccur').value === true">
                     <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" (click)="crimePeriodEndDatePicker.open()" readonly>
+                    <input type="text" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" [max]="todaysDate" (click)="crimePeriodEndDatePicker.open()" readonly>
                     <mat-datepicker #crimePeriodEndDatePicker></mat-datepicker>
                   </span>
                 </app-field>
@@ -854,27 +854,28 @@
 
                     <app-address [group]="form.get('crimeInformation.racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
                   </span>
-
-                  <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
-                  <div class="terms">
-                    <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following:</p>
-                    <ol class="list">
-                      <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
-                      <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
-                      <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
-                      <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
-                    </ol>
-                  </div>
-
-                  <app-field label="Applicant's Signature" [required]="true" [valid]="form.get('crimeInformation.racafInformation.signature').valid || !form.get('crimeInformation.racafInformation.signature').touched" errorMessage="Please provide your digital signature">
-                    <div class="signature-trigger" (click)="showSignPad('crimeInformation.racafInformation', 'signature')" *ngIf="!hasSignature('crimeInformation.racafInformation.signature')">
-                      <p>Click this box to sign</p>
+                  <span *ngIf="form.value.crimeInformation.racafInformation.willBeTakingLegalAction===100000000 || form.value.crimeInformation.racafInformation.applyToCourtForMoneyFromOffender===100000000">
+                    <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
+                    <div class="terms">
+                      <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following:</p>
+                      <ol class="list">
+                        <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
+                        <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
+                        <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
+                        <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
+                      </ol>
                     </div>
-                    <div *ngIf="hasSignature('crimeInformation.racafInformation.signature')" class="signature-preview">
-                      <img src="{{ valueOrEmpty('crimeInformation.racafInformation.signature') }}" />
-                      <a class="redo" (click)="showSignPad('crimeInformation.racafInformation', 'signature')">Redo Signature</a>
-                    </div>
-                  </app-field>
+
+                    <app-field label="Applicant's Signature" [required]="true" [valid]="form.get('crimeInformation.racafInformation.signature').valid || !form.get('crimeInformation.racafInformation.signature').touched" errorMessage="Please provide your digital signature">
+                      <div class="signature-trigger" (click)="showSignPad('crimeInformation.racafInformation', 'signature')" *ngIf="!hasSignature('crimeInformation.racafInformation.signature')">
+                        <p>Click this box to sign</p>
+                      </div>
+                      <div *ngIf="hasSignature('crimeInformation.racafInformation.signature')" class="signature-preview">
+                        <img src="{{ valueOrEmpty('crimeInformation.racafInformation.signature') }}" />
+                        <a class="redo" (click)="showSignPad('crimeInformation.racafInformation', 'signature')">Redo Signature</a>
+                      </div>
+                    </app-field>
+                  </span>
                 </div>
               </section>
             </section>
@@ -997,11 +998,11 @@
               <h3>Other Treatment Information</h3>
               <app-field label="Do you have a counsellor/therapist who has been treating you as a result of the incident?" [valid]="isFieldValid('medicalInformation.hadOtherTreatments')" [required]="true" errorMessage="Please select an option">
                 <label class="inline-label">
-                  <input type="radio" [value]="true" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                  <input type="radio" [value]="true" (click)="addProvider()" name="hadOtherTreatments" formControlName="hadOtherTreatments">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="false" name="hadOtherTreatments" formControlName="hadOtherTreatments">
+                  <input type="radio" [value]="false" (click)="clearProviders()" name="hadOtherTreatments" formControlName="hadOtherTreatments">
                   <span>No</span>
                 </label>
               </app-field>
