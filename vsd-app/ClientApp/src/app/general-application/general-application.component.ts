@@ -555,34 +555,6 @@ export class GeneralApplicationComponent implements OnInit {
     });
   }
 
-  submitPartialApplication() {
-    this.justiceDataService.submitApplication(this.harvestForm())
-      .subscribe(
-        data => {
-          console.log("submitting partial form");
-          this.router.navigate(['/application-success']);
-        },
-        err => {
-          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-          console.log('Error submitting application');
-        }
-      );
-  }
-
-  //submitPartialApplication() {
-  //  this.formFullyValidated = true;
-  //  this.save().subscribe(
-  //    data => {
-  //      console.log("submitting partial form");
-  //      this.router.navigate(['/application-success']);
-  //    },
-  //    err => {
-  //      this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-  //      console.log('Error submitting application');
-  //    }
-  //  );
-  //}
-
   submitApplication() {
     //let formIsValid = true;showValidationMessage
     // show the button as submitting and disable it
@@ -615,35 +587,6 @@ export class GeneralApplicationComponent implements OnInit {
       this.markAsTouched();
     }
   }
-
-  //submitApplication() {
-  //  let formIsValid = this.form.valid;
-  //  //let formIsValid = true;
-  //  if (formIsValid) {
-  //    this.formFullyValidated = true;
-  //    this.save().subscribe(
-  //      data => {
-  //        if (data['IsSuccess'] == true) {
-  //          console.log(data['IsSuccess']);
-  //          console.log("submitting");
-  //          this.router.navigate(['/application-success']);
-  //        }
-  //        else {
-  //          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-  //          console.log('Error submitting application');
-  //        }
-  //      },
-  //      error => {
-  //        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-  //        console.log('Error submitting application');
-  //      }
-  //    );
-  //  } else {
-  //    console.log("form not validated");
-  //    this.formFullyValidated = false;
-  //    this.markAsTouched();
-  //  }
-  //}
 
   debugFormData(): void {
     let formData: Application = {
@@ -683,30 +626,6 @@ export class GeneralApplicationComponent implements OnInit {
         err => { }
       );
   }
-
-  //save(): Subject<boolean> {
-  //  const subResult = new Subject<boolean>();
-  //  const formData: Application = {
-  //    Introduction: this.form.get('introduction').value,
-  //    PersonalInformation: this.form.get('personalInformation').value,
-  //    VictimInformation: this.form.get('victimInformation').value,
-  //    CrimeInformation: this.form.get('crimeInformation').value,
-  //    MedicalInformation: this.form.get('medicalInformation').value,
-  //    ExpenseInformation: this.form.get('expenseInformation').value,
-  //    RepresentativeInformation: this.form.get('representativeInformation').value,
-  //    DeclarationInformation: this.form.get('declarationInformation').value,
-  //    AuthorizationInformation: this.form.get('authorizationInformation').value,
-  //  };
-
-  //  this.busy = this.justiceDataService.submitApplication(formData)
-  //    .toPromise()
-  //    .then(res => {
-  //      subResult.next(true);
-  //    }, err => subResult.next(false));
-  //  this.busy2 = Promise.resolve(this.busy);
-
-  //  return subResult;
-  //}
 
   // marking the form as touched makes the validation messages show
   markAsTouched() {
