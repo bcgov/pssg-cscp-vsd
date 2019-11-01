@@ -15,7 +15,6 @@ import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
@@ -38,51 +37,43 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
   ]
 })
 export class GeneralApplicationComponent implements OnInit {
-  currentUser: User;
-  dataLoaded = false;
-  busy: Promise<any>;
-  busy2: Promise<any>;
-  busy3: Promise<any>;
+  // material stepper
+  public currentFormStep: number;
   form: FormGroup;
+
   formFullyValidated: boolean;
   showValidationMessage: boolean;
   submitting: boolean = false; // this controls the button state for
 
-  otherTreatmentItems: FormArray;
-  employerItems: FormArray;
   courtFileItems: FormArray;
   crimeLocationItems: FormArray;
+  employerItems: FormArray;
+  otherTreatmentItems: FormArray;
   policeReportItems: FormArray;
-
-  hospitalList = HOSPITALS;
-  enumHelper = new EnumHelper();
-
-  showAddCourtInfo: boolean = true;
-  showRemoveCourtInfo: boolean = false;
-  showAddCrimeLocation: boolean = true;
-  showRemoveCrimeLocation: boolean = false;
-  showAddPoliceReport: boolean = true;
-  showRemovePoliceReport: boolean = false;
-  showAddProvider: boolean = true;
-  showRemoveProvider: boolean = false;
-
-  public currentFormStep: number;
-
-  phoneIsRequired: boolean = false;
-  emailIsRequired: boolean = false;
-  addressIsRequired: boolean = false;
-
-  representativePhoneIsRequired: boolean = false;
-  representativeEmailIsRequired: boolean = false;
-  representativeAddressIsRequired: boolean = false;
-
   courtFiles: FormArray;
   crimeLocations: FormArray;
   policeReports: FormArray;
   otherMedicalTreatments: FormArray;
   employers: FormArray;
 
-  saveFormData: any;
+  enumHelper = new EnumHelper();
+  hospitalList = HOSPITALS;
+
+  showAddCourtInfo: boolean = true;
+  showAddCrimeLocation: boolean = true;
+  showAddPoliceReport: boolean = true;
+  showAddProvider: boolean = true;
+  showRemoveCourtInfo: boolean = false;
+  showRemoveCrimeLocation: boolean = false;
+  showRemovePoliceReport: boolean = false;
+  showRemoveProvider: boolean = false;
+
+  phoneIsRequired: boolean = false;
+  emailIsRequired: boolean = false;
+  addressIsRequired: boolean = false;
+  representativePhoneIsRequired: boolean = false;
+  representativeEmailIsRequired: boolean = false;
+  representativeAddressIsRequired: boolean = false;
 
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
