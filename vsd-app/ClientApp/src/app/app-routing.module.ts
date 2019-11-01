@@ -12,6 +12,7 @@ import { ApplicationSuccessComponent } from './application-success/application-s
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { TestComponent } from './test/test.component';
+import { GeneralApplicationComponent } from './general-application/general-application.component';
 
 const routes: Routes = [
   {
@@ -34,8 +35,13 @@ const routes: Routes = [
     //canDeactivate: [CanDeactivateGuard]
   },
   {
-    path: 'submit-invoice',
-    component: SubmitInvoiceComponent,
+    path: 'witness-application',
+    component: WitnessApplicationComponent,
+    //canDeactivate: [CanDeactivateGuard]
+  },
+  {
+    path: 'general', // todo routing will have to be implemented
+    component: GeneralApplicationComponent,
     //canDeactivate: [CanDeactivateGuard]
   },
   {
