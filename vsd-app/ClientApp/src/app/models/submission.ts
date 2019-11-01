@@ -117,28 +117,9 @@ interface iApplication {
   vsd_racaf_legalactiontaken: number;
   vsd_racaf_signature: string;
 }
-export interface iWitnessApplication extends iApplication {
-  vsd_cvap_relationshiptovictim: string;//missing on victim application
-  vsd_cvap_victimaddressline1: string;//not in victim form
-  vsd_cvap_victimaddressline2: string;//not in victim form
-  vsd_cvap_victimalternatephonenumber: string;//not in victim form
-  vsd_cvap_victimbirthdate: string;//not in victim form
-  vsd_cvap_victimcity: string;//not in victim form
-  vsd_cvap_victimcountry: string;//not in victim form
-  vsd_cvap_victimdateofnamechange: string;//not in victim form
-  vsd_cvap_victimemailaddress: string;//not in victim form
-  vsd_cvap_victimfirstname: string;//not in victim form
-  vsd_cvap_victimgendercode: number;//not in victim form
-  vsd_cvap_victimlastname: string;//not in victim form
-  vsd_cvap_victimmaritalstatus: number;//not in victim form
-  vsd_cvap_victimmiddlename: string;//not in victim form
-  vsd_cvap_victimoccupation: string;//not in victim form
-  vsd_cvap_victimotherfirstname: string;//not in victim form
-  vsd_cvap_victimotherlastname: string;//not in victim form
-  vsd_cvap_victimpostalcode: string;//not in victim form
-  vsd_cvap_victimprimaryphonenumber: string;//not in victim form
-  vsd_cvap_victimprovince: string;//not in victim form
-  vsd_cvap_victimsocialinsurancenumber: string;//not in victim form
+export interface iWitnessApplication extends iIfmApplication {
+  // both this one and the iIfmApplication are the same. We just extend the other one for laziness/efficiency
+  // if the form requirements become divergent then we can duplicate the properties of the other at that point
 }
 export interface iIfmApplication extends iApplication {
   vsd_cvap_relationshiptovictim: string;//missing on victim application
