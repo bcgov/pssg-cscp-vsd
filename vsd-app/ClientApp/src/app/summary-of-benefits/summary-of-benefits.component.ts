@@ -11,17 +11,17 @@ export class SummaryOfBenefitsDialog implements OnInit {
   benefitList: any;
   applicationType: string;
 
-  showVictimBenefits : boolean = false;
-  showFamilyBenefits : boolean = false;
-  showWitnessBenefits : boolean = false;
-  
+  showVictimBenefits: boolean = false;
+  showFamilyBenefits: boolean = false;
+  showWitnessBenefits: boolean = false;
+
   constructor(public dialogRef: MatDialogRef<SummaryOfBenefitsDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   closeMe(): void {
     this.dialogRef.close();
   }
-    
+
   ngOnInit() {
     this.applicationType = this.data;
 

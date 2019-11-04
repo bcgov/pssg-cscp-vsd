@@ -90,6 +90,7 @@ import { VictimInformationComponent } from './victim-information/victim-informat
 import { NameBlockComponent } from './name-block/name-block.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { GeneralApplicationComponent } from './general-application/general-application.component';
+import { OverviewComponent } from './general-application/overview/overview.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +131,7 @@ import { GeneralApplicationComponent } from './general-application/general-appli
     NameBlockComponent,
     DatePickerComponent,
     GeneralApplicationComponent,
+    OverviewComponent,
   ],
   imports: [
     BrowserModule,
