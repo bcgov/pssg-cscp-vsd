@@ -866,6 +866,40 @@ export class GeneralApplicationComponent implements OnInit {
       }),
     });
   }
+  changeGroupValidity(values: any): void {
+    // whenever an expenseInformation checkbox is changed we
+    // set whether the minimum expenses value is met into part of the form that isn't user editable.
+    let expenseMinimumMet = '';
+    const x = [
+      this.form.get('expenseInformation.haveMedicalExpenses'),
+      this.form.get('expenseInformation.haveDentalExpenses'),
+      this.form.get('expenseInformation.benefitsPrescription'),
+      this.form.get('expenseInformation.havePrescriptionDrugExpenses'),
+      this.form.get('expenseInformation.haveCounsellingExpenses'),
+      this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses'),
+      this.form.get('expenseInformation.havePersonalPropertyLostExpenses'),
+      this.form.get('expenseInformation.haveProtectiveMeasureExpenses'),
+      this.form.get('expenseInformation.haveDisabilityExpenses'),
+      this.form.get('expenseInformation.haveCrimeSceneCleaningExpenses'),
+      this.form.get('expenseInformation.haveOtherExpenses'),
+    ];
+    //determine if one of the checkboxes is true
+    let oneChecked = false;
+    x.forEach(c => {
+      // TODO: This should always return if not null because truthy. Second if should never trigger?
+      if (oneChecked)
+        return;
+      if (c instanceof FormControl) {
+        if (c.value === true)
+          oneChecked = true;
+      }
+    });
+    // fake a 'true' as a string
+    expenseMinimumMet = oneChecked ? 'yes' : '';
+    this.form.get('expenseInformation').patchValue({
+      minimumExpensesSelected: expenseMinimumMet
+    });
+  }
 
   onFileBundle(fileBundle: FileBundle) {
     try {

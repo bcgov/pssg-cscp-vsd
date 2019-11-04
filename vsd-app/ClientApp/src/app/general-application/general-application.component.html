@@ -1926,12 +1926,40 @@
           <h1>Review Component</h1>
           <!-- <app-ifm-review [group]="form"></app-ifm-review> -->
         </div>
-        fparent
         <div *ngIf="showValidationMessage" class="error-summary">
           <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
           <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
         </div>
+        <div *ngIf="currentStep === steps[7]">
+          <div class="page-header">
+            <h1>Employment Income</h1>
+          </div>
+          <span *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
 
+            <section>
+              <p>This section provides information regarding employment information. This information is only necessary if you are requesting benefits for lost employment income.</p>
+              <p><strong>You have not requested lost employment income benefits.</strong> Go back to Expense & Loss Information to request this particular benefit, or continue to the next section.</p>
+            </section>
+            <section class="button-container">
+              <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+              <span style="float: right;">
+                <button (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+              </span>
+            </section>
+          </span>
+          <span *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
+            <section>
+              <app-employment-income formControlName="employmentIncomeInformation" #employmentIncomeInfo></app-employment-income>
+            </section>
+            <section class="button-container">
+              <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+              <span style="float: right;">
+                <button *ngIf="!form.get('employmentIncomeInformation').valid" [disabled]="true" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+                <button *ngIf="form.get('employmentIncomeInformation').valid===true" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+              </span>
+            </section>
+          </span>
+        </div>
         <section class="button-container">
           <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span style="float: right;">
