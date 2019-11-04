@@ -19,7 +19,7 @@ import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
-import { Application } from '../interfaces/application.interface';
+import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -646,55 +646,101 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     });
   }
 
-
   submitPartialApplication() {
-    this.formFullyValidated = true;
-    this.save().subscribe(
-      data => {
-        console.log("submitting partial form");
-        this.router.navigate(['/application-success']);
-      },
-      err => {
-        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application');
-      }
-    );
+    this.justiceDataService.submitApplication(this.harvestForm())
+      .subscribe(
+        data => {
+          console.log("submitting partial form");
+          this.router.navigate(['/application-success']);
+        },
+        err => {
+          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+          console.log('Error submitting application');
+        }
+      );
   }
 
+  //submitPartialApplication() {
+  //  this.formFullyValidated = true;
+  //  this.save().subscribe(
+  //    data => {
+  //      console.log("submitting partial form");
+  //      this.router.navigate(['/application-success']);
+  //    },
+  //    err => {
+  //      this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+  //      console.log('Error submitting application');
+  //    }
+  //  );
+  //}
+
   submitApplication() {
+    //let formIsValid = true;showValidationMessage
     // show the button as submitting and disable it
     this.submitting = true;
     if (this.form.valid) {
-      this.formFullyValidated = true;
-      this.save().subscribe(
-        data => {
-          if (data['IsSuccess'] == true) {
-            console.log(data['IsSuccess']);
-            console.log("submitting");
-            this.router.navigate(['/application-success']);
-          }
-          else {
+      this.justiceDataService.submitApplication(this.harvestForm())
+        .subscribe(
+          data => {
+            if (data['isSuccess'] == true) {
+              this.router.navigate(['/application-success']);
+            }
+            else {
+              // re-enable the button
+              this.submitting = false;
+              this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              console.log('Error submitting application');
+            }
+          },
+          error => {
             // re-enable the button
             this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
           }
-        },
-        error => {
-          // re-enable the button
-          this.submitting = false;
-          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-          console.log('Error submitting application');
-        }
-      );
+        );
     } else {
       // re-enable the button
       this.submitting = false;
       console.log("form not validated");
-      this.formFullyValidated = false;
       this.markAsTouched();
     }
   }
+
+  //submitApplication() {
+  //  // show the button as submitting and disable it
+  //  this.submitting = true;
+  //  if (this.form.valid) {
+  //    this.formFullyValidated = true;
+  //    this.save().subscribe(
+  //      data => {
+  //        if (data['IsSuccess'] == true) {
+  //          console.log(data['IsSuccess']);
+  //          console.log("submitting");
+  //          this.router.navigate(['/application-success']);
+  //        }
+  //        else {
+  //          // re-enable the button
+  //          this.submitting = false;
+  //          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+  //          console.log('Error submitting application');
+  //        }
+  //      },
+  //      error => {
+  //        // re-enable the button
+  //        this.submitting = false;
+  //        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+  //        console.log('Error submitting application');
+  //      }
+  //    );
+  //  } else {
+  //    // re-enable the button
+  //    this.submitting = false;
+  //    console.log("form not validated");
+  //    this.formFullyValidated = false;
+  //    this.markAsTouched();
+  //  }
+  //}
 
   debugFormData(): void {
     let formData: Application = {
@@ -712,29 +758,51 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     console.log(JSON.stringify(formData));
   }
 
-  save(): Subject<boolean> {
-    const subResult = new Subject<boolean>();
-    const formData: Application = {
-      Introduction: this.form.get('introduction').value,
-      PersonalInformation: this.form.get('personalInformation').value,
-      VictimInformation: this.form.get('victimInformation').value,
-      CrimeInformation: this.form.get('crimeInformation').value,
-      MedicalInformation: this.form.get('medicalInformation').value,
-      ExpenseInformation: this.form.get('expenseInformation').value,
-      RepresentativeInformation: this.form.get('representativeInformation').value,
-      DeclarationInformation: this.form.get('declarationInformation').value,
-      AuthorizationInformation: this.form.get('authorizationInformation').value,
-    };
-
-    this.busy = this.justiceDataService.submitApplication(formData)
-      .toPromise()
-      .then(res => {
-        subResult.next(true);
-      }, err => subResult.next(false));
-    this.busy2 = Promise.resolve(this.busy);
-
-    return subResult;
+  harvestForm(): Application {
+    return {
+      Introduction: this.form.get('introduction').value as Introduction,
+      PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
+      CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
+      MedicalInformation: this.form.get('medicalInformation').value as MedicalInformation,
+      ExpenseInformation: this.form.get('expenseInformation').value as ExpenseInformation,
+      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value as EmploymentIncomeInformation,
+      RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
+      DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
+      AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
+    } as Application;
   }
+
+  save(): void {
+    this.justiceDataService.submitApplication(this.harvestForm())
+      .subscribe(
+        data => { },
+        err => { }
+      );
+  }
+
+  //save(): Subject<boolean> {
+  //  const subResult = new Subject<boolean>();
+  //  const formData: Application = {
+  //    Introduction: this.form.get('introduction').value,
+  //    PersonalInformation: this.form.get('personalInformation').value,
+  //    VictimInformation: this.form.get('victimInformation').value,
+  //    CrimeInformation: this.form.get('crimeInformation').value,
+  //    MedicalInformation: this.form.get('medicalInformation').value,
+  //    ExpenseInformation: this.form.get('expenseInformation').value,
+  //    RepresentativeInformation: this.form.get('representativeInformation').value,
+  //    DeclarationInformation: this.form.get('declarationInformation').value,
+  //    AuthorizationInformation: this.form.get('authorizationInformation').value,
+  //  };
+
+  //  this.busy = this.justiceDataService.submitApplication(formData)
+  //    .toPromise()
+  //    .then(res => {
+  //      subResult.next(true);
+  //    }, err => subResult.next(false));
+  //  this.busy2 = Promise.resolve(this.busy);
+
+  //  return subResult;
+  //}
 
   // marking the form as touched makes the validation messages show
   markAsTouched() {

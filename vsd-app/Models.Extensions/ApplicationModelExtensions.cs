@@ -201,30 +201,33 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // Setup otherTreatments, don't show if there isn't any
                 if (model.MedicalInformation.otherTreatments != null)
                 {
-                    if (model.MedicalInformation.otherTreatments[0].providerName.Length > 0)
+                    if (model.MedicalInformation.otherTreatments.Count() > 0)
                     {
-                        application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
+                        if (model.MedicalInformation.otherTreatments[0].providerName.Length > 0)
                         {
-                            vsd_name = t.providerName,
-                            vsd_phonenumber = t.providerPhoneNumber,
+                            application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
+                            {
+                                vsd_name = t.providerName,
+                                vsd_phonenumber = t.providerPhoneNumber,
 
-                            vsd_addressline1 = t.providerAddress.line1,
-                            vsd_addressline2 = t.providerAddress.line2,
-                            vsd_city = t.providerAddress.city,
-                            vsd_province = t.providerAddress.province,
-                            vsd_country = t.providerAddress.country,
-                            vsd_postalcode = t.providerAddress.postalCode,
-                            vsd_relationship1 = t.providerType.ToString(),
-                            //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
-                            //    vsd_firstname = "", // TODO: We don't collect a split name here
-                            //    vsd_middlename = "", // TODO: We don't collect a split name here
-                            //    vsd_lastname = "", // TODO: We don't collect a split name here
-                            //    vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
-                            //    vsd_email = "", // TODO: We don't collect an email here
-                            //    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
-                            //    //vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact, // TODO: This isn't correct either
-                            //    vsd_relationship1 = "", // TODO: We don't collect a relationship here
-                        }).ToArray();
+                                vsd_addressline1 = t.providerAddress.line1,
+                                vsd_addressline2 = t.providerAddress.line2,
+                                vsd_city = t.providerAddress.city,
+                                vsd_province = t.providerAddress.province,
+                                vsd_country = t.providerAddress.country,
+                                vsd_postalcode = t.providerAddress.postalCode,
+                                vsd_relationship1 = t.providerType.ToString(),
+                                //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
+                                //    vsd_firstname = "", // TODO: We don't collect a split name here
+                                //    vsd_middlename = "", // TODO: We don't collect a split name here
+                                //    vsd_lastname = "", // TODO: We don't collect a split name here
+                                //    vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
+                                //    vsd_email = "", // TODO: We don't collect an email here
+                                //    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
+                                //    //vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact, // TODO: This isn't correct either
+                                //    vsd_relationship1 = "", // TODO: We don't collect a relationship here
+                            }).ToArray();
+                        }
                     }
                 }
             }
@@ -277,36 +280,39 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             }
 
             // Add medical doctor information
-            if (model.MedicalInformation.familyDoctorName.Length > 0) // Only do this if there is something in this field
+            if (model.MedicalInformation.familyDoctorName != null)
             {
-                Providercollection[] tempProviderCollection = new Providercollection[1];
-                tempProviderCollection[0] = new Providercollection();
-                tempProviderCollection[0].vsd_name = model.MedicalInformation.familyDoctorName;
-                tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
-                tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddressLine1;
-                tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddressLine2;
-                tempProviderCollection[0].vsd_relationship1 = "100000000"; // TODO: This is just an assumption, looking for confirmation from Mano
+                if (model.MedicalInformation.familyDoctorName.Length > 0) // Only do this if there is something in this field
+                {
+                    Providercollection[] tempProviderCollection = new Providercollection[1];
+                    tempProviderCollection[0] = new Providercollection();
+                    tempProviderCollection[0].vsd_name = model.MedicalInformation.familyDoctorName;
+                    tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
+                    tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddressLine1;
+                    tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddressLine2;
+                    tempProviderCollection[0].vsd_relationship1 = "100000000"; // TODO: This is just an assumption, looking for confirmation from Mano
 
-                int tempProviderCount = 0;
-                if (application.ProviderCollection == null)
-                {
-                    tempProviderCount = 0;
+                    int tempProviderCount = 0;
+                    if (application.ProviderCollection == null)
+                    {
+                        tempProviderCount = 0;
+                    }
+                    else
+                    {
+                        tempProviderCount = application.ProviderCollection.Count();
+                    }
+                    Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                    if (application.ProviderCollection == null)
+                    {
+                        tempCombinedCollection = tempProviderCollection;
+                    }
+                    else
+                    {
+                        Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                    }
+                    Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                    application.ProviderCollection = tempCombinedCollection;
                 }
-                else
-                {
-                    tempProviderCount = application.ProviderCollection.Count();
-                }
-                Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                if (application.ProviderCollection == null)
-                {
-                    tempCombinedCollection = tempProviderCollection;
-                }
-                else
-                {
-                    Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                }
-                Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                application.ProviderCollection = tempCombinedCollection;
             }
 
             if (model.ExpenseInformation != null)
