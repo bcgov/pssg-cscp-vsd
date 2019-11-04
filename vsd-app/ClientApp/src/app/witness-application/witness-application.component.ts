@@ -72,6 +72,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   phoneIsRequired: boolean = false;
   emailIsRequired: boolean = false;
   addressIsRequired: boolean = false;
+  alternateAddressIsRequired: boolean = false;
 
   representativePhoneIsRequired: boolean = false;
   representativeEmailIsRequired: boolean = false;
@@ -110,7 +111,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         let phoneControl = this.form.get('personalInformation.phoneNumber');
         let emailControl = this.form.get('personalInformation.email');
         let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
-        let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
+        //let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
         let addressControls = [
           this.form.get('personalInformation').get('primaryAddress.country'),
           this.form.get('personalInformation').get('primaryAddress.province'),
@@ -125,33 +126,45 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         emailControl.setErrors(null);
         emailConfirmControl.clearValidators();
         emailConfirmControl.setErrors(null);
-        addressControl.clearValidators();
-        addressControl.setErrors(null);
+        //addressControl.clearValidators();
+        //addressControl.setErrors(null);
         for (let control of addressControls) {
           control.clearValidators();
           control.setErrors(null);
         }
 
         let contactMethod = parseInt(value);
-        if (contactMethod === 100000000) {
+        if (contactMethod === 2) {
           phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
           this.phoneIsRequired = true;
           this.emailIsRequired = false;
           this.addressIsRequired = false;
-        } else if (contactMethod === 100000001) {
+          this.alternateAddressIsRequired = false;
+        } else if (contactMethod === 1) {
           emailControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
           emailConfirmControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
           this.phoneIsRequired = false;
           this.emailIsRequired = true;
           this.addressIsRequired = false;
-        } else if (contactMethod === 100000002) {
-          addressControl.setValidators([Validators.required]);
+          this.alternateAddressIsRequired = false;
+        } else if (contactMethod === 4) {
+          //addressControl.setValidators([Validators.required]);
           for (let control of addressControls) {
             control.setValidators([Validators.required]);
           }
           this.phoneIsRequired = false;
           this.emailIsRequired = false;
           this.addressIsRequired = true;
+          this.alternateAddressIsRequired = false;
+        } else if (contactMethod === 100000002) {
+          //addressControl.setValidators([Validators.required]);
+          for (let control of addressControls) {
+            control.setValidators([Validators.required]);
+          }
+          this.phoneIsRequired = false;
+          this.emailIsRequired = false;
+          this.addressIsRequired = false;
+          this.alternateAddressIsRequired = true;
         }
 
         phoneControl.markAsTouched();
@@ -160,8 +173,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         emailControl.updateValueAndValidity();
         emailConfirmControl.markAsTouched();
         emailConfirmControl.updateValueAndValidity();
-        addressControl.markAsTouched();
-        addressControl.updateValueAndValidity();
+        //addressControl.markAsTouched();
+        //addressControl.updateValueAndValidity();
         for (let control of addressControls) {
           control.markAsTouched();
           control.updateValueAndValidity();
@@ -742,15 +755,15 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         dateOfNameChange: [''],
 
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
-        relationshipToVictim: [0, [Validators.required, Validators.min(100000000), Validators.max(100000004)]],
-        relationshipToVictimOther: [''],
+        //relationshipToVictim: [0, [Validators.required, Validators.min(100000000), Validators.max(100000004)]],
+        //relationshipToVictimOther: [''],
 
         birthDate: ['', [Validators.required]],
 
-        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
+        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],  // Phone = 100000000, Email = 100000001, Mail = 100000002
+        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(100000002)]],  // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
 
         permissionToContactViaMethod: [false],
         agreeToCvapCommunicationExchange: [''],
@@ -760,22 +773,25 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         email: [''],
         confirmEmail: [''],
 
-        primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        alternateAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
+        primaryAddress: [''],
+        alternateAddress: [''],
+
+//        primaryAddress: this.fb.group({
+//          line1: ['', Validators.required],
+//          line2: [''],
+//          city: ['', Validators.required],
+//          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+//          province: [{ value: 'British Columbia', disabled: false }],
+//          country: [{ value: 'Canada', disabled: false }],
+//        }),
+//        alternateAddress: this.fb.group({
+//          line1: [''],
+//          line2: [''],
+//          city: [''],
+//          postalCode: [''],
+//          province: [{ value: 'British Columbia', disabled: false }],
+//          country: [{ value: 'Canada', disabled: false }],
+//        }),
       }),
       victimInformation: this.fb.group({
         firstName: ['', Validators.required],
@@ -790,7 +806,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
         maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
-        sin: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(11)]], // needs refinement
+        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
         phoneNumber: [''],

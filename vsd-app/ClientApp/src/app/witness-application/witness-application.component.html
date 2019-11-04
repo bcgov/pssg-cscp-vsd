@@ -211,7 +211,7 @@
               </div>
               <div class="col-4">
                 <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('personalInformation.sin')" errorMessage="Please enter your SIN" [tooltipReference]="sinTemplate">
-                  <input class="form-control" maxlength="11" type="text" formControlName="sin">
+                  <input class="form-control" maxlength="9" type="text" formControlName="sin">
                   <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
                 </app-field>
               </div>
@@ -223,9 +223,10 @@
                 <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('personalInformation.preferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
                   <select class="form-control" formControlName="preferredMethodOfContact">
                     <option value="0">Select...</option>
-                    <option value="100000000">Phone Call</option>
-                    <option value="100000001">Email</option>
-                    <option value="100000002">Mail</option>
+                    <option value="2">Phone Call</option>
+                    <option value="1">Email</option>
+                    <option value="4">Primary Mail</option>
+                    <option value="100000002">Alternate Mail</option>
                   </select>
                 </app-field>
               </div>
@@ -288,17 +289,20 @@
             <div class="row">
               <div class="col-12">
                 <h3>Primary Address</h3>
-                <app-address [group]="form.get('personalInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
+                <app-address-block formControlName="primaryAddress" [required]="addressIsRequired"></app-address-block>
+                <!--                <app-address-block formControlName="primaryAddress" [required]="preferredMethodOfContact.value === '4'"></app-address-block>-->
               </div>
             </div>
             <div class="row">
               <div class="col-12">
-                <h3>Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
+                <h3>
+                  Alternate Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
                 </h3>
                 <ng-template #altAddressTemplate>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</ng-template>
-                <app-address [group]="form.get('personalInformation.alternateAddress')" [showChildrenAsRequired]="false"></app-address>
+                <app-address-block formControlName="alternateAddress" [required]="alternateAddressIsRequired"></app-address-block>
+                <!--<app-address-block formControlName="alternateAddress" [required]="preferredMethodOfContact.value === '100000002'"></app-address-block>-->
               </div>
-            </div>
+  </div>
           </div>
 
           <div formGroupName="victimInformation" *ngIf="this.currentFormStep == 2">
