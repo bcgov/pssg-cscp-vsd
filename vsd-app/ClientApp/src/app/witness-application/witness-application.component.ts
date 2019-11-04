@@ -83,6 +83,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
+  get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
