@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../models/user.model';
-import { Subject } from 'rxjs';
+
 import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
@@ -78,6 +76,9 @@ export class GeneralApplicationComponent implements OnInit {
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
+  steps: string[];
+  currentStep: string;
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -87,7 +88,31 @@ export class GeneralApplicationComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.formFullyValidated = false;
-    this.currentFormStep = 0;
+
+    this.steps = [
+      'Overview',
+      'Personal Information & Addresses',
+      'Victim Information',
+      'Crime Information',
+      'Medical & Dental Information',
+      'Expense & Benefits',
+      'Expense & Loss Information',
+      'Employment Income',
+      'Application on Behalf of Victim',
+      'Declaration',
+      'Authorization',
+      'Review & Submit',
+    ];
+    this.currentStep = this.steps[0];
+  }
+  gotoNextStep(): void {
+    // get the index of the current step
+    let index: number = this.steps.indexOf(this.currentStep);
+    // if less than the last element increment and reassign.
+    if (index < this.steps.length - 1) this.steps[index++];
+  }
+  gotoStep(step: string): void {
+    this.currentStep = step;
   }
 
   ngOnInit() {
@@ -391,44 +416,6 @@ export class GeneralApplicationComponent implements OnInit {
     return elements[groupIndex];
   }
 
-  gotoPageIndex(stepper: MatStepper, selectPage: number): void {
-    window.scroll(0, 0);
-    stepper.selectedIndex = selectPage;
-    this.currentFormStep = selectPage;
-  }
-
-  gotoPage(selectPage: MatStepper): void {
-    window.scroll(0, 0);
-    this.showValidationMessage = false;
-    this.currentFormStep = selectPage.selectedIndex;
-  }
-
-  gotoNextStep(stepper: MatStepper): void {
-    if (stepper != null) {
-      var desiredFormIndex = stepper.selectedIndex;
-      var formGroupName = this.getFormGroupName(desiredFormIndex);
-
-      this.formFullyValidated = this.form.valid;
-
-      if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
-        var formParts = this.form.get(formGroupName);
-        var formValid = true;
-
-        if (formParts != null) {
-          formValid = formParts.valid;
-        }
-
-        if (formValid) {
-          this.showValidationMessage = false;
-          window.scroll(0, 0);
-          stepper.next();
-        } else {
-          this.validateAllFormFields(formParts);
-          this.showValidationMessage = true;
-        }
-      }
-    }
-  }
 
   addProvider(): void {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
