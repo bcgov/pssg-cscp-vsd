@@ -1943,7 +1943,7 @@
             <section class="button-container">
               <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
               <span style="float: right;">
-                <button (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+                <button (click)="gotoNextStep()" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
               </span>
             </section>
           </span>
@@ -1955,7 +1955,7 @@
               <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
               <span style="float: right;">
                 <button *ngIf="!form.get('employmentIncomeInformation').valid" [disabled]="true" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
-                <button *ngIf="form.get('employmentIncomeInformation').valid===true" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+                <button *ngIf="form.get('employmentIncomeInformation').valid===true" (click)="gotoNextStep()" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
               </span>
             </section>
           </span>
@@ -1963,7 +1963,7 @@
         <section class="button-container">
           <a (click)="verifyCancellation()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span style="float: right;">
-            <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="currentStep===steps[11]">CONTINUE <i class="fas fa-chevron-right"></i></button>
+            <button (click)="gotoNextStep();" class="btn btn-primary" *ngIf="currentStep===steps[11]">CONTINUE <i class="fas fa-chevron-right"></i></button>
             <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="!submitting && currentStep===steps[11]">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
             <button class="btn btn-primary disabled" *ngIf="submitting && currentStep===steps[11]">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button>
           </span>
