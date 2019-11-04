@@ -407,10 +407,6 @@ export class GeneralApplicationComponent implements OnInit {
     );
   }
 
-  showSummaryOfBenefits(): void {
-    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'ifm' });
-  }
-
   getFormGroupName(groupIndex: any) {
     let elements: Array<string> = ['introduction', 'personalInformation', 'victimInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     return elements[groupIndex];
@@ -660,7 +656,7 @@ export class GeneralApplicationComponent implements OnInit {
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
-      }),
+      }, { validator: this.matchingEmails('email', 'confirmEmail') }),
       victimInformation: this.fb.group({
         firstName: ['', Validators.required],
         middleName: [''],
@@ -673,7 +669,7 @@ export class GeneralApplicationComponent implements OnInit {
 
         gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
         birthDate: ['', [Validators.required]],
-        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
+        maritalStatus: [null, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
         sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
@@ -817,7 +813,6 @@ export class GeneralApplicationComponent implements OnInit {
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
       }),
-
       representativeInformation: this.fb.group({
         completingOnBehalfOf: [0, [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
         representativeFirstName: [''], //, Validators.required],
@@ -837,12 +832,10 @@ export class GeneralApplicationComponent implements OnInit {
         }),
         legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
       }),
-
       declarationInformation: this.fb.group({
         declaredAndSigned: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
       }),
-
       authorizationInformation: this.fb.group({
         approvedAuthorityNotification: ['', Validators.requiredTrue],
         readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
@@ -864,8 +857,51 @@ export class GeneralApplicationComponent implements OnInit {
         authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
         authorizedPersonSignature: [''], //, Validators.required],
       }),
+      employmentIncomeInformation: [null, Validators.required],
+
     });
   }
+  matchingEmails(emailKey: string, confirmEmailKey: string) {
+    return (group: FormGroup): { [key: string]: any } => {
+      let email = group.controls[emailKey];
+      let confirmEmail = group.controls[confirmEmailKey];
+
+      if (email.value !== confirmEmail.value) {
+        return {
+          mismatchedEmails: true
+        };
+      }
+    }
+  }
+  // handy get for the contact method
+  get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
+
+  matchingEmailValidator() {
+    // this is an ugly validator. Do not reuse please.
+
+    // get fields
+    const email: AbstractControl = this.form.get('personalInformation.email')
+    const emailString: string = email.value.toString().toLowerCase();
+    const confirmEmail: AbstractControl = this.form.get('personalInformation.confirmEmail');
+    const confirmEmailString: string = confirmEmail.value.toString().toLowerCase();
+
+    // get field 2
+    // update the validity/error status of both fields
+    if (emailString === confirmEmailString) {
+      // validation passes. Return null and set both controls to valid.
+      console.log(emailString + " = " + confirmEmailString);
+      email.setErrors(null);
+      // email.markAsTouched();
+      confirmEmail.setErrors(null);
+    } else {
+      // mismatched
+      console.log('They do not match');
+      // email.markAsTouched();
+      email.setErrors({ mismatched: true });
+      confirmEmail.setErrors({ mismatched: true });
+    }
+
+  };
   changeGroupValidity(values: any): void {
     // whenever an expenseInformation checkbox is changed we
     // set whether the minimum expenses value is met into part of the form that isn't user editable.
