@@ -3,18 +3,20 @@ import { MatDialog } from '@angular/material';
 import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
 
 @Component({
-  selector: 'app-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+  selector: 'app-overview-box',
+  templateUrl: './overview-box.component.html',
+  styleUrls: ['./overview-box.component.scss']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewBoxComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
   showSummaryOfBenefits(): void {
     const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'ifm' });
   }
+
 }
