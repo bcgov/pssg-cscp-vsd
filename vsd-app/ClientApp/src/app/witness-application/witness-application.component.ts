@@ -20,6 +20,7 @@ import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
+import { FileBundle } from '../models/file-bundle';
 
 const moment = _rollupMoment || _moment;
 
@@ -749,7 +750,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       VictimInformation: this.form.get('victimInformation').value,
       CrimeInformation: this.form.get('crimeInformation').value,
       MedicalInformation: this.form.get('medicalInformation').value,
-      ExpenseInformation: this.form.get('expenseInformation').value,
+      ExpenseInformation: null,//this.form.get('expenseInformation').value,
+      EmploymentIncomeInformation: null,
       RepresentativeInformation: this.form.get('representativeInformation').value,
       DeclarationInformation: this.form.get('declarationInformation').value,
       AuthorizationInformation: this.form.get('authorizationInformation').value,
@@ -765,7 +767,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
       MedicalInformation: this.form.get('medicalInformation').value as MedicalInformation,
       ExpenseInformation: this.form.get('expenseInformation').value as ExpenseInformation,
-      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value as EmploymentIncomeInformation,
+      EmploymentIncomeInformation: null as EmploymentIncomeInformation,// this.form.get('employmentIncomeInformation').value as EmploymentIncomeInformation, // No employement information in Witness applications
       RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
       DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
       AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
@@ -913,7 +915,11 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.array([]),  // This will be a collection of uploaded files
+        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
+          filename: [''], // fileName
+          body: [''], // fileData
+        }), // This will be a collection of uploaded files
+        //additionalInformationFiles: this.fb.array([]),  // This will be a collection of uploaded files
 
         wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
 
@@ -1052,5 +1058,22 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         authorizedPersonSignature: [''], //, Validators.required],
       }),
     });
+  }
+
+  onFileBundle(fileBundle: FileBundle) {
+    try {
+      // save the files submitted from the component for attachment into the submitted form.
+      const patchObject = {};
+      patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;
+      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileBundle.fileName[0]);
+      var splitValues = fileBundle.fileData[0].split(',');
+
+      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(splitValues[1]);
+
+      fileBundle = fileBundle;
+    }
+    catch (e) {
+      console.log(e);
+    }
   }
 }
