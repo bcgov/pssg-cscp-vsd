@@ -134,18 +134,18 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         }
 
         let contactMethod = parseInt(value);
-        if (contactMethod === 100000000) {
+        if (contactMethod === 2) {
           phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
           this.phoneIsRequired = true;
           this.emailIsRequired = false;
           this.addressIsRequired = false;
-        } else if (contactMethod === 100000001) {
+        } else if (contactMethod === 1) {
           emailControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
           emailConfirmControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
           this.phoneIsRequired = false;
           this.emailIsRequired = true;
           this.addressIsRequired = false;
-        } else if (contactMethod === 100000002) {
+        } else if (contactMethod === 4) {
           addressControl.setValidators([Validators.required]);
           for (let control of addressControls) {
             control.setValidators([Validators.required]);
@@ -574,7 +574,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
         occupation: [''],
 
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(100000000)]],  // Phone = 100000000, Email = 100000001, Mail = 100000002
+        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(4)]],  // Phone = 2, Email = 1, Mail = 4
 
         permissionToContactViaMethod: [false],
         agreeToCvapCommunicationExchange: [''],
