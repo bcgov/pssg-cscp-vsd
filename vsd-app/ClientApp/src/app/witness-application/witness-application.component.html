@@ -409,7 +409,7 @@
             </div>
 
             <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('victimInformation.sin')" errorMessage="Please enter SIN" [tooltipReference]="victimSinTemplate">
-              <input class="form-control sin-input" maxlength="11" type="text" formControlName="sin">
+              <input class="form-control sin-input" maxlength="9" type="text" formControlName="sin">
               <ng-template #victimSinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
             </app-field>
 

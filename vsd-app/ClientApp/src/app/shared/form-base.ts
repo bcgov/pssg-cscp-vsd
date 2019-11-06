@@ -9,7 +9,7 @@ export class FormBase {
     let formField = this.form.get(field);
     if (formField.value === null)
       return true;
-    if (field === 'personalInformation.sin')
+    if (field === 'personalInformation.sin' || field === 'victimInformation.sin')
       return this.validateSIN(formField.value);
 
     return this.form.get(field).valid || !this.form.get(field).touched;
