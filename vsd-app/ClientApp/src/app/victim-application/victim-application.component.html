@@ -1289,9 +1289,7 @@
 
             <h2 class="blue-header">Proof of Guardianship/Trusteeship</h2>
             <p>Note: If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship/trusteeship.</p>
-            <div class="file-upload-placeholder">
-              [upload functionality goes here]
-            </div>
+            <app-file-uploader-box [initialValues]="form.value.representativeInformation.additionalInformation" (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
           </section>
         </div>
         <div formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7">
