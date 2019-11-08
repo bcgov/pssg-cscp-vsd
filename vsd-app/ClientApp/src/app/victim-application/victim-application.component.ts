@@ -447,7 +447,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.currentFormStep = selectPage.selectedIndex;
   }
 
-  gotoNextStep(stepper: MatStepper): void {
+  gotoNextStep(stepper: MatStepper, emptyPage?: boolean): void {
     // when a user clicks the continue button we move them to the next part of the form
     let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
 
@@ -471,6 +471,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           console.log(formParts);
         } else {
           alert('That was a null form. Nothing to validate')
+        }
+
+        // Ensure if the page is empty that the form is valid
+        if (emptyPage != null) {
+          if (emptyPage == true) {
+            formValid = true;
+          }
         }
 
         if (formValid) {
