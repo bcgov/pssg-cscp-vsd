@@ -995,9 +995,9 @@
                   <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeGroupValidity($event)">
                   Other
                 </label>
-                <section *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true" class="pushed">
-                  <app-field label="Please specify">
-                    <input class="form-control standard" type="text" formControlName="otherSpecificExpenses">
+                <section class="pushed">
+                  <app-field label="Please provide details of your requests.">
+                    <textarea class="form-control bigger" type="text" formControlName="otherSpecificExpenses" maxlength="2000"></textarea>
                   </app-field>
                 </section>
               </app-field>
