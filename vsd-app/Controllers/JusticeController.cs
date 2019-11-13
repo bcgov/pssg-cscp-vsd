@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Gov.Cscp.VictimServices.Public.Models.Extensions;
 using System.Collections.Generic;
 using Microsoft.Rest;
+using Gov.Cscp.VictimServices.Public.JsonObjects;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -60,7 +61,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
             var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
-            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Application Save", Message = dynamicsResponse.Result };
+            var result = new { IsSuccess = dynamicsResponse.Result.Substring(0, 5) != "Error", Status = "Application Save", Message = dynamicsResponse.Result };
+            //var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Application Save", Message = dynamicsResponse.Result };
             return new JsonResult(result);
         }
         
@@ -155,11 +157,24 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 string tempResult = tuple.Item1.ToString();
 
-                DynamicsResponse dynamicsResponse = new DynamicsResponse();
-                dynamicsResponse.IsSuccess = (tempResult == "200"); // Only return true if we get a 200 back from the server
+                string tempJson = tuple.Item3.ToString();
+                tempJson = tempJson.Replace("@odata.context", "oDataContext");
 
-                dynamicsResponse.Result = tempResult;
-                dynamicsResponse.odatacontext = tuple.Item2.ToString();
+                DynamicsResponseModel deserializeJson = JsonConvert.DeserializeObject<DynamicsResponseModel>(tempJson);
+
+                DynamicsResponse dynamicsResponse = new DynamicsResponse();
+
+                dynamicsResponse.IsSuccess = deserializeJson.IsSuccess;
+                dynamicsResponse.Result = deserializeJson.Result;
+
+                if (dynamicsResponse.Result == null)
+                {
+                    dynamicsResponse.odatacontext = tempJson;
+                }
+                else
+                {
+                    dynamicsResponse.odatacontext = dynamicsResponse.Result;
+                }
 
                 return dynamicsResponse.odatacontext;
 
@@ -307,7 +322,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
         }
 
-        static async Task<Tuple<int, HttpResponseMessage>> GetDynamicsHttpClientNew(IConfiguration configuration, String model, String endPointName)
+        static async Task<Tuple<int, HttpResponseMessage, string>> GetDynamicsHttpClientNew(IConfiguration configuration, String model, String endPointName)
         {
 
             var builder = new ConfigurationBuilder()
@@ -434,12 +449,12 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     Console.Out.WriteLine(_responseString);
                     Console.Out.WriteLine(_responseContent2);
 
-                    return new Tuple<int, HttpResponseMessage>((int)_statusCode, _httpResponse2);
+                    return new Tuple<int, HttpResponseMessage, string>((int)_statusCode, _httpResponse2, _responseContent2);
                     // End of scheduled task
                 }
                 catch (Exception e)
                 {
-                    return new Tuple<int, HttpResponseMessage>(100, null);
+                    return new Tuple<int, HttpResponseMessage, string>(100, null, "Error");
                     throw new Exception(e.Message + " " + _responseContent);
                 }
 
@@ -542,7 +557,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             //var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
 
             //Console.Out.WriteLine(_responseContent2);
-            return new Tuple<int, HttpResponseMessage>(100, null);
+            return new Tuple<int, HttpResponseMessage, string>(100, null, "Error");
         }
 
 

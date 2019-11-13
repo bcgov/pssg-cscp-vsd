@@ -315,6 +315,54 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
             }
 
+            if (model.RepresentativeInformation != null)
+            {
+                if (model.RepresentativeInformation.representativeFirstName != null)
+                {
+                    if (model.RepresentativeInformation.representativeFirstName.Length > 0)
+                    {
+                        // Add the Representative information to the JSON sent to Dynamics
+                        Providercollection[] tempProviderCollection = new Providercollection[1];
+                        tempProviderCollection[0] = new Providercollection();
+                        tempProviderCollection[0].vsd_name = "On Behalf of Victim";
+                        tempProviderCollection[0].vsd_phonenumber = model.RepresentativeInformation.representativePhoneNumber;
+                        tempProviderCollection[0].vsd_alternatephonenumber = model.RepresentativeInformation.representativeAlternatePhoneNumber;
+                        tempProviderCollection[0].vsd_addressline1 = model.RepresentativeInformation.representativeAddress.line1;
+                        tempProviderCollection[0].vsd_addressline2 = model.RepresentativeInformation.representativeAddress.line2;
+                        tempProviderCollection[0].vsd_country = model.RepresentativeInformation.representativeAddress.country;
+                        tempProviderCollection[0].vsd_province = model.RepresentativeInformation.representativeAddress.province;
+                        tempProviderCollection[0].vsd_city = model.RepresentativeInformation.representativeAddress.city;
+                        tempProviderCollection[0].vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact;
+                        tempProviderCollection[0].vsd_email = model.RepresentativeInformation.representativeEmail;
+                        tempProviderCollection[0].vsd_firstname = model.RepresentativeInformation.representativeFirstName;
+                        tempProviderCollection[0].vsd_middlename = model.RepresentativeInformation.representativeMiddleName;
+                        tempProviderCollection[0].vsd_lastname = model.RepresentativeInformation.representativeLastName;
+                        tempProviderCollection[0].vsd_relationship1 = "100000000"; // TODO: This is just an assumption, looking for confirmation from Mano
+
+                        int tempProviderCount = 0;
+                        if (application.ProviderCollection == null)
+                        {
+                            tempProviderCount = 0;
+                        }
+                        else
+                        {
+                            tempProviderCount = application.ProviderCollection.Count();
+                        }
+                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                        if (application.ProviderCollection == null)
+                        {
+                            tempCombinedCollection = tempProviderCollection;
+                        }
+                        else
+                        {
+                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                        }
+                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                        application.ProviderCollection = tempCombinedCollection;
+                    }
+                }
+            }
+
             if (model.ExpenseInformation != null)
             {
                 // Build Expenses CSV String
