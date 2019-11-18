@@ -111,6 +111,8 @@ export interface ExpenseInformation {
 export interface EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime?: number;
   wereYouAtWorkAtTimeOfIncident?: number;
+  haveYouAppliedToWorkSafe?: number;
+  wsbcClaimNumber?: string;
   didYouMissWorkDueToCrime: number;
   didYouLoseWages?: number;
   areYouSelfEmployed?: number;

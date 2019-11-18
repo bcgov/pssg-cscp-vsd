@@ -7,6 +7,8 @@ import { COUNTRIES_ADDRESS_2, iCountry } from '../shared/address/country-list';
 export class EiInfoForm implements EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime: number; // 100000001==yes 100000000==no
   wereYouAtWorkAtTimeOfIncident: number; // 100000001==yes 100000000==no
+  haveYouAppliedToWorkSafe: number;
+  wsbcClaimNumber: string;
   didYouMissWorkDueToCrime: number; // 100000001==yes 100000000==no
   didYouLoseWages: number; // 100000001==yes 100000000==no
   areYouSelfEmployed: number; // 100000001==yes 100000000==no
@@ -20,6 +22,8 @@ export class EiInfoForm implements EmploymentIncomeInformation {
     if (eiInfo) {
       this.wereYouEmployedAtTimeOfCrime = eiInfo.wereYouEmployedAtTimeOfCrime || null;
       this.wereYouAtWorkAtTimeOfIncident = eiInfo.wereYouAtWorkAtTimeOfIncident || null;
+      this.haveYouAppliedToWorkSafe = eiInfo.haveYouAppliedForWorkersCompensation || null;
+      this.wsbcClaimNumber = eiInfo.workersCompensationClaimNumber || null;
       this.didYouMissWorkDueToCrime = eiInfo.didYouMissWorkDueToCrime || null;
       this.didYouLoseWages = eiInfo.didYouLoseWages || null;
       this.areYouSelfEmployed = eiInfo.areYouSelfEmployed || null;
@@ -60,8 +64,8 @@ class AddressForm implements Address {
   line2: string;
   city: string;
   postalCode: string;
-  province: string = null; // made null so option can select default
-  country: string = null;
+  province: string = 'British Columbia'; // made null so option can select default
+  country: string = 'Canada';
   constructor(address?) {
     if (address) {
       this.line1 = address.line1 || null;
