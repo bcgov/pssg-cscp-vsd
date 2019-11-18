@@ -916,7 +916,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     if (useValidation) {
       representativeFirstName.setValidators([Validators.required]);
       representativeLastName.setValidators([Validators.required]);
-      representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
+      representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(1), Validators.max(4)]);
     }
   }
   setRepresentativePreferredMethodOfContact(): void {

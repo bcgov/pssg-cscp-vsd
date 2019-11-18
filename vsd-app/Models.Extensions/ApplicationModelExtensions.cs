@@ -252,7 +252,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_country = f.employerAddress.country,
                             vsd_firstname = f.employerFirstName,
                             vsd_lastname = f.employerLastName,
-                            vsd_relationship1 = "100000005", // TODO: This is just an assumption, looking for confirmation from Mano
+                            vsd_relationship1 = "Employer", 
                         }).ToArray();
 
                         int tempProviderCount = 0;
@@ -290,7 +290,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
                     tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddressLine1;
                     tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddressLine2;
-                    tempProviderCollection[0].vsd_relationship1 = "100000000"; // TODO: This is just an assumption, looking for confirmation from Mano
+                    tempProviderCollection[0].vsd_relationship1 = "Family Doctor";
 
                     int tempProviderCount = 0;
                     if (application.ProviderCollection == null)
@@ -337,7 +337,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         tempProviderCollection[0].vsd_firstname = model.RepresentativeInformation.representativeFirstName;
                         tempProviderCollection[0].vsd_middlename = model.RepresentativeInformation.representativeMiddleName;
                         tempProviderCollection[0].vsd_lastname = model.RepresentativeInformation.representativeLastName;
-                        tempProviderCollection[0].vsd_relationship1 = "100000000"; // TODO: This is just an assumption, looking for confirmation from Mano
+                        tempProviderCollection[0].vsd_relationship1 = "Representative";
 
                         int tempProviderCount = 0;
                         if (application.ProviderCollection == null)
