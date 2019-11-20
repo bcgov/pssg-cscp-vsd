@@ -847,13 +847,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     if (typeof isChecked != 'boolean') console.log('Set injured at work should be a boolean but is not for some reason. ' + typeof isChecked);
 
     let appliedForWorkersComp = this.form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation');
+    let appliedForWorkSafeBC = this.form.get('employmentIncomeInformation.haveYouAppliedToWorkSafe');
 
     appliedForWorkersComp.clearValidators();
     appliedForWorkersComp.setErrors(null);
+    appliedForWorkSafeBC.clearValidators();
+    appliedForWorkSafeBC.setErrors(null);
 
     let useValidation = isChecked === true;
     if (useValidation) {
       appliedForWorkersComp.setValidators([Validators.required]);
+      appliedForWorkSafeBC.setValidators([Validators.required]);
     }
   }
   setMissedWorkDueToCrime(): void {

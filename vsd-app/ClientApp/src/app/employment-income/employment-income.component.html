@@ -41,7 +41,7 @@
     </div>
 
     <div class="form-group" *ngIf="eiInfo.haveYouAppliedToWorkSafe===100000001">
-      <app-field label="WorkSafe BC Claim #" [required]="true" errorMessage="Please include a WorkSafe BC Claim Number">
+      <app-field label="WorkSafe BC Claim #" [required]="true" [valid]="eiInfo.workersCompensationClaimNumber" errorMessage="Please include a WorkSafe BC Claim Number">
         <input id="workersCompensationClaimNumber" class="form-control" name="workersCompensationClaimNumber" type="text" [(ngModel)]="eiInfo.workersCompensationClaimNumber" required>
       </app-field>
     </div>
