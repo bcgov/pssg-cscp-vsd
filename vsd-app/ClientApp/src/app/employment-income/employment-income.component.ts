@@ -7,7 +7,7 @@ import { COUNTRIES_ADDRESS_2, iCountry } from '../shared/address/country-list';
 export class EiInfoForm implements EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime: number; // 100000001==yes 100000000==no
   wereYouAtWorkAtTimeOfIncident: number; // 100000001==yes 100000000==no
-  haveYouAppliedToWorkSafe: number;
+  haveYouAppliedToWorkSafe: number; // 100000001==yes 100000000==no
   wsbcClaimNumber: string;
   didYouMissWorkDueToCrime: number; // 100000001==yes 100000000==no
   didYouLoseWages: number; // 100000001==yes 100000000==no
