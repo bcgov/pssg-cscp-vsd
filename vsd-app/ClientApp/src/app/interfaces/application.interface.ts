@@ -173,7 +173,7 @@ interface Racafinformation {
   signature: string;
 }
 interface Othertreatment {
-  providerType: number;
+  providerType: string;
   providerName: string;
   providerPhoneNumber: string;
   providerAddress: Address;

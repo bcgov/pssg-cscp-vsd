@@ -532,7 +532,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   createTreatmentItem(): FormGroup {
     // make a form group for insertion into the form
     return this.fb.group({
-      providerType: [0],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
+      providerType: [''],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
       providerName: ['', Validators.required],
       providerPhoneNumber: [''],
       providerAddress: this.fb.group({

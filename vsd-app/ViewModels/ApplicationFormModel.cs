@@ -125,7 +125,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Othertreatment
     {
-        public int providerType { get; set; }
+        public string providerType { get; set; }
         public string providerName { get; set; }
         public string providerPhoneNumber { get; set; }
         public Address providerAddress { get; set; }

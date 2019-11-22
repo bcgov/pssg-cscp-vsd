@@ -892,27 +892,28 @@
                   <div>
                     <app-field label="Type of provider">
                       <label class="inline-label">
-                        <input type="radio" [value]="Specialist" name="providerType" formControlName="providerType">
+                        <input type="radio" [value]="'Specialist'" formControlName="providerType">
                         <span>Specialist</span>
                       </label>
 
                       <label class="inline-label">
-                        <input type="radio" [value]="Counsellor" name="providerType" formControlName="providerType">
+                        <input type="radio" [value]="'Counsellor'" formControlName="providerType">
                         <span>Counsellor / Psychologist</span>
                       </label>
 
                       <label class="inline-label">
-                        <input type="radio" [value]="Dentist" name="providerType" formControlName="providerType">
+                        <input type="radio" [value]="'Dentist'" formControlName="providerType">
                         <span>Dentist</span>
                       </label>
 
                       <label class="inline-label">
-                        <input type="radio" [value]="Other" name="providerType" formControlName="providerType">
+                        <input type="radio" [value]="'Other'" formControlName="providerType">
                         <span>Other</span>
                       </label>
                     </app-field>
                   </div>
 
+                  <!--<app-address-block [group]="item.get('providerAddress')" formControlName="providerAddress" [required]="true" [showChildrenAsRequired]="false"></app-address-block>-->
                   <app-address [group]="item.get('providerAddress')" [showChildrenAsRequired]="false"></app-address>
                 </div>
               </div>
