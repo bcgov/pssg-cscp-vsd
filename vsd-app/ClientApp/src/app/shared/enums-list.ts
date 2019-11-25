@@ -39,10 +39,14 @@ export class EnumHelper {
   }
 
   public PreferredMethodOfContact = {
+    // There are two drop downs being accessed by this which is why items appear twice
     0: '--',
     100000000: 'Phone Call',
     100000001: 'Email',
     100000002: 'Mail',
+    2: 'Phone Call',
+    1: 'Email',
+    4: 'Mail',
   }
 
   public ReportMadeToPolice = {
