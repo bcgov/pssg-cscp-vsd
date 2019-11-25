@@ -535,14 +535,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       providerType: [''],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
       providerName: ['', Validators.required],
       providerPhoneNumber: [''],
-      providerAddress: this.fb.group({
-        line1: [''],
-        line2: [''],
-        city: [''],
-        postalCode: [''],  // , [Validators.pattern(postalRegex)]
-        province: [{ value: 'British Columbia', disabled: false }],
-        country: [{ value: 'Canada', disabled: false }],
-      }),
+      providerAddress: [''],
+//      providerAddress: this.fb.group({
+//        line1: [''],
+//        line2: [''],
+//        city: [''],
+//        postalCode: [''],  // , [Validators.pattern(postalRegex)]
+//        province: [{ value: 'British Columbia', disabled: false }],
+//        country: [{ value: 'Canada', disabled: false }],
+//      }),
     });
   }
 

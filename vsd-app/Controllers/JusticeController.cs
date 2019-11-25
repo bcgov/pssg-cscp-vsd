@@ -61,7 +61,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
             var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
-
+            
             // Local error handler to try to give some reasonable feedback to user about what happened
             bool localSuccess = true;
             string localErrorMessage = "";
