@@ -914,7 +914,8 @@
                   </div>
 
                   <!--<app-address-block [group]="item.get('providerAddress')" formControlName="providerAddress" [required]="true" [showChildrenAsRequired]="false"></app-address-block>-->
-                  <app-address [group]="item.get('providerAddress')" [showChildrenAsRequired]="false"></app-address>
+                  <app-address-block formControlName="providerAddress"></app-address-block>
+                  <!--<app-address [group]="item.get('providerAddress')" [showChildrenAsRequired]="false"></app-address>-->
                 </div>
               </div>
               <a href="javascript:void(0);" class="btn btn-secondary" (click)="addProvider()" *ngIf="showAddProvider">Add a Provider</a>
