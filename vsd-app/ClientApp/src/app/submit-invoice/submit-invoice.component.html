@@ -229,6 +229,10 @@
                           </app-field>
                           <input class="form-control number-field" type="hidden" formControlName="sessionAmount" [value]="calculateRow(item)" readonly>
                         </div>
+                        <div style="width:20px">
+                          <app-tool-tip [trigger]="sessionDateInfo"></app-tool-tip>
+                        </div>
+                        <ng-template #sessionDateInfo><h3>Line Item: Session Date</h3><p>Only invoices with session dates within one year will be considered for payment.</p></ng-template>
                         <div class="col text-right">
                           <br />
                           <a href="javascript:void(0);" (click)="removeLineItem(i)" *ngIf="showRemoveLine">Remove</a>
