@@ -470,6 +470,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     application.Application.vsd_cvap_ifmmissedworkend = model.EmploymentIncomeInformation.daysWorkMissedEnd;
                 }
+                //TODO: Add a new field like vsd_cvap_ifmcurrentlyoffwork
+                //model.EmploymentIncomeInformation.areYouStillMissingWork;
                 application.Application.vsd_cvap_ifmlostwages = model.EmploymentIncomeInformation.didYouLoseWages;
                 if (model.EmploymentIncomeInformation.areYouSelfEmployed > 0)
                 {

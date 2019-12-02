@@ -16,6 +16,7 @@ export class EiInfoForm implements EmploymentIncomeInformation {
   haveYouAppliedForWorkersCompensation: number; // 100000001==yes 100000000==no
   daysWorkMissedStart: Date;
   daysWorkMissedEnd: Date;
+  areYouStillOffWork: number; // 100000001==yes 100000000==no
   workersCompensationClaimNumber: string;
   employers: EmployerForm[] = [];
   constructor(eiInfo?: EmploymentIncomeInformation) {
