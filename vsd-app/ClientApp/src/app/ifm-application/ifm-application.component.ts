@@ -434,7 +434,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
             else {
               // re-enable the button
               this.submitting = false;
-              this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
             }
           },
