@@ -21,6 +21,7 @@ import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
 import { FileBundle } from '../models/file-bundle';
+import { VALID } from '@angular/forms/src/model';
 
 const moment = _rollupMoment || _moment;
 
@@ -477,6 +478,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         if (emptyPage != null) {
           if (emptyPage == true) {
             formValid = true;
+            //formParts.valid = true;
           }
         }
 
@@ -700,7 +702,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     //let formIsValid = true;showValidationMessage
     // show the button as submitting and disable it
     this.submitting = true;
-    if (this.form.valid) {
+    if ((this.form.valid) || (this.form.controls.personalInformation.valid // It's OK if this.form.controls.employmentIncomeInformation.valid is not valid
+      && this.form.controls.crimeInformation.valid
+      && this.form.controls.declarationInformation.valid
+      && this.form.controls.expenseInformation.valid
+      && this.form.controls.introduction.valid
+      && this.form.controls.medicalInformation.valid
+      && this.form.controls.personalInformation.valid
+      && this.form.controls.representativeInformation.valid)) {
       this.justiceDataService.submitApplication(this.harvestForm())
         .subscribe(
           data => {
