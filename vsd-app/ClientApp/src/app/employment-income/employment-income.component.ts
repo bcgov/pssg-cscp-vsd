@@ -125,14 +125,13 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
   }
 
   validate(validationState: boolean) {
-    return true;
-    ////TODO: remove all parts that may not fit the business logic. They could have changed their mind on a flag, added an answer so a blank element that shouldn't exist does exist.
-    //if (validationState) {
-    //  // TODO: the validation state can emit when the user meets minimum requirements so this should be cleaned before sent back
-    //  this.propagateModelChange();
-    //} else {
-    //  this.valueChange.emit(null);
-    //}
+    //TODO: remove all parts that may not fit the business logic. They could have changed their mind on a flag, added an answer so a blank element that shouldn't exist does exist.
+    if (validationState) {
+      // TODO: the validation state can emit when the user meets minimum requirements so this should be cleaned before sent back
+      this.propagateModelChange();
+    } else {
+      this.valueChange.emit(null);
+    }
   }
 
 
