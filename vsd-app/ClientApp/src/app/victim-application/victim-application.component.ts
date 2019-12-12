@@ -302,7 +302,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
       }),//{ validator: this.requireCheckboxesToBeCheckedValidator }),
-      employmentIncomeInformation: [null, Validators.required],
+      employmentIncomeInformation: [null],//, Validators.required],
 
       representativeInformation: this.fb.group({
         completingOnBehalfOf: [null, [Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
