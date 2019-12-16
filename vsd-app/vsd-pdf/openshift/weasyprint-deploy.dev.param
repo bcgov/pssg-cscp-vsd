@@ -1,0 +1,15 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: vsd-pdf
+# Template File: templates/weasyprint-deploy.yaml
+#=========================================================
+# NAME=weasyprint
+# APP_NAME=vsd
+# ROLE=pdf
+# SOURCE_IMAGE_NAME=weasyprint
+# IMAGE_NAMESPACE=vsd-app
+TAG_NAME=dev
+# CPU_REQUEST=10m
+# CPU_LIMIT=1000m
+# MEMORY_REQUEST=10Mi
+# MEMORY_LIMIT=1Gi
