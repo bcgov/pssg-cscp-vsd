@@ -11,13 +11,13 @@ export GIT_REF="development"
 
 # The project components
 # - defaults to the support the Simple Project Structure
-export components=${components:-"vsd-app vsd-pdf"}
+export components="vsd-app vsd-pdf"
 
 # The builds to be triggered after buildconfigs created (not auto-triggered)
-export builds=${builds:-""}
+export builds=""
 
 # The images to be tagged after build
-export images=${images:-"vsd-app"}
+export images="vsd-app"
 
 # The routes for the project
-export routes=${routes:-""}
+export routes=""
