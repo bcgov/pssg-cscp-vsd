@@ -14,7 +14,7 @@ export GIT_REF="development"
 export components="vsd-app vsd-pdf"
 
 # The builds to be triggered after buildconfigs created (not auto-triggered)
-export builds=""
+export builds="vsd-pdf"
 
 # The images to be tagged after build
 export images="vsd-app"
