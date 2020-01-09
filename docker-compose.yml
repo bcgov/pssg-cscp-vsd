@@ -29,3 +29,11 @@ services:
       
     ports:
       - '8080:8080'
+
+  #
+  # Weasyprint server for HTML to PDF printing
+  #
+  weasyprint:
+    image: bcgovimages/weasyprint
+    ports:
+      - ${WEASYPRINT_PORT}:${WEASYPRINT_PORT}
