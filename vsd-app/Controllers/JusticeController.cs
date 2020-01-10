@@ -101,7 +101,33 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
             var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
-            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Invoice Save", Message = dynamicsResponse.Result };
+
+            // Local error handler to try to give some reasonable feedback to user about what happened
+            bool localSuccess = true;
+            string localErrorMessage = "";
+            if (dynamicsResponse.Result.Length.Equals(3))
+            {
+                if (dynamicsResponse.Result != "200")
+                {
+                    localSuccess = false;
+                    localErrorMessage = "Error Code: " + dynamicsResponse.Result;
+                }
+            }
+            else
+            {
+                if (dynamicsResponse.Result.Substring(2, 5) == "error")
+                {
+                    localSuccess = false;
+                    localErrorMessage = "Generic Dynamics Error";
+                }
+                if (dynamicsResponse.Result.Substring(0, 5) == "Error")
+                {
+                    localSuccess = false;
+                    localErrorMessage = dynamicsResponse.Result;
+                }
+            }
+            var result = new { IsSuccess = localSuccess, Status = "Application Save", Message = localErrorMessage };
+//            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Invoice Save", Message = dynamicsResponse.Result };
             return new JsonResult(result);
         }
 
