@@ -270,8 +270,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
             this.invoiceSuccess();
           }
           else {
-            this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-            console.log('Error submitting invoice');
+            this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+            console.log('Error submitting invoice. ' + data['message']);
           }
         },
         error => {

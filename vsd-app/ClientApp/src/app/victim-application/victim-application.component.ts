@@ -720,7 +720,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
               // re-enable the button
               this.submitting = false;
               this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-              console.log('Error submitting application');
+              console.log('Error submitting application. ' + data['message']);
             }
           },
           error => {
