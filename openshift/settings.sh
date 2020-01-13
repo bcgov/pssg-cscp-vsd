@@ -11,10 +11,10 @@ export GIT_REF="development"
 
 # The project components
 # - defaults to the support the Simple Project Structure
-export components="vsd-app vsd-pdf"
+export components="vsd-app weasyprint"
 
 # The builds to be triggered after buildconfigs created (not auto-triggered)
-export builds="vsd-pdf"
+export builds=""
 
 # The images to be tagged after build
 export images="vsd-app"
