@@ -4,12 +4,16 @@ import { Application } from '../interfaces/application.interface';
 import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 import { VictimRestitution } from '../interfaces/victim-restitution.interface';
 import { OffenderRestitution } from '../interfaces/offender-restitution.interface';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class JusticeApplicationDataService {
   apiPath = 'api/justice/';
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
+  });
+  weasyHeaders: HttpHeaders = new HttpHeaders({
+    'Content-Type': 'html'
   });
 
   constructor(private http: HttpClient) { }
@@ -28,6 +32,10 @@ export class JusticeApplicationDataService {
 
   public submitOffenderRestitutionApplication(offenderRestitution: OffenderRestitution) {
     return this.http.post(this.apiPath + 'submitoffenderrestitution', offenderRestitution, { headers: this.headers });
+  }
+
+  public createPDF(htmlInput: String) : Observable<any> {
+    return this.http.post('pdf?filename=myFile.pdf', "<html>Hello World</html>", { headers: this.weasyHeaders });
   }
 
   public getSampleCall() {
