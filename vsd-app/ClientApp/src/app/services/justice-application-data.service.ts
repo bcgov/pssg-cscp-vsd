@@ -35,9 +35,8 @@ export class JusticeApplicationDataService {
   }
 
   public createPDF(htmlInput: String): Observable<any> {
-    htmlInput = "<html>Hello World</html>";
+    //htmlInput = "<html>Hello World</html>";
     return this.http.post(this.apiPath + 'getweasypdf', htmlInput, { headers: this.headers });
-    //return this.http.post('http://weasyprint:5001/pdf?filename=myFile.pdf', "<html>Hello World</html>", { headers: this.weasyHeaders });
   }
 
   public getSampleCall() {

@@ -601,11 +601,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         }
 
         [HttpPost("getweasypdf")]
-        public async Task<HttpRequestMessage> GetWeasyPDF([FromBody] String htmlInput)//IConfiguration configuration, string endpointAction)
+        public async Task<HttpResponseMessage> GetWeasyPDF([FromBody] String htmlInput)
         {
-            ////public async Task<IActionResult> SubmitOffenderRestitution([FromBody] OffenderRestitutionFormModel model)
-            ///
-
             if (htmlInput is null)
             {
                 htmlInput = "<html>Goodbye World</html>";
@@ -613,14 +610,6 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             HttpClient client;
             client = new HttpClient();
-            //var Authorization = $"Bearer {token}";
-            //client.DefaultRequestHeaders.Add("Authorization", Authorization);
-            //client.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
-            //client.DefaultRequestHeaders.Add("OData-Version", "4.0");
-            //client.DefaultRequestHeaders.Add("Accept", "application/json");
-            ////client.DefaultRequestHeaders.Add("content-type", "application/json");
-            ////client.DefaultRequestHeaders.Add("Content-Type", "application/json; charset=utf-8")
-            
 
             string url = "http://weasyprint:5001/pdf?filename=myFile.pdf";
 
@@ -629,9 +618,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             var _httpResponse = await client.SendAsync(_httpRequest);
 
-
-
-            return _httpRequest;
+            return _httpResponse;
 
 
 
