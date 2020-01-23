@@ -13,7 +13,8 @@ export class JusticeApplicationDataService {
     'Content-Type': 'application/json'
   });
   weasyHeaders: HttpHeaders = new HttpHeaders({
-    'Content-Type': 'html'
+    'Content-Type': 'html',
+    'Access-Control-Allow-Origin': 'always'
   });
 
   constructor(private http: HttpClient) { }
