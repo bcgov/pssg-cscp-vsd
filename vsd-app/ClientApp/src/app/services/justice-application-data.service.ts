@@ -14,7 +14,9 @@ export class JusticeApplicationDataService {
   });
   weasyHeaders: HttpHeaders = new HttpHeaders({
     'Content-Type': 'html',
-    'Access-Control-Allow-Origin': 'always'
+    'Access-Control-Allow-Origin': 'https://vsddev.pathfinder.gov.bc.ca',
+    'Access-Control-Allow-Methods': 'POST',
+    'Origin': 'https://weasyprint:5001'
   });
 
   constructor(private http: HttpClient) { }
