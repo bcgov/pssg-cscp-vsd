@@ -600,6 +600,79 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             return new Tuple<int, HttpResponseMessage, string>(100, null, "Error");
         }
 
+        [HttpPost("getweasypdf")]
+        public async Task<HttpRequestMessage> GetWeasyPDF([FromBody] String htmlInput)//IConfiguration configuration, string endpointAction)
+        {
+            ////public async Task<IActionResult> SubmitOffenderRestitution([FromBody] OffenderRestitutionFormModel model)
+            ///
+
+            if (htmlInput is null)
+            {
+                htmlInput = "<html>Goodbye World</html>";
+            }
+
+            HttpClient client;
+            client = new HttpClient();
+            //var Authorization = $"Bearer {token}";
+            //client.DefaultRequestHeaders.Add("Authorization", Authorization);
+            //client.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
+            //client.DefaultRequestHeaders.Add("OData-Version", "4.0");
+            //client.DefaultRequestHeaders.Add("Accept", "application/json");
+            ////client.DefaultRequestHeaders.Add("content-type", "application/json");
+            ////client.DefaultRequestHeaders.Add("Content-Type", "application/json; charset=utf-8")
+            
+
+            string url = "http://weasyprint:5001/pdf?filename=myFile.pdf";
+
+            HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
+            _httpRequest.Content = new StringContent(htmlInput);//, Encoding.UTF8, "application/html");
+
+            var _httpResponse = await client.SendAsync(_httpRequest);
+
+
+
+            return _httpRequest;
+
+
+
+
+
+            //_httpRequest.Content = new StringContent(model, Encoding.UTF8, "application/json");
+            ////_httpRequest.Content = new StringContent(System.IO.File.ReadAllText(@"C:\Temp\VSD-RestSampleData3.txt"), Encoding.UTF8, "application/json");
+
+            //var _httpResponse2 = await client.SendAsync(_httpRequest);
+            //HttpStatusCode _statusCode = _httpResponse2.StatusCode;
+
+            //var _responseString = _httpResponse2.ToString();
+            //var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
+
+            //Console.Out.WriteLine(model);
+            //Console.Out.WriteLine(_responseString);
+            //Console.Out.WriteLine(_responseContent2);
+
+            //return new Tuple<int, HttpResponseMessage, string>((int)_statusCode, _httpResponse2, _responseContent2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //HttpClient httpClient;
+
+            //httpClient = new HttpClient(new HttpClientHandler { });
+            //httpClient.BaseAddress = new Uri("http://weasyprint:5001/pdf?filename=myFile.pdf");
+            //return httpClient;
+        }
 
         private static HttpClient GetDynamicsHttpClient(IConfiguration configuration, string endpointAction)
         {
