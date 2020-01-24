@@ -635,6 +635,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 var _httpResponse = await client.SendAsync(_httpRequest);
 
                 temp = await _httpResponse.Content.ReadAsStringAsync();
+                Console.WriteLine(DateTime.Now + " temp = " + temp);
             }
             catch (Exception e)
             {
