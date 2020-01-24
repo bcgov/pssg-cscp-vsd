@@ -635,7 +635,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 var _httpResponse = await client.SendAsync(_httpRequest);
 
                 temp = await _httpResponse.Content.ReadAsStringAsync();
-                Console.WriteLine(DateTime.Now + " temp = " + temp);
+                //Console.WriteLine(DateTime.Now + " temp = " + temp); // Comment this out - it just produces logs that are too big
             }
             catch (Exception e)
             {
