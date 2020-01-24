@@ -603,6 +603,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         [HttpPost("getweasypdf")]
         public async Task<String> GetWeasyPDF([FromBody] String htmlInput)
         {
+            Console.WriteLine(DateTime.Now + " Enter GetWeasyPDF");
             string temp = "";
 
             try
@@ -626,6 +627,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(DateTime.Now + " Error in GetWeasyPDF: " + e.Message);
                 string errorMsg = e.Message;
             }
             finally
