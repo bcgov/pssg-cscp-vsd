@@ -693,15 +693,24 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
 
 
-    var printContents = document.getElementById('pdfPrintGroup').innerHTML;
-    //var printContents = "<html>Hello World</html>";
+    //var printContents = document.getElementById('pdfPrintGroup').innerHTML;
+    var printContents = "<html>Hello World</html>";
 
-    var w = window.open();
-    var fileOutput = this.justiceDataService.createPDF(printContents).subscribe(() => { });
-    //var fileOutput = this.justiceDataService.createPDF(printContents);
-    w.document.write(String(fileOutput));
-    w.print();
-    w.close();
+    //var w = window.open();
+    //var fileOutput =
+      this.justiceDataService.createPDF(printContents).subscribe((response) => { // download file
+      var blob = new Blob([response.blob()], { type: 'application/pdf' });
+      const blobUrl = URL.createObjectURL(blob);
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = blobUrl;
+      document.body.appendChild(iframe);
+      iframe.contentWindow.print();
+    });
+    ////var fileOutput = this.justiceDataService.createPDF(printContents);
+    //w.document.write(String(fileOutput));
+    //w.print();
+    //w.close();
 
 
     //window.print();
