@@ -12,9 +12,6 @@ export class JusticeApplicationDataService {
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  weasyHeaders: HttpHeaders = new HttpHeaders({
-    'Content-Type': 'string'
-  });
 
   constructor(private http: HttpClient) { }
 
@@ -35,7 +32,6 @@ export class JusticeApplicationDataService {
   }
 
   public createPDF(htmlInput: String): Observable<any> {
-    //htmlInput = "<html>Hello World</html>";
     return this.http.post(this.apiPath + 'getweasypdf', htmlInput, { headers: this.headers });
   }
 

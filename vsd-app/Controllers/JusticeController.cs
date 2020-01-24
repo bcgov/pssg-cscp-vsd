@@ -605,7 +605,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             if (htmlInput is null)
             {
-                htmlInput = "<html>Goodbye World</html>";
+                htmlInput = "<html>No HTML passed</html>";
             }
 
             HttpClient client;
