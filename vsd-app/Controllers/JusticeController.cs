@@ -601,24 +601,40 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         }
 
         [HttpPost("getweasypdf")]
-        public async Task<HttpResponseMessage> GetWeasyPDF([FromBody] String htmlInput)
+        public async Task<String> GetWeasyPDF([FromBody] String htmlInput)
         {
-            if (htmlInput is null)
+            string temp = "";
+
+            try
             {
-                htmlInput = "<html>No HTML passed</html>";
+                if (htmlInput is null)
+                {
+                    htmlInput = "<html>No HTML passed</html>";
+                }
+
+                HttpClient client;
+                client = new HttpClient();
+
+                string url = "http://weasyprint:5001/pdf?filename=myFile.pdf";
+
+                HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
+                _httpRequest.Content = new StringContent(htmlInput);//, Encoding.UTF8, "application/html");
+
+                var _httpResponse = await client.SendAsync(_httpRequest);
+
+                temp = await _httpResponse.Content.ReadAsStringAsync();
             }
+            catch (Exception e)
+            {
+                string errorMsg = e.Message;
+            }
+            finally
+            {
+            }
+            return temp;
 
-            HttpClient client;
-            client = new HttpClient();
-
-            string url = "http://weasyprint:5001/pdf?filename=myFile.pdf";
-
-            HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
-            _httpRequest.Content = new StringContent(htmlInput);//, Encoding.UTF8, "application/html");
-
-            var _httpResponse = await client.SendAsync(_httpRequest);
-
-            return _httpResponse;
+            //string temp = _httpResponse.Content;
+            //return _httpResponse;
 
 
 

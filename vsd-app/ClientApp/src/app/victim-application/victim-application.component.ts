@@ -698,6 +698,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
     var w = window.open();
     var fileOutput = this.justiceDataService.createPDF(printContents).subscribe(() => { });
+    //var fileOutput = this.justiceDataService.createPDF(printContents);
     w.document.write(String(fileOutput));
     w.print();
     w.close();
