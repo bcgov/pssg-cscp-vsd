@@ -31,7 +31,7 @@ export class JusticeApplicationDataService {
     return this.http.post(this.apiPath + 'submitoffenderrestitution', offenderRestitution, { headers: this.headers });
   }
 
-  public createPDF(htmlInput: String): Observable<any> {
+  public createPDF(htmlInput: String) : Observable<any> {
     return this.http.post(this.apiPath + 'getweasypdf', htmlInput, { headers: this.headers });
   }
 
