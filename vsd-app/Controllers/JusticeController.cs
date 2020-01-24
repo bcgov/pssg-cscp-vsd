@@ -43,6 +43,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         [HttpPost("saveapplication")]
         public async Task<IActionResult> SaveApplication([FromBody] ApplicationFormModel model)
         {
+            Console.WriteLine(DateTime.Now + " Enter SaveApplication");
             if (model == null)
             {
                 if (ModelState.ErrorCount > 0)
@@ -77,12 +78,14 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             var result = new { IsSuccess = localSuccess, Status = "Application Save", Message = localErrorMessage };
             //var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Application Save", Message = dynamicsResponse.Result };
+            Console.WriteLine(DateTime.Now + " Exit SaveApplication");
             return new JsonResult(result);
         }
         
         [HttpPost("submitcounsellorinvoice")]
         public async Task<IActionResult> SubmitCounsellorInvoice([FromBody] CounsellorInvoiceFormModel model)
         {
+            Console.WriteLine(DateTime.Now + " Enter SubmitCounsellorInvoice");
             if (model == null)
             {
                 if (ModelState.ErrorCount > 0)
@@ -127,13 +130,16 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 }
             }
             var result = new { IsSuccess = localSuccess, Status = "Application Save", Message = localErrorMessage };
-//            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Invoice Save", Message = dynamicsResponse.Result };
+            //            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Invoice Save", Message = dynamicsResponse.Result };
+
+            Console.WriteLine(DateTime.Now + " Exit SubmitCounsellorInvoice");
             return new JsonResult(result);
         }
 
         [HttpPost("submitvictimrestitution")]
         public async Task<IActionResult> SubmitVictimRestitution([FromBody] VictimRestitutionFormModel model)
         {
+            Console.WriteLine(DateTime.Now + " Enter SubmitVictimRestitution");
             if (model == null)
             {
                 if (ModelState.ErrorCount > 0)
@@ -153,12 +159,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
             var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
             var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Restitution Save", Message = dynamicsResponse.Result };
+
+            Console.WriteLine(DateTime.Now + " Exit SubmitVictimRestitution");
             return new JsonResult(result);
         }
 
         [HttpPost("submitoffenderrestitution")]
         public async Task<IActionResult> SubmitOffenderRestitution([FromBody] OffenderRestitutionFormModel model)
         {
+            Console.WriteLine(DateTime.Now + " Enter SubmitOffenderRestitution");
             if (model == null)
             {
                 if (ModelState.ErrorCount > 0)
@@ -177,6 +186,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
             var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Restitution Save", Message = dynamicsResponse.Result };
+
+            Console.WriteLine(DateTime.Now + " Exit SubmitOffenderRestitution");
             return new JsonResult(result);
         }
 
@@ -633,50 +644,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             finally
             {
             }
+
+            Console.WriteLine(DateTime.Now + " Exit GetWeasyPDF");
             return temp;
-
-            //string temp = _httpResponse.Content;
-            //return _httpResponse;
-
-
-
-
-
-            //_httpRequest.Content = new StringContent(model, Encoding.UTF8, "application/json");
-            ////_httpRequest.Content = new StringContent(System.IO.File.ReadAllText(@"C:\Temp\VSD-RestSampleData3.txt"), Encoding.UTF8, "application/json");
-
-            //var _httpResponse2 = await client.SendAsync(_httpRequest);
-            //HttpStatusCode _statusCode = _httpResponse2.StatusCode;
-
-            //var _responseString = _httpResponse2.ToString();
-            //var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
-
-            //Console.Out.WriteLine(model);
-            //Console.Out.WriteLine(_responseString);
-            //Console.Out.WriteLine(_responseContent2);
-
-            //return new Tuple<int, HttpResponseMessage, string>((int)_statusCode, _httpResponse2, _responseContent2);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //HttpClient httpClient;
-
-            //httpClient = new HttpClient(new HttpClientHandler { });
-            //httpClient.BaseAddress = new Uri("http://weasyprint:5001/pdf?filename=myFile.pdf");
-            //return httpClient;
         }
 
         private static HttpClient GetDynamicsHttpClient(IConfiguration configuration, string endpointAction)
