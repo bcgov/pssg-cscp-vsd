@@ -16,6 +16,7 @@ using Gov.Cscp.VictimServices.Public.Models.Extensions;
 using System.Collections.Generic;
 using Microsoft.Rest;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
+using Gov.Cscp.VictimServices.Public.Utils;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -61,27 +62,12 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             t.Wait();
 
             string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
-            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
-            
-            // Local error handler to try to give some reasonable feedback to user about what happened
-            bool localSuccess = true;
-            string localErrorMessage = "";
-            if (dynamicsResponse.Result.Substring(2, 5) == "error")
-            {
-                localSuccess = false;
-                localErrorMessage = "Generic Dynamics Error";
-            }
-            if (dynamicsResponse.Result.Substring(0, 5) == "Error")
-            {
-                localSuccess = false;
-                localErrorMessage = dynamicsResponse.Result;
-            }
-            var result = new { IsSuccess = localSuccess, Status = "Application Save", Message = localErrorMessage };
-            //var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Application Save", Message = dynamicsResponse.Result };
+            var result = InterfaceUtilities.ReturnErrorMessaging(tempString);
+
             Console.WriteLine(DateTime.Now + " Exit SaveApplication");
             return new JsonResult(result);
         }
-        
+
         [HttpPost("submitcounsellorinvoice")]
         public async Task<IActionResult> SubmitCounsellorInvoice([FromBody] CounsellorInvoiceFormModel model)
         {
@@ -103,34 +89,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             t.Wait();
 
             string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
-            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
-
-            // Local error handler to try to give some reasonable feedback to user about what happened
-            bool localSuccess = true;
-            string localErrorMessage = "";
-            if (dynamicsResponse.Result.Length.Equals(3))
-            {
-                if (dynamicsResponse.Result != "200")
-                {
-                    localSuccess = false;
-                    localErrorMessage = "Error Code: " + dynamicsResponse.Result;
-                }
-            }
-            else
-            {
-                if (dynamicsResponse.Result.Substring(2, 5) == "error")
-                {
-                    localSuccess = false;
-                    localErrorMessage = "Generic Dynamics Error";
-                }
-                if (dynamicsResponse.Result.Substring(0, 5) == "Error")
-                {
-                    localSuccess = false;
-                    localErrorMessage = dynamicsResponse.Result;
-                }
-            }
-            var result = new { IsSuccess = localSuccess, Status = "Application Save", Message = localErrorMessage };
-            //            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Invoice Save", Message = dynamicsResponse.Result };
+            var result = InterfaceUtilities.ReturnErrorMessaging(tempString);
 
             Console.WriteLine(DateTime.Now + " Exit SubmitCounsellorInvoice");
             return new JsonResult(result);
@@ -157,8 +116,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             t.Wait();
 
             string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
-            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
-            var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Restitution Save", Message = dynamicsResponse.Result };
+            var result = InterfaceUtilities.ReturnErrorMessaging(tempString);
+            //var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
+            //var result = new { IsSuccess = dynamicsResponse.IsCompletedSuccessfully, Status = "Restitution Save", Message = dynamicsResponse.Result };
 
             Console.WriteLine(DateTime.Now + " Exit SubmitVictimRestitution");
             return new JsonResult(result);
@@ -184,8 +144,10 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             var t = Task.Run(() => CreateOffenderRestitutionAction(_configuration, model));
             t.Wait();
 
-            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
-            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Restitution Save", Message = dynamicsResponse.Result };
+            //var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
+            string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
+            var result = InterfaceUtilities.ReturnErrorMessaging(tempString);
+//            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Restitution Save", Message = dynamicsResponse.Result };
 
             Console.WriteLine(DateTime.Now + " Exit SubmitOffenderRestitution");
             return new JsonResult(result);
