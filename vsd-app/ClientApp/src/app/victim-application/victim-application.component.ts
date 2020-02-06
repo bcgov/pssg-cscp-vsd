@@ -700,7 +700,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     //var fileOutput =
       this.justiceDataService.createPDF(printContents).subscribe((response) => { // download file
         var mediaType = 'application/pdf';
-        var blob = new Blob([response._body], { type: mediaType });
+        //var blob = new Blob([response._body], { type: mediaType });
+        var blob = new Blob([response], { type: mediaType });
+        //var blob = new Blob([JSON.stringify(response)], { type: mediaType });
         const blobUrl = URL.createObjectURL(blob);
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
