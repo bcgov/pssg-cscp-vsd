@@ -574,7 +574,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         }
 
         [HttpPost("getweasypdf")]
-        public async Task<String> GetWeasyPDF([FromBody] String htmlInput)
+        public async Task<IActionResult> GetWeasyPDF([FromBody] string htmlInput)
+        //public async Task<string> GetWeasyPDF([FromBody] string htmlInput)
         {
             Console.WriteLine(DateTime.Now + " Enter GetWeasyPDF");
             string temp = "";
@@ -589,7 +590,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 HttpClient client;
                 client = new HttpClient();
 
-                string url = "http://weasyprint:5001/pdf?filename=myFile.pdf";
+                //string url = "http://weasyprint:5001/pdf?filename=myFile.pdf";
+                string url = "http://localhost:5001/pdf?filename=myFile.pdf";
 
                 HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
                 _httpRequest.Content = new StringContent(htmlInput);//, Encoding.UTF8, "application/html");
@@ -609,7 +611,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
 
             Console.WriteLine(DateTime.Now + " Exit GetWeasyPDF");
-            return temp;
+            return new JsonResult(temp);
+            //return new JsonResult("<html>No HTML passed</html>");
         }
 
         private static HttpClient GetDynamicsHttpClient(IConfiguration configuration, string endpointAction)
