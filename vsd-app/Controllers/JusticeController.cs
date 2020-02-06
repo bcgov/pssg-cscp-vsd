@@ -579,6 +579,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             Console.WriteLine(DateTime.Now + " Enter GetWeasyPDF");
             string temp = "";
+            //byte[] tempByte = null;
 
             try
             {
@@ -590,14 +591,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 HttpClient client;
                 client = new HttpClient();
 
-                //string url = "http://weasyprint:5001/pdf?filename=myFile.pdf";
-                string url = "http://localhost:5001/pdf?filename=myFile.pdf";
+                string url = "http://weasyprint:5001/pdf?filename=myFile.pdf";
+                //string url = "http://localhost:5001/pdf?filename=myFile.pdf";
 
                 HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
                 _httpRequest.Content = new StringContent(htmlInput);//, Encoding.UTF8, "application/html");
 
                 var _httpResponse = await client.SendAsync(_httpRequest);
 
+                //tempByte = await _httpResponse.Content.ReadAsByteArrayAsync();//   .ReadAsStringAsync();
                 temp = await _httpResponse.Content.ReadAsStringAsync();
                 //Console.WriteLine(DateTime.Now + " temp = " + temp); // Comment this out - it just produces logs that are too big
             }
