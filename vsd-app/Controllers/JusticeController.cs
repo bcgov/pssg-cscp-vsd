@@ -579,7 +579,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             Console.WriteLine(DateTime.Now + " Enter GetWeasyPDF");
             string temp = "";
-            //byte[] tempByte = null;
+            //Byte[] tempByte = null;
 
             try
             {
@@ -600,7 +600,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 var _httpResponse = await client.SendAsync(_httpRequest);
 
                 //tempByte = await _httpResponse.Content.ReadAsByteArrayAsync();//   .ReadAsStringAsync();
+                //tempByte = await _httpResponse.Content.ReadAsStreamAsync();    
+
+
                 temp = await _httpResponse.Content.ReadAsStringAsync();
+
                 //Console.WriteLine(DateTime.Now + " temp = " + temp); // Comment this out - it just produces logs that are too big
             }
             catch (Exception e)
@@ -613,7 +617,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
 
             Console.WriteLine(DateTime.Now + " Exit GetWeasyPDF");
-            return new JsonResult(temp);
+            return new JsonResult(temp); // This actually gets to the next phase
+
+            //return tempByte;
+
+            //return new ObjectResult(tempByte); // For some reason this does not get to the next phase (error)
+
+            //return File(temp, "application/pdf");
+
+            //return new JsonResult(tempByte);
             //return new JsonResult("<html>No HTML passed</html>");
         }
 

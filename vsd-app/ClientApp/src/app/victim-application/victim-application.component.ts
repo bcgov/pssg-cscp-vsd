@@ -692,9 +692,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     //var doc = new jsPDF;
 
 
-
-    //var printContents = document.getElementById('pdfPrintGroup').innerHTML;
-    var printContents = "<html>Hello World</html>";
+    var printContents = document.getElementById('pdfPrintGroup').innerHTML;
+    //var printContents = "<html>Hello World</html>";
 
     //var w = window.open();
     //var fileOutput =
