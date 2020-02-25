@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using Microsoft.Rest;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
 using Gov.Cscp.VictimServices.Public.Utils;
+using System.IO;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -595,7 +596,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 //string url = "http://localhost:5001/pdf?filename=myFile.pdf";
 
                 HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
-                _httpRequest.Content = new StringContent(htmlInput);//, Encoding.UTF8, "application/html");
+                _httpRequest.Content = new StringContent(htmlInput, Encoding.ASCII, "application/html");
 
                 var _httpResponse = await client.SendAsync(_httpRequest);
 
@@ -617,6 +618,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
 
             Console.WriteLine(DateTime.Now + " Exit GetWeasyPDF");
+
+            
+            
             return new JsonResult(temp); // This actually gets to the next phase
 
             //return tempByte;
