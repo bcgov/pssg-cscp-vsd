@@ -22,6 +22,7 @@ import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
 import { FileBundle } from '../models/file-bundle';
 import { VALID } from '@angular/forms/src/model';
+import { window } from 'ngx-bootstrap';
 
 const moment = _rollupMoment || _moment;
 
@@ -692,19 +693,74 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     //var doc = new jsPDF;
 
 
-    var printContents = document.getElementById('pdfPrintGroup').innerHTML;
-    //var printContents = "<html>Hello World</html>";
+    //var printContents = document.getElementById('pdfPrintGroup').innerHTML;
+    var printContents = "<html>Hello World</html>";
 
     //var w = window.open();
     //var fileOutput =
-      this.justiceDataService.createPDF(printContents).subscribe((response) => { // download file
+      this.justiceDataService.createPDF(printContents).subscribe(response => { // download file
         var mediaType = 'application/pdf';
-        //var blob = new Blob([response._body], { type: mediaType });
+        console.log(response);
+        ////var blob = new Blob([response._body], { type: mediaType });
+
+
+        ////=============
+        ////const byteCharacters = btoa(response);
+        ////const byteNumbers = new Array(byteCharacters.length);
+        //const byteNumbers = new Array(response.length);
+        //for (let i = 0; i < response.length; i++) {
+        //  byteNumbers[i] = response.charCodeAt(i);
+        //}
+        //const byteArray = new Uint8Array(byteNumbers);
+        //const blob = new Blob([byteArray], { type: mediaType });
+        //window.open(URL.createObjectURL(blob));
+        ////=============
+
+
+
+        ////=============
+        //const a = document.createElement("a");
+        ////let pdfWindow = window.open("")
+        ////pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(btoa(response)) + "'></iframe>")
+        //a.href = "data:application/pdf," + response;
+        ////a.href = "data:application/pdf;base64," + response.message;
+        //a.download = "file.pdf";
+        //document.body.appendChild(a);
+        //a.click();
+        ////=============
+
+
+
+        //=============
+        //let newResponse: string = response;
         var blob = new Blob([response], { type: mediaType });
-        //saveAs(blob, "myPDF.pdf");
-        //var blob = new Blob([JSON.stringify(response)], { type: mediaType });
-        const blobUrl = URL.createObjectURL(blob);
+        console.log(blob);
+        ////saveAs(blob, "myPDF.pdf");
+        ////var blob = new Blob([JSON.stringify(response)], { type: mediaType });
+        var blobUrl = URL.createObjectURL(blob);
         window.open(blobUrl);
+        //window.open(URL.createObjectURL(blob));
+        //=============
+
+
+        ////=============
+        //var blob = new Blob([response], { type: mediaType }),
+        //  url = URL.createObjectURL(blob),
+        //  _iFrame = document.createElement('iframe');
+
+        //_iFrame.setAttribute('src', url);
+        ////_iFrame.setAttribute('style', 'visibility:hidden;');
+        //window.open(url);
+        ////$('#someDiv').append(_iFrame);
+        ////=============
+
+
+        //=======
+        //var newFile = new File(response, 'tempOut.pdf');
+        //const blobUrl = URL.createObjectURL(newFile);
+        //window.open(blobUrl);
+        //=======
+
         //const iframe = document.createElement('iframe');
         //iframe.style.display = 'none';
         //iframe.src = blobUrl;
