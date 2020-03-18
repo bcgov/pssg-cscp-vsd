@@ -2,7 +2,7 @@
   <div class="form-row">
     <div class="col">
       <app-field label="File Name" [required]="required" [valid]=" !(fileName.invalid && (fileName.dirty||fileName.touched))">
-        <input #fileName formControlName="fileName" id="fileName" class="form-control" name="fileName" type="text" [required]="required" contenteditable="false">
+        <input #fileName formControlName="fileName" id="fileName" class="form-control" name="fileName" type="text" contenteditable="false">
       </app-field>
     </div>
     <div class="col">
