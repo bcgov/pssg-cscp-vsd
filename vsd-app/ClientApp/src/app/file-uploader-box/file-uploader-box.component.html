@@ -8,14 +8,16 @@
 </div>
 <div class="row mt-2">
   <div class="col">
-    <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical">
-    <mat-chip *ngFor="let fileName of fileCollection.fileName; let i=index" [selectable]="true"
-              [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
-      {{fileName}}
-      <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip>
-    <input title="Description" formControlName="fileDescription" id="fileDescription" class="form-control" name="fileDescription" type="text">
-  </mat-chip-list>
+    <mat-chip-list>
+      <mat-chip *ngFor="let fileName of fileCollection.fileName; let i=index" [selectable]="true"
+                [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
+        {{fileName}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <!--This is not working so need to figure out how to get description to go with file upload-->
+      <!--<input #tempInputBox title="Description" formControlName="fileDescription" id="fileDescription" class="form-control" name="fileDescription" type="text">-->
+      <!--<app-filename-block #filenameBlock *ngFor="let fileName of fileCollection.fileName; let i=index" formControlName="filenameBlock"></app-filename-block>-->
+    </mat-chip-list>
   </div>
 </div>
 <!-- TODO: Remove this debugging. -->

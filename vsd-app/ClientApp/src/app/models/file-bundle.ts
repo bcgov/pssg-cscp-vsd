@@ -2,6 +2,8 @@
 export interface FileBundle {
   // list of file names (same order as file array)
   fileName: string[];
+  // description of the file (could be nothing)
+  fileDescription: string[];
   // base64 encoded file turned into a string
   fileData: string[];
 }
