@@ -1,7 +1,7 @@
 <div [formGroup]="filenameForm">
   <div class="form-row">
     <div class="col">
-      <app-field label="File Name" [required]="required" [valid]=" !(fileName.invalid && (fileName.dirty||fileName.touched))">
+      <app-field label="File Name" [valid]=" !(fileName.invalid && (fileName.dirty||fileName.touched))">
         <input #fileName formControlName="fileName" id="fileName" class="form-control" name="fileName" type="text" contenteditable="false">
       </app-field>
     </div>
