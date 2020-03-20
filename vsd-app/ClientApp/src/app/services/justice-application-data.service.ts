@@ -10,6 +10,10 @@ import { Binary } from 'selenium-webdriver/firefox';
 @Injectable()
 export class JusticeApplicationDataService {
   apiPath = 'api/justice/';
+  //headers: HttpHeaders = new HttpHeaders({
+  //  'Content-Type': 'application/json',
+  //  'Access-Control-Allow-Origin' : 'http://localhost:59451'
+  //});
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   });
