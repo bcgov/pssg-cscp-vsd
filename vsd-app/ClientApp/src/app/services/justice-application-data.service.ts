@@ -10,10 +10,10 @@ import { Binary } from 'selenium-webdriver/firefox';
 @Injectable()
 export class JusticeApplicationDataService {
   apiPath = 'api/justice/';
-  //headers: HttpHeaders = new HttpHeaders({
-  //  'Content-Type': 'application/json',
+  pdfHeaders: HttpHeaders = new HttpHeaders({
+    'Content-Type': 'application/json;charset=UTF-8',
   //  'Access-Control-Allow-Origin' : 'http://localhost:59451'
-  //});
+  });
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   });
@@ -37,7 +37,7 @@ export class JusticeApplicationDataService {
   }
 
   public createPDF(htmlInput: String): Observable<any> {
-    return this.http.post<any>(this.apiPath + 'getweasypdf', htmlInput, { headers: this.headers });
+    return this.http.post<any>(this.apiPath + 'getweasypdf', htmlInput, { headers: this.pdfHeaders });
   }
 
   public getSampleCall() {

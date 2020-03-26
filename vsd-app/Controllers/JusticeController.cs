@@ -587,7 +587,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (htmlInput is null)
                 {
-                    htmlInput = "<html>No HTML passed</html>";
+                    htmlInput = "<!DOCTYPE html><html>No HTML passed</html>";
                 }
 
                 HttpClient client;
@@ -597,8 +597,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 //string url = "http://localhost:5001/pdf?filename=myFile.pdf";
 
                 HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
+                _httpRequest.Headers.Add("AcceptCharset", "UTF-8");
+                _httpRequest.Headers.Add("AcceptEncoding", "UTF-8");
+                //_httpRequest.Headers.Add("Content-Type", "application/json;charset=UTF-8");
                 _httpRequest.Content = new StringContent(htmlInput, Encoding.ASCII, "application/html");
-                
+
 
                 var _httpResponse = await client.SendAsync(_httpRequest);
 
@@ -621,8 +624,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             Console.WriteLine(DateTime.Now + " Exit GetWeasyPDF");
 
-            
-            
+
+
             return new JsonResult(temp); // This actually gets to the next phase
             //return new JsonResult(tempResponse.Content.ReadAsStringAsync()); // This actually gets to the next phase
 
