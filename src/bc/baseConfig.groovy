@@ -6,7 +6,7 @@ class baseConfig {
   public static final int WAIT_TIMEOUT = 10
 
   // Deployment Environment TAGs
-  public static final String[] DEPLOYMENT_ENVIRONMENT_TAGS = ['dev', 'bc-test', 'bc-prod']
+  public static final String[] DEPLOYMENT_ENVIRONMENT_TAGS = ['bc-test']
 
   // The name of the project namespace(s).
   public static final String  NAME_SPACE = 'devex-von-bc-tob'
@@ -15,5 +15,5 @@ class baseConfig {
   public static final String  SUFFIX = '-indy-cat'
 
   // Apps - Listed in the order they should be tagged
-  public static final String[] APPS = ['db', 'search-engine', 'msg-queue', 'frontend', 'agent', 'backup', 'schema-spy', 'api']
+  public static final String[] APPS = ['agent', 'api']
 }
