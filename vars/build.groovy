@@ -6,12 +6,12 @@ void call(OpenShiftDSL openshift, String buildConfigName, int waitTimeout = 10, 
 
   // Find all of the build configurations associated to the application ...
   echo "Looking up build configurations for ${buildConfigName} ..."
-  def buildconfigs = openshift.selector("bc", "${buildConfigName}")
+  def buildconfigs = openshift.selector("vsd", "${buildConfigName}")
   echo "Found ${buildconfigs.count()} buildconfigs: ${buildconfigs.names()}"
 
   // Inject environment variables into the build as needed ...
   if (envVars?.trim()) {
-    echo "Setting environment variables on bc/${buildConfigName} ..."
+    echo "Setting environment variables on vsd/${buildConfigName} ..."
     echo "envVars: ${envVars}"
     buildconfigs.set("env bc/${buildConfigName} ${envVars}")
   }
