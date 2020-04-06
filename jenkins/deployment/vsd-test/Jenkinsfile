@@ -2,7 +2,7 @@ def PIPELINE_NAME = "deployment/vsd-test"
 
 def LIB_NAME= "vsd-lib"
 def LIB_REPO = "https://github.com/bcgov/pssg-cscp-vsd.git"
-def LIB_BRANCH = "master"
+def LIB_BRANCH = "development"
 library identifier: "${LIB_NAME}@${LIB_BRANCH}", 
         retriever: modernSCM(
           [$class: 'GitSCMSource',
