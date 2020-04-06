@@ -12,8 +12,10 @@ library identifier: "${LIB_NAME}@${LIB_BRANCH}",
 echo "Finished library"
 
 node {
+  echo "in Node"
   def config = load "../workspace@script/jenkins/${PIPELINE_NAME}/config.groovy"
-
+  echo "done with config"
+        
   config.APPS.each { appName ->
     stage("Deploying ${appName} to ${config.DESTINATION_TAG}") {
       script {
