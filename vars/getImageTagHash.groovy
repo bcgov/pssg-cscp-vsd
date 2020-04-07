@@ -2,6 +2,7 @@ import com.openshift.jenkins.plugins.OpenShiftDSL;
 
 String call(OpenShiftDSL openshift, String imageName, String tag = "") {
 
+  echo "getImageTagHash"
   if(!tag?.trim()) {
     tag = "latest"
   }
