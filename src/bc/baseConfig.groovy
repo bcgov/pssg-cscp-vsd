@@ -9,10 +9,10 @@ class baseConfig {
   public static final String[] DEPLOYMENT_ENVIRONMENT_TAGS = ['bc-test']
 
   // The name of the project namespace(s).
-  public static final String  NAME_SPACE = 'pssg-cscp'
+  public static final String  NAME_SPACE = 'pssg-cscp-vsd'
 
   // Instance Suffix
-  public static final String  SUFFIX = '-vsd'
+  public static final String  SUFFIX = '-tools'
 
   // Apps - Listed in the order they should be tagged
   public static final String[] APPS = ['agent', 'api']
