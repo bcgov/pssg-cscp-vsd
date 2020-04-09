@@ -1,4 +1,4 @@
-def PIPELINE_NAME = "deployment/sample-pipeline"
+def PIPELINE_NAME = "deployment/bc-test"
 
 def LIB_NAME= "vsd-lib"
 def LIB_REPO = "https://github.com/bcgov/pssg-cscp-vsd.git"
