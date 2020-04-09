@@ -5,10 +5,8 @@ def LIB_REPO = "https://github.com/bcgov/pssg-cscp-vsd.git"
 def LIB_BRANCH = "development"
 echo "Did all def tasks"
 library identifier: "${LIB_NAME}@${LIB_BRANCH}", 
-        retriever: modernSCM(
-          [$class: 'GitSCMSource',
-          remote: "${LIB_REPO}",
-          branches: [[name: "*/${LIB_BRANCH}"]]])  
+        retriever: http(
+                httpURL: "${LIB_REPO}")  
 echo "Finished library"
 
 node {
