@@ -15,5 +15,5 @@ class baseConfig {
   public static final String  SUFFIX = '-tools'
 
   // Apps - Listed in the order they should be tagged
-  public static final String[] APPS = ['api']
+  public static final String[] APPS = []
 }
