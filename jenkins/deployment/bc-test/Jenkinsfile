@@ -14,6 +14,7 @@ node {
   def config = load "../workspace@script/jenkins/${PIPELINE_NAME}/config.groovy"
         
   config.APPS.each { appName ->
+    echo "Deploying ${appName} to ${config.DESTINATION_TAG}"
     stage("Deploying ${appName} to ${config.DESTINATION_TAG}") {
       script {
         openshift.withCluster() {
