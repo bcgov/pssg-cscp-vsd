@@ -2,7 +2,7 @@ void call(String appName, String appSuffix, String namespace, String envTag) {
   openshift.withCluster() {
     openshift.withProject() {
 
-      echo "Tagging ${appName} for deployment to ${envTag} ..."
+      echo "JT: Tagging ${appName} for deployment to ${envTag} ..."
 
       // Don't tag with BUILD_ID so the pruner can do it's job; it won't delete tagged images.
       // Tag the images for deployment based on the image's hash
