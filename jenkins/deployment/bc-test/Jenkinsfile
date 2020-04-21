@@ -21,9 +21,13 @@ node {
             echo "JTT: Tagging ${appName}:${config.SOURCE_TAG} for deployment to ${config.DESTINATION_TAG} ..."
             openshift.tag("${appName}:${config.SOURCE_TAG}", "${appName}:${config.DESTINATION_TAG}")
           }
+                echo "JTT: Out one bracket"
         }
+              echo "JTT: Out two bracket"
       }
+            echo "JTT: Out three bracket"
     }
+          echo "JTT: Out four bracket"
   }
         echo "JTT: Leaving bc-test"
 }
