@@ -18,7 +18,7 @@ node {
       script {
         openshift.withCluster() {
           openshift.withProject() {
-            echo "Tagging ${appName}:${config.SOURCE_TAG} for deployment to ${config.DESTINATION_TAG} ..."
+            echo "JTT: Tagging ${appName}:${config.SOURCE_TAG} for deployment to ${config.DESTINATION_TAG} ..."
             openshift.tag("${appName}:${config.SOURCE_TAG}", "${appName}:${config.DESTINATION_TAG}")
           }
         }
