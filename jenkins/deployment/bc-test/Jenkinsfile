@@ -3,18 +3,15 @@ def PIPELINE_NAME = "deployment/bc-test"
 def LIB_NAME= "vsd-lib"
 def LIB_REPO = "https://github.com/bcgov/pssg-cscp-vsd.git"
 def LIB_BRANCH = "development"
-echo "Did all def tasks"
+
 library identifier: "${LIB_NAME}@${LIB_BRANCH}", 
         retriever: modernSCM(
           [$class: 'GitSCMSource',
           remote: "${LIB_REPO}",
           branches: [[name: "*/${LIB_BRANCH}"]]])  
-echo "Finished library"
 
 node {
-  echo "in Node"
   def config = load "../workspace@script/jenkins/${PIPELINE_NAME}/config.groovy"
-  echo "done with config"
         
   config.APPS.each { appName ->
     stage("Deploying ${appName} to ${config.DESTINATION_TAG}") {
