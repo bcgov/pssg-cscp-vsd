@@ -25,4 +25,5 @@ node {
       }
     }
   }
+        echo "JTT: Leaving bc-test"
 }
