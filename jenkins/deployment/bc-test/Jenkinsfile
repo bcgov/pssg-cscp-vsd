@@ -28,9 +28,9 @@ node {
   }
   stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[0]}") {
     script {
-      deploy("vsd-app",
-             "latest",
+      deploy("vsd",
+             "-app",
              "dev",
-             "latest")
+             "")
     }
   }}
