@@ -28,7 +28,7 @@ node {
   }
   stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[0]}") {
     script {
-      deploy("pssg-cscp-vsd",
+      deploy("vsd",
              "",
              "dev",
              "latest")
