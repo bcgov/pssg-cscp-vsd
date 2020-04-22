@@ -8,7 +8,9 @@ void call(String appName, String appSuffix, String namespace, String envTag) {
       // Tag the images for deployment based on the image's hash
       def IMAGE_HASH = getImageTagHash(openshift, "${appName}")
       echo "IMAGE_HASH: ${IMAGE_HASH}"
+      echo "JT(VDG): Tagging: ${appName}@${IMAGE_HASH} / ${appName}:${envTag}"
       openshift.tag("${appName}@${IMAGE_HASH}", "${appName}:${envTag}")
+      echo "JT(VDG): Finished tagging"
     }
 
     echo "Watching rollout of ${appName}${appSuffix} in ${namespace}-${envTag} ..."
