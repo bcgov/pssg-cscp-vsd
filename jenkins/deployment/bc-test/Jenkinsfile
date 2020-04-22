@@ -31,6 +31,6 @@ node {
       deploy("vsd",
              "-app",
              "dev",
-             "")
+             "latest")
     }
   }}
