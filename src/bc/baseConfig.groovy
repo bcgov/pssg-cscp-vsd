@@ -6,7 +6,7 @@ class baseConfig {
   public static final int WAIT_TIMEOUT = 10
 
   // Deployment Environment TAGs
-  public static final String[] DEPLOYMENT_ENVIRONMENT_TAGS = ['dev', 'bc-test', 'bc-prod']
+  public static final String[] DEPLOYMENT_ENVIRONMENT_TAGS = ['latest', 'bc-test', 'bc-prod']
 
   // The name of the project namespace(s).
   public static final String  NAME_SPACE = 'pssg-cscp-vsd'
