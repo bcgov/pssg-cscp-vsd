@@ -3,6 +3,7 @@ def PIPELINE_NAME = "vsd"
 def LIB_NAME= "vsd-lib"
 def LIB_REPO = "https://github.com/bcgov/pssg-cscp-vsd.git"
 def LIB_BRANCH = "development"
+echo "Entering jenkins/vsd"
 library identifier: "${LIB_NAME}@${LIB_BRANCH}", 
         retriever: modernSCM(
           [$class: 'GitSCMSource',
@@ -25,6 +26,7 @@ node {
     }
   }
 
+        echo "about to deploy jenkins/vsd"
   stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[0]}") {
     script {
       deploy("${config.APP_NAME}",
