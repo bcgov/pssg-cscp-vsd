@@ -26,11 +26,12 @@ node {
       }
     }
   }
-  stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[0]}") {
-    script {
-      deploy("vsd",
-             "",
-             "dev",
-             "latest")
-    }
-  }}
+//  stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[0]}") {
+//    script {
+//      deploy("vsd",
+//             "",
+//             "dev",
+//             "latest")
+//    }
+//  }
+}
