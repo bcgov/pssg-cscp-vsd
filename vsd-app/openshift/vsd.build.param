@@ -1,0 +1,20 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: templates/vsd/vsd.build.json
+#=========================================================
+NAME=vsd.build
+GIT_REPO_URL=https://github.com/WillWeinzettl/pssg-cscp-vsd/
+GIT_REF=master
+SOURCE_CONTEXT_DIR=
+SOURCE_IMAGE_KIND=DockerImage
+SOURCE_IMAGE_NAME=registry.access.redhat.com/dotnet/dotnet-21-rhel7
+SOURCE_IMAGE_TAG=latest
+DOTNET_STARTUP_PROJECT=vsd-app/vsd-app.csproj
+OUTPUT_IMAGE_TAG=latest
+CPU_LIMIT=1
+MEMORY_LIMIT=6Gi
+CPU_REQUEST=1
+MEMORY_REQUEST=4Gi
+UAT_BUILD=
+PROD_BUILD=
