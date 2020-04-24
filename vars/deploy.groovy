@@ -14,8 +14,8 @@ void call(String appName, String appSuffix, String namespace, String envTag) {
     }
 
     echo "Watching rollout of ${appName}${appSuffix} in ${namespace}-${envTag} ..."
-    //openshift.withProject("${namespace}-${envTag}") {
-    openshift.withProject("${namespace}") {
+    openshift.withProject("${namespace}-${envTag}") {
+    //openshift.withProject("${namespace}") {
         def dc = openshift.selector('dc', "${appName}${appSuffix}")
         //def dc = openshift.selector('dc', "vsd")
         // Wait for the deployment to complete.
