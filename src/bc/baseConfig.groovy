@@ -12,7 +12,7 @@ class baseConfig {
   public static final String  NAME_SPACE = 'pssg-cscp-vsd'
 
   // Instance Suffix
-  public static final String  SUFFIX = '-tools'
+  public static final String  SUFFIX = ''
 
   // Apps - Listed in the order they should be tagged
   public static final String[] APPS = ['vsd']
