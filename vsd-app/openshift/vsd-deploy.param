@@ -1,0 +1,30 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: templates/vsd/vsd-deploy.json
+#=========================================================
+NAME=vsd
+SOURCE_IMAGE_NAME=vsd
+IMAGE_NAMESPACE=-tools
+TAG_NAME=dev
+ASPNETCORE_ENVIRONMENT=Production
+CPU_LIMIT=1
+MEMORY_LIMIT=4Gi
+CPU_REQUEST=100m
+MEMORY_REQUEST=2Gi
+SITEMINDER_APPLICATION_DOMAIN=vsd-app-dev.pathfinder.bcgov
+APPLICATION_DOMAIN=vsd--dev.pathfinder.gov.bc.ca
+SHAREPOINT_WEBNAME=vsd-app
+SHAREPOINT_AAD_TENANTID=bcgovtrial.onmicrosoft.com
+SHAREPOINT_CLIENT_ID=
+SHAREPOINT_CERTIFICATE_PASSWORD=
+SHAREPOINT_CERTIFICATE_FILENAME=/sharepointcert/BCGovTrial.pfx
+SHOW_LOGIN=true
+IS_LITE_VERSION=false
+DASHBOARD_LITE=false
+DATABASE_SERVICE_NAME=mssql
+SECRET_RESOURCE_NAME=vsd-app
+SITEMINDER_LOGOUT_URL=https://logon.gov.bc.ca/clp-cgi/logoff.cgi
+BCEP_CONF_PATH_WORKER=/worker-registration/payment-confirmation
+KEY_RING_DIRECTORY=/key-ring
+KEY_RING_STORAGE_NAME=key-ring
