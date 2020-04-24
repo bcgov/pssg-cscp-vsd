@@ -455,14 +455,14 @@
       "displayName": "Name",
       "description": "The name assigned to all of the resources defined in this template.",
       "required": true,
-      "value": "vsd-app"
+      "value": "vsd"
     },
     {
       "name": "SOURCE_IMAGE_NAME",
       "displayName": "Source Image Name",
       "description": "The name of the image to use for this resource.",
       "required": true,
-      "value": "vsd-app"
+      "value": "vsd"
     },
     {
       "name": "IMAGE_NAMESPACE",
