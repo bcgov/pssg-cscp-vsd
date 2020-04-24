@@ -17,10 +17,12 @@ void call(String appName, String appSuffix, String namespace, String envTag) {
     openshift.withProject("${namespace}-${envTag}") {
     //openshift.withProject("${namespace}") {
         def dc = openshift.selector('dc', "${appName}${appSuffix}")
+        echo "JT(VDG): create openshift.selector - dc / ${appName}${appSuffix}"
         //def dc = openshift.selector('dc', "vsd")
         // Wait for the deployment to complete.
         // This will wait until the desired replicas are all available
         dc.rollout().status()
+        echo "JT(VDG): Rollout.status"
     }
 
     echo "Deployment Complete."
