@@ -36,15 +36,15 @@ node {
     }
   }
 
-        echo "about to deploy jenkins/vsd to ${config.DEPLOYMENT_ENVIRONMENT_TAGS[1]} / ${config.APP_NAME} / ${config.SUFFIX} / ${config.NAME_SPACE}"
-  stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[1]}") {
-    script {
-      deploy("${config.APP_NAME}",
-             "${config.SUFFIX}",
-             "${config.NAME_SPACE}",
-             "${config.DEPLOYMENT_ENVIRONMENT_TAGS[1]}")
-    }
-  }
+//        echo "about to deploy jenkins/vsd to ${config.DEPLOYMENT_ENVIRONMENT_TAGS[1]} / ${config.APP_NAME} / ${config.SUFFIX} / ${config.NAME_SPACE}"
+//  stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[1]}") {
+//    script {
+//      deploy("${config.APP_NAME}",
+//             "${config.SUFFIX}",
+//             "${config.NAME_SPACE}",
+//             "${config.DEPLOYMENT_ENVIRONMENT_TAGS[1]}")
+//    }
+//  }
 
         echo "about to deploy jenkins/vsd to ${config.DEPLOYMENT_ENVIRONMENT_TAGS[2]} / ${config.APP_NAME} / ${config.SUFFIX} / ${config.NAME_SPACE}"
   stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[2]}") {
