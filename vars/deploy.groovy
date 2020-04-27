@@ -15,18 +15,18 @@ void call(String appName, String appSuffix, String namespace, String envTag) {
 
     echo "Watching rollout of ${appName}${appSuffix} in ${namespace}-${envTag} ..."
     openshift.withProject("${namespace}-${envTag}") {
-       def rm = openshift.selector("dc", "${appName}${appSuffix}").rollout().latest()
-                  timeout(5) { 
-                    openshift.selector("dc", "${appName}${appSuffix}").related('pods').untilEach(1) {
-                      return (it.object().status.phase == "Running")
-                    }
-                  }
+//       def rm = openshift.selector("dc", "${appName}${appSuffix}").rollout().latest()
+//                  timeout(5) { 
+//                    openshift.selector("dc", "${appName}${appSuffix}").related('pods').untilEach(1) {
+//                      return (it.object().status.phase == "Running")
+//                    }
+//                  }
                     
-        //def dc = openshift.selector('dc', "${appName}${appSuffix}")
-        //echo "JT(VDG): create openshift.selector - dc / ${appName}${appSuffix}"
-        //// Wait for the deployment to complete.
-        //// This will wait until the desired replicas are all available
-        //dc.rollout().status()
+        def dc = openshift.selector('dc', "${appName}${appSuffix}")
+        echo "JT(VDG): create openshift.selector - dc / ${appName}${appSuffix}"
+        // Wait for the deployment to complete.
+        // This will wait until the desired replicas are all available
+        dc.rollout().status()
         echo "JT(VDG): Rollout.status"
     }
 
