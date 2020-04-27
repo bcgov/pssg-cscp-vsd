@@ -21,7 +21,7 @@ void call(String appName, String appSuffix, String namespace, String envTag) {
         //def dc = openshift.selector('dc', "vsd")
         // Wait for the deployment to complete.
         // This will wait until the desired replicas are all available
-        dc.rollout().status()
+        dc.rollout().latest().status()
         echo "JT(VDG): Rollout.status"
     }
 
