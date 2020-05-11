@@ -17,7 +17,7 @@ export components="vsd-app weasyprint"
 export builds=""
 
 # The images to be tagged after build
-export images="vsd-app"
+export images="vsd"
 
 # The routes for the project
 export routes=""
