@@ -1,7 +1,7 @@
 def PIPELINE_NAME = "cpu"
 
 def LIB_NAME= "cpu-lib"
-def LIB_REPO = "https://github.com/bcgov/pssg-cscp-cpu.git"
+def LIB_REPO = "https://github.com/LayCraft/pssg-cscp-cpu.git"
 def LIB_BRANCH = "development"
 echo "Entering jenkins/cpu"
 library identifier: "${LIB_NAME}@${LIB_BRANCH}", 
