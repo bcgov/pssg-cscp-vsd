@@ -225,14 +225,14 @@
                         </div>
                         <div class="col col-2">
                           <app-field label="Hours" [required]="true" [valid]="isControlValid(item, 'sessionHours')" errorMessage="Enter hours">
-                            <input class="form-control number-field" type="number" step="0.5" formControlName="sessionHours">
+                            <input class="form-control number-field" type="number" step="0.5" formControlName="sessionHours" placeholder="1.5">
                           </app-field>
                           <input class="form-control number-field" type="hidden" formControlName="sessionAmount" [value]="calculateRow(item)" readonly>
                         </div>
                         <div style="width:20px">
                           <app-tool-tip [trigger]="sessionDateInfo"></app-tool-tip>
                         </div>
-                        <ng-template #sessionDateInfo><h3>Line Item: Session Date</h3><p>Only invoices with session dates within one year will be considered for payment.</p></ng-template>
+                        <ng-template #sessionDateInfo><h3>Line Item: Session Date</h3><p>Only invoices with session dates within one year will be considered for payment. Sessions that run for 1hr 30 mins should be recorded as 1.5, while 1 hr sessions should be recorded as 1.</p></ng-template>
                         <div class="col text-right">
                           <br />
                           <a href="javascript:void(0);" (click)="removeLineItem(i)" *ngIf="showRemoveLine">Remove</a>
