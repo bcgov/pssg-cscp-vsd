@@ -46,13 +46,14 @@ node {
     }
   }
 
-        echo "about to deploy jenkins/cpu to ${config.DEPLOYMENT_ENVIRONMENT_TAGS[2]} / ${config.APP_NAME} / ${config.SUFFIX} / ${config.NAME_SPACE}"
-  stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[2]}") {
-    script {
-      deploy("${config.APP_NAME}",
-             "${config.SUFFIX}",
-             "${config.NAME_SPACE}",
-             "${config.DEPLOYMENT_ENVIRONMENT_TAGS[2]}")
-    }
-  }
+// COMMENT OUT TO BLOCK AUTO DEPLOY TO PROD (for now)
+//        echo "about to deploy jenkins/cpu to ${config.DEPLOYMENT_ENVIRONMENT_TAGS[2]} / ${config.APP_NAME} / ${config.SUFFIX} / ${config.NAME_SPACE}"
+//  stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[2]}") {
+//    script {
+//      deploy("${config.APP_NAME}",
+//             "${config.SUFFIX}",
+//             "${config.NAME_SPACE}",
+//             "${config.DEPLOYMENT_ENVIRONMENT_TAGS[2]}")
+//    }
+//  }
 }
