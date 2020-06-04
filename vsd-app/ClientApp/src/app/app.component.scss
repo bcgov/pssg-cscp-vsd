@@ -111,7 +111,7 @@ h3,
 h4,
 h5 {
   color: #494949;
-  font-weight: 600
+  font-weight: 600;
 }
 
 .jumbotron {
@@ -126,7 +126,7 @@ h5 {
 }
 
 .navbar-footer {
-  background-color: #003366
+  background-color: #003366;
 }
 
 .version-info {
@@ -162,7 +162,7 @@ div.c1 li.c2 a {
 }
 
 .navigationRibbon .level3Navigation {
-  background-color: #5475a7
+  background-color: #5475a7;
 }
 
 /* unvisited link */
@@ -178,7 +178,7 @@ a:link {
 a:visited {
   color: #fff;
   text-decoration: none;
-  font-weight: 600
+  font-weight: 600;
 }
 
 /* mouse over link */
@@ -186,7 +186,7 @@ a:visited {
 a:hover {
   color: #fff;
   text-decoration: underline;
-  font-weight: 600
+  font-weight: 600;
 }
 
 /* selected link */
@@ -236,7 +236,7 @@ a:active {
   color: #fff;
   text-decoration: underline;
   background-color: #415273;
-  font-weight: 400
+  font-weight: 400;
 }
 
 .signin {
@@ -251,7 +251,7 @@ a:active {
   width: 200px;
   background-color: #c6cdda;
   margin-right: 30px;
-  padding-top: 20px
+  padding-top: 20px;
 }
 
 .sidebar-nav {
@@ -261,7 +261,7 @@ a:active {
 
 .sidebar-nav li {
   text-indent: 0px;
-  line-height: 40px
+  line-height: 40px;
 }
 
 .sidebar-nav li a {
@@ -282,17 +282,17 @@ a:active {
 
 .sidebar-nav li a:active,
 .sidebar-nav li a:focus {
-  text-decoration: none
+  text-decoration: none;
 }
 
 .sidebar-nav > .sidebar-brand {
   height: 65px;
   font-size: 18px;
-  line-height: 60px
+  line-height: 60px;
 }
 
 .sidebar-nav > .sidebar-brand a {
-  color: #999999
+  color: #999999;
 }
 
 .sidebar-nav > .sidebar-brand a:hover {
@@ -359,11 +359,14 @@ h3 span {
   padding-bottom: 10px;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-weight: 600;
 }
 
-h2, h3 {
+h2,
+h3 {
   margin-top: 30px;
   margin-bottom: 20px;
 }
@@ -394,16 +397,16 @@ h2, h3 {
   }
 
   .mat-step-header .mat-step-label.mat-step-label-active .mat-step-text-label {
-    color: #21527E;
+    color: #21527e;
   }
 
   .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-text-label {
-    color: #21527E;
+    color: #21527e;
     font-weight: 700;
   }
 
   .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-icon {
-    background-color: #21527E;
+    background-color: #21527e;
   }
 
   .mat-vertical-content {
@@ -436,7 +439,7 @@ h2, h3 {
 }
 
 ::ng-deep .tooltip-icon .fa {
-  color: #21527E;
+  color: #21527e;
   margin-left: 2px;
 }
 
@@ -449,7 +452,7 @@ h2, h3 {
   left: -3px;
   margin-top: -2px;
   border-width: 15px 15px 15px 0;
-  border-right-color: #21527E;
+  border-right-color: #21527e;
 }
 
 ::ng-deep .tooltip.right .tooltip-arrow::before {
@@ -468,9 +471,9 @@ h2, h3 {
   color: #fff;
   text-align: left;
   font-size: 14px;
-  background-color: #21527E;
+  background-color: #21527e;
   border-radius: 0;
-  border-bottom: 3px solid #FCBA19;
+  border-bottom: 3px solid #fcba19;
 
   h3 {
     color: #fff;
@@ -514,7 +517,6 @@ h2, h3 {
 }
 
 ::ng-deep ol.list {
-
   li {
     margin-bottom: 15px;
   }
@@ -652,8 +654,8 @@ textarea.form-control {
     margin-bottom: 5px;
   }
 
-  input[type=checkbox],
-  input[type=radio] {
+  input[type="checkbox"],
+  input[type="radio"] {
     margin-right: 5px;
   }
 
@@ -671,7 +673,7 @@ textarea.form-control {
 }
 
 ::ng-deep .terms {
-  input[type=text] {
+  input[type="text"] {
     margin-left: 15px;
   }
 
@@ -717,8 +719,6 @@ textarea.form-control {
   border-collapse: separate;
   border-spacing: 1px;
   border: 0 !important;
-  ;
-
   tr {
     background-color: #f1f4fa;
 
@@ -767,7 +767,7 @@ hr {
 }
 
 .step {
-  border-bottom: 2px solid #FCBA19;
+  border-bottom: 2px solid #fcba19;
 }
 
 .button-container {
@@ -802,8 +802,8 @@ hr {
 }
 
 .submit-container {
-  background-color: #38598A;
-  border-bottom: solid 4px #FFCC00;
+  background-color: #38598a;
+  border-bottom: solid 4px #ffcc00;
   color: #fff;
   margin-bottom: 20px;
   padding: 30px;
@@ -815,7 +815,7 @@ hr {
 }
 
 ::ng-deep .mat-calendar-body-selected {
-  background-color: #337AB7;
+  background-color: #337ab7;
   color: #000 !important;
 }
 
@@ -824,7 +824,7 @@ hr {
 }
 
 ::ng-deep .mat-calendar-header {
-  background-color: #337AB7;
+  background-color: #337ab7;
   color: #fff;
 }
 
@@ -905,7 +905,8 @@ hr {
     padding-right: 20px;
   }
 
-  th, td {
+  th,
+  td {
     padding-bottom: 5px;
   }
 }

@@ -8,11 +8,14 @@ h3 span {
   padding-bottom: 10px;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-weight: 600;
 }
 
-h2, h3 {
+h2,
+h3 {
   margin-top: 30px;
   margin-bottom: 20px;
 }
@@ -32,7 +35,6 @@ h2, h3 {
 }
 
 ::ng-deep .application-nav {
-
   .mat-step-label {
     white-space: initial;
   }
@@ -44,18 +46,17 @@ h2, h3 {
   }
 
   .mat-step-header .mat-step-label.mat-step-label-active .mat-step-text-label {
-    color: #21527E;
+    color: #21527e;
   }
 
   .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-text-label {
-    color: #21527E;
+    color: #21527e;
     font-weight: 700;
   }
 
   .mat-step-header .mat-step-label-active.mat-step-label-selected .mat-step-icon {
-    background-color: #21527E;
+    background-color: #21527e;
   }
-
 
   .mat-vertical-content {
     padding: 0 24px 0 24px;
@@ -151,8 +152,8 @@ textarea.form-control {
     margin-bottom: 5px;
   }
 
-  input[type=checkbox],
-  input[type=radio] {
+  input[type="checkbox"],
+  input[type="radio"] {
     margin-right: 5px;
   }
 
@@ -167,7 +168,7 @@ textarea.form-control {
 }
 
 ::ng-deep .terms {
-  input[type=text] {
+  input[type="text"] {
     margin-left: 15px;
   }
 
@@ -228,7 +229,7 @@ hr {
 }
 
 .step {
-  border-bottom: 2px solid #FCBA19;
+  border-bottom: 2px solid #fcba19;
 }
 
 .button-container {
@@ -263,8 +264,8 @@ hr {
 }
 
 .submit-container {
-  background-color: #38598A;
-  border-bottom: solid 4px #FFCC00;
+  background-color: #38598a;
+  border-bottom: solid 4px #ffcc00;
   color: #fff;
   margin-bottom: 20px;
   padding: 30px;
@@ -276,7 +277,7 @@ hr {
 }
 
 ::ng-deep .mat-calendar-body-selected {
-  background-color: #337AB7;
+  background-color: #337ab7;
   color: #000 !important;
 }
 
@@ -285,18 +286,12 @@ hr {
 }
 
 ::ng-deep .mat-calendar-header {
-  background-color: #337AB7;
+  background-color: #337ab7;
   color: #fff;
 }
 
 ::ng-deep .tooltip-icon {
 }
-
-
-
-
-
-
 
 .invoice-questions {
   background-color: #f1f1f2;
@@ -380,4 +375,14 @@ hr {
       margin-left: 4px;
     }
   }
+}
+
+.print-link {
+  color: #0c5cb1 !important;
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
+.print-link:hover {
+  color: #0f3355 !important;
 }

@@ -284,7 +284,7 @@
             </div>
 
             <div class="court-information">
-              <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('restitutionInformation.courtFiles').controls; let i = index;">
+              <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('restitutionInformation.courtFiles')['controls']; let i = index;">
                 <div [formGroupName]="i" class="row court-files">
                   <div class="col-4">
                     <app-field label="Court File Number">

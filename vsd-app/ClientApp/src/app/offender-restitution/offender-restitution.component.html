@@ -259,7 +259,7 @@
             <h2 class="blue-header">Restitution Order Information</h2>
 
             <div class="court-information">
-              <div class="court-listing restitution-listing" formArrayName="restitutionCourtFiles" *ngFor="let item of form.get('restitutionInformation.restitutionCourtFiles').controls; let i = index;">
+              <div class="court-listing restitution-listing" formArrayName="restitutionCourtFiles" *ngFor="let item of form.get('restitutionInformation.restitutionCourtFiles')['controls']; let i = index;">
                 <div [formGroupName]="i" class="court-files">
                   <div class="float-right">
                     <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">

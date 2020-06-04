@@ -389,7 +389,7 @@
               <app-field [required]="true" [valid]="isFieldValid('crimeInformation.crimeLocations')" errorMessage="Please enter at least one location">
                 Please provide the <strong>city/town</strong> in BC where the crime took place. If the crime occured over a period of time in more than one location, please enter one location per box
                 <div class="crime-location-information">
-                  <div class="location-listing" formArrayName="crimeLocations" *ngFor="let item of form.get('crimeInformation.crimeLocations').controls; let i = index;">
+                  <div class="location-listing" formArrayName="crimeLocations" *ngFor="let item of form.get('crimeInformation.crimeLocations')['controls']; let i = index;">
                     <div [formGroupName]="i" class="crime-location">
                       <app-field>
                         <input class="form-control standard" type="text" formControlName="location">
@@ -463,7 +463,7 @@
               </app-field>
 
               <div class="police-report-information">
-                <div class="police-report-listing" formArrayName="policeReports" *ngFor="let item of form.get('crimeInformation.policeReports').controls; let i = index;">
+                <div class="police-report-listing" formArrayName="policeReports" *ngFor="let item of form.get('crimeInformation.policeReports')['controls']; let i = index;">
                   <div [formGroupName]="i" class="row police-report">
                     <div class="col-4">
                       <app-field label="Police File Number (if known)" [tooltipReference]="policeFileNumber">
@@ -594,7 +594,7 @@
 
               <h3>Court Information</h3>
               <div class="court-information">
-                <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('crimeInformation.courtFiles').controls; let i = index;">
+                <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('crimeInformation.courtFiles')['controls']; let i = index;">
                   <div [formGroupName]="i" class="row court-files">
                     <div class="col-4">
                       <app-field label="Court File Number (if known)" [tooltipReference]="courtFileNumber">
@@ -871,7 +871,7 @@
               </label>
             </app-field>
             <section *ngIf="form.get('medicalInformation.hadOtherTreatments').value === true">
-              <div class="other-treatments" formArrayName="otherTreatments" *ngFor="let item of form.get('medicalInformation.otherTreatments').controls; let i = index;">
+              <div class="other-treatments" formArrayName="otherTreatments" *ngFor="let item of form.get('medicalInformation.otherTreatments')['controls']; let i = index;">
                 <div [formGroupName]="i" class="other-treatment">
                   <a href="javascript:void(0);" (click)="removeProvider(i)" class="float-right" *ngIf="showRemoveProvider">
                     <i class="fas fa-trash-alt"></i> Delete Provider

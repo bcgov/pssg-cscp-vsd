@@ -118,6 +118,7 @@ export interface EmploymentIncomeInformation {
   areYouSelfEmployed?: number;
   mayContactEmployer?: number;
   haveYouAppliedForWorkersCompensation: number;
+  areYouStillOffWork?: number;
   daysWorkMissedStart?: Date;
   daysWorkMissedEnd?: Date;
   workersCompensationClaimNumber: string;
