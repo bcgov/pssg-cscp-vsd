@@ -225,7 +225,7 @@
                         </div>
                         <div class="col col-2">
                           <app-field label="Hours" [required]="true" [valid]="isControlValid(item, 'sessionHours')" errorMessage="Enter hours">
-                            <input class="form-control number-field" type="number" step="0.5" formControlName="sessionHours" placeholder="1.5">
+                            <input class="form-control number-field" type="number" step="0.5" formControlName="sessionHours" placeholder="1, 1.5, 2 or 2.5">
                           </app-field>
                           <input class="form-control number-field" type="hidden" formControlName="sessionAmount" [value]="calculateRow(item)" readonly>
                         </div>
