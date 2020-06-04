@@ -336,11 +336,17 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
     if (contactMethod === 100000000) {
       phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+      for (let control of addressControls) {
+        control.setValidators([Validators.required]);
+      }
       this.representativePhoneIsRequired = true;
       this.representativeEmailIsRequired = false;
       this.representativeAddressIsRequired = false;
     } else if (contactMethod === 100000001) {
       emailControl.setValidators([Validators.required, Validators.email]);
+      for (let control of addressControls) {
+        control.setValidators([Validators.required]);
+      }
       this.representativePhoneIsRequired = false;
       this.representativeEmailIsRequired = true;
       this.representativeAddressIsRequired = false;
@@ -848,22 +854,22 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         primaryAddress: [''],
         alternateAddress: [''],
 
-//        primaryAddress: this.fb.group({
-//          line1: ['', Validators.required],
-//          line2: [''],
-//          city: ['', Validators.required],
-//          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-//          province: [{ value: 'British Columbia', disabled: false }],
-//          country: [{ value: 'Canada', disabled: false }],
-//        }),
-//        alternateAddress: this.fb.group({
-//          line1: [''],
-//          line2: [''],
-//          city: [''],
-//          postalCode: [''],
-//          province: [{ value: 'British Columbia', disabled: false }],
-//          country: [{ value: 'Canada', disabled: false }],
-//        }),
+        //        primaryAddress: this.fb.group({
+        //          line1: ['', Validators.required],
+        //          line2: [''],
+        //          city: ['', Validators.required],
+        //          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+        //          province: [{ value: 'British Columbia', disabled: false }],
+        //          country: [{ value: 'Canada', disabled: false }],
+        //        }),
+        //        alternateAddress: this.fb.group({
+        //          line1: [''],
+        //          line2: [''],
+        //          city: [''],
+        //          postalCode: [''],
+        //          province: [{ value: 'British Columbia', disabled: false }],
+        //          country: [{ value: 'Canada', disabled: false }],
+        //        }),
       }),
       victimInformation: this.fb.group({
         firstName: ['', Validators.required],
@@ -1028,7 +1034,10 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
-        legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
+        legalGuardianFiles: this.fb.group({
+          filename: [''], // fileName
+          body: [''], // fileData
+        }), // This will be a collection of uploaded files
       }),
 
       declarationInformation: this.fb.group({
@@ -1060,17 +1069,34 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     });
   }
 
+  onRepresentativeFileBundle(fileBundle: FileBundle) {
+    try {
+      // save the files submitted from the component for attachment into the submitted form.
+      const patchObject = {};
+      patchObject['representativeInformation.legalGuardianFiles'] = fileBundle;
+
+      let fileName = fileBundle.fileName[0] || "";
+      this.form.get('representativeInformation.legalGuardianFiles.filename').patchValue(fileName);
+
+      let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
+      this.form.get('representativeInformation.legalGuardianFiles.body').patchValue(body);
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+
   onFileBundle(fileBundle: FileBundle) {
     try {
       // save the files submitted from the component for attachment into the submitted form.
       const patchObject = {};
       patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;
-      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileBundle.fileName[0]);
-      var splitValues = fileBundle.fileData[0].split(',');
 
-      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(splitValues[1]);
+      let fileName = fileBundle.fileName[0] || "";
+      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileName);
 
-      fileBundle = fileBundle;
+      let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
+      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(body);
     }
     catch (e) {
       console.log(e);

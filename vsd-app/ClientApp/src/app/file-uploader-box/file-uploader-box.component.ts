@@ -11,7 +11,7 @@ import { FilenameBlockComponent } from '../filename-block/filename-block.compone
 export class FileUploaderBoxComponent implements OnInit {
   // collect the element reference frin the child so that we can access native parts of the files element
   @ViewChild('files') myInputVariable: ElementRef;
-  @ViewChild('filenameBlock') filenameBlock: FilenameBlockComponent;
+  // @ViewChild('filenameBlock') filenameBlock: FilenameBlockComponent;
 
   @Output() fileBundle = new EventEmitter<FileBundle>();
 
@@ -29,9 +29,8 @@ export class FileUploaderBoxComponent implements OnInit {
   ngOnInit() {
     // sanity check the included data. they must be the same length and there must be more than 0 files
     if (
-      this.initialValues &&
-      this.initialValues.fileName.length === this.initialValues.fileData.length &&
-      this.initialValues.fileName.length > 0
+      this.initialValues && this.initialValues.fileName && //this.initialValues.fileName.length > 0 &&
+      this.initialValues.fileName.length === this.initialValues.fileData.length
     ) {
       this.fileCollection.fileData = this.initialValues.fileData;
       this.fileCollection.fileName = this.initialValues.fileName;
@@ -45,6 +44,8 @@ export class FileUploaderBoxComponent implements OnInit {
   }
 
   onFilesAdded(files: FileList): void {
+    console.log("on files added");
+    console.log(files);
     // for each file added we go through the same conversion process.
     for (let i = 0; i < files.length; i++) {
       // convert the file to base64 for upload
@@ -68,8 +69,8 @@ export class FileUploaderBoxComponent implements OnInit {
         }
       };
       reader.onerror = error => console.log('Error: ', error);
-      this.filenameBlock.fileCollection.fileName[i] = files.item(i).name;
-      this.filenameBlock.emitBundle();
+      // this.filenameBlock.fileCollection.fileName[i] = files.item(i).name;
+      // this.filenameBlock.emitBundle();
     }
   }
   removeItem(index: number): void {
