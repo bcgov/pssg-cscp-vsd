@@ -468,7 +468,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 }
                 catch (Exception e)
                 {
-                    return new Tuple<int, HttpResponseMessage, string>(100, null, "Error");
+                    return new Tuple<int, HttpResponseMessage, string>(100, null, "Error: " + e.Message);
                     throw new Exception(e.Message + " " + _responseContent);
                 }
 
