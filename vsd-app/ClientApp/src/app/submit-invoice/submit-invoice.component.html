@@ -42,6 +42,7 @@
                 <h1>Submit an Invoice</h1>
               </div>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+              <p>This form is best used on Chrome, Firefox and Edge.</p>
 
               <h3>Vendor Information</h3>
               <app-field label="Are you a registered Vendor with CVAP?" errorMessage="Please choose an option" [showChevrons]="false" [valid]="isFieldValid('invoiceDetails.registeredCounsellorWithCvap')">
@@ -255,10 +256,7 @@
                         </label>
                       </div>
                     </div>
-                    <ng-template #gstExemptionInfo>
-                      <h3>Exempt from GST</h3>
-                      <p>Only check this if you are a registered psychologist filling out this invoice.</p>
-                    </ng-template>
+                    <ng-template #gstExemptionInfo><h3>Exempt from GST</h3><p>Registered psychologists are exempted from GST.</p></ng-template>
                     <br />
 
                     <div class="row grand-total">
@@ -526,7 +524,7 @@
             </div>
             <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program if you would like to print your invoice then please click <a class="print-link" [routerLink]="" (click)="printInvoice()">here</a>.</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-            <p><a href="/">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
+            <p><a href="/submit-invoice">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
           </div>
         </div>
       </div>
