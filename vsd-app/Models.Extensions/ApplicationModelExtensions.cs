@@ -88,8 +88,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 if (model.CrimeInformation.crimeLocations.Count() > 0)
                 {
                     string tempOutput = "";
-                    foreach(Crimelocation tempCrimeLocation in model.CrimeInformation.crimeLocations)
-                        {
+                    foreach (Crimelocation tempCrimeLocation in model.CrimeInformation.crimeLocations)
+                    {
                         tempOutput = tempOutput + tempCrimeLocation.location + "\r\n";
                     }
                     application.Application.vsd_cvap_crimelocations = tempOutput.Substring(0, tempOutput.Length - 2);
@@ -101,6 +101,23 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // Include upload file
                 try
                 {
+                    int documentCollectionLength = 0;
+                    if (model.CrimeInformation.additionalInformationFiles != null && model.CrimeInformation.additionalInformationFiles.fileName.Length > 0)
+                    {
+                        ++documentCollectionLength;
+                    }
+                    if (model.RepresentativeInformation.legalGuardianFiles != null && model.RepresentativeInformation.legalGuardianFiles.fileName.Length > 0)
+                    {
+                        ++documentCollectionLength;
+                    }
+
+                    if (documentCollectionLength > 0)
+                    {
+                        application.DocumentCollection = new Documentcollection[documentCollectionLength];
+                    }
+
+                    int documentIndex = 0;
+
                     if (model.CrimeInformation.additionalInformationFiles != null)
                     {
                         if (model.CrimeInformation.additionalInformationFiles.fileName.Length > 0)
@@ -108,8 +125,21 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             Documentcollection tempDocumentCollection = new Documentcollection();
                             tempDocumentCollection.body = model.CrimeInformation.additionalInformationFiles.body;
                             tempDocumentCollection.filename = model.CrimeInformation.additionalInformationFiles.fileName;
-                            application.DocumentCollection = new Documentcollection[1];
-                            application.DocumentCollection[0] = tempDocumentCollection;
+                            application.DocumentCollection[documentIndex] = tempDocumentCollection;
+                            ++documentIndex;
+                        }
+                    }
+
+                    if (model.RepresentativeInformation.legalGuardianFiles != null)
+                    {
+                        if (model.RepresentativeInformation.legalGuardianFiles.fileName.Length > 0)
+                        {
+                            Documentcollection tempDocumentCollection = new Documentcollection();
+                            tempDocumentCollection.body = model.RepresentativeInformation.legalGuardianFiles.body;
+                            tempDocumentCollection.filename = model.RepresentativeInformation.legalGuardianFiles.fileName;
+                            // application.DocumentCollection = new Documentcollection[1];
+                            // application.DocumentCollection[0] = tempDocumentCollection;
+                            application.DocumentCollection[documentIndex] = tempDocumentCollection;
                         }
                     }
                 }
@@ -168,10 +198,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
                 if (model.CrimeInformation.racafInformation != null)
                 {
-                    application.Application.vsd_racaf_appliedforrestitution = model.CrimeInformation.racafInformation.applyToCourtForMoneyFromOffender; 
+                    application.Application.vsd_racaf_appliedforrestitution = model.CrimeInformation.racafInformation.applyToCourtForMoneyFromOffender;
                     application.Application.vsd_racaf_requestedexpenses = model.CrimeInformation.racafInformation.expensesRequested;
-                    application.Application.vsd_racaf_expensesawarded = model.CrimeInformation.racafInformation.expensesAwarded; 
-                    application.Application.vsd_racaf_amountreceived = model.CrimeInformation.racafInformation.expensesReceived; 
+                    application.Application.vsd_racaf_expensesawarded = model.CrimeInformation.racafInformation.expensesAwarded;
+                    application.Application.vsd_racaf_amountreceived = model.CrimeInformation.racafInformation.expensesReceived;
 
                     application.Application.vsd_racaf_legalactiontaken = model.CrimeInformation.racafInformation.willBeTakingLegalAction;
                     application.Application.vsd_racaf_lawyerorfirmname = model.CrimeInformation.racafInformation.lawyerOrFirmName;
@@ -252,7 +282,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_country = f.employerAddress.country,
                             vsd_firstname = f.employerFirstName,
                             vsd_lastname = f.employerLastName,
-                            vsd_relationship1 = "Employer", 
+                            vsd_relationship1 = "Employer",
                         }).ToArray();
 
                         int tempProviderCount = 0;
@@ -477,7 +507,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     application.Application.vsd_cvap_ifmselfemployed = model.EmploymentIncomeInformation.areYouSelfEmployed;
                 }
-                application.Application.vsd_cvap_ifmcontactemployer = model.EmploymentIncomeInformation.mayContactEmployer; 
+                application.Application.vsd_cvap_ifmcontactemployer = model.EmploymentIncomeInformation.mayContactEmployer;
             }
 
             if (model.RepresentativeInformation != null)
@@ -485,7 +515,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_onbehalfofdeclaration = model.RepresentativeInformation.completingOnBehalfOf;
             }
 
-            if (model.DeclarationInformation!= null)
+            if (model.DeclarationInformation != null)
             {
                 // TODO: Apparently we don't do anything with this information? No obvious fields on the Dynamics side to feed this into
             }
@@ -497,11 +527,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             }
 
             application.Application.vsd_applicantssignature = model.AuthorizationInformation.signature; // TODO: where does this come from?
-            //application.Application.vsd_cvap_optionalauthorization = 0; // TODO: where does this come from?
-            //application.Application.vsd_optionalauthorizationsignature = ""; // TODO: where does this come from?
+                                                                                                        //application.Application.vsd_cvap_optionalauthorization = 0; // TODO: where does this come from?
+                                                                                                        //application.Application.vsd_optionalauthorizationsignature = ""; // TODO: where does this come from?
 
             //application.DocumentCollection = new Documentcollection[1]; // TODO: bind collection
-            
+
 
             return application;
         }

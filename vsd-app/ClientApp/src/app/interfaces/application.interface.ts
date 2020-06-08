@@ -134,7 +134,7 @@ export interface RepresentativeInformation {
   representativeAlternatePhoneNumber: string;
   representativeEmail: string;
   representativeAddress: Address;
-  legalGuardianFiles: Object[];
+  legalGuardianFiles: DocumentCollectioninformation[];
 }
 export interface DeclarationInformation {
   declaredAndSigned: string;
