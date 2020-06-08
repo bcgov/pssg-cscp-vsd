@@ -7,7 +7,7 @@ export class FormBase {
 
   isFieldValid(field: string) {
     let formField = this.form.get(field);
-    if (formField.value === null)
+    if (!formField || formField.value === null)
       return true;
     if (field === 'personalInformation.sin' || field === 'victimInformation.sin')
       return this.validateSIN(formField.value);

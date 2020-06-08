@@ -1,7 +1,7 @@
 <div class="form-wrapper" style="position: relative;">
   <div [ngBusy]="[busy, busy2]"></div>
   <div class="row" [formGroup]="form">
-    <div class="col-lg-3 col-sm-12 application-gutter">
+    <div class="col-lg-3 col-sm-12 application-gutter" *ngIf="!showPrintView">
 
       <section class="invoice-questions">
         <div class="submit-content">
@@ -24,7 +24,7 @@
           </p>
           <p>
             <strong>Mailing:</strong><br />
-            PO Box 5550 Station Terminal,<br />Vancouver, B.C.  V6B 1H1
+            PO Box 5550 Station Terminal,<br />Vancouver, B.C. V6B 1H1
           </p>
           <p>
             <strong>Email:</strong><br />
@@ -188,8 +188,7 @@
                     </div>
                     <div class="col-6">
                       <app-field label="Invoice Date" [required]="true" [valid]="isFieldValid('invoiceDetails.invoiceDate')" errorMessage="Please enter the invoice date">
-                        <input type="text" class="form-control" formControlName="invoiceDate" placeholder="yyyy-mm-dd"
-                               [matDatepicker]="invoiceDatePicker" (focus)="invoiceDatePicker.open()" (click)="invoiceDatePicker.open()" readonly style="background-color: #fff;">
+                        <input type="text" class="form-control" formControlName="invoiceDate" placeholder="yyyy-mm-dd" [matDatepicker]="invoiceDatePicker" (focus)="invoiceDatePicker.open()" (click)="invoiceDatePicker.open()" readonly style="background-color: #fff;">
                         <mat-datepicker #invoiceDatePicker></mat-datepicker>
                       </app-field>
                     </div>
@@ -203,7 +202,7 @@
                   </div>
                   <h3>Line Items</h3>
                   <div class="invoice-items">
-                    <div class="item-listing" formArrayName="lineItems" *ngFor="let item of form.get('invoiceDetails.lineItems').controls; let i = index;">
+                    <div class="item-listing" formArrayName="lineItems" *ngFor="let item of form.get('invoiceDetails.lineItems')['controls']; let i = index;">
                       <div [formGroupName]="i" class="invoice-item row no-gutter">
                         <div class="col col-3">
                           <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter session date">
@@ -233,7 +232,10 @@
                         <div style="width:20px">
                           <app-tool-tip [trigger]="sessionDateInfo"></app-tool-tip>
                         </div>
-                        <ng-template #sessionDateInfo><h3>Line Item: Session Date</h3><p>Only invoices with session dates within one year will be considered for payment. Sessions that run for 1hr 30 mins should be recorded as 1.5, while 1 hr sessions should be recorded as 1.</p></ng-template>
+                        <ng-template #sessionDateInfo>
+                          <h3>Line Item: Session Date</h3>
+                          <p>Only invoices with session dates within one year will be considered for payment. Sessions that run for 1hr 30 mins should be recorded as 1.5, while 1 hr sessions should be recorded as 1.</p>
+                        </ng-template>
                         <div class="col text-right">
                           <br />
                           <a href="javascript:void(0);" (click)="removeLineItem(i)" *ngIf="showRemoveLine">Remove</a>
@@ -260,7 +262,8 @@
                     <div class="row grand-total">
                       <div class="col text-right">
                         <label>
-                          <span class="big-label">Total Hours:</span><app-tool-tip [trigger]="totalAmountInfo"></app-tool-tip> <span class="amount">{{ invoiceGrandTotal.toFixed(2).toString() }}</span>
+                          <span class="big-label">Total Hours:</span>
+                          <app-tool-tip [trigger]="totalAmountInfo"></app-tool-tip> <span class="amount">{{ invoiceGrandTotal.toFixed(2).toString() }}</span>
                         </label>
                         <ng-template #totalAmountInfo>
                           <h3>Calculations for Total Amount</h3>
@@ -274,12 +277,36 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr><td>$40</td><td><em>n</em> hours</td><td>$40 x <em>n</em> hrs = total</td></tr>
-                              <tr><td>$60</td><td><em>n</em> hours</td><td>$60 x <em>n</em> hrs = total</td></tr>
-                              <tr><td>$80</td><td><em>n</em> hours</td><td>$80 x <em>n</em> hrs = total</td></tr>
-                              <tr><td>$95</td><td><em>n</em> hours</td><td>$95 x <em>n</em> hrs = total</td></tr>
-                              <tr><td>$105</td><td><em>n</em> hours</td><td>$105 x <em>n</em> hrs = total</td></tr>
-                              <tr><td>$15</td><td><em>n</em> hours</td><td>$15 x <em>n</em> hrs = total</td></tr>
+                              <tr>
+                                <td>$40</td>
+                                <td><em>n</em> hours</td>
+                                <td>$40 x <em>n</em> hrs = total</td>
+                              </tr>
+                              <tr>
+                                <td>$60</td>
+                                <td><em>n</em> hours</td>
+                                <td>$60 x <em>n</em> hrs = total</td>
+                              </tr>
+                              <tr>
+                                <td>$80</td>
+                                <td><em>n</em> hours</td>
+                                <td>$80 x <em>n</em> hrs = total</td>
+                              </tr>
+                              <tr>
+                                <td>$95</td>
+                                <td><em>n</em> hours</td>
+                                <td>$95 x <em>n</em> hrs = total</td>
+                              </tr>
+                              <tr>
+                                <td>$105</td>
+                                <td><em>n</em> hours</td>
+                                <td>$105 x <em>n</em> hrs = total</td>
+                              </tr>
+                              <tr>
+                                <td>$15</td>
+                                <td><em>n</em> hours</td>
+                                <td>$15 x <em>n</em> hrs = total</td>
+                              </tr>
                             </tbody>
                           </table>
                         </ng-template>
@@ -326,129 +353,133 @@
         </div>
       </div>
 
-      <div class="container" *ngIf="showReviewPanel">
+      <div class="container" *ngIf="showReviewPanel || showPrintView">
         <div class="row">
           <div class="col">
-            <div class="page-header">
+            <div class="page-header" *ngIf="!showPrintView">
               <h1>Review and Edit</h1>
             </div>
-            <p>Please check the accuracy of the information entered in your application before submitting.</p>
+
+            <div class="page-header" *ngIf="showPrintView">
+              <h1>Review Invoice</h1>
+            </div>
+            <p *ngIf="!showPrintView">Please check the accuracy of the information entered in your application before submitting.</p>
 
             <section>
 
               <h3>Vendor Information</h3>
               <table class="table table-striped review-table">
                 <tbody>
-                <tr>
-                  <th>Are you a registered Vendor with CVAP?</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.doYouHaveVendorNumberOnFile') }} </td>
-                </tr>
-                <tr>
-                  <th>Do you know your Vendor Number?</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.doYouHaveVendorNumberOnFile') }} </td>
-                </tr>
-                <tr *ngIf="form.get('invoiceDetails.doYouHaveVendorNumberOnFile').value === true">
-                  <th>Vendor Number</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.vendorNumber') }} </td>
-                </tr>
-                <tr *ngIf="form.get('invoiceDetails.doYouHaveVendorNumberOnFile').value === false">
-                  <th>Vendor Name</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.vendorName') }} </td>
-                </tr>
-                <tr *ngIf="form.get('invoiceDetails.doYouHaveVendorNumberOnFile').value === false">
-                  <th>Email Address</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.vendorEmail') }} </td>
-                </tr>
+                  <tr>
+                    <th>Are you a registered Vendor with CVAP?</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.doYouHaveVendorNumberOnFile') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Do you know your Vendor Number?</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.doYouHaveVendorNumberOnFile') }} </td>
+                  </tr>
+                  <tr *ngIf="form.get('invoiceDetails.doYouHaveVendorNumberOnFile').value === true">
+                    <th>Vendor Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.vendorNumber') }} </td>
+                  </tr>
+                  <tr *ngIf="form.get('invoiceDetails.doYouHaveVendorNumberOnFile').value === false">
+                    <th>Vendor Name</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.vendorName') }} </td>
+                  </tr>
+                  <tr *ngIf="form.get('invoiceDetails.doYouHaveVendorNumberOnFile').value === false">
+                    <th>Email Address</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.vendorEmail') }} </td>
+                  </tr>
                 </tbody>
               </table>
 
               <h3>Counsellor Information</h3>
               <table class="table table-striped review-table">
                 <tbody>
-                <tr>
-                  <th>Do you have a Counsellor's Registration Number?</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.doYouHaveCvapCounsellorNumber') }} </td>
-                </tr>
-                <tr *ngIf="form.get('invoiceDetails.doYouHaveCvapCounsellorNumber').value === true">
-                  <th>Counsellor Registration Number</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.counsellorRegistrationNumber') }} </td>
-                </tr>
-                <tr *ngIf="form.get('invoiceDetails.doYouHaveCvapCounsellorNumber').value === false">
-                  <th>Counsellor First Name</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.counsellorFirstName') }} </td>
-                </tr>
-                <tr *ngIf="form.get('invoiceDetails.doYouHaveCvapCounsellorNumber').value === false">
-                  <th>Counsellor Last Name</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.counsellorLastName') }} </td>
-                </tr>
-                <tr *ngIf="form.get('invoiceDetails.doYouHaveCvapCounsellorNumber').value === false">
-                  <th>Email Address</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.counsellorEmail') }} </td>
-                </tr>
+                  <tr>
+                    <th>Do you have a Counsellor's Registration Number?</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.doYouHaveCvapCounsellorNumber') }} </td>
+                  </tr>
+                  <tr *ngIf="form.get('invoiceDetails.doYouHaveCvapCounsellorNumber').value === true">
+                    <th>Counsellor Registration Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.counsellorRegistrationNumber') }} </td>
+                  </tr>
+                  <tr *ngIf="form.get('invoiceDetails.doYouHaveCvapCounsellorNumber').value === false">
+                    <th>Counsellor First Name</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.counsellorFirstName') }} </td>
+                  </tr>
+                  <tr *ngIf="form.get('invoiceDetails.doYouHaveCvapCounsellorNumber').value === false">
+                    <th>Counsellor Last Name</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.counsellorLastName') }} </td>
+                  </tr>
+                  <tr *ngIf="form.get('invoiceDetails.doYouHaveCvapCounsellorNumber').value === false">
+                    <th>Email Address</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.counsellorEmail') }} </td>
+                  </tr>
                 </tbody>
               </table>
 
               <h3>Claim Information</h3>
               <table class="table table-striped review-table">
                 <tbody>
-                <tr>
-                  <th>Claimant's Name</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.claimantsName') }} </td>
-                </tr>
-                <tr>
-                  <th>Claim Number</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.claimNumber') }} </td>
-                </tr>
+                  <tr>
+                    <th>Claimant's Name</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.claimantsName') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Claim Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.claimNumber') }} </td>
+                  </tr>
                 </tbody>
               </table>
 
-              <h2 class="blue-header">Invoice Details <button (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+              <h2 class="blue-header">Invoice Details <button *ngIf="!showPrintView" (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
               <table class="table table-striped review-table">
                 <tbody>
-                <tr>
-                  <th>Invoice Number</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.invoiceNumber') }} </td>
-                </tr>
-                <tr>
-                  <th>Invoice Date</th>
-                  <td>{{ datesOrEmpty(['invoiceDetails.invoiceDate']) }} </td>
-                </tr>
-                <tr>
-                  <th>Please submit a brief description of the services provided.</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.descriptionOfServicesProvided') }} </td>
-                </tr>
+                  <tr>
+                    <th>Invoice Number</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.invoiceNumber') }} </td>
+                  </tr>
+                  <tr>
+                    <th>Invoice Date</th>
+                    <td>{{ datesOrEmpty(['invoiceDetails.invoiceDate']) }} </td>
+                  </tr>
+                  <tr>
+                    <th>Please submit a brief description of the services provided.</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.descriptionOfServicesProvided') }} </td>
+                  </tr>
                 </tbody>
               </table>
 
               <h3>Line Item Summary</h3>
               <table class="table table-striped review-table">
                 <thead>
-                <tr>
-                  <th>SESSION DATES</th>
-                  <th>COUNSELLING TYPE</th>
-                  <th>HOURS</th>
-                </tr>
+                  <tr>
+                    <th>SESSION DATES</th>
+                    <th>COUNSELLING TYPE</th>
+                    <th>HOURS</th>
+                  </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let item of lineItemsControls.controls; let i = index;">
-                  <td style="width: 30%">{{ datesOrEmpty([item.get('sessionDate')]) }}</td>
-                  <td style="width: 35%">{{ enumHelper.InvoiceCounsellingType[valueForEnum(item.get('counsellingType'))] }}</td>
-                  <td style="width: 35%">{{ item.get('sessionHours').value }}</td>
-                </tr>
+                  <tr *ngFor="let item of lineItemsControls.controls; let i = index;">
+                    <td style="width: 30%">{{ datesOrEmpty([item.get('sessionDate')]) }}</td>
+                    <td style="width: 35%">{{ enumHelper.InvoiceCounsellingType[valueForEnum(item.get('counsellingType'))] }}</td>
+                    <td style="width: 35%">{{ item.get('sessionHours').value }}</td>
+                  </tr>
                 </tbody>
               </table>
 
               <table class="table table-striped review-table">
                 <tbody>
-                <tr>
-                  <th>Exempt from GST</th>
-                  <td>{{ valueOrEmpty('invoiceDetails.exemptFromGst') }} </td>
-                </tr>
+                  <tr>
+                    <th>Exempt from GST</th>
+                    <td>{{ valueOrEmpty('invoiceDetails.exemptFromGst') }} </td>
+                  </tr>
                 </tbody>
               </table>
             </section>
 
-            <h2 class="blue-header">Declaration <button (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+            <h2 class="blue-header">Declaration <button *ngIf="!showPrintView" (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
             <p>
               <label class="inline-label">
                 <input *ngIf="form.get('invoiceDetails.declaredAndSigned').value === true" type="checkbox" checked="checked" disabled="disabled" />
@@ -476,21 +507,22 @@
           <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
         </div>
 
-        <section class="button-container">
+        <section class="button-container" *ngIf="!showPrintView">
           <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
           <span style="float: right;">
             <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
+            <button (click)="invoiceSuccess()" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
           </span>
         </section>
       </div>
 
-      <div class="container" *ngIf="showSuccessPanel">
+      <div class="container" *ngIf="showSuccessPanel && !showPrintView">
         <div class="row">
           <div class="col">
             <div class="page-header">
               <h1>Thank you for your invoice submission</h1>
             </div>
-            <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program if you would like to print your invoice then please click <a href="">here</a>.</h3>
+            <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program if you would like to print your invoice then please click <a class="print-link" [routerLink]="" (click)="printInvoice()">here</a>.</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
             <p><a href="/submit-invoice">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
           </div>

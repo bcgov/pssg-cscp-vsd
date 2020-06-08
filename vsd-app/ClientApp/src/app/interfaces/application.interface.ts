@@ -118,6 +118,7 @@ export interface EmploymentIncomeInformation {
   areYouSelfEmployed?: number;
   mayContactEmployer?: number;
   haveYouAppliedForWorkersCompensation: number;
+  areYouStillOffWork?: number;
   daysWorkMissedStart?: Date;
   daysWorkMissedEnd?: Date;
   workersCompensationClaimNumber: string;
@@ -133,7 +134,7 @@ export interface RepresentativeInformation {
   representativeAlternatePhoneNumber: string;
   representativeEmail: string;
   representativeAddress: Address;
-  legalGuardianFiles: Object[];
+  legalGuardianFiles: DocumentCollectioninformation[];
 }
 export interface DeclarationInformation {
   declaredAndSigned: string;

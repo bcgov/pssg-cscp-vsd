@@ -33,7 +33,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public DateTime? dateOfNameChange { get; set; }
         public int gender { get; set; }
         public DateTime? birthDate { get; set; }
-        public int maritalStatus { get; set; }
+        public int? maritalStatus { get; set; }
         public string sin { get; set; }
         public string occupation { get; set; }
         public int preferredMethodOfContact { get; set; }
@@ -191,7 +191,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string representativeAlternatePhoneNumber { get; set; }
         public string representativeEmail { get; set; }
         public Address representativeAddress { get; set; }
-        public object[] legalGuardianFiles { get; set; }
+        public DocumentCollectioninformation legalGuardianFiles { get; set; }
     }
 
     public class Declarationinformation

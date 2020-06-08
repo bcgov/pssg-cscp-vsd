@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -28,7 +28,10 @@ import { DynamicsApplicationModel } from '../models/dynamics-application.model';
   ],
 })
 
+
+
 export class SubmitInvoiceComponent extends FormBase implements OnInit {
+
   currentUser: User;
   dataLoaded = false;
   busy: Promise<any>;
@@ -50,6 +53,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   public showReviewPanel: boolean = false;
   public showSuccessPanel: boolean = false;
   public showCancelPanel: boolean = false;
+  public showPrintView: boolean = false;
 
   invoiceSubTotal: number = 0.00;
   invoiceGrandTotal: number = 0.00;
@@ -144,6 +148,32 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
     console.log(JSON.stringify(formData));
     //console.log(formData);
+  }
+
+  printInvoice() {
+    console.log("attempt to print invoice");
+    window.scroll(0, 0);
+
+    this.showPrintView = true;
+    //hide slide close thing
+    document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
+
+    setTimeout(() => {
+      window.print();
+    }, 100);
+  }
+
+  @HostListener('window:afterprint')
+  onafterprint() {
+    console.log("after print");
+    document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
+    window.scroll(0, 0);
+    // this.showFormPanel = false;
+    // this.showReviewPanel = false;
+    // this.showSuccessPanel = true;
+    // this.showCancelPanel = false;
+
+    this.showPrintView = false;
   }
 
   invoiceEdit(): void {
@@ -263,7 +293,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       this.formFullyValidated = true;
       this.save().subscribe(
         data => {
-          console.log (data);
+          console.log(data);
           if (data['isSuccess'] == true) {
             console.log(data['isSuccess']);
             console.log("submitting");
@@ -278,7 +308,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
           this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           console.log('Error submitting invoice');
         },
-        () => {}
+        () => { }
       );
     } else {
       console.log("form not validated");

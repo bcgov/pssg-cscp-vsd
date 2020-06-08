@@ -775,7 +775,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
-        legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
+        legalGuardianFiles: this.fb.group({
+          filename: [''], // fileName
+          body: [''], // fileData
+        }), // This will be a collection of uploaded files
       }),
 
       declarationInformation: this.fb.group({
@@ -807,17 +810,34 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     });
   }
 
+  onRepresentativeFileBundle(fileBundle: FileBundle) {
+    try {
+      // save the files submitted from the component for attachment into the submitted form.
+      const patchObject = {};
+      patchObject['representativeInformation.legalGuardianFiles'] = fileBundle;
+
+      let fileName = fileBundle.fileName[0] || "";
+      this.form.get('representativeInformation.legalGuardianFiles.filename').patchValue(fileName);
+
+      let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
+      this.form.get('representativeInformation.legalGuardianFiles.body').patchValue(body);
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+
   onFileBundle(fileBundle: FileBundle) {
     try {
       // save the files submitted from the component for attachment into the submitted form.
       const patchObject = {};
       patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;
-      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileBundle.fileName[0]);
-      var splitValues = fileBundle.fileData[0].split(',');
 
-      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(splitValues[1]);
+      let fileName = fileBundle.fileName[0] || "";
+      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileName);
 
-      fileBundle = fileBundle;
+      let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
+      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(body);
     }
     catch (e) {
       console.log(e);
