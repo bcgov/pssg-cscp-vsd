@@ -604,11 +604,12 @@
                 </app-field>
 
                 <app-field label="If you have any additional information, please upload it below">
-                  <!--<div class="file-upload-placeholder">
-                    [upload functionality goes here]
-                  </div>-->
                 </app-field>
                 <app-file-uploader-box [initialValues]="form.value.crimeInformation.additionalInformation" (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
+
+                <app-field *ngIf="showAdditionalInformationDocumentDescription" [required]="true" [valid]="isFieldValid('crimeInformation.documentDescription')" label="Please provide a description of the document. (Maximum 250 words)" errorMessage="Please provide document description">
+                  <textarea class="form-control bigger" formControlName="documentDescription" maxlength="2000"></textarea>
+                </app-field>
               </section>
             </section>
 
@@ -1522,6 +1523,10 @@
                 [upload functionality goes here]
               </div> -->
               <app-file-uploader-box [initialValues]="form.value.representativeInformation.legalGuardian" (fileBundle)="onRepresentativeFileBundle($event)"></app-file-uploader-box>
+
+              <app-field *ngIf="showLegalGuardianDocumentDescription" [required]="true" [valid]="isFieldValid('representativeInformation.documentDescription')" label="Please provide a description of the document. (Maximum 250 words)" errorMessage="Please provide document description">
+                <textarea class="form-control bigger" formControlName="documentDescription" maxlength="2000"></textarea>
+              </app-field>
             </section>
           </div>
 

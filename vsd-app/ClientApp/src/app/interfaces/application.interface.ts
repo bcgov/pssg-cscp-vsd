@@ -66,6 +66,7 @@ export interface CrimeInformation {
   courtFiles: Courtfile[];
   racafInformation: Racafinformation;
   additionalInformationFiles: DocumentCollectioninformation[];
+  documentDescription: string;
 }
 export interface MedicalInformation {
   doYouHaveMedicalServicesCoverage: string;
@@ -135,6 +136,7 @@ export interface RepresentativeInformation {
   representativeEmail: string;
   representativeAddress: Address;
   legalGuardianFiles: DocumentCollectioninformation[];
+  documentDescription: string;
 }
 export interface DeclarationInformation {
   declaredAndSigned: string;

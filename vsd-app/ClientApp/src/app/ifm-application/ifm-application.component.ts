@@ -67,6 +67,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   showRemovePoliceReport: boolean = false;
   showAddProvider: boolean = true;
   showRemoveProvider: boolean = false;
+  showAdditionalInformationDocumentDescription: boolean = false;
+  showLegalGuardianDocumentDescription: boolean = false;
 
   public currentFormStep: number;
 
@@ -651,11 +653,11 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
-          filename: [''], // fileName
-          body: [''], // fileData
+        additionalInformationFiles: this.fb.group({
+          filename: [''],
+          body: [''],
         }), // This will be a collection of uploaded files
-        //additionalInformationFiles: this.fb.array([]),
+        documentDescription: [''],
 
         wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
 
@@ -776,9 +778,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
           country: [{ value: 'Canada', disabled: false }],
         }),
         legalGuardianFiles: this.fb.group({
-          filename: [''], // fileName
-          body: [''], // fileData
+          filename: [''],
+          body: [''],
         }), // This will be a collection of uploaded files
+        documentDescription: [''],
       }),
 
       declarationInformation: this.fb.group({
@@ -812,6 +815,12 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   onRepresentativeFileBundle(fileBundle: FileBundle) {
     try {
+      if (fileBundle.fileData && fileBundle.fileData.length > 0) {
+        this.showLegalGuardianDocumentDescription = true;
+      }
+      else {
+        this.showLegalGuardianDocumentDescription = false;
+      }
       // save the files submitted from the component for attachment into the submitted form.
       const patchObject = {};
       patchObject['representativeInformation.legalGuardianFiles'] = fileBundle;
@@ -829,6 +838,14 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   onFileBundle(fileBundle: FileBundle) {
     try {
+      console.log("on file bundle");
+      console.log(fileBundle);
+      if (fileBundle.fileData && fileBundle.fileData.length > 0) {
+        this.showAdditionalInformationDocumentDescription = true;
+      }
+      else {
+        this.showAdditionalInformationDocumentDescription = false;
+      }
       // save the files submitted from the component for attachment into the submitted form.
       const patchObject = {};
       patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;

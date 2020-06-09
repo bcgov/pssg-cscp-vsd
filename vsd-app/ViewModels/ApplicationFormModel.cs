@@ -60,6 +60,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string crimeDetails { get; set; }
         public string crimeInjuries { get; set; }
         public DocumentCollectioninformation additionalInformationFiles { get; set; }
+        public string documentDescription { get; set; }
         public int wasReportMadeToPolice { get; set; }
         public string policeReportedWhichPoliceForce { get; set; }
         public string policeReportedMultipleTimes { get; set; }
@@ -192,6 +193,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string representativeEmail { get; set; }
         public Address representativeAddress { get; set; }
         public DocumentCollectioninformation legalGuardianFiles { get; set; }
+        public string documentDescription { get; set; }
     }
 
     public class Declarationinformation

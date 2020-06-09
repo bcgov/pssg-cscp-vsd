@@ -125,6 +125,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             Documentcollection tempDocumentCollection = new Documentcollection();
                             tempDocumentCollection.body = model.CrimeInformation.additionalInformationFiles.body;
                             tempDocumentCollection.filename = model.CrimeInformation.additionalInformationFiles.fileName;
+                            tempDocumentCollection.subject = model.CrimeInformation.documentDescription;
                             application.DocumentCollection[documentIndex] = tempDocumentCollection;
                             ++documentIndex;
                         }
@@ -137,8 +138,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             Documentcollection tempDocumentCollection = new Documentcollection();
                             tempDocumentCollection.body = model.RepresentativeInformation.legalGuardianFiles.body;
                             tempDocumentCollection.filename = model.RepresentativeInformation.legalGuardianFiles.fileName;
-                            // application.DocumentCollection = new Documentcollection[1];
-                            // application.DocumentCollection[0] = tempDocumentCollection;
+                            tempDocumentCollection.subject = model.RepresentativeInformation.documentDescription;
                             application.DocumentCollection[documentIndex] = tempDocumentCollection;
                         }
                     }

@@ -118,14 +118,14 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
 
     public class Courtinfocollection
     {
-        public string odatatype => "Microsoft.Dynamics.CRM.vsd_applicationcourtinformation"; 
+        public string odatatype => "Microsoft.Dynamics.CRM.vsd_applicationcourtinformation";
         public string vsd_courtfilenumber { get; set; }
         public string vsd_courtlocation { get; set; }
     }
 
     public class Policefilenumbercollection
     {
-        public string odatatype => "Microsoft.Dynamics.CRM.vsd_applicationpolicenumber"; 
+        public string odatatype => "Microsoft.Dynamics.CRM.vsd_applicationpolicenumber";
         public string vsd_policefilenumber { get; set; }
         public string vsd_investigatingpoliceofficername { get; set; }
     }
@@ -133,7 +133,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
     public class Providercollection
     {
         // TODO: Looks like we might use this object for two different purposes... vsd_applicationserviceprovider and vs_participant, so we either need to split, or set the odatatype in situ instead of here
-        public string odatatype => "Microsoft.Dynamics.CRM.vsd_participant"; 
+        public string odatatype => "Microsoft.Dynamics.CRM.vsd_participant";
         public string vsd_name { get; set; }
         public string vsd_phonenumber { get; set; }
         public string vsd_addressline1 { get; set; }
@@ -156,6 +156,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string odatatype => "Microsoft.Dynamics.CRM.activitymimeattachment";
         public string filename { get; set; }
         public string body { get; set; }
+        public string subject { get; set; }
     }
 
 }

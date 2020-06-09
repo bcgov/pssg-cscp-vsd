@@ -2,7 +2,7 @@
 
 /* Controls Survey styles */
 
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 @import "~mygovbc-bootstrap-theme/dist/mygovbc-bootstrap-theme.min.css";
 @include mat-core();
 $primary: mat-palette($mat-grey, 400);
@@ -20,7 +20,7 @@ body {
     /*width: 99%;*/
 }
 
-html{
+html {
     background: #f2f2f2;
 }
 
@@ -54,7 +54,7 @@ html{
 }
 
 .btn-secondary:hover {
-    background-color: #F2F2F2;
+    background-color: #f2f2f2;
 }
 
 .btn-secondary:focus {
@@ -79,7 +79,7 @@ html{
 }
 
 .ctx-home {
-    background: #f2f2f2
+    background: #f2f2f2;
 }
 
 .panel-footer {
@@ -89,7 +89,7 @@ html{
 
 p {
     font-weight: Regular;
-    font-size: 14px #494949
+    font-size: 14px #494949;
 }
 
 h1 {
@@ -151,18 +151,18 @@ select.form-control:not([size]):not([multiple]) {
     line-height: 55px;
     width: 48px;
     border-radius: 48px;
-    background-color: #7596C8;
+    background-color: #7596c8;
     text-align: center;
     display: inline-block;
 }
 
-.summary-table  table {
+.summary-table table {
     border-spacing: 5px;
     border-collapse: separate;
     width: 100%;
 }
 
-.summary-table  th {
+.summary-table th {
     background-color: #38598a;
     color: #fff;
     padding: 5px 5px 3px 10px;
@@ -178,7 +178,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 
 .blue-header {
-    background-color: #38598A;
+    background-color: #38598a;
     color: #fff;
     padding: 10px 7px 7px 15px;
     font-size: 16px;
@@ -195,16 +195,16 @@ hr {
 }
 
 .error-states {
-    color: #d8292f
+    color: #d8292f;
 }
 
 .error-summary {
-    background-color: #F2F2F2;
+    background-color: #f2f2f2;
     border: solid 1px transparent;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-    color: #d8292f
+    color: #d8292f;
 }
 
 .form-wrapper {
@@ -220,7 +220,7 @@ hr {
 }
 
 .red-snackbar {
-    background: #F44336;
+    background: #f44336;
 }
 
 .green-snackbar {
@@ -228,7 +228,7 @@ hr {
 }
 
 .step {
-    border-bottom: 2px solid #FCBA19;
+    border-bottom: 2px solid #fcba19;
     display: inline-block;
 }
 
@@ -237,13 +237,12 @@ hr {
 }
 
 .notes {
-    background-color: #F2F2F2;
+    background-color: #f2f2f2;
     border: solid 1px transparent;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
 }
-
 
 .submitted-header {
     background-color: rgba(56, 89, 138, 1);
@@ -268,8 +267,8 @@ hr {
 }
 
 .submit-container {
-    background-color: #38598A;
-    border-bottom: solid 4px #FFCC00;
+    background-color: #38598a;
+    border-bottom: solid 4px #ffcc00;
     color: #fff;
     margin-bottom: 20px;
     padding: 30px;
@@ -277,4 +276,12 @@ hr {
     h2 {
         color: #fff;
     }
+}
+
+.cancel-link {
+    cursor: pointer;
+}
+
+.cancel-link:hover {
+    text-decoration: underline !important;
 }
