@@ -322,7 +322,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
-        legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
+        //legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
+        legalGuardianFiles: this.fb.group({
+          filename: [''],
+          body: [''],
+        }),
       }),
 
       declarationInformation: this.fb.group({
