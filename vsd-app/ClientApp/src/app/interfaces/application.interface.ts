@@ -175,6 +175,7 @@ interface Racafinformation {
 }
 interface Othertreatment {
   providerType: string;
+  providerTypeText: string;
   providerName: string;
   providerPhoneNumber: string;
   providerAddress: Address;
