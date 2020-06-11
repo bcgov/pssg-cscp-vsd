@@ -256,7 +256,7 @@
                         </label>
                       </div>
                     </div>
-                    <ng-template #gstExemptionInfo><h3>Exempt from GST</h3><p>Registered psychologists are exempted from GST.</p></ng-template>
+                    <ng-template #gstExemptionInfo><h3>Exempt from GST</h3><p>For example Registered psychologist are exempted from GST.</p></ng-template>
                     <br />
 
                     <div class="row grand-total">
@@ -312,7 +312,7 @@
                         </ng-template>
                       </div>
                     </div>
-                    <p class="pull-right" style="max-width: 400px;"><em>If all the above items you have entered are approved, you will be eligible to receive the amount calculated from the hours submitted.</em></p>
+                    <p class="pull-right" style="max-width: 400px;"><em>If additional information is required, we will be in contact with you. Once invoices are processed, payment will be issued within a few days</em></p>
                   </div>
 
                   <section>
@@ -367,7 +367,7 @@
 
             <section>
 
-              <h3>Vendor Information</h3>
+              <h2 class="blue-header">Vendor Information <button *ngIf="!showPrintView" (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
               <table class="table table-striped review-table">
                 <tbody>
                   <tr>
@@ -511,7 +511,7 @@
           <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
           <span style="float: right;">
             <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
-            <button (click)="invoiceSuccess()" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
+            <!--<button (click)="invoiceSuccess()" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>-->
           </span>
         </section>
       </div>
