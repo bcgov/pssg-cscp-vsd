@@ -162,6 +162,8 @@ interface Crimelocation {
 interface Policereport {
   policeFileNumber: string;
   investigatingOfficer: string;
+  policeForce: string;
+  reportDate: Date;
 }
 
 interface Racafinformation {

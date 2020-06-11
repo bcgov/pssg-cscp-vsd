@@ -168,7 +168,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         application.PoliceFileNumberCollection = model.CrimeInformation.policeReports.Select(r => new Policefilenumbercollection
                         {
                             vsd_investigatingpoliceofficername = r.investigatingOfficer,
-                            vsd_policefilenumber = r.policeFileNumber
+                            vsd_policefilenumber = r.policeFileNumber,
+                            vsd_policeforce = r.policeForce,
+                            vsd_reportdate = r.reportDate
                         }).ToArray();
                     }
                 }

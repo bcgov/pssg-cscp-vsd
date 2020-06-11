@@ -299,7 +299,7 @@
           <div class="row">
             <div class="col-12">
               <h3>Primary Home Address</h3>
-              <app-address-block formControlName="primaryAddress" [required]="preferredMethodOfContact.value === '4'"></app-address-block>
+              <app-address [group]="form.get('personalInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
             </div>
           </div>
           <div class="row">
@@ -308,7 +308,7 @@
                 Alternate Mailing Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
               </h3>
               <ng-template #altAddressTemplate>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</ng-template>
-              <app-address-block formControlName="alternateAddress" [required]="preferredMethodOfContact.value === '100000002'"></app-address-block>
+              <app-address [group]="form.get('personalInformation.alternateAddress')" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
             </div>
           </div>
           <!-- //////////////////////////////For rehoming above//////////////////////////////// -->
@@ -441,7 +441,7 @@
             </section>
 
             <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000001">
-              <app-field label="To which police force was the report made?">
+              <!-- <app-field label="To which police force was the report made?">
                 <input class="form-control standard" type="text" formControlName="policeReportedWhichPoliceForce">
               </app-field>
 
@@ -460,26 +460,48 @@
                   <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
                   <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
                 </span>
-              </app-field>
+              </app-field> -->
 
               <div class="police-report-information">
                 <div class="police-report-listing" formArrayName="policeReports" *ngFor="let item of form.get('crimeInformation.policeReports')['controls']; let i = index;">
-                  <div [formGroupName]="i" class="row police-report">
-                    <div class="col-4">
-                      <app-field label="Police File Number (if known)" [tooltipReference]="policeFileNumber">
-                        <input class="form-control" type="text" formControlName="policeFileNumber">
-                      </app-field>
+                  <div [formGroupName]="i" class="police-report">
+                    <div class="row">
+                      <div class="col-12">
+                        <app-field label="Date report was made to the police.">
+                          <input type="text" class="form-control date-picker" formControlName="reportDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportDatePicker" (focus)="reportDatePicker.open()" (click)="reportDatePicker.open()" readonly>
+                          <mat-datepicker #reportDatePicker></mat-datepicker>
+                          <!-- <span *ngIf="form.get('policeReportedMultipleTimes').value === true">
+                          <span> - </span>
+                          <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
+                          <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
+                        </span> -->
+                        </app-field>
+                      </div>
                     </div>
-                    <div class="col-4">
-                      <app-field label="Name of investigating officer (if known)">
-                        <input class="form-control" type="text" formControlName="investigatingOfficer">
-                      </app-field>
+                    <div class="row">
+                      <div class="col-12">
+                        <app-field label="To which police force was the report made?">
+                          <input class="form-control standard" type="text" formControlName="policeForce">
+                        </app-field>
+                      </div>
                     </div>
-                    <div class="col-4">
-                      <br />
-                      <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport">
-                        <i class="fas fa-trash-alt"></i> Remove
-                      </a>
+                    <div class="row">
+                      <div class="col-4">
+                        <app-field label="Police File Number (if known)" [tooltipReference]="policeFileNumber">
+                          <input class="form-control" type="text" formControlName="policeFileNumber">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                        <app-field label="Name of investigating officer (if known)">
+                          <input class="form-control" type="text" formControlName="investigatingOfficer">
+                        </app-field>
+                      </div>
+                      <div class="col-4">
+                        <br />
+                        <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport">
+                          <i class="fas fa-trash-alt"></i> Remove
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1254,22 +1276,6 @@
             <h3>Contact Information</h3>
             <div class="row">
               <div class="col-4">
-                <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('representativeInformation.representativePreferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
-                  <select class="form-control" formControlName="representativePreferredMethodOfContact">
-                    <option value="0">Select...</option>
-                    <option value="100000000">Phone Call</option>
-                    <option value="100000001">Email</option>
-                    <option value="100000002">Mail</option>
-                  </select>
-                </app-field>
-              </div>
-              <div class="col-4">
-              </div>
-              <div class="col-4">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-4">
                 <app-field label="Phone Number (incl. area code)" [required]="representativePhoneIsRequired" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
                   <input class="form-control" maxlength="10" type="text" formControlName="representativePhoneNumber">
                 </app-field>
@@ -1287,7 +1293,24 @@
             </div>
 
             <h3>Mailing Address</h3>
-            <app-address [group]="form.get('representativeInformation.representativeAddress')" [showChildrenAsRequired]="representativeAddressIsRequired"></app-address>
+            <app-address [group]="form.get('representativeInformation.representativeAddress')"></app-address>
+
+            <div class="row">
+              <div class="col-4">
+                <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('representativeInformation.representativePreferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
+                  <select class="form-control" formControlName="representativePreferredMethodOfContact">
+                    <option value="0">Select...</option>
+                    <option value="100000000">Phone Call</option>
+                    <option value="100000001">Email</option>
+                    <option value="100000002">Mail</option>
+                  </select>
+                </app-field>
+              </div>
+              <div class="col-4">
+              </div>
+              <div class="col-4">
+              </div>
+            </div>
 
             <h2 class="blue-header">Proof of Guardianship/Trusteeship</h2>
             <p>Note: If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship/trusteeship.</p>

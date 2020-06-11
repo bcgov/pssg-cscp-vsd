@@ -194,6 +194,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       .subscribe(value => {
         this.copyPersonalAddressToVictimAddress();
       });
+
+    this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
   }
 
   showSignPad(group, control): void {
@@ -390,7 +392,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   createPoliceReport(): FormGroup {
     return this.fb.group({
       policeFileNumber: '',
-      investigatingOfficer: ''
+      investigatingOfficer: '',
+      policeForce: '',
+      reportDate: '',
     });
   }
 
@@ -811,6 +815,72 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         authorizedPersonSignature: [''], //, Validators.required],
       }),
     });
+  }
+
+  setRequiredFields() {
+    // set all form validation
+    // this.setCompletingOnBehalfOf();
+    // this.setCvapStaffSharing();
+    // this.setHospitalTreatment();
+    // this.setPreferredContactMethod();
+    this.setRepresentativePreferredMethodOfContact();
+  }
+
+  setRepresentativePreferredMethodOfContact(): void {
+    // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
+    const responseCode: number = parseInt(this.form.get('representativeInformation.representativePreferredMethodOfContact').value);
+    if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
+    let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
+    let emailControl = this.form.get('representativeInformation.representativeEmail');
+    let addressControls = [
+      this.form.get('representativeInformation').get('representativeAddress.country'),
+      this.form.get('representativeInformation').get('representativeAddress.province'),
+      this.form.get('representativeInformation').get('representativeAddress.city'),
+      this.form.get('representativeInformation').get('representativeAddress.line1'),
+      this.form.get('representativeInformation').get('representativeAddress.postalCode'),
+    ];
+
+    phoneControl.clearValidators();
+    phoneControl.setErrors(null);
+    emailControl.clearValidators();
+    emailControl.setErrors(null);
+    for (let control of addressControls) {
+      control.clearValidators();
+      control.setErrors(null);
+    }
+
+    if (responseCode === 100000000) {
+      phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+      this.representativePhoneIsRequired = true;
+      this.representativeEmailIsRequired = false;
+      // this.representativeAddressIsRequired = true;
+    } else if (responseCode === 100000001) {
+      emailControl.setValidators([Validators.required, Validators.email]);
+      this.representativePhoneIsRequired = false;
+      this.representativeEmailIsRequired = true;
+      // this.representativeAddressIsRequired = true;
+    } else if (responseCode === 100000002) {
+      // for (let control of addressControls) {
+      //   control.setValidators([Validators.required]);
+      // }
+      this.representativePhoneIsRequired = false;
+      this.representativeEmailIsRequired = false;
+      // this.representativeAddressIsRequired = true;
+    }
+
+    for (let control of addressControls) {
+      control.setValidators([Validators.required]);
+    }
+    this.representativeAddressIsRequired = true;
+
+    phoneControl.markAsTouched();
+    phoneControl.updateValueAndValidity();
+    emailControl.markAsTouched();
+    emailControl.updateValueAndValidity();
+    for (let control of addressControls) {
+      control.markAsTouched();
+      control.updateValueAndValidity();
+    }
   }
 
   onRepresentativeFileBundle(fileBundle: FileBundle) {

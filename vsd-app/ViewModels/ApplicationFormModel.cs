@@ -101,6 +101,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     {
         public string policeFileNumber { get; set; }
         public string investigatingOfficer { get; set; }
+        public string policeForce { get; set; }
+        public DateTime? reportDate { get; set; }
     }
 
     public class Medicalinformation

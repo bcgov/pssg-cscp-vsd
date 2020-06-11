@@ -128,6 +128,8 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string odatatype => "Microsoft.Dynamics.CRM.vsd_applicationpolicenumber";
         public string vsd_policefilenumber { get; set; }
         public string vsd_investigatingpoliceofficername { get; set; }
+        public string vsd_policeforce { get; set; }
+        public DateTime? vsd_reportdate { get; set; }
     }
 
     public class Providercollection

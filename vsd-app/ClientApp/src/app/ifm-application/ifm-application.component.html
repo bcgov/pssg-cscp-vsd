@@ -634,7 +634,7 @@
               </section>
 
               <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000001">
-                <app-field label="To which police force was the report made?">
+                <!-- <app-field label="To which police force was the report made?">
                   <input class="form-control standard" type="text" formControlName="policeReportedWhichPoliceForce">
                 </app-field>
 
@@ -653,26 +653,48 @@
                     <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
                     <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
                   </span>
-                </app-field>
+                </app-field> -->
 
                 <div class="police-report-information">
                   <div class="police-report-listing" formArrayName="policeReports" *ngFor="let item of form.get('crimeInformation.policeReports')['controls']; let i = index;">
-                    <div [formGroupName]="i" class="row police-report">
-                      <div class="col-4">
-                        <app-field label="Police File Number (if known)" [tooltipReference]="policeFileNumber">
-                          <input class="form-control" type="text" formControlName="policeFileNumber">
-                        </app-field>
+                    <div [formGroupName]="i" class="police-report">
+                      <div class="row">
+                        <div class="col-12">
+                          <app-field label="Date report was made to the police.">
+                            <input type="text" class="form-control date-picker" formControlName="reportDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportDatePicker" (focus)="reportDatePicker.open()" (click)="reportDatePicker.open()" readonly>
+                            <mat-datepicker #reportDatePicker></mat-datepicker>
+                            <!-- <span *ngIf="form.get('policeReportedMultipleTimes').value === true">
+                            <span> - </span>
+                            <input type="text" class="form-control date-picker" formControlName="policeReportedEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="policeReportedEndDatePicker" (focus)="policeReportedEndDatePicker.open()" (click)="policeReportedEndDatePicker.open()" readonly>
+                            <mat-datepicker #policeReportedEndDatePicker></mat-datepicker>
+                          </span> -->
+                          </app-field>
+                        </div>
                       </div>
-                      <div class="col-4">
-                        <app-field label="Name of investigating officer (if known)">
-                          <input class="form-control" type="text" formControlName="investigatingOfficer">
-                        </app-field>
+                      <div class="row">
+                        <div class="col-12">
+                          <app-field label="To which police force was the report made?">
+                            <input class="form-control standard" type="text" formControlName="policeForce">
+                          </app-field>
+                        </div>
                       </div>
-                      <div class="col-4">
-                        <br />
-                        <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport">
-                          <i class="fas fa-trash-alt"></i> Remove
-                        </a>
+                      <div class="row">
+                        <div class="col-4">
+                          <app-field label="Police File Number (if known)" [tooltipReference]="policeFileNumber">
+                            <input class="form-control" type="text" formControlName="policeFileNumber">
+                          </app-field>
+                        </div>
+                        <div class="col-4">
+                          <app-field label="Name of investigating officer (if known)">
+                            <input class="form-control" type="text" formControlName="investigatingOfficer">
+                          </app-field>
+                        </div>
+                        <div class="col-4">
+                          <br />
+                          <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport">
+                            <i class="fas fa-trash-alt"></i> Remove
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1478,7 +1500,7 @@
               </div>
 
               <h3>Contact Information</h3>
-              
+
               <div class="row">
                 <div class="col-4">
                   <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
@@ -1516,7 +1538,7 @@
                 <div class="col-4">
                 </div>
               </div>
-              
+
               <h2 class="blue-header">Proof of Guardianship/Trusteeship</h2>
               <p>Note: If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship/trusteeship.</p>
               <!-- <div class="file-upload-placeholder">
