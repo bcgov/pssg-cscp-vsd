@@ -1053,23 +1053,27 @@
                     <div>
                       <app-field label="Type of provider">
                         <label class="inline-label">
-                          <input type="radio" [value]="100000001" name="providerType" formControlName="providerType">
+                          <input type="radio" [value]="'Specialist'" name="providerType" formControlName="providerType">
                           <span>Specialist</span>
                         </label>
 
                         <label class="inline-label">
-                          <input type="radio" [value]="100000002" name="providerType" formControlName="providerType">
+                          <input type="radio" [value]="'Counsellor'" name="providerType" formControlName="providerType">
                           <span>Counsellor / Psychologist</span>
                         </label>
 
                         <label class="inline-label">
-                          <input type="radio" [value]="100000003" name="providerType" formControlName="providerType">
+                          <input type="radio" [value]="'Dentist'" name="providerType" formControlName="providerType">
                           <span>Dentist</span>
                         </label>
 
                         <label class="inline-label">
-                          <input type="radio" [value]="100000004" name="providerType" formControlName="providerType">
+                          <input type="radio" [value]="'Other'" name="providerType" formControlName="providerType">
                           <span>Other</span>
+                        </label>
+
+                        <label class="inline-label">
+                          <input type="text" maxlength="50" class="form-control" formControlName="providerTypeText">
                         </label>
                       </app-field>
                     </div>

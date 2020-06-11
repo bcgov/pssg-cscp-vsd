@@ -337,7 +337,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
-        legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
+        //legalGuardianFiles: this.fb.array([]),  // This will be a collection of uploaded files
+        legalGuardianFiles: this.fb.group({
+          filename: [''],
+          body: [''],
+        }),
       }),
 
       declarationInformation: this.fb.group({
@@ -551,6 +555,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     // make a form group for insertion into the form
     return this.fb.group({
       providerType: [''],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
+      providerTypeText: [''],
       providerName: ['', Validators.required],
       providerPhoneNumber: [''],
       providerAddress: [''],

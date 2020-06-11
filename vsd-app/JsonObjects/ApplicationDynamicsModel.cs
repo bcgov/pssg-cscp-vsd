@@ -145,6 +145,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_postalcode { get; set; }
         public string vsd_email { get; set; }
         public string vsd_relationship1 { get; set; }
+        public string vsd_relationship1other { get; set; }
         public string vsd_country { get; set; }
         public string vsd_firstname { get; set; }
         public string vsd_lastname { get; set; }
