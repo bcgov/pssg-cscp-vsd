@@ -105,6 +105,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public int? vsd_cvap_ifmmissedwork { get; set; }
         public DateTime? vsd_cvap_ifmmissedworkstart { get; set; }
         public DateTime? vsd_cvap_ifmmissedworkend { get; set; }
+        public int? vsd_cvap_ifmcurrentlyoffwork { get; set; }
         public int? vsd_cvap_ifmlostwages { get; set; }
         public int? vsd_cvap_ifmselfemployed { get; set; }
         public int? vsd_cvap_ifmcontactemployer { get; set; }

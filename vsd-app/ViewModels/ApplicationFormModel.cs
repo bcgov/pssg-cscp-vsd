@@ -168,7 +168,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int didYouMissWorkDueToCrime { get; set; }
         public DateTime? daysWorkMissedStart { get; set; }
         public DateTime? daysWorkMissedEnd { get; set; }
-        public int? areYouStillMissingWork { get; set; }
+        public int? areYouStillOffWork { get; set; }
         public int? didYouLoseWages { get; set; }
         public int? areYouSelfEmployed { get; set; }
         public Employer[] employers { get; set; }

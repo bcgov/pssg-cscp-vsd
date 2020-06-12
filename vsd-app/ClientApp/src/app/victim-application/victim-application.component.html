@@ -840,7 +840,7 @@
                 <app-field label="Name of hospital" [required]="true" [valid]="isFieldValid('medicalInformation.treatedAtHospitalName')" errorMessage="Please select a hospital">
                   <select class="form-control standard" formControlName="treatedAtHospitalName">
                     <option value="">Select...</option>
-                    <option *ngFor="let item of hospitalList">{{ item }}</option>
+                    <option *ngFor="let item of hospitalList" [value]="item">{{ item }}</option>
                   </select>
                 </app-field>
               </section>
