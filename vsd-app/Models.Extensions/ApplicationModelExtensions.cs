@@ -241,13 +241,12 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             {
                                 vsd_name = t.providerName,
                                 vsd_phonenumber = t.providerPhoneNumber,
-
-                                vsd_addressline1 = t.providerAddress.line1,
-                                vsd_addressline2 = t.providerAddress.line2,
-                                vsd_city = t.providerAddress.city,
-                                vsd_province = t.providerAddress.province,
-                                vsd_country = t.providerAddress.country,
-                                vsd_postalcode = t.providerAddress.postalCode,
+                                vsd_addressline1 = t.providerAddress != null ? t.providerAddress.line1 : "",
+                                vsd_addressline2 = t.providerAddress != null ? t.providerAddress.line2 : "",
+                                vsd_city = t.providerAddress != null ? t.providerAddress.city : "",
+                                vsd_province = t.providerAddress != null ? t.providerAddress.province : "",
+                                vsd_country = t.providerAddress != null ? t.providerAddress.country : "",
+                                vsd_postalcode = t.providerAddress != null ? t.providerAddress.postalCode : "",
                                 vsd_relationship1 = "Other",//t.providerType.ToString(),
                                 vsd_relationship1other = t.providerTypeText,// t.providerType.ToString(),
                                 //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
