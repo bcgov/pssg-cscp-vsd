@@ -60,6 +60,8 @@ interface iApplication {
   vsd_applicantsmiddlename: string;
   vsd_applicantsoccupation: string;
   vsd_applicantspersonalhealthnumber: string;
+  vsd_applicantsmspprovince: string;
+  vst_applicantsmspprovinceother: string;
   vsd_applicantspreferredmethodofcontact: number;
   vsd_applicantsprimaryaddressline1: string;
   vsd_applicantsprimaryaddressline2: string;

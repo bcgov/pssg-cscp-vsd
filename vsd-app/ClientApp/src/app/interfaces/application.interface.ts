@@ -71,6 +71,8 @@ export interface CrimeInformation {
 export interface MedicalInformation {
   doYouHaveMedicalServicesCoverage: string;
   personalHealthNumber: string;
+  haveMedicalCoverageProvince: string;
+  haveMedicalCoverageProvinceOther: string;
   doYouHaveOtherHealthCoverage: string;
   otherHealthCoverageProviderName: string;
   otherHealthCoverageExtendedPlanNumber: string;

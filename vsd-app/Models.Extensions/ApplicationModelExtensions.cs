@@ -222,6 +222,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             if (model.MedicalInformation != null)
             {
                 application.Application.vsd_applicantspersonalhealthnumber = model.MedicalInformation.personalHealthNumber;
+                application.Application.vsd_applicantsmspprovince = model.MedicalInformation.haveMedicalCoverageProvince;
+                application.Application.vsd_applicantsmpsprovinceother = model.MedicalInformation.haveMedicalCoverageProvinceOther;
                 application.Application.vsd_applicantsextendedhealthprovidername = model.MedicalInformation.otherHealthCoverageProviderName; // TODO: verify mapping, "other" seems weird here
                 application.Application.vsd_applicantsextendedhealthnumber = model.MedicalInformation.otherHealthCoverageExtendedPlanNumber; // TODO: verify mapping, "other" seems weird here
 
