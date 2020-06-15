@@ -394,8 +394,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     return this.fb.group({
       policeFileNumber: '',
       investigatingOfficer: '',
-      policeForce: '',
-      reportDate: '',
+      policeDetachment: '',
+      reportStartDate: '',
+      reportEndDate: '',
+      policeReportedMultipleTimes: ['']
     });
   }
 
@@ -666,10 +668,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
         wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
 
-        policeReportedWhichPoliceForce: [''],
-        policeReportedMultipleTimes: [''],
-        policeReportedDate: [''],
-        policeReportedEndDate: [''],
+        // policeReportedWhichPoliceForce: [''],
+        // policeReportedMultipleTimes: [''],
+        // policeReportedDate: [''],
+        // policeReportedEndDate: [''],
         policeReports: this.fb.array([this.createPoliceReport()]),
 
         noPoliceReportIdentification: [''],

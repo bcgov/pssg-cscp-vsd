@@ -50,9 +50,9 @@ export interface CrimeInformation {
   wasReportMadeToPolice: number;
   policeReportedMultipleTimes: string;
   crimeDetails: string;
-  policeReportedDate?: Date;
-  policeReportedEndDate?: Date;
-  policeReportedWhichPoliceForce: string;
+  // policeReportedDate?: Date;
+  // policeReportedEndDate?: Date;
+  // policeReportedWhichPoliceForce: string;
   offenderFirstName: string;
   offenderMiddleName: string;
   offenderLastName: string;
@@ -162,8 +162,11 @@ interface Crimelocation {
 interface Policereport {
   policeFileNumber: string;
   investigatingOfficer: string;
-  policeForce: string;
-  reportDate: Date;
+  // policeForce: string;
+  // reportDate: Date;
+  policeDetachment: string;
+  reportStartDate: Date;
+  reportEndDate: Date;
 }
 
 interface Racafinformation {

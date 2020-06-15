@@ -148,16 +148,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     string errormessage = e.Message;
                 }
 
-                application.Application.vsd_cvap_reportedtopolice = model.CrimeInformation.wasReportMadeToPolice;
-                application.Application.vsd_cvap_policedetachment = model.CrimeInformation.policeReportedWhichPoliceForce;
-                if (model.CrimeInformation.policeReportedDate.HasValue)
-                {
-                    application.Application.vsd_cvap_policereportingstartdate = model.CrimeInformation.policeReportedDate;
-                }
-                if (model.CrimeInformation.policeReportedEndDate.HasValue)
-                {
-                    application.Application.vsd_cvap_policereportingenddate = model.CrimeInformation.policeReportedEndDate;
-                }
+                application.Application.vsd_cvap_reporttopolice = model.CrimeInformation.wasReportMadeToPolice;
+                // application.Application.vsd_cvap_policedetachment = model.CrimeInformation.policeReportedWhichPoliceForce;
+                // if (model.CrimeInformation.policeReportedDate.HasValue)
+                // {
+                //     application.Application.vsd_cvap_policereportingstartdate = model.CrimeInformation.policeReportedDate;
+                // }
+                // if (model.CrimeInformation.policeReportedEndDate.HasValue)
+                // {
+                //     application.Application.vsd_cvap_policereportingenddate = model.CrimeInformation.policeReportedEndDate;
+                // }
                 application.Application.vsd_cvap_crimereportedto = model.CrimeInformation.noPoliceReportIdentification; // TODO: verify mapping - I think it's right, but different names
 
                 // Setup policeFiles, don't show if there isn't any
@@ -169,8 +169,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         {
                             vsd_investigatingpoliceofficername = r.investigatingOfficer,
                             vsd_policefilenumber = r.policeFileNumber,
-                            vsd_policeforce = r.policeForce,
-                            vsd_reportdate = r.reportDate
+                            vsd_policedetachment = r.policeDetachment,
+                            vsd_policereportingstartdate = r.reportStartDate,
+                            vsd_policereportingenddate = r.reportEndDate
                         }).ToArray();
                     }
                 }

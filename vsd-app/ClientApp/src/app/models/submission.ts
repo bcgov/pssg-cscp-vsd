@@ -19,6 +19,9 @@ export interface iPoliceFileNumber {
   "@odata.type": "Microsoft.Dynamics.CRM.vsd_applicationpolicenumber";
   vsd_investigatingpoliceofficername: string;
   vsd_policefilenumber: string;
+  vsd_policedetachment: string;
+  vsd_policereportingstartdate: string;
+  vsd_policereportingenddate: string;
 }
 export interface iProvider {
   "@odata.type": "Microsoft.Dynamics.CRM.vsd_participant";
@@ -92,12 +95,12 @@ interface iApplication {
   vsd_cvap_offendermiddlename: string;
   vsd_cvap_onbehalfofdeclaration: number;
   vsd_cvap_otherbenefitsother: string;
-  vsd_cvap_policedetachment: string;
-  vsd_cvap_policereportingenddate: string;
-  vsd_cvap_policereportingstartdate: string;
+  // vsd_cvap_policedetachment: string;
+  // vsd_cvap_policereportingenddate: string;
+  // vsd_cvap_policereportingstartdate: string;
   vsd_cvap_reasontoapplylate: string;
   vsd_cvap_relationshiptooffender: string;
-  vsd_cvap_reportedtopolice: number;
+  vsd_cvap_reporttopolice: number;
   vsd_cvap_treatmentdate: string;
   vsd_cvap_treatmenthospitalname: string;
   vsd_cvap_typeofcrime: string;

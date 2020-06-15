@@ -21,6 +21,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_otherfirstname { get; set; }
         public string vsd_otherlastname { get; set; }
         public DateTime? vsd_dateofnamechange { get; set; }
+        public string vsd_cvap_relationshiptovictim { get; set; }
 
         public int vsd_applicantsgendercode { get; set; }
         public DateTime? vsd_applicantsbirthdate { get; set; }
@@ -48,6 +49,29 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_applicantsalternatepostalcode { get; set; }
         public string vsd_applicantsalternatecountry { get; set; }
 
+
+        //TODO - missing victim information - these are the fields, need to include them in various other places
+        // public string vsd_cvap_victimfirstname { get; set; }
+        // public string vsd_cvap_victimmiddlename { get; set; }
+        // public string vsd_cvap_victimlastname { get; set; }
+        // public string vsd_cvap_victimotherfirstname { get; set; }
+        // public string vsd_cvap_victimotherlastname { get; set; }
+        // public string vsd_cvap_victimdateofnamechange { get; set; }
+        // public int vsd_cvap_victimgendercode { get; set; }
+        // public DateTime? vsd_cvap_victimbirthdate { get; set; }
+        // public int? vsd_cvap_victimmaritalstatus { get; set; }
+        // public string vsd_cvap_victimsocialinsurancenumber { get; set; }
+        // public string vsd_cvap_victimoccupation { get; set; }
+        // public string vsd_cvap_victimprimaryphonenumber { get; set; }
+        // public string vsd_cvap_victimalternatephonenumber { get; set; }
+        // public string vsd_cvap_victimemailaddress { get; set; }
+        // public string vsd_cvap_victimaddressline1 { get; set; }
+        // public string vsd_cvap_victimaddressline2 { get; set; }
+        // public string vsd_cvap_victimcity { get; set; }
+        // public string vsd_cvap_victimpostalcode { get; set; }
+        // public string vsd_cvap_victimprovince { get; set; }
+        // public string vsd_cvap_victimcountry { get; set; }
+
         public string vsd_cvap_typeofcrime { get; set; }
         public DateTime? vsd_cvap_crimestartdate { get; set; }
         public DateTime? vsd_cvap_crimeenddate { get; set; }
@@ -56,10 +80,10 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_crimedetails { get; set; }
         public string vsd_cvap_injuries { get; set; }
 
-        public int? vsd_cvap_reportedtopolice { get; set; }
-        public string vsd_cvap_policedetachment { get; set; }
-        public DateTime? vsd_cvap_policereportingstartdate { get; set; }
-        public DateTime? vsd_cvap_policereportingenddate { get; set; }
+        public int? vsd_cvap_reporttopolice { get; set; }
+        // public string vsd_cvap_policedetachment { get; set; } //deleted in COAST
+        // public DateTime? vsd_cvap_policereportingstartdate { get; set; }
+        // public DateTime? vsd_cvap_policereportingenddate { get; set; }
         public string vsd_cvap_crimereportedto { get; set; }
 
         public string vsd_cvap_offenderfirstname { get; set; }
@@ -129,8 +153,10 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string odatatype => "Microsoft.Dynamics.CRM.vsd_applicationpolicenumber";
         public string vsd_policefilenumber { get; set; }
         public string vsd_investigatingpoliceofficername { get; set; }
-        public string vsd_policeforce { get; set; }
-        public DateTime? vsd_reportdate { get; set; }
+        // public string vsd_policeforce { get; set; }
+        public string vsd_policedetachment { get; set; }
+        public DateTime? vsd_policereportingstartdate { get; set; }
+        public DateTime? vsd_policereportingenddate { get; set; }
     }
 
     public class Providercollection
