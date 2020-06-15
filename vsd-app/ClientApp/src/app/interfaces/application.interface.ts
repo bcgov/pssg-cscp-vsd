@@ -50,9 +50,9 @@ export interface CrimeInformation {
   wasReportMadeToPolice: number;
   policeReportedMultipleTimes: string;
   crimeDetails: string;
-  policeReportedDate?: Date;
-  policeReportedEndDate?: Date;
-  policeReportedWhichPoliceForce: string;
+  // policeReportedDate?: Date;
+  // policeReportedEndDate?: Date;
+  // policeReportedWhichPoliceForce: string;
   offenderFirstName: string;
   offenderMiddleName: string;
   offenderLastName: string;
@@ -66,6 +66,7 @@ export interface CrimeInformation {
   courtFiles: Courtfile[];
   racafInformation: Racafinformation;
   additionalInformationFiles: DocumentCollectioninformation[];
+  documentDescription: string;
 }
 export interface MedicalInformation {
   doYouHaveMedicalServicesCoverage: string;
@@ -137,6 +138,7 @@ export interface RepresentativeInformation {
   representativeEmail: string;
   representativeAddress: Address;
   legalGuardianFiles: DocumentCollectioninformation[];
+  documentDescription: string;
 }
 export interface DeclarationInformation {
   declaredAndSigned: string;
@@ -162,6 +164,11 @@ interface Crimelocation {
 interface Policereport {
   policeFileNumber: string;
   investigatingOfficer: string;
+  // policeForce: string;
+  // reportDate: Date;
+  policeDetachment: string;
+  reportStartDate: Date;
+  reportEndDate: Date;
 }
 
 interface Racafinformation {

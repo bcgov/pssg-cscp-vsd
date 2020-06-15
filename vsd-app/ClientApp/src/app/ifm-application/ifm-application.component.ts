@@ -69,6 +69,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   showRemovePoliceReport: boolean = false;
   showAddProvider: boolean = true;
   showRemoveProvider: boolean = false;
+  showAdditionalInformationDocumentDescription: boolean = false;
+  showLegalGuardianDocumentDescription: boolean = false;
 
   public currentFormStep: number;
 
@@ -196,6 +198,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       .subscribe(value => {
         this.copyPersonalAddressToVictimAddress();
       });
+
+    this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
   }
 
   showSignPad(group, control): void {
@@ -393,7 +397,11 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   createPoliceReport(): FormGroup {
     return this.fb.group({
       policeFileNumber: '',
-      investigatingOfficer: ''
+      investigatingOfficer: '',
+      policeDetachment: '',
+      reportStartDate: '',
+      reportEndDate: '',
+      policeReportedMultipleTimes: ['']
     });
   }
 
@@ -656,18 +664,18 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
-          filename: [''], // fileName
-          body: [''], // fileData
+        additionalInformationFiles: this.fb.group({
+          filename: [''],
+          body: [''],
         }), // This will be a collection of uploaded files
-        //additionalInformationFiles: this.fb.array([]),
+        documentDescription: [''],
 
         wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
 
-        policeReportedWhichPoliceForce: [''],
-        policeReportedMultipleTimes: [''],
-        policeReportedDate: [''],
-        policeReportedEndDate: [''],
+        // policeReportedWhichPoliceForce: [''],
+        // policeReportedMultipleTimes: [''],
+        // policeReportedDate: [''],
+        // policeReportedEndDate: [''],
         policeReports: this.fb.array([this.createPoliceReport()]),
 
         noPoliceReportIdentification: [''],
@@ -783,9 +791,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
           country: [{ value: 'Canada', disabled: false }],
         }),
         legalGuardianFiles: this.fb.group({
-          filename: [''], // fileName
-          body: [''], // fileData
+          filename: [''],
+          body: [''],
         }), // This will be a collection of uploaded files
+        documentDescription: [''],
       }),
 
       declarationInformation: this.fb.group({
@@ -817,8 +826,80 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     });
   }
 
+  setRequiredFields() {
+    // set all form validation
+    // this.setCompletingOnBehalfOf();
+    // this.setCvapStaffSharing();
+    // this.setHospitalTreatment();
+    // this.setPreferredContactMethod();
+    this.setRepresentativePreferredMethodOfContact();
+  }
+
+  setRepresentativePreferredMethodOfContact(): void {
+    // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
+    const responseCode: number = parseInt(this.form.get('representativeInformation.representativePreferredMethodOfContact').value);
+    if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
+    let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
+    let emailControl = this.form.get('representativeInformation.representativeEmail');
+    let addressControls = [
+      this.form.get('representativeInformation').get('representativeAddress.country'),
+      this.form.get('representativeInformation').get('representativeAddress.province'),
+      this.form.get('representativeInformation').get('representativeAddress.city'),
+      this.form.get('representativeInformation').get('representativeAddress.line1'),
+      this.form.get('representativeInformation').get('representativeAddress.postalCode'),
+    ];
+
+    phoneControl.clearValidators();
+    phoneControl.setErrors(null);
+    emailControl.clearValidators();
+    emailControl.setErrors(null);
+    for (let control of addressControls) {
+      control.clearValidators();
+      control.setErrors(null);
+    }
+
+    if (responseCode === 100000000) {
+      phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+      this.representativePhoneIsRequired = true;
+      this.representativeEmailIsRequired = false;
+      // this.representativeAddressIsRequired = true;
+    } else if (responseCode === 100000001) {
+      emailControl.setValidators([Validators.required, Validators.email]);
+      this.representativePhoneIsRequired = false;
+      this.representativeEmailIsRequired = true;
+      // this.representativeAddressIsRequired = true;
+    } else if (responseCode === 100000002) {
+      // for (let control of addressControls) {
+      //   control.setValidators([Validators.required]);
+      // }
+      this.representativePhoneIsRequired = false;
+      this.representativeEmailIsRequired = false;
+      // this.representativeAddressIsRequired = true;
+    }
+
+    for (let control of addressControls) {
+      control.setValidators([Validators.required]);
+    }
+    this.representativeAddressIsRequired = true;
+
+    phoneControl.markAsTouched();
+    phoneControl.updateValueAndValidity();
+    emailControl.markAsTouched();
+    emailControl.updateValueAndValidity();
+    for (let control of addressControls) {
+      control.markAsTouched();
+      control.updateValueAndValidity();
+    }
+  }
+
   onRepresentativeFileBundle(fileBundle: FileBundle) {
     try {
+      if (fileBundle.fileData && fileBundle.fileData.length > 0) {
+        this.showLegalGuardianDocumentDescription = true;
+      }
+      else {
+        this.showLegalGuardianDocumentDescription = false;
+      }
       // save the files submitted from the component for attachment into the submitted form.
       const patchObject = {};
       patchObject['representativeInformation.legalGuardianFiles'] = fileBundle;
@@ -836,6 +917,14 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   onFileBundle(fileBundle: FileBundle) {
     try {
+      console.log("on file bundle");
+      console.log(fileBundle);
+      if (fileBundle.fileData && fileBundle.fileData.length > 0) {
+        this.showAdditionalInformationDocumentDescription = true;
+      }
+      else {
+        this.showAdditionalInformationDocumentDescription = false;
+      }
       // save the files submitted from the component for attachment into the submitted form.
       const patchObject = {};
       patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;

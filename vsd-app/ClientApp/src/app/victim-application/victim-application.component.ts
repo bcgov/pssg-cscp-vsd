@@ -77,6 +77,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   phoneIsRequired: boolean = false;
   emailIsRequired: boolean = false;
   addressIsRequired: boolean = true; // Always required
+  alternateAddressIsRequired: boolean = false;
 
   representativePhoneIsRequired: boolean = false;
   representativeEmailIsRequired: boolean = false;
@@ -188,8 +189,22 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         email: ['', [Validators.required]],
         confirmEmail: ['', [Validators.required]],
 
-        primaryAddress: [''],
-        alternateAddress: [''],
+        primaryAddress: this.fb.group({
+          line1: ['', Validators.required],
+          line2: [''],
+          city: ['', Validators.required],
+          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+        alternateAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          city: [''],
+          postalCode: [''],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
       }, { validator: this.matchingEmails('email', 'confirmEmail') }),
       crimeInformation: this.fb.group({
         typeOfCrime: ['', Validators.required],
@@ -216,10 +231,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
             0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
           ], // No: 100000000 Yes: 100000001
 
-        policeReportedWhichPoliceForce: [''],
-        policeReportedMultipleTimes: [''],
-        policeReportedDate: [''],
-        policeReportedEndDate: [''],
+        // policeReportedWhichPoliceForce: [''],
+        // policeReportedMultipleTimes: [''],
+        // policeReportedDate: [''],
+        // policeReportedEndDate: [''],
         policeReports: this.fb.array([this.createPoliceReport()]),
 
         noPoliceReportIdentification: [''],
@@ -550,14 +565,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       providerName: ['', Validators.required],
       providerPhoneNumber: [''],
       providerAddress: [''],
-//      providerAddress: this.fb.group({
-//        line1: [''],
-//        line2: [''],
-//        city: [''],
-//        postalCode: [''],  // , [Validators.pattern(postalRegex)]
-//        province: [{ value: 'British Columbia', disabled: false }],
-//        country: [{ value: 'Canada', disabled: false }],
-//      }),
+      //      providerAddress: this.fb.group({
+      //        line1: [''],
+      //        line2: [''],
+      //        city: [''],
+      //        postalCode: [''],  // , [Validators.pattern(postalRegex)]
+      //        province: [{ value: 'British Columbia', disabled: false }],
+      //        country: [{ value: 'Canada', disabled: false }],
+      //      }),
     });
   }
 
@@ -666,7 +681,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   createPoliceReport(): FormGroup {
     return this.fb.group({
       policeFileNumber: '',
-      investigatingOfficer: ''
+      investigatingOfficer: '',
+      policeDetachment: '',
+      reportStartDate: '',
+      reportEndDate: '',
+      policeReportedMultipleTimes: ['']
     });
   }
 
@@ -709,74 +728,74 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
     //var w = window.open();
     //var fileOutput =
-      this.justiceDataService.createPDF(printContents).subscribe(response => { // download file
-        var mediaType = 'application/pdf';
-        console.log(response);
-        ////var blob = new Blob([response._body], { type: mediaType });
+    this.justiceDataService.createPDF(printContents).subscribe(response => { // download file
+      var mediaType = 'application/pdf';
+      console.log(response);
+      ////var blob = new Blob([response._body], { type: mediaType });
 
 
-        ////=============
-        ////const byteCharacters = btoa(response);
-        ////const byteNumbers = new Array(byteCharacters.length);
-        //const byteNumbers = new Array(response.length);
-        //for (let i = 0; i < response.length; i++) {
-        //  byteNumbers[i] = response.charCodeAt(i);
-        //}
-        //const byteArray = new Uint8Array(byteNumbers);
-        //const blob = new Blob([byteArray], { type: mediaType });
-        //window.open(URL.createObjectURL(blob));
-        ////=============
-
-
-
-        ////=============
-        //const a = document.createElement("a");
-        ////let pdfWindow = window.open("")
-        ////pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(btoa(response)) + "'></iframe>")
-        //a.href = "data:application/pdf," + response;
-        ////a.href = "data:application/pdf;base64," + response.message;
-        //a.download = "file.pdf";
-        //document.body.appendChild(a);
-        //a.click();
-        ////=============
+      ////=============
+      ////const byteCharacters = btoa(response);
+      ////const byteNumbers = new Array(byteCharacters.length);
+      //const byteNumbers = new Array(response.length);
+      //for (let i = 0; i < response.length; i++) {
+      //  byteNumbers[i] = response.charCodeAt(i);
+      //}
+      //const byteArray = new Uint8Array(byteNumbers);
+      //const blob = new Blob([byteArray], { type: mediaType });
+      //window.open(URL.createObjectURL(blob));
+      ////=============
 
 
 
-        //=============
-        //let newResponse: string = response;
-        var blob = new Blob([response], { type: mediaType });
-        console.log(blob);
-        ////saveAs(blob, "myPDF.pdf");
-        ////var blob = new Blob([JSON.stringify(response)], { type: mediaType });
-        var blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl);
-        //window.open(URL.createObjectURL(blob));
-        //=============
+      ////=============
+      //const a = document.createElement("a");
+      ////let pdfWindow = window.open("")
+      ////pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(btoa(response)) + "'></iframe>")
+      //a.href = "data:application/pdf," + response;
+      ////a.href = "data:application/pdf;base64," + response.message;
+      //a.download = "file.pdf";
+      //document.body.appendChild(a);
+      //a.click();
+      ////=============
 
 
-        ////=============
-        //var blob = new Blob([response], { type: mediaType }),
-        //  url = URL.createObjectURL(blob),
-        //  _iFrame = document.createElement('iframe');
 
-        //_iFrame.setAttribute('src', url);
-        ////_iFrame.setAttribute('style', 'visibility:hidden;');
-        //window.open(url);
-        ////$('#someDiv').append(_iFrame);
-        ////=============
+      //=============
+      //let newResponse: string = response;
+      var blob = new Blob([response], { type: mediaType });
+      console.log(blob);
+      ////saveAs(blob, "myPDF.pdf");
+      ////var blob = new Blob([JSON.stringify(response)], { type: mediaType });
+      var blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl);
+      //window.open(URL.createObjectURL(blob));
+      //=============
 
 
-        //=======
-        //var newFile = new File(response, 'tempOut.pdf');
-        //const blobUrl = URL.createObjectURL(newFile);
-        //window.open(blobUrl);
-        //=======
+      ////=============
+      //var blob = new Blob([response], { type: mediaType }),
+      //  url = URL.createObjectURL(blob),
+      //  _iFrame = document.createElement('iframe');
 
-        //const iframe = document.createElement('iframe');
-        //iframe.style.display = 'none';
-        //iframe.src = blobUrl;
-        //document.body.appendChild(iframe);
-        //iframe.contentWindow.print();
+      //_iFrame.setAttribute('src', url);
+      ////_iFrame.setAttribute('style', 'visibility:hidden;');
+      //window.open(url);
+      ////$('#someDiv').append(_iFrame);
+      ////=============
+
+
+      //=======
+      //var newFile = new File(response, 'tempOut.pdf');
+      //const blobUrl = URL.createObjectURL(newFile);
+      //window.open(blobUrl);
+      //=======
+
+      //const iframe = document.createElement('iframe');
+      //iframe.style.display = 'none';
+      //iframe.src = blobUrl;
+      //document.body.appendChild(iframe);
+      //iframe.contentWindow.print();
     });
     ////var fileOutput = this.justiceDataService.createPDF(printContents);
     //w.document.write(String(fileOutput));
@@ -1055,20 +1074,25 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
       this.representativePhoneIsRequired = true;
       this.representativeEmailIsRequired = false;
-      this.representativeAddressIsRequired = false;
+      // this.representativeAddressIsRequired = true;
     } else if (responseCode === 100000001) {
       emailControl.setValidators([Validators.required, Validators.email]);
       this.representativePhoneIsRequired = false;
       this.representativeEmailIsRequired = true;
-      this.representativeAddressIsRequired = false;
+      // this.representativeAddressIsRequired = true;
     } else if (responseCode === 100000002) {
-      for (let control of addressControls) {
-        control.setValidators([Validators.required]);
-      }
+      // for (let control of addressControls) {
+      //   control.setValidators([Validators.required]);
+      // }
       this.representativePhoneIsRequired = false;
       this.representativeEmailIsRequired = false;
-      this.representativeAddressIsRequired = true;
+      // this.representativeAddressIsRequired = true;
     }
+
+    for (let control of addressControls) {
+      control.setValidators([Validators.required]);
+    }
+    this.representativeAddressIsRequired = true;
 
     phoneControl.markAsTouched();
     phoneControl.updateValueAndValidity();

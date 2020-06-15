@@ -60,11 +60,12 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string crimeDetails { get; set; }
         public string crimeInjuries { get; set; }
         public DocumentCollectioninformation additionalInformationFiles { get; set; }
+        public string documentDescription { get; set; }
         public int wasReportMadeToPolice { get; set; }
-        public string policeReportedWhichPoliceForce { get; set; }
+        // public string policeReportedWhichPoliceForce { get; set; }
         public string policeReportedMultipleTimes { get; set; }
-        public DateTime? policeReportedDate { get; set; }
-        public DateTime? policeReportedEndDate { get; set; }
+        // public DateTime? policeReportedDate { get; set; }
+        // public DateTime? policeReportedEndDate { get; set; }
         public Policereport[] policeReports { get; set; }
         public string noPoliceReportIdentification { get; set; }
         public string offenderFirstName { get; set; }
@@ -100,6 +101,10 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     {
         public string policeFileNumber { get; set; }
         public string investigatingOfficer { get; set; }
+        public string policeDetachment { get; set; }
+        public DateTime? reportStartDate { get; set; }
+        public DateTime? reportEndDate { get; set; }
+        public string policeReportedMultipleTimes { get; set; }
     }
 
     public class Medicalinformation
@@ -167,7 +172,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int didYouMissWorkDueToCrime { get; set; }
         public DateTime? daysWorkMissedStart { get; set; }
         public DateTime? daysWorkMissedEnd { get; set; }
-        public int? areYouStillMissingWork { get; set; }
+        public int? areYouStillOffWork { get; set; }
         public int? didYouLoseWages { get; set; }
         public int? areYouSelfEmployed { get; set; }
         public Employer[] employers { get; set; }
@@ -195,6 +200,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string representativeEmail { get; set; }
         public Address representativeAddress { get; set; }
         public DocumentCollectioninformation legalGuardianFiles { get; set; }
+        public string documentDescription { get; set; }
     }
 
     public class Declarationinformation

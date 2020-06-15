@@ -123,7 +123,7 @@
       </div>
 
       <span *ngFor="let employer of eiInfo.employers; let i = index">
-        <div class="form-group">
+        <div class="form-group" *ngIf="eiInfo.areYouSelfEmployed !== 100000001">
           <app-field label="If you are requesting benefits for lost wages, may we contact your employer?" [valid]="employer.contactable" [required]="true" errorMessage="Please select an option">
             <label for="{{'employerContactableYes_'+i.toString()}}" class="inline-label">
               <input #selfEmployed type="radio" [(ngModel)]="employer.contactable" [value]='100000001' name="{{'employerContactableYes_'+i.toString()}}" id="selfEmployedYes" required>

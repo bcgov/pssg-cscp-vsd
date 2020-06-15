@@ -118,7 +118,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         let phoneControl = this.form.get('personalInformation.phoneNumber');
         let emailControl = this.form.get('personalInformation.email');
         let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
-        //let addressControl = this.form.get('personalInformation').get('primaryAddress.line1');
+        let TestaddressControl = this.form.get('personalInformation');
         let addressControls = [
           this.form.get('personalInformation').get('primaryAddress.country'),
           this.form.get('personalInformation').get('primaryAddress.province'),
@@ -135,6 +135,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         emailConfirmControl.setErrors(null);
         //addressControl.clearValidators();
         //addressControl.setErrors(null);
+
         for (let control of addressControls) {
           control.clearValidators();
           control.setErrors(null);
@@ -345,7 +346,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       }
       this.representativePhoneIsRequired = true;
       this.representativeEmailIsRequired = false;
-      this.representativeAddressIsRequired = false;
+      // this.representativeAddressIsRequired = true;
     } else if (contactMethod === 100000001) {
       emailControl.setValidators([Validators.required, Validators.email]);
       for (let control of addressControls) {
@@ -353,15 +354,20 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       }
       this.representativePhoneIsRequired = false;
       this.representativeEmailIsRequired = true;
-      this.representativeAddressIsRequired = false;
+      // this.representativeAddressIsRequired = true;
     } else if (contactMethod === 100000002) {
-      for (let control of addressControls) {
-        control.setValidators([Validators.required]);
-      }
+      // for (let control of addressControls) {
+      //   control.setValidators([Validators.required]);
+      // }
       this.representativePhoneIsRequired = false;
       this.representativeEmailIsRequired = false;
-      this.representativeAddressIsRequired = true;
+      // this.representativeAddressIsRequired = true;
     }
+
+    for (let control of addressControls) {
+      control.setValidators([Validators.required]);
+    }
+    this.representativeAddressIsRequired = true;
 
     phoneControl.markAsTouched();
     phoneControl.updateValueAndValidity();
@@ -654,7 +660,11 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   createPoliceReport(): FormGroup {
     return this.fb.group({
       policeFileNumber: '',
-      investigatingOfficer: ''
+      investigatingOfficer: '',
+      policeDetachment: '',
+      reportStartDate: '',
+      reportEndDate: '',
+      policeReportedMultipleTimes: ['']
     });
   }
 
@@ -856,8 +866,22 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         email: [''],
         confirmEmail: [''],
 
-        primaryAddress: [''],
-        alternateAddress: [''],
+        primaryAddress: this.fb.group({
+          line1: ['', Validators.required],
+          line2: [''],
+          city: ['', Validators.required],
+          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
+        alternateAddress: this.fb.group({
+          line1: [''],
+          line2: [''],
+          city: [''],
+          postalCode: [''],
+          province: [{ value: 'British Columbia', disabled: false }],
+          country: [{ value: 'Canada', disabled: false }],
+        }),
 
         //        primaryAddress: this.fb.group({
         //          line1: ['', Validators.required],
@@ -934,10 +958,10 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
         wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
 
-        policeReportedWhichPoliceForce: [''],
-        policeReportedMultipleTimes: [''],
-        policeReportedDate: [''],
-        policeReportedEndDate: [''],
+        // policeReportedWhichPoliceForce: [''],
+        // policeReportedMultipleTimes: [''],
+        // policeReportedDate: [''],
+        // policeReportedEndDate: [''],
         policeReports: this.fb.array([this.createPoliceReport()]),
 
         noPoliceReportIdentification: [''],

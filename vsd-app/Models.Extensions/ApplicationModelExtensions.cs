@@ -125,6 +125,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             Documentcollection tempDocumentCollection = new Documentcollection();
                             tempDocumentCollection.body = model.CrimeInformation.additionalInformationFiles.body;
                             tempDocumentCollection.filename = model.CrimeInformation.additionalInformationFiles.fileName;
+                            tempDocumentCollection.subject = model.CrimeInformation.documentDescription;
                             application.DocumentCollection[documentIndex] = tempDocumentCollection;
                             ++documentIndex;
                         }
@@ -137,8 +138,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             Documentcollection tempDocumentCollection = new Documentcollection();
                             tempDocumentCollection.body = model.RepresentativeInformation.legalGuardianFiles.body;
                             tempDocumentCollection.filename = model.RepresentativeInformation.legalGuardianFiles.fileName;
-                            // application.DocumentCollection = new Documentcollection[1];
-                            // application.DocumentCollection[0] = tempDocumentCollection;
+                            tempDocumentCollection.subject = model.RepresentativeInformation.documentDescription;
                             application.DocumentCollection[documentIndex] = tempDocumentCollection;
                         }
                     }
@@ -148,16 +148,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     string errormessage = e.Message;
                 }
 
-                application.Application.vsd_cvap_reportedtopolice = model.CrimeInformation.wasReportMadeToPolice;
-                application.Application.vsd_cvap_policedetachment = model.CrimeInformation.policeReportedWhichPoliceForce;
-                if (model.CrimeInformation.policeReportedDate.HasValue)
-                {
-                    application.Application.vsd_cvap_policereportingstartdate = model.CrimeInformation.policeReportedDate;
-                }
-                if (model.CrimeInformation.policeReportedEndDate.HasValue)
-                {
-                    application.Application.vsd_cvap_policereportingenddate = model.CrimeInformation.policeReportedEndDate;
-                }
+                application.Application.vsd_cvap_reporttopolice = model.CrimeInformation.wasReportMadeToPolice;
+                // application.Application.vsd_cvap_policedetachment = model.CrimeInformation.policeReportedWhichPoliceForce;
+                // if (model.CrimeInformation.policeReportedDate.HasValue)
+                // {
+                //     application.Application.vsd_cvap_policereportingstartdate = model.CrimeInformation.policeReportedDate;
+                // }
+                // if (model.CrimeInformation.policeReportedEndDate.HasValue)
+                // {
+                //     application.Application.vsd_cvap_policereportingenddate = model.CrimeInformation.policeReportedEndDate;
+                // }
                 application.Application.vsd_cvap_crimereportedto = model.CrimeInformation.noPoliceReportIdentification; // TODO: verify mapping - I think it's right, but different names
 
                 // Setup policeFiles, don't show if there isn't any
@@ -168,7 +168,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         application.PoliceFileNumberCollection = model.CrimeInformation.policeReports.Select(r => new Policefilenumbercollection
                         {
                             vsd_investigatingpoliceofficername = r.investigatingOfficer,
-                            vsd_policefilenumber = r.policeFileNumber
+                            vsd_policefilenumber = r.policeFileNumber,
+                            vsd_policedetachment = r.policeDetachment,
+                            vsd_policereportingstartdate = r.reportStartDate,
+                            vsd_policereportingenddate = r.reportEndDate
                         }).ToArray();
                     }
                 }
@@ -220,7 +223,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             {
                 application.Application.vsd_applicantspersonalhealthnumber = model.MedicalInformation.personalHealthNumber;
                 application.Application.vsd_applicantsmspprovince = model.MedicalInformation.haveMedicalCoverageProvince;
-                application.Application.vsd_applicantsmpsprovinceother = model.MedicalInformation.haveMedicalCoverageProvinceOther;
+                application.Application.vsd_applicantsmspprovinceother = model.MedicalInformation.haveMedicalCoverageProvinceOther;
                 application.Application.vsd_applicantsextendedhealthprovidername = model.MedicalInformation.otherHealthCoverageProviderName; // TODO: verify mapping, "other" seems weird here
                 application.Application.vsd_applicantsextendedhealthnumber = model.MedicalInformation.otherHealthCoverageExtendedPlanNumber; // TODO: verify mapping, "other" seems weird here
 
@@ -503,7 +506,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_ifmmissedworkend = model.EmploymentIncomeInformation.daysWorkMissedEnd;
                 }
                 //TODO: Add a new field like vsd_cvap_ifmcurrentlyoffwork
-                //model.EmploymentIncomeInformation.areYouStillMissingWork;
+                //model.EmploymentIncomeInformation.areYouStillOffWork;
+                if (model.EmploymentIncomeInformation.areYouStillOffWork.HasValue)
+                {
+                    application.Application.vsd_cvap_ifmcurrentlyoffwork = model.EmploymentIncomeInformation.areYouStillOffWork;
+                }
                 application.Application.vsd_cvap_ifmlostwages = model.EmploymentIncomeInformation.didYouLoseWages;
                 if (model.EmploymentIncomeInformation.areYouSelfEmployed > 0)
                 {
