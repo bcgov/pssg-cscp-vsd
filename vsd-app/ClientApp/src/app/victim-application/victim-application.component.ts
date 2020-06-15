@@ -23,6 +23,7 @@ import { Application, Introduction, PersonalInformation, CrimeInformation, Medic
 import { FileBundle } from '../models/file-bundle';
 import { VALID } from '@angular/forms/src/model';
 import { window } from 'ngx-bootstrap';
+import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 
 const moment = _rollupMoment || _moment;
 
@@ -57,6 +58,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   submitting: boolean = false; // this controls the button state for
 
   hospitalList = HOSPITALS;
+  provinceList: string[];
   enumHelper = new EnumHelper();
 
   showAddCourtInfo: boolean = true;
@@ -101,6 +103,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     private matDialog: MatDialog, // popup to show static content
   ) {
     super();
+    var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
+    this.provinceList = canada.areas;
   }
 
   canDeactivate() {
@@ -258,6 +262,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }),
       medicalInformation: this.fb.group({
         doYouHaveMedicalServicesCoverage: ['', Validators.required],
+        haveMedicalCoverageProvince: [''],
+        haveMedicalCoverageProvinceOther: [''],
         personalHealthNumber: [''],
 
         doYouHaveOtherHealthCoverage: ['', Validators.required],
