@@ -88,6 +88,8 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_racaf_signature { get; set; }
 
         public string vsd_applicantspersonalhealthnumber { get; set; }
+        public string vsd_applicantsmspprovince { get; set; }
+        public string vsd_applicantsmpsprovinceother { get; set; }
         public string vsd_applicantsextendedhealthprovidername { get; set; }
         public string vsd_applicantsextendedhealthnumber { get; set; }
 

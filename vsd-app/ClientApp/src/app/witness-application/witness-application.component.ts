@@ -21,6 +21,7 @@ import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
 import { FileBundle } from '../models/file-bundle';
+import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 
 const moment = _rollupMoment || _moment;
 
@@ -57,6 +58,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   policeReportItems: FormArray;
 
   hospitalList = HOSPITALS;
+  provinceList: string[];
   enumHelper = new EnumHelper();
 
   showAddCourtInfo: boolean = true;
@@ -95,6 +97,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     private dialog: MatDialog
   ) {
     super();
+    var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
+    this.provinceList = canada.areas;
 
     this.formFullyValidated = false;
     this.currentFormStep = 0;
@@ -970,6 +974,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       }),
       medicalInformation: this.fb.group({
         doYouHaveMedicalServicesCoverage: ['', Validators.required],
+        haveMedicalCoverageProvince: [''],
+        haveMedicalCoverageProvinceOther: [''],
         personalHealthNumber: [''],
 
         doYouHaveOtherHealthCoverage: ['', Validators.required],
