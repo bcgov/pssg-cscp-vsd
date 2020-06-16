@@ -733,7 +733,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         familyDoctorAddressLine2: [''],
 
         hadOtherTreatments: ['', Validators.required],
-        otherTreatments: this.fb.array([this.createTreatmentItem()]),
+        otherTreatments: this.fb.array([]),
       }),
       expenseInformation: this.fb.group({
         haveCounsellingExpenses: [false],
