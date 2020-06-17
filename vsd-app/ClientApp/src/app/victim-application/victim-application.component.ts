@@ -156,6 +156,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
     this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields());
+
+    this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.setEmploymentInfoRequiredFields());
   }
 
   buildApplicationForm(): void {
@@ -324,7 +326,23 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
       }),//{ validator: this.requireCheckboxesToBeCheckedValidator }),
-      employmentIncomeInformation: [null],//, Validators.required],
+      employmentIncomeInformation: this.fb.group({
+        wereYouEmployedAtTimeOfCrime: ['', Validators.required],
+        wereYouAtWorkAtTimeOfIncident: [''],
+        haveYouAppliedToWorkSafe: [''],
+        wsbcClaimNumber: [''],
+        didYouMissWorkDueToCrime: ['', Validators.required],
+        didYouLoseWages: [''],
+        areYouSelfEmployed: [''],
+        mayContactEmployer: [''],
+        haveYouAppliedForWorkersCompensation: [''],
+        areYouStillOffWork: [''],
+        daysWorkMissedStart: [''],
+        daysWorkMissedEnd: [''],
+        workersCompensationClaimNumber: [''],
+        employers: this.fb.array([this.createEmployerInfo()]),
+      }),
+      // employmentIncomeInformation: [null],//, Validators.required],
 
       representativeInformation: this.fb.group({
         completingOnBehalfOf: [null, [Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
@@ -628,6 +646,29 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.courtFileItems.removeAt(index);
     this.showAddCourtInfo = this.courtFileItems.length < 3;
     this.showRemoveCourtInfo = this.courtFileItems.length > 1;
+  }
+
+  setEmploymentInformation(ei: EmploymentIncomeInformation) {
+    console.log("employment info changed");
+    this.form.get('employmentIncomeInformation').patchValue(ei);
+  }
+
+  createEmployerInfo(): FormGroup {
+    return this.fb.group({
+      employerName: '',
+      employerPhoneNumber: '',
+      employerFirstName: '',
+      employerLastName: '',
+      employerAddress: this.fb.group({
+        line1: [''],
+        line2: [''],
+        city: [''],
+        postalCode: [''], //// postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+        province: [{ value: 'British Columbia', disabled: false }],
+        country: [{ value: 'Canada', disabled: false }],
+      }),
+      contactable: '',
+    });
   }
 
   createCourtInfoItem(): FormGroup {
@@ -1000,6 +1041,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     lostWages.setErrors(null);
     selfEmployed.clearValidators();
     selfEmployed.setErrors(null);
+    console.log("doing stuff we don't want...")
     mayContactEmployer.clearValidators();
     mayContactEmployer.setErrors(null);
     for (let control of employerControls.controls) {
@@ -1128,6 +1170,111 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.setHospitalTreatment();
     // this.setPreferredContactMethod();
     this.setRepresentativePreferredMethodOfContact();
+  }
+  setEmploymentInfoRequiredFields() {
+    let eiInfo = this.form.get('employmentIncomeInformation') as FormGroup;
+
+    let eiControls = eiInfo.controls; //this is an object of all controls, it's not an array
+    let options = { onlySelf: true, emitEvent: false };
+
+    eiControls.wereYouEmployedAtTimeOfCrime.setValidators([Validators.required]);
+    // console.log(eiControls.wereYouEmployedAtTimeOfCrime);
+    eiControls.wereYouEmployedAtTimeOfCrime.markAsTouched(options);
+    eiControls.wereYouEmployedAtTimeOfCrime.updateValueAndValidity(options);
+
+    if (eiControls.wereYouEmployedAtTimeOfCrime.value === 100000001) {
+      // console.log("setting wereYouAtWorkAtTimeOfIncident as required");
+      eiControls.wereYouAtWorkAtTimeOfIncident.setValidators([Validators.required]);
+      eiControls.wereYouAtWorkAtTimeOfIncident.markAsTouched(options);
+      eiControls.wereYouAtWorkAtTimeOfIncident.updateValueAndValidity(options);
+    }
+    else {
+      // eiControls.wereYouAtWorkAtTimeOfIncident.patchValue(null);
+      eiControls.wereYouAtWorkAtTimeOfIncident.clearValidators();
+      eiControls.wereYouAtWorkAtTimeOfIncident.setErrors(null);
+    }
+
+    if (eiControls.wereYouAtWorkAtTimeOfIncident.value === 100000001) {
+      // console.log("setting haveYouAppliedToWorkSafe as required");
+      eiControls.haveYouAppliedToWorkSafe.setValidators([Validators.required]);
+      eiControls.haveYouAppliedToWorkSafe.markAsTouched(options);
+      eiControls.haveYouAppliedToWorkSafe.updateValueAndValidity(options);
+    }
+    else {
+      // eiControls.haveYouAppliedToWorkSafe.patchValue(null);
+      eiControls.haveYouAppliedToWorkSafe.clearValidators();
+      eiControls.haveYouAppliedToWorkSafe.setErrors(null);
+    }
+
+    if (eiControls.haveYouAppliedToWorkSafe.value === 100000001) {
+      // console.log("setting workersCompensationClaimNumber as required");
+      eiControls.workersCompensationClaimNumber.setValidators([Validators.required]);
+      eiControls.workersCompensationClaimNumber.markAsTouched(options);
+      eiControls.workersCompensationClaimNumber.updateValueAndValidity(options);
+    }
+    else {
+      // eiControls.workersCompensationClaimNumber.patchValue(null);
+      eiControls.workersCompensationClaimNumber.clearValidators();
+      eiControls.workersCompensationClaimNumber.setErrors(null);
+    }
+
+
+    eiControls.didYouMissWorkDueToCrime.setValidators([Validators.required]);
+    eiControls.didYouMissWorkDueToCrime.markAsTouched(options);
+    eiControls.didYouMissWorkDueToCrime.updateValueAndValidity(options);
+
+    if (eiControls.didYouMissWorkDueToCrime.value === 100000001) {
+      // console.log("setting daysWorkMissedStart as required");
+      eiControls.daysWorkMissedStart.setValidators([Validators.required]);
+      eiControls.daysWorkMissedStart.markAsTouched(options);
+      eiControls.daysWorkMissedStart.updateValueAndValidity(options);
+
+      eiControls.daysWorkMissedEnd.setValidators([Validators.required]);
+      eiControls.daysWorkMissedEnd.markAsTouched(options);
+      eiControls.daysWorkMissedEnd.updateValueAndValidity(options);
+
+      eiControls.areYouStillOffWork.setValidators([Validators.required]);
+      eiControls.areYouStillOffWork.markAsTouched(options);
+      eiControls.areYouStillOffWork.updateValueAndValidity(options);
+
+      eiControls.didYouLoseWages.setValidators([Validators.required]);
+      eiControls.didYouLoseWages.markAsTouched(options);
+      eiControls.didYouLoseWages.updateValueAndValidity(options);
+
+      if (eiControls.didYouLoseWages.value === 100000001) {
+        console.log("setting areYouSelfEmployed as required");
+        //not working well for some reason
+        eiControls.areYouSelfEmployed.setValidators([Validators.required]);
+        eiControls.areYouSelfEmployed.markAsTouched(options);
+        eiControls.areYouSelfEmployed.updateValueAndValidity(options);
+        //employer info
+      }
+      else {
+        // console.log("setting areYouSelfEmployed as NOT required");
+        // eiControls.areYouSelfEmployed.patchValue(null);
+        eiControls.areYouSelfEmployed.clearValidators();
+        eiControls.areYouSelfEmployed.setErrors(null);
+      }
+    }
+    else {
+      // eiControls.daysWorkMissedStart.patchValue(null);
+      eiControls.daysWorkMissedStart.clearValidators();
+      eiControls.daysWorkMissedStart.setErrors(null);
+
+      // eiControls.daysWorkMissedEnd.patchValue(null);
+      eiControls.daysWorkMissedEnd.clearValidators();
+      eiControls.daysWorkMissedEnd.setErrors(null);
+
+      // eiControls.areYouStillOffWork.patchValue(null);
+      eiControls.areYouStillOffWork.clearValidators();
+      eiControls.areYouStillOffWork.setErrors(null);
+
+      // eiControls.didYouLoseWages.patchValue(null);
+      eiControls.didYouLoseWages.clearValidators();
+      eiControls.didYouLoseWages.setErrors(null);
+    }
+
+    //Also fix attrocious review section for employment information
   }
 
   matchingEmailValidator() {

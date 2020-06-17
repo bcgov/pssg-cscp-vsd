@@ -71,6 +71,46 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
             }
 
+            if (model.VictimInformation != null)
+            {
+                application.Application.vsd_cvap_victimfirstname = model.VictimInformation.firstName;
+                application.Application.vsd_cvap_victimmiddlename = model.VictimInformation.middleName;
+                application.Application.vsd_cvap_victimlastname = model.VictimInformation.lastName;
+                application.Application.vsd_cvap_victimotherfirstname = model.VictimInformation.otherFirstName;
+                application.Application.vsd_cvap_victimotherlastname = model.VictimInformation.otherLastName;
+
+                //copied from personal - update to victim
+                if (model.VictimInformation.dateOfNameChange.HasValue)
+                {
+                    application.Application.vsd_cvap_victimdateofnamechange = model.VictimInformation.dateOfNameChange;
+                }
+
+                application.Application.vsd_cvap_victimgendercode = model.VictimInformation.gender;
+                if (model.VictimInformation.birthDate.HasValue)
+                {
+                    application.Application.vsd_cvap_victimbirthdate = model.VictimInformation.birthDate.Value;
+                }
+
+
+                application.Application.vsd_cvap_victimoccupation = model.VictimInformation.occupation;
+                application.Application.vsd_cvap_victimsocialinsurancenumber = model.VictimInformation.sin;
+
+                application.Application.vsd_cvap_victimprimaryphonenumber = model.VictimInformation.phoneNumber;
+                application.Application.vsd_cvap_victimalternatephonenumber = model.VictimInformation.alternatePhoneNumber;
+                application.Application.vsd_cvap_victimemailaddress = model.VictimInformation.email;
+
+                if (model.VictimInformation.primaryAddress != null)
+                {
+                    application.Application.vsd_cvap_victimaddressline1 = model.VictimInformation.primaryAddress.line1;
+                    application.Application.vsd_cvap_victimaddressline2 = model.VictimInformation.primaryAddress.line2;
+                    application.Application.vsd_cvap_victimcity = model.VictimInformation.primaryAddress.city;
+                    application.Application.vsd_cvap_victimprovince = model.VictimInformation.primaryAddress.province;
+                    application.Application.vsd_cvap_victimcountry = model.VictimInformation.primaryAddress.country;
+                    application.Application.vsd_cvap_victimpostalcode = model.VictimInformation.primaryAddress.postalCode;
+                }
+
+            }
+
             if (model.CrimeInformation != null)
             {
                 application.Application.vsd_cvap_typeofcrime = model.CrimeInformation.typeOfCrime;
@@ -149,15 +189,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
 
                 application.Application.vsd_cvap_reporttopolice = model.CrimeInformation.wasReportMadeToPolice;
-                // application.Application.vsd_cvap_policedetachment = model.CrimeInformation.policeReportedWhichPoliceForce;
-                // if (model.CrimeInformation.policeReportedDate.HasValue)
-                // {
-                //     application.Application.vsd_cvap_policereportingstartdate = model.CrimeInformation.policeReportedDate;
-                // }
-                // if (model.CrimeInformation.policeReportedEndDate.HasValue)
-                // {
-                //     application.Application.vsd_cvap_policereportingenddate = model.CrimeInformation.policeReportedEndDate;
-                // }
                 application.Application.vsd_cvap_crimereportedto = model.CrimeInformation.noPoliceReportIdentification; // TODO: verify mapping - I think it's right, but different names
 
                 // Setup policeFiles, don't show if there isn't any
