@@ -433,6 +433,10 @@
                 <input type="radio" [value]="100000000" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
                 <span>No</span>
               </label>
+              <label class="inline-label">
+                <input type="radio" [value]="100000002" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+                <span>Unknown</span>
+              </label>
             </app-field>
 
             <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000000">

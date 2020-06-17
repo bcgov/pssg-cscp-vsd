@@ -670,7 +670,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         }), // This will be a collection of uploaded files
         documentDescription: [''],
 
-        wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000 Yes: 100000001
+        wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]], // No: 100000000 Yes: 100000001
 
         // policeReportedWhichPoliceForce: [''],
         // policeReportedMultipleTimes: [''],
@@ -733,7 +733,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         familyDoctorAddressLine2: [''],
 
         hadOtherTreatments: ['', Validators.required],
-        otherTreatments: this.fb.array([this.createTreatmentItem()]),
+        otherTreatments: this.fb.array([]),
       }),
       expenseInformation: this.fb.group({
         haveCounsellingExpenses: [false],

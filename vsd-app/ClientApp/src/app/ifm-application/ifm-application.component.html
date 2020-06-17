@@ -16,7 +16,7 @@
           <mat-step label="Crime Information"></mat-step>
           <mat-step label="Medical & Dental Information"></mat-step>
           <mat-step label="Expense & Benefits"></mat-step>
-          <mat-step label="Application on Behalf of Victim"></mat-step>
+          <mat-step label="Application on Behalf of Immediate Family Member"></mat-step>
           <mat-step label="Declaration"></mat-step>
           <mat-step label="Authorization"></mat-step>
           <mat-step label="Review & Submit"></mat-step>
@@ -627,6 +627,10 @@
                 <label class="inline-label">
                   <input type="radio" [value]="100000000" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
                   <span>No</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="100000002" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+                  <span>Unknown</span>
                 </label>
               </app-field>
 
