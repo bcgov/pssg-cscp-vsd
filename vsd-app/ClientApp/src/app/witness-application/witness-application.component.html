@@ -230,12 +230,12 @@
             <div class="row">
               <div class="col-5">
                 <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2'" [valid]="isFieldValid('personalInformation.phoneNumber')" errorMessage="Please enter your phone number">
-                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
                 </app-field>
               </div>
               <div class="col-5">
                 <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('personalInformation.alternatePhoneNumber')" errorMessage="Please enter your phone number">
-                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
                 </app-field>
               </div>
               <div class="col-2">
@@ -426,12 +426,12 @@
             <div class="row">
               <div class="col-5">
                 <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('victimInformation.phoneNumber')" errorMessage="Please enter phone number">
-                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
                 </app-field>
               </div>
               <div class="col-5">
                 <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('victimInformation.alternatePhoneNumber')" errorMessage="Please enter phone number">
-                  <input class="form-control" maxlength="10" (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
                 </app-field>
               </div>
               <div class="col-2">
@@ -979,7 +979,7 @@
                   <input class="form-control standard" type="text" formControlName="familyDoctorName">
                 </app-field>
                 <app-field label="Phone Number (incl. area code)">
-                  <input class="form-control standard" type="text" formControlName="familyDoctorPhoneNumber">
+                  <input mask='(000) 000 0000' class="form-control standard" type="text" formControlName="familyDoctorPhoneNumber">
                 </app-field>
                 <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
                   <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
@@ -1013,7 +1013,7 @@
                       </div>
                       <div class="col-4">
                         <app-field label="Phone number (incl. area code)">
-                          <input type="text" class="form-control" formControlName="providerPhoneNumber">
+                          <input mask='(000) 000 0000' type="text" class="form-control" formControlName="providerPhoneNumber">
                         </app-field>
                       </div>
                     </div>
@@ -1222,12 +1222,12 @@
               <div class="row">
                 <div class="col-4">
                   <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" type="text" formControlName="representativePhoneNumber">
+                    <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativePhoneNumber">
                   </app-field>
                 </div>
                 <div class="col-4">
                   <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeInformation.representativeAlternatePhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" type="text" formControlName="representativeAlternatePhoneNumber">
+                    <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativeAlternatePhoneNumber">
                   </app-field>
                 </div>
                 <div class="col-4">
@@ -1364,7 +1364,7 @@
                   </div>
                   <div class="col-4">
                     <app-field label="Phone Number (incl. area code)" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
-                      <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber">
+                      <input mask='(000) 000 0000' class="form-control" type="text" formControlName="authorizedPersonPhoneNumber">
                     </app-field>
                   </div>
                   <div class="col-4"></div>

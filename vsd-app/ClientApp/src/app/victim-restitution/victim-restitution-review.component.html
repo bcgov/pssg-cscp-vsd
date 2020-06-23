@@ -101,11 +101,11 @@
     <tbody>
       <tr>
         <th>Primary Phone Number</th>
-        <td>{{ valueOrEmpty('restitutionInformation.phoneNumber') }} </td>
+        <td>{{ valueOrEmpty('restitutionInformation.phoneNumber') | phone}} </td>
       </tr>
       <tr>
         <th>Alternate Phone Number</th>
-        <td>{{ valueOrEmpty('restitutionInformation.alternatePhoneNumber') }} </td>
+        <td>{{ valueOrEmpty('restitutionInformation.alternatePhoneNumber') | phone}} </td>
       </tr>
       <tr>
         <th>Email Address</th>

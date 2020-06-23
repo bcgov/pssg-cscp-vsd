@@ -150,12 +150,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     });
 
     // subscribe to form changes to set the form in various ways
-    this.form.get('personalInformation.preferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('medicalInformation.wereYouTreatedAtHospital').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields());
+    this.form.get('personalInformation.preferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields('personalInformation.preferredMethodOfContact'));
+    this.form.get('medicalInformation.wereYouTreatedAtHospital').valueChanges.subscribe(() => this.setRequiredFields('medicalInformation.wereYouTreatedAtHospital'));
+    this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').valueChanges.subscribe(() => this.setRequiredFields('expenseInformation.haveLostEmploymentIncomeExpenses'));
+    this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setRequiredFields('representativeInformation.completingOnBehalfOf'));
+    this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields('representativeInformation.representativePreferredMethodOfContact'));
+    this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields('authorizationInformation.allowCvapStaffSharing'));
 
     this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.setEmploymentInfoRequiredFields());
   }
@@ -218,7 +218,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         applicationFiledWithinOneYearFromCrime: ['', Validators.required],
         whyDidYouNotApplySooner: [''],
 
-        crimeLocation: [''], // REMOVE AFTER DEMO
+        // crimeLocation: [''], // REMOVE AFTER DEMO
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
@@ -346,7 +346,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         representativeFirstName: [''], //, Validators.required],
         representativeMiddleName: [''],
         representativeLastName: [''], //, Validators.required],
-        representativePreferredMethodOfContact: [null, [Validators.min(100000000), Validators.max(100000002)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
+        representativePreferredMethodOfContact: [0, [Validators.min(100000000), Validators.max(100000002)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
         representativePhoneNumber: [''],
         representativeAlternatePhoneNumber: [''],
         representativeEmail: [''], //, [Validators.required, Validators.email]],
@@ -1065,11 +1065,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     }
   }
   setCompletingOnBehalfOf(): void {
+    console.log("setCompletingOnBehalfOf");
     const responseCode: number = parseInt(this.form.get('representativeInformation.completingOnBehalfOf').value);
     if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
     let representativeFirstName = this.form.get('representativeInformation.representativeFirstName');
     let representativeLastName = this.form.get('representativeInformation.representativeLastName');
     let representativePreferredMethodOfContact = this.form.get('representativeInformation.representativePreferredMethodOfContact');
+    let options = { onlySelf: true, emitEvent: false };
 
     representativeFirstName.clearValidators();
     representativeFirstName.setErrors(null);
@@ -1078,18 +1080,46 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     representativePreferredMethodOfContact.clearValidators();
     representativePreferredMethodOfContact.setErrors(null);
 
+
+    console.log(responseCode);
+
     let useValidation = responseCode === 100000001 || responseCode === 100000002 || responseCode === 100000003;
-    this.setRepresentativePreferredMethodOfContact();  // Have to clear contact validators on contact method change
+    console.log(useValidation);
     if (useValidation) {
+      this.setRepresentativePreferredMethodOfContact();
+      console.log("setting validators");
       representativeFirstName.setValidators([Validators.required]);
       representativeLastName.setValidators([Validators.required]);
-      representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(1), Validators.max(4)]);
+      representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
     }
+    else {
+      //make sure address info is also not required
+      let addressControls = [
+        this.form.get('representativeInformation').get('representativeAddress.country'),
+        this.form.get('representativeInformation').get('representativeAddress.province'),
+        this.form.get('representativeInformation').get('representativeAddress.city'),
+        this.form.get('representativeInformation').get('representativeAddress.line1'),
+        this.form.get('representativeInformation').get('representativeAddress.postalCode'),
+      ];
+
+      for (let control of addressControls) {
+        control.clearValidators();
+        control.setErrors(null);
+        control.updateValueAndValidity(options);
+      }
+      console.log("make address not required");
+    }
+
+    representativeFirstName.updateValueAndValidity(options);
+    representativeLastName.updateValueAndValidity(options);
+    representativePreferredMethodOfContact.updateValueAndValidity(options);
+    console.log(representativePreferredMethodOfContact);
   }
   setRepresentativePreferredMethodOfContact(): void {
     // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
     const responseCode: number = parseInt(this.form.get('representativeInformation.representativePreferredMethodOfContact').value);
     if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
+    let options = { onlySelf: true, emitEvent: false };
     let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
     let emailControl = this.form.get('representativeInformation.representativeEmail');
     let addressControls = [
@@ -1110,16 +1140,19 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     }
 
     if (responseCode === 100000000) {
+      console.log("making phone required");
       phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
       this.representativePhoneIsRequired = true;
       this.representativeEmailIsRequired = false;
       // this.representativeAddressIsRequired = true;
     } else if (responseCode === 100000001) {
+      console.log("making email required");
       emailControl.setValidators([Validators.required, Validators.email]);
       this.representativePhoneIsRequired = false;
       this.representativeEmailIsRequired = true;
       // this.representativeAddressIsRequired = true;
     } else if (responseCode === 100000002) {
+      console.log("neither required");
       // for (let control of addressControls) {
       //   control.setValidators([Validators.required]);
       // }
@@ -1132,14 +1165,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       control.setValidators([Validators.required]);
     }
     this.representativeAddressIsRequired = true;
+    console.log("address required");
 
-    phoneControl.markAsTouched();
-    phoneControl.updateValueAndValidity();
-    emailControl.markAsTouched();
-    emailControl.updateValueAndValidity();
+    // phoneControl.markAsTouched();
+    phoneControl.updateValueAndValidity(options);
+    // emailControl.markAsTouched();
+    emailControl.updateValueAndValidity(options);
     for (let control of addressControls) {
-      control.markAsTouched();
-      control.updateValueAndValidity();
+      // control.markAsTouched();
+      control.updateValueAndValidity(options);
     }
   }
   setCvapStaffSharing() {
@@ -1160,13 +1194,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       authorizedPersonSignature.setValidators([Validators.required]);
     }
   }
-  setRequiredFields() {
+  setRequiredFields(source: string) {
     // set all form validation
     this.setCompletingOnBehalfOf();
     this.setCvapStaffSharing();
     this.setHospitalTreatment();
     // this.setPreferredContactMethod();
-    this.setRepresentativePreferredMethodOfContact();
+    if (source != 'representativeInformation.completingOnBehalfOf') {
+      this.setRepresentativePreferredMethodOfContact();
+    }
   }
   setEmploymentInfoRequiredFields() {
     let eiInfo = this.form.get('employmentIncomeInformation') as FormGroup;

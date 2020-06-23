@@ -152,7 +152,7 @@
           </div>
           <div class="col">
             <app-field label="Phone Number of Contact Person" [valid]="employer.employerPhoneNumber" [required]="eiInfo.didYouLoseWages===100000001" errorMessage="Please include an employer phone number">
-              <input id="{{'employerPhoneNumber_'+i.toString()}}" class="form-control" maxlength="10" name="{{'employerPhoneNumber_'+i.toString()}}" type="text" [(ngModel)]="employer.employerPhoneNumber" required>
+              <input mask='(000) 000 0000' id="{{'employerPhoneNumber_'+i.toString()}}" class="form-control" maxlength="10" name="{{'employerPhoneNumber_'+i.toString()}}" type="text" [(ngModel)]="employer.employerPhoneNumber" required>
             </app-field>
           </div>
         </div>
