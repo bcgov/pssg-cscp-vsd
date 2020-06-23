@@ -149,13 +149,14 @@ export interface AuthorizationInformation {
   readAndUnderstoodTermsAndConditions: string;
   signature: string;
   allowCvapStaffSharing: string;
-  authorizedPersonFullName: string;
-  authorizedPersonPhoneNumber: string;
-  authorizedPersonRelationship: string;
-  authorizedPersonAgencyName: string;
-  authorizedPersonAuthorizesDiscussion: string;
-  authorizedPersonSignature: string;
-  authorizedPersonAgencyAddress: Address;
+  authorizedPerson: AuthorizedPerson[];
+  //authorizedPersonFullName: string;
+  //authorizedPersonPhoneNumber: string;
+  //authorizedPersonRelationship: string;
+  //authorizedPersonAgencyName: string;
+  //authorizedPersonAuthorizesDiscussion: string;
+  //authorizedPersonSignature: string;
+  //authorizedPersonAgencyAddress: Address;
 }
 
 interface Crimelocation {
@@ -188,6 +189,15 @@ interface Othertreatment {
   providerName: string;
   providerPhoneNumber: string;
   providerAddress: Address;
+}
+interface AuthorizedPerson {
+  providerType: string;
+  providerTypeText: string;
+  authorizedPersonFullName: string;
+  authorizedPersonPhoneNumber: string;
+  authorizedPersonAgencyAddress: Address;
+  authorizedPersonRelationship: string;
+  authorizedPersonAgencyName: string;
 }
 export interface Employer {
   employerName: string;
