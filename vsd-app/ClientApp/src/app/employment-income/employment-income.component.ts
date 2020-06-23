@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { EmploymentIncomeInformation, Employer } from '../interfaces/application.interface';
 import { Address } from '../interfaces/address.interface';
@@ -89,7 +89,7 @@ const EMPLOYMENT_INCOME_PROVIDER = {
   styleUrls: ['./employment-income.component.scss'],
   providers: [EMPLOYMENT_INCOME_PROVIDER]
 })
-export class EmploymentIncomeComponent implements ControlValueAccessor {
+export class EmploymentIncomeComponent implements ControlValueAccessor, OnInit {
   @Input() value: EmploymentIncomeInformation;
   @Output() valueChange = new EventEmitter<EmploymentIncomeInformation>();
   @Input() disabled = false; // TODO: disable the fields in the component when needed.
@@ -100,9 +100,18 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
   objectKeys = Object.keys;
   countryList = COUNTRIES_ADDRESS_2;
 
-  constructor() { }
+  constructor() {
+
+  }
 
   eiInfo: EmploymentIncomeInformation;
+
+  ngOnInit() {
+    console.log("employment info");
+    console.log(this.value);
+    this.eiInfo = this.value;
+  }
+
   getCountryProperty(country: string, properyName: string): any {
     if (!country) country = 'Canada';
     if (!properyName) properyName = 'areaType';
@@ -132,6 +141,9 @@ export class EmploymentIncomeComponent implements ControlValueAccessor {
     } else {
       this.valueChange.emit(null);
     }
+  }
+  test() {
+    this.valueChange.emit(this.eiInfo);
   }
 
 

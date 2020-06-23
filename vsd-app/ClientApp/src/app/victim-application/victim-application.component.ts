@@ -150,12 +150,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     });
 
     // subscribe to form changes to set the form in various ways
-    this.form.get('personalInformation.preferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('medicalInformation.wereYouTreatedAtHospital').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
-    this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields());
+    this.form.get('personalInformation.preferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields('personalInformation.preferredMethodOfContact'));
+    this.form.get('medicalInformation.wereYouTreatedAtHospital').valueChanges.subscribe(() => this.setRequiredFields('medicalInformation.wereYouTreatedAtHospital'));
+    this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').valueChanges.subscribe(() => this.setRequiredFields('expenseInformation.haveLostEmploymentIncomeExpenses'));
+    this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setRequiredFields('representativeInformation.completingOnBehalfOf'));
+    this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields('representativeInformation.representativePreferredMethodOfContact'));
+    this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields('authorizationInformation.allowCvapStaffSharing'));
+
+    this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.setEmploymentInfoRequiredFields());
   }
 
   buildApplicationForm(): void {
@@ -216,7 +218,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         applicationFiledWithinOneYearFromCrime: ['', Validators.required],
         whyDidYouNotApplySooner: [''],
 
-        crimeLocation: [''], // REMOVE AFTER DEMO
+        // crimeLocation: [''], // REMOVE AFTER DEMO
         crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
         crimeDetails: ['', Validators.required],
         crimeInjuries: ['', Validators.required],
@@ -321,14 +323,30 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         otherSpecificBenefits: [''],
         noneOfTheAboveBenefits: [false],
       }),//{ validator: this.requireCheckboxesToBeCheckedValidator }),
-      employmentIncomeInformation: [null],//, Validators.required],
+      employmentIncomeInformation: this.fb.group({
+        wereYouEmployedAtTimeOfCrime: ['', Validators.required],
+        wereYouAtWorkAtTimeOfIncident: [''],
+        haveYouAppliedToWorkSafe: [''],
+        wsbcClaimNumber: [''],
+        didYouMissWorkDueToCrime: ['', Validators.required],
+        didYouLoseWages: [''],
+        areYouSelfEmployed: [''],
+        mayContactEmployer: [''],
+        haveYouAppliedForWorkersCompensation: [''],
+        areYouStillOffWork: [''],
+        daysWorkMissedStart: [''],
+        daysWorkMissedEnd: [''],
+        workersCompensationClaimNumber: [''],
+        employers: this.fb.array([this.createEmployerInfo()]),
+      }),
+      // employmentIncomeInformation: [null],//, Validators.required],
 
       representativeInformation: this.fb.group({
         completingOnBehalfOf: [null, [Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
         representativeFirstName: [''], //, Validators.required],
         representativeMiddleName: [''],
         representativeLastName: [''], //, Validators.required],
-        representativePreferredMethodOfContact: [null, [Validators.min(100000000), Validators.max(100000002)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
+        representativePreferredMethodOfContact: [0, [Validators.min(100000000), Validators.max(100000002)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
         representativePhoneNumber: [''],
         representativeAlternatePhoneNumber: [''],
         representativeEmail: [''], //, [Validators.required, Validators.email]],
@@ -625,6 +643,29 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.courtFileItems.removeAt(index);
     this.showAddCourtInfo = this.courtFileItems.length < 3;
     this.showRemoveCourtInfo = this.courtFileItems.length > 1;
+  }
+
+  setEmploymentInformation(ei: EmploymentIncomeInformation) {
+    console.log("employment info changed");
+    this.form.get('employmentIncomeInformation').patchValue(ei);
+  }
+
+  createEmployerInfo(): FormGroup {
+    return this.fb.group({
+      employerName: '',
+      employerPhoneNumber: '',
+      employerFirstName: '',
+      employerLastName: '',
+      employerAddress: this.fb.group({
+        line1: [''],
+        line2: [''],
+        city: [''],
+        postalCode: [''], //// postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+        province: [{ value: 'British Columbia', disabled: false }],
+        country: [{ value: 'Canada', disabled: false }],
+      }),
+      contactable: '',
+    });
   }
 
   createCourtInfoItem(): FormGroup {
@@ -997,6 +1038,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     lostWages.setErrors(null);
     selfEmployed.clearValidators();
     selfEmployed.setErrors(null);
+    console.log("doing stuff we don't want...")
     mayContactEmployer.clearValidators();
     mayContactEmployer.setErrors(null);
     for (let control of employerControls.controls) {
@@ -1028,6 +1070,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     let representativeFirstName = this.form.get('representativeInformation.representativeFirstName');
     let representativeLastName = this.form.get('representativeInformation.representativeLastName');
     let representativePreferredMethodOfContact = this.form.get('representativeInformation.representativePreferredMethodOfContact');
+    let options = { onlySelf: true, emitEvent: false };
 
     representativeFirstName.clearValidators();
     representativeFirstName.setErrors(null);
@@ -1036,18 +1079,40 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     representativePreferredMethodOfContact.clearValidators();
     representativePreferredMethodOfContact.setErrors(null);
 
+
     let useValidation = responseCode === 100000001 || responseCode === 100000002 || responseCode === 100000003;
-    this.setRepresentativePreferredMethodOfContact();  // Have to clear contact validators on contact method change
     if (useValidation) {
+      this.setRepresentativePreferredMethodOfContact();
       representativeFirstName.setValidators([Validators.required]);
       representativeLastName.setValidators([Validators.required]);
-      representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(1), Validators.max(4)]);
+      representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
     }
+    else {
+      //make sure address info is also not required
+      let addressControls = [
+        this.form.get('representativeInformation').get('representativeAddress.country'),
+        this.form.get('representativeInformation').get('representativeAddress.province'),
+        this.form.get('representativeInformation').get('representativeAddress.city'),
+        this.form.get('representativeInformation').get('representativeAddress.line1'),
+        this.form.get('representativeInformation').get('representativeAddress.postalCode'),
+      ];
+
+      for (let control of addressControls) {
+        control.clearValidators();
+        control.setErrors(null);
+        control.updateValueAndValidity(options);
+      }
+    }
+
+    representativeFirstName.updateValueAndValidity(options);
+    representativeLastName.updateValueAndValidity(options);
+    representativePreferredMethodOfContact.updateValueAndValidity(options);
   }
   setRepresentativePreferredMethodOfContact(): void {
     // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
     const responseCode: number = parseInt(this.form.get('representativeInformation.representativePreferredMethodOfContact').value);
     if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
+    let options = { onlySelf: true, emitEvent: false };
     let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
     let emailControl = this.form.get('representativeInformation.representativeEmail');
     let addressControls = [
@@ -1091,13 +1156,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     }
     this.representativeAddressIsRequired = true;
 
-    phoneControl.markAsTouched();
-    phoneControl.updateValueAndValidity();
-    emailControl.markAsTouched();
-    emailControl.updateValueAndValidity();
+    // phoneControl.markAsTouched();
+    phoneControl.updateValueAndValidity(options);
+    // emailControl.markAsTouched();
+    emailControl.updateValueAndValidity(options);
     for (let control of addressControls) {
-      control.markAsTouched();
-      control.updateValueAndValidity();
+      // control.markAsTouched();
+      control.updateValueAndValidity(options);
     }
   }
   setCvapStaffSharing() {
@@ -1118,13 +1183,120 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       authorizedPersonSignature.setValidators([Validators.required]);
     }
   }
-  setRequiredFields() {
+  setRequiredFields(source: string) {
     // set all form validation
     this.setCompletingOnBehalfOf();
     this.setCvapStaffSharing();
     this.setHospitalTreatment();
     // this.setPreferredContactMethod();
-    this.setRepresentativePreferredMethodOfContact();
+    if (source != 'representativeInformation.completingOnBehalfOf') {
+      this.setRepresentativePreferredMethodOfContact();
+    }
+  }
+  setEmploymentInfoRequiredFields() {
+    let eiInfo = this.form.get('employmentIncomeInformation') as FormGroup;
+
+    let eiControls = eiInfo.controls; //this is an object of all controls, it's not an array
+    let options = { onlySelf: true, emitEvent: false };
+
+    eiControls.wereYouEmployedAtTimeOfCrime.setValidators([Validators.required]);
+    // console.log(eiControls.wereYouEmployedAtTimeOfCrime);
+    eiControls.wereYouEmployedAtTimeOfCrime.markAsTouched(options);
+    eiControls.wereYouEmployedAtTimeOfCrime.updateValueAndValidity(options);
+
+    if (eiControls.wereYouEmployedAtTimeOfCrime.value === 100000001) {
+      // console.log("setting wereYouAtWorkAtTimeOfIncident as required");
+      eiControls.wereYouAtWorkAtTimeOfIncident.setValidators([Validators.required]);
+      eiControls.wereYouAtWorkAtTimeOfIncident.markAsTouched(options);
+      eiControls.wereYouAtWorkAtTimeOfIncident.updateValueAndValidity(options);
+    }
+    else {
+      // eiControls.wereYouAtWorkAtTimeOfIncident.patchValue(null);
+      eiControls.wereYouAtWorkAtTimeOfIncident.clearValidators();
+      eiControls.wereYouAtWorkAtTimeOfIncident.setErrors(null);
+    }
+
+    if (eiControls.wereYouAtWorkAtTimeOfIncident.value === 100000001) {
+      // console.log("setting haveYouAppliedToWorkSafe as required");
+      eiControls.haveYouAppliedToWorkSafe.setValidators([Validators.required]);
+      eiControls.haveYouAppliedToWorkSafe.markAsTouched(options);
+      eiControls.haveYouAppliedToWorkSafe.updateValueAndValidity(options);
+    }
+    else {
+      // eiControls.haveYouAppliedToWorkSafe.patchValue(null);
+      eiControls.haveYouAppliedToWorkSafe.clearValidators();
+      eiControls.haveYouAppliedToWorkSafe.setErrors(null);
+    }
+
+    if (eiControls.haveYouAppliedToWorkSafe.value === 100000001) {
+      // console.log("setting workersCompensationClaimNumber as required");
+      eiControls.workersCompensationClaimNumber.setValidators([Validators.required]);
+      eiControls.workersCompensationClaimNumber.markAsTouched(options);
+      eiControls.workersCompensationClaimNumber.updateValueAndValidity(options);
+    }
+    else {
+      // eiControls.workersCompensationClaimNumber.patchValue(null);
+      eiControls.workersCompensationClaimNumber.clearValidators();
+      eiControls.workersCompensationClaimNumber.setErrors(null);
+    }
+
+
+    eiControls.didYouMissWorkDueToCrime.setValidators([Validators.required]);
+    eiControls.didYouMissWorkDueToCrime.markAsTouched(options);
+    eiControls.didYouMissWorkDueToCrime.updateValueAndValidity(options);
+
+    if (eiControls.didYouMissWorkDueToCrime.value === 100000001) {
+      // console.log("setting daysWorkMissedStart as required");
+      eiControls.daysWorkMissedStart.setValidators([Validators.required]);
+      eiControls.daysWorkMissedStart.markAsTouched(options);
+      eiControls.daysWorkMissedStart.updateValueAndValidity(options);
+
+      eiControls.daysWorkMissedEnd.setValidators([Validators.required]);
+      eiControls.daysWorkMissedEnd.markAsTouched(options);
+      eiControls.daysWorkMissedEnd.updateValueAndValidity(options);
+
+      eiControls.areYouStillOffWork.setValidators([Validators.required]);
+      eiControls.areYouStillOffWork.markAsTouched(options);
+      eiControls.areYouStillOffWork.updateValueAndValidity(options);
+
+      eiControls.didYouLoseWages.setValidators([Validators.required]);
+      eiControls.didYouLoseWages.markAsTouched(options);
+      eiControls.didYouLoseWages.updateValueAndValidity(options);
+
+      if (eiControls.didYouLoseWages.value === 100000001) {
+        console.log("setting areYouSelfEmployed as required");
+        //not working well for some reason
+        eiControls.areYouSelfEmployed.setValidators([Validators.required]);
+        eiControls.areYouSelfEmployed.markAsTouched(options);
+        eiControls.areYouSelfEmployed.updateValueAndValidity(options);
+        //employer info
+      }
+      else {
+        // console.log("setting areYouSelfEmployed as NOT required");
+        // eiControls.areYouSelfEmployed.patchValue(null);
+        eiControls.areYouSelfEmployed.clearValidators();
+        eiControls.areYouSelfEmployed.setErrors(null);
+      }
+    }
+    else {
+      // eiControls.daysWorkMissedStart.patchValue(null);
+      eiControls.daysWorkMissedStart.clearValidators();
+      eiControls.daysWorkMissedStart.setErrors(null);
+
+      // eiControls.daysWorkMissedEnd.patchValue(null);
+      eiControls.daysWorkMissedEnd.clearValidators();
+      eiControls.daysWorkMissedEnd.setErrors(null);
+
+      // eiControls.areYouStillOffWork.patchValue(null);
+      eiControls.areYouStillOffWork.clearValidators();
+      eiControls.areYouStillOffWork.setErrors(null);
+
+      // eiControls.didYouLoseWages.patchValue(null);
+      eiControls.didYouLoseWages.clearValidators();
+      eiControls.didYouLoseWages.setErrors(null);
+    }
+
+    //Also fix attrocious review section for employment information
   }
 
   matchingEmailValidator() {

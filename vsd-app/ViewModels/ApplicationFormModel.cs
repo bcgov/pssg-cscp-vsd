@@ -13,6 +13,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Representativeinformation RepresentativeInformation { get; set; }
         public Declarationinformation DeclarationInformation { get; set; }
         public Authorizationinformation AuthorizationInformation { get; set; }
+        public VictimInformation VictimInformation { get; set; }
         //public DocumentCollectioninformation[] DocumentCollectionInformation { get; set; }
         // TODO: Missing VictimInformation
     }
@@ -227,8 +228,27 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string authorizedPersonRelationship { get; set; }
         public string authorizedPersonAgencyName { get; set; }
         public Address authorizedPersonAgencyAddress { get; set; }
-
     }
+
+    public class VictimInformation
+    {
+        public string firstName { get; set; }
+        public string middleName { get; set; }
+        public string lastName { get; set; }
+        public string iHaveOtherNames { get; set; }
+        public string otherFirstName { get; set; }
+        public string otherLastName { get; set; }
+        public DateTime? dateOfNameChange { get; set; }
+        public int gender { get; set; }
+        public DateTime? birthDate { get; set; }
+        public string sin { get; set; }
+        public string occupation { get; set; }
+        public string phoneNumber { get; set; }
+        public string alternatePhoneNumber { get; set; }
+        public string email { get; set; }
+        public Address primaryAddress { get; set; }
+    }
+
     public class DocumentCollectioninformation
     {
         public string fileName { get; set; }

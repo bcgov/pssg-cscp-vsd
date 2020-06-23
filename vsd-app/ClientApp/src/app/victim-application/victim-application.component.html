@@ -232,37 +232,20 @@
 
           <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('personalInformation.sin')" errorMessage="Please enter a valid SIN" [tooltipReference]="sinTemplate">
             <input class="form-control sin-input" maxlength="9" type="text" formControlName="sin">
-            <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
+            <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />text to be provided by CVAP</ng-template>
           </app-field>
 
           <h2 class="blue-header">Contact Information</h2>
-          <div class="row">
-            <div class="col-4">
-              <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('personalInformation.preferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
-                <select class="form-control" formControlName="preferredMethodOfContact">
-                  <option value="0">Select...</option>
-                  <option value="2">Phone Call</option>
-                  <option value="1">Email</option>
-                  <option value="4">Primary Mail</option>
-                  <option value="100000002">Alternate Mail</option>
-                </select>
-              </app-field>
-            </div>
-            <div class="col-8">
-            </div>
-          </div>
-
-          <br />
 
           <div class="row">
             <div class="col-5">
               <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2'" [valid]="isFieldValid('personalInformation.phoneNumber')" errorMessage="Please enter your phone number">
-                <input class="form-control" maxlength="10" type="text" formControlName="phoneNumber">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber">
               </app-field>
             </div>
             <div class="col-5">
               <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('personalInformation.alternatePhoneNumber')" errorMessage="Please enter your phone number">
-                <input class="form-control" maxlength="10" type="text" formControlName="alternatePhoneNumber">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber">
               </app-field>
             </div>
             <div class="col-2">
@@ -298,7 +281,9 @@
 
           <div class="row">
             <div class="col-12">
-              <h3>Primary Home Address</h3>
+              <h3>Primary Home Address <app-tool-tip [trigger]="primaryAddressTemplate"></app-tool-tip>
+              </h3>
+              <ng-template #primaryAddressTemplate>Your decision is required be in writing, and we will need an address to deliver this to you.</ng-template>
               <app-address [group]="form.get('personalInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
             </div>
           </div>
@@ -312,6 +297,22 @@
             </div>
           </div>
           <!-- //////////////////////////////For rehoming above//////////////////////////////// -->
+          <div class="row">
+            <div class="col-4">
+              <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('personalInformation.preferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
+                <select class="form-control" formControlName="preferredMethodOfContact">
+                  <option value="0">Select...</option>
+                  <option value="2">Phone Call</option>
+                  <option value="1">Email</option>
+                  <option value="4">Primary Mail</option>
+                  <option value="100000002">Alternate Mail</option>
+                </select>
+              </app-field>
+            </div>
+            <div class="col-8">
+            </div>
+          </div>
+
           <div class="row">
             <div class="col-12">
               <label class="inline-label">
@@ -366,7 +367,17 @@
               </app-field>
             </section>
 
-            <app-field label="Is this application being filed within one year of the date of the crime?" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
+            <!-- <app-field label="Have you sued the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('crimeInformation.haveYouSuedOffender')" errorMessage="Please make a selection">
+              <label class="inline-label">
+                <input type="radio" [value]="100000001" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
+                <span>Yes</span>
+              </label>
+              <label class="inline-label">
+                <input type="radio" [value]="100000000" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
+                <span>No</span>
+              </label>
+            </app-field> -->
+            <app-field label="Is this application being filed within one year of the date of the crime?" [valid]="isFieldValid('crimeInformation.applicationFiledWithinOneYearFromCrime')" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
               <label class="inline-label">
                 <input type="radio" [value]="true" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
                 <span>Yes</span>
@@ -391,7 +402,7 @@
                 <div class="crime-location-information">
                   <div class="location-listing" formArrayName="crimeLocations" *ngFor="let item of form.get('crimeInformation.crimeLocations')['controls']; let i = index;">
                     <div [formGroupName]="i" class="crime-location">
-                      <app-field>
+                      <app-field [valid]="isArrayFieldValid('crimeInformation.crimeLocations', 'location', i)">
                         <input class="form-control standard" type="text" formControlName="location">
                         <a href="javascript:void(0);" (click)="removeCrimeLocation(i)" *ngIf="showRemoveCrimeLocation">
                           <i class="fas fa-trash-alt"></i> Remove Location
@@ -896,7 +907,7 @@
                 <input class="form-control standard" type="text" formControlName="familyDoctorName">
               </app-field>
               <app-field label="Phone Number (incl. area code)">
-                <input class="form-control standard" maxlength="10" type="text" formControlName="familyDoctorPhoneNumber">
+                <input mask='(000) 000 0000' class="form-control standard" maxlength="10" type="text" formControlName="familyDoctorPhoneNumber">
               </app-field>
               <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
                 <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
@@ -930,7 +941,7 @@
                     </div>
                     <div class="col-4">
                       <app-field label="Phone number (incl. area code)">
-                        <input type="text" maxlength="10" class="form-control" formControlName="providerPhoneNumber">
+                        <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerPhoneNumber">
                       </app-field>
                     </div>
                   </div>
@@ -1228,14 +1239,16 @@
           </span>
           <span *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
             <section>
-              <app-employment-income formControlName="employmentIncomeInformation" #employmentIncomeInfo></app-employment-income>
+              <!-- this whole project seems to e reactive forms, and weirdly this one component is template, that's fun -->
+              <!-- formControlName="employmentIncomeInformation" -->
+              <app-employment-income [value]="form.get('employmentIncomeInformation').value" (valueChange)="setEmploymentInformation($event)" #employmentIncomeInfo></app-employment-income>
             </section>
             <section class="button-container">
               <div [ngBusy]="[busy3]"></div>
               <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
               <span style="float: right;">
-                <button *ngIf="!form.get('employmentIncomeInformation').valid" [disabled]="true" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
-                <button *ngIf="form.get('employmentIncomeInformation').valid===true" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+                <button [disabled]="!form.get('employmentIncomeInformation').valid || (form.get('employmentIncomeInformation.didYouLoseWages').value === 100000001 && form.get('employmentIncomeInformation.areYouSelfEmployed').value < 10)" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+                <!-- <button *ngIf="form.get('employmentIncomeInformation').valid===true" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button> -->
               </span>
             </section>
           </span>
@@ -1304,12 +1317,12 @@
             <div class="row">
               <div class="col-4">
                 <app-field label="Phone Number (incl. area code)" [required]="representativePhoneIsRequired" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
-                  <input class="form-control" maxlength="10" type="text" formControlName="representativePhoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativePhoneNumber">
                 </app-field>
               </div>
               <div class="col-4">
                 <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeInformation.representativeAlternatePhoneNumber')" errorMessage="Please enter a phone number">
-                  <input class="form-control" maxlength="10" type="text" formControlName="representativeAlternatePhoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativeAlternatePhoneNumber">
                 </app-field>
               </div>
               <div class="col-4">
@@ -1439,7 +1452,7 @@
                 </div>
                 <div class="col-4">
                   <app-field label="Phone Number (incl. area code)" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" maxlength="10" type="text" formControlName="authorizedPersonPhoneNumber">
+                    <input class="form-control" mask='(000) 000 0000' type="text" formControlName="authorizedPersonPhoneNumber">
                   </app-field>
                 </div>
                 <div class="col-4"></div>

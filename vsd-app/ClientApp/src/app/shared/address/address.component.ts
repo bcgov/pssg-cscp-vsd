@@ -27,7 +27,7 @@ export class AddressComponent implements OnInit {
   }
 
   isSubFieldValid(field: string) {
-    let formField = this.group['controls'][field];  // this.group.controls should work, but it doesn't
+    let formField = this.group['controls'][field];
     if (formField == null)
       return true;
 

@@ -224,12 +224,12 @@
             <div class="row">
               <div class="col-4">
                 <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('restitutionInformation.phoneNumber')" errorMessage="Please enter your phone number">
-                  <input class="form-control" maxlength="10" type="text" formControlName="phoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber">
                 </app-field>
               </div>
               <div class="col-4">
                 <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('restitutionInformation.alternatePhoneNumber')" errorMessage="Please enter your phone number">
-                  <input class="form-control" maxlength="10" type="text" formControlName="alternatePhoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber">
                 </app-field>
               </div>
               <div class="col-4">
