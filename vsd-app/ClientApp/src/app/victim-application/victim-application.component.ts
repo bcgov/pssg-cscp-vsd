@@ -1065,7 +1065,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     }
   }
   setCompletingOnBehalfOf(): void {
-    console.log("setCompletingOnBehalfOf");
     const responseCode: number = parseInt(this.form.get('representativeInformation.completingOnBehalfOf').value);
     if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
     let representativeFirstName = this.form.get('representativeInformation.representativeFirstName');
@@ -1081,13 +1080,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     representativePreferredMethodOfContact.setErrors(null);
 
 
-    console.log(responseCode);
-
     let useValidation = responseCode === 100000001 || responseCode === 100000002 || responseCode === 100000003;
-    console.log(useValidation);
     if (useValidation) {
       this.setRepresentativePreferredMethodOfContact();
-      console.log("setting validators");
       representativeFirstName.setValidators([Validators.required]);
       representativeLastName.setValidators([Validators.required]);
       representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
@@ -1107,13 +1102,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         control.setErrors(null);
         control.updateValueAndValidity(options);
       }
-      console.log("make address not required");
     }
 
     representativeFirstName.updateValueAndValidity(options);
     representativeLastName.updateValueAndValidity(options);
     representativePreferredMethodOfContact.updateValueAndValidity(options);
-    console.log(representativePreferredMethodOfContact);
   }
   setRepresentativePreferredMethodOfContact(): void {
     // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
@@ -1140,19 +1133,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     }
 
     if (responseCode === 100000000) {
-      console.log("making phone required");
       phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
       this.representativePhoneIsRequired = true;
       this.representativeEmailIsRequired = false;
       // this.representativeAddressIsRequired = true;
     } else if (responseCode === 100000001) {
-      console.log("making email required");
       emailControl.setValidators([Validators.required, Validators.email]);
       this.representativePhoneIsRequired = false;
       this.representativeEmailIsRequired = true;
       // this.representativeAddressIsRequired = true;
     } else if (responseCode === 100000002) {
-      console.log("neither required");
       // for (let control of addressControls) {
       //   control.setValidators([Validators.required]);
       // }
@@ -1165,7 +1155,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       control.setValidators([Validators.required]);
     }
     this.representativeAddressIsRequired = true;
-    console.log("address required");
 
     // phoneControl.markAsTouched();
     phoneControl.updateValueAndValidity(options);
