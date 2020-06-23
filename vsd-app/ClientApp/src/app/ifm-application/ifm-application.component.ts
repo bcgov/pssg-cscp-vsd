@@ -56,6 +56,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   courtFileItems: FormArray;
   crimeLocationItems: FormArray;
   policeReportItems: FormArray;
+  authorizedPersons: FormArray;
 
   hospitalList = HOSPITALS;
   provinceList: string[];
@@ -68,6 +69,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   showAddPoliceReport: boolean = true;
   showRemovePoliceReport: boolean = false;
   showAddProvider: boolean = true;
+  showAddAuthorizationInformation: boolean = true;
+  showRemoveAuthorization: boolean = true;
   showRemoveProvider: boolean = false;
   showAdditionalInformationDocumentDescription: boolean = false;
   showLegalGuardianDocumentDescription: boolean = false;
@@ -284,6 +287,26 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     }
   }
 
+  addAuthorizationInformation(): void {
+    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
+    this.authorizedPersons.push(this.createAuthorizedPerson());
+    this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
+    this.showRemoveAuthorization = this.authorizedPersons.length > 1;
+  }
+  clearAuthorizationInformation(): void {
+    // remove all AuthorizedInformation items
+    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
+    while (this.authorizedPersons.length > 0) {
+      this.authorizedPersons.removeAt(this.authorizedPersons.length - 1);
+    }
+  }
+  removeAuthorizationInformation(index: number): void {
+    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
+    this.authorizedPersons.removeAt(index);
+    this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
+    this.showRemoveAuthorization = this.authorizedPersons.length > 1;
+  }
+
   addProvider(): void {
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
     this.otherTreatmentItems.push(this.createTreatmentItem());
@@ -303,6 +326,25 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     this.otherTreatmentItems.removeAt(index);
     this.showAddProvider = this.otherTreatmentItems.length < 5;
     this.showRemoveProvider = this.otherTreatmentItems.length > 1;
+  }
+
+  createAuthorizedPerson(): FormGroup {
+    return this.fb.group({
+      providerType: [''],
+      providerTypeText: [''],
+      authorizedPersonFullName: ['', Validators.required],
+      authorizedPersonPhoneNumber: [''],
+      authorizedPersonAgencyAddress: this.fb.group({
+        line1: [''],
+        line2: [''],
+        city: [''],
+        postalCode: [''],  // , [Validators.pattern(postalRegex)]
+        province: [{ value: 'British Columbia', disabled: false }],
+        country: [{ value: 'Canada', disabled: false }],
+      }),
+      authorizedPersonRelationship: [''],
+      authorizedPersonAgencyName: [''],
+    });
   }
 
   createTreatmentItem(): FormGroup {
@@ -808,18 +850,19 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         signature: ['', Validators.required],
 
         allowCvapStaffSharing: [''],
-        authorizedPersonFullName: [''],
-        authorizedPersonPhoneNumber: [''],
-        authorizedPersonRelationship: [''],
-        authorizedPersonAgencyName: [''],
-        authorizedPersonAgencyAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
+        authorizedPerson: this.fb.array([]),
+//        authorizedPersonFullName: [''],
+//        authorizedPersonPhoneNumber: [''],
+//        authorizedPersonRelationship: [''],
+//        authorizedPersonAgencyName: [''],
+//        authorizedPersonAgencyAddress: this.fb.group({
+//          line1: [''],
+//          line2: [''],
+//          city: [''],
+//          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+//          province: [{ value: 'British Columbia', disabled: false }],
+//          country: [{ value: 'Canada', disabled: false }],
+//        }),
         authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
         authorizedPersonSignature: [''], //, Validators.required],
       }),

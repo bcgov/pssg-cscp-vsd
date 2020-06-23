@@ -215,15 +215,20 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string readAndUnderstoodTermsAndConditions { get; set; }
         public string signature { get; set; }
         public string allowCvapStaffSharing { get; set; }
+        public AuthorizedPerson[] authorizedPerson { get; set; }
+        public string authorizedPersonAuthorizesDiscussion { get; set; }
+        public string authorizedPersonSignature { get; set; }
+    }
+
+    public class AuthorizedPerson
+    {
         public string authorizedPersonFullName { get; set; }
         public string authorizedPersonPhoneNumber { get; set; }
         public string authorizedPersonRelationship { get; set; }
         public string authorizedPersonAgencyName { get; set; }
         public Address authorizedPersonAgencyAddress { get; set; }
-        public string authorizedPersonAuthorizesDiscussion { get; set; }
-        public string authorizedPersonSignature { get; set; }
-    }
 
+    }
     public class DocumentCollectioninformation
     {
         public string fileName { get; set; }

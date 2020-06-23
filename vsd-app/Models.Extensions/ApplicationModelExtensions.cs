@@ -265,6 +265,25 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         }
                     }
                 }
+
+                // Setup Representatives, if available
+                if (model.AuthorizationInformation != null)
+                {
+                    application.Application.vsd_authorizationsignature = model.AuthorizationInformation.signature;
+                    application.ProviderCollection = model.AuthorizationInformation.authorizedPerson.Select(t => new Providercollection
+                    {
+                        vsd_name = t.authorizedPersonFullName,
+                        vsd_phonenumber = t.authorizedPersonPhoneNumber,
+                        vsd_addressline1 = t.authorizedPersonAgencyAddress.line1,
+                        vsd_addressline2 = t.authorizedPersonAgencyAddress.line2,
+                        vsd_city = t.authorizedPersonAgencyAddress.city,
+                        vsd_province = t.authorizedPersonAgencyAddress.province,
+                        vsd_country = t.authorizedPersonAgencyAddress.country,
+                        vsd_postalcode = t.authorizedPersonAgencyAddress.postalCode,
+                        vsd_relationship1 = "Authorized Person",
+                        vsd_relationship1other = t.authorizedPersonRelationship,
+                    }).ToArray();
+                }
             }
 
             // Add employer information to Provider collection
