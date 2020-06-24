@@ -148,7 +148,7 @@ export interface AuthorizationInformation {
   approvedAuthorityNotification: string;
   readAndUnderstoodTermsAndConditions: string;
   signature: string;
-  allowCvapStaffSharing: string;
+  allowCvapStaffSharing: number;
   authorizedPerson: AuthorizedPerson[];
   //authorizedPersonFullName: string;
   //authorizedPersonPhoneNumber: string;
@@ -202,6 +202,8 @@ interface AuthorizedPerson {
 export interface Employer {
   employerName: string;
   employerPhoneNumber: string;
+  employerFax: string;
+  employerEmail: string;
   employerFirstName: string;
   employerLastName: string;
   employerAddress: Address;
@@ -223,6 +225,6 @@ export interface VictimInformation {
   alternatePhoneNumber?: string;
   email?: string;
   confirmEmail?: string;
-  mostRecentMailingAddressSameAsPersonal: string;
+  mostRecentMailingAddressSameAsPersonal: boolean;
   primaryAddress: Address;
 }

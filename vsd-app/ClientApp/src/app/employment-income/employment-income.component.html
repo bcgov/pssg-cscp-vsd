@@ -1,7 +1,7 @@
 <p>This section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
 <section>
   <!-- #eiInfoForm="ngForm"  (change)="validate(eiInfoForm.form.valid)"-->
-  <form (change)="test()">
+  <form (change)="validate()" class="employment-info-form">
     <h2 class="blue-header">Income Loss Information</h2>
     <div class="form-group">
       <app-field label="Were you employed when the crime occured?" [valid]="employedAtCrimeTime" [required]="true" errorMessage="Please select an option">
@@ -64,15 +64,16 @@
       <div class="form-group">
         <section>
           <app-field label="Please provide days of work missed" [valid]="eiInfo.daysWorkMissedStart && eiInfo.daysWorkMissedEnd" [required]="eiInfo.didYouMissWorkDueToCrime===100000001" errorMessage="Please select an option">
-            <input type="text" name="daysWorkMissedStart" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly required>
+            <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" name="daysWorkMissedStart" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly required>
             <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
             <span> - </span>
-            <input type="text" name="daysWorkMissedEnd" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly required>
+            <input type="text" [max]="today" [min]="minEndDate" (dateChange)="daysWorkMissedEndChange($event)" name="daysWorkMissedEnd" class="form-control date-picker" [(ngModel)]="eiInfo.daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly required>
             <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+            <!-- (selectedChanged)="daysWorkMissedEndChange($event)" -->
           </app-field>
         </section>
       </div>
-      <div class="form-group">
+      <div class="form-group" *ngIf="showCurrentlyOffWork">
         <app-field label="Are you currently off work?" [tooltipReference]="stillOfWorkTemplate" [valid]="eiInfo.areYouStillOffWork" [required]="eiInfo.didYouMissWorkDueToCrime===100000001" errorMessage="Please select an option">
           <label for="currentlyOffWorkYes" class="inline-label">
             <input type="radio" [(ngModel)]="eiInfo.areYouStillOffWork" [value]='100000001' name="currentlyOffWorkYes" id="currentlyOffWorkYes" required>
@@ -150,11 +151,7 @@
               <input id="{{'employerName_'+i.toString()}}" class="form-control" name="{{'employerName_'+i.toString()}}" type="text" [(ngModel)]="employer.employerName" required>
             </app-field>
           </div>
-          <div class="col">
-            <app-field label="Phone Number of Contact Person" [valid]="employer.employerPhoneNumber" [required]="eiInfo.didYouLoseWages===100000001" errorMessage="Please include an employer phone number">
-              <input mask='(000) 000 0000' id="{{'employerPhoneNumber_'+i.toString()}}" class="form-control" maxlength="10" name="{{'employerPhoneNumber_'+i.toString()}}" type="text" [(ngModel)]="employer.employerPhoneNumber" required>
-            </app-field>
-          </div>
+          
         </div>
         <div class="form-row">
           <div class="col">
@@ -168,6 +165,23 @@
             </app-field>
           </div>
         </div>
+        <div class="form-row">
+        <div class="col">
+          <app-field label="Phone Number of Contact Person" [valid]="employer.employerPhoneNumber" [required]="eiInfo.didYouLoseWages===100000001" errorMessage="Please include an employer phone number">
+            <input mask='(000) 000 0000' id="{{'employerPhoneNumber_'+i.toString()}}" class="form-control" name="{{'employerPhoneNumber_'+i.toString()}}" type="text" [(ngModel)]="employer.employerPhoneNumber" required>
+          </app-field>
+        </div>
+        <div class="col">
+          <app-field label="Fax Number of Contact Person">
+            <input mask='(000) 000 0000' id="{{'employerFax'+i.toString()}}" class="form-control" name="{{'employerFax'+i.toString()}}" type="text" [(ngModel)]="employer.employerFax">
+          </app-field>
+        </div>
+        <div class="col">
+          <app-field label="Email of Contact Person" [valid]="employer.employerEmail" [required]="eiInfo.didYouLoseWages===100000001" errorMessage="Please include an employer email">
+            <input id="{{'employerEmail'+i.toString()}}" class="form-control" name="{{'employerEmail'+i.toString()}}" type="text" [(ngModel)]="employer.employerEmail" required>
+          </app-field>
+        </div>
+      </div>
         <h3>Mailing Address</h3>
         <div class="form-row">
           <div class="col">
@@ -199,8 +213,8 @@
         <div class="form-row">
           <div class="col">
             <!-- mailing address 1 field  -->
-            <app-field label="Mailing address line 1" [required]="false" errorMessage="Please include your mailing address">
-              <input id="{{'employerLine1_'+i.toString()}}" class="form-control" name="{{'employerLine1_'+i.toString()}}" type="text" [(ngModel)]="employer.employerAddress.line1">
+            <app-field label="Mailing address line 1" [required]="eiInfo.didYouLoseWages===100000001" [valid]="employer.employerAddress?.line1" errorMessage="Please include your mailing address">
+              <input id="{{'employerLine1_'+i.toString()}}" class="form-control" name="{{'employerLine1_'+i.toString()}}" type="text" [(ngModel)]="employer.employerAddress.line1" required>
             </app-field>
           </div>
           <div class="col">
@@ -213,17 +227,17 @@
         <div class="form-row">
           <div class="col">
             <!-- city -->
-            <app-field label="City" [required]="false" errorMessage="Please include the city">
-              <input id="{{'employerCity_'+i.toString()}}" class="form-control" name="{{'employerCity_'+i.toString()}}" type="text" [(ngModel)]="employer.employerAddress.city">
+            <app-field label="City" [required]="eiInfo.didYouLoseWages===100000001" [valid]="employer.employerAddress?.city" errorMessage="Please include the city">
+              <input id="{{'employerCity_'+i.toString()}}" class="form-control" name="{{'employerCity_'+i.toString()}}" type="text" [(ngModel)]="employer.employerAddress.city" required>
             </app-field>
           </div>
           <div class="col">
             <!-- postal -->
-            <app-field *ngIf="!employer.employerAddress.country" label="Postal Code" [required]="false" errorMessage="Please include the postal code">
+            <app-field *ngIf="!employer.employerAddress.country" label="Postal Code" [required]="eiInfo.didYouLoseWages===100000001" [valid]="employer.employerAddress?.postalCode" errorMessage="Please include the postal code">
               <input id="{{'employerPostal_'+i.toString()}}" class="form-control" name="{{'employerPostal_'+i.toString()}}" type="text" disabled>
             </app-field>
-            <app-field *ngIf="employer.employerAddress.country" label="Postal Code" [required]="false" errorMessage="Please include the postal code">
-              <input id="{{'employerPostal_'+i.toString()}}" class="form-control" name="{{'employerPostal_'+i.toString()}}" type="text" [(ngModel)]="employer.employerAddress.postalCode">
+            <app-field *ngIf="employer.employerAddress.country" label="Postal Code" [required]="eiInfo.didYouLoseWages===100000001" [valid]="employer.employerAddress?.postalCode" errorMessage="Please include the postal code">
+              <input id="{{'employerPostal_'+i.toString()}}" class="form-control" name="{{'employerPostal_'+i.toString()}}" type="text" [(ngModel)]="employer.employerAddress.postalCode" required>
             </app-field>
           </div>
         </div>

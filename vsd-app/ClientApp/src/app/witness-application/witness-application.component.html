@@ -1345,16 +1345,16 @@
               <h2 class="blue-header">Optional Authorization</h2>
               <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?" [valid]="isFieldValid('authorizationInformation.allowCvapStaffSharing')" errorMessage="Please select an option" [required]="true">
                 <label class="inline-label">
-                  <input type="radio" [value]="true" (click)="addAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <input type="radio" [value]="100000001" (click)="addAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="false" (click)="clearAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <input type="radio" [value]="100000000" (click)="clearAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                   <span>No</span>
                 </label>
               </app-field>
 
-              <section *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === true">
+              <section *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === 100000001">
                 <div class="authorizedPerson" formArrayName="authorizedPerson" *ngFor="let item of form.get('authorizationInformation.authorizedPerson')['controls']; let i = index;">
                   <div [formGroupName]="i" class="authorizedPers">
                     <a href="javascript:void(0);" (click)="removeAuthorizationInformation(i)" class="float-right" *ngIf="showRemoveAuthorization"><i class="fas fa-trash-alt"></i> Delete Authorization</a>

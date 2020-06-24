@@ -3,6 +3,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { EmploymentIncomeInformation, Employer } from '../interfaces/application.interface';
 import { Address } from '../interfaces/address.interface';
 import { COUNTRIES_ADDRESS_2, iCountry } from '../shared/address/country-list';
+import { MatDatepickerInputEvent } from '@angular/material';
+import * as moment from 'moment';
 
 export class EiInfoForm implements EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime: number; // 100000001==yes 100000000==no
@@ -19,6 +21,7 @@ export class EiInfoForm implements EmploymentIncomeInformation {
   areYouStillOffWork: number; // 100000001==yes 100000000==no
   workersCompensationClaimNumber: string;
   employers: EmployerForm[] = [];
+
   constructor(eiInfo?: EmploymentIncomeInformation) {
     if (eiInfo) {
       this.wereYouEmployedAtTimeOfCrime = eiInfo.wereYouEmployedAtTimeOfCrime || null;
@@ -43,6 +46,8 @@ export class EiInfoForm implements EmploymentIncomeInformation {
 class EmployerForm implements Employer {
   employerName: string;
   employerPhoneNumber: string;
+  employerFax: string;
+  employerEmail: string;
   employerFirstName: string;
   employerLastName: string;
   employerAddress: AddressForm;
@@ -51,6 +56,8 @@ class EmployerForm implements Employer {
     if (employer) {
       this.employerName = employer.employerName || null;
       this.employerPhoneNumber = employer.employerPhoneNumber || null;
+      this.employerFax = employer.employerFax || null;
+      this.employerEmail = employer.employerEmail || null;
       this.employerFirstName = employer.employerFirstName || null;
       this.employerLastName = employer.employerLastName || null;
       this.employerAddress = new AddressForm(employer.employerAddress);
@@ -92,6 +99,7 @@ const EMPLOYMENT_INCOME_PROVIDER = {
 export class EmploymentIncomeComponent implements ControlValueAccessor, OnInit {
   @Input() value: EmploymentIncomeInformation;
   @Output() valueChange = new EventEmitter<EmploymentIncomeInformation>();
+  @Output() employerAdded = new EventEmitter<EmploymentIncomeInformation>();
   @Input() disabled = false; // TODO: disable the fields in the component when needed.
 
   phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
@@ -99,6 +107,9 @@ export class EmploymentIncomeComponent implements ControlValueAccessor, OnInit {
   // handy expose keys for iteration
   objectKeys = Object.keys;
   countryList = COUNTRIES_ADDRESS_2;
+  showCurrentlyOffWork: boolean = false;
+  today = new Date();
+  minEndDate: Date;
 
   constructor() {
 
@@ -107,9 +118,10 @@ export class EmploymentIncomeComponent implements ControlValueAccessor, OnInit {
   eiInfo: EmploymentIncomeInformation;
 
   ngOnInit() {
-    console.log("employment info");
-    console.log(this.value);
     this.eiInfo = this.value;
+    if (this.eiInfo.daysWorkMissedStart) {
+      this.minEndDate = this.eiInfo.daysWorkMissedStart;
+    }
   }
 
   getCountryProperty(country: string, properyName: string): any {
@@ -120,6 +132,8 @@ export class EmploymentIncomeComponent implements ControlValueAccessor, OnInit {
   }
   addEmployer() {
     this.eiInfo.employers.push(new EmployerForm());
+    this.employerAdded.emit(this.eiInfo);
+    // this.valueChange.emit(this.eiInfo);
   }
   removeEmployer(i: number) {
     // TODO: this is untested. If it isn't working right please fix or if it is please remove this comment
@@ -133,16 +147,33 @@ export class EmploymentIncomeComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  validate(validationState: boolean) {
-    //TODO: remove all parts that may not fit the business logic. They could have changed their mind on a flag, added an answer so a blank element that shouldn't exist does exist.
-    if (validationState) {
-      // TODO: the validation state can emit when the user meets minimum requirements so this should be cleaned before sent back
-      this.propagateModelChange();
-    } else {
-      this.valueChange.emit(null);
-    }
+  // validate(validationState: boolean) {
+  //   //TODO: remove all parts that may not fit the business logic. They could have changed their mind on a flag, added an answer so a blank element that shouldn't exist does exist.
+  //   if (validationState) {
+  //     // TODO: the validation state can emit when the user meets minimum requirements so this should be cleaned before sent back
+  //     this.propagateModelChange();
+  //   } else {
+  //     this.valueChange.emit(null);
+  //   }
+  // }
+  validate() {
+    this.valueChange.emit(this.eiInfo);
   }
-  test() {
+
+  daysWorkMissedStartChange(event: MatDatepickerInputEvent<Date>) {
+    this.minEndDate = event.target.value;
+    //validate that a selected end date is not before the start date
+    let startDate = moment(event.target.value);
+    let endDate = moment(this.eiInfo.daysWorkMissedEnd);
+    if (endDate.isBefore(startDate)) {
+      this.eiInfo.daysWorkMissedEnd = null;
+    }
+    this.valueChange.emit(this.eiInfo);
+  }
+
+  daysWorkMissedEndChange(event: MatDatepickerInputEvent<Date>) {
+    let endDate = moment(event.target.value);
+    this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
     this.valueChange.emit(this.eiInfo);
   }
 

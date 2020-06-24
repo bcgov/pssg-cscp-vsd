@@ -16,6 +16,7 @@ export class AddressComponent implements OnInit {
 
   @Input() group = FormGroup;
   @Input() showChildrenAsRequired: Boolean = true;
+  @Input() isDisabled: Boolean = false;
 
   constructor() {
 
@@ -26,7 +27,8 @@ export class AddressComponent implements OnInit {
     this.postalCodeSample = canada.postalCodeSample;
   }
 
-  isSubFieldValid(field: string) {
+  isSubFieldValid(field: string, disabled: boolean) {
+    if (disabled === true) return true;
     let formField = this.group['controls'][field];
     if (formField == null)
       return true;

@@ -476,21 +476,31 @@ export class FormBase {
     let copyAddress = this.form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value === true;
     let target = this.form.get('victimInformation.primaryAddress');
     let source = this.form.get('personalInformation.primaryAddress');
+    let options = { onlySelf: true, emitEvent: true };
 
     if (copyAddress) {
-      target.get('line1').patchValue(source.get('line1').value);
-      target.get('line2').patchValue(source.get('line2').value);
-      target.get('city').patchValue(source.get('city').value);
-      target.get('postalCode').patchValue(source.get('postalCode').value);
-      target.get('province').patchValue(source.get('province').value);
-      target.get('country').patchValue(source.get('country').value);
+      target.get('line1').patchValue(source.get('line1').value, options);
+      target.get('line2').patchValue(source.get('line2').value, options);
+      target.get('city').patchValue(source.get('city').value, options);
+      target.get('postalCode').patchValue(source.get('postalCode').value, options);
+      target.get('province').patchValue(source.get('province').value, options);
+      target.get('country').patchValue(source.get('country').value, options);
 
-      target.get('line1').disable();
-      target.get('line2').disable();
-      target.get('city').disable();
-      target.get('postalCode').disable();
-      target.get('province').disable();
-      target.get('country').disable();
+      target.get('line1').setErrors(null, options);
+      target.get('line2').setErrors(null, options);
+      target.get('city').setErrors(null, options);
+      target.get('postalCode').setErrors(null, options);
+      target.get('province').setErrors(null, options);
+      target.get('country').setErrors(null, options);
+
+      target.get('line1').disable(options);
+      target.get('line2').disable(options);
+      target.get('city').disable(options);
+      target.get('postalCode').disable(options);
+      target.get('province').disable(options);
+      target.get('country').disable(options);
+
+
     }
     else {
       target.get('line1').enable();
@@ -500,6 +510,13 @@ export class FormBase {
       target.get('province').enable();
       target.get('country').enable();
     }
+
+    target.get('line1').updateValueAndValidity(options);
+    target.get('line2').updateValueAndValidity(options);
+    target.get('city').updateValueAndValidity(options);
+    target.get('postalCode').updateValueAndValidity(options);
+    target.get('province').updateValueAndValidity(options);
+    target.get('country').updateValueAndValidity(options);
   }
 }
 // More custom validation

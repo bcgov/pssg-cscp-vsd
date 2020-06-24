@@ -19,7 +19,7 @@ import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
-import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
+import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
 import { FileBundle } from '../models/file-bundle';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 
@@ -555,7 +555,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   harvestForm(): Application {
-    return {
+    let data = {
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
@@ -565,7 +565,14 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
       DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
       AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
+      VictimInformation: this.form.get('victimInformation').value as VictimInformation,
     } as Application;
+
+    if (data.VictimInformation.mostRecentMailingAddressSameAsPersonal == true) {
+      data.VictimInformation.primaryAddress = data.PersonalInformation.primaryAddress;
+    }
+
+    return data;
   }
 
   save(): void {
@@ -681,10 +688,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         mostRecentMailingAddressSameAsPersonal: ['', Validators.required],
 
         primaryAddress: this.fb.group({
-          line1: [''],//, Validators.required],
+          line1: ['', Validators.required],//, Validators.required],
           line2: [''],
-          city: [''],//, Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex)]],//, Validators.required]],
+          city: ['', Validators.required],//, Validators.required],
+          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],//, Validators.required]],
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),
@@ -849,20 +856,20 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
 
-        allowCvapStaffSharing: [''],
+        allowCvapStaffSharing: ['', Validators.required],
         authorizedPerson: this.fb.array([]),
-//        authorizedPersonFullName: [''],
-//        authorizedPersonPhoneNumber: [''],
-//        authorizedPersonRelationship: [''],
-//        authorizedPersonAgencyName: [''],
-//        authorizedPersonAgencyAddress: this.fb.group({
-//          line1: [''],
-//          line2: [''],
-//          city: [''],
-//          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-//          province: [{ value: 'British Columbia', disabled: false }],
-//          country: [{ value: 'Canada', disabled: false }],
-//        }),
+        //        authorizedPersonFullName: [''],
+        //        authorizedPersonPhoneNumber: [''],
+        //        authorizedPersonRelationship: [''],
+        //        authorizedPersonAgencyName: [''],
+        //        authorizedPersonAgencyAddress: this.fb.group({
+        //          line1: [''],
+        //          line2: [''],
+        //          city: [''],
+        //          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+        //          province: [{ value: 'British Columbia', disabled: false }],
+        //          country: [{ value: 'Canada', disabled: false }],
+        //        }),
         authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
         authorizedPersonSignature: [''], //, Validators.required],
       }),
@@ -882,6 +889,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
     const responseCode: number = parseInt(this.form.get('representativeInformation.representativePreferredMethodOfContact').value);
     if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
+    let options = { onlySelf: true, emitEvent: false };
     let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
     let emailControl = this.form.get('representativeInformation.representativeEmail');
     let addressControls = [
@@ -925,13 +933,13 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     }
     this.representativeAddressIsRequired = true;
 
-    phoneControl.markAsTouched();
-    phoneControl.updateValueAndValidity();
-    emailControl.markAsTouched();
-    emailControl.updateValueAndValidity();
+    // phoneControl.markAsTouched();
+    phoneControl.updateValueAndValidity(options);
+    // emailControl.markAsTouched();
+    emailControl.updateValueAndValidity(options);
     for (let control of addressControls) {
-      control.markAsTouched();
-      control.updateValueAndValidity();
+      // control.markAsTouched();
+      control.updateValueAndValidity(options);
     }
   }
 

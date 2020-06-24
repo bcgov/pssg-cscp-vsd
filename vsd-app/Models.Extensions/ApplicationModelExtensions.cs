@@ -79,7 +79,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_victimotherfirstname = model.VictimInformation.otherFirstName;
                 application.Application.vsd_cvap_victimotherlastname = model.VictimInformation.otherLastName;
 
-                //copied from personal - update to victim
+                application.Application.vsd_cvap_victimmaritalstatus = model.VictimInformation.maritalStatus;
+
                 if (model.VictimInformation.dateOfNameChange.HasValue)
                 {
                     application.Application.vsd_cvap_victimdateofnamechange = model.VictimInformation.dateOfNameChange;
@@ -301,28 +302,31 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 if (model.AuthorizationInformation != null)
                 {
                     application.Application.vsd_authorizationsignature = model.AuthorizationInformation.signature;
-                    application.ProviderCollection = model.AuthorizationInformation.authorizedPerson.Select(t => new Providercollection
+                    if (model.AuthorizationInformation.authorizedPerson != null && model.AuthorizationInformation.authorizedPerson.Length > 0)
                     {
-                        vsd_name = t.authorizedPersonFullName,
-                        vsd_phonenumber = t.authorizedPersonPhoneNumber,
-                        vsd_addressline1 = t.authorizedPersonAgencyAddress.line1,
-                        vsd_addressline2 = t.authorizedPersonAgencyAddress.line2,
-                        vsd_city = t.authorizedPersonAgencyAddress.city,
-                        vsd_province = t.authorizedPersonAgencyAddress.province,
-                        vsd_country = t.authorizedPersonAgencyAddress.country,
-                        vsd_postalcode = t.authorizedPersonAgencyAddress.postalCode,
-                        vsd_relationship1 = "Authorized Person",
-                        vsd_relationship1other = t.authorizedPersonRelationship,
-                    }).ToArray();
+                        application.ProviderCollection = model.AuthorizationInformation.authorizedPerson.Select(t => new Providercollection
+                        {
+                            vsd_name = t.authorizedPersonFullName,
+                            vsd_phonenumber = t.authorizedPersonPhoneNumber,
+                            vsd_addressline1 = t.authorizedPersonAgencyAddress.line1,
+                            vsd_addressline2 = t.authorizedPersonAgencyAddress.line2,
+                            vsd_city = t.authorizedPersonAgencyAddress.city,
+                            vsd_province = t.authorizedPersonAgencyAddress.province,
+                            vsd_country = t.authorizedPersonAgencyAddress.country,
+                            vsd_postalcode = t.authorizedPersonAgencyAddress.postalCode,
+                            vsd_relationship1 = "Authorized Person",
+                            vsd_relationship1other = t.authorizedPersonRelationship,
+                        }).ToArray();
+                    }
                 }
             }
 
             // Add employer information to Provider collection
-            if (model.EmploymentIncomeInformation != null)
+            if (model.EmploymentIncomeInformation != null && model.ExpenseInformation.haveLostEmploymentIncomeExpenses)
             {
                 if (model.EmploymentIncomeInformation.employers.Count() > 0)
                 {
-                    if (model.EmploymentIncomeInformation.employers[0].employerFirstName != null)
+                    if (!String.IsNullOrEmpty(model.EmploymentIncomeInformation.employers[0].employerName))
                     {
                         Providercollection[] tempProviderCollection;
                         tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
@@ -338,6 +342,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_firstname = f.employerFirstName,
                             vsd_lastname = f.employerLastName,
                             vsd_relationship1 = "Employer",
+                            vsd_email = f.employerEmail,
+                            //VS-1772 mentioned adding a fax field, doesn't currently exist in CRM on the Participant
                         }).ToArray();
 
                         int tempProviderCount = 0;
@@ -359,7 +365,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
                         }
                         Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                        application.ProviderCollection = tempCombinedCollection;
+                        if (tempCombinedCollection.Length > 0)
+                        {
+                            application.ProviderCollection = tempCombinedCollection;
+                        }
                     }
                 }
             }
@@ -396,7 +405,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
                     }
                     Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                    application.ProviderCollection = tempCombinedCollection;
+                    if (tempCombinedCollection.Length > 0)
+                    {
+                        application.ProviderCollection = tempCombinedCollection;
+                    }
                 }
             }
 
@@ -443,7 +455,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
                         }
                         Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                        application.ProviderCollection = tempCombinedCollection;
+                        if (tempCombinedCollection.Length > 0)
+                        {
+                            application.ProviderCollection = tempCombinedCollection;
+                        }
                     }
                 }
             }
@@ -537,7 +552,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_otherbenefitsother = model.ExpenseInformation.otherSpecificBenefits;
             }
 
-            if (model.EmploymentIncomeInformation != null)
+            if (model.EmploymentIncomeInformation != null && model.ExpenseInformation.haveLostEmploymentIncomeExpenses)
             {
                 // what is with all the "ifm" stuff?
                 if (model.EmploymentIncomeInformation.wereYouEmployedAtTimeOfCrime.HasValue)
@@ -555,11 +570,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     application.Application.vsd_cvap_ifmmissedworkend = model.EmploymentIncomeInformation.daysWorkMissedEnd;
                 }
-                //TODO: Add a new field like vsd_cvap_ifmcurrentlyoffwork
-                //model.EmploymentIncomeInformation.areYouStillOffWork;
+
                 if (model.EmploymentIncomeInformation.areYouStillOffWork.HasValue)
                 {
-                    application.Application.vsd_cvap_ifmcurrentlyoffwork = model.EmploymentIncomeInformation.areYouStillOffWork;
+                    application.Application.vsd_cvap_ifmareyoustilloffwork = model.EmploymentIncomeInformation.areYouStillOffWork;
                 }
                 application.Application.vsd_cvap_ifmlostwages = model.EmploymentIncomeInformation.didYouLoseWages;
                 if (model.EmploymentIncomeInformation.areYouSelfEmployed > 0)
@@ -586,8 +600,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             }
 
             application.Application.vsd_applicantssignature = model.AuthorizationInformation.signature; // TODO: where does this come from?
-                                                                                                        //application.Application.vsd_cvap_optionalauthorization = 0; // TODO: where does this come from?
-                                                                                                        //application.Application.vsd_optionalauthorizationsignature = ""; // TODO: where does this come from?
+            application.Application.vsd_cvap_optionalauthorization = model.AuthorizationInformation.allowCvapStaffSharing;
+            //application.Application.vsd_optionalauthorizationsignature = ""; // TODO: where does this come from?
 
             //application.DocumentCollection = new Documentcollection[1]; // TODO: bind collection
 
