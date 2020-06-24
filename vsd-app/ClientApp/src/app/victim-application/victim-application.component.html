@@ -1434,47 +1434,52 @@
             <h2 class="blue-header">Optional Authorization</h2>
             <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?" [valid]="isFieldValid('authorizationInformation.allowCvapStaffSharing')" errorMessage="Please select an option" [required]="true">
               <label class="inline-label">
-                <input type="radio" [value]="100000001" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                <input type="radio" [value]="100000001" (click)="addAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                 <span>Yes</span>
               </label>
               <label class="inline-label">
-                <input type="radio" [value]="100000000" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                <input type="radio" [value]="100000000" (click)="clearAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                 <span>No</span>
               </label>
             </app-field>
 
             <section *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === 100000001">
-              <h3>Authorized Person</h3>
-              <div class="row">
-                <div class="col-4">
-                  <app-field label="Full Name">
-                    <input class="form-control" type="text" formControlName="authorizedPersonFullName">
-                  </app-field>
-                </div>
-                <div class="col-4">
-                  <app-field label="Phone Number (incl. area code)" [valid]="isFieldValid('authorizationInformation.authorizedPersonPhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" mask='(000) 000 0000' type="text" formControlName="authorizedPersonPhoneNumber">
-                  </app-field>
-                </div>
-                <div class="col-4"></div>
-              </div>
-              <div class="row">
-                <div class="col-4">
-                  <app-field label="Relationship to Applicant">
-                    <input class="form-control" type="text" formControlName="authorizedPersonRelationship">
-                  </app-field>
-                </div>
-                <div class="col-4">
-                  <app-field label="Agency Name">
-                    <input class="form-control" type="text" formControlName="authorizedPersonAgencyName">
-                  </app-field>
-                </div>
-                <div class="col-4"></div>
-              </div>
+              <div class="authorizedPerson" formArrayName="authorizedPerson" *ngFor="let item of form.get('authorizationInformation.authorizedPerson')['controls']; let i = index;">
+                <div [formGroupName]="i" class="authorizedPers">
+                  <a href="javascript:void(0);" (click)="removeAuthorizationInformation(i)" class="float-right" *ngIf="showRemoveAuthorization"><i class="fas fa-trash-alt"></i> Delete Authorization</a>
+                  <h3>Authorized Person {{ i + 1 }}</h3>
+                  <div class="row">
+                    <div class="col-4">
+                      <app-field label="Full Name">
+                        <input class="form-control" type="text" formControlName="authorizedPersonFullName">
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                      <app-field label="Phone Number (incl. area code)">
+                        <input class="form-control" maxlength="10" type="text" formControlName="authorizedPersonPhoneNumber">
+                      </app-field>
+                    </div>
+                    <div class="col-4"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4">
+                      <app-field label="Relationship to Applicant">
+                        <input class="form-control" type="text" formControlName="authorizedPersonRelationship">
+                      </app-field>
+                    </div>
+                    <div class="col-4">
+                      <app-field label="Agency Name">
+                        <input class="form-control" type="text" formControlName="authorizedPersonAgencyName">
+                      </app-field>
+                    </div>
+                    <div class="col-4"></div>
+                  </div>
 
-              <app-address [group]="form.get('authorizationInformation.authorizedPersonAgencyAddress')" [showChildrenAsRequired]="false"></app-address>
+                  <app-address [group]="item.get('authorizedPersonAgencyAddress')" [showChildrenAsRequired]="false"></app-address>
 
-              <app-field [valid]="isFieldValid('authorizationInformation.authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration">
+                </div>
+              </div>
+              <app-field [required]="true" [valid]="isFieldValid('authorizationInformation.authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration">
                 <label>
                   <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion">
                   I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.
@@ -1490,6 +1495,8 @@
                   <a class="redo" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')">Redo Signature</a>
                 </div>
               </app-field>
+              <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
+              <a href="javascript:void(0);" class="btn btn-secondary" (click)="addAuthorizationInformation()" *ngIf="showAddAuthorizationInformation">Add an Authorization</a>
             </section>
           </section>
         </div>
