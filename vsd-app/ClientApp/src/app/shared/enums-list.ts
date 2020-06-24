@@ -67,7 +67,7 @@ export class EnumHelper {
     100000000: 'No',
     100000001: 'Yes',
   }
-    
+
   public IntendToSueOffender = {
     0: '--',
     100000000: 'Yes',
@@ -88,13 +88,19 @@ export class EnumHelper {
     100000001: 'No',
     100000002: 'Unsure',
   }
-    
+
   public WereYouEmployedAtTimeOfCrime = {
     0: '--',
-    100000000: 'Yes',
-    100000001: 'No',
+    100000000: 'No',
+    100000001: 'Yes',
   }
-      
+
+  public boolEnum = {
+    0: '--',
+    100000000: 'No',
+    100000001: 'Yes',
+  }
+
   public CompletingOnBehalfOf = {
     0: '--',
     100000000: 'Completing this application for myself',

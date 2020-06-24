@@ -19,7 +19,7 @@ import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
-import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
+import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
 import { FileBundle } from '../models/file-bundle';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 
@@ -834,6 +834,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
       DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
       AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
+      VictimInformation: this.form.get('victimInformation').value as VictimInformation,
     } as Application;
   }
 

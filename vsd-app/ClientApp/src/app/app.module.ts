@@ -90,6 +90,8 @@ import { VictimInformationComponent } from './victim-information/victim-informat
 import { NameBlockComponent } from './name-block/name-block.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { FilenameBlockComponent } from './filename-block/filename-block.component';
+import { PhonePipe } from './pipes/phone.pipe';
+import { NgxMaskModule } from 'ngx-mask'
 
 @NgModule({
   declarations: [
@@ -130,6 +132,7 @@ import { FilenameBlockComponent } from './filename-block/filename-block.componen
     NameBlockComponent,
     DatePickerComponent,
     FilenameBlockComponent,
+    PhonePipe
   ],
   imports: [
     BrowserModule,
@@ -180,7 +183,8 @@ import { FilenameBlockComponent } from './filename-block/filename-block.componen
     TooltipModule.forRoot(),
     //    BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    AlertModule.forRoot()
+    AlertModule.forRoot(),
+    NgxMaskModule.forRoot(),
   ],
   exports: [
     BrowserModule,

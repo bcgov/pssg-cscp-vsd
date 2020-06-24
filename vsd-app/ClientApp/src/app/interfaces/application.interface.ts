@@ -207,7 +207,7 @@ export interface Employer {
   employerAddress: Address;
   contactable: boolean;
 }
-interface VictimInformation {
+export interface VictimInformation {
   firstName: string;
   middleName?: string;
   lastName: string;
@@ -224,4 +224,5 @@ interface VictimInformation {
   email?: string;
   confirmEmail?: string;
   mostRecentMailingAddressSameAsPersonal: string;
+  primaryAddress: Address;
 }

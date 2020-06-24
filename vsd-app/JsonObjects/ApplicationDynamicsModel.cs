@@ -51,26 +51,25 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
 
 
         //TODO - missing victim information - these are the fields, need to include them in various other places
-        // public string vsd_cvap_victimfirstname { get; set; }
-        // public string vsd_cvap_victimmiddlename { get; set; }
-        // public string vsd_cvap_victimlastname { get; set; }
-        // public string vsd_cvap_victimotherfirstname { get; set; }
-        // public string vsd_cvap_victimotherlastname { get; set; }
-        // public string vsd_cvap_victimdateofnamechange { get; set; }
-        // public int vsd_cvap_victimgendercode { get; set; }
-        // public DateTime? vsd_cvap_victimbirthdate { get; set; }
-        // public int? vsd_cvap_victimmaritalstatus { get; set; }
-        // public string vsd_cvap_victimsocialinsurancenumber { get; set; }
-        // public string vsd_cvap_victimoccupation { get; set; }
-        // public string vsd_cvap_victimprimaryphonenumber { get; set; }
-        // public string vsd_cvap_victimalternatephonenumber { get; set; }
-        // public string vsd_cvap_victimemailaddress { get; set; }
-        // public string vsd_cvap_victimaddressline1 { get; set; }
-        // public string vsd_cvap_victimaddressline2 { get; set; }
-        // public string vsd_cvap_victimcity { get; set; }
-        // public string vsd_cvap_victimpostalcode { get; set; }
-        // public string vsd_cvap_victimprovince { get; set; }
-        // public string vsd_cvap_victimcountry { get; set; }
+        public string vsd_cvap_victimfirstname { get; set; }
+        public string vsd_cvap_victimmiddlename { get; set; }
+        public string vsd_cvap_victimlastname { get; set; }
+        public string vsd_cvap_victimotherfirstname { get; set; }
+        public string vsd_cvap_victimotherlastname { get; set; }
+        public DateTime? vsd_cvap_victimdateofnamechange { get; set; }
+        public int vsd_cvap_victimgendercode { get; set; }
+        public DateTime? vsd_cvap_victimbirthdate { get; set; }
+        public string vsd_cvap_victimsocialinsurancenumber { get; set; }
+        public string vsd_cvap_victimoccupation { get; set; }
+        public string vsd_cvap_victimprimaryphonenumber { get; set; }
+        public string vsd_cvap_victimalternatephonenumber { get; set; }
+        public string vsd_cvap_victimemailaddress { get; set; }
+        public string vsd_cvap_victimaddressline1 { get; set; }
+        public string vsd_cvap_victimaddressline2 { get; set; }
+        public string vsd_cvap_victimcity { get; set; }
+        public string vsd_cvap_victimpostalcode { get; set; }
+        public string vsd_cvap_victimprovince { get; set; }
+        public string vsd_cvap_victimcountry { get; set; }
 
         public string vsd_cvap_typeofcrime { get; set; }
         public DateTime? vsd_cvap_crimestartdate { get; set; }
