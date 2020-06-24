@@ -5,9 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import * as _moment from 'moment';
+// import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
-import { defaultFormat as _rollupMoment } from 'moment';
+// import { defaultFormat as _rollupMoment } from 'moment';
 import { CanDeactivateGuard } from '../services/can-deactivate-guard.service';
 import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
@@ -24,8 +24,8 @@ import { FileBundle } from '../models/file-bundle';
 import { VALID } from '@angular/forms/src/model';
 import { window } from 'ngx-bootstrap';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
-
-const moment = _rollupMoment || _moment;
+import * as moment from 'moment';
+// const moment = _rollupMoment || _moment;
 
 export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 
@@ -91,6 +91,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
   // a field that represents the current employment income information state
   employmentIncomeInformation: EmploymentIncomeInformation;
+  employmentInfoFormIsValid: boolean = false;
 
   //
   get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
@@ -157,7 +158,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields('representativeInformation.representativePreferredMethodOfContact'));
     this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields('authorizationInformation.allowCvapStaffSharing'));
 
-    this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.setEmploymentInfoRequiredFields());
+    this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.validateEmploymentInfoForm());
   }
 
   buildApplicationForm(): void {
@@ -253,7 +254,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           [
             0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
           ], // No: 100000000   Yes: 100000001
-        intendToSueOffender: [0], // Yes: 100000000 No: 100000001 Undecided: 100000002
+        intendToSueOffender: [null], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
         racafInformation: this.fb.group({
           applyToCourtForMoneyFromOffender: [null, [Validators.min(100000000), Validators.max(100000002)]],
@@ -593,10 +594,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   addEmployer(): void {
     // add an employer to the list
+    console.log("add employer");
     this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
-    this.employerItems.push(this.createEmployerItem());
+    this.employerItems.push(this.createEmployerInfo());
     this.showAddEmployer = this.employerItems.length < 5;
     this.showRemoveEmployer = this.employerItems.length > 1;
+    //let the form render and update status before validating it
+    setTimeout(() => {
+      this.validateEmploymentInfoForm();
+    }, 200)
+
   }
 
   removeEmployer(index: number): void {
@@ -605,24 +612,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.employerItems.removeAt(index);
     this.showAddEmployer = this.employerItems.length < 5;
     this.showRemoveEmployer = this.employerItems.length > 1;
-  }
-
-  createEmployerItem(): FormGroup {
-    // create an employer form group when the user clicks to add a new one.
-    return this.fb.group({
-      employerName: ['', Validators.required],
-      employerPhoneNumber: ['', Validators.required],
-      employerFirstName: [''],
-      employerLastName: [''],
-      employerAddress: this.fb.group({
-        line1: [''],
-        line2: [''],
-        city: [''],
-        postalCode: [''],  // , [Validators.pattern(postalRegex)]
-        province: [{ value: 'British Columbia', disabled: false }],
-        country: [{ value: 'Canada', disabled: false }],
-      })
-    });
   }
 
   getEmployerItem(index: number): FormControl {
@@ -646,7 +635,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   setEmploymentInformation(ei: EmploymentIncomeInformation) {
-    console.log("employment info changed");
     this.form.get('employmentIncomeInformation').patchValue(ei);
   }
 
@@ -654,6 +642,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     return this.fb.group({
       employerName: '',
       employerPhoneNumber: '',
+      employerFax: '',
+      employerEmail: '',
       employerFirstName: '',
       employerLastName: '',
       employerAddress: this.fb.group({
@@ -1193,110 +1183,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       this.setRepresentativePreferredMethodOfContact();
     }
   }
-  setEmploymentInfoRequiredFields() {
-    let eiInfo = this.form.get('employmentIncomeInformation') as FormGroup;
-
-    let eiControls = eiInfo.controls; //this is an object of all controls, it's not an array
-    let options = { onlySelf: true, emitEvent: false };
-
-    eiControls.wereYouEmployedAtTimeOfCrime.setValidators([Validators.required]);
-    // console.log(eiControls.wereYouEmployedAtTimeOfCrime);
-    eiControls.wereYouEmployedAtTimeOfCrime.markAsTouched(options);
-    eiControls.wereYouEmployedAtTimeOfCrime.updateValueAndValidity(options);
-
-    if (eiControls.wereYouEmployedAtTimeOfCrime.value === 100000001) {
-      // console.log("setting wereYouAtWorkAtTimeOfIncident as required");
-      eiControls.wereYouAtWorkAtTimeOfIncident.setValidators([Validators.required]);
-      eiControls.wereYouAtWorkAtTimeOfIncident.markAsTouched(options);
-      eiControls.wereYouAtWorkAtTimeOfIncident.updateValueAndValidity(options);
-    }
-    else {
-      // eiControls.wereYouAtWorkAtTimeOfIncident.patchValue(null);
-      eiControls.wereYouAtWorkAtTimeOfIncident.clearValidators();
-      eiControls.wereYouAtWorkAtTimeOfIncident.setErrors(null);
-    }
-
-    if (eiControls.wereYouAtWorkAtTimeOfIncident.value === 100000001) {
-      // console.log("setting haveYouAppliedToWorkSafe as required");
-      eiControls.haveYouAppliedToWorkSafe.setValidators([Validators.required]);
-      eiControls.haveYouAppliedToWorkSafe.markAsTouched(options);
-      eiControls.haveYouAppliedToWorkSafe.updateValueAndValidity(options);
-    }
-    else {
-      // eiControls.haveYouAppliedToWorkSafe.patchValue(null);
-      eiControls.haveYouAppliedToWorkSafe.clearValidators();
-      eiControls.haveYouAppliedToWorkSafe.setErrors(null);
-    }
-
-    if (eiControls.haveYouAppliedToWorkSafe.value === 100000001) {
-      // console.log("setting workersCompensationClaimNumber as required");
-      eiControls.workersCompensationClaimNumber.setValidators([Validators.required]);
-      eiControls.workersCompensationClaimNumber.markAsTouched(options);
-      eiControls.workersCompensationClaimNumber.updateValueAndValidity(options);
-    }
-    else {
-      // eiControls.workersCompensationClaimNumber.patchValue(null);
-      eiControls.workersCompensationClaimNumber.clearValidators();
-      eiControls.workersCompensationClaimNumber.setErrors(null);
-    }
-
-
-    eiControls.didYouMissWorkDueToCrime.setValidators([Validators.required]);
-    eiControls.didYouMissWorkDueToCrime.markAsTouched(options);
-    eiControls.didYouMissWorkDueToCrime.updateValueAndValidity(options);
-
-    if (eiControls.didYouMissWorkDueToCrime.value === 100000001) {
-      // console.log("setting daysWorkMissedStart as required");
-      eiControls.daysWorkMissedStart.setValidators([Validators.required]);
-      eiControls.daysWorkMissedStart.markAsTouched(options);
-      eiControls.daysWorkMissedStart.updateValueAndValidity(options);
-
-      eiControls.daysWorkMissedEnd.setValidators([Validators.required]);
-      eiControls.daysWorkMissedEnd.markAsTouched(options);
-      eiControls.daysWorkMissedEnd.updateValueAndValidity(options);
-
-      eiControls.areYouStillOffWork.setValidators([Validators.required]);
-      eiControls.areYouStillOffWork.markAsTouched(options);
-      eiControls.areYouStillOffWork.updateValueAndValidity(options);
-
-      eiControls.didYouLoseWages.setValidators([Validators.required]);
-      eiControls.didYouLoseWages.markAsTouched(options);
-      eiControls.didYouLoseWages.updateValueAndValidity(options);
-
-      if (eiControls.didYouLoseWages.value === 100000001) {
-        console.log("setting areYouSelfEmployed as required");
-        //not working well for some reason
-        eiControls.areYouSelfEmployed.setValidators([Validators.required]);
-        eiControls.areYouSelfEmployed.markAsTouched(options);
-        eiControls.areYouSelfEmployed.updateValueAndValidity(options);
-        //employer info
-      }
-      else {
-        // console.log("setting areYouSelfEmployed as NOT required");
-        // eiControls.areYouSelfEmployed.patchValue(null);
-        eiControls.areYouSelfEmployed.clearValidators();
-        eiControls.areYouSelfEmployed.setErrors(null);
-      }
-    }
-    else {
-      // eiControls.daysWorkMissedStart.patchValue(null);
-      eiControls.daysWorkMissedStart.clearValidators();
-      eiControls.daysWorkMissedStart.setErrors(null);
-
-      // eiControls.daysWorkMissedEnd.patchValue(null);
-      eiControls.daysWorkMissedEnd.clearValidators();
-      eiControls.daysWorkMissedEnd.setErrors(null);
-
-      // eiControls.areYouStillOffWork.patchValue(null);
-      eiControls.areYouStillOffWork.clearValidators();
-      eiControls.areYouStillOffWork.setErrors(null);
-
-      // eiControls.didYouLoseWages.patchValue(null);
-      eiControls.didYouLoseWages.clearValidators();
-      eiControls.didYouLoseWages.setErrors(null);
-    }
-
-    //Also fix attrocious review section for employment information
+  validateEmploymentInfoForm() {
+    let eiForm = document.querySelector(".employment-info-form");
+    this.employmentInfoFormIsValid = eiForm.classList.contains("ng-valid");
   }
 
   matchingEmailValidator() {

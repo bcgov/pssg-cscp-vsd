@@ -54,10 +54,11 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_victimfirstname { get; set; }
         public string vsd_cvap_victimmiddlename { get; set; }
         public string vsd_cvap_victimlastname { get; set; }
+        public int? vsd_cvap_victimmaritalstatus { get; set; }
         public string vsd_cvap_victimotherfirstname { get; set; }
         public string vsd_cvap_victimotherlastname { get; set; }
         public DateTime? vsd_cvap_victimdateofnamechange { get; set; }
-        public int vsd_cvap_victimgendercode { get; set; }
+        public int? vsd_cvap_victimgendercode { get; set; }
         public DateTime? vsd_cvap_victimbirthdate { get; set; }
         public string vsd_cvap_victimsocialinsurancenumber { get; set; }
         public string vsd_cvap_victimoccupation { get; set; }
@@ -130,7 +131,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public int? vsd_cvap_ifmmissedwork { get; set; }
         public DateTime? vsd_cvap_ifmmissedworkstart { get; set; }
         public DateTime? vsd_cvap_ifmmissedworkend { get; set; }
-        public int? vsd_cvap_ifmcurrentlyoffwork { get; set; }
+        public int? vsd_cvap_ifmareyoustilloffwork { get; set; }
         public int? vsd_cvap_ifmlostwages { get; set; }
         public int? vsd_cvap_ifmselfemployed { get; set; }
         public int? vsd_cvap_ifmcontactemployer { get; set; }

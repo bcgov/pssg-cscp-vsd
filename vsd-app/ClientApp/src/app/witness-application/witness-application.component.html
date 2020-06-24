@@ -1345,11 +1345,11 @@
               <h2 class="blue-header">Optional Authorization</h2>
               <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?" [valid]="isFieldValid('authorizationInformation.allowCvapStaffSharing')" errorMessage="Please select an option" [required]="true">
                 <label class="inline-label">
-                  <input type="radio" [value]="true" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <input type="radio" [value]="100000001" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="false" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <input type="radio" [value]="100000000" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                   <span>No</span>
                 </label>
               </app-field>

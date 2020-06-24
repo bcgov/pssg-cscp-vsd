@@ -1241,13 +1241,14 @@
             <section>
               <!-- this whole project seems to e reactive forms, and weirdly this one component is template, that's fun -->
               <!-- formControlName="employmentIncomeInformation" -->
-              <app-employment-income [value]="form.get('employmentIncomeInformation').value" (valueChange)="setEmploymentInformation($event)" #employmentIncomeInfo></app-employment-income>
+              <app-employment-income [value]="form.get('employmentIncomeInformation').value" (valueChange)="setEmploymentInformation($event)" (employerAdded)="addEmployer()" #employmentIncomeInfo></app-employment-income>
             </section>
             <section class="button-container">
               <div [ngBusy]="[busy3]"></div>
               <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
               <span style="float: right;">
-                <button [disabled]="!form.get('employmentIncomeInformation').valid || (form.get('employmentIncomeInformation.didYouLoseWages').value === 100000001 && form.get('employmentIncomeInformation.areYouSelfEmployed').value < 10)" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+                <button [disabled]="!employmentInfoFormIsValid" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button>
+                <!-- || (form.get('employmentIncomeInformation.didYouLoseWages').value === 100000001 && form.get('employmentIncomeInformation.areYouSelfEmployed').value < 10) -->
                 <!-- <button *ngIf="form.get('employmentIncomeInformation').valid===true" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE<i class="fas fa-chevron-right"></i></button> -->
               </span>
             </section>
@@ -1433,11 +1434,11 @@
             <h2 class="blue-header">Optional Authorization</h2>
             <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?" [valid]="isFieldValid('authorizationInformation.allowCvapStaffSharing')" errorMessage="Please select an option" [required]="true">
               <label class="inline-label">
-                <input type="radio" [value]="true" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                <input type="radio" [value]="100000001" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                 <span>Yes</span>
               </label>
               <label class="inline-label">
-                <input type="radio" [value]="false" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                <input type="radio" [value]="100000000" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                 <span>No</span>
               </label>
             </app-field>

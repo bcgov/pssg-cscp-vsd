@@ -15,7 +15,6 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Authorizationinformation AuthorizationInformation { get; set; }
         public VictimInformation VictimInformation { get; set; }
         //public DocumentCollectioninformation[] DocumentCollectionInformation { get; set; }
-        // TODO: Missing VictimInformation
     }
 
     public class Introduction
@@ -76,7 +75,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int offenderBeenCharged { get; set; }
         public Courtfile[] courtFiles { get; set; }
         public int haveYouSuedOffender { get; set; }
-        public int intendToSueOffender { get; set; }
+        public int? intendToSueOffender { get; set; }
         public Racafinformation racafInformation { get; set; }
     }
 
@@ -170,7 +169,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int? wereYouAtWorkAtTimeOfIncident { get; set; }
         public string haveYouAppliedForWorkersCompensation { get; set; }
         public string workersCompensationClaimNumber { get; set; }
-        public int didYouMissWorkDueToCrime { get; set; }
+        public int? didYouMissWorkDueToCrime { get; set; }
         public DateTime? daysWorkMissedStart { get; set; }
         public DateTime? daysWorkMissedEnd { get; set; }
         public int? areYouStillOffWork { get; set; }
@@ -184,6 +183,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     {
         public string employerName { get; set; }
         public string employerPhoneNumber { get; set; }
+        public string employerFax { get; set; }
+        public string employerEmail { get; set; }
         public string employerFirstName { get; set; }
         public string employerLastName { get; set; }
         public Address employerAddress { get; set; }
@@ -215,7 +216,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string approvedAuthorityNotification { get; set; }
         public string readAndUnderstoodTermsAndConditions { get; set; }
         public string signature { get; set; }
-        public string allowCvapStaffSharing { get; set; }
+        public int? allowCvapStaffSharing { get; set; }
         public AuthorizedPerson[] authorizedPerson { get; set; }
         public string authorizedPersonAuthorizesDiscussion { get; set; }
         public string authorizedPersonSignature { get; set; }
@@ -239,8 +240,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string otherFirstName { get; set; }
         public string otherLastName { get; set; }
         public DateTime? dateOfNameChange { get; set; }
-        public int gender { get; set; }
+        public int? gender { get; set; }
         public DateTime? birthDate { get; set; }
+        public int? maritalStatus { get; set; }
         public string sin { get; set; }
         public string occupation { get; set; }
         public string phoneNumber { get; set; }

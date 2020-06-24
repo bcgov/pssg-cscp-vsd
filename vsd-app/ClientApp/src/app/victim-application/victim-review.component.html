@@ -456,7 +456,9 @@
       </tr>
       <tr>
         <th>Please provide days of work missed</th>
-        <td>{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart') | date:'yyyy-MM-dd'}} - {{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd') | date:'yyyy-MM-dd'}} </td>
+        <!-- handle piping '--' into date pipe because of fun empty handling from value or empty blah blah -->
+        <td *ngIf="form.get('employmentIncomeInformation.daysWorkMissedStart').value != ''">{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart') | date:'yyyy-MM-dd'}} - {{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd') | date:'yyyy-MM-dd'}} </td>
+        <td *ngIf="form.get('employmentIncomeInformation.daysWorkMissedStart').value == ''">--</td>
       </tr>
       <tr>
         <th>As a result of any crime-related injuries, did you lose wages?</th>

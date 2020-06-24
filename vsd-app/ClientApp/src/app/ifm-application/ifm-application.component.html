@@ -256,12 +256,12 @@
             <div class="row">
               <div class="col-5">
                 <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('personalInformation.phoneNumber')" errorMessage="Please enter your phone number">
-                  <input class="form-control" mask='(000) 000 0000'  (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
                 </app-field>
               </div>
               <div class="col-5">
                 <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('personalInformation.alternatePhoneNumber')" errorMessage="Please enter your phone number">
-                  <input class="form-control" mask='(000) 000 0000'  (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
                 </app-field>
               </div>
               <div class="col-2">
@@ -449,12 +449,12 @@
             <div class="row">
               <div class="col-5">
                 <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('victimInformation.phoneNumber')" errorMessage="Please enter your phone number">
-                  <input class="form-control" mask='(000) 000 0000'  (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
                 </app-field>
               </div>
               <div class="col-5">
                 <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('victimInformation.alternatePhoneNumber')" errorMessage="Please enter your phone number">
-                  <input class="form-control" mask='(000) 000 0000'  (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
+                  <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
                 </app-field>
               </div>
               <div class="col-2">
@@ -487,7 +487,7 @@
             </div>
             <div class="row">
               <div class="col-6">
-                <app-address [group]="form.get('victimInformation.primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
+                <app-address [group]="form.get('victimInformation.primaryAddress')" [showChildrenAsRequired]="form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value.toString() != 'true'" [isDisabled]="form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value"></app-address>
                 <!--<app-address [group]="form.get('victimInformation.primaryAddress')" [showChildrenAsRequired]="mostRecentMailingAddressSameAsPersonal.Value == false"></app-address>-->
               </div>
               <div class="col-6">
@@ -1038,7 +1038,7 @@
                   <input class="form-control standard" type="text" formControlName="familyDoctorName">
                 </app-field>
                 <app-field label="Phone Number (incl. area code)">
-                  <input class="form-control standard" mask='(000) 000 0000'  type="text" formControlName="familyDoctorPhoneNumber">
+                  <input class="form-control standard" mask='(000) 000 0000' type="text" formControlName="familyDoctorPhoneNumber">
                 </app-field>
                 <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
                   <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
@@ -1072,7 +1072,7 @@
                       </div>
                       <div class="col-4">
                         <app-field label="Phone number (incl. area code)">
-                          <input type="text" mask='(000) 000 0000'  class="form-control" formControlName="providerPhoneNumber">
+                          <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerPhoneNumber">
                         </app-field>
                       </div>
                     </div>
@@ -1370,7 +1370,7 @@
                       </div>
                       <div class="col-4">
                         <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a contact phone number">
-                          <input type="text" mask='(000) 000 0000'  class="form-control" formControlName="employerPhoneNumber">
+                          <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
                         </app-field>
                       </div>
                       <div class="col-4">
@@ -1534,12 +1534,12 @@
               <div class="row">
                 <div class="col-4">
                   <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('representativeInformation.representativePhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" mask='(000) 000 0000'  type="text" formControlName="representativePhoneNumber">
+                    <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativePhoneNumber">
                   </app-field>
                 </div>
                 <div class="col-4">
                   <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeInformation.representativeAlternatePhoneNumber')" errorMessage="Please enter a phone number">
-                    <input class="form-control" mask='(000) 000 0000'  type="text" formControlName="representativeAlternatePhoneNumber">
+                    <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativeAlternatePhoneNumber">
                   </app-field>
                 </div>
                 <div class="col-4">
@@ -1660,19 +1660,19 @@
               <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
 
               <h2 class="blue-header">Optional Authorization</h2>
-              <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?">
+              <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?" [valid]="isFieldValid('authorizationInformation.allowCvapStaffSharing')" [required]="true" errorMessage="Please make a selection">
                 <label class="inline-label">
-                  <input type="radio" [value]="true" (click)="addAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <input type="radio" [value]="100000001" (click)="addAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                   <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                  <input type="radio" [value]="false" (click)="clearAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
+                  <input type="radio" [value]="100000000" (click)="clearAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
                   <span>No</span>
                 </label>
               </app-field>
 
               <section *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === true">
-                <div class="authorizedPerson"  formArrayName="authorizedPerson" *ngFor="let item of form.get('authorizationInformation.authorizedPerson')['controls']; let i = index;">
+                <div class="authorizedPerson" formArrayName="authorizedPerson" *ngFor="let item of form.get('authorizationInformation.authorizedPerson')['controls']; let i = index;">
                   <div [formGroupName]="i" class="authorizedPers">
                     <a href="javascript:void(0);" (click)="removeAuthorizationInformation(i)" class="float-right" *ngIf="showRemoveAuthorization"><i class="fas fa-trash-alt"></i> Delete Authorization</a>
 
@@ -1685,7 +1685,7 @@
                       </div>
                       <div class="col-4">
                         <app-field label="Phone Number (incl. area code)">
-                          <input class="form-control" mask='(000) 000 0000'  type="text" formControlName="authorizedPersonPhoneNumber">
+                          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="authorizedPersonPhoneNumber">
                         </app-field>
                       </div>
                       <div class="col-4"></div>
