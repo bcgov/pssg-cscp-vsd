@@ -1124,7 +1124,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
 
-        allowCvapStaffSharing: [''],
+        allowCvapStaffSharing: ['', Validators.required],
         authorizedPerson: this.fb.array([]),
         //        authorizedPersonFullName: [''],
         //        authorizedPersonPhoneNumber: [''],

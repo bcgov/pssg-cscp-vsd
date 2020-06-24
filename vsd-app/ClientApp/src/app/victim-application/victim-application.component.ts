@@ -351,7 +351,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         representativeFirstName: [''], //, Validators.required],
         representativeMiddleName: [''],
         representativeLastName: [''], //, Validators.required],
-        representativePreferredMethodOfContact: [0, [Validators.min(100000000), Validators.max(100000002)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
+        representativePreferredMethodOfContact: [null, [Validators.min(100000000), Validators.max(100000002)]], // Phone = 100000000, Email = 100000001, Mail = 100000002
         representativePhoneNumber: [''],
         representativeAlternatePhoneNumber: [''],
         representativeEmail: [''], //, [Validators.required, Validators.email]],
@@ -380,7 +380,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
 
-        allowCvapStaffSharing: [''],
+        allowCvapStaffSharing: ['', Validators.required],
         authorizedPerson: this.fb.array([]),
         //        authorizedPersonFullName: [''],
         //        authorizedPersonPhoneNumber: [''],
@@ -1141,6 +1141,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     representativeFirstName.updateValueAndValidity(options);
     representativeLastName.updateValueAndValidity(options);
     representativePreferredMethodOfContact.updateValueAndValidity(options);
+    console.log(this.form.get('representativeInformation'));
   }
   setRepresentativePreferredMethodOfContact(): void {
     // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
