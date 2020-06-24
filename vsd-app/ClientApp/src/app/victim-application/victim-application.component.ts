@@ -44,6 +44,7 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
 
 export class VictimApplicationComponent extends FormBase implements OnInit, CanDeactivateGuard {
   currentUser: User;
+
   busy: Promise<any>;
   busy2: Promise<any>;
   busy3: Promise<any>;
@@ -55,6 +56,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   courtFileItems: FormArray;
   crimeLocationItems: FormArray;
   policeReportItems: FormArray;
+  authorizedPersons: FormArray;
   submitting: boolean = false; // this controls the button state for
 
   hospitalList = HOSPITALS;
@@ -71,6 +73,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   showRemoveEmployer: boolean = false;
   showAddProvider: boolean = true;
   showRemoveProvider: boolean = false;
+  showAddAuthorizationInformation: boolean = true;
+  showRemoveAuthorization: boolean = true;
 
   public currentFormStep: number = 0; // form flow. Which step are we on?
 
@@ -375,19 +379,20 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
 
-        allowCvapStaffSharing: ['', Validators.required],
-        authorizedPersonFullName: [''],
-        authorizedPersonPhoneNumber: [''],
-        authorizedPersonRelationship: [''],
-        authorizedPersonAgencyName: [''],
-        authorizedPersonAgencyAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
+        allowCvapStaffSharing: [''],
+        authorizedPerson: this.fb.array([]),
+        //        authorizedPersonFullName: [''],
+        //        authorizedPersonPhoneNumber: [''],
+        //        authorizedPersonRelationship: [''],
+        //        authorizedPersonAgencyName: [''],
+        //        authorizedPersonAgencyAddress: this.fb.group({
+        //          line1: [''],
+        //          line2: [''],
+        //          city: [''],
+        //          postalCode: [''],  // , [Validators.pattern(postalRegex)]
+        //          province: [{ value: 'British Columbia', disabled: false }],
+        //          country: [{ value: 'Canada', disabled: false }],
+        //        }),
         authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
         authorizedPersonSignature: [''], //, Validators.required],
       }),
@@ -549,6 +554,26 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.familyDoctorNameItem.setValidators(null);
   }
 
+  addAuthorizationInformation(): void {
+    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
+    this.authorizedPersons.push(this.createAuthorizedPerson());
+    this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
+    this.showRemoveAuthorization = this.authorizedPersons.length > 1;
+  }
+  clearAuthorizationInformation(): void {
+    // remove all AuthorizedInformation items
+    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
+    while (this.authorizedPersons.length > 0) {
+      this.authorizedPersons.removeAt(this.authorizedPersons.length - 1);
+    }
+  }
+  removeAuthorizationInformation(index: number): void {
+    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
+    this.authorizedPersons.removeAt(index);
+    this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
+    this.showRemoveAuthorization = this.authorizedPersons.length > 1;
+  }
+
   addProvider(): void {
     // add a medical treatment provider to the list
     this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
@@ -605,6 +630,25 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.employerItems.removeAt(index);
     this.showAddEmployer = this.employerItems.length < 5;
     this.showRemoveEmployer = this.employerItems.length > 1;
+  }
+
+  createAuthorizedPerson(): FormGroup {
+    return this.fb.group({
+      providerType: [''],
+      providerTypeText: [''],
+      authorizedPersonFullName: ['', Validators.required],
+      authorizedPersonPhoneNumber: [''],
+      authorizedPersonAgencyAddress: this.fb.group({
+        line1: [''],
+        line2: [''],
+        city: [''],
+        postalCode: [''],  // , [Validators.pattern(postalRegex)]
+        province: [{ value: 'British Columbia', disabled: false }],
+        country: [{ value: 'Canada', disabled: false }],
+      }),
+      authorizedPersonRelationship: [''],
+      authorizedPersonAgencyName: [''],
+    });
   }
 
   createEmployerItem(): FormGroup {
@@ -1185,9 +1229,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
   setRequiredFields(source: string) {
     // set all form validation
-    this.setCompletingOnBehalfOf();
-    this.setCvapStaffSharing();
-    this.setHospitalTreatment();
+    //this.setCompletingOnBehalfOf();
+    //this.setCvapStaffSharing();
+    //this.setHospitalTreatment();
     // this.setPreferredContactMethod();
     if (source != 'representativeInformation.completingOnBehalfOf') {
       this.setRepresentativePreferredMethodOfContact();
