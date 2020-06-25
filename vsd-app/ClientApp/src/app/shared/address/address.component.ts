@@ -15,8 +15,8 @@ export class AddressComponent implements OnInit {
   postalCodeSample: string;
 
   @Input() group = FormGroup;
-  @Input() showChildrenAsRequired: Boolean = true;
-  @Input() isDisabled: Boolean = false;
+  @Input() showChildrenAsRequired: boolean = true;
+  @Input() isDisabled: boolean = false;
 
   constructor() {
 
