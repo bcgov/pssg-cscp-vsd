@@ -17,7 +17,7 @@ import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.c
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
-import { EnumHelper } from '../shared/enums-list';
+import { EnumHelper, ApplicationType } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
 import { FileBundle } from '../models/file-bundle';
@@ -89,6 +89,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   expenseMinimumMet: boolean = null;
   saveFormData: any;
+
+  ApplicationType = ApplicationType;
 
   matchingEmail: string; // this is the value of the email that both email fields should match.
   todaysDate = new Date(); // for the birthdate validation
