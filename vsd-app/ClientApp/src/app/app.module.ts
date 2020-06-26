@@ -93,6 +93,8 @@ import { FilenameBlockComponent } from './filename-block/filename-block.componen
 import { PhonePipe } from './pipes/phone.pipe';
 import { NgxMaskModule } from 'ngx-mask'
 import { CrimeInformationComponent } from './shared/crime-information/crime-information.component';
+import { AuthorizationInformationComponent } from './shared/authorization-information/authorization-information.component';
+import { MedicalInformationComponent } from './shared/medical-information/medical-information.component';
 
 @NgModule({
   declarations: [
@@ -116,6 +118,8 @@ import { CrimeInformationComponent } from './shared/crime-information/crime-info
     OffenderRestitutionComponent,
     OffenderRestitutionReviewComponent,
     CrimeInformationComponent,
+    MedicalInformationComponent,
+    AuthorizationInformationComponent,
     BreadcrumbComponent,
     HomeComponent,
     NotFoundComponent,

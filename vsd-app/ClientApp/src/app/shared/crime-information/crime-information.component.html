@@ -31,16 +31,16 @@
 
         <section>
             <app-field label="Date(s) of crime" [required]="true" [valid]="isFieldValid('crimePeriodStart')" errorMessage="Please enter the crime date">
-                <input type="text" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" [max]="todaysDate" (click)="crimePeriodStartPicker.open()" readonly>
+                <input type="text" (dateChange)="crimePeriodStartChange($event)" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" [max]="todaysDate" (click)="crimePeriodStartPicker.open()" readonly>
                 <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
                 <span *ngIf="form.get('whenDidCrimeOccur').value === true || form.get('unsureOfCrimeDates').value === true">
                     <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" [max]="todaysDate" (click)="crimePeriodEndDatePicker.open()" readonly>
+                    <input type="text" [min]="crimePeriodStartDate" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" [max]="todaysDate" (click)="crimePeriodEndDatePicker.open()" readonly>
                     <mat-datepicker #crimePeriodEndDatePicker></mat-datepicker>
                 </span>
             </app-field>
         </section>
-       
+
         <app-field label="Is this application being filed within one year of the date of the crime?" [valid]="isFieldValid('applicationFiledWithinOneYearFromCrime')" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
             <label class="inline-label">
                 <input type="radio" [value]="true" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
@@ -157,23 +157,26 @@
                                 <input class="form-control" type="text" formControlName="policeFileNumber">
                             </td>
                             <td>
-                                <input class="form-control standard" type="text" formControlName="policeDetachment">
+                                <!-- <input class="form-control standard" type="text" formControlName="policeDetachment"> -->
+                                <select class="form-control standard" formControlName="policeDetachment">
+                                    <option *ngFor="let policeForce of policeForceList">{{policeForce}}</option>
+                                </select>
                             </td>
                             <td>
                                 <input class="form-control" type="text" formControlName="investigatingOfficer">
                             </td>
                             <td>
-                                <input type="text" class="form-control date-picker" formControlName="reportStartDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportStartDatePicker" (focus)="reportStartDatePicker.open()" (click)="reportStartDatePicker.open()" readonly>
+                                <input type="text" [max]="today" (dateChange)="reportStartChange(i, $event)" class="form-control date-picker" formControlName="reportStartDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportStartDatePicker" (focus)="reportStartDatePicker.open()" (click)="reportStartDatePicker.open()" readonly>
                                 <mat-datepicker #reportStartDatePicker></mat-datepicker>
                             </td>
                             <td>
                                 <span *ngIf="item.controls.policeReportedMultipleTimes.value === true">
-                                    <input type="text" class="form-control date-picker" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
+                                    <input type="text" [max]="today" [min]="policeReportMinDates[i]" class="form-control date-picker" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
                                     <mat-datepicker #reportEndDatePicker></mat-datepicker>
                                 </span>
                             </td>
                             <td>
-                                <input type="checkbox" [value]="true" name="policeReportedMultipleTimes" formControlName="policeReportedMultipleTimes">
+                                <input type="checkbox" [value]="true" name="policeReportedMultipleTimes" formControlName="policeReportedMultipleTimes" (click)="clearReportEndDate(i);">
                                 <!-- <span>Unsure of date report was made to the Police force?</span> -->
                             </td>
                             <td>
@@ -240,30 +243,32 @@
                 </div>
             </div>
 
-            <h3>Court Information</h3>
-            <div class="court-information">
-                <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('courtFiles')['controls']; let i = index;">
-                    <div [formGroupName]="i" class="row court-files">
-                        <div class="col-4">
-                            <app-field label="Court File Number (if known)" [tooltipReference]="courtFileNumber">
-                                <input class="form-control" type="text" formControlName="courtFileNumber">
-                            </app-field>
-                        </div>
-                        <div class="col-4">
-                            <app-field label="Court Location">
-                                <input class="form-control" type="text" formControlName="courtLocation">
-                            </app-field>
-                        </div>
-                        <div class="col-4">
-                            <br />
-                            <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">
-                                <i class="fas fa-trash-alt"></i> Remove Court File
-                            </a>
+            <div *ngIf="form.get('offenderBeenCharged').value === 100000000">
+                <h3>Court Information</h3>
+                <div class="court-information">
+                    <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('courtFiles')['controls']; let i = index;">
+                        <div [formGroupName]="i" class="row court-files">
+                            <div class="col-4">
+                                <app-field label="Court File Number (if known)" [tooltipReference]="courtFileNumber">
+                                    <input class="form-control" type="text" formControlName="courtFileNumber">
+                                </app-field>
+                            </div>
+                            <div class="col-4">
+                                <app-field label="Court Location">
+                                    <input class="form-control" type="text" formControlName="courtLocation">
+                                </app-field>
+                            </div>
+                            <div class="col-4">
+                                <br />
+                                <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">
+                                    <i class="fas fa-trash-alt"></i> Remove Court File
+                                </a>
+                            </div>
                         </div>
                     </div>
+                    <ng-template #courtFileNumber><strong>Court File Number</strong><br />This information is needed by CVAP to access court records about the incident.</ng-template>
+                    <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add Additional Court Information</a>
                 </div>
-                <ng-template #courtFileNumber><strong>Court File Number</strong><br />This information is needed by CVAP to access court records about the incident.</ng-template>
-                <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add Additional Court Information</a>
             </div>
 
             <app-field label="Have you sued the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('haveYouSuedOffender')" errorMessage="Please make a selection">
@@ -370,6 +375,7 @@
                                 <a class="redo" (click)="showSignPad('racafInformation', 'signature')">Redo Signature</a>
                             </div>
                         </app-field>
+                        <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
                     </span>
                 </div>
             </section>

@@ -1,13 +1,12 @@
 import { OnInit, Component, Input } from "@angular/core";
 import { FormBase } from "../form-base";
-import { CanDeactivateGuard } from "../../services/can-deactivate-guard.service";
-import { MatDialogConfig, MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material";
-import { DeactivateGuardDialog } from "../guard-dialog/guard-dialog.component";
+import { MatDialogConfig, MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepickerInputEvent } from "@angular/material";
 import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer } from "@angular/forms";
 import { FileBundle } from "../../models/file-bundle";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-crime-information',
@@ -39,6 +38,24 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     todaysDate = new Date();
 
     ApplicationType = ApplicationType;
+
+    today = new Date();
+    policeReportMinDates: Date[] = [];
+
+    crimePeriodStartDate: Date = null;
+
+    policeForceList = ["Surrey RCMP",
+        "Vancouver Police Department",
+        "Abbotsford Police Department",
+        "Kelowna RCMP",
+        "Chilliwack RCMP",
+        "New Westminster Police Department",
+        "Burnaby RCMP",
+        "Victoria Police Department",
+        "Coquitlam RCMP",
+        "Langley RCMP",
+        "Nanaimo",
+        "Kamloops"];
 
     constructor(
         private controlContainer: ControlContainer,
@@ -79,6 +96,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         this.policeReportItems.push(this.createPoliceReport());
         this.showAddPoliceReport = this.policeReportItems.length < 5;
         this.showRemovePoliceReport = this.policeReportItems.length > 1;
+
+        this.policeReportMinDates.push(null)
     }
 
     removePoliceReport(index: number): void {
@@ -86,6 +105,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         this.policeReportItems.removeAt(index);
         this.showAddPoliceReport = this.policeReportItems.length < 5;
         this.showRemovePoliceReport = this.policeReportItems.length > 1;
+        this.policeReportMinDates.splice(index, 1);
     }
 
     createPoliceReport(): FormGroup {
@@ -165,6 +185,48 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
             },
             err => console.log(err)
         );
+    }
+
+    crimePeriodStartChange(event: MatDatepickerInputEvent<Date>) {
+        this.crimePeriodStartDate = event.target.value;
+        //validate that a selected end date is not before the start date
+        let startDate = moment(event.target.value);
+
+        let endDate = this.form.get('crimePeriodEnd').value;
+        if (endDate && moment(endDate).isBefore(startDate)) {
+            this.form.get('crimePeriodEnd').patchValue(null);
+        }
+    }
+
+    reportStartChange(index: number, event: MatDatepickerInputEvent<Date>) {
+        this.policeReportMinDates[index] = event.target.value;
+        //validate that a selected end date is not before the start date
+        let startDate = moment(event.target.value);
+        this.policeReportItems = this.form.get('policeReports') as FormArray;
+        let thisReport = this.policeReportItems.at(index) as FormGroup;
+        let endDate = moment(thisReport.get('reportEndDate').value);
+        if (endDate.isBefore(startDate)) {
+            thisReport.get('reportEndDate').patchValue(null);
+        }
+        // this.valueChange.emit(this.eiInfo);
+    }
+
+    // reportEndChange(index: number, event: MatDatepickerInputEvent<Date>) {
+    //     let endDate = moment(event.target.value);
+    //     this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
+    //     this.valueChange.emit(this.eiInfo);
+    // }
+
+    clearReportEndDate(index: number) {
+        console.log("clearReportEndDate");
+        this.policeReportItems = this.form.get('policeReports') as FormArray;
+        console.log(this.policeReportItems);
+        let thisReport = this.policeReportItems.at(index) as FormGroup;
+        console.log(thisReport);
+
+        if (thisReport.get('policeReportedMultipleTimes').value) {
+            thisReport.get('reportEndDate').patchValue(null);
+        }
     }
 
 }

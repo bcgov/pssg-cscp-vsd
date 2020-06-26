@@ -1020,7 +1020,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         courtFiles: this.fb.array([this.createCourtInfoItem()]),
 
         haveYouSuedOffender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000   Yes: 100000001
-        intendToSueOffender: [0], // Yes: 100000000 No: 100000001 Undecided: 100000002
+        intendToSueOffender: [null], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
         racafInformation: this.fb.group({
           applyToCourtForMoneyFromOffender: [''],
@@ -1080,6 +1080,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         employers: this.fb.array([this.createEmployerItem()]),
         mayContactEmployer: [''],
 
+        additionalBenefitsDetails: [''],//, Validators.required], ??
         // Other Benefits
         haveDisabilityPlanBenefits: [false],
         haveEmploymentInsuranceBenefits: [false],
