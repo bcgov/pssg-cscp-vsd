@@ -1283,6 +1283,15 @@
             </app-field>
           </section>
 
+          <section *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === 100000003">
+            <app-field label="Relationship to Person" [required]="true" errorMessage="Please select a relationship">
+              <select class="form-control standard" formControlName="relationshipToPerson">
+                <option value="">Select...</option>
+                <option *ngFor="let item of relationshipList">{{ item }}</option>
+              </select>
+            </app-field>
+          </section>
+
           <hr />
 
           <section *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === 100000000">

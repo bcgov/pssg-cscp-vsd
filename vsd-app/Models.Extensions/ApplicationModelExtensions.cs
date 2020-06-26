@@ -434,7 +434,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         tempProviderCollection[0].vsd_firstname = model.RepresentativeInformation.representativeFirstName;
                         tempProviderCollection[0].vsd_middlename = model.RepresentativeInformation.representativeMiddleName;
                         tempProviderCollection[0].vsd_lastname = model.RepresentativeInformation.representativeLastName;
-                        tempProviderCollection[0].vsd_relationship1 = "Representative";
+                        tempProviderCollection[0].vsd_relationship1 = model.RepresentativeInformation.relationshipToPerson;// "Representative";
 
                         int tempProviderCount = 0;
                         if (application.ProviderCollection == null)

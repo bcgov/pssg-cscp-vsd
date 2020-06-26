@@ -22,6 +22,7 @@ import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
 import { FileBundle } from '../models/file-bundle';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
+import { REPRESENTATIVE_LIST } from '../constants/representative-list';
 
 const moment = _rollupMoment || _moment;
 
@@ -60,6 +61,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   hospitalList = HOSPITALS;
   provinceList: string[];
+  relationshipList: string[];
   enumHelper = new EnumHelper();
 
   showAddCourtInfo: boolean = true;
@@ -102,6 +104,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     super();
     var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
     this.provinceList = canada.areas;
+    this.relationshipList = REPRESENTATIVE_LIST.name;
 
     this.formFullyValidated = false;
     this.currentFormStep = 0;
@@ -1112,6 +1115,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
           filename: [''], // fileName
           body: [''], // fileData
         }), // This will be a collection of uploaded files
+        relationshipToPerson: [''],
       }),
 
       declarationInformation: this.fb.group({

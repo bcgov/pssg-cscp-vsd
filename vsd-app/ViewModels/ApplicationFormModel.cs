@@ -203,6 +203,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Address representativeAddress { get; set; }
         public DocumentCollectioninformation legalGuardianFiles { get; set; }
         public string documentDescription { get; set; }
+        public string relationshipToPerson { get; set; }
     }
 
     public class Declarationinformation
