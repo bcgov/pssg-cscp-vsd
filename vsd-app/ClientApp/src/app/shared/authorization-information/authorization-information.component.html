@@ -64,30 +64,28 @@
             <a href="javascript:void(0);" (click)="removeAuthorizationInformation(i)" class="float-right" *ngIf="showRemoveAuthorization"><i class="fas fa-trash-alt"></i> Delete Authorization</a>
             <h3>Authorized Person {{ i + 1 }}</h3>
             <div class="row">
-              <div class="col-4">
+              <div class="col">
                 <app-field label="Full Name">
                   <input class="form-control" type="text" formControlName="authorizedPersonFullName">
                 </app-field>
               </div>
-              <div class="col-4">
+              <div class="col">
                 <app-field label="Phone Number (incl. area code)">
                   <input class="form-control" maxlength="10" type="text" formControlName="authorizedPersonPhoneNumber">
                 </app-field>
               </div>
-              <div class="col-4"></div>
             </div>
             <div class="row">
-              <div class="col-4">
+              <div class="col">
                 <app-field label="Relationship to Applicant">
                   <input class="form-control" type="text" formControlName="authorizedPersonRelationship">
                 </app-field>
               </div>
-              <div class="col-4">
+              <div class="col">
                 <app-field label="Agency Name">
                   <input class="form-control" type="text" formControlName="authorizedPersonAgencyName">
                 </app-field>
               </div>
-              <div class="col-4"></div>
             </div>
 
             <app-address [group]="item.get('authorizedPersonAgencyAddress')" [showChildrenAsRequired]="false"></app-address>
