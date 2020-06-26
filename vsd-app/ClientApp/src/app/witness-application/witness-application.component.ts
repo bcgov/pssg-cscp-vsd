@@ -17,7 +17,7 @@ import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.c
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { FormBase } from '../shared/form-base';
 import { HOSPITALS } from '../shared/hospital-list';
-import { EnumHelper } from '../shared/enums-list';
+import { EnumHelper, ApplicationType } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
 import { FileBundle } from '../models/file-bundle';
@@ -90,6 +90,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
+
+  ApplicationType = ApplicationType;
 
   get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
 

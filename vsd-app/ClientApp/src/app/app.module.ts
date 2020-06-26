@@ -92,6 +92,7 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
 import { FilenameBlockComponent } from './filename-block/filename-block.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { NgxMaskModule } from 'ngx-mask'
+import { CrimeInformationComponent } from './shared/crime-information/crime-information.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { NgxMaskModule } from 'ngx-mask'
     VictimRestitutionReviewComponent,
     OffenderRestitutionComponent,
     OffenderRestitutionReviewComponent,
+    CrimeInformationComponent,
     BreadcrumbComponent,
     HomeComponent,
     NotFoundComponent,
