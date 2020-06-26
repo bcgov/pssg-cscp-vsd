@@ -640,12 +640,12 @@
                     </a>
                     <h3>Provider {{ i + 1 }}</h3>
                     <div class="row">
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Provider name" [required]="true">
                           <input type="text" class="form-control" formControlName="providerName">
                         </app-field>
                       </div>
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Phone number (incl. area code)">
                           <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerPhoneNumber">
                         </app-field>
@@ -938,31 +938,27 @@
                 <div class="employers" formArrayName="employers" *ngFor="let item of form.get('expenseInformation.employers')['controls']; let i = index;">
                   <div [formGroupName]="i" class="employer">
                     <div class="row">
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Name of Company / Organization" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a company name">
                           <input type="text" class="form-control" formControlName="employerName">
                         </app-field>
                       </div>
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a contact phone number">
                           <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
                         </app-field>
                       </div>
-                      <div class="col-4">
-                      </div>
                     </div>
                     <div class="row">
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Employer First Name">
                           <input type="text" class="form-control" formControlName="employerFirstName">
                         </app-field>
                       </div>
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Employer Last name">
                           <input type="text" class="form-control" formControlName="employerLastName">
                         </app-field>
-                      </div>
-                      <div class="col-4">
                       </div>
                     </div>
 
@@ -1262,30 +1258,28 @@
 
                     <h3>Authorized Person {{ i + 1 }}</h3>
                     <div class="row">
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Full Name">
                           <input class="form-control" type="text" formControlName="authorizedPersonFullName">
                         </app-field>
                       </div>
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Phone Number (incl. area code)">
                           <input class="form-control" mask='(000) 000 0000' type="text" formControlName="authorizedPersonPhoneNumber">
                         </app-field>
                       </div>
-                      <div class="col-4"></div>
                     </div>
                     <div class="row">
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Relationship to Applicant">
                           <input class="form-control" type="text" formControlName="authorizedPersonRelationship">
                         </app-field>
                       </div>
-                      <div class="col-4">
+                      <div class="col">
                         <app-field label="Agency Name">
                           <input class="form-control" type="text" formControlName="authorizedPersonAgencyName">
                         </app-field>
                       </div>
-                      <div class="col-4"></div>
                     </div>
 
                     <app-address [group]="item.get('authorizedPersonAgencyAddress')" [showChildrenAsRequired]="false"></app-address>
