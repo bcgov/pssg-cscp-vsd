@@ -139,6 +139,7 @@ export interface RepresentativeInformation {
   representativeAddress: Address;
   legalGuardianFiles: DocumentCollectioninformation[];
   documentDescription: string;
+  relationshipToPerson: string;
 }
 export interface DeclarationInformation {
   declaredAndSigned: string;
