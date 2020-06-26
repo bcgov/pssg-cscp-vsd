@@ -24,6 +24,7 @@ import { FileBundle } from '../models/file-bundle';
 import { VALID } from '@angular/forms/src/model';
 import { window } from 'ngx-bootstrap';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
+import { REPRESENTATIVE_LIST } from '../constants/representative-list';
 import * as moment from 'moment';
 // const moment = _rollupMoment || _moment;
 
@@ -61,6 +62,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   hospitalList = HOSPITALS;
   provinceList: string[];
+  relationshipList: string[];
   enumHelper = new EnumHelper();
 
   showAddCourtInfo: boolean = true;
@@ -113,6 +115,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     super();
     var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
     this.provinceList = canada.areas;
+    this.relationshipList = REPRESENTATIVE_LIST.name;
   }
 
   canDeactivate() {
@@ -370,6 +373,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
           filename: [''],
           body: [''],
         }),
+        relationshipToPerson: [''],
       }),
 
       declarationInformation: this.fb.group({

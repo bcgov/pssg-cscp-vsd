@@ -620,6 +620,15 @@
               </app-field>
             </section>
 
+            <section *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === 100000003">
+              <app-field label="Relationship to Person" [required]="true" errorMessage="Please select a relationship">
+                <select class="form-control standard" formControlName="relationshipToPerson">
+                  <option value="">Select...</option>
+                  <option *ngFor="let item of relationshipList">{{ item }}</option>
+                </select>
+              </app-field>
+            </section>
+
             <hr />
 
             <section *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === 100000000">
@@ -694,8 +703,8 @@
               <h2 class="blue-header">Proof of Guardianship/Trusteeship</h2>
               <p>Note: If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship/trusteeship.</p>
               <!-- <div class="file-upload-placeholder">
-                [upload functionality goes here]
-              </div> -->
+      [upload functionality goes here]
+    </div> -->
               <app-file-uploader-box [initialValues]="form.value.representativeInformation.legalGuardian" (fileBundle)="onRepresentativeFileBundle($event)"></app-file-uploader-box>
             </section>
           </div>
