@@ -124,3 +124,9 @@ export class EnumHelper {
     100000002: 'Psycho-educational sessions',
   }
 }
+
+export enum ApplicationType {
+  Victim_Application = 100000002,
+  IFM_Application = 100000001,
+  Witness_Application = 100000000
+}
