@@ -24,13 +24,13 @@
         </app-field>
         <section *ngIf="form.get('doYouHaveMedicalServicesCoverage').value === true">
             <app-field label="Province" [required]="true" errorMessage="Please select a province">
-                <select class="form-control standard" formControlName="haveMedicalCoverageProvince">
+                <select class="form-control standard" formControlName="haveMedicalCoverageProvince" #haveMedicalCoverageProv>
                     <option value="">Select...</option>
                     <option *ngFor="let item of provinceList">{{ item }}</option>
-                    <option value="">Other</option>
+                    <option value="Other">Other</option>
                 </select>
                 &nbsp;
-                <input class="form-control standard" type="text" formControlName="haveMedicalCoverageProvinceOther">
+                <input *ngIf="form.get('haveMedicalCoverageProvince').value==='Other'" class="form-control standard" type="text" formControlName="haveMedicalCoverageProvinceOther" value="haveMedicalCoverageProv.value">
             </app-field>
             <app-field label="Personal Health Number">
                 <input class="form-control standard" type="text" formControlName="personalHealthNumber">
