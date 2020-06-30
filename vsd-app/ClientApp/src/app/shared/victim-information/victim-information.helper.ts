@@ -23,10 +23,11 @@ export class VictimInfoHelper {
             phoneNumber: [''],
             alternatePhoneNumber: [''],
             email: [''],
-            confirmEmail: ['', [
-                Validators.email,
-                EmailValidator('email')
-            ]],
+            confirmEmail: [''],
+            // , [
+            //     Validators.email,
+            //     EmailValidator('email')
+            // ]],
 
             // Bind a subscribe event on this field being true. Change victim primary address when applicant address changes
             mostRecentMailingAddressSameAsPersonal: ['', Validators.required],

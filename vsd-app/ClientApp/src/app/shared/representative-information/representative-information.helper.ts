@@ -15,10 +15,16 @@ export class RepresentativeInfoHelper {
             representativePhoneNumber: [''],
             representativeAlternatePhoneNumber: [''],
             representativeEmail: ['', [Validators.email]], //, [Validators.required, Validators.email]],
-            representativeConfirmEmail: ['', [
-                Validators.email,
-                EmailValidator('representativeEmail')
-            ]],
+            // representativeConfirmEmail: ['', [
+            //     Validators.email,
+            //     EmailValidator('representativeEmail')
+            // ]],
+
+            representativeConfirmEmail: [''],
+            // , [
+            //     Validators.email,
+            //     EmailValidator('representativeEmail')
+            // ]],
             representativeAddress: fb.group({
                 line1: [''],
                 line2: [''],
