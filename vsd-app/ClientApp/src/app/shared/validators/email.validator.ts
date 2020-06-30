@@ -1,6 +1,6 @@
-// import { FormControl, AbstractControl } from '@angular/forms';
+// import { FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 
-// export function EmailValidator(confirmEmailInput: string) {
+// export function EmailValidator(confirmEmailInput: string): ValidatorFn {
 //   let confirmEmailControl: AbstractControl;
 //   let emailControl: AbstractControl;
 

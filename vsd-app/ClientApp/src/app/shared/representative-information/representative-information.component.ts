@@ -40,6 +40,12 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
         this.provinceList = canada.areas;
         this.relationshipList = REPRESENTATIVE_LIST.name;
+    }
+
+    ngOnInit() {
+        this.form = <FormGroup>this.controlContainer.control;
+        console.log("representative info component");
+        console.log(this.form);
 
         if (this.formType === ApplicationType.Victim_Application) {
             this.header = "Victim";
@@ -50,12 +56,6 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         if (this.formType === ApplicationType.Witness_Application) {
             this.header = "Witness";
         }
-    }
-
-    ngOnInit() {
-        this.form = <FormGroup>this.controlContainer.control;
-        console.log("representative info component");
-        console.log(this.form);
 
         this.form.get('completingOnBehalfOf').valueChanges.subscribe(value => {
             let representativeFirstName = this.form.get('representativeFirstName');

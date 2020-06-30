@@ -122,19 +122,22 @@
                 <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
             </app-field>
         </div>
-
     </div>
+
+
     <div class="row">
         <div class="col-md-6">
             <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
-                <input class="form-control" type="text" (blur)="trimValue(form.get('email'))" formControlName="email" maxlength="100">
+                <input class="form-control" type="text" formControlName="email" maxlength="100">
+                <!-- (blur)="trimValue(form.get('email'))" -->
             </app-field>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm email address">
-                <input class="form-control" type="text" (blur)="trimValue(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
+                <input class="form-control" type="text" formControlName="confirmEmail" maxlength="100">
+                <!-- (blur)="trimValue(form.get('confirmEmail'))" -->
             </app-field>
         </div>
     </div>
