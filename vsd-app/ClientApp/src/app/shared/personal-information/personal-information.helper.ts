@@ -29,10 +29,11 @@ export class PersonalInfoHelper {
             phoneNumber: [''],
             alternatePhoneNumber: [''],
             email: ['', [Validators.email] ],
-            confirmEmail: ['', [
-                Validators.email,
-                EmailValidator('email')
-            ]],
+            confirmEmail: [''],
+            // , [
+            //     Validators.email,
+            //     EmailValidator('email')
+            // ]],
 
             primaryAddress: fb.group({
                 line1: [''],

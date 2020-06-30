@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
-import { Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -20,9 +19,7 @@ import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper, ApplicationType } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
-import { FileBundle } from '../models/file-bundle';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
-import { REPRESENTATIVE_LIST } from '../constants/representative-list';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
@@ -88,7 +85,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     private dialog: MatDialog,
   ) {
     super();
-    var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
     this.formFullyValidated = false;
     this.currentFormStep = 0;
   }
