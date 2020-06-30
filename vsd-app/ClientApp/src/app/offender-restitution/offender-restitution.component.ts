@@ -20,10 +20,11 @@ import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { OffenderRestitution } from '../interfaces/offender-restitution.interface';
 import { FileBundle } from '../models/file-bundle';
+import { POSTAL_CODE } from '../shared/regex.constants';
 
 const moment = _rollupMoment || _moment;
 
-export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
+// export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 
 @Component({
   selector: 'app-offender-restitution',
@@ -39,6 +40,7 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
 })
 
 export class OffenderRestitutionComponent extends FormBase implements OnInit, CanDeactivateGuard {
+  postalRegex = POSTAL_CODE;
   currentUser: User;
   dataLoaded = false;
   busy: Promise<any>;
@@ -387,7 +389,7 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
           line1: [''],//, Validators.required],
           line2: [''],
           city: [''],//, Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex)]],//, Validators.required]],
+          postalCode: ['', [Validators.pattern(this.postalRegex)]],//, Validators.required]],
           province: [{ value: 'British Columbia', disabled: false }],
           country: [{ value: 'Canada', disabled: false }],
         }),

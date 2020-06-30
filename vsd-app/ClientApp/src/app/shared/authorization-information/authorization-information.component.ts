@@ -2,7 +2,7 @@ import { FormBase } from "../form-base";
 import { Input, Component, OnInit } from "@angular/core";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDialogConfig } from "@angular/material";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, ApplicationType } from "../enums-list";
+import { MY_FORMATS, ApplicationType, EnumHelper } from "../enums-list";
 import { FormGroup, ControlContainer, FormBuilder, FormArray, Validators } from "@angular/forms";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 
@@ -23,6 +23,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
     @Input() formType: number;
     public form: FormGroup;
     ApplicationType = ApplicationType;
+    enumHelper = new EnumHelper();
 
     authorizedPersons: FormArray;
     showAddAuthorizationInformation: boolean = true;
@@ -40,6 +41,25 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         this.form = <FormGroup>this.controlContainer.control;
         console.log("auth info component");
         console.log(this.form);
+
+        this.form.get('allowCvapStaffSharing').valueChanges.subscribe(value => {
+            let authorizedPersonAuthorizesDiscussion = this.form.get('authorizedPersonAuthorizesDiscussion');
+            let authorizedPersonSignature = this.form.get('authorizedPersonSignature');
+
+            authorizedPersonAuthorizesDiscussion.clearValidators();
+            authorizedPersonAuthorizesDiscussion.setErrors(null);
+            authorizedPersonSignature.clearValidators();
+            authorizedPersonSignature.setErrors(null);
+
+            let useValidation = value === this.enumHelper.boolValues.Yes;
+            if (useValidation) {
+                authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
+                authorizedPersonSignature.setValidators([Validators.required]);
+            }
+
+            authorizedPersonAuthorizesDiscussion.updateValueAndValidity();
+            authorizedPersonSignature.updateValueAndValidity();
+        });
     }
 
     addAuthorizationInformation(makeAuthorizedSignatureRequired: boolean = false): void {

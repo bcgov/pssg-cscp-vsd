@@ -5,6 +5,7 @@ import { Address } from '../interfaces/address.interface';
 import { COUNTRIES_ADDRESS_2, iCountry } from '../shared/address/country-list';
 import { MatDatepickerInputEvent } from '@angular/material';
 import * as moment from 'moment';
+import { POSTAL_CODE } from '../shared/regex.constants';
 
 export class EiInfoForm implements EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime: number; // 100000001==yes 100000000==no
@@ -103,7 +104,7 @@ export class EmploymentIncomeComponent implements ControlValueAccessor, OnInit {
   @Input() disabled = false; // TODO: disable the fields in the component when needed.
 
   phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-  postalRegex = /^[A-Za-z][0-9][A-Za-z][ ]?[0-9][A-Za-z][0-9]$/;
+  postalRegex = POSTAL_CODE;
   // handy expose keys for iteration
   objectKeys = Object.keys;
   countryList = COUNTRIES_ADDRESS_2;

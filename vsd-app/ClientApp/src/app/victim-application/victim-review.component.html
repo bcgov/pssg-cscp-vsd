@@ -8,12 +8,14 @@
       </tr>
     </tbody>
   </table>
-  <p>
-    <label class="inline-label">
-      <input type="checkbox" checked="checked" disabled="disabled" />
-      <span>I have read and understood all the above information.</span>
-    </label>
-  </p>
+  <div *ngIf="form.get('introduction.understoodInformation').value === true">
+    <p>
+      <label class="inline-label inline-checkbox-label">
+        <input type="checkbox" [checked]="form.get('introduction.understoodInformation').value === true" disabled="disabled" />
+        <span>I have read and understood all the above information.</span>
+      </label>
+    </p>
+  </div>
 </section>
 
 <section>
@@ -590,13 +592,14 @@
 
 <section>
   <h2 class="blue-header">Declaration <button (click)="gotoPageIndex(7);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
-  <p>
-    <label class="inline-label">
-      <input *ngIf="form.get('declarationInformation.declaredAndSigned').value === true" type="checkbox" checked="checked" disabled="disabled" />
-      <input *ngIf="form.get('declarationInformation.declaredAndSigned').value !== true" type="checkbox" disabled="disabled" />
-      <span>I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct.</span>
-    </label>
-  </p>
+  <div *ngIf="form.get('declarationInformation.declaredAndSigned').value === true">
+    <p>
+      <label class="inline-label inline-checkbox-label">
+        <input type="checkbox" [checked]="form.get('declarationInformation.declaredAndSigned').value === true" disabled="disabled" />
+        <span>I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct.</span>
+      </label>
+    </p>
+  </div>
 
   <table class="table table-striped review-table">
     <tbody>
@@ -612,20 +615,22 @@
 
 <section>
   <h2 class="blue-header">Authorization <button (click)="gotoPageIndex(8);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
-  <p>
-    <label class="inline-label">
-      <input *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value === true" type="checkbox" checked="checked" disabled="disabled" />
-      <input *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value !== true" type="checkbox" disabled="disabled" />
-      <span>I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the Crime Victim Assistance Act.</span>
-    </label>
-  </p>
-  <p>
-    <label class="inline-label">
-      <input *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value === true" type="checkbox" checked="checked" disabled="disabled" />
-      <input *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value !== true" type="checkbox" disabled="disabled" />
-      <span>I have read and understood the above information.</span>
-    </label>
-  </p>
+  <div *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value === true">
+    <p>
+      <label class="inline-label inline-checkbox-label">
+        <input type="checkbox" [checked]="form.get('authorizationInformation.approvedAuthorityNotification').value === true" disabled="disabled" />
+        <span>I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the Crime Victim Assistance Act.</span>
+      </label>
+    </p>
+  </div>
+  <div *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value === true">
+    <p>
+      <label class="inline-label inline-checkbox-label">
+        <input type="checkbox" [checked]="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value === true" disabled="disabled" />
+        <span>I have read and understood the above information.</span>
+      </label>
+    </p>
+  </div>
 
   <table class="table table-striped review-table">
     <tbody>
@@ -633,52 +638,58 @@
         <th>Applicant's Signature</th>
         <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.signature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.signature', '') }}" /></td>
       </tr>
+      <!-- <ng-container *ngIf="form.get('authorizationInformationallowCvapStaffSharing').value === true"> -->
       <tr>
         <th>Optional authorization given?</th>
-        <td>{{ valueOrEmpty('authorizationInformation.allowCvapStaffSharing') }}</td>
+        <td>{{ enumHelper.boolEnum[valueOrEmpty('authorizationInformation.allowCvapStaffSharing')] }}</td>
       </tr>
+      <!-- </ng-container> -->
     </tbody>
   </table>
 
-  <h3>Optional Authorization</h3>
-  <table class="table table-striped review-table">
-    <tbody>
-      <tr>
-        <th>Full Name</th>
-        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonFullName') }}</td>
-      </tr>
-      <tr>
-        <th>Phone Number</th>
-        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonPhoneNumber') | phone}}</td>
-      </tr>
-      <tr>
-        <th>Relationship to Applicant</th>
-        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonRelationship') }}</td>
-      </tr>
-      <tr>
-        <th>Agency Name</th>
-        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonAgencyName') }}</td>
-      </tr>
-      <tr>
-        <th>Agency Address</th>
-        <td><span [innerHTML]="displayMailingAddress('authorizationInformation.authorizedPersonAgencyAddress')"></span></td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.boolValues.Yes">
+    <h3>Optional Authorization</h3>
+    <table class="table table-striped review-table">
+      <tbody>
+        <tr>
+          <th>Full Name</th>
+          <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonFullName') }}</td>
+        </tr>
+        <tr>
+          <th>Phone Number</th>
+          <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonPhoneNumber') | phone}}</td>
+        </tr>
+        <tr>
+          <th>Relationship to Applicant</th>
+          <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonRelationship') }}</td>
+        </tr>
+        <tr>
+          <th>Agency Name</th>
+          <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonAgencyName') }}</td>
+        </tr>
+        <tr>
+          <th>Agency Address</th>
+          <td><span [innerHTML]="displayMailingAddress('authorizationInformation.authorizedPersonAgencyAddress')"></span></td>
+        </tr>
+      </tbody>
+    </table>
 
-  <p>
-    <label class="inline-label">
-      <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true" type="checkbox" checked="checked" disabled="disabled" />
-      <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value !== true" type="checkbox" disabled="disabled" />
-      <span>I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.</span>
-    </label>
-  </p>
-  <table class="table table-striped review-table">
-    <tbody>
-      <tr>
-        <th>Applicant's Signature</th>
-        <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') }}" /></td>
-      </tr>
-    </tbody>
-  </table>
+
+    <div *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true">
+      <p>
+        <label class="inline-label inline-checkbox-label">
+          <input type="checkbox" [checked]="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true" disabled="disabled" />
+          <span>I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.</span>
+        </label>
+      </p>
+    </div>
+    <table class="table table-striped review-table">
+      <tbody>
+        <tr>
+          <th>Applicant's Signature</th>
+          <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') }}" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>

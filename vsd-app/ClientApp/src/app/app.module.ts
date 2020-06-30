@@ -86,7 +86,7 @@ import { TestComponent } from './test/test.component';
 import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
 import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
 import { AddressBlockComponent } from './address-block/address-block.component';
-import { VictimInformationComponent } from './victim-information/victim-information.component';
+// import { VictimInformationComponent } from './victim-information/victim-information.component';
 import { NameBlockComponent } from './name-block/name-block.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { FilenameBlockComponent } from './filename-block/filename-block.component';
@@ -95,6 +95,8 @@ import { NgxMaskModule } from 'ngx-mask'
 import { CrimeInformationComponent } from './shared/crime-information/crime-information.component';
 import { AuthorizationInformationComponent } from './shared/authorization-information/authorization-information.component';
 import { MedicalInformationComponent } from './shared/medical-information/medical-information.component';
+import { VictimInformationComponent } from './shared/victim-information/victim-information.component';
+import { PersonalInformationComponent } from './shared/personal-information/personal-information.component';
 
 @NgModule({
   declarations: [
@@ -135,6 +137,7 @@ import { MedicalInformationComponent } from './shared/medical-information/medica
     EmploymentIncomeComponent,
     AddressBlockComponent,
     VictimInformationComponent,
+    PersonalInformationComponent,
     NameBlockComponent,
     DatePickerComponent,
     FilenameBlockComponent,
@@ -237,6 +240,7 @@ import { MedicalInformationComponent } from './shared/medical-information/medica
     MatTooltipModule
   ],
   providers: [
+    CrimeInformationComponent,
     CookieService,
     CanDeactivateGuard,
     AliasDataService,

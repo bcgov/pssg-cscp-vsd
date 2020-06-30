@@ -58,6 +58,24 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
         else {
             this.otherTreatmentLabel = "Do you have a counsellor/therapist who has been treating you as a result of the incident?";
         }
+
+        if (this.formType === ApplicationType.Victim_Application || this.formType === ApplicationType.IFM_Application) {
+            this.form.get('wereYouTreatedAtHospital').valueChanges.subscribe(value => {
+                let hospitalControl = this.form.get('treatedAtHospitalName');
+
+                hospitalControl.clearValidators();
+                hospitalControl.setErrors(null);
+
+                let useValidation = value === true;
+                if (useValidation) {
+                    hospitalControl.setValidators([Validators.required]);
+                }
+
+                hospitalControl.updateValueAndValidity();
+            });
+        }
+
+        //TODO - setup other change detection required field validation
     }
 
     addProvider(): void {

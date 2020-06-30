@@ -26,9 +26,15 @@ import { window } from 'ngx-bootstrap';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 import { REPRESENTATIVE_LIST } from '../constants/representative-list';
 import * as moment from 'moment';
+import { CrimeInformationComponent } from '../shared/crime-information/crime-information.component';
+import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
+import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
+import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
+import { POSTAL_CODE } from '../shared/regex.constants';
+import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 // const moment = _rollupMoment || _moment;
 
-export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
+// export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 
 @Component({
   selector: 'app-victim-application',
@@ -44,6 +50,7 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
 })
 
 export class VictimApplicationComponent extends FormBase implements OnInit, CanDeactivateGuard {
+  postalRegex = POSTAL_CODE;
   currentUser: User;
 
   busy: Promise<any>;
@@ -77,6 +84,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   showRemoveProvider: boolean = false;
   showAddAuthorizationInformation: boolean = true;
   showRemoveAuthorization: boolean = true;
+  showLegalGuardianDocumentDescription: boolean = false;
 
   public currentFormStep: number = 0; // form flow. Which step are we on?
 
@@ -101,8 +109,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   employmentIncomeInformation: EmploymentIncomeInformation;
   employmentInfoFormIsValid: boolean = false;
 
-  //
   get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
+
+  personalInfoHelper = new PersonalInfoHelper();
+  crimeInfoHelper = new CrimeInfoHelper();
+  medicalInfoHelper = new MedicalInfoHelper();
+  authInfoHelper = new AuthInfoHelper();
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -110,7 +122,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
-    private matDialog: MatDialog, // popup to show static content
+    private matDialog: MatDialog, // popup to show static content,
   ) {
     super();
     var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
@@ -160,12 +172,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     });
 
     // subscribe to form changes to set the form in various ways
-    this.form.get('personalInformation.preferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields('personalInformation.preferredMethodOfContact'));
-    this.form.get('medicalInformation.wereYouTreatedAtHospital').valueChanges.subscribe(() => this.setRequiredFields('medicalInformation.wereYouTreatedAtHospital'));
     this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').valueChanges.subscribe(() => this.setRequiredFields('expenseInformation.haveLostEmploymentIncomeExpenses'));
     this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setRequiredFields('representativeInformation.completingOnBehalfOf'));
     this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields('representativeInformation.representativePreferredMethodOfContact'));
-    this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields('authorizationInformation.allowCvapStaffSharing'));
+    // this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields('authorizationInformation.allowCvapStaffSharing'));
 
     this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.validateEmploymentInfoForm());
   }
@@ -175,140 +185,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       introduction: this.fb.group({
         understoodInformation: [null, Validators.requiredTrue]
       }),
-      personalInformation: this.fb.group({
-        firstName: ['', Validators.required],
-        middleName: [''],
-        lastName: ['', Validators.required],
-
-        iHaveOtherNames: [''],
-        otherFirstName: [''],
-        otherLastName: [''],
-        dateOfNameChange: [''],
-
-        gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
-        birthDate: ['', [Validators.required]],
-        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
-        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
-        occupation: [''],
-
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(100000002)]], // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
-
-        permissionToContactViaMethod: [false],
-        agreeToCvapCommunicationExchange: [''],
-
-        phoneNumber: [''],
-        alternatePhoneNumber: [''],
-        email: ['', [Validators.required]],
-        confirmEmail: ['', [Validators.required]],
-
-        primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        alternateAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-      }, { validator: this.matchingEmails('email', 'confirmEmail') }),
-      crimeInformation: this.fb.group({
-        typeOfCrime: ['', Validators.required],
-
-        unsureOfCrimeDates: [''],
-        whenDidCrimeOccur: [''], // True = Period of Time, False = Start date only
-        crimePeriodStart: ['', Validators.required],
-        crimePeriodEnd: [''],
-        applicationFiledWithinOneYearFromCrime: ['', Validators.required],
-        whyDidYouNotApplySooner: [''],
-
-        // crimeLocation: [''], // REMOVE AFTER DEMO
-        crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
-        crimeDetails: ['', Validators.required],
-        crimeInjuries: ['', Validators.required],
-        //additionalInformationFiles: this.fb.array([]),//{
-        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
-          filename: [''], // fileName
-          body: [''], // fileData
-        }), // This will be a collection of uploaded files
-
-        wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]], // No: 100000000 Yes: 100000001
-
-        // policeReportedWhichPoliceForce: [''],
-        // policeReportedMultipleTimes: [''],
-        // policeReportedDate: [''],
-        // policeReportedEndDate: [''],
-        policeReports: this.fb.array([this.createPoliceReport()]),
-
-        noPoliceReportIdentification: [''],
-
-        offenderFirstName: [''],
-        offenderMiddleName: [''],
-        offenderLastName: [''],
-        offenderRelationship: [''],
-        offenderBeenCharged:
-          [
-            0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]
-          ], // Yes: 100000000 No: 100000001 Undecided: 100000002
-
-        courtFiles: this.fb.array([this.createCourtInfoItem()]),
-
-        haveYouSuedOffender:
-          [
-            0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
-          ], // No: 100000000   Yes: 100000001
-        intendToSueOffender: [null], // Yes: 100000000 No: 100000001 Undecided: 100000002
-
-        racafInformation: this.fb.group({
-          applyToCourtForMoneyFromOffender: [null, [Validators.min(100000000), Validators.max(100000002)]],
-          expensesRequested: [''],
-          expensesAwarded: [null],
-          expensesReceived: [null],
-          willBeTakingLegalAction: [null, [Validators.min(100000000), Validators.max(100000002)]],
-          lawyerOrFirmName: [''],
-          lawyerAddress: this.fb.group({
-            line1: [''],
-            line2: [''],
-            city: [''],
-            postalCode: [''], // , [Validators.pattern(postalRegex)]
-            province: [{ value: 'British Columbia', disabled: false }],
-            country: [{ value: 'Canada', disabled: false }],
-          }),
-          signName: [''],
-          signature: [''],
-        }),
-      }),
-      medicalInformation: this.fb.group({
-        doYouHaveMedicalServicesCoverage: ['', Validators.required],
-        haveMedicalCoverageProvince: [''],
-        haveMedicalCoverageProvinceOther: [''],
-        personalHealthNumber: [''],
-
-        doYouHaveOtherHealthCoverage: ['', Validators.required],
-        otherHealthCoverageProviderName: [''],
-        otherHealthCoverageExtendedPlanNumber: [''],
-
-        wereYouTreatedAtHospital: ['', Validators.required],
-        treatedAtHospitalName: [''],
-        treatedOutsideBc: [''],
-        treatedOutsideBcHospitalName: [''],
-        treatedAtHospitalDate: [''],
-
-        beingTreatedByFamilyDoctor: ['', Validators.required],
-        familyDoctorName: [''],
-        familyDoctorPhoneNumber: [''],
-        familyDoctorAddressLine1: [''],
-        familyDoctorAddressLine2: [''],
-
-        hadOtherTreatments: ['', Validators.required],
-        otherTreatments: this.fb.array([]),
-      }),
+      personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, ApplicationType.Victim_Application),
+      crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, ApplicationType.Victim_Application),
+      medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, ApplicationType.Victim_Application),
       expenseInformation: this.fb.group({
         haveMedicalExpenses: [false],
         haveDentalExpenses: [false],
@@ -381,31 +260,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         signature: ['', Validators.required],
       }),
 
-      authorizationInformation: this.fb.group({
-        approvedAuthorityNotification: ['', Validators.requiredTrue],
-        readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
-        signature: ['', Validators.required],
-
-        allowCvapStaffSharing: ['', Validators.required],
-        authorizedPerson: this.fb.array([]),
-        //        authorizedPersonFullName: [''],
-        //        authorizedPersonPhoneNumber: [''],
-        //        authorizedPersonRelationship: [''],
-        //        authorizedPersonAgencyName: [''],
-        //        authorizedPersonAgencyAddress: this.fb.group({
-        //          line1: [''],
-        //          line2: [''],
-        //          city: [''],
-        //          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-        //          province: [{ value: 'British Columbia', disabled: false }],
-        //          country: [{ value: 'Canada', disabled: false }],
-        //        }),
-        authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
-        authorizedPersonSignature: [''], //, Validators.required],
-      }),
+      authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, ApplicationType.Victim_Application),
     });
     // set default contact method
-    this.setPreferredContactMethod();
+    // this.setPreferredContactMethod();
   }
 
   showSummaryOfBenefits(): void {
@@ -549,79 +407,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     }
   }
 
-  addDoctor(): void {
-    this.familyDoctorNameItem = this.form.get('medicalInformation.familyDoctorName') as FormControl;
-    this.familyDoctorNameItem.enable();
-    this.familyDoctorNameItem.setValidators([Validators.required]);// .validator = Validators.required;
-  }
-
-  clearDoctor(): void {
-    this.familyDoctorNameItem = this.form.get('medicalInformation.familyDoctorName') as FormControl;
-    this.familyDoctorNameItem.disable();
-    this.familyDoctorNameItem.setValidators(null);
-  }
-
-  addAuthorizationInformation(): void {
-    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
-    this.authorizedPersons.push(this.createAuthorizedPerson());
-    this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
-    this.showRemoveAuthorization = this.authorizedPersons.length > 1;
-  }
-  clearAuthorizationInformation(): void {
-    // remove all AuthorizedInformation items
-    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
-    while (this.authorizedPersons.length > 0) {
-      this.authorizedPersons.removeAt(this.authorizedPersons.length - 1);
-    }
-  }
-  removeAuthorizationInformation(index: number): void {
-    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
-    this.authorizedPersons.removeAt(index);
-    this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
-    this.showRemoveAuthorization = this.authorizedPersons.length > 1;
-  }
-
-  addProvider(): void {
-    // add a medical treatment provider to the list
-    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    this.otherTreatmentItems.push(this.createTreatmentItem());
-    this.showAddProvider = this.otherTreatmentItems.length < 5;
-    this.showRemoveProvider = this.otherTreatmentItems.length > 1;
-  }
-  clearProviders(): void {
-    // remove all providers
-    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    while (this.otherTreatmentItems.length > 0) {
-      this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
-    }
-  }
-
-  removeProvider(index: number): void {
-    // when the user clicks to remove the medical provider this removes the provider at the index clicked
-    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    this.otherTreatmentItems.removeAt(index);
-    this.showAddProvider = this.otherTreatmentItems.length < 5;
-    this.showRemoveProvider = this.otherTreatmentItems.length > 1;
-  }
-
-  createTreatmentItem(): FormGroup {
-    // make a form group for insertion into the form
-    return this.fb.group({
-      providerType: [''],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
-      providerTypeText: [''],
-      providerName: ['', Validators.required],
-      providerPhoneNumber: [''],
-      providerAddress: [''],
-      //      providerAddress: this.fb.group({
-      //        line1: [''],
-      //        line2: [''],
-      //        city: [''],
-      //        postalCode: [''],  // , [Validators.pattern(postalRegex)]
-      //        province: [{ value: 'British Columbia', disabled: false }],
-      //        country: [{ value: 'Canada', disabled: false }],
-      //      }),
-    });
-  }
 
   addEmployer(): void {
     // add an employer to the list
@@ -645,43 +430,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.showRemoveEmployer = this.employerItems.length > 1;
   }
 
-  createAuthorizedPerson(): FormGroup {
-    return this.fb.group({
-      providerType: [''],
-      providerTypeText: [''],
-      authorizedPersonFullName: ['', Validators.required],
-      authorizedPersonPhoneNumber: [''],
-      authorizedPersonAgencyAddress: this.fb.group({
-        line1: [''],
-        line2: [''],
-        city: [''],
-        postalCode: [''],  // , [Validators.pattern(postalRegex)]
-        province: [{ value: 'British Columbia', disabled: false }],
-        country: [{ value: 'Canada', disabled: false }],
-      }),
-      authorizedPersonRelationship: [''],
-      authorizedPersonAgencyName: [''],
-    });
-  }
-
   getEmployerItem(index: number): FormControl {
     // TODO: this appears to be unused.
     // collect item from the employer array.
     return (<FormArray>this.form.get('employmentIncomeInformation.employers')).controls[index] as FormControl;
-  }
-
-  addCourtInfo(): void {
-    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
-    this.courtFileItems.push(this.createCourtInfoItem());
-    this.showAddCourtInfo = this.courtFileItems.length < 3;
-    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
-  }
-
-  removeCourtInfo(index: number): void {
-    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
-    this.courtFileItems.removeAt(index);
-    this.showAddCourtInfo = this.courtFileItems.length < 3;
-    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
   }
 
   setEmploymentInformation(ei: EmploymentIncomeInformation) {
@@ -715,45 +467,18 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     });
   }
 
-  addCrimeLocation(): void {
-    this.crimeLocationItems = this.form.get('crimeInformation.crimeLocations') as FormArray;
-    this.crimeLocationItems.push(this.createCrimeLocationItem());
-    this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
-    this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
-  }
 
-  removeCrimeLocation(index: number): void {
-    this.crimeLocationItems = this.form.get('crimeInformation.crimeLocations') as FormArray;
-    this.crimeLocationItems.removeAt(index);
-    this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
-    this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
-  }
-
-  createCrimeLocationItem(): FormGroup {
-    return this.fb.group({
-      location: ['', Validators.required]
-    });
-  }
+  // createCrimeLocationItem(): FormGroup {
+  //   return this.fb.group({
+  //     location: ['', Validators.required]
+  //   });
+  // }
 
   createAdditionalInformationFiles(): FormGroup {
     return this.fb.group({
       filename: [''],
       body: ['']
     });
-  }
-
-  addPoliceReport(): void {
-    this.policeReportItems = this.form.get('crimeInformation.policeReports') as FormArray;
-    this.policeReportItems.push(this.createPoliceReport());
-    this.showAddPoliceReport = this.policeReportItems.length < 5;
-    this.showRemovePoliceReport = this.policeReportItems.length > 1;
-  }
-
-  removePoliceReport(index: number): void {
-    this.policeReportItems = this.form.get('crimeInformation.policeReports') as FormArray;
-    this.policeReportItems.removeAt(index);
-    this.showAddPoliceReport = this.policeReportItems.length < 5;
-    this.showRemovePoliceReport = this.policeReportItems.length > 1;
   }
 
   createPoliceReport(): FormGroup {
@@ -958,48 +683,50 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.markAsTouched();
   }
   // -----------METHODS TO ADJUST FORM STATE ---------------------------------
-  setPreferredContactMethod(): void {
-    // responsible for setting preferred contact information for the person filling out the form
 
-    let contactMethod = parseInt(this.form.get('personalInformation.preferredMethodOfContact').value);
-    if (typeof contactMethod != 'number') console.log('Set preferred contact method should be a number but is not for some reason. ' + typeof contactMethod);
-    // maybe the form initializes with null?
-    if (!contactMethod) contactMethod = 0;
-    let phoneControl = this.form.get('personalInformation.phoneNumber');
-    let emailControl = this.form.get('personalInformation.email');
-    let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
 
-    phoneControl.clearValidators();
-    phoneControl.setErrors(null);
-    emailControl.clearValidators();
-    emailControl.setErrors(null);
-    emailConfirmControl.clearValidators();
-    emailConfirmControl.setErrors(null);
+  // setPreferredContactMethod(): void {
+  //   // responsible for setting preferred contact information for the person filling out the form
 
-    if (contactMethod === 2) {
-      phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-      this.phoneIsRequired = true;
-      this.emailIsRequired = false;
-      this.addressIsRequired = true; // Always true
-    } else if (contactMethod === 1) {
-      emailControl.setValidators([Validators.required]); // need to add validator to check these two are the same
-      emailConfirmControl.setValidators([Validators.required]); // need to add validator to check these two are the same
-      this.phoneIsRequired = false;
-      this.emailIsRequired = true;
-      this.addressIsRequired = true; // Always true
-    } else if (contactMethod === 4) {
-      this.phoneIsRequired = false;
-      this.emailIsRequired = false;
-      this.addressIsRequired = true; // Always true
-    }
+  //   let contactMethod = parseInt(this.form.get('personalInformation.preferredMethodOfContact').value);
+  //   if (typeof contactMethod != 'number') console.log('Set preferred contact method should be a number but is not for some reason. ' + typeof contactMethod);
+  //   // maybe the form initializes with null?
+  //   if (!contactMethod) contactMethod = 0;
+  //   let phoneControl = this.form.get('personalInformation.phoneNumber');
+  //   let emailControl = this.form.get('personalInformation.email');
+  //   let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
 
-    phoneControl.markAsTouched();
-    phoneControl.updateValueAndValidity();
-    emailControl.markAsTouched();
-    emailControl.updateValueAndValidity();
-    emailConfirmControl.markAsTouched();
-    emailConfirmControl.updateValueAndValidity();
-  }
+  //   phoneControl.clearValidators();
+  //   phoneControl.setErrors(null);
+  //   emailControl.clearValidators();
+  //   emailControl.setErrors(null);
+  //   emailConfirmControl.clearValidators();
+  //   emailConfirmControl.setErrors(null);
+
+  //   if (contactMethod === 2) {
+  //     phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+  //     this.phoneIsRequired = true;
+  //     this.emailIsRequired = false;
+  //     this.addressIsRequired = true; // Always true
+  //   } else if (contactMethod === 1) {
+  //     emailControl.setValidators([Validators.required]); // need to add validator to check these two are the same
+  //     emailConfirmControl.setValidators([Validators.required]); // need to add validator to check these two are the same
+  //     this.phoneIsRequired = false;
+  //     this.emailIsRequired = true;
+  //     this.addressIsRequired = true; // Always true
+  //   } else if (contactMethod === 4) {
+  //     this.phoneIsRequired = false;
+  //     this.emailIsRequired = false;
+  //     this.addressIsRequired = true; // Always true
+  //   }
+
+  //   phoneControl.markAsTouched();
+  //   phoneControl.updateValueAndValidity();
+  //   emailControl.markAsTouched();
+  //   emailControl.updateValueAndValidity();
+  //   emailConfirmControl.markAsTouched();
+  //   emailConfirmControl.updateValueAndValidity();
+  // }
   setHospitalTreatment(): void {
     const yesNo: boolean = this.form.get('medicalInformation.wereYouTreatedAtHospital').value === 'true';
     if (typeof yesNo != 'boolean') console.log('Set hospital treatment should be a boolean but is not for some reason. ' + typeof yesNo);
@@ -1239,32 +966,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.employmentInfoFormIsValid = eiForm.classList.contains("ng-valid");
   }
 
-  matchingEmailValidator() {
-    // this is an ugly validator. Do not reuse please.
 
-    // get fields
-    const email: AbstractControl = this.form.get('personalInformation.email')
-    const emailString: string = email.value.toString().toLowerCase();
-    const confirmEmail: AbstractControl = this.form.get('personalInformation.confirmEmail');
-    const confirmEmailString: string = confirmEmail.value.toString().toLowerCase();
-
-    // get field 2
-    // update the validity/error status of both fields
-    if (emailString === confirmEmailString) {
-      // validation passes. Return null and set both controls to valid.
-      console.log(emailString + " = " + confirmEmailString);
-      email.setErrors(null);
-      // email.markAsTouched();
-      confirmEmail.setErrors(null);
-    } else {
-      // mismatched
-      console.log('They do not match');
-      // email.markAsTouched();
-      email.setErrors({ mismatched: true });
-      confirmEmail.setErrors({ mismatched: true });
-    }
-
-  };
   matchingEmails(emailKey: string, confirmEmailKey: string) {
     return (group: FormGroup): { [key: string]: any } => {
       let email = group.controls[emailKey];
@@ -1277,22 +979,23 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }
     }
   }
-  onFileBundle(fileBundle: FileBundle) {
+  onRepresentativeFileBundle(fileBundle: FileBundle) {
     try {
+      if (fileBundle.fileData && fileBundle.fileData.length > 0) {
+        this.showLegalGuardianDocumentDescription = true;
+      }
+      else {
+        this.showLegalGuardianDocumentDescription = false;
+      }
       // save the files submitted from the component for attachment into the submitted form.
       const patchObject = {};
-      patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;
-      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileBundle.fileName[0]);
-      var splitValues = fileBundle.fileData[0].split(',');
+      patchObject['representativeInformation.legalGuardianFiles'] = fileBundle;
 
-      //this.form.get('documentInformation.body').patchValue(fileBundle.fileData[0]);
-      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(splitValues[1]);
+      let fileName = fileBundle.fileName[0] || "";
+      this.form.get('representativeInformation.legalGuardianFiles.filename').patchValue(fileName);
 
-      //this.form.get('crimeInformation.additionalInformationFiles').value['0'].filename = fileBundle.fileName[0];
-      //var splitValues = fileBundle.fileData[0].split(',');
-      //this.form.get('crimeInformation.additionalInformationFiles').value['0'].body = splitValues[1];
-
-      fileBundle = fileBundle;
+      let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
+      this.form.get('representativeInformation.legalGuardianFiles.body').patchValue(body);
     }
     catch (e) {
       console.log(e);
