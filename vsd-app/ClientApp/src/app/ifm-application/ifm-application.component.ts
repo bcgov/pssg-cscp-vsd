@@ -73,29 +73,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   relationshipList: string[];
   enumHelper = new EnumHelper();
 
-  // showAddCourtInfo: boolean = true;
-  // showRemoveCourtInfo: boolean = false;
-  // showAddCrimeLocation: boolean = true;
-  // showRemoveCrimeLocation: boolean = false;
-  // showAddPoliceReport: boolean = true;
-  // showRemovePoliceReport: boolean = false;
-  // showAddProvider: boolean = true;
-  // showAddAuthorizationInformation: boolean = true;
-  // showRemoveAuthorization: boolean = true;
-  // showRemoveProvider: boolean = false;
-  // showAdditionalInformationDocumentDescription: boolean = false;
-  // showLegalGuardianDocumentDescription: boolean = false;
-
   public currentFormStep: number;
-
-  // phoneIsRequired: boolean = false;
-  // emailIsRequired: boolean = false;
-  // addressIsRequired: boolean = false;
-  // alternateAddressIsRequired: boolean = false;
-
-  // representativePhoneIsRequired: boolean = false;
-  // representativeEmailIsRequired: boolean = false;
-  // representativeAddressIsRequired: boolean = false;
 
   saveFormData: any;
 

@@ -128,13 +128,13 @@
             </section>
           </div>
 
-          <app-personal-information [formGroup]="form" [formType]="ApplicationType.IFM_Application" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1"></app-personal-information>
+          <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1"></app-personal-information>
 
-          <app-victim-information [formGroup]="form" [formType]="ApplicationType.IFM_Application" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2"></app-victim-information>
+          <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2"></app-victim-information>
 
-          <app-crime-information [formGroup]="form" [formType]="ApplicationType.IFM_Application" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3"></app-crime-information>
+          <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3"></app-crime-information>
 
-          <app-medical-information [formGroup]="form" [formType]="ApplicationType.IFM_Application" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4"></app-medical-information>
+          <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4"></app-medical-information>
 
           <div formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5">
             <div class="page-header">
@@ -523,7 +523,7 @@
             </section>
           </div>
 
-          <app-authorization-information [formGroup]="form" [formType]="ApplicationType.IFM_Application" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8"></app-authorization-information>
+          <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8"></app-authorization-information>
 
           <div *ngIf="this.currentFormStep == 9">
             <div class="page-header">

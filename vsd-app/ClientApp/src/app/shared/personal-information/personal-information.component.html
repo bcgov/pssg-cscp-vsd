@@ -152,17 +152,22 @@
             </app-field>
         </div>
     </div>
+
+
+
     <div class="row">
         <div class="col-md-6">
             <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
-                <input class="form-control" type="text" (blur)="trimValue(form.get('email'))" formControlName="email" maxlength="100">
+                <input class="form-control" type="text" formControlName="email" maxlength="100">
+                <!-- (blur)="trimValue(form.get('email'))" -->
             </app-field>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm your email address">
-                <input class="form-control" type="text" (blur)="trimValue(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
+                <input class="form-control" type="text" formControlName="confirmEmail" maxlength="100">
+                <!-- (blur)="trimValue(form.get('confirmEmail'))" -->
             </app-field>
         </div>
     </div>

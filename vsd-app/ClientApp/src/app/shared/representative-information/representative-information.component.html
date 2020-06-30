@@ -84,19 +84,24 @@
           <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativeAlternatePhoneNumber">
         </app-field>
       </div>
-
     </div>
+
+
+
+
 
     <div class="row">
       <div class="col-md-6">
         <app-field label="Email Address" [required]="true" [valid]="isFieldValid('representativeEmail')" errorMessage="Please enter an email address">
-          <input class="form-control" type="text" (blur)="trimValue(form.get('representativeEmail'))" formControlName="representativeEmail" placeholder="myname@email.com">
+          <input class="form-control" type="text" formControlName="representativeEmail" maxlength="100">
+          <!-- (blur)="trimValue(form.get('representativeEmail'))" -->
         </app-field>
       </div>
 
       <div class="col-md-6">
         <app-field label="Confirm Email Address" [required]="true" [valid]="isFieldValid('representativeConfirmEmail')" errorMessage="Please confirm your email address">
-          <input class="form-control" type="text" (blur)="trimValue(form.get('representativeConfirmEmail'))" formControlName="representativeConfirmEmail" maxlength="100">
+          <input class="form-control" type="text" formControlName="representativeConfirmEmail" maxlength="100">
+          <!-- (blur)="trimValue(form.get('representativeConfirmEmail'))" -->
         </app-field>
       </div>
     </div>
