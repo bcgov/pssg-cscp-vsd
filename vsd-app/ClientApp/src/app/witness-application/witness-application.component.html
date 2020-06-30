@@ -124,13 +124,13 @@
             </section>
           </div>
 
-          <app-personal-information [formGroup]="form" [formType]="ApplicationType.Witness_Application" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1"></app-personal-information>
+          <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1"></app-personal-information>
 
-          <app-victim-information [formGroup]="form" [formType]="ApplicationType.Witness_Application" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2"></app-victim-information>
+          <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2"></app-victim-information>
 
-          <app-crime-information [formGroup]="form" [formType]="ApplicationType.Witness_Application" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3"></app-crime-information>
+          <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3"></app-crime-information>
 
-          <app-medical-information [formGroup]="form" [formType]="ApplicationType.Witness_Application" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4"></app-medical-information>
+          <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4"></app-medical-information>
 
           <div formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5">
             <div class="page-header">
@@ -239,7 +239,9 @@
             </section>
           </div>
 
-          <div formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6">
+          <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6"></app-representative-information>
+
+          <!-- <div formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6">
             <div class="page-header">
               <h1>Application on Behalf of Witness</h1>
             </div>
@@ -352,12 +354,10 @@
 
               <h2 class="blue-header">Proof of Guardianship/Trusteeship</h2>
               <p>Note: If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship/trusteeship.</p>
-              <!-- <div class="file-upload-placeholder">
-      [upload functionality goes here]
-    </div> -->
+              
               <app-file-uploader-box [initialValues]="form.value.representativeInformation.legalGuardian" (fileBundle)="onRepresentativeFileBundle($event)"></app-file-uploader-box>
             </section>
-          </div>
+          </div> -->
 
 
           <div formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7">
@@ -389,7 +389,7 @@
             </section>
           </div>
 
-          <app-authorization-information [formGroup]="form" [formType]="ApplicationType.Witness_Application" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8"></app-authorization-information>
+          <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8"></app-authorization-information>
 
           <div *ngIf="this.currentFormStep == 9">
             <div class="page-header">

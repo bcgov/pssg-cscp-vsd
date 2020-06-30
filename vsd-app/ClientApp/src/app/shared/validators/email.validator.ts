@@ -1,17 +1,17 @@
-import { FormControl } from '@angular/forms';
+import { FormControl, AbstractControl } from '@angular/forms';
 
 export function EmailValidator(confirmEmailInput: string) {
-  let confirmEmailControl: FormControl;
-  let emailControl: FormControl;
+  let confirmEmailControl: AbstractControl;
+  let emailControl: AbstractControl;
 
-  return (control: FormControl) => {
+  return (control: AbstractControl) => {
     if (!control.parent) {
       return null;
     }
 
     if (!confirmEmailControl) {
       confirmEmailControl = control;
-      emailControl = control.parent.get(confirmEmailInput) as FormControl;
+      emailControl = control.parent.get(confirmEmailInput) as AbstractControl;
       emailControl.valueChanges.subscribe(() => {
         confirmEmailControl.updateValueAndValidity();
       });
