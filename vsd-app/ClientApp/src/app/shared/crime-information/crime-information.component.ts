@@ -1,13 +1,13 @@
 import { OnInit, Component, Input } from "@angular/core";
 import { FormBase } from "../form-base";
-import { CanDeactivateGuard } from "../../services/can-deactivate-guard.service";
-import { MatDialogConfig, MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material";
-import { DeactivateGuardDialog } from "../guard-dialog/guard-dialog.component";
+import { MatDialogConfig, MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepickerInputEvent } from "@angular/material";
 import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer } from "@angular/forms";
 import { FileBundle } from "../../models/file-bundle";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
+import * as moment from 'moment';
+import { CrimeInfoHelper } from "./crime-information.helper";
 
 @Component({
     selector: 'app-crime-information',
@@ -40,6 +40,25 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
 
     ApplicationType = ApplicationType;
 
+    today = new Date();
+    policeReportMinDates: Date[] = [];
+
+    crimePeriodStartDate: Date = null;
+    crimeInfoHelper = new CrimeInfoHelper();
+
+    policeForceList = ["Surrey RCMP",
+        "Vancouver Police Department",
+        "Abbotsford Police Department",
+        "Kelowna RCMP",
+        "Chilliwack RCMP",
+        "New Westminster Police Department",
+        "Burnaby RCMP",
+        "Victoria Police Department",
+        "Coquitlam RCMP",
+        "Langley RCMP",
+        "Nanaimo",
+        "Kamloops"];
+
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
@@ -52,12 +71,33 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         this.form = <FormGroup>this.controlContainer.control;
         console.log("crime info component");
         console.log(this.form);
-    }
 
+        //From witness form component - but minimumAdditionalBenefits doesn't even exist on that form, so can't get past expense info with this set
+        // if (this.formType === ApplicationType.Witness_Application) {
+        //     this.form.get('victimDeceasedFromCrime').valueChanges.subscribe(value => {
+        //         let minimumAdditionalBenefits = this.form.parent.get('expenseInformation.minimumAdditionalBenefitsSelected');
+        //         let missedWork = this.form.parent.get('expenseInformation.missedWorkDueToDeathOfVictim');
+
+        //         minimumAdditionalBenefits.clearValidators();
+        //         minimumAdditionalBenefits.setErrors(null);
+        //         missedWork.clearValidators();
+        //         missedWork.setErrors(null);
+
+        //         let useValidation = value === true;
+        //         if (useValidation) {
+        //             minimumAdditionalBenefits.setValidators([Validators.required]);
+        //             missedWork.setValidators([Validators.required]);
+        //         }
+        //         //setTimeout(() => { control.updateValueAndValidity(); })
+        //         minimumAdditionalBenefits.updateValueAndValidity();
+        //         missedWork.updateValueAndValidity();
+        //     });
+        // }
+    }
 
     addCrimeLocation(): void {
         this.crimeLocationItems = this.form.get('crimeLocations') as FormArray;
-        this.crimeLocationItems.push(this.createCrimeLocationItem());
+        this.crimeLocationItems.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
         this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
         this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
     }
@@ -68,17 +108,14 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
         this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
     }
-    createCrimeLocationItem(): FormGroup {
-        return this.fb.group({
-            location: ['', Validators.required]
-        });
-    }
 
     addPoliceReport(): void {
         this.policeReportItems = this.form.get('policeReports') as FormArray;
-        this.policeReportItems.push(this.createPoliceReport());
+        this.policeReportItems.push(this.crimeInfoHelper.createPoliceReport(this.fb));
         this.showAddPoliceReport = this.policeReportItems.length < 5;
         this.showRemovePoliceReport = this.policeReportItems.length > 1;
+
+        this.policeReportMinDates.push(null)
     }
 
     removePoliceReport(index: number): void {
@@ -86,29 +123,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         this.policeReportItems.removeAt(index);
         this.showAddPoliceReport = this.policeReportItems.length < 5;
         this.showRemovePoliceReport = this.policeReportItems.length > 1;
-    }
-
-    createPoliceReport(): FormGroup {
-        return this.fb.group({
-            policeFileNumber: '',
-            investigatingOfficer: '',
-            policeDetachment: '',
-            reportStartDate: '',
-            reportEndDate: '',
-            policeReportedMultipleTimes: ['']
-        });
-    }
-
-    createCourtInfoItem(): FormGroup {
-        return this.fb.group({
-            courtFileNumber: '',
-            courtLocation: ''
-        });
+        this.policeReportMinDates.splice(index, 1);
     }
 
     addCourtInfo(): void {
         this.courtFileItems = this.form.get('courtFiles') as FormArray;
-        this.courtFileItems.push(this.createCourtInfoItem());
+        this.courtFileItems.push(this.crimeInfoHelper.createCourtInfoItem(this.fb));
         this.showAddCourtInfo = this.courtFileItems.length < 3;
         this.showRemoveCourtInfo = this.courtFileItems.length > 1;
     }
@@ -165,6 +185,41 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
             },
             err => console.log(err)
         );
+    }
+
+    crimePeriodStartChange(event: MatDatepickerInputEvent<Date>) {
+        this.crimePeriodStartDate = event.target.value;
+        //validate that a selected end date is not before the start date
+        let startDate = moment(event.target.value);
+
+        let endDate = this.form.get('crimePeriodEnd').value;
+        if (endDate && moment(endDate).isBefore(startDate)) {
+            this.form.get('crimePeriodEnd').patchValue(null);
+        }
+    }
+
+    reportStartChange(index: number, event: MatDatepickerInputEvent<Date>) {
+        this.policeReportMinDates[index] = event.target.value;
+        //validate that a selected end date is not before the start date
+        let startDate = moment(event.target.value);
+        this.policeReportItems = this.form.get('policeReports') as FormArray;
+        let thisReport = this.policeReportItems.at(index) as FormGroup;
+        let endDate = moment(thisReport.get('reportEndDate').value);
+        if (endDate.isBefore(startDate)) {
+            thisReport.get('reportEndDate').patchValue(null);
+        }
+    }
+
+    clearReportEndDate(index: number) {
+        console.log("clearReportEndDate");
+        this.policeReportItems = this.form.get('policeReports') as FormArray;
+        console.log(this.policeReportItems);
+        let thisReport = this.policeReportItems.at(index) as FormGroup;
+        console.log(thisReport);
+
+        if (thisReport.get('policeReportedMultipleTimes').value) {
+            thisReport.get('reportEndDate').patchValue(null);
+        }
     }
 
 }

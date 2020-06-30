@@ -1,0 +1,1 @@
+export const POSTAL_CODE: RegExp = /^[A-Za-z][0-9][A-Za-z][ ]?[0-9][A-Za-z][0-9] *$/;

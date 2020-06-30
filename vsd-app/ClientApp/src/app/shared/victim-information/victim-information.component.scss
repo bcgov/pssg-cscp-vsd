@@ -99,9 +99,9 @@ h3 {
   text-align: center;
 }
 
-input.sin-input {
-  width: 180px;
-}
+// input.sin-input {
+//   width: 180px;
+// }
 
 textarea.form-control {
   &.standard {
@@ -121,7 +121,6 @@ input.form-control {
   }
 
   &.date-picker {
-    width: 200px;
     background-color: #fff;
   }
 
@@ -372,8 +371,4 @@ hr {
 }
 
 ::ng-deep .tooltip-icon {
-}
-
-.continue-btn {
-  float: right;
 }

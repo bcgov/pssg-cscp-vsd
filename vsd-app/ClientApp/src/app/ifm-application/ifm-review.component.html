@@ -8,12 +8,14 @@
       </tr>
     </tbody>
   </table>
-  <p>
-    <label class="inline-label">
-      <input type="checkbox" checked="checked" disabled="disabled" />
-      <span>I have read and understood all the above information.</span>
-    </label>
-  </p>
+  <div *ngIf="form.get('introduction.understoodInformation').value === true">
+    <p>
+      <label class="inline-label inline-checkbox-label">
+        <input type="checkbox" checked="checked" disabled="disabled" />
+        <span>I have read and understood all the above information.</span>
+      </label>
+    </p>
+  </div>
 </section>
 
 <section>
@@ -225,7 +227,7 @@
   <table class="table table-striped review-table">
     <tbody>
       <tr>
-        <th>Is victim's most recent mailing address same as applicant's address?</th>
+        <th>Is victim's most recent home address same as applicant's primary home address?</th>
         <td>{{ valueOrEmpty('victimInformation.mostRecentMailingAddressSameAsPersonal') }} </td>
       </tr>
       <tr>
@@ -727,13 +729,15 @@
 
 <section>
   <h2 class="blue-header">Declaration <button (click)="gotoPageIndex(7);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
-  <p>
-    <label class="inline-label">
-      <input *ngIf="form.get('declarationInformation.declaredAndSigned').value === true" type="checkbox" checked="checked" disabled="disabled" />
-      <input *ngIf="form.get('declarationInformation.declaredAndSigned').value !== true" type="checkbox" disabled="disabled" />
-      <span>I submit this application in support of a claim for benefits available to Immediate Family Members under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct.</span>
-    </label>
-  </p>
+  <div *ngIf="form.get('declarationInformation.declaredAndSigned').value === true">
+    <p>
+      <label class="inline-label inline-checkbox-label">
+        <input *ngIf="form.get('declarationInformation.declaredAndSigned').value === true" type="checkbox" checked="checked" disabled="disabled" />
+        <input *ngIf="form.get('declarationInformation.declaredAndSigned').value !== true" type="checkbox" disabled="disabled" />
+        <span>I submit this application in support of a claim for benefits available to Immediate Family Members under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct.</span>
+      </label>
+    </p>
+  </div>
 
   <table class="table table-striped review-table">
     <tbody>
@@ -749,20 +753,24 @@
 
 <section>
   <h2 class="blue-header">Authorization <button (click)="gotoPageIndex(8);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
-  <p>
-    <label class="inline-label">
-      <input *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value === true" type="checkbox" checked="checked" disabled="disabled" />
-      <input *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value !== true" type="checkbox" disabled="disabled" />
-      <span>I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the Crime Victim Assistance Act.</span>
-    </label>
-  </p>
-  <p>
-    <label class="inline-label">
-      <input *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value === true" type="checkbox" checked="checked" disabled="disabled" />
-      <input *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value !== true" type="checkbox" disabled="disabled" />
-      <span>I have read and understood the above information.</span>
-    </label>
-  </p>
+  <div *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value === true">
+    <p>
+      <label class="inline-label inline-checkbox-label">
+        <input *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value === true" type="checkbox" checked="checked" disabled="disabled" />
+        <input *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value !== true" type="checkbox" disabled="disabled" />
+        <span>I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the Crime Victim Assistance Act.</span>
+      </label>
+    </p>
+  </div>
+  <div *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value === true">
+    <p>
+      <label class="inline-label inline-checkbox-label">
+        <input *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value === true" type="checkbox" checked="checked" disabled="disabled" />
+        <input *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value !== true" type="checkbox" disabled="disabled" />
+        <span>I have read and understood the above information.</span>
+      </label>
+    </p>
+  </div>
 
   <table class="table table-striped review-table">
     <tbody>
@@ -803,13 +811,15 @@
     </tbody>
   </table>
 
-  <p>
-    <label class="inline-label">
-      <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true" type="checkbox" checked="checked" disabled="disabled" />
-      <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value !== true" type="checkbox" disabled="disabled" />
-      <span>I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.</span>
-    </label>
-  </p>
+  <div *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true">
+    <p>
+      <label class="inline-label inline-checkbox-label">
+        <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true" type="checkbox" checked="checked" disabled="disabled" />
+        <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value !== true" type="checkbox" disabled="disabled" />
+        <span>I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.</span>
+      </label>
+    </p>
+  </div>
   <table class="table table-striped review-table">
     <tbody>
       <tr>

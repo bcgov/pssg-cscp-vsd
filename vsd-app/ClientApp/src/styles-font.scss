@@ -285,3 +285,13 @@ hr {
 .cancel-link:hover {
     text-decoration: underline !important;
 }
+
+.inline-checkbox-label {
+    display: flex;
+}
+
+input.form-control {
+    &.date-picker {
+      background-color: #fff;
+    }
+  }

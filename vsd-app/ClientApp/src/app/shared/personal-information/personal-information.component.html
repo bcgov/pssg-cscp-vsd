@@ -1,0 +1,218 @@
+<div [formGroup]="form">
+    <div class="page-header">
+        <h1>{{header}} Information & Addresses</h1>
+    </div>
+    <h2 class="blue-header">{{header}} Information</h2>
+    <h3>Applicant Name</h3>
+
+    <div class="row">
+        <div class="col-md-4">
+            <app-field label="First Name" [required]="true" [valid]="isFieldValid('firstName')" errorMessage="Please enter your first name">
+                <input class="form-control" type="text" formControlName="firstName" maxlength="100">
+            </app-field>
+        </div>
+        <div class="col-md-4">
+            <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('middleName')" errorMessage="Please enter your middle name">
+                <input class="form-control" type="text" formControlName="middleName" maxlength="100">
+            </app-field>
+        </div>
+        <div class="col-md-4">
+            <app-field label="Last Name" [required]="true" [valid]="isFieldValid('lastName')" errorMessage="Please enter your last name">
+                <input class="form-control" type="text" formControlName="lastName" maxlength="100">
+            </app-field>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <label class="inline-label">
+                <input type="checkbox" style="margin-right: 10px;" formControlName="iHaveOtherNames" [value]="true">
+                <span>I also go by other names (e.g. nickname, maiden name, alias)</span>
+            </label>
+        </div>
+    </div>
+
+    <div *ngIf="form.get('iHaveOtherNames').value === true">
+        <h3>Other Names Used</h3>
+
+        <div class="row">
+            <div class="col-md-4">
+                <app-field label="Other First Name" [required]="false" errorMessage="Please enter your other first name">
+                    <input class="form-control" type="text" formControlName="otherFirstName" maxlength="100">
+                </app-field>
+            </div>
+            <div class="col-md-4">
+                <app-field label="Other Last Name" [required]="false" errorMessage="Please enter your other last name">
+                    <input class="form-control" type="text" formControlName="otherLastName" maxlength="100">
+                </app-field>
+            </div>
+            <div class="col-md-4">
+                <app-field label="Date of Name Change">
+                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" [max]="todaysDate" [min]="oldestHuman" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
+                    <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
+                </app-field>
+            </div>
+        </div>
+    </div>
+
+    <h3>Other Details</h3>
+
+    <div *ngIf="formType === ApplicationType.IFM_Application">
+        <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictim')" errorMessage="Please select a relationship">
+            <label class="inline-label">
+                <input type="radio" [value]="100000000" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Spouse</span>
+            </label>
+            <label class="inline-label">
+                <input type="radio" [value]="100000001" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Parent/Guardian</span>
+            </label>
+            <label class="inline-label">
+                <input type="radio" [value]="100000002" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Child</span>
+            </label>
+            <label class="inline-label">
+                <input type="radio" [value]="100000003" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Sibling</span>
+            </label>
+            <label class="inline-label">
+                <input type="radio" [value]="100000004" name="relationshipToVictim" formControlName="relationshipToVictim">
+                <span>Other</span>
+            </label>
+            <label class="inline-label" *ngIf="form.get('relationshipToVictim').value === 100000004">
+                <span>Please specify</span>
+                <input type="text" name="relationshipToVictimOther" formControlName="relationshipToVictimOther">
+            </label>
+        </app-field>
+    </div>
+
+    <app-field label="Gender" [required]="true" [valid]="isFieldValid('gender')" errorMessage="Please select your gender">
+        <label class="inline-label">
+            <input type="radio" [value]="100000000" name="gender" formControlName="gender">
+            <span>M</span>
+        </label>
+        <label class="inline-label">
+            <input type="radio" [value]="100000001" name="gender" formControlName="gender">
+            <span>F</span>
+        </label>
+        <label class="inline-label">
+            <input type="radio" [value]="100000002" name="gender" formControlName="gender">
+            <span>X</span>
+        </label>
+    </app-field>
+
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('birthDate')" errorMessage="Please enter your birth date">
+                <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" [max]="todaysDate" [min]="oldestHuman" readonly>
+                <mat-datepicker #birthDatePicker></mat-datepicker>
+            </app-field>
+        </div>
+        <div class="col-md-6" *ngIf="formType === ApplicationType.Victim_Application">
+            <app-field label="Marital Status" [required]="true" [valid]="isFieldValid('maritalStatus')" errorMessage="Please select your marital status">
+                <select class="form-control" formControlName="maritalStatus">
+                    <option value="0">Select...</option>
+                    <option value="100000000">Married</option>
+                    <option value="100000001">Common Law</option>
+                    <option value="100000002">Widowed</option>
+                    <option value="100000003">Divorced</option>
+                    <option value="100000004">Separated</option>
+                    <option value="100000005">Single</option>
+                    <option value="100000006">Prefer not to answer</option>
+                </select>
+            </app-field>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Occupation" [required]="false" [valid]="isFieldValid('occupation')" errorMessage="Please enter your occupation">
+                <input class="form-control" type="text" formControlName="occupation" maxlength="100">
+            </app-field>
+        </div>
+        <div class="col-md-6">
+            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter a valid SIN" [tooltipReference]="sinTemplate">
+                <input class="form-control" maxlength="9" type="text" formControlName="sin">
+                <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />text to be provided by CVAP</ng-template>
+            </app-field>
+        </div>
+    </div>
+
+    <h2 class="blue-header">Contact Information</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2'" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber">
+            </app-field>
+        </div>
+        <div class="col-md-6">
+            <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('alternatePhoneNumber')" errorMessage="Please enter your phone number">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber">
+            </app-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
+                <input class="form-control" type="text" (blur)="trimValue(form.get('email'))" formControlName="email" maxlength="100">
+            </app-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm your email address">
+                <input class="form-control" type="text" (blur)="trimValue(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
+            </app-field>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <label class="inline-label inline-checkbox-label">
+                <input type="checkbox" style="margin-right: 10px;" formControlName="agreeToCvapCommunicationExchange" [value]="true">
+                <span>I agree that the Crime Victim Assistance Program can communicate with me about my application and exchange documents via my email address.</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h3>Primary Home Address <app-tool-tip [trigger]="primaryAddressTemplate"></app-tool-tip>
+            </h3>
+            <ng-template #primaryAddressTemplate>Your decision is required be in writing, and we will need an address to deliver this to you.</ng-template>
+            <app-address [group]="form.get('primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h3>
+                Alternate Mailing Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
+            </h3>
+            <ng-template #altAddressTemplate>(e.g. the address of a family member) in case mail sent to the above address is returned to us.</ng-template>
+            <app-address [group]="form.get('alternateAddress')" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('preferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
+                <select class="form-control" formControlName="preferredMethodOfContact">
+                    <option value="0">Select...</option>
+                    <option value="2">Phone Call</option>
+                    <option value="1">Email</option>
+                    <option value="4">Primary Mail</option>
+                    <option value="100000002">Alternate Mail</option>
+                </select>
+            </app-field>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <label class="inline-label">
+                <input type="checkbox" style="margin-right: 10px;" formControlName="permissionToContactViaMethod" [value]="true">
+                <span>I give permission to be contacted via this method. </span>
+            </label>
+        </div>
+    </div>
+</div>

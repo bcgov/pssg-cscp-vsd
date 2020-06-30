@@ -36,7 +36,7 @@ export class WitnessReviewComponent extends FormBase implements OnInit {
     this.courtFiles = this.form.get('crimeInformation.courtFiles') as FormArray;
     this.policeReports = this.form.get('crimeInformation.policeReports') as FormArray;
     this.otherMedicalTreatments = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    this.employers = this.form.get('employmentIncomeInformation.employers') as FormArray;
+    this.employers = this.form.get('expenseInformation.employers') as FormArray;
   }
   
   gotoPageIndex(selectPage: number): void {

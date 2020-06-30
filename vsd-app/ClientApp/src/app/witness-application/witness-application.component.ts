@@ -23,10 +23,16 @@ import { Application, Introduction, PersonalInformation, CrimeInformation, Medic
 import { FileBundle } from '../models/file-bundle';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 import { REPRESENTATIVE_LIST } from '../constants/representative-list';
+import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
+import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
+import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
+import { POSTAL_CODE } from '../shared/regex.constants';
+import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
+import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 
 const moment = _rollupMoment || _moment;
 
-export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
+// export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 
 @Component({
   selector: 'app-witness-application',
@@ -42,6 +48,7 @@ export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[
 })
 
 export class WitnessApplicationComponent extends FormBase implements OnInit {
+  postalRegex = POSTAL_CODE;
   currentUser: User;
   dataLoaded = false;
   busy: Promise<any>;
@@ -95,13 +102,19 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
 
+  personalInfoHelper = new PersonalInfoHelper();
+  victimInfoHelper = new VictimInfoHelper();
+  crimeInfoHelper = new CrimeInfoHelper();
+  medicalInfoHelper = new MedicalInfoHelper();
+  authInfoHelper = new AuthInfoHelper();
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {
     super();
     var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
@@ -119,105 +132,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     this.form.get('representativeInformation').patchValue({
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
-
-    this.form.get('personalInformation.preferredMethodOfContact')
-      .valueChanges
-      .subscribe(value => {
-        let phoneControl = this.form.get('personalInformation.phoneNumber');
-        let emailControl = this.form.get('personalInformation.email');
-        let emailConfirmControl = this.form.get('personalInformation.confirmEmail');
-        let TestaddressControl = this.form.get('personalInformation');
-        let addressControls = [
-          this.form.get('personalInformation').get('primaryAddress.country'),
-          this.form.get('personalInformation').get('primaryAddress.province'),
-          this.form.get('personalInformation').get('primaryAddress.city'),
-          this.form.get('personalInformation').get('primaryAddress.line1'),
-          this.form.get('personalInformation').get('primaryAddress.postalCode'),
-        ];
-
-        phoneControl.clearValidators();
-        phoneControl.setErrors(null);
-        emailControl.clearValidators();
-        emailControl.setErrors(null);
-        emailConfirmControl.clearValidators();
-        emailConfirmControl.setErrors(null);
-        //addressControl.clearValidators();
-        //addressControl.setErrors(null);
-
-        for (let control of addressControls) {
-          control.clearValidators();
-          control.setErrors(null);
-        }
-
-        let contactMethod = parseInt(value);
-        if (contactMethod === 2) {
-          phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-          this.phoneIsRequired = true;
-          this.emailIsRequired = false;
-          this.addressIsRequired = false;
-          this.alternateAddressIsRequired = false;
-        } else if (contactMethod === 1) {
-          emailControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
-          emailConfirmControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
-          this.phoneIsRequired = false;
-          this.emailIsRequired = true;
-          this.addressIsRequired = false;
-          this.alternateAddressIsRequired = false;
-        } else if (contactMethod === 4) {
-          //addressControl.setValidators([Validators.required]);
-          for (let control of addressControls) {
-            control.setValidators([Validators.required]);
-          }
-          this.phoneIsRequired = false;
-          this.emailIsRequired = false;
-          this.addressIsRequired = true;
-          this.alternateAddressIsRequired = false;
-        } else if (contactMethod === 100000002) {
-          //addressControl.setValidators([Validators.required]);
-          for (let control of addressControls) {
-            control.setValidators([Validators.required]);
-          }
-          this.phoneIsRequired = false;
-          this.emailIsRequired = false;
-          this.addressIsRequired = false;
-          this.alternateAddressIsRequired = true;
-        }
-
-        phoneControl.markAsTouched();
-        phoneControl.updateValueAndValidity();
-        emailControl.markAsTouched();
-        emailControl.updateValueAndValidity();
-        emailConfirmControl.markAsTouched();
-        emailConfirmControl.updateValueAndValidity();
-        //addressControl.markAsTouched();
-        //addressControl.updateValueAndValidity();
-        for (let control of addressControls) {
-          control.markAsTouched();
-          control.updateValueAndValidity();
-        }
-      });
-
-    this.form.get('crimeInformation.victimDeceasedFromCrime')
-      .valueChanges
-      .subscribe(value => {
-        let minimumAdditionalBenefits = this.form.get('expenseInformation.minimumAdditionalBenefitsSelected');
-        let missedWork = this.form.get('expenseInformation.missedWorkDueToDeathOfVictim');
-
-        minimumAdditionalBenefits.clearValidators();
-        minimumAdditionalBenefits.setErrors(null);
-        missedWork.clearValidators();
-        missedWork.setErrors(null);
-
-        let useValidation = value === true;
-        if (useValidation) {
-          minimumAdditionalBenefits.setValidators([Validators.required]);
-          missedWork.setValidators([Validators.required]);
-        }
-        //setTimeout(() => { control.updateValueAndValidity(); })
-        minimumAdditionalBenefits.updateValueAndValidity();
-        missedWork.updateValueAndValidity();
-      });
-
 
     this.form.get('expenseInformation.missedWorkDueToDeathOfVictim')
       .valueChanges
@@ -298,33 +212,23 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         this.setupRepresentativeContactInformation(contactMethod);
       });
 
-    this.form.get('authorizationInformation.allowCvapStaffSharing')
-      .valueChanges
-      .subscribe(value => {
-        let authorizedPersonAuthorizesDiscussion = this.form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion');
-        let authorizedPersonSignature = this.form.get('authorizationInformation.authorizedPersonSignature');
+    // this.form.get('authorizationInformation.allowCvapStaffSharing')
+    //   .valueChanges
+    //   .subscribe(value => {
+    //     let authorizedPersonAuthorizesDiscussion = this.form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion');
+    //     let authorizedPersonSignature = this.form.get('authorizationInformation.authorizedPersonSignature');
 
-        authorizedPersonAuthorizesDiscussion.clearValidators();
-        authorizedPersonAuthorizesDiscussion.setErrors(null);
-        authorizedPersonSignature.clearValidators();
-        authorizedPersonSignature.setErrors(null);
+    //     authorizedPersonAuthorizesDiscussion.clearValidators();
+    //     authorizedPersonAuthorizesDiscussion.setErrors(null);
+    //     authorizedPersonSignature.clearValidators();
+    //     authorizedPersonSignature.setErrors(null);
 
-        let useValidation = value === true;
-        if (useValidation) {
-          authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
-          authorizedPersonSignature.setValidators([Validators.required]);
-        }
-      });
-
-    this.form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').valueChanges
-      .subscribe(value => {
-        this.copyPersonalAddressToVictimAddress();
-      });
-
-    this.form.get('personalInformation.primaryAddress').valueChanges
-      .subscribe(value => {
-        this.copyPersonalAddressToVictimAddress();
-      });
+    //     let useValidation = value === true;
+    //     if (useValidation) {
+    //       authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
+    //       authorizedPersonSignature.setValidators([Validators.required]);
+    //     }
+    //   });
   }
 
   setupRepresentativeContactInformation(contactMethod: number): void {
@@ -555,83 +459,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     }
   }
 
-  addAuthorizationInformation(): void {
-    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
-    this.authorizedPersons.push(this.createAuthorizedPerson());
-    this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
-    this.showRemoveAuthorization = this.authorizedPersons.length > 1;
-  }
-  clearAuthorizationInformation(): void {
-    // remove all AuthorizedInformation items
-    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
-    while (this.authorizedPersons.length > 0) {
-      this.authorizedPersons.removeAt(this.authorizedPersons.length - 1);
-    }
-  }
-  removeAuthorizationInformation(index: number): void {
-    this.authorizedPersons = this.form.get('authorizationInformation.authorizedPerson') as FormArray;
-    this.authorizedPersons.removeAt(index);
-    this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
-    this.showRemoveAuthorization = this.authorizedPersons.length > 1;
-  }
-
-  addProvider(): void {
-    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    this.otherTreatmentItems.push(this.createTreatmentItem());
-    this.showAddProvider = this.otherTreatmentItems.length < 5;
-    this.showRemoveProvider = this.otherTreatmentItems.length > 1;
-  }
-  clearProviders(): void {
-    // remove all providers
-    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    while (this.otherTreatmentItems.length > 0) {
-      this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
-    }
-  }
-
-  removeProvider(index: number): void {
-    this.otherTreatmentItems = this.form.get('medicalInformation.otherTreatments') as FormArray;
-    this.otherTreatmentItems.removeAt(index);
-    this.showAddProvider = this.otherTreatmentItems.length < 5;
-    this.showRemoveProvider = this.otherTreatmentItems.length > 1;
-  }
-
-  createAuthorizedPerson(): FormGroup {
-    return this.fb.group({
-      providerType: [''],
-      providerTypeText: [''],
-      authorizedPersonFullName: ['', Validators.required],
-      authorizedPersonPhoneNumber: [''],
-      authorizedPersonAgencyAddress: this.fb.group({
-        line1: [''],
-        line2: [''],
-        city: [''],
-        postalCode: [''],  // , [Validators.pattern(postalRegex)]
-        province: [{ value: 'British Columbia', disabled: false }],
-        country: [{ value: 'Canada', disabled: false }],
-      }),
-      authorizedPersonRelationship: [''],
-      authorizedPersonAgencyName: [''],
-    });
-  }
-
-  createTreatmentItem(): FormGroup {
-    return this.fb.group({
-      providerType: [''],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
-      providerTypeText: [''],
-      providerName: ['', Validators.required],
-      providerPhoneNumber: [''],
-      providerAddress: this.fb.group({
-        line1: [''],
-        line2: [''],
-        city: [''],
-        postalCode: [''],  // , [Validators.pattern(postalRegex)]
-        province: [{ value: 'British Columbia', disabled: false }],
-        country: [{ value: 'Canada', disabled: false }],
-      }),
-    });
-  }
-
   createEmployerItem(): FormGroup {
     return this.fb.group({
       employerName: [''],
@@ -649,20 +476,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     });
   }
 
-  addCourtInfo(): void {
-    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
-    this.courtFileItems.push(this.createCourtInfoItem());
-    this.showAddCourtInfo = this.courtFileItems.length < 3;
-    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
-  }
-
-  removeCourtInfo(index: number): void {
-    this.courtFileItems = this.form.get('crimeInformation.courtFiles') as FormArray;
-    this.courtFileItems.removeAt(index);
-    this.showAddCourtInfo = this.courtFileItems.length < 3;
-    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
-  }
-
   createCourtInfoItem(): FormGroup {
     return this.fb.group({
       courtFileNumber: '',
@@ -670,38 +483,10 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     });
   }
 
-  addCrimeLocation(): void {
-    this.crimeLocationItems = this.form.get('crimeInformation.crimeLocations') as FormArray;
-    this.crimeLocationItems.push(this.createCrimeLocationItem());
-    this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
-    this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
-  }
-
-  removeCrimeLocation(index: number): void {
-    this.crimeLocationItems = this.form.get('crimeInformation.crimeLocations') as FormArray;
-    this.crimeLocationItems.removeAt(index);
-    this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
-    this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
-  }
-
   createCrimeLocationItem(): FormGroup {
     return this.fb.group({
       location: ['', Validators.required]
     });
-  }
-
-  addPoliceReport(): void {
-    this.policeReportItems = this.form.get('crimeInformation.policeReports') as FormArray;
-    this.policeReportItems.push(this.createPoliceReport());
-    this.showAddPoliceReport = this.policeReportItems.length < 5;
-    this.showRemovePoliceReport = this.policeReportItems.length > 1;
-  }
-
-  removePoliceReport(index: number): void {
-    this.policeReportItems = this.form.get('crimeInformation.policeReports') as FormArray;
-    this.policeReportItems.removeAt(index);
-    this.showAddPoliceReport = this.policeReportItems.length < 5;
-    this.showRemovePoliceReport = this.policeReportItems.length > 1;
   }
 
   createPoliceReport(): FormGroup {
@@ -885,184 +670,10 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       introduction: this.fb.group({
         understoodInformation: ['', Validators.requiredTrue]
       }),
-      personalInformation: this.fb.group({
-        firstName: ['', Validators.required],
-        middleName: [''],
-        lastName: ['', Validators.required],
-
-        iHaveOtherNames: [''],
-        otherFirstName: [''],
-        otherLastName: [''],
-        dateOfNameChange: [''],
-
-        gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
-        //relationshipToVictim: [0, [Validators.required, Validators.min(100000000), Validators.max(100000004)]],
-        //relationshipToVictimOther: [''],
-
-        birthDate: ['', [Validators.required]],
-
-        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
-        occupation: [''],
-
-        preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(100000002)]],  // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
-
-        permissionToContactViaMethod: [false],
-        agreeToCvapCommunicationExchange: [''],
-
-        phoneNumber: [''],
-        alternatePhoneNumber: [''],
-        email: [''],
-        confirmEmail: [''],
-
-        primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        alternateAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-
-        //        primaryAddress: this.fb.group({
-        //          line1: ['', Validators.required],
-        //          line2: [''],
-        //          city: ['', Validators.required],
-        //          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-        //          province: [{ value: 'British Columbia', disabled: false }],
-        //          country: [{ value: 'Canada', disabled: false }],
-        //        }),
-        //        alternateAddress: this.fb.group({
-        //          line1: [''],
-        //          line2: [''],
-        //          city: [''],
-        //          postalCode: [''],
-        //          province: [{ value: 'British Columbia', disabled: false }],
-        //          country: [{ value: 'Canada', disabled: false }],
-        //        }),
-      }),
-      victimInformation: this.fb.group({
-        firstName: ['', Validators.required],
-        middleName: [''],
-        lastName: ['', Validators.required],
-
-        iHaveOtherNames: [''],
-        otherFirstName: [''],
-        otherLastName: [''],
-        dateOfNameChange: [''],
-
-        gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
-        birthDate: ['', [Validators.required]],
-        maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
-        sin: ['', [Validators.minLength(9), Validators.maxLength(9)]], // needs refinement
-        occupation: [''],
-
-        phoneNumber: [''],
-        alternatePhoneNumber: [''],
-        email: [''],
-        confirmEmail: [''],
-
-        // Bind a subscribe event on this field being true. Change victim primary address when applicant address changes
-        mostRecentMailingAddressSameAsPersonal: ['', Validators.required],
-
-        primaryAddress: this.fb.group({
-          line1: ['', Validators.required],
-          line2: [''],
-          city: ['', Validators.required],
-          postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-      }),
-      crimeInformation: this.fb.group({
-        typeOfCrime: ['', Validators.required],
-
-        unsureOfCrimeDates: [''],
-        whenDidCrimeOccur: [''],  // True = Period of Time, False = Start date only
-        crimePeriodStart: ['', Validators.required],
-        crimePeriodEnd: [''],
-        applicationFiledWithinOneYearFromCrime: [''],
-        whyDidYouNotApplySooner: [''],
-
-        victimDeceasedFromCrime: ['', Validators.required],
-        dateOfDeath: [''],
-
-        crimeLocation: [''],  // REMOVE AFTER DEMO
-        crimeLocations: this.fb.array([this.createCrimeLocationItem()]),
-        crimeDetails: ['', Validators.required],
-        crimeInjuries: ['', Validators.required],
-        additionalInformationFiles: this.fb.group({//[this.createAdditionalInformationFiles()]),
-          filename: [''], // fileName
-          body: [''], // fileData
-        }), // This will be a collection of uploaded files
-        //additionalInformationFiles: this.fb.array([]),  // This will be a collection of uploaded files
-
-        wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]], // No: 100000000 Yes: 100000001
-
-        // policeReportedWhichPoliceForce: [''],
-        // policeReportedMultipleTimes: [''],
-        // policeReportedDate: [''],
-        // policeReportedEndDate: [''],
-        policeReports: this.fb.array([this.createPoliceReport()]),
-
-        noPoliceReportIdentification: [''],
-
-        offenderFirstName: [''],
-        offenderMiddleName: [''],
-        offenderLastName: [''],
-        offenderRelationship: [''],
-        offenderBeenCharged: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],  // Yes: 100000000 No: 100000001 Undecided: 100000002
-
-        courtFiles: this.fb.array([this.createCourtInfoItem()]),
-
-        haveYouSuedOffender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]], // No: 100000000   Yes: 100000001
-        intendToSueOffender: [0], // Yes: 100000000 No: 100000001 Undecided: 100000002
-
-        racafInformation: this.fb.group({
-          applyToCourtForMoneyFromOffender: [''],
-          expensesRequested: [''],
-          expensesAwarded: [''],
-          expensesReceived: [''],
-          willBeTakingLegalAction: [''],
-          lawyerOrFirmName: [''],
-          lawyerAddress: this.fb.group({
-            line1: [''],
-            line2: [''],
-            city: [''],
-            postalCode: [''],  // , [Validators.pattern(postalRegex)]
-            province: [{ value: 'British Columbia', disabled: false }],
-            country: [{ value: 'Canada', disabled: false }],
-          }),
-          signName: [''],
-          signature: [''],
-        }),
-      }),
-      medicalInformation: this.fb.group({
-        doYouHaveMedicalServicesCoverage: ['', Validators.required],
-        haveMedicalCoverageProvince: [''],
-        haveMedicalCoverageProvinceOther: [''],
-        personalHealthNumber: [''],
-
-        doYouHaveOtherHealthCoverage: ['', Validators.required],
-        otherHealthCoverageProviderName: [''],
-        otherHealthCoverageExtendedPlanNumber: [''],
-
-        beingTreatedByFamilyDoctor: ['', Validators.required],
-        familyDoctorName: [''],
-        familyDoctorPhoneNumber: [''],
-        familyDoctorAddressLine1: [''],
-        familyDoctorAddressLine2: [''],
-
-        hadOtherTreatments: ['', Validators.required],
-        otherTreatments: this.fb.array([]),
-      }),
+      personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
+      victimInformation: this.victimInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
+      crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
+      medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
       expenseInformation: this.fb.group({
         haveCounsellingExpenses: [false],
         haveCounsellingTransportation: [false],
@@ -1083,6 +694,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         employers: this.fb.array([this.createEmployerItem()]),
         mayContactEmployer: [''],
 
+        additionalBenefitsDetails: [''],//, Validators.required], ??
         // Other Benefits
         haveDisabilityPlanBenefits: [false],
         haveEmploymentInsuranceBenefits: [false],
@@ -1125,28 +737,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         signature: ['', Validators.required],
       }),
 
-      authorizationInformation: this.fb.group({
-        approvedAuthorityNotification: ['', Validators.requiredTrue],
-        readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
-        signature: ['', Validators.required],
-
-        allowCvapStaffSharing: ['', Validators.required],
-        authorizedPerson: this.fb.array([]),
-        //        authorizedPersonFullName: [''],
-        //        authorizedPersonPhoneNumber: [''],
-        //        authorizedPersonRelationship: [''],
-        //        authorizedPersonAgencyName: [''],
-        //        authorizedPersonAgencyAddress: this.fb.group({
-        //          line1: [''],
-        //          line2: [''],
-        //          city: [''],
-        //          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-        //          province: [{ value: 'British Columbia', disabled: false }],
-        //          country: [{ value: 'Canada', disabled: false }],
-        //        }),
-        authorizedPersonAuthorizesDiscussion: [''], //, Validators.required],
-        authorizedPersonSignature: [''], //, Validators.required],
-      }),
+      authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
     });
   }
 
@@ -1161,23 +752,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
       let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
       this.form.get('representativeInformation.legalGuardianFiles.body').patchValue(body);
-    }
-    catch (e) {
-      console.log(e);
-    }
-  }
-
-  onFileBundle(fileBundle: FileBundle) {
-    try {
-      // save the files submitted from the component for attachment into the submitted form.
-      const patchObject = {};
-      patchObject['crimeInformation.additionalInformationFiles'] = fileBundle;
-
-      let fileName = fileBundle.fileName[0] || "";
-      this.form.get('crimeInformation.additionalInformationFiles.filename').patchValue(fileName);
-
-      let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
-      this.form.get('crimeInformation.additionalInformationFiles.body').patchValue(body);
     }
     catch (e) {
       console.log(e);

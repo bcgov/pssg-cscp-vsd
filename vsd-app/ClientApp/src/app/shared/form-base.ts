@@ -9,7 +9,7 @@ export class FormBase {
     let formField = this.form.get(field);
     if (!formField || formField.value === null)
       return true;
-    if (field === 'personalInformation.sin' || field === 'victimInformation.sin')
+    if (field === 'personalInformation.sin' || field === 'victimInformation.sin' || field === 'sin')
       return this.validateSIN(formField.value);
 
     return this.form.get(field).valid || !this.form.get(field).touched;
@@ -472,10 +472,10 @@ export class FormBase {
     control.setValue(value.trim());
   }
 
-  copyPersonalAddressToVictimAddress() {
-    let copyAddress = this.form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value === true;
-    let target = this.form.get('victimInformation.primaryAddress');
-    let source = this.form.get('personalInformation.primaryAddress');
+  copyPersonalAddressToVictimAddress(form: FormGroup | FormArray) {
+    let copyAddress = form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value === true;
+    let target = form.get('victimInformation.primaryAddress');
+    let source = form.get('personalInformation.primaryAddress');
     let options = { onlySelf: true, emitEvent: true };
 
     if (copyAddress) {
@@ -499,8 +499,6 @@ export class FormBase {
       target.get('postalCode').disable(options);
       target.get('province').disable(options);
       target.get('country').disable(options);
-
-
     }
     else {
       target.get('line1').enable();

@@ -371,17 +371,22 @@ hr {
   color: #fff;
 }
 
-.police-file-header {
-  width: 18%;
-}
+// .police-file-header {
+//   width: 18%;
+// }
 
 .police-file-table .date-picker {
-  max-width: 142px !important;
+  max-width: 105px !important;
 }
 
-.police-file-table input {
+.police-file-table input,
+.police-file-table select {
   width: 100%;
 }
+
+// .police-file-table select {
+//   width: 100%;
+// }
 
 .remove-police-report-link {
   display: flex;

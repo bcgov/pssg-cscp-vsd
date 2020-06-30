@@ -101,6 +101,11 @@ export class EnumHelper {
     100000001: 'Yes',
   }
 
+  public boolValues = {
+    No: 100000000,
+    Yes: 100000001
+  }
+
   public CompletingOnBehalfOf = {
     0: '--',
     100000000: 'Completing this application for myself',
