@@ -1,7 +1,9 @@
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { ApplicationType } from "../enums-list";
+import { POSTAL_CODE } from "../regex.constants";
 
 export class CrimeInfoHelper {
+    postalRegex = POSTAL_CODE;
     public setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
         let group = {
             typeOfCrime: ['', Validators.required],
@@ -54,7 +56,7 @@ export class CrimeInfoHelper {
                     line1: [''],
                     line2: [''],
                     city: [''],
-                    postalCode: [''], // , [Validators.pattern(postalRegex)]
+                    postalCode: ['', [Validators.pattern(this.postalRegex)]],
                     province: [{ value: 'British Columbia', disabled: false }],
                     country: [{ value: 'Canada', disabled: false }],
                 }),

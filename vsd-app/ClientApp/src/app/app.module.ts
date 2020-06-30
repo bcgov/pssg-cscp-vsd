@@ -97,6 +97,7 @@ import { AuthorizationInformationComponent } from './shared/authorization-inform
 import { MedicalInformationComponent } from './shared/medical-information/medical-information.component';
 import { VictimInformationComponent } from './shared/victim-information/victim-information.component';
 import { PersonalInformationComponent } from './shared/personal-information/personal-information.component';
+import { RepresentativeInformationComponent } from './shared/representative-information/representative-information.component';
 
 @NgModule({
   declarations: [
@@ -138,6 +139,7 @@ import { PersonalInformationComponent } from './shared/personal-information/pers
     AddressBlockComponent,
     VictimInformationComponent,
     PersonalInformationComponent,
+    RepresentativeInformationComponent,
     NameBlockComponent,
     DatePickerComponent,
     FilenameBlockComponent,

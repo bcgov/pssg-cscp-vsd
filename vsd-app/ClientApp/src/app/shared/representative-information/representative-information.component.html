@@ -1,0 +1,126 @@
+<div [formGroup]="form">
+  <div class="page-header">
+    <h1>Application on Behalf of {{header}}</h1>
+  </div>
+
+  <p>This section provides information regarding applying on behalf of an applicant. This information is only necessary if you are a guardian or legal representative of the applicant.</p>
+  <div class="attention" *ngIf="form.get('completingOnBehalfOf').value > 0">
+    <p>You previously selected the option below. Verify that this is correct before continuing with the application.</p>
+  </div>
+
+  <section class="radio-list">
+    <app-field label="I am:" [required]="true" [valid]="isFieldValid('completingOnBehalfOf')" errorMessage="Please indicate who is completing this form.">
+      <label>
+        <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+        Completing this application for myself
+      </label>
+      <br />
+
+      <label>
+        <input type="radio" [value]="100000002" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+        A parent completing this application for my minor child (19 and below)
+      </label>
+      <br />
+
+      <label>
+        <input type="radio" [value]="100000003" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+        A legal representative or legal guardian completing this application on behalf of someone else
+      </label>
+    </app-field>
+  </section>
+
+  <div class="row" *ngIf="form.get('completingOnBehalfOf').value === 100000003">
+    <div class="col-md-6">
+      <app-field label="Relationship to Person" [required]="true" errorMessage="Please select a relationship">
+        <select class="form-control" formControlName="relationshipToPerson">
+          <option value="">Select...</option>
+          <option *ngFor="let item of relationshipList">{{ item }}</option>
+        </select>
+      </app-field>
+    </div>
+  </div>
+
+  <hr />
+
+  <section *ngIf="form.get('completingOnBehalfOf').value === 100000000">
+    <p>Continue to the next step in the application.</p>
+  </section>
+
+  <section *ngIf="form.get('completingOnBehalfOf').value === 100000001 || form.get('completingOnBehalfOf').value === 100000002 || form.get('completingOnBehalfOf').value === 100000003">
+    <p>Complete the following before continuing with the application.</p>
+    <h2 class="blue-header">Person Completing the Application</h2>
+
+    <p style="display: none; background-color: yellow; font-size: 16px;">See required fields based on preferred contact methods here</p>
+
+    <h3>Name</h3>
+    <div class="row">
+      <div class="col-md-4">
+        <app-field label="First Name" [required]="true" [valid]="isFieldValid('representativeFirstName')" errorMessage="Please enter a first name">
+          <input class="form-control" type="text" formControlName="representativeFirstName" placeholder="Full Name">
+        </app-field>
+      </div>
+      <div class="col-md-4">
+        <app-field label="Middle Name" [required]="false" errorMessage="Please enter a middle name">
+          <input class="form-control" type="text" formControlName="representativeMiddleName" placeholder="Full Name">
+        </app-field>
+      </div>
+      <div class="col-md-4">
+        <app-field label="Last Name" [required]="true" [valid]="isFieldValid('representativeLastName')" errorMessage="Please enter a last name">
+          <input class="form-control" type="text" formControlName="representativeLastName" placeholder="Full Name">
+        </app-field>
+      </div>
+    </div>
+
+    <h3>Contact Information</h3>
+
+    <div class="row">
+      <div class="col-md-6">
+        <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('representativePhoneNumber')" errorMessage="Please enter a phone number">
+          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativePhoneNumber">
+        </app-field>
+      </div>
+      <div class="col-md-6">
+        <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeAlternatePhoneNumber')" errorMessage="Please enter a phone number">
+          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativeAlternatePhoneNumber">
+        </app-field>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <app-field label="Email Address" [required]="true" [valid]="isFieldValid('representativeEmail')" errorMessage="Please enter an email address">
+          <input class="form-control" type="text" formControlName="representativeEmail" placeholder="myname@email.com">
+        </app-field>
+      </div>
+
+      <div class="col-md-6">
+        <app-field label="Confirm Email Address" [required]="true" [valid]="isFieldValid('representativeConfirmEmail')" errorMessage="Please confirm your email address">
+          <input class="form-control" type="text" (blur)="trimValue(form.get('representativeConfirmEmail'))" formControlName="representativeConfirmEmail" maxlength="100">
+        </app-field>
+      </div>
+    </div>
+
+
+    <h3>Mailing Address</h3>
+    <app-address [group]="form.get('representativeAddress')" [showChildrenAsRequired]="true"></app-address>
+
+    <div class="row">
+      <div class="col-md-6">
+        <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('representativePreferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
+          <select class="form-control" formControlName="representativePreferredMethodOfContact">
+            <option value="0">Select...</option>
+            <option value="100000000">Phone Call</option>
+            <option value="100000001">Email</option>
+            <option value="100000002">Mail</option>
+          </select>
+        </app-field>
+      </div>
+    </div>
+
+    <h2 class="blue-header">Proof of Guardianship/Trusteeship</h2>
+    <p>Note: If you are not the natural or adoptive parent of the applicant, please attach a copy of any court order or other document that is proof of guardianship/trusteeship.</p>
+
+    <app-file-uploader-box [initialValues]="form.value.legalGuardian" (fileBundle)="onRepresentativeFileBundle($event)"></app-file-uploader-box>
+  </section>
+</div>

@@ -29,10 +29,9 @@ import { AuthInfoHelper } from '../shared/authorization-information/authorizatio
 import { POSTAL_CODE } from '../shared/regex.constants';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
+import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
 
 const moment = _rollupMoment || _moment;
-
-// export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 
 @Component({
   selector: 'app-witness-application',
@@ -48,6 +47,7 @@ const moment = _rollupMoment || _moment;
 })
 
 export class WitnessApplicationComponent extends FormBase implements OnInit {
+  FORM_TYPE: ApplicationType = ApplicationType.Witness_Application;
   postalRegex = POSTAL_CODE;
   currentUser: User;
   dataLoaded = false;
@@ -59,44 +59,14 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   showValidationMessage: boolean;
   submitting: boolean = false; // this controls the button state for
 
-  otherTreatmentItems: FormArray;
-  employerItems: FormArray;
-  courtFileItems: FormArray;
-  crimeLocationItems: FormArray;
-  policeReportItems: FormArray;
-  authorizedPersons: FormArray;
-
   hospitalList = HOSPITALS;
   provinceList: string[];
   relationshipList: string[];
   enumHelper = new EnumHelper();
 
-  showAddCourtInfo: boolean = true;
-  showRemoveCourtInfo: boolean = false;
-  showAddCrimeLocation: boolean = true;
-  showRemoveCrimeLocation: boolean = false;
-  showAddPoliceReport: boolean = true;
-  showRemovePoliceReport: boolean = false;
-  showAddProvider: boolean = true;
-  showRemoveProvider: boolean = false;
-  showAddAuthorizationInformation: boolean = true;
-  showRemoveAuthorization: boolean = true;
-
   public currentFormStep: number;
 
-  phoneIsRequired: boolean = false;
-  emailIsRequired: boolean = false;
-  addressIsRequired: boolean = false;
-  alternateAddressIsRequired: boolean = false;
-
-  representativePhoneIsRequired: boolean = false;
-  representativeEmailIsRequired: boolean = false;
-  representativeAddressIsRequired: boolean = false;
-
   saveFormData: any;
-
-  todaysDate = new Date(); // for the birthdate validation
-  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
   ApplicationType = ApplicationType;
 
@@ -106,6 +76,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   victimInfoHelper = new VictimInfoHelper();
   crimeInfoHelper = new CrimeInfoHelper();
   medicalInfoHelper = new MedicalInfoHelper();
+  representativeInfoHelper = new RepresentativeInfoHelper();
   authInfoHelper = new AuthInfoHelper();
 
   constructor(
@@ -118,9 +89,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   ) {
     super();
     var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
-    this.provinceList = canada.areas;
-    this.relationshipList = REPRESENTATIVE_LIST.name;
-
     this.formFullyValidated = false;
     this.currentFormStep = 0;
   }
@@ -180,115 +148,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         minimumOtherBenefitsSelected.updateValueAndValidity();
         //  employers: this.fb.array([this.createEmployerItem()]),
       });
-
-    this.form.get('representativeInformation.completingOnBehalfOf')
-      .valueChanges
-      .subscribe(value => {
-        let representativeFirstName = this.form.get('representativeInformation.representativeFirstName');
-        let representativeLastName = this.form.get('representativeInformation.representativeLastName');
-        let representativePreferredMethodOfContact = this.form.get('representativeInformation.representativePreferredMethodOfContact');
-
-        representativeFirstName.clearValidators();
-        representativeFirstName.setErrors(null);
-        representativeLastName.clearValidators();
-        representativeLastName.setErrors(null);
-        representativePreferredMethodOfContact.clearValidators();
-        representativePreferredMethodOfContact.setErrors(null);
-
-        let useValidation = value === 100000002 || value === 100000003;
-        this.setupRepresentativeContactInformation(0);  // Have to clear contact validators on contact method change
-        if (useValidation) {
-          representativeFirstName.setValidators([Validators.required]);
-          representativeLastName.setValidators([Validators.required]);
-          representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
-        }
-      });
-
-
-    this.form.get('representativeInformation.representativePreferredMethodOfContact')
-      .valueChanges
-      .subscribe(value => {
-        let contactMethod = parseInt(value);
-        this.setupRepresentativeContactInformation(contactMethod);
-      });
-
-    // this.form.get('authorizationInformation.allowCvapStaffSharing')
-    //   .valueChanges
-    //   .subscribe(value => {
-    //     let authorizedPersonAuthorizesDiscussion = this.form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion');
-    //     let authorizedPersonSignature = this.form.get('authorizationInformation.authorizedPersonSignature');
-
-    //     authorizedPersonAuthorizesDiscussion.clearValidators();
-    //     authorizedPersonAuthorizesDiscussion.setErrors(null);
-    //     authorizedPersonSignature.clearValidators();
-    //     authorizedPersonSignature.setErrors(null);
-
-    //     let useValidation = value === true;
-    //     if (useValidation) {
-    //       authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
-    //       authorizedPersonSignature.setValidators([Validators.required]);
-    //     }
-    //   });
-  }
-
-  setupRepresentativeContactInformation(contactMethod: number): void {
-    let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
-    let emailControl = this.form.get('representativeInformation.representativeEmail');
-    let addressControls = [
-      this.form.get('representativeInformation').get('representativeAddress.country'),
-      this.form.get('representativeInformation').get('representativeAddress.province'),
-      this.form.get('representativeInformation').get('representativeAddress.city'),
-      this.form.get('representativeInformation').get('representativeAddress.line1'),
-      this.form.get('representativeInformation').get('representativeAddress.postalCode'),
-    ];
-
-    phoneControl.clearValidators();
-    phoneControl.setErrors(null);
-    emailControl.clearValidators();
-    emailControl.setErrors(null);
-    for (let control of addressControls) {
-      control.clearValidators();
-      control.setErrors(null);
-    }
-
-    if (contactMethod === 100000000) {
-      phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-      for (let control of addressControls) {
-        control.setValidators([Validators.required]);
-      }
-      this.representativePhoneIsRequired = true;
-      this.representativeEmailIsRequired = false;
-      // this.representativeAddressIsRequired = true;
-    } else if (contactMethod === 100000001) {
-      emailControl.setValidators([Validators.required, Validators.email]);
-      for (let control of addressControls) {
-        control.setValidators([Validators.required]);
-      }
-      this.representativePhoneIsRequired = false;
-      this.representativeEmailIsRequired = true;
-      // this.representativeAddressIsRequired = true;
-    } else if (contactMethod === 100000002) {
-      // for (let control of addressControls) {
-      //   control.setValidators([Validators.required]);
-      // }
-      this.representativePhoneIsRequired = false;
-      this.representativeEmailIsRequired = false;
-      // this.representativeAddressIsRequired = true;
-    }
-
-    for (let control of addressControls) {
-      control.setValidators([Validators.required]);
-    }
-    this.representativeAddressIsRequired = true;
-
-    phoneControl.markAsTouched();
-    phoneControl.updateValueAndValidity();
-    emailControl.markAsTouched();
-    emailControl.updateValueAndValidity();
-    for (let control of addressControls) {
-      control.markAsTouched();
-      control.updateValueAndValidity();
-    }
   }
 
   showSignPad(group, control): void {
@@ -476,30 +335,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     });
   }
 
-  createCourtInfoItem(): FormGroup {
-    return this.fb.group({
-      courtFileNumber: '',
-      courtLocation: ''
-    });
-  }
-
-  createCrimeLocationItem(): FormGroup {
-    return this.fb.group({
-      location: ['', Validators.required]
-    });
-  }
-
-  createPoliceReport(): FormGroup {
-    return this.fb.group({
-      policeFileNumber: '',
-      investigatingOfficer: '',
-      policeDetachment: '',
-      reportStartDate: '',
-      reportEndDate: '',
-      policeReportedMultipleTimes: ['']
-    });
-  }
-
   submitPartialApplication() {
     this.justiceDataService.submitApplication(this.harvestForm())
       .subscribe(
@@ -514,22 +349,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       );
   }
 
-  //submitPartialApplication() {
-  //  this.formFullyValidated = true;
-  //  this.save().subscribe(
-  //    data => {
-  //      console.log("submitting partial form");
-  //      this.router.navigate(['/application-success']);
-  //    },
-  //    err => {
-  //      this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-  //      console.log('Error submitting application');
-  //    }
-  //  );
-  //}
-
   submitApplication() {
-    //let formIsValid = true;showValidationMessage
     // show the button as submitting and disable it
     this.submitting = true;
     if (this.form.valid) {
@@ -560,41 +380,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       this.markAsTouched();
     }
   }
-
-  //submitApplication() {
-  //  // show the button as submitting and disable it
-  //  this.submitting = true;
-  //  if (this.form.valid) {
-  //    this.formFullyValidated = true;
-  //    this.save().subscribe(
-  //      data => {
-  //        if (data['IsSuccess'] == true) {
-  //          console.log(data['IsSuccess']);
-  //          console.log("submitting");
-  //          this.router.navigate(['/application-success']);
-  //        }
-  //        else {
-  //          // re-enable the button
-  //          this.submitting = false;
-  //          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-  //          console.log('Error submitting application');
-  //        }
-  //      },
-  //      error => {
-  //        // re-enable the button
-  //        this.submitting = false;
-  //        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-  //        console.log('Error submitting application');
-  //      }
-  //    );
-  //  } else {
-  //    // re-enable the button
-  //    this.submitting = false;
-  //    console.log("form not validated");
-  //    this.formFullyValidated = false;
-  //    this.markAsTouched();
-  //  }
-  //}
 
   debugFormData(): void {
     let formData: Application = {
@@ -636,30 +421,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       );
   }
 
-  //save(): Subject<boolean> {
-  //  const subResult = new Subject<boolean>();
-  //  const formData: Application = {
-  //    Introduction: this.form.get('introduction').value,
-  //    PersonalInformation: this.form.get('personalInformation').value,
-  //    VictimInformation: this.form.get('victimInformation').value,
-  //    CrimeInformation: this.form.get('crimeInformation').value,
-  //    MedicalInformation: this.form.get('medicalInformation').value,
-  //    ExpenseInformation: this.form.get('expenseInformation').value,
-  //    RepresentativeInformation: this.form.get('representativeInformation').value,
-  //    DeclarationInformation: this.form.get('declarationInformation').value,
-  //    AuthorizationInformation: this.form.get('authorizationInformation').value,
-  //  };
-
-  //  this.busy = this.justiceDataService.submitApplication(formData)
-  //    .toPromise()
-  //    .then(res => {
-  //      subResult.next(true);
-  //    }, err => subResult.next(false));
-  //  this.busy2 = Promise.resolve(this.busy);
-
-  //  return subResult;
-  //}
-
   // marking the form as touched makes the validation messages show
   markAsTouched() {
     this.form.markAsTouched();
@@ -670,10 +431,10 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       introduction: this.fb.group({
         understoodInformation: ['', Validators.requiredTrue]
       }),
-      personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
-      victimInformation: this.victimInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
-      crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
-      medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
+      personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
+      victimInformation: this.victimInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
+      crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
+      medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       expenseInformation: this.fb.group({
         haveCounsellingExpenses: [false],
         haveCounsellingTransportation: [false],
@@ -708,53 +469,14 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         minimumOtherBenefitsSelected: [''], // Dynamically required
       }),
 
-      representativeInformation: this.fb.group({
-        completingOnBehalfOf: [0, [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
-        representativeFirstName: [''], //, Validators.required],
-        representativeMiddleName: [''],
-        representativeLastName: [''], //, Validators.required],
-        representativePreferredMethodOfContact: [0],   // Phone = 100000000, Email = 100000001, Mail = 100000002
-        representativePhoneNumber: [''],
-        representativeAlternatePhoneNumber: [''],
-        representativeEmail: [''], //, [Validators.required, Validators.email]],
-        representativeAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        legalGuardianFiles: this.fb.group({
-          filename: [''], // fileName
-          body: [''], // fileData
-        }), // This will be a collection of uploaded files
-        relationshipToPerson: [''],
-      }),
+      representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
 
       declarationInformation: this.fb.group({
         declaredAndSigned: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
       }),
 
-      authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, ApplicationType.Witness_Application),
+      authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
     });
-  }
-
-  onRepresentativeFileBundle(fileBundle: FileBundle) {
-    try {
-      // save the files submitted from the component for attachment into the submitted form.
-      const patchObject = {};
-      patchObject['representativeInformation.legalGuardianFiles'] = fileBundle;
-
-      let fileName = fileBundle.fileName[0] || "";
-      this.form.get('representativeInformation.legalGuardianFiles.filename').patchValue(fileName);
-
-      let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
-      this.form.get('representativeInformation.legalGuardianFiles.body').patchValue(body);
-    }
-    catch (e) {
-      console.log(e);
-    }
   }
 }
