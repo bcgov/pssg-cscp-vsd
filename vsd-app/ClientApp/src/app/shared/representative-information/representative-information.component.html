@@ -90,7 +90,7 @@
     <div class="row">
       <div class="col-md-6">
         <app-field label="Email Address" [required]="true" [valid]="isFieldValid('representativeEmail')" errorMessage="Please enter an email address">
-          <input class="form-control" type="text" formControlName="representativeEmail" placeholder="myname@email.com">
+          <input class="form-control" type="text" (blur)="trimValue(form.get('representativeEmail'))" formControlName="representativeEmail" placeholder="myname@email.com">
         </app-field>
       </div>
 

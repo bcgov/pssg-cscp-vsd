@@ -472,6 +472,12 @@ export class FormBase {
     control.setValue(value.trim());
   }
 
+  public trimEmail(control: AbstractControl) {
+    const value = control.value;
+    control.setValue('');
+    control.setValue(value.trim());
+  }
+
   copyPersonalAddressToVictimAddress(form: FormGroup | FormArray) {
     let copyAddress = form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value === true;
     let target = form.get('victimInformation.primaryAddress');

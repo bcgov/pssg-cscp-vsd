@@ -29,6 +29,7 @@ import { AuthInfoHelper } from '../shared/authorization-information/authorizatio
 import { POSTAL_CODE } from '../shared/regex.constants';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
+import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
 
 const moment = _rollupMoment || _moment;
 
@@ -48,6 +49,7 @@ const moment = _rollupMoment || _moment;
 })
 
 export class IfmApplicationComponent extends FormBase implements OnInit {
+  FORM_TYPE = ApplicationType.IFM_Application;
   postalRegex = POSTAL_CODE;
   currentUser: User;
   dataLoaded = false;
@@ -71,29 +73,29 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   relationshipList: string[];
   enumHelper = new EnumHelper();
 
-  showAddCourtInfo: boolean = true;
-  showRemoveCourtInfo: boolean = false;
-  showAddCrimeLocation: boolean = true;
-  showRemoveCrimeLocation: boolean = false;
-  showAddPoliceReport: boolean = true;
-  showRemovePoliceReport: boolean = false;
-  showAddProvider: boolean = true;
-  showAddAuthorizationInformation: boolean = true;
-  showRemoveAuthorization: boolean = true;
-  showRemoveProvider: boolean = false;
-  showAdditionalInformationDocumentDescription: boolean = false;
-  showLegalGuardianDocumentDescription: boolean = false;
+  // showAddCourtInfo: boolean = true;
+  // showRemoveCourtInfo: boolean = false;
+  // showAddCrimeLocation: boolean = true;
+  // showRemoveCrimeLocation: boolean = false;
+  // showAddPoliceReport: boolean = true;
+  // showRemovePoliceReport: boolean = false;
+  // showAddProvider: boolean = true;
+  // showAddAuthorizationInformation: boolean = true;
+  // showRemoveAuthorization: boolean = true;
+  // showRemoveProvider: boolean = false;
+  // showAdditionalInformationDocumentDescription: boolean = false;
+  // showLegalGuardianDocumentDescription: boolean = false;
 
   public currentFormStep: number;
 
-  phoneIsRequired: boolean = false;
-  emailIsRequired: boolean = false;
-  addressIsRequired: boolean = false;
-  alternateAddressIsRequired: boolean = false;
+  // phoneIsRequired: boolean = false;
+  // emailIsRequired: boolean = false;
+  // addressIsRequired: boolean = false;
+  // alternateAddressIsRequired: boolean = false;
 
-  representativePhoneIsRequired: boolean = false;
-  representativeEmailIsRequired: boolean = false;
-  representativeAddressIsRequired: boolean = false;
+  // representativePhoneIsRequired: boolean = false;
+  // representativeEmailIsRequired: boolean = false;
+  // representativeAddressIsRequired: boolean = false;
 
   saveFormData: any;
 
@@ -108,6 +110,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   victimInfoHelper = new VictimInfoHelper();
   crimeInfoHelper = new CrimeInfoHelper();
   medicalInfoHelper = new MedicalInfoHelper();
+  representativeInfoHelper = new RepresentativeInfoHelper();
   authInfoHelper = new AuthInfoHelper();
 
   constructor(
@@ -135,7 +138,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
 
-    this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
+    // this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
   }
 
   showSignPad(group, control): void {
@@ -237,29 +240,29 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     });
   }
 
-  createCourtInfoItem(): FormGroup {
-    return this.fb.group({
-      courtFileNumber: '',
-      courtLocation: ''
-    });
-  }
+  // createCourtInfoItem(): FormGroup {
+  //   return this.fb.group({
+  //     courtFileNumber: '',
+  //     courtLocation: ''
+  //   });
+  // }
 
-  createCrimeLocationItem(): FormGroup {
-    return this.fb.group({
-      location: ['', Validators.required]
-    });
-  }
+  // createCrimeLocationItem(): FormGroup {
+  //   return this.fb.group({
+  //     location: ['', Validators.required]
+  //   });
+  // }
 
-  createPoliceReport(): FormGroup {
-    return this.fb.group({
-      policeFileNumber: '',
-      investigatingOfficer: '',
-      policeDetachment: '',
-      reportStartDate: '',
-      reportEndDate: '',
-      policeReportedMultipleTimes: ['']
-    });
-  }
+  // createPoliceReport(): FormGroup {
+  //   return this.fb.group({
+  //     policeFileNumber: '',
+  //     investigatingOfficer: '',
+  //     policeDetachment: '',
+  //     reportStartDate: '',
+  //     reportEndDate: '',
+  //     policeReportedMultipleTimes: ['']
+  //   });
+  // }
 
   submitPartialApplication() {
     this.justiceDataService.submitApplication(this.harvestForm())
@@ -431,10 +434,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       introduction: this.fb.group({
         understoodInformation: ['', Validators.requiredTrue]
       }),
-      personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, ApplicationType.IFM_Application),
-      victimInformation: this.victimInfoHelper.setupFormGroup(this.fb, ApplicationType.IFM_Application),
-      crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, ApplicationType.IFM_Application),
-      medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, ApplicationType.IFM_Application),
+      personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
+      victimInformation: this.victimInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
+      crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
+      medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       expenseInformation: this.fb.group({
         haveCounsellingExpenses: [false],
         haveCounsellingTransportation: [false],
@@ -475,127 +478,104 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         noneOfTheAboveBenefits: [false],
       }),
 
-      representativeInformation: this.fb.group({
-        completingOnBehalfOf: [0, [Validators.required, Validators.min(100000000), Validators.max(100000003)]], // Self: 100000000  Victim Service Worker: 100000001  Parent/Guardian: 100000002,
-        representativeFirstName: [''], //, Validators.required],
-        representativeMiddleName: [''],
-        representativeLastName: [''], //, Validators.required],
-        representativePreferredMethodOfContact: [0],   // Phone = 100000000, Email = 100000001, Mail = 100000002
-        representativePhoneNumber: [''],
-        representativeAlternatePhoneNumber: [''],
-        representativeEmail: [''], //, [Validators.required, Validators.email]],
-        representativeAddress: this.fb.group({
-          line1: [''],
-          line2: [''],
-          city: [''],
-          postalCode: [''],  // , [Validators.pattern(postalRegex)]
-          province: [{ value: 'British Columbia', disabled: false }],
-          country: [{ value: 'Canada', disabled: false }],
-        }),
-        legalGuardianFiles: this.fb.group({
-          filename: [''],
-          body: [''],
-        }), // This will be a collection of uploaded files
-        documentDescription: [''],
-        relationshipToPerson: [''],
-      }),
+      representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
 
       declarationInformation: this.fb.group({
         declaredAndSigned: ['', Validators.requiredTrue],
         signature: ['', Validators.required],
       }),
 
-      authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, ApplicationType.IFM_Application),
+      authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
     });
   }
 
-  setRequiredFields() {
-    // set all form validation
-    // this.setCompletingOnBehalfOf();
-    // this.setCvapStaffSharing();
-    // this.setHospitalTreatment();
-    // this.setPreferredContactMethod();
-    this.setRepresentativePreferredMethodOfContact();
-  }
+  // setRequiredFields() {
+  //   // set all form validation
+  //   // this.setCompletingOnBehalfOf();
+  //   // this.setCvapStaffSharing();
+  //   // this.setHospitalTreatment();
+  //   // this.setPreferredContactMethod();
+  //   this.setRepresentativePreferredMethodOfContact();
+  // }
 
-  setRepresentativePreferredMethodOfContact(): void {
-    // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
-    const responseCode: number = parseInt(this.form.get('representativeInformation.representativePreferredMethodOfContact').value);
-    if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
-    let options = { onlySelf: true, emitEvent: false };
-    let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
-    let emailControl = this.form.get('representativeInformation.representativeEmail');
-    let addressControls = [
-      this.form.get('representativeInformation').get('representativeAddress.country'),
-      this.form.get('representativeInformation').get('representativeAddress.province'),
-      this.form.get('representativeInformation').get('representativeAddress.city'),
-      this.form.get('representativeInformation').get('representativeAddress.line1'),
-      this.form.get('representativeInformation').get('representativeAddress.postalCode'),
-    ];
+  // setRepresentativePreferredMethodOfContact(): void {
+  //   // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
+  //   const responseCode: number = parseInt(this.form.get('representativeInformation.representativePreferredMethodOfContact').value);
+  //   if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
+  //   let options = { onlySelf: true, emitEvent: false };
+  //   let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
+  //   let emailControl = this.form.get('representativeInformation.representativeEmail');
+  //   let addressControls = [
+  //     this.form.get('representativeInformation').get('representativeAddress.country'),
+  //     this.form.get('representativeInformation').get('representativeAddress.province'),
+  //     this.form.get('representativeInformation').get('representativeAddress.city'),
+  //     this.form.get('representativeInformation').get('representativeAddress.line1'),
+  //     this.form.get('representativeInformation').get('representativeAddress.postalCode'),
+  //   ];
 
-    phoneControl.clearValidators();
-    phoneControl.setErrors(null);
-    emailControl.clearValidators();
-    emailControl.setErrors(null);
-    for (let control of addressControls) {
-      control.clearValidators();
-      control.setErrors(null);
-    }
+  //   phoneControl.clearValidators();
+  //   phoneControl.setErrors(null);
+  //   emailControl.clearValidators();
+  //   emailControl.setErrors(null);
+  //   for (let control of addressControls) {
+  //     control.clearValidators();
+  //     control.setErrors(null);
+  //   }
 
-    if (responseCode === 100000000) {
-      phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-      this.representativePhoneIsRequired = true;
-      this.representativeEmailIsRequired = false;
-      // this.representativeAddressIsRequired = true;
-    } else if (responseCode === 100000001) {
-      emailControl.setValidators([Validators.required, Validators.email]);
-      this.representativePhoneIsRequired = false;
-      this.representativeEmailIsRequired = true;
-      // this.representativeAddressIsRequired = true;
-    } else if (responseCode === 100000002) {
-      // for (let control of addressControls) {
-      //   control.setValidators([Validators.required]);
-      // }
-      this.representativePhoneIsRequired = false;
-      this.representativeEmailIsRequired = false;
-      // this.representativeAddressIsRequired = true;
-    }
+  //   if (responseCode === 100000000) {
+  //     phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+  //     this.representativePhoneIsRequired = true;
+  //     this.representativeEmailIsRequired = false;
+  //     // this.representativeAddressIsRequired = true;
+  //   } else if (responseCode === 100000001) {
+  //     emailControl.setValidators([Validators.required, Validators.email]);
+  //     this.representativePhoneIsRequired = false;
+  //     this.representativeEmailIsRequired = true;
+  //     // this.representativeAddressIsRequired = true;
+  //   } else if (responseCode === 100000002) {
+  //     // for (let control of addressControls) {
+  //     //   control.setValidators([Validators.required]);
+  //     // }
+  //     this.representativePhoneIsRequired = false;
+  //     this.representativeEmailIsRequired = false;
+  //     // this.representativeAddressIsRequired = true;
+  //   }
 
-    for (let control of addressControls) {
-      control.setValidators([Validators.required]);
-    }
-    this.representativeAddressIsRequired = true;
+  //   for (let control of addressControls) {
+  //     control.setValidators([Validators.required]);
+  //   }
+  //   this.representativeAddressIsRequired = true;
 
-    // phoneControl.markAsTouched();
-    phoneControl.updateValueAndValidity(options);
-    // emailControl.markAsTouched();
-    emailControl.updateValueAndValidity(options);
-    for (let control of addressControls) {
-      // control.markAsTouched();
-      control.updateValueAndValidity(options);
-    }
-  }
+  //   // phoneControl.markAsTouched();
+  //   phoneControl.updateValueAndValidity(options);
+  //   // emailControl.markAsTouched();
+  //   emailControl.updateValueAndValidity(options);
+  //   for (let control of addressControls) {
+  //     // control.markAsTouched();
+  //     control.updateValueAndValidity(options);
+  //   }
+  // }
 
-  onRepresentativeFileBundle(fileBundle: FileBundle) {
-    try {
-      if (fileBundle.fileData && fileBundle.fileData.length > 0) {
-        this.showLegalGuardianDocumentDescription = true;
-      }
-      else {
-        this.showLegalGuardianDocumentDescription = false;
-      }
-      // save the files submitted from the component for attachment into the submitted form.
-      const patchObject = {};
-      patchObject['representativeInformation.legalGuardianFiles'] = fileBundle;
+  // onRepresentativeFileBundle(fileBundle: FileBundle) {
+  //   try {
+  //     if (fileBundle.fileData && fileBundle.fileData.length > 0) {
+  //       this.showLegalGuardianDocumentDescription = true;
+  //     }
+  //     else {
+  //       this.showLegalGuardianDocumentDescription = false;
+  //     }
+  //     // save the files submitted from the component for attachment into the submitted form.
+  //     const patchObject = {};
+  //     patchObject['representativeInformation.legalGuardianFiles'] = fileBundle;
 
-      let fileName = fileBundle.fileName[0] || "";
-      this.form.get('representativeInformation.legalGuardianFiles.filename').patchValue(fileName);
+  //     let fileName = fileBundle.fileName[0] || "";
+  //     this.form.get('representativeInformation.legalGuardianFiles.filename').patchValue(fileName);
 
-      let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
-      this.form.get('representativeInformation.legalGuardianFiles.body').patchValue(body);
-    }
-    catch (e) {
-      console.log(e);
-    }
-  }
+  //     let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
+  //     this.form.get('representativeInformation.legalGuardianFiles.body').patchValue(body);
+  //   }
+  //   catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 }

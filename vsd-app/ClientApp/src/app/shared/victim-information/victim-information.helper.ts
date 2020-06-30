@@ -1,7 +1,7 @@
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { ApplicationType } from "../enums-list";
 import { POSTAL_CODE } from "../regex.constants";
-import { EmailValidator } from "../validators/email.validator";
+// import { EmailValidator } from "../validators/email.validator";
 
 export class VictimInfoHelper {
     postalRegex = POSTAL_CODE;
@@ -22,9 +22,11 @@ export class VictimInfoHelper {
 
             phoneNumber: [''],
             alternatePhoneNumber: [''],
+
             email: [''],
             confirmEmail: [''],
-            // , [
+            // email: [''],
+            // confirmEmail: ['', [
             //     Validators.email,
             //     EmailValidator('email')
             // ]],
