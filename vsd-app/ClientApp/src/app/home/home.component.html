@@ -11,78 +11,89 @@
           <p>The program may also provide benefits to <strong>Immediate Family Members</strong> of an injured or deceased victim of crime, as well as <strong>Witnesses</strong> to the crime with a close personal relationship to the victim.</p>
           <p>To begin your application, select the option below that applies to you. If you are applying on behalf of one of the following, the following page will ask for your relationship to the person you are applying on behalf of.</p>
 
-          <div *ngIf="selectedApplicationType !== 0">
-            <div *ngIf="selectedApplicationType === 100000002" class="attention">
-              <p>
-                This application package is designed for a <strong>Victim of violent crime</strong>. Under the <em>Crime Victim Assistance Act</em>, a victim is a person who is injured, physically or psychologically, as a result of an eligible criminal offence committed in British Columbia.
-              </p>
+          <div [formGroup]="form">
+            <app-field label="Please select the application form that applies to you." (change)="updateForm($event)" [required]="true">
+              <select class="form-control" style="width: 350px;" formControlName="applicationType">
+                <option value="0">Select...</option>
+                <option value="100000002">Victim Application</option>
+                <option value="100000001">Immediate Family Member Application</option>
+                <option value="100000000">Witness Application</option>
+              </select>
+            </app-field>
+
+            <div *ngIf="selectedApplicationType !== 0">
+              <div *ngIf="selectedApplicationType === 100000002" class="attention">
+                <p>
+                  This application package is designed for a <strong>Victim of violent crime</strong>. Under the <em>Crime Victim Assistance Act</em>, a victim is a person who is injured, physically or psychologically, as a result of an eligible criminal offence committed in British Columbia.
+                </p>
+              </div>
+
+              <div *ngIf="selectedApplicationType === 100000001" class="attention">
+                <p>
+                  This application package is designed for an <strong>Immediate Family Member</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, an Immediate Family Member is a person who (at the time of the eligible offence that caused the injury or death of a victim) was a spouse, child, sibling, step sibling, half sibling, parent of the victim or, if financially dependent on the victim, a grandparent or grandchild of the victim.
+                </p>
+              </div>
+
+              <div *ngIf="selectedApplicationType === 100000000" class="attention">
+                <p>
+                  This application package is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who is not related to the victim but has a strong emotional attachment to the victim and witnesses in close proximity an eligible offence that causes a life-threatening injury or death to the victim or witnesses the immediate aftermath of an eligible offence that caused the death of the victim.
+                </p>
+              </div>
+
+              <section class="radio-list per-line">
+                <app-field label="I am:" [required]="true">
+                  <label>
+                    <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                    Completing this application for myself
+                  </label>
+                  <label *ngIf="selectedApplicationType === 1">
+                    <!--This will never happen, but kept here in case they want it back-->
+                    <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                    A Victim Service Worker or other person helping a victim complete this application
+                  </label>
+                  <label>
+                    <input type="radio" [value]="100000002" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                    A parent completing this application for my minor child (19 and below)
+                  </label>
+                  <label>
+                    <input type="radio" [value]="100000003" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                    A legal representative or legal guardian completing this application on behalf of someone else
+                  </label>
+                </app-field>
+              </section>
+
+              <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
+                <app-field label="Did the crime occur in BC" [required]="true">
+                  <br />
+                  <table style="width: 100%" class="out-of-line">
+                    <tr>
+                      <td class="lead-cell">
+                        <label class="inline-label">
+                          <input type="radio" [value]="true" name="wasCrimeInBC" formControlName="wasCrimeInBC">
+                          <span>Yes</span>
+                        </label>
+                        <label class="inline-label">
+                          <input type="radio" [value]="false" name="wasCrimeInBC" formControlName="wasCrimeInBC">
+                          <span>No</span>
+                        </label>
+                      </td>
+                      <td class="error-cell was-in-bc-warning" *ngIf="form.get('wasCrimeInBC').value === false">
+                        CVAP only accepts applications for crimes that have occurred in BC. Please click <a href="https://www.victimsfirst.gc.ca/serv/spt-spt.html" target="_blank">here</a> to apply to your provincial assistance program or call CVAP toll free at 1-866-660-3888 if you have any questions.
+                      </td>
+                    </tr>
+                  </table>
+                </app-field>
+              </section>
+
+              <div *ngIf="showValidationMessage" class="error-summary">
+                <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+                <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
+              </div>
+
+              <section class="button-container mt-3">
+                <button [disabled]="form.get('wasCrimeInBC').value === false" (click)="markAsTouched(); gotoApplication();" class="btn btn-primary pull-right">CONTINUE TO {{ selectedApplicationName }} <i class="fas fa-chevron-right"></i></button>
+              </section>
             </div>
-
-            <div *ngIf="selectedApplicationType === 100000001" class="attention">
-              <p>
-                This application package is designed for an <strong>Immediate Family Member</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, an Immediate Family Member is a person who (at the time of the eligible offence that caused the injury or death of a victim) was a spouse, child, sibling, step sibling, half sibling, parent of the victim or, if financially dependent on the victim, a grandparent or grandchild of the victim.
-              </p>
-            </div>
-
-            <div *ngIf="selectedApplicationType === 100000000" class="attention">
-              <p>
-                This application package is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who is not related to the victim but has a strong emotional attachment to the victim and witnesses in close proximity an eligible offence that causes a life-threatening injury or death to the victim or witnesses the immediate aftermath of an eligible offence that caused the death of the victim.
-              </p>
-            </div>
-
-            <section class="radio-list per-line">
-              <app-field label="I am:" [required]="true">
-                <label>
-                  <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                  Completing this application for myself
-                </label>
-                <label *ngIf="selectedApplicationType === 1">
-                  <!--This will never happen, but kept here in case they want it back-->
-                  <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                  A Victim Service Worker or other person helping a victim complete this application
-                </label>
-                <label>
-                  <input type="radio" [value]="100000002" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                  A parent completing this application for my minor child (19 and below)
-                </label>
-                <label>
-                  <input type="radio" [value]="100000003" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                  A legal representative or legal guardian completing this application on behalf of someone else
-                </label>
-              </app-field>
-            </section>
-
-            <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
-              <app-field label="Did the crime occur in BC" [required]="true">
-                <br />
-                <table style="width: 100%" class="out-of-line">
-                  <tr>
-                    <td class="lead-cell">
-                      <label class="inline-label">
-                        <input type="radio" [value]="true" name="wasCrimeInBC" formControlName="wasCrimeInBC">
-                        <span>Yes</span>
-                      </label>
-                      <label class="inline-label">
-                        <input type="radio" [value]="false" name="wasCrimeInBC" formControlName="wasCrimeInBC">
-                        <span>No</span>
-                      </label>
-                    </td>
-                    <td class="error-cell was-in-bc-warning" *ngIf="form.get('wasCrimeInBC').value === false">
-                      CVAP only accepts applications for crimes that have occurred in BC. Please click <a href="https://www.victimsfirst.gc.ca/serv/spt-spt.html" target="_blank">here</a> to apply to your provincial assistance program or call CVAP toll free at 1-866-660-3888 if you have any questions.
-                    </td>
-                  </tr>
-                </table>
-              </app-field>
-            </section>
-
-            <div *ngIf="showValidationMessage" class="error-summary">
-              <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
-              <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
-            </div>
-
-            <section class="button-container mt-3">
-              <button [disabled]="form.get('wasCrimeInBC').value === false" (click)="markAsTouched(); gotoApplication();" class="btn btn-primary pull-right">CONTINUE TO {{ selectedApplicationName }} <i class="fas fa-chevron-right"></i></button>
-            </section>
           </div>
         </div>
       </div>
