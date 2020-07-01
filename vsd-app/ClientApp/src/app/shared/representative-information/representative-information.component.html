@@ -75,8 +75,8 @@
 
     <div class="row">
       <div class="col-md-6">
-        <app-field label="Phone Number (incl. area code)" [required]="true" [valid]="isFieldValid('representativePhoneNumber')" errorMessage="Please enter a phone number">
-          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativePhoneNumber">
+        <app-field label="Phone Number (incl. area code)" [required]="representativePhoneIsRequired" [valid]="isFieldValid('representativePhoneNumber')" errorMessage="Please enter a phone number">
+          <input class="form-control" mask='(000) 000 0000' [validation]="true" type="text" formControlName="representativePhoneNumber">
         </app-field>
       </div>
       <div class="col-md-6">
@@ -86,26 +86,21 @@
       </div>
     </div>
 
-
-
-
-
     <div class="row">
       <div class="col-md-6">
-        <app-field label="Email Address" [required]="true" [valid]="isFieldValid('representativeEmail')" errorMessage="Please enter an email address">
-          <input class="form-control" type="text" formControlName="representativeEmail" maxlength="100">
-          <!-- (blur)="trimValue(form.get('representativeEmail'))" -->
-        </app-field>
-      </div>
-
-      <div class="col-md-6">
-        <app-field label="Confirm Email Address" [required]="true" [valid]="isFieldValid('representativeConfirmEmail')" errorMessage="Please confirm your email address">
-          <input class="form-control" type="text" formControlName="representativeConfirmEmail" maxlength="100">
-          <!-- (blur)="trimValue(form.get('representativeConfirmEmail'))" -->
+        <app-field label="Email Address" [required]="representativeEmailIsRequired" [valid]="isFieldValid('representativeEmail')" errorMessage="Please enter an email address">
+          <input class="form-control" type="text" (blur)="trimEmail(form.get('representativeEmail'))" formControlName="representativeEmail" maxlength="100">
         </app-field>
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-md-6">
+        <app-field label="Confirm Email Address" [required]="representativeEmailIsRequired" [valid]="isFieldValid('representativeConfirmEmail')" errorMessage="Please confirm your email address">
+          <input class="form-control" type="text" (blur)="trimEmail(form.get('representativeConfirmEmail'))" formControlName="representativeConfirmEmail" maxlength="100">
+        </app-field>
+      </div>
+    </div>
 
     <h3>Mailing Address</h3>
     <app-address [group]="form.get('representativeAddress')" [showChildrenAsRequired]="true"></app-address>

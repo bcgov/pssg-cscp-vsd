@@ -7,6 +7,8 @@ import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { COUNTRIES_ADDRESS } from "../address/country-list";
 import { REPRESENTATIVE_LIST } from "../../constants/representative-list";
 import { FileBundle } from "../../models/file-bundle";
+import { AddressHelper } from "../address/address.helper";
+import { EmailValidator } from "../validators/email.validator";
 
 @Component({
     selector: 'app-representative-information',
@@ -32,6 +34,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     representativeEmailIsRequired: boolean = false;
     representativeAddressIsRequired: boolean = false;
 
+    addressHelper = new AddressHelper();
 
     constructor(
         private controlContainer: ControlContainer,
@@ -44,8 +47,8 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        console.log("representative info component");
-        console.log(this.form);
+        // console.log("representative info component");
+        // console.log(this.form);
 
         if (this.formType === ApplicationType.Victim_Application) {
             this.header = "Victim";
@@ -70,11 +73,18 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
             representativePreferredMethodOfContact.setErrors(null);
 
             let useValidation = value === 100000002 || value === 100000003;
-            this.setupRepresentativeContactInformation(0);  // Have to clear contact validators on contact method change
+            this.setupRepresentativeContactInformation(this.form.get('representativePreferredMethodOfContact').value);  // Have to clear contact validators on contact method change
             if (useValidation) {
                 representativeFirstName.setValidators([Validators.required]);
                 representativeLastName.setValidators([Validators.required]);
                 representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
+
+                representativeFirstName.markAsTouched();
+                representativeFirstName.updateValueAndValidity();
+                representativeLastName.markAsTouched();
+                representativeLastName.updateValueAndValidity();
+                representativePreferredMethodOfContact.markAsTouched();
+                representativePreferredMethodOfContact.updateValueAndValidity();
             }
         });
 
@@ -82,67 +92,45 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
             let contactMethod = parseInt(value);
             this.setupRepresentativeContactInformation(contactMethod);
         });
-
     }
 
     setupRepresentativeContactInformation(contactMethod: number): void {
         let phoneControl = this.form.get('representativePhoneNumber');
         let emailControl = this.form.get('representativeEmail');
-        let addressControls = [
-            this.form.get('representativeAddress.country'),
-            this.form.get('representativeAddress.province'),
-            this.form.get('representativeAddress.city'),
-            this.form.get('representativeAddress.line1'),
-            this.form.get('representativeAddress.postalCode'),
-        ];
+        let emailConfirmControl = this.form.get('representativeConfirmEmail');
 
-        phoneControl.clearValidators();
+        this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'representativeAddress');
+        this.addressHelper.setAddressAsRequired(this.form, 'representativeAddress');
+
+        phoneControl.setValidators([Validators.minLength(10), Validators.maxLength(10)]);
         phoneControl.setErrors(null);
-        emailControl.clearValidators();
+        emailControl.setValidators([Validators.email]);
         emailControl.setErrors(null);
-        for (let control of addressControls) {
-            control.clearValidators();
-            control.setErrors(null);
-        }
+        emailConfirmControl.setValidators([Validators.email, EmailValidator('representativeEmail')]);
+        emailConfirmControl.setErrors(null);
 
         if (contactMethod === 100000000) {
             phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-            for (let control of addressControls) {
-                control.setValidators([Validators.required]);
-            }
             this.representativePhoneIsRequired = true;
             this.representativeEmailIsRequired = false;
-            // this.representativeAddressIsRequired = true;
         } else if (contactMethod === 100000001) {
             emailControl.setValidators([Validators.required, Validators.email]);
-            for (let control of addressControls) {
-                control.setValidators([Validators.required]);
-            }
+            emailConfirmControl.setValidators([Validators.required, Validators.email, EmailValidator('representativeEmail')]);
             this.representativePhoneIsRequired = false;
             this.representativeEmailIsRequired = true;
-            // this.representativeAddressIsRequired = true;
         } else if (contactMethod === 100000002) {
-            // for (let control of addressControls) {
-            //   control.setValidators([Validators.required]);
-            // }
             this.representativePhoneIsRequired = false;
             this.representativeEmailIsRequired = false;
-            // this.representativeAddressIsRequired = true;
         }
 
-        for (let control of addressControls) {
-            control.setValidators([Validators.required]);
-        }
         this.representativeAddressIsRequired = true;
 
         phoneControl.markAsTouched();
         phoneControl.updateValueAndValidity();
         emailControl.markAsTouched();
         emailControl.updateValueAndValidity();
-        for (let control of addressControls) {
-            control.markAsTouched();
-            control.updateValueAndValidity();
-        }
+        emailConfirmControl.markAsTouched();
+        emailConfirmControl.updateValueAndValidity();
     }
 
     onRepresentativeFileBundle(fileBundle: FileBundle) {

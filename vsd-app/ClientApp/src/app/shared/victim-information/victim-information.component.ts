@@ -37,8 +37,8 @@ export class VictimInformationComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        console.log("victim info component");
-        console.log(this.form);
+        // console.log("victim info component");
+        // console.log(this.form);
 
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
             this.form.get('mostRecentMailingAddressSameAsPersonal').valueChanges.subscribe(value => {

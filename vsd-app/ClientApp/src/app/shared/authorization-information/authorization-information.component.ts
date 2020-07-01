@@ -39,8 +39,8 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        console.log("auth info component");
-        console.log(this.form);
+        // console.log("auth info component");
+        // console.log(this.form);
 
         this.form.get('allowCvapStaffSharing').valueChanges.subscribe(value => {
             let authorizedPersonAuthorizesDiscussion = this.form.get('authorizedPersonAuthorizesDiscussion');

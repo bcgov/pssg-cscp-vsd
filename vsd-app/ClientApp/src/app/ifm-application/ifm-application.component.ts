@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
-import { Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
-// tslint:disable-next-line:no-duplicate-imports
 import { defaultFormat as _rollupMoment } from 'moment';
 import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
-
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
@@ -20,7 +17,6 @@ import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper, ApplicationType } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
-import { FileBundle } from '../models/file-bundle';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 import { REPRESENTATIVE_LIST } from '../constants/representative-list';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
@@ -30,10 +26,10 @@ import { POSTAL_CODE } from '../shared/regex.constants';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
+import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
+import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
 
 const moment = _rollupMoment || _moment;
-
-// export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
 
 @Component({
   selector: 'app-ifm-application',
@@ -88,7 +84,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   victimInfoHelper = new VictimInfoHelper();
   crimeInfoHelper = new CrimeInfoHelper();
   medicalInfoHelper = new MedicalInfoHelper();
+  expenseInfoHelper = new ExpenseInfoHelper();
   representativeInfoHelper = new RepresentativeInfoHelper();
+  declarationInfoHelper = new DeclarationInfoHelper();
   authInfoHelper = new AuthInfoHelper();
 
   constructor(
@@ -115,25 +113,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     this.form.get('representativeInformation').patchValue({
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
-
-    // this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields());
-  }
-
-  showSignPad(group, control): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-
-    const dialogRef = this.dialog.open(SignPadDialog, dialogConfig);
-    dialogRef.afterClosed().subscribe(
-      data => {
-        var patchObject = {};
-        patchObject[control] = data;
-        this.form.get(group).patchValue(
-          patchObject
-        );
-      }
-    );
   }
 
   verifyCancellation(): void {
@@ -218,30 +197,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     });
   }
 
-  // createCourtInfoItem(): FormGroup {
-  //   return this.fb.group({
-  //     courtFileNumber: '',
-  //     courtLocation: ''
-  //   });
-  // }
-
-  // createCrimeLocationItem(): FormGroup {
-  //   return this.fb.group({
-  //     location: ['', Validators.required]
-  //   });
-  // }
-
-  // createPoliceReport(): FormGroup {
-  //   return this.fb.group({
-  //     policeFileNumber: '',
-  //     investigatingOfficer: '',
-  //     policeDetachment: '',
-  //     reportStartDate: '',
-  //     reportEndDate: '',
-  //     policeReportedMultipleTimes: ['']
-  //   });
-  // }
-
   submitPartialApplication() {
     this.justiceDataService.submitApplication(this.harvestForm())
       .subscribe(
@@ -255,20 +210,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         }
       );
   }
-
-  //submitPartialApplication() {
-  //  this.formFullyValidated = true;
-  //  this.save().subscribe(
-  //    data => {
-  //      console.log("submitting partial form");
-  //      this.router.navigate(['/application-success']);
-  //    },
-  //    err => {
-  //      this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-  //      console.log('Error submitting application');
-  //    }
-  //  );
-  //}
 
   submitApplication() {
     //let formIsValid = true;showValidationMessage
@@ -302,35 +243,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       this.markAsTouched();
     }
   }
-
-  //submitApplication() {
-  //  let formIsValid = this.form.valid;
-  //  //let formIsValid = true;
-  //  if (formIsValid) {
-  //    this.formFullyValidated = true;
-  //    this.save().subscribe(
-  //      data => {
-  //        if (data['IsSuccess'] == true) {
-  //          console.log(data['IsSuccess']);
-  //          console.log("submitting");
-  //          this.router.navigate(['/application-success']);
-  //        }
-  //        else {
-  //          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-  //          console.log('Error submitting application');
-  //        }
-  //      },
-  //      error => {
-  //        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-  //        console.log('Error submitting application');
-  //      }
-  //    );
-  //  } else {
-  //    console.log("form not validated");
-  //    this.formFullyValidated = false;
-  //    this.markAsTouched();
-  //  }
-  //}
 
   debugFormData(): void {
     let formData: Application = {
@@ -378,30 +290,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       );
   }
 
-  //save(): Subject<boolean> {
-  //  const subResult = new Subject<boolean>();
-  //  const formData: Application = {
-  //    Introduction: this.form.get('introduction').value,
-  //    PersonalInformation: this.form.get('personalInformation').value,
-  //    VictimInformation: this.form.get('victimInformation').value,
-  //    CrimeInformation: this.form.get('crimeInformation').value,
-  //    MedicalInformation: this.form.get('medicalInformation').value,
-  //    ExpenseInformation: this.form.get('expenseInformation').value,
-  //    RepresentativeInformation: this.form.get('representativeInformation').value,
-  //    DeclarationInformation: this.form.get('declarationInformation').value,
-  //    AuthorizationInformation: this.form.get('authorizationInformation').value,
-  //  };
-
-  //  this.busy = this.justiceDataService.submitApplication(formData)
-  //    .toPromise()
-  //    .then(res => {
-  //      subResult.next(true);
-  //    }, err => subResult.next(false));
-  //  this.busy2 = Promise.resolve(this.busy);
-
-  //  return subResult;
-  //}
-
   // marking the form as touched makes the validation messages show
   markAsTouched() {
     this.form.markAsTouched();
@@ -410,150 +298,16 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   private buildApplicationForm(): FormGroup {
     return this.fb.group({
       introduction: this.fb.group({
-        understoodInformation: ['', Validators.requiredTrue]
+        understoodInformation: [null, Validators.requiredTrue]
       }),
       personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       victimInformation: this.victimInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      expenseInformation: this.fb.group({
-        haveCounsellingExpenses: [false],
-        haveCounsellingTransportation: [false],
-        havePrescriptionDrugExpenses: [false],
-
-        // Additional Expenses
-        haveVocationalServicesExpenses: [false],
-        haveIncomeSupportExpenses: [false],
-        haveChildcareExpenses: [false],
-        haveLegalProceedingExpenses: [false],
-        haveFuneralExpenses: [false],
-        haveBereavementLeaveExpenses: [false],
-        haveLostOfParentalGuidanceExpenses: [false],
-        haveHomeMakerExpenses: [false],
-        haveCrimeSceneCleaningExpenses: [false],
-        noneOfTheAboveExpenses: [''],
-
-        missedWorkDueToDeathOfVictim: [''],//, Validators.required],
-
-        didYouLoseWages: [''], //, Validators.required],
-        daysWorkMissedStart: [''], //, Validators.required],
-        daysWorkMissedEnd: [''],
-
-        employers: this.fb.array([this.createEmployerItem()]),
-        mayContactEmployer: [''],
-
-        additionalBenefitsDetails: [''],//, Validators.required], ??
-
-        // Other Benefits
-        haveDisabilityPlanBenefits: [false],
-        haveEmploymentInsuranceBenefits: [false],
-        haveIncomeAssistanceBenefits: [false],
-        haveCanadaPensionPlanBenefits: [false],
-        haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
-        haveCivilActionBenefits: [false],
-        haveOtherBenefits: [false],
-        otherSpecificBenefits: [''],
-        noneOfTheAboveBenefits: [false],
-      }),
-
+      expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-
-      declarationInformation: this.fb.group({
-        declaredAndSigned: ['', Validators.requiredTrue],
-        signature: ['', Validators.required],
-      }),
-
+      declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
     });
   }
-
-  // setRequiredFields() {
-  //   // set all form validation
-  //   // this.setCompletingOnBehalfOf();
-  //   // this.setCvapStaffSharing();
-  //   // this.setHospitalTreatment();
-  //   // this.setPreferredContactMethod();
-  //   this.setRepresentativePreferredMethodOfContact();
-  // }
-
-  // setRepresentativePreferredMethodOfContact(): void {
-  //   // TODO: this responseCode is a string for some reason in the form instead of a number. Why?
-  //   const responseCode: number = parseInt(this.form.get('representativeInformation.representativePreferredMethodOfContact').value);
-  //   if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
-  //   let options = { onlySelf: true, emitEvent: false };
-  //   let phoneControl = this.form.get('representativeInformation.representativePhoneNumber');
-  //   let emailControl = this.form.get('representativeInformation.representativeEmail');
-  //   let addressControls = [
-  //     this.form.get('representativeInformation').get('representativeAddress.country'),
-  //     this.form.get('representativeInformation').get('representativeAddress.province'),
-  //     this.form.get('representativeInformation').get('representativeAddress.city'),
-  //     this.form.get('representativeInformation').get('representativeAddress.line1'),
-  //     this.form.get('representativeInformation').get('representativeAddress.postalCode'),
-  //   ];
-
-  //   phoneControl.clearValidators();
-  //   phoneControl.setErrors(null);
-  //   emailControl.clearValidators();
-  //   emailControl.setErrors(null);
-  //   for (let control of addressControls) {
-  //     control.clearValidators();
-  //     control.setErrors(null);
-  //   }
-
-  //   if (responseCode === 100000000) {
-  //     phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-  //     this.representativePhoneIsRequired = true;
-  //     this.representativeEmailIsRequired = false;
-  //     // this.representativeAddressIsRequired = true;
-  //   } else if (responseCode === 100000001) {
-  //     emailControl.setValidators([Validators.required, Validators.email]);
-  //     this.representativePhoneIsRequired = false;
-  //     this.representativeEmailIsRequired = true;
-  //     // this.representativeAddressIsRequired = true;
-  //   } else if (responseCode === 100000002) {
-  //     // for (let control of addressControls) {
-  //     //   control.setValidators([Validators.required]);
-  //     // }
-  //     this.representativePhoneIsRequired = false;
-  //     this.representativeEmailIsRequired = false;
-  //     // this.representativeAddressIsRequired = true;
-  //   }
-
-  //   for (let control of addressControls) {
-  //     control.setValidators([Validators.required]);
-  //   }
-  //   this.representativeAddressIsRequired = true;
-
-  //   // phoneControl.markAsTouched();
-  //   phoneControl.updateValueAndValidity(options);
-  //   // emailControl.markAsTouched();
-  //   emailControl.updateValueAndValidity(options);
-  //   for (let control of addressControls) {
-  //     // control.markAsTouched();
-  //     control.updateValueAndValidity(options);
-  //   }
-  // }
-
-  // onRepresentativeFileBundle(fileBundle: FileBundle) {
-  //   try {
-  //     if (fileBundle.fileData && fileBundle.fileData.length > 0) {
-  //       this.showLegalGuardianDocumentDescription = true;
-  //     }
-  //     else {
-  //       this.showLegalGuardianDocumentDescription = false;
-  //     }
-  //     // save the files submitted from the component for attachment into the submitted form.
-  //     const patchObject = {};
-  //     patchObject['representativeInformation.legalGuardianFiles'] = fileBundle;
-
-  //     let fileName = fileBundle.fileName[0] || "";
-  //     this.form.get('representativeInformation.legalGuardianFiles.filename').patchValue(fileName);
-
-  //     let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
-  //     this.form.get('representativeInformation.legalGuardianFiles.body').patchValue(body);
-  //   }
-  //   catch (e) {
-  //     console.log(e);
-  //   }
-  // }
 }

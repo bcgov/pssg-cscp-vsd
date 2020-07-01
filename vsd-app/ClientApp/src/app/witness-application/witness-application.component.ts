@@ -6,10 +6,8 @@ import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
-// tslint:disable-next-line:no-duplicate-imports
 import { defaultFormat as _rollupMoment } from 'moment';
 import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
-
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
@@ -19,7 +17,6 @@ import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper, ApplicationType } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
-import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
@@ -27,6 +24,8 @@ import { POSTAL_CODE } from '../shared/regex.constants';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
+import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
+import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
 
 const moment = _rollupMoment || _moment;
 
@@ -73,7 +72,9 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   victimInfoHelper = new VictimInfoHelper();
   crimeInfoHelper = new CrimeInfoHelper();
   medicalInfoHelper = new MedicalInfoHelper();
+  expenseInfoHelper = new ExpenseInfoHelper();
   representativeInfoHelper = new RepresentativeInfoHelper();
+  declarationInfoHelper = new DeclarationInfoHelper();
   authInfoHelper = new AuthInfoHelper();
 
   constructor(
@@ -146,23 +147,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       });
   }
 
-  showSignPad(group, control): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-
-    const dialogRef = this.dialog.open(SignPadDialog, dialogConfig);
-    dialogRef.afterClosed().subscribe(
-      data => {
-        var patchObject = {};
-        patchObject[control] = data;
-        this.form.get(group).patchValue(
-          patchObject
-        );
-      }
-    );
-  }
-
   verifyCancellation(): void {
     const verifyDialogConfig = new MatDialogConfig();
     verifyDialogConfig.disableClose = true;
@@ -188,91 +172,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   getFormGroupName(groupIndex: any) {
     let elements: Array<string> = ['introduction', 'personalInformation', 'victimInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     return elements[groupIndex];
-  }
-
-  changeBenefitGroupValidity(values: any): void {
-    let minimumBenefitsMet = '';
-    const x = [
-      this.form.get('expenseInformation.haveCounsellingExpenses'),
-      this.form.get('expenseInformation.haveCounsellingTransportation'),
-      this.form.get('expenseInformation.havePrescriptionDrugExpenses'),
-    ];
-
-    let oneChecked = false;
-    x.forEach(c => {
-      if (oneChecked)
-        return;
-
-      if (c instanceof FormControl) {
-        if (c.value === true)
-          oneChecked = true;
-      }
-    });
-
-    // fake a 'true' as a string
-    minimumBenefitsMet = oneChecked ? 'yes' : '';
-
-    this.form.get('expenseInformation').patchValue({
-      minimumBenefitsSelected: minimumBenefitsMet
-    });
-  }
-
-  changeAdditionalBenefitGroupValidity(values: any): void {
-    let minimumBenefitsMet = '';
-    const x = [
-      this.form.get('expenseInformation.haveCrimeSceneCleaningExpenses'),
-      this.form.get('expenseInformation.noneOfTheAboveExpenses'),
-    ];
-
-    let oneChecked = false;
-    x.forEach(c => {
-      if (oneChecked)
-        return;
-
-      if (c instanceof FormControl) {
-        if (c.value === true)
-          oneChecked = true;
-      }
-    });
-
-    // fake a 'true' as a string
-    minimumBenefitsMet = oneChecked ? 'yes' : '';
-
-    this.form.get('expenseInformation').patchValue({
-      minimumAdditionalBenefitsSelected: minimumBenefitsMet
-    });
-  }
-
-  changeOtherBenefitGroupValidity(values: any): void {
-    let minimumBenefitsMet = '';
-    const x = [
-      this.form.get('expenseInformation.haveDisabilityPlanBenefits'),
-      this.form.get('expenseInformation.haveEmploymentInsuranceBenefits'),
-      this.form.get('expenseInformation.haveIncomeAssistanceBenefits'),
-      this.form.get('expenseInformation.haveCanadaPensionPlanBenefits'),
-      this.form.get('expenseInformation.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits'),
-      this.form.get('expenseInformation.haveCivilActionBenefits'),
-      this.form.get('expenseInformation.haveOtherBenefits'),
-      this.form.get('expenseInformation.noneOfTheAboveBenefits'),
-    ];
-
-    let oneChecked = false;
-    x.forEach(c => {
-      if (oneChecked)
-        return;
-
-      if (c instanceof FormControl) {
-        if (c.value === true)
-          oneChecked = true;
-      }
-    });
-
-    // fake a 'true' as a string
-    minimumBenefitsMet = oneChecked ? 'yes' : '';
-
-    this.form.get('expenseInformation').patchValue({
-      minimumOtherBenefitsSelected: minimumBenefitsMet
-    });
   }
 
   gotoPageIndex(stepper: MatStepper, selectPage: number): void {
@@ -425,53 +324,15 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   private buildApplicationForm(): FormGroup {
     return this.fb.group({
       introduction: this.fb.group({
-        understoodInformation: ['', Validators.requiredTrue]
+        understoodInformation: [null, Validators.requiredTrue]
       }),
       personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       victimInformation: this.victimInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      expenseInformation: this.fb.group({
-        haveCounsellingExpenses: [false],
-        haveCounsellingTransportation: [false],
-        havePrescriptionDrugExpenses: [false],
-        minimumBenefitsSelected: ['', Validators.required],
-
-        // Additional Expenses
-        haveCrimeSceneCleaningExpenses: [false],
-        noneOfTheAboveExpenses: [''],
-        minimumAdditionalBenefitsSelected: [''], // Dynamically required
-
-        missedWorkDueToDeathOfVictim: [''], // Dynamically required
-
-        didYouLoseWages: [''], //, Validators.required],
-        daysWorkMissedStart: [''], //, Validators.required],
-        daysWorkMissedEnd: [''],
-
-        employers: this.fb.array([this.createEmployerItem()]),
-        mayContactEmployer: [''],
-
-        additionalBenefitsDetails: [''],//, Validators.required], ??
-        // Other Benefits
-        haveDisabilityPlanBenefits: [false],
-        haveEmploymentInsuranceBenefits: [false],
-        haveIncomeAssistanceBenefits: [false],
-        haveCanadaPensionPlanBenefits: [false],
-        haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
-        haveCivilActionBenefits: [false],
-        haveOtherBenefits: [false],
-        otherSpecificBenefits: [''],
-        noneOfTheAboveBenefits: [false],
-        minimumOtherBenefitsSelected: [''], // Dynamically required
-      }),
-
+      expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-
-      declarationInformation: this.fb.group({
-        declaredAndSigned: ['', Validators.requiredTrue],
-        signature: ['', Validators.required],
-      }),
-
+      declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
     });
   }

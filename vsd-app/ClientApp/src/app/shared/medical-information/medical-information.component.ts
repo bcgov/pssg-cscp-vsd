@@ -49,8 +49,8 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        console.log("medical info component");
-        console.log(this.form);
+        // console.log("medical info component");
+        // console.log(this.form);
 
         if (this.formType === ApplicationType.Victim_Application) {
             this.otherTreatmentLabel = "Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?";
@@ -74,8 +74,6 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
                 hospitalControl.updateValueAndValidity();
             });
         }
-
-        //TODO - setup other change detection required field validation
     }
 
     addProvider(): void {

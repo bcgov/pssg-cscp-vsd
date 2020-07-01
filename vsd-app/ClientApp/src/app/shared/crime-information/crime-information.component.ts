@@ -69,8 +69,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        console.log("crime info component");
-        console.log(this.form);
+        // console.log("crime info component");
+        // console.log(this.form);
 
         //From witness form component - but minimumAdditionalBenefits doesn't even exist on that form, so can't get past expense info with this set
         // if (this.formType === ApplicationType.Witness_Application) {
@@ -211,11 +211,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     }
 
     clearReportEndDate(index: number) {
-        console.log("clearReportEndDate");
         this.policeReportItems = this.form.get('policeReports') as FormArray;
-        console.log(this.policeReportItems);
         let thisReport = this.policeReportItems.at(index) as FormGroup;
-        console.log(thisReport);
 
         if (thisReport.get('policeReportedMultipleTimes').value) {
             thisReport.get('reportEndDate').patchValue(null);
