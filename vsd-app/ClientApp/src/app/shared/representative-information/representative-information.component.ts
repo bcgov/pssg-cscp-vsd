@@ -133,17 +133,17 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         emailConfirmControl.updateValueAndValidity();
     }
 
-    onRepresentativeFileBundle(fileBundle: FileBundle) {
+    onFileBundle(fileBundle: FileBundle) {
         try {
             // save the files submitted from the component for attachment into the submitted form.
             const patchObject = {};
-            patchObject['legalGuardianFiles'] = fileBundle;
+            patchObject['documents'] = fileBundle;
 
             let fileName = fileBundle.fileName[0] || "";
-            this.form.get('legalGuardianFiles.filename').patchValue(fileName);
+            this.form.get('documents.filename').patchValue(fileName);
 
             let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
-            this.form.get('legalGuardianFiles.body').patchValue(body);
+            this.form.get('documents.body').patchValue(body);
         }
         catch (e) {
             console.log(e);

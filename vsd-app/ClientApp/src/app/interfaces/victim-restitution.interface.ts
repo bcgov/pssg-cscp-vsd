@@ -48,4 +48,5 @@ export interface VictimRestitutionInformation {
 export interface DocumentCollectioninformation {
   filename: string;
   body: string;
+  subject: string;
 }

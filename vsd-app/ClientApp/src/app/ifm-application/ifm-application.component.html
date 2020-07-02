@@ -2,33 +2,36 @@
   <div [ngBusy]="[busy, busy2]"></div>
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter">
-      <section class="application-nav">
-        <h3>Immediate Family Member Application</h3>
-        <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
-          <ng-template matStepperIcon="edit">
-            <mat-icon>done</mat-icon>
-          </ng-template>
-          <ng-template matStepperIcon="number">
-          </ng-template>
-          <mat-step label="Overview"></mat-step>
-          <mat-step label="Personal Information & Addresses"></mat-step>
-          <mat-step label="Victim Information"></mat-step>
-          <mat-step label="Crime Information"></mat-step>
-          <mat-step label="Medical & Dental Information"></mat-step>
-          <mat-step label="Expense & Benefits"></mat-step>
-          <mat-step label="Application on Behalf of Immediate Family Member"></mat-step>
-          <mat-step label="Declaration"></mat-step>
-          <mat-step label="Authorization"></mat-step>
-          <mat-step label="Review & Submit"></mat-step>
-        </mat-vertical-stepper>
-      </section>
+      <h3>Immediate Family Member Application</h3>
+      <section class="application-nav sticky-top">
+        <div>
+          <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
+            <ng-template matStepperIcon="edit">
+              <mat-icon>done</mat-icon>
+            </ng-template>
+            <ng-template matStepperIcon="number">
+            </ng-template>
+            <mat-step label="Overview"></mat-step>
+            <mat-step label="Personal Information & Addresses"></mat-step>
+            <mat-step label="Victim Information"></mat-step>
+            <mat-step label="Crime Information"></mat-step>
+            <mat-step label="Medical & Dental Information"></mat-step>
+            <mat-step label="Expense & Benefits"></mat-step>
+            <mat-step label="Application on Behalf of Immediate Family Member"></mat-step>
+            <mat-step label="Declaration"></mat-step>
+            <mat-step label="Authorization"></mat-step>
+            <mat-step label="Review & Submit"></mat-step>
+          </mat-vertical-stepper>
 
-      <section class="submit-container learn-benefits">
-        <div class="submit-content">
-          <h2>Want to learn more about your Benefits?</h2>
-          <p>Click below to open a new window and view the full summary of benefits.</p>
-          <p>You will not lose your progress on this application.</p>
-          <p><button class="btn btn-secondary btn-wrappable" (click)="showSummaryOfBenefits()">View Summary of Benefits</button></p>
+
+          <div class="submit-container learn-benefits">
+            <div class="submit-content">
+              <h3>Want to learn more about your Benefits?</h3>
+              <p>Click below to open a new window and view the full summary of benefits.</p>
+              <p>You will not lose your progress on this application.</p>
+              <p><button class="btn btn-secondary btn-wrappable" (click)="showSummaryOfBenefits()">View Summary of Benefits</button></p>
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -37,7 +40,7 @@
       <form [formGroup]="form">
 
         <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == 0"></app-introduction>
-        
+
         <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1"></app-personal-information>
 
         <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2"></app-victim-information>

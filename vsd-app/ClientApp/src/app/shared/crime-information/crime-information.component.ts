@@ -140,28 +140,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         this.showRemoveCourtInfo = this.courtFileItems.length > 1;
     }
 
-    onFileBundle(fileBundle: FileBundle) {
-        try {
-            // save the files submitted from the component for attachment into the submitted form.
-            const patchObject = {};
-            patchObject['additionalInformationFiles'] = fileBundle;
-            this.form.get('additionalInformationFiles.filename').patchValue(fileBundle.fileName[0]);
-            var splitValues = fileBundle.fileData[0].split(',');
-
-            //this.form.get('documentInformation.body').patchValue(fileBundle.fileData[0]);
-            this.form.get('additionalInformationFiles.body').patchValue(splitValues[1]);
-
-            //this.form.get('additionalInformationFiles').value['0'].filename = fileBundle.fileName[0];
-            //var splitValues = fileBundle.fileData[0].split(',');
-            //this.form.get('additionalInformationFiles').value['0'].body = splitValues[1];
-
-            fileBundle = fileBundle;
-        }
-        catch (e) {
-            console.log(e);
-        }
-    }
-
     showSignPad(group, control): void {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = true;

@@ -111,7 +111,7 @@
 
             <app-field label="If you have any additional information, please upload it below">
             </app-field>
-            <app-file-uploader-box [initialValues]="form.value.additionalInformation" (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
+            <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')" ></app-file-uploader>
         </section>
     </section>
 
@@ -145,9 +145,9 @@
                     <th scope="col" class="police-file-header">Police File Number</th>
                     <th scope="col" class="police-file-header">Police Force</th>
                     <th scope="col" class="police-file-header">Name of Investigating Officer</th>
-                    <th scope="col" class="police-file-header">Police Reporting Start Date</th>
+                    <th scope="col" class="police-file-header">Police Reporting Start Date <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip></th>
                     <th scope="col" class="police-file-header">Police Reporting End Date</th>
-                    <th scope="col" class="police-file-header">Multiple reports</th>
+                    <th scope="col" class="police-file-header">Unsure of date</th>
                     <th></th>
                 </thead>
                 <tbody>
@@ -382,3 +382,6 @@
         </section>
     </section>
 </div>
+
+<!-- Tool tips -->
+<ng-template #estimateDateRange>Please estimate the time frame the report was made.</ng-template>

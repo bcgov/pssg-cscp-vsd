@@ -142,47 +142,34 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // Include upload file
                 try
                 {
-                    int documentCollectionLength = 0;
-                    if (model.CrimeInformation.additionalInformationFiles != null && model.CrimeInformation.additionalInformationFiles.fileName.Length > 0)
-                    {
-                        ++documentCollectionLength;
-                    }
-                    if (model.RepresentativeInformation.legalGuardianFiles != null && model.RepresentativeInformation.legalGuardianFiles.fileName.Length > 0)
-                    {
-                        ++documentCollectionLength;
-                    }
+                    int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length;
 
                     if (documentCollectionLength > 0)
                     {
                         application.DocumentCollection = new Documentcollection[documentCollectionLength];
-                    }
+                        int documentIndex = 0;
 
-                    int documentIndex = 0;
-
-                    if (model.CrimeInformation.additionalInformationFiles != null)
-                    {
-                        if (model.CrimeInformation.additionalInformationFiles.fileName.Length > 0)
+                        for (int i = 0; i < model.CrimeInformation.documents.Length; ++i)
                         {
                             Documentcollection tempDocumentCollection = new Documentcollection();
-                            tempDocumentCollection.body = model.CrimeInformation.additionalInformationFiles.body;
-                            tempDocumentCollection.filename = model.CrimeInformation.additionalInformationFiles.fileName;
-                            tempDocumentCollection.subject = model.CrimeInformation.documentDescription;
+                            tempDocumentCollection.body = model.CrimeInformation.documents[i].body;
+                            tempDocumentCollection.filename = model.CrimeInformation.documents[i].fileName;
+                            tempDocumentCollection.subject = model.CrimeInformation.documents[i].subject;
+                            application.DocumentCollection[documentIndex] = tempDocumentCollection;
+                            ++documentIndex;
+                        }
+
+                        for (int i = 0; i < model.RepresentativeInformation.documents.Length; ++i)
+                        {
+                            Documentcollection tempDocumentCollection = new Documentcollection();
+                            tempDocumentCollection.body = model.RepresentativeInformation.documents[i].body;
+                            tempDocumentCollection.filename = model.RepresentativeInformation.documents[i].fileName;
+                            tempDocumentCollection.subject = model.RepresentativeInformation.documents[i].subject;
                             application.DocumentCollection[documentIndex] = tempDocumentCollection;
                             ++documentIndex;
                         }
                     }
-
-                    if (model.RepresentativeInformation.legalGuardianFiles != null)
-                    {
-                        if (model.RepresentativeInformation.legalGuardianFiles.fileName.Length > 0)
-                        {
-                            Documentcollection tempDocumentCollection = new Documentcollection();
-                            tempDocumentCollection.body = model.RepresentativeInformation.legalGuardianFiles.body;
-                            tempDocumentCollection.filename = model.RepresentativeInformation.legalGuardianFiles.fileName;
-                            tempDocumentCollection.subject = model.RepresentativeInformation.documentDescription;
-                            application.DocumentCollection[documentIndex] = tempDocumentCollection;
-                        }
-                    }
+                    
                 }
                 catch (Exception e)
                 {

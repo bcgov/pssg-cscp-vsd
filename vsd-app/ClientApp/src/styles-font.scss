@@ -273,7 +273,7 @@ hr {
     margin-bottom: 20px;
     padding: 30px;
     padding-top: 20px;
-    h2 {
+    h2, h3 {
         color: #fff;
     }
 }
@@ -292,6 +292,11 @@ hr {
 
 input.form-control {
     &.date-picker {
-      background-color: #fff;
+        background-color: #fff;
     }
-  }
+}
+
+.sticky-top {
+    z-index: 1000 !important;
+    background-color: white;
+}

@@ -14,7 +14,7 @@ export class RepresentativeInfoHelper {
             representativePreferredMethodOfContact: [0],   // Phone = 100000000, Email = 100000001, Mail = 100000002
             representativePhoneNumber: [''],
             representativeAlternatePhoneNumber: [''],
-            
+
             // representativeEmail: [''],
             // representativeConfirmEmail: [''],
             representativeEmail: ['', [Validators.email]], //, [Validators.required, Validators.email]],
@@ -31,10 +31,7 @@ export class RepresentativeInfoHelper {
                 province: [{ value: 'British Columbia', disabled: false }],
                 country: [{ value: 'Canada', disabled: false }],
             }),
-            legalGuardianFiles: fb.group({
-                filename: [''],
-                body: [''],
-            }),
+            documents: fb.array([]),
             relationshipToPerson: [''],
         };
 

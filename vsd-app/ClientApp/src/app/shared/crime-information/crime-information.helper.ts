@@ -18,10 +18,7 @@ export class CrimeInfoHelper {
             crimeLocations: fb.array([this.createCrimeLocationItem(fb)]),
             crimeDetails: ['', Validators.required],
             crimeInjuries: ['', Validators.required],
-            additionalInformationFiles: fb.group({
-                filename: [''],
-                body: [''],
-            }),
+            documents: fb.array([]),
 
             wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]], // No: 100000000 Yes: 100000001
 
