@@ -127,18 +127,11 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         const dialogRef = this.matDialog.open(SignPadDialog, dialogConfig);
         dialogRef.afterClosed().subscribe(
             data => {
-                // TODO: This timeout is required so the page structure doesn't explode after the signature is filled.
-                // why is this is like this. Leaving the patch in there.
-                // I suspect that maybe converting the signature to png needs to finish before proceeding
-                // Maybe this will fix itself as the form is cleaned up.
-                // This actually breaks the whole page layout on closing the signature box if removed. WHAAAA
-                setTimeout(() => {
-                    var patchObject = {};
-                    patchObject[control] = data;
-                    this.form.get(group).patchValue(
-                        patchObject
-                    );
-                }, 1)
+                var patchObject = {};
+                patchObject[control] = data;
+                this.form.get(group).patchValue(
+                    patchObject
+                );
             },
             err => console.log(err)
         );

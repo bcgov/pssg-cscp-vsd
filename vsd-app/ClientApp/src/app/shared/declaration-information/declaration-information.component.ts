@@ -45,7 +45,6 @@ export class DeclarationInformationComponent extends FormBase implements OnInit 
         if (this.formType === ApplicationType.Witness_Application) {
             this.eligible_name = "Witnesses";
         }
-
     }
 
     showSignPad(control): void {
