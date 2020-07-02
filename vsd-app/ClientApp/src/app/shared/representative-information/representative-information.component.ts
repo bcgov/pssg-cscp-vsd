@@ -61,40 +61,46 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         }
 
         this.form.get('completingOnBehalfOf').valueChanges.subscribe(value => {
+            let options = { onlySelf: true, emitEvent: false };
             let representativeFirstName = this.form.get('representativeFirstName');
             let representativeLastName = this.form.get('representativeLastName');
             let representativePreferredMethodOfContact = this.form.get('representativePreferredMethodOfContact');
 
             representativeFirstName.clearValidators();
-            representativeFirstName.setErrors(null);
+            representativeFirstName.setErrors(null, options);
             representativeLastName.clearValidators();
-            representativeLastName.setErrors(null);
+            representativeLastName.setErrors(null, options);
             representativePreferredMethodOfContact.clearValidators();
-            representativePreferredMethodOfContact.setErrors(null);
+            representativePreferredMethodOfContact.setErrors(null, options);
+            this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'representativeAddress');
 
             let useValidation = value === 100000002 || value === 100000003;
-            this.setupRepresentativeContactInformation(this.form.get('representativePreferredMethodOfContact').value);  // Have to clear contact validators on contact method change
             if (useValidation) {
+                this.setupRepresentativeContactInformation(this.form.get('representativePreferredMethodOfContact').value);  // Have to clear contact validators on contact method change
                 representativeFirstName.setValidators([Validators.required]);
                 representativeLastName.setValidators([Validators.required]);
                 representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
 
                 representativeFirstName.markAsTouched();
-                representativeFirstName.updateValueAndValidity();
+                representativeFirstName.updateValueAndValidity(options);
                 representativeLastName.markAsTouched();
-                representativeLastName.updateValueAndValidity();
-                representativePreferredMethodOfContact.markAsTouched();
-                representativePreferredMethodOfContact.updateValueAndValidity();
+                representativeLastName.updateValueAndValidity(options);
+                representativePreferredMethodOfContact.markAsTouched(options);
+                representativePreferredMethodOfContact.updateValueAndValidity(options);
             }
         });
 
         this.form.get('representativePreferredMethodOfContact').valueChanges.subscribe(value => {
             let contactMethod = parseInt(value);
-            this.setupRepresentativeContactInformation(contactMethod);
+            let completingOnBehalfOf = this.form.get('completingOnBehalfOf').value;
+            if (completingOnBehalfOf === 100000002 || completingOnBehalfOf === 100000003) {
+                this.setupRepresentativeContactInformation(contactMethod);
+            }
         });
     }
 
     setupRepresentativeContactInformation(contactMethod: number): void {
+        let options = { onlySelf: true, emitEvent: false };
         let phoneControl = this.form.get('representativePhoneNumber');
         let emailControl = this.form.get('representativeEmail');
         let emailConfirmControl = this.form.get('representativeConfirmEmail');
@@ -103,11 +109,11 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         this.addressHelper.setAddressAsRequired(this.form, 'representativeAddress');
 
         phoneControl.setValidators([Validators.minLength(10), Validators.maxLength(10)]);
-        phoneControl.setErrors(null);
+        phoneControl.setErrors(null, options);
         emailControl.setValidators([Validators.email]);
-        emailControl.setErrors(null);
+        emailControl.setErrors(null, options);
         emailConfirmControl.setValidators([Validators.email, EmailValidator('representativeEmail')]);
-        emailConfirmControl.setErrors(null);
+        emailConfirmControl.setErrors(null, options);
 
         if (contactMethod === 100000000) {
             phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
@@ -126,11 +132,11 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         this.representativeAddressIsRequired = true;
 
         phoneControl.markAsTouched();
-        phoneControl.updateValueAndValidity();
+        phoneControl.updateValueAndValidity(options);
         emailControl.markAsTouched();
-        emailControl.updateValueAndValidity();
+        emailControl.updateValueAndValidity(options);
         emailConfirmControl.markAsTouched();
-        emailConfirmControl.updateValueAndValidity();
+        emailConfirmControl.updateValueAndValidity(options);
     }
 
     onFileBundle(fileBundle: FileBundle) {

@@ -5,6 +5,7 @@ export class AddressHelper {
     postalRegex = POSTAL_CODE;
 
     public clearAddressValidatorsAndErrors(form: FormGroup, field: string) {
+        let options = { onlySelf: true, emitEvent: false };
         let addressControls = [
             form.get(field + '.country'),
             form.get(field + '.province'),
@@ -16,15 +17,15 @@ export class AddressHelper {
 
         for (let control of addressControls) {
             control.clearValidators();
-            control.setErrors(null);
+            control.setErrors(null, options);
             control.markAsTouched();
-            control.updateValueAndValidity();
+            control.updateValueAndValidity(options);
         }
 
         postalControl.setValidators([Validators.pattern(this.postalRegex)]);
-        postalControl.setErrors(null);
+        postalControl.setErrors(null, options);
         postalControl.markAsTouched();
-        postalControl.updateValueAndValidity();
+        postalControl.updateValueAndValidity(options);
     }
 
     public setAddressAsRequired(form: FormGroup, field: string) {
