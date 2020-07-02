@@ -20,17 +20,17 @@
         </app-field>
         <app-field label="Crime occurred over a period of time" errorMessage="Please make a selection" [showChevrons]="false">
             <label class="inline-label">
-                <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
+                <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur" (change)="whenDidCrimeOccurChange($event)">
                 <span>Yes</span>
             </label>
             <label class="inline-label">
-                <input type="radio" [value]="false" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur">
+                <input type="radio" [value]="false" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur" (change)="whenDidCrimeOccurChange($event)">
                 <span>No</span>
             </label>
         </app-field>
 
         <section>
-            <app-field label="Date(s) of crime" [required]="true" [valid]="isFieldValid('crimePeriodStart')" errorMessage="Please enter the crime date">
+            <app-field label="Date(s) of crime" [required]="true" [valid]="form.get('whenDidCrimeOccur').value === true?isFieldValid('crimePeriodStart') && isFieldValid('crimePeriodEnd'):isFieldValid('crimePeriodStart')" errorMessage="Please enter the crime date">
                 <input type="text" (dateChange)="crimePeriodStartChange($event)" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" [max]="todaysDate" (click)="crimePeriodStartPicker.open()" readonly>
                 <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
                 <span *ngIf="form.get('whenDidCrimeOccur').value === true || form.get('unsureOfCrimeDates').value === true">
@@ -41,7 +41,7 @@
             </app-field>
         </section>
 
-        <app-field label="Is this application being filed within one year of the date of the crime?" [valid]="isFieldValid('applicationFiledWithinOneYearFromCrime')" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
+        <!-- <app-field label="Is this application being filed within one year of the date of the crime?" [valid]="isFieldValid('applicationFiledWithinOneYearFromCrime')" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
             <label class="inline-label">
                 <input type="radio" [value]="true" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
                 <span>Yes</span>
@@ -50,9 +50,9 @@
                 <input type="radio" [value]="false" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
                 <span>No</span>
             </label>
-        </app-field>
+        </app-field> -->
 
-        <section *ngIf="form.get('applicationFiledWithinOneYearFromCrime').value === false">
+        <section *ngIf="showWhyDidYouNotApplySooner">
             <app-field label="Please briefly explain why you did not apply sooner" [tooltipReference]="fileWithinYearTemplate">
                 <textarea class="form-control standard" formControlName="whyDidYouNotApplySooner"></textarea>
             </app-field>
@@ -111,7 +111,7 @@
 
             <app-field label="If you have any additional information, please upload it below">
             </app-field>
-            <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')" ></app-file-uploader>
+            <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')"></app-file-uploader>
         </section>
     </section>
 
@@ -145,7 +145,8 @@
                     <th scope="col" class="police-file-header">Police File Number</th>
                     <th scope="col" class="police-file-header">Police Force</th>
                     <th scope="col" class="police-file-header">Name of Investigating Officer</th>
-                    <th scope="col" class="police-file-header">Police Reporting Start Date <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip></th>
+                    <th scope="col" class="police-file-header">Police Reporting Start Date <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip>
+                    </th>
                     <th scope="col" class="police-file-header">Police Reporting End Date</th>
                     <th scope="col" class="police-file-header">Unsure of date</th>
                     <th></th>

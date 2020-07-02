@@ -41,10 +41,13 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     ApplicationType = ApplicationType;
 
     today = new Date();
+    oneYearAgo = moment(new Date()).subtract(1, 'year');
     policeReportMinDates: Date[] = [];
 
     crimePeriodStartDate: Date = null;
+    showWhyDidYouNotApplySooner: boolean = false;
     crimeInfoHelper = new CrimeInfoHelper();
+
 
     policeForceList = ["Surrey RCMP",
         "Vancouver Police Department",
@@ -69,30 +72,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        // console.log("crime info component");
-        // console.log(this.form);
-
-        //From witness form component - but minimumAdditionalBenefits doesn't even exist on that form, so can't get past expense info with this set
-        // if (this.formType === ApplicationType.Witness_Application) {
-        //     this.form.get('victimDeceasedFromCrime').valueChanges.subscribe(value => {
-        //         let minimumAdditionalBenefits = this.form.parent.get('expenseInformation.minimumAdditionalBenefitsSelected');
-        //         let missedWork = this.form.parent.get('expenseInformation.missedWorkDueToDeathOfVictim');
-
-        //         minimumAdditionalBenefits.clearValidators();
-        //         minimumAdditionalBenefits.setErrors(null);
-        //         missedWork.clearValidators();
-        //         missedWork.setErrors(null);
-
-        //         let useValidation = value === true;
-        //         if (useValidation) {
-        //             minimumAdditionalBenefits.setValidators([Validators.required]);
-        //             missedWork.setValidators([Validators.required]);
-        //         }
-        //         //setTimeout(() => { control.updateValueAndValidity(); })
-        //         minimumAdditionalBenefits.updateValueAndValidity();
-        //         missedWork.updateValueAndValidity();
-        //     });
-        // }
     }
 
     addCrimeLocation(): void {
@@ -173,6 +152,26 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         let endDate = this.form.get('crimePeriodEnd').value;
         if (endDate && moment(endDate).isBefore(startDate)) {
             this.form.get('crimePeriodEnd').patchValue(null);
+        }
+
+        this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
+        this.form.get('applicationFiledWithinOneYearFromCrime').patchValue(!this.showWhyDidYouNotApplySooner);
+    }
+
+    whenDidCrimeOccurChange(event) {
+        let crimePeriodEndControl = this.form.get('crimePeriodEnd');
+
+        if (this.form.get('whenDidCrimeOccur').value) {
+            crimePeriodEndControl.setValidators([Validators.required]);
+            crimePeriodEndControl.markAsTouched();
+            crimePeriodEndControl.updateValueAndValidity();
+        }
+        else {
+            this.form.get('crimePeriodEnd').patchValue(null);
+            crimePeriodEndControl.clearValidators();
+            crimePeriodEndControl.setErrors(null);
+            crimePeriodEndControl.markAsTouched();
+            crimePeriodEndControl.updateValueAndValidity();
         }
     }
 

@@ -12,7 +12,7 @@ export class CrimeInfoHelper {
             whenDidCrimeOccur: [''],
             crimePeriodStart: ['', Validators.required],
             crimePeriodEnd: [''],
-            applicationFiledWithinOneYearFromCrime: ['', Validators.required],
+            applicationFiledWithinOneYearFromCrime: [''],
             whyDidYouNotApplySooner: [''],
 
             crimeLocations: fb.array([this.createCrimeLocationItem(fb)]),
