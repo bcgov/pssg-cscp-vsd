@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
-import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, FormControl, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-// import * as _moment from 'moment';
-// tslint:disable-next-line:no-duplicate-imports
-// import { defaultFormat as _rollupMoment } from 'moment';
 import { CanDeactivateGuard } from '../services/can-deactivate-guard.service';
 import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
@@ -20,22 +17,17 @@ import { HOSPITALS } from '../shared/hospital-list';
 import { EnumHelper, ApplicationType } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
-import { FileBundle } from '../models/file-bundle';
-import { VALID } from '@angular/forms/src/model';
 import { window } from 'ngx-bootstrap';
 import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
 import { REPRESENTATIVE_LIST } from '../constants/representative-list';
-import * as moment from 'moment';
-import { CrimeInformationComponent } from '../shared/crime-information/crime-information.component';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { POSTAL_CODE } from '../shared/regex.constants';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
-// const moment = _rollupMoment || _moment;
-
-// export const postalRegex = '(^\\d{5}([\-]\\d{4})?$)|(^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$)';
+import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
+import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
 
 @Component({
   selector: 'app-victim-application',
@@ -58,7 +50,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   busy: Promise<any>;
   busy2: Promise<any>;
   busy3: Promise<any>;
-  // form: FormGroup; // form is defined as a FormGroup in the FormBase
   showValidationMessage: boolean;
   familyDoctorNameItem: FormControl;
   otherTreatmentItems: FormArray;
@@ -84,9 +75,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   ApplicationType = ApplicationType;
 
-  // matchingEmail: string; // this is the value of the email that both email fields should match.
-  // todaysDate = new Date(); // for the birthdate validation
-  // oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
   // a field that represents the current employment income information state
   employmentIncomeInformation: EmploymentIncomeInformation;
   employmentInfoFormIsValid: boolean = false;
@@ -96,7 +84,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   personalInfoHelper = new PersonalInfoHelper();
   crimeInfoHelper = new CrimeInfoHelper();
   medicalInfoHelper = new MedicalInfoHelper();
+  expenseInfoHelper = new ExpenseInfoHelper();
   representativeInfoHelper = new RepresentativeInfoHelper();
+  declarationInfoHelper = new DeclarationInfoHelper();
   authInfoHelper = new AuthInfoHelper();
 
   constructor(
@@ -132,12 +122,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }
     );
 
-    //return verifyDialogRef.navigateAwaySelection$;
-    // if the editName !== this.user.name
-    //    if (this.user.name !== this.editName) {
-    //return window.confirm('Discard changes?');
-    //}
-
     return false;
   }
 
@@ -154,12 +138,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
 
-    // subscribe to form changes to set the form in various ways
-    // this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').valueChanges.subscribe(() => this.setRequiredFields('expenseInformation.haveLostEmploymentIncomeExpenses'));
-    // this.form.get('representativeInformation.completingOnBehalfOf').valueChanges.subscribe(() => this.setRequiredFields('representativeInformation.completingOnBehalfOf'));
-    // this.form.get('representativeInformation.representativePreferredMethodOfContact').valueChanges.subscribe(() => this.setRequiredFields('representativeInformation.representativePreferredMethodOfContact'));
-    // this.form.get('authorizationInformation.allowCvapStaffSharing').valueChanges.subscribe(() => this.setRequiredFields('authorizationInformation.allowCvapStaffSharing'));
-
     this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.validateEmploymentInfoForm());
   }
 
@@ -171,30 +149,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      expenseInformation: this.fb.group({
-        haveMedicalExpenses: [false],
-        haveDentalExpenses: [false],
-        havePrescriptionDrugExpenses: [false],
-        haveCounsellingExpenses: [false],
-        haveLostEmploymentIncomeExpenses: [false],
-        havePersonalPropertyLostExpenses: [false],
-        haveProtectiveMeasureExpenses: [false],
-        haveDisabilityExpenses: [false],
-        haveCrimeSceneCleaningExpenses: [false],
-        haveOtherExpenses: [false],
-        otherSpecificExpenses: [''],
-        minimumExpensesSelected: ['', Validators.required],
-
-        haveDisabilityPlanBenefits: [false],
-        haveEmploymentInsuranceBenefits: [false],
-        haveIncomeAssistanceBenefits: [false],
-        haveCanadaPensionPlanBenefits: [false],
-        haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
-        haveCivilActionBenefits: [false],
-        haveOtherBenefits: [false],
-        otherSpecificBenefits: [''],
-        noneOfTheAboveBenefits: [false],
-      }),//{ validator: this.requireCheckboxesToBeCheckedValidator }),
+      expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       employmentIncomeInformation: this.fb.group({
         wereYouEmployedAtTimeOfCrime: ['', Validators.required],
         wereYouAtWorkAtTimeOfIncident: [''],
@@ -214,44 +169,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       // employmentIncomeInformation: [null],//, Validators.required],
 
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-
-      declarationInformation: this.fb.group({
-        declaredAndSigned: ['', Validators.requiredTrue],
-        signature: ['', Validators.required],
-      }),
-
+      declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
     });
-    // set default contact method
-    // this.setPreferredContactMethod();
   }
 
   showSummaryOfBenefits(): void {
     const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
-  }
-  showSignPad(group, control): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-
-    const dialogRef = this.matDialog.open(SignPadDialog, dialogConfig);
-    dialogRef.afterClosed().subscribe(
-      data => {
-        // TODO: This timeout is required so the page structure doesn't explode after the signature is filled.
-        // why is this is like this. Leaving the patch in there.
-        // I suspect that maybe converting the signature to png needs to finish before proceeding
-        // Maybe this will fix itself as the form is cleaned up.
-        // This actually breaks the whole page layout on closing the signature box if removed. WHAAAA
-        setTimeout(() => {
-          var patchObject = {};
-          patchObject[control] = data;
-          this.form.get(group).patchValue(
-            patchObject
-          );
-        }, 1)
-      },
-      err => console.log(err)
-    );
   }
   verifyCancellation(): void {
     const verifyDialogConfig = new MatDialogConfig();
@@ -269,41 +193,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       },
       err => { console.log(err) }
     );
-  }
-
-  changeGroupValidity(values: any): void {
-    // whenever an expenseInformation checkbox is changed we
-    // set whether the minimum expenses value is met into part of the form that isn't user editable.
-    let expenseMinimumMet = '';
-    const x = [
-      this.form.get('expenseInformation.haveMedicalExpenses'),
-      this.form.get('expenseInformation.haveDentalExpenses'),
-      this.form.get('expenseInformation.benefitsPrescription'),
-      this.form.get('expenseInformation.havePrescriptionDrugExpenses'),
-      this.form.get('expenseInformation.haveCounsellingExpenses'),
-      this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses'),
-      this.form.get('expenseInformation.havePersonalPropertyLostExpenses'),
-      this.form.get('expenseInformation.haveProtectiveMeasureExpenses'),
-      this.form.get('expenseInformation.haveDisabilityExpenses'),
-      this.form.get('expenseInformation.haveCrimeSceneCleaningExpenses'),
-      this.form.get('expenseInformation.haveOtherExpenses'),
-    ];
-    //determine if one of the checkboxes is true
-    let oneChecked = false;
-    x.forEach(c => {
-      // TODO: This should always return if not null because truthy. Second if should never trigger?
-      if (oneChecked)
-        return;
-      if (c instanceof FormControl) {
-        if (c.value === true)
-          oneChecked = true;
-      }
-    });
-    // fake a 'true' as a string
-    expenseMinimumMet = oneChecked ? 'yes' : '';
-    this.form.get('expenseInformation').patchValue({
-      minimumExpensesSelected: expenseMinimumMet
-    });
   }
 
   gotoPageIndex(stepper: MatStepper, selectPage: number): void {
@@ -611,7 +500,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
   // -----------METHODS TO ADJUST FORM STATE ---------------------------------
 
-  
+
   setLostEmploymentIncomeExpenses(): void {
     // if the employment income expenses are set to true
     // the employed when crime occured should become required
@@ -702,10 +591,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       }
     }
   }
-  
+
   validateEmploymentInfoForm() {
     let eiForm = document.querySelector(".employment-info-form");
     this.employmentInfoFormIsValid = eiForm.classList.contains("ng-valid");
   }
-  
+
 }

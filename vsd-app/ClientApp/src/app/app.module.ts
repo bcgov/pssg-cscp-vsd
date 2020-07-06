@@ -44,7 +44,6 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { JusticeApplicationDataService } from './services/justice-application-data.service';
 import { AppComponent } from './app.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
-//import { DynamicsDataService } from './services/dynamics-data.service';
 import { CanDeactivateGuard } from './services/can-deactivate-guard.service';
 import { StaticComponent } from './static/static.component';
 import { HomeComponent } from './home/home.component';
@@ -73,8 +72,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
 import { NgBusyModule } from 'ng-busy';
 import { BsDatepickerModule, AlertModule, BsDropdownModule } from 'ngx-bootstrap';
-//import { IntlTelInputNgModule } from 'intl-tel-input-ng';
-//import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { TermsAndConditionsComponent } from './lite/terms-and-conditions/terms-and-conditions.component';
 import { AliasDataService } from './services/alias-data.service';
 import { FieldComponent } from './shared/field/field.component';
@@ -86,7 +83,6 @@ import { TestComponent } from './test/test.component';
 import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
 import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
 import { AddressBlockComponent } from './address-block/address-block.component';
-// import { VictimInformationComponent } from './victim-information/victim-information.component';
 import { NameBlockComponent } from './name-block/name-block.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { FilenameBlockComponent } from './filename-block/filename-block.component';
@@ -98,6 +94,9 @@ import { MedicalInformationComponent } from './shared/medical-information/medica
 import { VictimInformationComponent } from './shared/victim-information/victim-information.component';
 import { PersonalInformationComponent } from './shared/personal-information/personal-information.component';
 import { RepresentativeInformationComponent } from './shared/representative-information/representative-information.component';
+import { IntroductionComponent } from './shared/introduction/introduction.component';
+import { DeclarationInformationComponent } from './shared/declaration-information/declaration-information.component';
+import { ExpenseInformationComponent } from './shared/expense-information/expense-information.component';
 
 @NgModule({
   declarations: [
@@ -140,6 +139,9 @@ import { RepresentativeInformationComponent } from './shared/representative-info
     VictimInformationComponent,
     PersonalInformationComponent,
     RepresentativeInformationComponent,
+    IntroductionComponent,
+    DeclarationInformationComponent,
+    ExpenseInformationComponent,
     NameBlockComponent,
     DatePickerComponent,
     FilenameBlockComponent,

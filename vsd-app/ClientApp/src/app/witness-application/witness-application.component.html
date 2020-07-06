@@ -2,299 +2,82 @@
   <div [ngBusy]="[busy, busy2]"></div>
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter">
-      <section class="application-nav">
-        <h3>Witness Application</h3>
-        <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
-          <ng-template matStepperIcon="edit">
-            <mat-icon>done</mat-icon>
-          </ng-template>
-          <ng-template matStepperIcon="number">
-          </ng-template>
-          <mat-step label="Overview"></mat-step>
-          <mat-step label="Personal Information & Addresses"></mat-step>
-          <mat-step label="Victim Information"></mat-step>
-          <mat-step label="Crime Information"></mat-step>
-          <mat-step label="Medical & Dental Information"></mat-step>
-          <mat-step label="Expense & Benefits"></mat-step>
-          <mat-step label="Application on Behalf of Witness"></mat-step>
-          <mat-step label="Declaration"></mat-step>
-          <mat-step label="Authorization"></mat-step>
-          <mat-step label="Review & Submit"></mat-step>
-        </mat-vertical-stepper>
-      </section>
+      <h3>Witness Application</h3>
+      <section class="application-nav sticky-top">
+        <div>
+          <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
+            <ng-template matStepperIcon="edit">
+              <mat-icon>done</mat-icon>
+            </ng-template>
+            <ng-template matStepperIcon="number">
+            </ng-template>
+            <mat-step label="Overview"></mat-step>
+            <mat-step label="Personal Information & Addresses"></mat-step>
+            <mat-step label="Victim Information"></mat-step>
+            <mat-step label="Crime Information"></mat-step>
+            <mat-step label="Medical & Dental Information"></mat-step>
+            <mat-step label="Expense & Benefits"></mat-step>
+            <mat-step label="Application on Behalf of Witness"></mat-step>
+            <mat-step label="Declaration"></mat-step>
+            <mat-step label="Authorization"></mat-step>
+            <mat-step label="Review & Submit"></mat-step>
+          </mat-vertical-stepper>
 
-      <section class="submit-container learn-benefits">
-        <div class="submit-content">
-          <h2>Want to learn more about your Benefits?</h2>
-          <p>Click below to open a new window and view the full summary of benefits.</p>
-          <p>You will not lose your progress on this application.</p>
-          <p><button class="btn btn-secondary btn-wrappable" (click)="showSummaryOfBenefits()">View Summary of Benefits</button></p>
+          <div class="submit-container learn-benefits">
+            <div class="submit-content">
+              <h2>Want to learn more about your Benefits?</h2>
+              <p>Click below to open a new window and view the full summary of benefits.</p>
+              <p>You will not lose your progress on this application.</p>
+              <p><button class="btn btn-secondary btn-wrappable" (click)="showSummaryOfBenefits()">View Summary of Benefits</button></p>
+            </div>
+          </div>
         </div>
       </section>
     </div>
 
     <div class="col-lg-7 col-sm-12">
       <form [formGroup]="form">
-        <div *ngIf="dataLoaded || true">
-          <div formGroupName="introduction" *ngIf="this.currentFormStep == 0">
-            <div class="page-header">
-              <h1>Overview</h1>
-            </div>
 
-            <h2>Before you apply</h2>
-            <h3>Who may use this application?</h3>
+        <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == 0"></app-introduction>
 
-            <p>This application package is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who is not related to the victim but has a strong emotional attachment to the victim and witnesses in close proximity an eligible offence that causes a life-threatening injury or death to the victim or witnesses the immediate aftermath of an eligible offence that caused the death of the victim.</p>
-            <p>If this definition does not apply to you, please see the application forms for <a routerLink="/ifm-application">Immediate Family Members</a> or <a routerLink="/victim-application">Victims</a>.</p>
+        <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1"></app-personal-information>
 
-            <h3>What types of benefits does the Crime Victim's Assistance Program provide?</h3>
+        <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2"></app-victim-information>
 
-            <p>Benefits that may be available to Witnesses include:</p>
-            <ul class="list">
-              <li>counselling</li>
-              <li>prescription drug expenses</li>
-              <li>transportation and related expenses</li>
-              <li>crime scene cleaning</li>
-            </ul>
+        <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3"></app-crime-information>
 
-            <h3>The Crime Victim Assistance Program will NOT cover:</h3>
-            <ul class="list">
-              <li>injuries or loss sustained from motor vehicle accidents</li>
-              <li>injuries or loss sustained at work, and which are covered by WorkSafeBC</li>
-              <li>claims for pain and suffering</li>
-              <li>lost or stolen property</li>
-              <li>injuries sustained from an offence occurring outside of B.C. or prior to July 1, 1972</li>
-            </ul>
+        <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4"></app-medical-information>
 
-            <div class="attention">
-              <h3>Note</h3>
-              <p>
-                The Crime Victim Assistance Program will only provide benefits that are not covered by other programs<br />
-                (e.g., EI, ICBC, extended health coverage, personal insurance).
-              </p>
-              <p><a [routerLink]="" (click)="showSummaryOfBenefits()">View full summary of benefits</a></p>
-            </div>
+        <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5"></app-expense-information>
 
-            <h2>Instructions</h2>
+        <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6"></app-representative-information>
 
-            <h3>Filling out the application</h3>
-            <p>The application form is also available in PDF format at <a href="https://www.gov.bc.ca/crimevictimassistance" target="_blank">www.gov.bc.ca/crimevictimassistance</a>. To download the appropriate viewer, visit <a href="http://get.adobe.com/reader" target="_blank">http://get.adobe.com/reader</a>.</p>
-            <p>Print versions of the application form are also available from the Crime Victim Assistance Program or a local victim service program.</p>
-            <p>A local victim service program can help you complete this application. To locate a program near you, call VictimLink BC toll-free at <strong class="phone-number">1-800-563-0808</strong>.</p>
+        <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7"></app-declaration-information>
 
-            <h3>Be complete and accurate</h3>
-            <p>Please ensure that all form fields that you fill in are done so accurately. Any information that is inaccurate will affect the processing of your claim.</p>
+        <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8"></app-authorization-information>
 
-            <h3>What you need to have:</h3>
-            <p>In order to complete this form efficiently please make sure you have the following on hand:</p>
-            <ul class="list">
-              <li>All information pertaining to the incident</li>
-              <li>Your own health information (PHN)</li>
-              <li>Police Officers contact (If Known)</li>
-              <li>Employment information (if requesting benefits for lost employment income)</li>
-              <li>Info about the deceased (if it was a fatality)</li>
-              <li>What benefits you are claiming (View <a [routerLink]="" (click)="showSummaryOfBenefits()">Summary of Benefits</a>)</li>
-              <li>Victim Service Worker's information (if available)</li>
-              <li>Court File Number (if known)</li>
-              <li>Date of crime</li>
-              <li>Date reported to police</li>
-              <li>Date of hospital visit (if applicable)</li>
-              <li>Name of hospital (if applicable)</li>
-              <li>Date of any health care professional (ie., doctor, psychiatrist) visit</li>
-              <li>Name of any health care professional (if applicable)</li>
-            </ul>
-
-            <div class="attention">
-              <h3>Time needed to complete this application</h3>
-              <p>This application will take approximately 45 minutes to complete. You will not be able to save and come back to your application, so please be sure that you have enough time to finish it in one session.</p>
-            </div>
-
-            <p>If your address or telephone number changes after submitting this application, please inform the Crime Victim Assistance Program by calling <strong class="phone-number">1-866-660-3888</strong>.</p>
-            <p>For additional questions, please contact the Crime Victim Assistance Program at <strong>604-660-3888</strong> or toll free in B.C. at <strong class="phone-number">1-866-660-3888</strong>.</p>
-            <p>For more information, see the Government of British Columbia website at <a href="https://www.gov.bc.ca/crimevictimassistance" target="_blank">www.gov.bc.ca/crimevictimassistance</a> or query &ldquo;cvap bc&rdquo; using your internet search engine.</p>
-            <br /><br />
-
-            <section>
-              <app-field [valid]="isFieldValid('introduction.understoodInformation')" errorMessage="Indicate that you have read and understood all of the above information">
-                <label class="inline-label">
-                  <input type="checkbox" style="margin-right: 10px;" formControlName="understoodInformation" [value]="true">
-                  <span>I have read and understood all the above information. <span class="error-states ng-star-inserted">*</span></span>
-                </label>
-              </app-field>
-            </section>
+        <div *ngIf="this.currentFormStep == 9">
+          <div class="page-header">
+            <h1>Review & Submit</h1>
           </div>
-
-          <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1"></app-personal-information>
-
-          <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2"></app-victim-information>
-
-          <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3"></app-crime-information>
-
-          <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4"></app-medical-information>
-
-          <div formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5">
-            <div class="page-header">
-              <h1>Expense & Benefits Information</h1>
-            </div>
-            <p>This section provides information regarding any expenses or losses you are claiming as a result of the crime. Please keep receipts for all expenses you are claiming. The program will require you to submit <strong>original receipts</strong>.</p>
-            <section>
-              <h2 class="blue-header">Benefits Available Through CVAP</h2>
-              <p>
-                For a list of benefits available through CVAP, please view the <a [routerLink]="" (click)="showSummaryOfBenefits()">Summary of Benefits</a>.<br />
-                <strong>Original reciepts</strong> are required for expenses not covered by your extended health or other insurance plan
-              </p>
-              <br />
-
-              <p>Please check all that apply (at least one is required):</p>
-              <div class="radio-list">
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveCounsellingExpenses" formControlName="haveCounsellingExpenses" (change)="changeBenefitGroupValidity($event)">
-                    Counselling <app-tool-tip [trigger]="benefitsCounselling"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveCounsellingTransportation" formControlName="haveCounsellingTransportation" (change)="changeBenefitGroupValidity($event)">
-                    Transportation to obtain counselling <app-tool-tip [trigger]="benefitsCounsellingTransportation"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="havePrescriptionDrugExpenses" formControlName="havePrescriptionDrugExpenses" (change)="changeBenefitGroupValidity($event)">
-                    Prescription drug expenses <app-tool-tip [trigger]="benefitsPrescription"></app-tool-tip>
-                  </label>
-                </app-field>
-
-                <app-field [valid]="isFieldValid('expenseInformation.minimumBenefitsSelected')" errorMessage="Please select at least one option">
-                  <input type="hidden" name="minimumBenefitsSelected" formControlName="minimumBenefitsSelected">
-                </app-field>
-
-                <ng-template #benefitsCounsellingTransportation>
-                  <h3>Transportation to obtain counselling</h3>
-                  <p>Witnesses who have to travel some distance to obtain counselling services provided as crime victim assistance benefits.</p>
-                  <p><strong>Examples:</strong></p>
-                  <ul>
-                    <li>Transportation expenses such as bus fare, air fare, mileage expenses</li>
-                    <li>Meals and accommodation</li>
-                    <li>Childcare while attending appointments</li>
-                  </ul>
-                </ng-template>
-                <ng-template #benefitsPrescription>
-                  <h3>Prescription Drug Expenses</h3>
-                  <p>Witnesses who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p>
-                  <p><strong>Examples:</strong></p>
-                  <ul>
-                    <li>Medications prescribed by a doctor, dentist, or podiatrist</li>
-                  </ul>
-                </ng-template>
-                <ng-template #benefitsCounselling>
-                  <h3>Counselling</h3>
-                  <p>For Witnesses who need counselling to recover from the psychological injury caused by the crime</p>
-                  <p><strong>Examples:</strong></p>
-                  <ul>
-                    <li>Counselling Sessions</li>
-                  </ul>
-                </ng-template>
-              </div>
-            </section>
-
-            <section *ngIf="form.get('crimeInformation.victimDeceasedFromCrime').value == true">
-              <h2 class="blue-header">Additional Benefits</h2>
-              <p>If the victim is deceased as a result of the crime, please indicate which additional expenses or benefits you wish to claim (at least one is required):</p>
-              <div class="radio-list">
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
-                    Crime scene cleaning <app-tool-tip [trigger]="expensesWitnessCrimeSceneCleaning"></app-tool-tip>
-                  </label>
-                </app-field>
-                <app-field>
-                  <label>
-                    <input type="checkbox" [value]="true" name="noneOfTheAboveExpenses" formControlName="noneOfTheAboveExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
-                    None of the above
-                  </label>
-                </app-field>
-
-                <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
-                <app-field label="Please provide details of your requests. (Maximum 250 words)" errorMessage="Please provide details of your requests.">
-                  <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="2000"></textarea>
-                </app-field>
-
-                <app-field [valid]="isFieldValid('expenseInformation.minimumAdditionalBenefitsSelected')" errorMessage="Please select at least one option">
-                  <input type="hidden" name="minimumAdditionalBenefitsSelected" formControlName="minimumAdditionalBenefitsSelected">
-                </app-field>
-              </div>
-
-              <ng-template #expensesWitnessCrimeSceneCleaning>
-                <h3>Crime Scene Cleaning</h3>
-                <h2>NEED FINAL TEXT</h2>
-                <p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p>
-                <p><strong>Examples:</strong></p>
-                <ul>
-                  <li>Specialized cleaning and disinfecting of contaminated areas</li>
-                  <li>Replacement of contaminated flooring, wall covering, or other built-in features</li>
-                </ul>
-              </ng-template>
-            </section>
-          </div>
-
-          <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6"></app-representative-information>
-
-          <div formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7">
-            <div class="page-header">
-              <h1>Declaration</h1>
-            </div>
-            <p>Information supplied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits.</p>
-            <p>By signing this section you declare that the information you have provided on this application is true and correct. It is an offence to provide false or misleading information on this application and may lead to prosecution. If it is discovered at a later time that false or misleading information has been provided on this application form, you may be required to repay to CVAP any benefits received.</p>
-
-            <section>
-              <h2 class="blue-header">Declaration & Signature</h2>
-              <app-field [required]="true" [valid]="isFieldValid('declarationInformation.declaredAndSigned')" errorMessage="Please check declaration">
-                <label>
-                  <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
-                  I submit this application in support of a claim for benefits available to Witnesses under the <em>Crime Victim Assistance Act</em>, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
-                </label>
-              </app-field>
-
-              <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('declarationInformation.signature')" errorMessage="Please provide your digital signature">
-                <div class="signature-trigger" (click)="showSignPad('declarationInformation', 'signature')" *ngIf="!hasSignature('declarationInformation.signature')">
-                  <p>Click this box to sign</p>
-                </div>
-                <div *ngIf="hasSignature('declarationInformation.signature')" class="signature-preview">
-                  <img src="{{ valueOrEmpty('declarationInformation.signature') }}" />
-                  <a class="redo" (click)="showSignPad('declarationInformation', 'signature')">Redo Signature</a>
-                </div>
-              </app-field>
-              <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
-            </section>
-          </div>
-
-          <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8"></app-authorization-information>
-
-          <div *ngIf="this.currentFormStep == 9">
-            <div class="page-header">
-              <h1>Review & Submit</h1>
-            </div>
-            <p>Please check the accuracy of the information entered in your application before submitting.</p>
-            <app-witness-review [group]="form" [parentStepper]="stepper"></app-witness-review>
-          </div>
-
-          <div *ngIf="showValidationMessage" class="error-summary">
-            <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
-            <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
-          </div>
-
-          <section class="button-container">
-            <div [ngBusy]="[busy3]"></div>
-            <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
-            <span style="float: right;">
-              <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
-              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="!submitting && stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
-              <button class="btn btn-primary disabled" *ngIf="submitting && stepper.selectedIndex == 9">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button>
-            </span>
-          </section>
+          <p>Please check the accuracy of the information entered in your application before submitting.</p>
+          <app-witness-review [group]="form" [parentStepper]="stepper"></app-witness-review>
         </div>
+
+        <div *ngIf="showValidationMessage" class="error-summary">
+          <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+          <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
+        </div>
+
+        <section class="button-container">
+          <div [ngBusy]="[busy3]"></div>
+          <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+          <span style="float: right;">
+            <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
+            <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="!submitting && stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
+            <button class="btn btn-primary disabled" *ngIf="submitting && stepper.selectedIndex == 9">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button>
+          </span>
+        </section>
       </form>
     </div>
   </div>

@@ -36,12 +36,12 @@
       </app-field>
 
       <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('signature')" errorMessage="Please provide your digital signature">
-        <div class="signature-trigger" (click)="showSignPad('authorizationInformation', 'signature')" *ngIf="!hasSignature('signature')">
+        <div class="signature-trigger" (click)="showSignPad('signature')" *ngIf="!hasSignature('signature')">
           <p>Click this box to sign</p>
         </div>
         <div *ngIf="hasSignature('signature')" class="signature-preview">
           <img src="{{ valueOrEmpty('signature') }}" />
-          <a class="redo" (click)="showSignPad('authorizationInformation', 'signature')">Redo Signature</a>
+          <a class="redo" (click)="showSignPad('signature')">Redo Signature</a>
         </div>
       </app-field>
       <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
@@ -100,12 +100,12 @@
         </app-field>
 
         <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('authorizedPersonSignature')" errorMessage="Please provide your digital signature">
-          <div class="signature-trigger" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')" *ngIf="!hasSignature('authorizedPersonSignature')">
+          <div class="signature-trigger" (click)="showSignPad('authorizedPersonSignature')" *ngIf="!hasSignature('authorizedPersonSignature')">
             <p>Click this box to sign</p>
           </div>
           <div *ngIf="hasSignature('authorizedPersonSignature')" class="signature-preview">
             <img src="{{ valueOrEmpty('authorizedPersonSignature') }}" />
-            <a class="redo" (click)="showSignPad('authorizationInformation', 'authorizedPersonSignature')">Redo Signature</a>
+            <a class="redo" (click)="showSignPad('authorizedPersonSignature')">Redo Signature</a>
           </div>
         </app-field>
         <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>

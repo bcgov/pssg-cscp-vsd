@@ -41,10 +41,13 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     ApplicationType = ApplicationType;
 
     today = new Date();
+    oneYearAgo = moment(new Date()).subtract(1, 'year');
     policeReportMinDates: Date[] = [];
 
     crimePeriodStartDate: Date = null;
+    showWhyDidYouNotApplySooner: boolean = false;
     crimeInfoHelper = new CrimeInfoHelper();
+
 
     policeForceList = ["Surrey RCMP",
         "Vancouver Police Department",
@@ -69,30 +72,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        console.log("crime info component");
-        console.log(this.form);
-
-        //From witness form component - but minimumAdditionalBenefits doesn't even exist on that form, so can't get past expense info with this set
-        // if (this.formType === ApplicationType.Witness_Application) {
-        //     this.form.get('victimDeceasedFromCrime').valueChanges.subscribe(value => {
-        //         let minimumAdditionalBenefits = this.form.parent.get('expenseInformation.minimumAdditionalBenefitsSelected');
-        //         let missedWork = this.form.parent.get('expenseInformation.missedWorkDueToDeathOfVictim');
-
-        //         minimumAdditionalBenefits.clearValidators();
-        //         minimumAdditionalBenefits.setErrors(null);
-        //         missedWork.clearValidators();
-        //         missedWork.setErrors(null);
-
-        //         let useValidation = value === true;
-        //         if (useValidation) {
-        //             minimumAdditionalBenefits.setValidators([Validators.required]);
-        //             missedWork.setValidators([Validators.required]);
-        //         }
-        //         //setTimeout(() => { control.updateValueAndValidity(); })
-        //         minimumAdditionalBenefits.updateValueAndValidity();
-        //         missedWork.updateValueAndValidity();
-        //     });
-        // }
     }
 
     addCrimeLocation(): void {
@@ -140,28 +119,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         this.showRemoveCourtInfo = this.courtFileItems.length > 1;
     }
 
-    onFileBundle(fileBundle: FileBundle) {
-        try {
-            // save the files submitted from the component for attachment into the submitted form.
-            const patchObject = {};
-            patchObject['additionalInformationFiles'] = fileBundle;
-            this.form.get('additionalInformationFiles.filename').patchValue(fileBundle.fileName[0]);
-            var splitValues = fileBundle.fileData[0].split(',');
-
-            //this.form.get('documentInformation.body').patchValue(fileBundle.fileData[0]);
-            this.form.get('additionalInformationFiles.body').patchValue(splitValues[1]);
-
-            //this.form.get('additionalInformationFiles').value['0'].filename = fileBundle.fileName[0];
-            //var splitValues = fileBundle.fileData[0].split(',');
-            //this.form.get('additionalInformationFiles').value['0'].body = splitValues[1];
-
-            fileBundle = fileBundle;
-        }
-        catch (e) {
-            console.log(e);
-        }
-    }
-
     showSignPad(group, control): void {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = true;
@@ -170,18 +127,11 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         const dialogRef = this.matDialog.open(SignPadDialog, dialogConfig);
         dialogRef.afterClosed().subscribe(
             data => {
-                // TODO: This timeout is required so the page structure doesn't explode after the signature is filled.
-                // why is this is like this. Leaving the patch in there.
-                // I suspect that maybe converting the signature to png needs to finish before proceeding
-                // Maybe this will fix itself as the form is cleaned up.
-                // This actually breaks the whole page layout on closing the signature box if removed. WHAAAA
-                setTimeout(() => {
-                    var patchObject = {};
-                    patchObject[control] = data;
-                    this.form.get(group).patchValue(
-                        patchObject
-                    );
-                }, 1)
+                var patchObject = {};
+                patchObject[control] = data;
+                this.form.get(group).patchValue(
+                    patchObject
+                );
             },
             err => console.log(err)
         );
@@ -195,6 +145,26 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         let endDate = this.form.get('crimePeriodEnd').value;
         if (endDate && moment(endDate).isBefore(startDate)) {
             this.form.get('crimePeriodEnd').patchValue(null);
+        }
+
+        this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
+        this.form.get('applicationFiledWithinOneYearFromCrime').patchValue(!this.showWhyDidYouNotApplySooner);
+    }
+
+    whenDidCrimeOccurChange(event) {
+        let crimePeriodEndControl = this.form.get('crimePeriodEnd');
+
+        if (this.form.get('whenDidCrimeOccur').value) {
+            crimePeriodEndControl.setValidators([Validators.required]);
+            crimePeriodEndControl.markAsTouched();
+            crimePeriodEndControl.updateValueAndValidity();
+        }
+        else {
+            this.form.get('crimePeriodEnd').patchValue(null);
+            crimePeriodEndControl.clearValidators();
+            crimePeriodEndControl.setErrors(null);
+            crimePeriodEndControl.markAsTouched();
+            crimePeriodEndControl.updateValueAndValidity();
         }
     }
 
@@ -211,11 +181,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     }
 
     clearReportEndDate(index: number) {
-        console.log("clearReportEndDate");
         this.policeReportItems = this.form.get('policeReports') as FormArray;
-        console.log(this.policeReportItems);
         let thisReport = this.policeReportItems.at(index) as FormGroup;
-        console.log(thisReport);
 
         if (thisReport.get('policeReportedMultipleTimes').value) {
             thisReport.get('reportEndDate').patchValue(null);

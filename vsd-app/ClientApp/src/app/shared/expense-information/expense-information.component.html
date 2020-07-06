@@ -1,0 +1,614 @@
+<div [formGroup]="form">
+    <div class="page-header">
+        <h1>Expense & {{header}} Information</h1>
+    </div>
+    <p>This section provides information regarding any expenses or losses you are claiming as a result of the crime. Please keep receipts for all expenses you are claiming. The program will require you to submit <strong>original receipts</strong>.</p>
+    <section>
+        <h2 class="blue-header">Benefits Available Through CVAP</h2>
+        <p>
+            For a list of benefits available through CVAP, please view the <a [routerLink]="" (click)="showSummaryOfBenefits()">Summary of Benefits</a>.<br />
+            <strong>Original receipts</strong> are required for expenses not covered by your extended health or other insurance plan
+        </p>
+        <br />
+
+        <p>Please check all that apply (at least one is required):</p>
+        <div class="radio-list">
+            <ng-container *ngIf="formType === ApplicationType.Victim_Application">
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveMedicalExpenses" formControlName="haveMedicalExpenses" (change)="changeGroupValidity($event)">
+                        Medical Expenses <app-tool-tip [trigger]="benefitsMedicalExpenses"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveDentalExpenses" formControlName="haveDentalExpenses" (change)="changeGroupValidity($event)">
+                        Dental Expenses <app-tool-tip [trigger]="benefitsDental"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="havePrescriptionDrugExpenses" formControlName="havePrescriptionDrugExpenses" (change)="changeGroupValidity($event)">
+                        Prescription drug expenses <app-tool-tip [trigger]="benefitsPrescription"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveCounsellingExpenses" formControlName="haveCounsellingExpenses" (change)="changeGroupValidity($event)">
+                        Counselling <app-tool-tip [trigger]="benefitsCounselling"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveLostEmploymentIncomeExpenses" formControlName="haveLostEmploymentIncomeExpenses" (change)="changeGroupValidity($event)">
+                        Lost employment income (reimbursed at minimum wage) <app-tool-tip [trigger]="benefitsLostEmployment"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="havePersonalPropertyLostExpenses" formControlName="havePersonalPropertyLostExpenses" (change)="changeGroupValidity($event)">
+                        Repair or replacement costs of damaged or destroyed personal property that you were wearing at the time of the incident (e.g. eyeglasses, clothing) <app-tool-tip [trigger]="benefitsLostProperty"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveProtectiveMeasureExpenses" formControlName="haveProtectiveMeasureExpenses" (change)="changeGroupValidity($event)">
+                        Protective measures (e.g. moving expenses, security devices) <app-tool-tip [trigger]="benefitsProtective"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveDisabilityExpenses" formControlName="haveDisabilityExpenses" (change)="changeGroupValidity($event)">
+                        Disability benefits, services or equipment <app-tool-tip [trigger]="benefitsDisability"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses" (change)="changeGroupValidity($event)">
+                        Crime scene cleaning <app-tool-tip [trigger]="benefitsCrimeScene"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeGroupValidity($event)">
+                        Other
+                    </label>
+                    <section class="pushed">
+                        <app-field label="Please provide details of your requests.">
+                            <textarea class="form-control bigger" type="text" formControlName="otherSpecificExpenses" maxlength="2000"></textarea>
+                        </app-field>
+                    </section>
+                </app-field>
+            </ng-container>
+
+            <ng-container *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveCounsellingExpenses" formControlName="haveCounsellingExpenses" (change)="changeGroupValidity($event)">
+                        Counselling <app-tool-tip [trigger]="benefitsCounselling"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveCounsellingTransportation" formControlName="haveCounsellingTransportation" (change)="changeGroupValidity($event)">
+                        Transportation to obtain counselling <app-tool-tip [trigger]="benefitsCounsellingTransportation"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="havePrescriptionDrugExpenses" formControlName="havePrescriptionDrugExpenses" (change)="changeGroupValidity($event)">
+                        Prescription drug expenses <app-tool-tip [trigger]="benefitsPrescription"></app-tool-tip>
+                    </label>
+                </app-field>
+            </ng-container>
+
+            <app-field [valid]="isFieldValid('minimumExpensesSelected')" errorMessage="Please select at least one option">
+                <input type="hidden" name="minimumExpensesSelected" formControlName="minimumExpensesSelected">
+            </app-field>
+        </div>
+    </section>
+
+
+    <!-- Victim Other Benefits -->
+    <ng-container *ngIf="formType === ApplicationType.Victim_Application">
+        <section>
+            <h2 class="blue-header">Other Benefits</h2>
+            <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply:</p>
+            <div class="radio-list">
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveDisabilityPlanBenefits" formControlName="haveDisabilityPlanBenefits">
+                        Disability Plan benefits
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveEmploymentInsuranceBenefits" formControlName="haveEmploymentInsuranceBenefits">
+                        Employment Insurance benefits
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveIncomeAssistance" formControlName="haveIncomeAssistanceBenefits">
+                        Income Assistance
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveCanadaPensionPlanBenefits" formControlName="haveCanadaPensionPlanBenefits">
+                        Canada Pension Plan
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits" formControlName="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits">
+                        Aboriginal Affairs and Northern Development Canada
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveCivilActionBenefits" formControlName="haveCivilActionBenefits">
+                        Benefits you have recieved as a result of civil action
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits">
+                        Other
+                    </label>
+                    <section *ngIf="form.get('haveOtherBenefits').value === true" class="pushed">
+                        <app-field label="Please specify">
+                            <input class="form-control standard" type="text" formControlName="otherSpecificBenefits">
+                        </app-field>
+                    </section>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits">
+                        None of the above
+                    </label>
+                </app-field>
+            </div>
+        </section>
+    </ng-container>
+
+    <!-- IFM Additional Benefits -->
+    <ng-container *ngIf="formType === ApplicationType.IFM_Application">
+        <section *ngIf="form.parent.get('crimeInformation.victimDeceasedFromCrime').value == true">
+            <h2 class="blue-header">Additional Benefits</h2>
+            <p>If the victim is deceased as a result of the crime, please indicate which additional expenses or benefits you wish to claim (at least one is required):</p>
+            <div class="radio-list">
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveVocationalServicesExpenses" formControlName="haveVocationalServicesExpenses">
+                        Vocational services or training <app-tool-tip [trigger]="expensesVocational"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveIncomeSupportExpenses" formControlName="haveIncomeSupportExpenses">
+                        Income support <app-tool-tip [trigger]="expensesIncomeSupport"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveChildcareExpenses" formControlName="haveChildcareExpenses">
+                        Childcare <app-tool-tip [trigger]="expensesChildCare"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveLegalProceedingExpenses" formControlName="haveLegalProceedingExpenses">
+                        Transportation to attend legal proceedings <app-tool-tip [trigger]="expensesLegalTransportation"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveFuneralExpenses" formControlName="haveFuneralExpenses">
+                        Funeral expenses <app-tool-tip [trigger]="expensesFuneral"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveBereavementLeaveExpenses" formControlName="haveBereavementLeaveExpenses">
+                        Bereavement leave <app-tool-tip [trigger]="expensesBereavementLeave"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveLostOfParentalGuidanceExpenses" formControlName="haveLostOfParentalGuidanceExpenses">
+                        Loss of parental guidance <app-tool-tip [trigger]="expensesParentalLoss"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveHomeMakerExpenses" formControlName="haveHomeMakerExpenses">
+                        Homemaker services <app-tool-tip [trigger]="expensesHomemakerServices"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses">
+                        Crime scene cleaning <app-tool-tip [trigger]="expensesFamilyCrimeSceneCleaning"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="noneOfTheAboveExpenses" formControlName="noneOfTheAboveExpenses">
+                        None of the above
+                    </label>
+                </app-field>
+
+                <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
+                <app-field label="Please provide details of your requests. (Maximum 250 words)" errorMessage="Please provide details of your requests.">
+                    <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="2000"></textarea>
+                </app-field>
+            </div>
+
+
+            <p>The following section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
+            <h2 class="blue-header">Income Loss Information</h2>
+
+            <app-field label="Have you missed work as a result of the death of the victim?" [valid]="isFieldValid('missedWorkDueToDeathOfVictim')" [required]="true" errorMessage="Please select an option">
+                <label class="inline-label">
+                    <input type="radio" [value]="true" name="missedWorkDueToDeathOfVictim" formControlName="missedWorkDueToDeathOfVictim">
+                    <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                    <input type="radio" [value]="false" name="missedWorkDueToDeathOfVictim" formControlName="missedWorkDueToDeathOfVictim">
+                    <span>No</span>
+                </label>
+            </app-field>
+
+            <section *ngIf="form.get('missedWorkDueToDeathOfVictim').value === true">
+                <app-field label="Please provide days of work missed" [valid]="isFieldValid('daysWorkMissedStart')" [required]="true" errorMessage="Please select an option">
+                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
+                    <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
+                    <span> - </span>
+                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
+                    <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+                </app-field>
+                <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="isFieldValid('didYouLoseWages')" [required]="true" errorMessage="Please select an option">
+                    <label class="inline-label">
+                        <input type="radio" [value]="true" name="didYouLoseWages" formControlName="didYouLoseWages">
+                        <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                        <input type="radio" [value]="false" name="didYouLoseWages" formControlName="didYouLoseWages">
+                        <span>No</span>
+                    </label>
+                </app-field>
+
+
+                <h3 class="blue-header">Employer Information</h3>
+                <div class="employers" formArrayName="employers" *ngFor="let item of form.get('employers')['controls']; let i = index;">
+                    <div [formGroupName]="i" class="employer">
+                        <div class="row">
+                            <div class="col">
+                                <app-field label="Name of Company / Organization" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a company name">
+                                    <input type="text" class="form-control" formControlName="employerName">
+                                </app-field>
+                            </div>
+                            <div class="col">
+                                <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a contact phone number">
+                                    <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
+                                </app-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <app-field label="Employer First Name">
+                                    <input type="text" class="form-control" formControlName="employerFirstName">
+                                </app-field>
+                            </div>
+                            <div class="col">
+                                <app-field label="Employer Last name">
+                                    <input type="text" class="form-control" formControlName="employerLastName">
+                                </app-field>
+                            </div>
+                        </div>
+
+                        <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="false"></app-address>
+                    </div>
+                </div>
+
+                <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
+                    <label class="inline-label">
+                        <input type="radio" [value]="true" name="mayContactEmployer" formControlName="mayContactEmployer">
+                        <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                        <input type="radio" [value]="false" name="mayContactEmployer" formControlName="mayContactEmployer">
+                        <span>No</span>
+                    </label>
+                </app-field>
+
+                <h2 class="blue-header">Other Benefits</h2>
+                <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply (at least one is required):</p>
+                <div class="radio-list">
+                    <app-field>
+                        <label>
+                            <input type="checkbox" [value]="true" name="haveDisabilityPlanBenefits" formControlName="haveDisabilityPlanBenefits">
+                            Disability Plan benefits
+                        </label>
+                    </app-field>
+                    <app-field>
+                        <label>
+                            <input type="checkbox" [value]="true" name="haveEmploymentInsuranceBenefits" formControlName="haveEmploymentInsuranceBenefits">
+                            Employment Insurance benefits
+                        </label>
+                    </app-field>
+                    <app-field>
+                        <label>
+                            <input type="checkbox" [value]="true" name="haveIncomeAssistance" formControlName="haveIncomeAssistanceBenefits">
+                            Income Assistance
+                        </label>
+                    </app-field>
+                    <app-field>
+                        <label>
+                            <input type="checkbox" [value]="true" name="haveCanadaPensionPlanBenefits" formControlName="haveCanadaPensionPlanBenefits">
+                            Canada Pension Plan
+                        </label>
+                    </app-field>
+                    <app-field>
+                        <label>
+                            <input type="checkbox" [value]="true" name="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits" formControlName="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits">
+                            Aboriginal Affairs and Northern Development Canada
+                        </label>
+                    </app-field>
+                    <app-field>
+                        <label>
+                            <input type="checkbox" [value]="true" name="haveCivilActionBenefits" formControlName="haveCivilActionBenefits">
+                            Benefits you have recieved as a result of civil action
+                        </label>
+                    </app-field>
+                    <app-field>
+                        <label>
+                            <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits">
+                            Other
+                        </label>
+                        <section *ngIf="form.get('haveOtherBenefits').value === true" class="pushed">
+                            <app-field label="Please specify">
+                                <input class="form-control standard" type="text" formControlName="otherSpecificBenefits">
+                            </app-field>
+                        </section>
+                    </app-field>
+                    <app-field>
+                        <label>
+                            <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits">
+                            None of the above
+                        </label>
+                    </app-field>
+                </div>
+            </section>
+        </section>
+    </ng-container>
+
+    <!-- Witness Additional Benefits -->
+    <ng-container *ngIf="formType === ApplicationType.Witness_Application">
+        <section *ngIf="form.parent.get('crimeInformation.victimDeceasedFromCrime').value == true">
+            <h2 class="blue-header">Additional Benefits</h2>
+            <p>If the victim is deceased as a result of the crime, please indicate which additional expenses or benefits you wish to claim (at least one is required):</p>
+            <div class="radio-list">
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                        Crime scene cleaning <app-tool-tip [trigger]="expensesWitnessCrimeSceneCleaning"></app-tool-tip>
+                    </label>
+                </app-field>
+                <app-field>
+                    <label>
+                        <input type="checkbox" [value]="true" name="noneOfTheAboveExpenses" formControlName="noneOfTheAboveExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                        None of the above
+                    </label>
+                </app-field>
+
+                <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
+                <app-field label="Please provide details of your requests. (Maximum 250 words)" errorMessage="Please provide details of your requests.">
+                    <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="2000"></textarea>
+                </app-field>
+
+                <app-field [valid]="isFieldValid('minimumAdditionalBenefitsSelected')" errorMessage="Please select at least one option">
+                    <input type="hidden" name="minimumAdditionalBenefitsSelected" formControlName="minimumAdditionalBenefitsSelected">
+                </app-field>
+            </div>
+        </section>
+    </ng-container>
+
+</div>
+
+<!-- Tool tips -->
+<ng-template #benefitsCounsellingTransportation>
+    <h3>Transportation to obtain counselling</h3>
+    <p>For Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p>
+    <p>Also for Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death.</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Transportation expenses such as bus fare, air fare, mileage expenses</li>
+        <li>Meals and accommodation</li>
+        <li>Childcare while attending appointments</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsMedicalExpenses>
+    <h3>Medical Expenses</h3>
+    <p>Victims who need healthcare because of their injuries from the crime</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Ambulence or emergency transportation</li>
+        <li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li>
+        <li>Health care services at a facility</li>
+        <li>Medical equipment and supplies</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsDental>
+    <h3>Dental Expenses</h3>
+    <p>Victims who need healthcare because of their injuries from the crime</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Ambulence or emergency transportation</li>
+        <li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li>
+        <li>Health care services at a facility</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsPrescription>
+    <h3>Prescription Drug Expenses</h3>
+    <p>Victims who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Medications prescribed by a doctor, dentist, or podiatrist</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsCounselling>
+    <h3>Counselling</h3>
+    <p>For all victims of crime</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Counselling Sessions</li>
+        <li>Psycho-educational sessions to others who support the victim</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsLostEmployment>
+    <h3>Lost Employment Income (reimbursed at minimum wage)</h3>
+    <p>Victims whose injuries have a long-term effect on their ability to work and who did not have a job when the crime occurred (special eligibility issues for minors)</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Monthly payments to assist in financially supporting the victim</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsLostProperty>
+    <h3>Damaged or destroyed personal property</h3>
+    <p>Victims whose eyeglasses/contacts, disability aids, or articles of clothing were damaged or destroyed because of the crime</p>
+    <p><strong>Repair or replacement of:</strong></p>
+    <ul>
+        <li>Eyeglass frames</li>
+        <li>Prescription lenses</li>
+        <li>Various types of disability aids</li>
+        <li>Clothing</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsProtective>
+    <h3>Protective Measures</h3>
+    <p>Victims who need healthcare because of their injuries from the crime</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Ambulence or emergency transportation</li>
+        <li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li>
+        <li>Health care services at a facility</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsDisability>
+    <h3>Disability benefits, services or equipment</h3>
+    <p>Victims who need disability aids because of their injuries from the crime, to reduce the effects of the injuries, improve their quality of life, and assist in daily living</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Mobility aids</li>
+        <li>Communication aids</li>
+        <li>Vision aids</li>
+        <li>Specialized clothing</li>
+        <li>Prostheses and orthoses</li>
+        <li>Other equipment or supplies</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsCrimeScene>
+    <h3>Crime Scene Cleaning</h3>
+    <p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Specialized cleaning and disinfecting of contaminated areas</li>
+        <li>Replacement of contaminated flooring, wall covering, or other built-in features</li>
+    </ul>
+</ng-template>
+<ng-template #expensesWitnessCrimeSceneCleaning>
+    <h3>Crime Scene Cleaning</h3>
+    <h2>NEED FINAL TEXT</h2>
+    <p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Specialized cleaning and disinfecting of contaminated areas</li>
+        <li>Replacement of contaminated flooring, wall covering, or other built-in features</li>
+    </ul>
+</ng-template>
+<ng-template #lostWagesTemplate>
+    <p><strong>Lost wages or income</strong></p>
+    <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
+</ng-template>
+<ng-template #expensesVocational>
+    <h3>Vocational services or expenses</h3>
+    <p>Spouses of deceased victims who need training or education to prepare for employment or improve their earning capacity (and who are eligible for income support benefits from CVAP)</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Education and training courses</li>
+        <li>Programs to improve skills and qualifications</li>
+        <li>Programs to prepare for, or find, employment</li>
+    </ul>
+</ng-template>
+<ng-template #expensesIncomeSupport>
+    <h3>Income support</h3>
+    <p>Spouses of deceased victim</p>
+    <p>Children of deceased victims</p>
+    <p>Other immeditate family members of deceased victims if they were financially dependent on the victim</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Monthly payments to assist in financially supporting the immediate family member</li>
+    </ul>
+</ng-template>
+<ng-template #expensesChildCare>
+    <h3>Childcare services or expenses (see also under transportation)</h3>
+    <p>Spouses of deceased victims who need to pay for childcare because there is no one in the household to share this responsibility</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Childcare</li>
+    </ul>
+</ng-template>
+<ng-template #expensesLegalTransportation>
+    <h3>Transportation and related expenses, and transportation related childcare</h3>
+    <p>Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p>
+    <p>Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Transportation expenses such as bus fare, air fare, mileage expenses</li>
+        <li>Meals and accommodation</li>
+        <li>Childcare while attending appointments</li>
+    </ul>
+</ng-template>
+<ng-template #expensesFuneral>
+    <h3>Funeral Expenses</h3>
+    <p>Immediate Family Members of deceased victims who have to pay for funeral and related costs</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Costs involved in the funeral service, burial, cremation or related ceremony</li>
+    </ul>
+</ng-template>
+<ng-template #expensesBereavementLeave>
+    <h3>Bereavement leave</h3>
+    <p>Immediate Family Members of deceased victims who lose earnings from taking time off work for the funeral or other matters related to the victim’s death</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>An amount to help offset the loss of earnings</li>
+    </ul>
+</ng-template>
+<ng-template #expensesParentalLoss>
+    <h3>Loss of parental guidance for a minor child</h3>
+    <p>Children of deceased victims who were under 19 when their parent was killed</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>A set amount as a contribution toward loss of parental guidance</li>
+    </ul>
+</ng-template>
+<ng-template #expensesHomemakerServices>
+    <h3>Homemaker services or expenses</h3>
+    <p>Spouses of deceased victims who need to pay for homemaker services because there is no one in the household to share household tasks</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Help with shopping, cleaning, cooking, and other household tasks</li>
+    </ul>
+</ng-template>
+<ng-template #expensesFamilyCrimeSceneCleaning>
+    <h3>Crime scene cleaning</h3>
+    <p>Immediate Family Members of deceased victims who need specialized cleaning of the victim’s home or vehicle, or their own home or vehicle, because the crime was committed there</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Specialized cleaning and disinfecting of contaminated areas</li>
+        <li>Replacement of contaminated flooring, wall covering, or other built-in features</li>
+    </ul>
+</ng-template>

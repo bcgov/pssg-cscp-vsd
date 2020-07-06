@@ -1,15 +1,7 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { UploadEvent, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
-import { Http, Headers, Response } from '@angular/http';
-import { FileSystemItem } from '../../models/file-system-item.model';
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { MatDialogRef } from '@angular/material';
-
-export interface DropdownOption {
-  id: string;
-  name: string;
-}
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
+import { DocumentCollectioninformation } from '../../interfaces/victim-restitution.interface';
+import { FormGroup, ControlContainer, FormBuilder, FormArray } from '@angular/forms';
+import { FormBase } from '../form-base';
 
 @Component({
   selector: 'app-file-uploader',
@@ -17,133 +9,60 @@ export interface DropdownOption {
   styleUrls: ['./file-uploader.component.scss']
 })
 export class FileUploaderComponent implements OnInit {
-  @Input() uploadUrl: string;
-  @Input() fileTypes = '';
-  @Input() documentType: string;
-  @Input() entityName: string;
-  @Input() entityId: string;
-  @Input() multipleFiles = true;
-  @Input() extensions: string[] = ['pdf'];
-  @Input() uploadHeader = 'TO UPLOAD DOCUMENTS, DRAG FILES HERE OR';
-  busy: Subscription;
-  attachmentURL: string;
-  Math = Math;
-  public files: FileSystemItem[] = [];
+  @ViewChild('files') myInputVariable: ElementRef;
+  @Input() formType: number;
+  @Input() documents: FormArray;
+  @Output() fileBundle = new EventEmitter<DocumentCollectioninformation[]>();
 
-  @ViewChild(FileUploaderComponent) fileUploaderComponent: FileUploaderComponent;
 
-  // TODO: move http call to a service
-  constructor(private http: Http) {
+  constructor(private controlContainer: ControlContainer,
+    private fb: FormBuilder) {
   }
 
-  ngOnInit(): void {
-    this.attachmentURL = `api/file/${this.entityId}/attachments/${this.entityName}`;
-    this.getUploadedFileData();
+  ngOnInit() {
+    console.log("file uploader");
+    console.log(this.documents);
   }
 
-  public dropped(event: UploadEvent) {
-    const files = event.files;
-    if (files.length > 1 && !this.multipleFiles) {
-      alert('Only one file can be uploaded here');
-      return;
+  fakeBrowseClick(): void {
+    // the UI element for the native element is completely useless and ugly so we hide it and fake the user click.
+    this.myInputVariable.nativeElement.click();
+    console.log('Native button is clicked.');
+  }
+
+  onFilesAdded(files: FileList): void {
+    console.log("on files added");
+    console.log(files);
+    // for each file added we go through the same conversion process.
+    for (let i = 0; i < files.length; i++) {
+      // convert the file to base64 for upload
+      const reader: FileReader = new FileReader();
+      reader.readAsDataURL(files.item(i));
+      reader.onload = () => {
+        let fileIndex = this.documents.controls.findIndex(doc => doc.get('filename').value === files.item(i).name);
+        if (fileIndex >= 0) {
+          this.documents.controls[fileIndex].get('body').patchValue(reader.result.toString());
+        }
+        else {
+          this.documents.push(this.fb.group({
+            filename: [files.item(i).name],
+            body: [reader.result.toString()],
+            subject: ['']
+          }));
+        }
+
+      };
+      reader.onerror = error => console.log('Error: ', error);
+      // this.filenameBlock.fileCollection.fileName[i] = files.item(i).name;
+      // this.filenameBlock.emitBundle();
     }
-    for (const droppedFile of files) {
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {
-          this.uploadFile(file);
-        });
-      } else {
-        // It was a directory (empty directories are added, otherwise only files)
-        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-        // console.log(droppedFile.relativePath, fileEntry);
-      }
-    }
   }
-
-  onBrowserFileSelect(event: any, input: any) {
-    const uploadedFiles = event.target.files;
-    for (const file of uploadedFiles) {
-      this.uploadFile(file);
-    }
-
-    input.value = '';
+  removeItem(index: number): void {
+    console.log('Remove Item');
+    this.documents.removeAt(index);
   }
-
-  private uploadFile(file) {
-    const validExt = this.extensions.filter(ex => file.name.toLowerCase().endsWith(ex)).length > 0;
-    if (!validExt) {
-      alert('File type not supported.');
-      return;
-    }
-
-    if (file && file.name && file.name.length > 128) {
-      alert('File name must be 128 characters or less.');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', file, file.name);
-    formData.append('documentType', this.documentType);
-    const headers = new Headers();
-    // let url = "";
-    // url = this.attachmentURL + this.applicationId + "/attachments";
-    this.busy = this.http.post(this.attachmentURL, formData, { headers: headers }).subscribe(result => {
-      this.getUploadedFileData();
-    },
-      err => alert('Failed to upload file'));
-  }
-
-  getUploadedFileData() {
-    const headers = new Headers({
-      // 'Content-Type': 'multipart/form-data'
-    });
-    const getFileURL = this.attachmentURL + '/' + this.documentType;
-    this.busy = this.http.get(getFileURL, { headers: headers })
-      .pipe(map((data: Response) => <FileSystemItem[]>data.json()))
-      .subscribe((data) => {
-        // convert bytes to KB
-        data.forEach((entry) => {
-          entry.size = Math.ceil(entry.size / 1024);
-          entry.downloadUrl = `api/file/${this.entityId}/download-file/${this.entityName}/${entry.name}`;
-          entry.downloadUrl += `?serverRelativeUrl=${encodeURIComponent(entry.serverrelativeurl)}&documentType=${this.documentType}`;
-        });
-        this.files = data;
-      },
-        err => alert('Failed to get files'));
-  }
-
-  deleteFile(relativeUrl: string) {
-    const headers = new Headers({
-      'Content-Type': 'application/json'
-    });
-    const queryParams = `?serverRelativeUrl=${encodeURIComponent(relativeUrl)}&documentType=${this.documentType}`;
-    this.busy = this.http.delete(this.attachmentURL + queryParams, { headers: headers }).subscribe(result => {
-      this.getUploadedFileData();
-    },
-      err => alert('Failed to delete file'));
-  }
-
-  disableFileUpload(): boolean {
-    return !this.multipleFiles && (this.files && this.files.length > 0);
-  }
-
-  public fileOver(event) {
-    // console.log(event);
-  }
-
-  public fileLeave(event) {
-    // console.log(event);
-  }
-
-  browseFiles(browserMultiple, browserSingle) {
-    if (!this.disableFileUpload()) {
-      if (this.multipleFiles) {
-        browserMultiple.click();
-      } else {
-        browserSingle.click();
-      }
-    }
+  emitBundle() {
+    // when needed emit the file bundle
+    // this.fileBundle.emit(this.fileCollection);
   }
 }
-

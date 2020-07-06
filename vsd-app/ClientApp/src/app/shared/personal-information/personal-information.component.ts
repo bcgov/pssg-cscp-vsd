@@ -5,6 +5,8 @@ import { FormGroup, ControlContainer, AbstractControl, Validators } from "@angul
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { POSTAL_CODE } from "../regex.constants";
+import { AddressHelper } from "../address/address.helper";
+import { EmailValidator } from "../validators/email.validator";
 
 @Component({
     selector: 'app-personal-information',
@@ -34,6 +36,8 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
     addressIsRequired: boolean = false;
     alternateAddressIsRequired: boolean = false;
 
+    addressHelper = new AddressHelper();
+
     get preferredMethodOfContact() { return this.form.get('preferredMethodOfContact'); }
 
     constructor(
@@ -44,8 +48,8 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        console.log("personal info component");
-        console.log(this.form);
+        // console.log("personal info component");
+        // console.log(this.form);
 
         this.header = "Personal";
         if (this.formType === ApplicationType.Victim_Application) {
@@ -58,7 +62,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
             });
         }
 
-
         this.form.get('preferredMethodOfContact').valueChanges.subscribe(value => this.preferredMethodOfContactChange(value));
     }
 
@@ -66,43 +69,16 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
         let phoneControl = this.form.get('phoneNumber');
         let emailControl = this.form.get('email');
         let emailConfirmControl = this.form.get('confirmEmail');
-        let addressControls = [
-            this.form.get('primaryAddress.country'),
-            this.form.get('primaryAddress.province'),
-            this.form.get('primaryAddress.city'),
-            this.form.get('primaryAddress.line1'),
-        ];
 
-        let altAddressControls = [
-            this.form.get('alternateAddress.country'),
-            this.form.get('alternateAddress.province'),
-            this.form.get('alternateAddress.city'),
-            this.form.get('alternateAddress.line1'),
-        ];
+        this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'primaryAddress');
+        this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'alternateAddress');
 
-        let postalControl = this.form.get('primaryAddress.postalCode');
-        let altPostalControl = this.form.get('alternateAddress.postalCode');
-
-        phoneControl.clearValidators();
+        phoneControl.setValidators([Validators.minLength(10), Validators.maxLength(10)]);
         phoneControl.setErrors(null);
-        emailControl.clearValidators();
+        emailControl.setValidators([Validators.email]);
         emailControl.setErrors(null);
-        emailConfirmControl.clearValidators();
+        emailConfirmControl.setValidators([Validators.email, EmailValidator('email')]);
         emailConfirmControl.setErrors(null);
-        for (let control of addressControls) {
-            control.clearValidators();
-            control.setErrors(null);
-        }
-        postalControl.clearValidators();
-        postalControl.setErrors(null);
-
-        for (let control of altAddressControls) {
-            control.clearValidators();
-            control.setErrors(null);
-
-        }
-        altPostalControl.clearValidators();
-        altPostalControl.setErrors(null);
 
         let contactMethod = parseInt(value);
         if (contactMethod === 2) {
@@ -110,33 +86,23 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
             this.phoneIsRequired = true;
             this.emailIsRequired = false;
             this.addressIsRequired = false;
-            postalControl.setValidators([Validators.pattern(this.postalRegex)]);
-            altPostalControl.setValidators([Validators.pattern(this.postalRegex)]);
         } else if (contactMethod === 1) {
-            emailControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
-            emailConfirmControl.setValidators([Validators.required, Validators.email]); // need to add validator to check these two are the same
+            emailControl.setValidators([Validators.required, Validators.email]);
+            emailConfirmControl.setValidators([Validators.required, Validators.email, EmailValidator('email')]);
             this.phoneIsRequired = false;
             this.emailIsRequired = true;
             this.addressIsRequired = false;
-            postalControl.setValidators([Validators.pattern(this.postalRegex)]);
-            altPostalControl.setValidators([Validators.pattern(this.postalRegex)]);
         } else if (contactMethod === 4) {
-            for (let control of addressControls) {
-                control.setValidators([Validators.required]);
-            }
-            postalControl.setValidators([Validators.required, Validators.pattern(this.postalRegex)]);
-            altPostalControl.setValidators([Validators.pattern(this.postalRegex)]);
+            this.addressHelper.setAddressAsRequired(this.form, 'primaryAddress');
+
             this.phoneIsRequired = false;
             this.emailIsRequired = false;
             this.addressIsRequired = true;
             this.alternateAddressIsRequired = false;
         }
         else if (contactMethod === 100000002) {
-            for (let control of altAddressControls) {
-                control.setValidators([Validators.required]);
-            }
-            postalControl.setValidators([Validators.pattern(this.postalRegex)]);
-            altPostalControl.setValidators([Validators.required, Validators.pattern(this.postalRegex)]);
+            this.addressHelper.setAddressAsRequired(this.form, 'alternateAddress');
+
             this.phoneIsRequired = false;
             this.emailIsRequired = false;
             this.addressIsRequired = false;
@@ -149,20 +115,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
         emailControl.updateValueAndValidity();
         emailConfirmControl.markAsTouched();
         emailConfirmControl.updateValueAndValidity();
-        for (let control of addressControls) {
-            control.markAsTouched();
-            control.updateValueAndValidity();
-        }
-        for (let control of altAddressControls) {
-            control.markAsTouched();
-            control.updateValueAndValidity();
-        }
-
-        postalControl.markAsTouched();
-        postalControl.updateValueAndValidity();
-
-        altPostalControl.markAsTouched();
-        altPostalControl.updateValueAndValidity();
 
     }
 }
