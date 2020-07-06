@@ -4,6 +4,7 @@ import { NameBlock } from "../name-block/name-block.component";
 import { DocumentCollectioninformation } from "./victim-restitution.interface";
 
 export interface Application {
+  ApplicationType: number;
   Introduction: Introduction;
   PersonalInformation: PersonalInformation;
   CrimeInformation: CrimeInformation;

@@ -473,6 +473,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   harvestForm(): Application {
     return {
+      ApplicationType: this.FORM_TYPE,
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,

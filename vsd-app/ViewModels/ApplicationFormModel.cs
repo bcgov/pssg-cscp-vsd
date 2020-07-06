@@ -4,6 +4,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 {
     public class ApplicationFormModel
     {
+        public int ApplicationType { get; set; }
         public Introduction Introduction { get; set; }
         public Personalinformation PersonalInformation { get; set; }
         public Crimeinformation CrimeInformation { get; set; }
@@ -254,6 +255,6 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     {
         public string fileName { get; set; }
         public string body { get; set; }
-        public string subject {get; set;}
+        public string subject { get; set; }
     }
 }

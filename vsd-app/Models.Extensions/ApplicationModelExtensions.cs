@@ -17,6 +17,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             if (model == null)
                 return null;
 
+            application.Application.vsd_applicanttype = model.ApplicationType;
             if (model.PersonalInformation != null)
             {
                 application.Application.vsd_applicantsfirstname = model.PersonalInformation.firstName;

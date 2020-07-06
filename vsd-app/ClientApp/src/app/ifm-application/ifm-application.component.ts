@@ -246,6 +246,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   debugFormData(): void {
     let formData: Application = {
+      ApplicationType: this.FORM_TYPE,
       Introduction: this.form.get('introduction').value,
       PersonalInformation: this.form.get('personalInformation').value,
       VictimInformation: this.form.get('victimInformation').value,
@@ -263,6 +264,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   harvestForm(): Application {
     let data = {
+      ApplicationType: this.FORM_TYPE,
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
