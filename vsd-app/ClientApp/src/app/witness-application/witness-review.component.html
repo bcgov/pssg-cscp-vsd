@@ -692,47 +692,49 @@
     </tbody>
   </table>
 
-  <h3>Optional Authorization</h3>
-  <table class="table table-striped review-table">
-    <tbody>
-      <tr>
-        <th>Full Name</th>
-        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonFullName') }}</td>
-      </tr>
-      <tr>
-        <th>Phone Number</th>
-        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonPhoneNumber') | phone}}</td>
-      </tr>
-      <tr>
-        <th>Relationship to Applicant</th>
-        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonRelationship') }}</td>
-      </tr>
-      <tr>
-        <th>Agency Name</th>
-        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonAgencyName') }}</td>
-      </tr>
-      <tr>
-        <th>Agency Address</th>
-        <td><span [innerHTML]="displayMailingAddress('authorizationInformation.authorizedPersonAgencyAddress')"></span></td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.boolValues.Yes">
+    <h3>Optional Authorization</h3>
+    <table class="table table-striped review-table">
+      <tbody>
+        <tr>
+          <th>Full Name</th>
+          <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonFullName') }}</td>
+        </tr>
+        <tr>
+          <th>Phone Number</th>
+          <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonPhoneNumber') | phone}}</td>
+        </tr>
+        <tr>
+          <th>Relationship to Applicant</th>
+          <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonRelationship') }}</td>
+        </tr>
+        <tr>
+          <th>Agency Name</th>
+          <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonAgencyName') }}</td>
+        </tr>
+        <tr>
+          <th>Agency Address</th>
+          <td><span [innerHTML]="displayMailingAddress('authorizationInformation.authorizedPersonAgencyAddress')"></span></td>
+        </tr>
+      </tbody>
+    </table>
 
-  <div *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true">
-    <p>
-      <label class="inline-label inline-checkbox-label">
-        <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true" type="checkbox" checked="checked" disabled="disabled" />
-        <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value !== true" type="checkbox" disabled="disabled" />
-        <span>I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.</span>
-      </label>
-    </p>
+    <div *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true">
+      <p>
+        <label class="inline-label inline-checkbox-label">
+          <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true" type="checkbox" checked="checked" disabled="disabled" />
+          <input *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value !== true" type="checkbox" disabled="disabled" />
+          <span>I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.</span>
+        </label>
+      </p>
+    </div>
+    <table class="table table-striped review-table">
+      <tbody>
+        <tr>
+          <th>Applicant's Signature</th>
+          <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') }}" /></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <table class="table table-striped review-table">
-    <tbody>
-      <tr>
-        <th>Applicant's Signature</th>
-        <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') }}" /></td>
-      </tr>
-    </tbody>
-  </table>
 </section>

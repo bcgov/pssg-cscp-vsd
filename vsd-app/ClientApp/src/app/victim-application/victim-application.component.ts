@@ -593,8 +593,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   validateEmploymentInfoForm() {
+    console.log("validateEmploymentInfoForm");
     let eiForm = document.querySelector(".employment-info-form");
     this.employmentInfoFormIsValid = eiForm.classList.contains("ng-valid");
+    console.log(this.employmentInfoFormIsValid);
   }
 
 }

@@ -39,14 +39,16 @@ export class FileUploaderComponent implements OnInit {
       const reader: FileReader = new FileReader();
       reader.readAsDataURL(files.item(i));
       reader.onload = () => {
+        let body = reader.result.toString();
+        body = body.split(',').slice(-1)[0];
         let fileIndex = this.documents.controls.findIndex(doc => doc.get('filename').value === files.item(i).name);
         if (fileIndex >= 0) {
-          this.documents.controls[fileIndex].get('body').patchValue(reader.result.toString());
+          this.documents.controls[fileIndex].get('body').patchValue(body);
         }
         else {
           this.documents.push(this.fb.group({
             filename: [files.item(i).name],
-            body: [reader.result.toString()],
+            body: [body],
             subject: ['']
           }));
         }

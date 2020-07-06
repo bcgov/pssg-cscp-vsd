@@ -123,6 +123,13 @@ export class EmploymentIncomeComponent implements ControlValueAccessor, OnInit {
     if (this.eiInfo.daysWorkMissedStart) {
       this.minEndDate = this.eiInfo.daysWorkMissedStart;
     }
+    if (this.eiInfo.daysWorkMissedEnd) {
+      let endDate = moment(this.eiInfo.daysWorkMissedEnd);
+      this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
+      if (!this.showCurrentlyOffWork) {
+        this.eiInfo.areYouStillOffWork = null;
+      }
+    }
   }
 
   getCountryProperty(country: string, properyName: string): any {
@@ -175,7 +182,12 @@ export class EmploymentIncomeComponent implements ControlValueAccessor, OnInit {
   daysWorkMissedEndChange(event: MatDatepickerInputEvent<Date>) {
     let endDate = moment(event.target.value);
     this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
-    this.valueChange.emit(this.eiInfo);
+    if (!this.showCurrentlyOffWork) {
+      this.eiInfo.areYouStillOffWork = null;
+    }
+
+    //'this' context is currently the change event, wrapping it in a timeout gets us back to the component context, needed to trigger the valueChange
+    setTimeout(() => { this.valueChange.emit(this.eiInfo); }, 0);
   }
 
 
