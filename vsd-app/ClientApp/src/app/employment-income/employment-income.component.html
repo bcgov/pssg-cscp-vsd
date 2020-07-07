@@ -74,7 +74,7 @@
         </section>
       </div>
       <div class="form-group" *ngIf="showCurrentlyOffWork">
-        <app-field label="Are you currently off work?" [tooltipReference]="stillOfWorkTemplate" [valid]="eiInfo.areYouStillOffWork" [required]="eiInfo.didYouMissWorkDueToCrime===100000001" errorMessage="Please select an option">
+        <app-field label="Are you currently off work?" [tooltipReference]="stillOfWorkTemplate" [valid]="eiInfo.areYouStillOffWork" [required]="showCurrentlyOffWork" errorMessage="Please select an option">
           <label for="currentlyOffWorkYes" class="inline-label">
             <input type="radio" [(ngModel)]="eiInfo.areYouStillOffWork" [value]='100000001' name="currentlyOffWorkYes" id="currentlyOffWorkYes" required>
             <span>Yes</span>

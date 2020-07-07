@@ -473,6 +473,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   harvestForm(): Application {
     return {
+      ApplicationType: this.FORM_TYPE,
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
@@ -593,8 +594,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   }
 
   validateEmploymentInfoForm() {
+    console.log("validateEmploymentInfoForm");
     let eiForm = document.querySelector(".employment-info-form");
     this.employmentInfoFormIsValid = eiForm.classList.contains("ng-valid");
+    console.log(this.employmentInfoFormIsValid);
   }
 
 }

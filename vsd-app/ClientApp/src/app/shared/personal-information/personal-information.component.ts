@@ -72,6 +72,8 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
 
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'primaryAddress');
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'alternateAddress');
+        this.addressHelper.setAddressAsRequired(this.form, 'primaryAddress');
+        this.addressHelper.markAsTouched(this.form, 'primaryAddress');
 
         phoneControl.setValidators([Validators.minLength(10), Validators.maxLength(10)]);
         phoneControl.setErrors(null);
@@ -93,7 +95,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
             this.emailIsRequired = true;
             this.addressIsRequired = false;
         } else if (contactMethod === 4) {
-            this.addressHelper.setAddressAsRequired(this.form, 'primaryAddress');
+            // this.addressHelper.setAddressAsRequired(this.form, 'primaryAddress');
 
             this.phoneIsRequired = false;
             this.emailIsRequired = false;
@@ -102,6 +104,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
         }
         else if (contactMethod === 100000002) {
             this.addressHelper.setAddressAsRequired(this.form, 'alternateAddress');
+            this.addressHelper.markAsTouched(this.form, 'alternateAddress');
 
             this.phoneIsRequired = false;
             this.emailIsRequired = false;

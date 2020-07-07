@@ -182,7 +182,7 @@
             <h3>Primary Home Address <app-tool-tip [trigger]="primaryAddressTemplate"></app-tool-tip>
             </h3>
             <ng-template #primaryAddressTemplate>Your decision is required be in writing, and we will need an address to deliver this to you.</ng-template>
-            <app-address [group]="form.get('primaryAddress')" [showChildrenAsRequired]="addressIsRequired"></app-address>
+            <app-address [group]="form.get('primaryAddress')" [showChildrenAsRequired]="true"></app-address>
         </div>
     </div>
     <div class="row">

@@ -60,34 +60,10 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
             this.header = "Witness";
         }
 
+        this.setRequiredFields(this.form.get('completingOnBehalfOf').value);
+
         this.form.get('completingOnBehalfOf').valueChanges.subscribe(value => {
-            let options = { onlySelf: true, emitEvent: false };
-            let representativeFirstName = this.form.get('representativeFirstName');
-            let representativeLastName = this.form.get('representativeLastName');
-            let representativePreferredMethodOfContact = this.form.get('representativePreferredMethodOfContact');
-
-            representativeFirstName.clearValidators();
-            representativeFirstName.setErrors(null, options);
-            representativeLastName.clearValidators();
-            representativeLastName.setErrors(null, options);
-            representativePreferredMethodOfContact.clearValidators();
-            representativePreferredMethodOfContact.setErrors(null, options);
-            this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'representativeAddress');
-
-            let useValidation = value === 100000002 || value === 100000003;
-            if (useValidation) {
-                this.setupRepresentativeContactInformation(this.form.get('representativePreferredMethodOfContact').value);  // Have to clear contact validators on contact method change
-                representativeFirstName.setValidators([Validators.required]);
-                representativeLastName.setValidators([Validators.required]);
-                representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
-
-                representativeFirstName.markAsTouched();
-                representativeFirstName.updateValueAndValidity(options);
-                representativeLastName.markAsTouched();
-                representativeLastName.updateValueAndValidity(options);
-                representativePreferredMethodOfContact.markAsTouched(options);
-                representativePreferredMethodOfContact.updateValueAndValidity(options);
-            }
+            this.setRequiredFields(value);
         });
 
         this.form.get('representativePreferredMethodOfContact').valueChanges.subscribe(value => {
@@ -97,6 +73,36 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
                 this.setupRepresentativeContactInformation(contactMethod);
             }
         });
+    }
+
+    setRequiredFields(completingOnBehalfOf: number) {
+        let options = { onlySelf: true, emitEvent: false };
+        let representativeFirstName = this.form.get('representativeFirstName');
+        let representativeLastName = this.form.get('representativeLastName');
+        let representativePreferredMethodOfContact = this.form.get('representativePreferredMethodOfContact');
+
+        representativeFirstName.clearValidators();
+        representativeFirstName.setErrors(null, options);
+        representativeLastName.clearValidators();
+        representativeLastName.setErrors(null, options);
+        representativePreferredMethodOfContact.clearValidators();
+        representativePreferredMethodOfContact.setErrors(null, options);
+        this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'representativeAddress');
+
+        let useValidation = completingOnBehalfOf === 100000002 || completingOnBehalfOf === 100000003;
+        if (useValidation) {
+            this.setupRepresentativeContactInformation(this.form.get('representativePreferredMethodOfContact').value);  // Have to clear contact validators on contact method change
+            representativeFirstName.setValidators([Validators.required]);
+            representativeLastName.setValidators([Validators.required]);
+            representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
+
+            // representativeFirstName.markAsTouched();
+            representativeFirstName.updateValueAndValidity(options);
+            // representativeLastName.markAsTouched();
+            representativeLastName.updateValueAndValidity(options);
+            // representativePreferredMethodOfContact.markAsTouched(options);
+            representativePreferredMethodOfContact.updateValueAndValidity(options);
+        }
     }
 
     setupRepresentativeContactInformation(contactMethod: number): void {

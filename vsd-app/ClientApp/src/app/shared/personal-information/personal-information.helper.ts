@@ -38,10 +38,10 @@ export class PersonalInfoHelper {
             ]],
 
             primaryAddress: fb.group({
-                line1: [''],
+                line1: ['', [Validators.required]],
                 line2: [''],
-                city: [''],
-                postalCode: ['', [Validators.pattern(this.postalRegex)]],
+                city: ['', [Validators.required]],
+                postalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
                 province: [{ value: 'British Columbia', disabled: false }],
                 country: [{ value: 'Canada', disabled: false }],
             }),
