@@ -427,19 +427,19 @@
         <th>Did you goto a hospital to be treated for injuries resulting from the incident?</th>
         <td>{{ valueOrEmpty('medicalInformation.wereYouTreatedAtHospital') }} </td>
       </tr>
-      <tr>
+      <tr *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
         <th>Name of hospital</th>
         <td>{{ valueOrEmpty('medicalInformation.treatedAtHospitalName') }} </td>
       </tr>
-      <tr>
+      <tr *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
         <th>Is the hospital outside of BC?</th>
         <td>{{ valueOrEmpty('medicalInformation.treatedOutsideBc') }} </td>
       </tr>
-      <tr>
+      <tr *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
         <th>Please enter the name of the hospital</th>
         <td>{{ valueOrEmpty('medicalInformation.treatedOutsideBcHospitalName') }} </td>
       </tr>
-      <tr>
+      <tr *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
         <th>Date of treatment</th>
         <td>{{ datesOrEmpty(['medicalInformation.treatedAtHospitalDate']) }}</td>
       </tr>
