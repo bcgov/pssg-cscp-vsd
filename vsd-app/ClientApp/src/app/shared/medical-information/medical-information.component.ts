@@ -73,7 +73,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
                 hospitalControl.updateValueAndValidity();
             });
-        }
+      }
     }
 
     addProvider(): void {

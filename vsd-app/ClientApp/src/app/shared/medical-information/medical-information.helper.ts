@@ -5,7 +5,7 @@ export class MedicalInfoHelper {
     public setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
         let group = {
             doYouHaveMedicalServicesCoverage: ['', Validators.required],
-            haveMedicalCoverageProvince: [''],
+            haveMedicalCoverageProvince: ['British Columbia'],
             haveMedicalCoverageProvinceOther: [''],
             personalHealthNumber: [''],
 
