@@ -1,1 +1,19 @@
-﻿
+﻿.contact-info-box {
+    background-color: #f1f1f2;
+    color: #000;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    padding: 30px;
+    padding-top: 20px;
+
+    h3 {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    p {
+        margin: 20px 0;
+        font-size: 16px;
+    }
+}
