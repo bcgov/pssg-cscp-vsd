@@ -5,6 +5,7 @@ import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType, EnumHelper } from "../enums-list";
 import { FormGroup, ControlContainer, FormBuilder, FormArray, Validators } from "@angular/forms";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
+import { POSTAL_CODE } from "../regex.constants";
 
 
 @Component({
@@ -28,6 +29,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
     authorizedPersons: FormArray;
     showAddAuthorizationInformation: boolean = true;
     showRemoveAuthorization: boolean = true;
+    postalRegex = POSTAL_CODE;
 
     constructor(
         private controlContainer: ControlContainer,
@@ -43,36 +45,28 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         // console.log(this.form);
 
         this.form.get('allowCvapStaffSharing').valueChanges.subscribe(value => {
-          let authorizedPersonAuthorizesDiscussion = this.form.get('authorizedPersonAuthorizesDiscussion');
-          let authorizedPersonSignature = this.form.get('authorizedPersonSignature');
-          let authorizedPersonFullName = this.form.get('authorizedPersonFullName');
-          let authorizedPersonRelationship = this.form.get('authorizedPersonRelationship');
+            let options = { onlySelf: true, emitEvent: false };
+            let authorizedPersonAuthorizesDiscussion = this.form.get('authorizedPersonAuthorizesDiscussion');
+            let authorizedPersonSignature = this.form.get('authorizedPersonSignature');
 
-          authorizedPersonAuthorizesDiscussion.clearValidators();
-          authorizedPersonAuthorizesDiscussion.setErrors(null);
-          authorizedPersonSignature.clearValidators();
-          authorizedPersonSignature.setErrors(null);
-          authorizedPersonFullName.clearValidators();
-          authorizedPersonFullName.setErrors(null);
-          authorizedPersonRelationship.clearValidators();
-          authorizedPersonRelationship.setErrors(null);
+            authorizedPersonAuthorizesDiscussion.clearValidators();
+            authorizedPersonAuthorizesDiscussion.setErrors(null, options);
+            authorizedPersonSignature.clearValidators();
+            authorizedPersonSignature.setErrors(null), options;
 
             let useValidation = value === this.enumHelper.boolValues.Yes;
             if (useValidation) {
-              authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
-              authorizedPersonSignature.setValidators([Validators.required]);
-              authorizedPersonFullName.setValidators([Validators.required]);
-              authorizedPersonRelationship.setValidators([Validators.required]);
+                authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
+                authorizedPersonSignature.setValidators([Validators.required]);
             }
 
-          authorizedPersonAuthorizesDiscussion.updateValueAndValidity();
-          authorizedPersonSignature.updateValueAndValidity();
-          authorizedPersonFullName.updateValueAndValidity();
-          authorizedPersonRelationship.updateValueAndValidity();
+            authorizedPersonAuthorizesDiscussion.updateValueAndValidity(options);
+            authorizedPersonSignature.updateValueAndValidity(options);
         });
     }
 
     addAuthorizationInformation(makeAuthorizedSignatureRequired: boolean = false): void {
+        let options = { onlySelf: true, emitEvent: false };
         this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
         this.authorizedPersons.push(this.createAuthorizedPerson());
         this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
@@ -80,9 +74,9 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
 
         if (makeAuthorizedSignatureRequired) {
             let authorizedPersonSignature = this.form.get('authorizedPersonSignature');
-            authorizedPersonSignature.setErrors(null);
+            authorizedPersonSignature.setErrors(null, options);
             authorizedPersonSignature.setValidators([Validators.required]);
-            authorizedPersonSignature.updateValueAndValidity();
+            authorizedPersonSignature.updateValueAndValidity(options);
         }
     }
     clearAuthorizationInformation(): void {
@@ -108,17 +102,17 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         return this.fb.group({
             providerType: [''],
             providerTypeText: [''],
-            authorizedPersonFullName: [''],
+            authorizedPersonFullName: ['', Validators.required],
             authorizedPersonPhoneNumber: [''],
             authorizedPersonAgencyAddress: this.fb.group({
                 line1: [''],
                 line2: [''],
                 city: [''],
-                postalCode: [''],  // , [Validators.pattern(postalRegex)]
+                postalCode: ['', [Validators.pattern(this.postalRegex)]],  // 
                 province: [{ value: 'British Columbia', disabled: false }],
                 country: [{ value: 'Canada', disabled: false }],
             }),
-            authorizedPersonRelationship: [''],
+            authorizedPersonRelationship: ['', Validators.required],
             authorizedPersonAgencyName: [''],
         });
     }

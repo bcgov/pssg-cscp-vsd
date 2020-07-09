@@ -270,7 +270,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                                 vsd_province = t.providerAddress != null ? t.providerAddress.province : "",
                                 vsd_country = t.providerAddress != null ? t.providerAddress.country : "",
                                 vsd_postalcode = t.providerAddress != null ? t.providerAddress.postalCode : "",
-                                vsd_relationship1 = "Other",//t.providerType.ToString(),
+                                vsd_relationship1 = t.providerType,
                                 vsd_relationship1other = t.providerTypeText,// t.providerType.ToString(),
                                 //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
                                 //    vsd_firstname = "", // TODO: We don't collect a split name here

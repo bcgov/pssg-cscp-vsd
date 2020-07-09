@@ -95,7 +95,7 @@
                 </app-field>
 
                 <app-field label="Date of Death" *ngIf="form.get('victimDeceasedFromCrime').value === true">
-                    <input type="text" class="form-control date-picker" formControlName="dateOfDeath" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfDeathPicker" (focus)="dateOfDeathPicker.open()" (click)="dateOfDeathPicker.open()" readonly>
+                    <input type="text" [max]="todaysDate" class="form-control date-picker" formControlName="dateOfDeath" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfDeathPicker" (focus)="dateOfDeathPicker.open()" (click)="dateOfDeathPicker.open()" readonly>
                     <mat-datepicker #dateOfDeathPicker></mat-datepicker>
                 </app-field>
             </div>
@@ -148,7 +148,7 @@
                     <th scope="col" class="police-file-header">Police Reporting Start Date <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip>
                     </th>
                     <th scope="col" class="police-file-header">Police Reporting End Date</th>
-                    <th scope="col" class="police-file-header">Unsure of date</th>
+                    <th scope="col" class="police-file-header">Unsure of Date of Report</th>
                     <th></th>
                 </thead>
                 <tbody>

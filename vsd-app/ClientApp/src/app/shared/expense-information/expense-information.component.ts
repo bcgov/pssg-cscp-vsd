@@ -1,10 +1,11 @@
 import { FormBase } from "../form-base";
 import { OnInit, Component, Input } from "@angular/core";
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog } from "@angular/material";
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDatepickerInputEvent } from "@angular/material";
 import { FormGroup, ControlContainer, FormControl, AbstractControl } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { SummaryOfBenefitsDialog } from "../../summary-of-benefits/summary-of-benefits.component";
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-expense-information',
@@ -26,6 +27,9 @@ export class ExpenseInformationComponent extends FormBase implements OnInit {
     BENEFITS: string[];
     OTHER_BENEFITS: string[];
     header: string;
+
+    today = new Date();
+    minEndDate: Date;
 
     constructor(
         private controlContainer: ControlContainer,
@@ -97,6 +101,17 @@ export class ExpenseInformationComponent extends FormBase implements OnInit {
             ];
         }
 
+    }
+
+    daysWorkMissedStartChange(event: MatDatepickerInputEvent<Date>) {
+        this.minEndDate = event.target.value;
+        //validate that a selected end date is not before the start date
+        let startDate = moment(event.target.value);
+
+        let endDate = this.form.get('daysWorkMissedEnd').value;
+        if (endDate && moment(endDate).isBefore(startDate)) {
+            this.form.get('daysWorkMissedEnd').patchValue(null);
+        }
     }
 
     changeGroupValidity(values: any): void {

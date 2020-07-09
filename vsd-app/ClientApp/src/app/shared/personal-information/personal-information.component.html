@@ -132,7 +132,7 @@
         </div>
         <div class="col-md-6">
             <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter a valid SIN" [tooltipReference]="sinTemplate">
-                <input class="form-control" maxlength="9" type="text" formControlName="sin">
+                <input class="form-control" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
                 <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />text to be provided by CVAP</ng-template>
             </app-field>
         </div>
@@ -145,6 +145,7 @@
             <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2'" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number">
                 <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber">
             </app-field>
+            <label class="italic">I authorize you to leave a voicemail on this phone #</label>
         </div>
         <div class="col-md-6">
             <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('alternatePhoneNumber')" errorMessage="Please enter your phone number">
@@ -196,7 +197,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('preferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
+            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('preferredMethodOfContact')" errorMessage="Please select your preferred method of contact" [tooltipReference]="preferredMethodOfContactTemplate">
                 <select class="form-control" formControlName="preferredMethodOfContact">
                     <option value="0">Select...</option>
                     <option value="2">Phone Call</option>
@@ -205,6 +206,7 @@
                     <option value="100000002">Alternate Mail</option>
                 </select>
             </app-field>
+            <ng-template #preferredMethodOfContactTemplate>Should the program have any questions, what is your preferred method of contact?</ng-template>
         </div>
     </div>
 

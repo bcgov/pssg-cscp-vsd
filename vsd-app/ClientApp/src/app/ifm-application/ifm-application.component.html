@@ -57,13 +57,7 @@
 
         <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8"></app-authorization-information>
 
-        <div *ngIf="this.currentFormStep == 9">
-          <div class="page-header">
-            <h1>Review & Submit</h1>
-          </div>
-          <p>Please check the accuracy of the information entered in your application before submitting.</p>
-          <app-ifm-review [group]="form" [parentStepper]="stepper"></app-ifm-review>
-        </div>
+        <app-application-review [formGroup]="form" [formType]="FORM_TYPE" [parentStepper]="stepper" *ngIf="this.currentFormStep == 9"></app-application-review>
 
         <div *ngIf="showValidationMessage" class="error-summary">
           <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>

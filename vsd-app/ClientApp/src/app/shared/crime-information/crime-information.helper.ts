@@ -79,7 +79,7 @@ export class CrimeInfoHelper {
         return fb.group({
             policeFileNumber: '',
             investigatingOfficer: '',
-            policeDetachment: '',
+            policeDetachment: 'Surrey RCMP',
             reportStartDate: '',
             reportEndDate: '',
             policeReportedMultipleTimes: ['']
