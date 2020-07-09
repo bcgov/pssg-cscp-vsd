@@ -43,22 +43,32 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         // console.log(this.form);
 
         this.form.get('allowCvapStaffSharing').valueChanges.subscribe(value => {
-            let authorizedPersonAuthorizesDiscussion = this.form.get('authorizedPersonAuthorizesDiscussion');
-            let authorizedPersonSignature = this.form.get('authorizedPersonSignature');
+          let authorizedPersonAuthorizesDiscussion = this.form.get('authorizedPersonAuthorizesDiscussion');
+          let authorizedPersonSignature = this.form.get('authorizedPersonSignature');
+          let authorizedPersonFullName = this.form.get('authorizedPersonFullName');
+          let authorizedPersonRelationship = this.form.get('authorizedPersonRelationship');
 
-            authorizedPersonAuthorizesDiscussion.clearValidators();
-            authorizedPersonAuthorizesDiscussion.setErrors(null);
-            authorizedPersonSignature.clearValidators();
-            authorizedPersonSignature.setErrors(null);
+          authorizedPersonAuthorizesDiscussion.clearValidators();
+          authorizedPersonAuthorizesDiscussion.setErrors(null);
+          authorizedPersonSignature.clearValidators();
+          authorizedPersonSignature.setErrors(null);
+          authorizedPersonFullName.clearValidators();
+          authorizedPersonFullName.setErrors(null);
+          authorizedPersonRelationship.clearValidators();
+          authorizedPersonRelationship.setErrors(null);
 
             let useValidation = value === this.enumHelper.boolValues.Yes;
             if (useValidation) {
-                authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
-                authorizedPersonSignature.setValidators([Validators.required]);
+              authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
+              authorizedPersonSignature.setValidators([Validators.required]);
+              authorizedPersonFullName.setValidators([Validators.required]);
+              authorizedPersonRelationship.setValidators([Validators.required]);
             }
 
-            authorizedPersonAuthorizesDiscussion.updateValueAndValidity();
-            authorizedPersonSignature.updateValueAndValidity();
+          authorizedPersonAuthorizesDiscussion.updateValueAndValidity();
+          authorizedPersonSignature.updateValueAndValidity();
+          authorizedPersonFullName.updateValueAndValidity();
+          authorizedPersonRelationship.updateValueAndValidity();
         });
     }
 

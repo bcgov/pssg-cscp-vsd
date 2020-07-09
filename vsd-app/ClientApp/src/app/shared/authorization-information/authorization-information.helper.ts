@@ -8,7 +8,7 @@ export class AuthInfoHelper {
             approvedAuthorityNotification: ['', Validators.requiredTrue],
             readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
             signature: ['', Validators.required],
-            allowCvapStaffSharing: ['', Validators.required],
+            allowCvapStaffSharing: [''],
             authorizedPerson: fb.array([]),
             authorizedPersonAuthorizesDiscussion: [''],
             authorizedPersonSignature: [''],
