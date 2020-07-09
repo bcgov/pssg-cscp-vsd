@@ -501,6 +501,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_benefitsrequested = tempExpenses;
                 }
                 application.Application.vsd_cvap_benefitsrequestedother = model.ExpenseInformation.otherSpecificExpenses;
+                application.Application.vsd_cvap_benefitsrequesteddescription = model.ExpenseInformation.additionalBenefitsDetails;
 
                 // Build Benefits CSV String
                 string tempBenefits = "";

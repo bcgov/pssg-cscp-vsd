@@ -161,6 +161,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public bool haveOtherBenefits { get; set; }
         public string otherSpecificBenefits { get; set; }
         public bool noneOfTheAboveBenefits { get; set; }
+        public string additionalBenefitsDetails { get; set; }
     }
 
     public class Employmentincomeinformation
