@@ -181,7 +181,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_crimereportedto = model.CrimeInformation.noPoliceReportIdentification; // TODO: verify mapping - I think it's right, but different names
 
                 // Setup policeFiles, don't show if there isn't any
-                if (model.CrimeInformation.policeReports != null)
+                if (model.CrimeInformation.policeReports != null && model.CrimeInformation.policeReports.Length > 0)
                 {
                     if (model.CrimeInformation.policeReports[0].policeFileNumber.Length > 0)
                     {

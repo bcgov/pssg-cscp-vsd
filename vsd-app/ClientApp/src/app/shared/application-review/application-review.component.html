@@ -958,27 +958,27 @@
 
         <div *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.boolValues.Yes">
             <h3>Optional Authorization</h3>
-            <table class="table table-striped review-table">
+            <table class="table table-striped review-table" *ngFor="let item of form.get('authorizationInformation.authorizedPerson')['controls']; let i = index">
                 <tbody>
                     <tr>
                         <th>Full Name</th>
-                        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonFullName') }}</td>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonFullName')) }}</td>
                     </tr>
                     <tr>
                         <th>Phone Number</th>
-                        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonPhoneNumber') | phone}}</td>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonPhoneNumber')) | phone}}</td>
                     </tr>
                     <tr>
                         <th>Relationship to Applicant</th>
-                        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonRelationship') }}</td>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonRelationship')) }}</td>
                     </tr>
                     <tr>
                         <th>Agency Name</th>
-                        <td>{{ valueOrEmpty('authorizationInformation.authorizedPersonAgencyName') }}</td>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonAgencyName')) }}</td>
                     </tr>
                     <tr>
                         <th>Agency Address</th>
-                        <td><span [innerHTML]="displayMailingAddress('authorizationInformation.authorizedPersonAgencyAddress')"></span></td>
+                        <td><span [innerHTML]="displayMailingAddress(item.get('authorizedPersonAgencyAddress'))"></span></td>
                     </tr>
                 </tbody>
             </table>

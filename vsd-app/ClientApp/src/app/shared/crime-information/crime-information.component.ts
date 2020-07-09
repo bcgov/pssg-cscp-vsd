@@ -72,6 +72,15 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
+
+        this.form.get('wasReportMadeToPolice').valueChanges.subscribe(value => {
+            if (value === 100000001) {
+                this.addPoliceReport();
+            }
+            else {
+                this.removeAllPoliceReports();
+            }
+        });
     }
 
     addCrimeLocation(): void {
@@ -103,6 +112,14 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         this.showAddPoliceReport = this.policeReportItems.length < 5;
         this.showRemovePoliceReport = this.policeReportItems.length > 1;
         this.policeReportMinDates.splice(index, 1);
+    }
+
+    removeAllPoliceReports() {
+        this.policeReportItems = this.form.get('policeReports') as FormArray;
+        for (let i = 0; i < this.policeReportItems.length; ++i) {
+            this.policeReportItems.removeAt(i);
+        }
+        this.policeReportMinDates = [];
     }
 
     addCourtInfo(): void {
