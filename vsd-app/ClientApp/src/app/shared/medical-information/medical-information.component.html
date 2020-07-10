@@ -112,16 +112,38 @@
             </label>
         </app-field>
         <section *ngIf="form.get('beingTreatedByFamilyDoctor').value === true">
-            <app-field label="Name of Medical Doctor/Clinic" [required]="true">
-                <input class="form-control standard" type="text" formControlName="familyDoctorName">
-            </app-field>
-            <app-field label="Phone Number (incl. area code)">
-                <input mask='(000) 000 0000' class="form-control standard" type="text" formControlName="familyDoctorPhoneNumber">
-            </app-field>
-            <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
-                <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
-                <input class="form-control standard" type="text" formControlName="familyDoctorAddressLine2" placeholder="Address Line 2"><br />
-            </app-field>
+            <div class="row">
+                <div class="col-md-6">
+                    <app-field label="Name of Medical Doctor/Clinic" [required]="true">
+                        <input class="form-control" type="text" formControlName="familyDoctorName">
+                    </app-field>
+                </div>
+                <div class="col-md-6">
+                    <app-field label="Email Address">
+                        <input class="form-control" type="text" formControlName="familyDoctorEmail" maxlength="100">
+                    </app-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <app-field label="Phone Number (incl. area code)">
+                        <input mask='(000) 000 0000' class="form-control" type="text" formControlName="familyDoctorPhoneNumber">
+                    </app-field>
+                </div>
+                <div class="col-md-6">
+                    <app-field label="Fax">
+                        <input mask='(000) 000 0000' class="form-control" type="text" formControlName="familyDoctorFax">
+                    </app-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
+                        <input class="form-control" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
+                        <input class="form-control" type="text" formControlName="familyDoctorAddressLine2" placeholder="Address Line 2"><br />
+                    </app-field>
+                </div>
+            </div>
         </section>
 
         <h3>Other Treatment Information</h3>
@@ -137,57 +159,69 @@
         </app-field>
         <section *ngIf="form.get('hadOtherTreatments').value === true">
             <div class="other-treatments" formArrayName="otherTreatments" *ngFor="let item of form.get('otherTreatments')['controls']; let i = index;">
-                <div [formGroupName]="i" class="other-treatment">
+                <ng-container [formGroupName]="i" class="other-treatment">
                     <a href="javascript:void(0);" (click)="removeProvider(i)" class="float-right" *ngIf="showRemoveProvider">
                         <i class="fas fa-trash-alt"></i> Delete Provider
                     </a>
                     <h3>Provider {{ i + 1 }}</h3>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md-6">
                             <app-field label="Provider name" [required]="true">
                                 <input type="text" class="form-control" formControlName="providerName">
                             </app-field>
                         </div>
-                        <div class="col">
+                        <div class="col-md-6">
+                            <app-field label="Email Address">
+                                <input type="text" class="form-control" formControlName="providerEmail" maxlength="100">
+                            </app-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
                             <app-field label="Phone number (incl. area code)">
                                 <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerPhoneNumber">
                             </app-field>
                         </div>
+                        <div class="col-md-6">
+                            <app-field label="Fax">
+                                <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerFax">
+                            </app-field>
+                        </div>
                     </div>
-                    <div>
-                        <app-field label="Type of provider">
-                            <label class="inline-label">
-                                <input type="radio" [value]="'Specialist'" formControlName="providerType" (change)="hideOtherProviderInput(i)">
-                                <span>Specialist</span>
-                            </label>
 
-                            <label class="inline-label">
-                                <input type="radio" [value]="'Counsellor / Psychologist'" formControlName="providerType" (change)="hideOtherProviderInput(i)">
-                                <span>Counsellor / Psychologist</span>
-                            </label>
-
-                            <label class="inline-label">
-                                <input type="radio" [value]="'Dentist'" formControlName="providerType" (change)="hideOtherProviderInput(i)">
-                                <span>Dentist</span>
-                            </label>
-
-                            <label class="inline-label">
-                                <input type="radio" [value]="'Other'" formControlName="providerType" (change)="showOtherProviderInput(i)">
-                                <span>Other</span>
-                            </label>
-
-                            <div *ngIf="showOtherProvider[i] == true">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <app-field label="Type of provider">
                                 <label class="inline-label">
-                                    <input type="text" maxlength="50" class="form-control" formControlName="providerTypeText">
+                                    <input type="radio" [value]="'Specialist'" formControlName="providerType">
+                                    <span>Specialist</span>
                                 </label>
-                            </div>
-                        </app-field>
-                    </div>
 
-                    <!--<app-address-block [group]="item.get('providerAddress')" formControlName="providerAddress" [required]="true" [showChildrenAsRequired]="false"></app-address-block>-->
-                    <app-address-block formControlName="providerAddress"></app-address-block>
-                    <!--<app-address [group]="item.get('providerAddress')" [showChildrenAsRequired]="false"></app-address>-->
-                </div>
+                                <label class="inline-label">
+                                    <input type="radio" [value]="'Counsellor / Psychologist'" formControlName="providerType">
+                                    <span>Counsellor / Psychologist</span>
+                                </label>
+
+                                <label class="inline-label">
+                                    <input type="radio" [value]="'Dentist'" formControlName="providerType">
+                                    <span>Dentist</span>
+                                </label>
+
+                                <label class="inline-label">
+                                    <input type="radio" [value]="'Other'" formControlName="providerType">
+                                    <span>Other</span>
+                                </label>
+
+                                <div *ngIf="item.get('providerType').value === 'Other'">
+                                    <label class="inline-label">
+                                        <input type="text" maxlength="50" class="form-control" formControlName="providerTypeText">
+                                    </label>
+                                </div>
+                            </app-field>
+                        </div>
+                    </div>
+                    <app-address [group]="item.get('providerAddress')" [showChildrenAsRequired]="false"></app-address>
+                </ng-container>
             </div>
             <a href="javascript:void(0);" class="btn btn-secondary" (click)="addProvider()" *ngIf="showAddProvider">Add a Provider</a>
         </section>

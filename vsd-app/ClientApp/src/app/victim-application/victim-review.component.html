@@ -1,4 +1,4 @@
-<section>
+<!-- <section>
   <h2 class="blue-header">Overview <button (click)="gotoPageIndex(0);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
   <table class="table table-striped review-table">
     <tbody>
@@ -458,7 +458,6 @@
       </tr>
       <tr>
         <th>Please provide days of work missed</th>
-        <!-- handle piping '--' into date pipe because of fun empty handling from value or empty blah blah -->
         <td *ngIf="form.get('employmentIncomeInformation.daysWorkMissedStart').value != ''">{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart') | date:'yyyy-MM-dd'}} - {{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd') | date:'yyyy-MM-dd'}} </td>
         <td *ngIf="form.get('employmentIncomeInformation.daysWorkMissedStart').value == ''">--</td>
       </tr>
@@ -478,34 +477,7 @@
       </tr>
     </tbody>
   </table>
-  <!--<table class="table table-striped review-table" *ngFor="let item of employers.controls; let i = index">
-    <tbody>
-      <tr>
-        <th>Name of Company/Organization</th>
-        <td>{{ valueOrEmpty(item.get('employerName')) }}</td>
-      </tr>
-      <tr>
-        <th>Phone Number of Contact Person</th>
-        <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) }}</td>
-      </tr>
-      <tr>
-        <th>Mailing Address</th>
-        <td><span [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
-      </tr>
-      <tr>
-        <th>Contact Name</th>
-        <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName')) }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <table class="table table-striped review-table">
-    <tbody>
-      <tr>
-        <th>If you are requesting benefits for lost wages, may we contact your employer?</th>
-        <td>{{ valueOrEmpty('employmentIncomeInformation.mayContactEmployer') }} </td>
-      </tr>
-    </tbody>
-  </table>-->
+  
 </section>
 
 <section>
@@ -638,12 +610,10 @@
         <th>Applicant's Signature</th>
         <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.signature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.signature', '') }}" /></td>
       </tr>
-      <!-- <ng-container *ngIf="form.get('authorizationInformationallowCvapStaffSharing').value === true"> -->
       <tr>
         <th>Optional authorization given?</th>
         <td>{{ enumHelper.boolEnum[valueOrEmpty('authorizationInformation.allowCvapStaffSharing')] }}</td>
       </tr>
-      <!-- </ng-container> -->
     </tbody>
   </table>
 
@@ -692,4 +662,4 @@
       </tbody>
     </table>
   </div>
-</section>
+</section> -->

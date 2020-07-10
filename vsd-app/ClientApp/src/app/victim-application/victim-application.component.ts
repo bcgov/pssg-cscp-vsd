@@ -27,6 +27,7 @@ import { PersonalInfoHelper } from '../shared/personal-information/personal-info
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
 import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
+import { EmploymentInfoHelper } from '../shared/employment-information/employment-information.helper';
 
 @Component({
   selector: 'app-victim-application',
@@ -83,6 +84,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   personalInfoHelper = new PersonalInfoHelper();
   crimeInfoHelper = new CrimeInfoHelper();
   medicalInfoHelper = new MedicalInfoHelper();
+  employmentInfoHelper = new EmploymentInfoHelper();
   expenseInfoHelper = new ExpenseInfoHelper();
   representativeInfoHelper = new RepresentativeInfoHelper();
   declarationInfoHelper = new DeclarationInfoHelper();
@@ -137,7 +139,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
 
-    this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.validateEmploymentInfoForm());
+    // this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.validateEmploymentInfoForm());
   }
 
   buildApplicationForm(): void {
@@ -149,24 +151,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      employmentIncomeInformation: this.fb.group({
-        wereYouEmployedAtTimeOfCrime: ['', Validators.required],
-        wereYouAtWorkAtTimeOfIncident: [''],
-        haveYouAppliedToWorkSafe: [''],
-        wsbcClaimNumber: [''],
-        didYouMissWorkDueToCrime: ['', Validators.required],
-        didYouLoseWages: [''],
-        areYouSelfEmployed: [''],
-        mayContactEmployer: [''],
-        haveYouAppliedForWorkersCompensation: [''],
-        areYouStillOffWork: [''],
-        daysWorkMissedStart: [''],
-        daysWorkMissedEnd: [''],
-        workersCompensationClaimNumber: [''],
-        employers: this.fb.array([this.createEmployerInfo()]),
-      }),
-      // employmentIncomeInformation: [null],//, Validators.required],
-
+      employmentIncomeInformation: this.employmentInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
@@ -258,55 +243,55 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
 
   addEmployer(): void {
     // add an employer to the list
-    console.log("add employer");
-    this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
-    this.employerItems.push(this.createEmployerInfo());
-    this.showAddEmployer = this.employerItems.length < 5;
-    this.showRemoveEmployer = this.employerItems.length > 1;
+    // console.log("add employer");
+    // this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
+    // this.employerItems.push(this.createEmployerInfo());
+    // this.showAddEmployer = this.employerItems.length < 5;
+    // this.showRemoveEmployer = this.employerItems.length > 1;
     //let the form render and update status before validating it
-    setTimeout(() => {
-      this.validateEmploymentInfoForm();
-    }, 200)
+    // setTimeout(() => {
+    //   this.validateEmploymentInfoForm();
+    // }, 200)
 
   }
 
   removeEmployer(index: number): void {
     // remove the employer from the list of employers
-    this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
-    this.employerItems.removeAt(index);
-    this.showAddEmployer = this.employerItems.length < 5;
-    this.showRemoveEmployer = this.employerItems.length > 1;
+    // this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
+    // this.employerItems.removeAt(index);
+    // this.showAddEmployer = this.employerItems.length < 5;
+    // this.showRemoveEmployer = this.employerItems.length > 1;
   }
 
-  getEmployerItem(index: number): FormControl {
-    // TODO: this appears to be unused.
-    // collect item from the employer array.
-    return (<FormArray>this.form.get('employmentIncomeInformation.employers')).controls[index] as FormControl;
-  }
+  // getEmployerItem(index: number): FormControl {
+  // TODO: this appears to be unused.
+  // collect item from the employer array.
+  // return (<FormArray>this.form.get('employmentIncomeInformation.employers')).controls[index] as FormControl;
+  // }
 
-  setEmploymentInformation(ei: EmploymentIncomeInformation) {
-    this.form.get('employmentIncomeInformation').patchValue(ei);
-  }
+  // setEmploymentInformation(ei: EmploymentIncomeInformation) {
+  //   this.form.get('employmentIncomeInformation').patchValue(ei);
+  // }
 
-  createEmployerInfo(): FormGroup {
-    return this.fb.group({
-      employerName: '',
-      employerPhoneNumber: '',
-      employerFax: '',
-      employerEmail: '',
-      employerFirstName: '',
-      employerLastName: '',
-      employerAddress: this.fb.group({
-        line1: [''],
-        line2: [''],
-        city: [''],
-        postalCode: [''], //// postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-        province: [{ value: 'British Columbia', disabled: false }],
-        country: [{ value: 'Canada', disabled: false }],
-      }),
-      contactable: '',
-    });
-  }
+  // createEmployerInfo(): FormGroup {
+  //   return this.fb.group({
+  //     employerName: '',
+  //     employerPhoneNumber: '',
+  //     employerFax: '',
+  //     employerEmail: '',
+  //     employerFirstName: '',
+  //     employerLastName: '',
+  //     employerAddress: this.fb.group({
+  //       line1: [''],
+  //       line2: [''],
+  //       city: [''],
+  //       postalCode: [''], //// postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
+  //       province: [{ value: 'British Columbia', disabled: false }],
+  //       country: [{ value: 'Canada', disabled: false }],
+  //     }),
+  //     contactable: '',
+  //   });
+  // }
 
   submitPartialApplication() {
     this.justiceDataService.submitApplication(this.harvestForm())
@@ -592,11 +577,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     }
   }
 
-  validateEmploymentInfoForm() {
-    console.log("validateEmploymentInfoForm");
-    let eiForm = document.querySelector(".employment-info-form");
-    this.employmentInfoFormIsValid = eiForm.classList.contains("ng-valid");
-    console.log(this.employmentInfoFormIsValid);
-  }
+  // validateEmploymentInfoForm() {
+  //   console.log("validateEmploymentInfoForm");
+  //   let eiForm = document.querySelector(".employment-info-form");
+  //   this.employmentInfoFormIsValid = eiForm.classList.contains("ng-valid");
+  //   console.log(this.employmentInfoFormIsValid);
+  // }
 
 }

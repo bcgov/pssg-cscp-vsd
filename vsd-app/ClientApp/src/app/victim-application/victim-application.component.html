@@ -48,7 +48,9 @@
 
         <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" *ngIf="this.currentFormStep == 4"></app-expense-information>
 
-        <div *ngIf="this.currentFormStep == 5">
+        <app-employment-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="employmentIncomeInformation" *ngIf="this.currentFormStep == 5"></app-employment-information>
+
+        <!-- <div *ngIf="this.currentFormStep == 5">
           <div class="page-header">
             <h1>Employment Income</h1>
           </div>
@@ -77,7 +79,7 @@
               </span>
             </section>
           </span>
-        </div>
+        </div> -->
 
         <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6"></app-representative-information>
 
@@ -94,10 +96,9 @@
 
         <section class="button-container">
           <div [ngBusy]="[busy3]"></div>
-          <!-- Stepper page 5 is employment information. The one page has a validation problem. I have spent 32+ hours trying to find it and am giving up and making a hack. -->
-          <a (click)="verifyCancellation()" *ngIf="stepper.selectedIndex!=5" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+          <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span style="float: right;">
-            <button (click)="gotoNextStep(stepper);" class="btn btn-primary continue-btn" *ngIf="stepper.selectedIndex < 9 &&stepper.selectedIndex!=5">CONTINUE <i class="fas fa-chevron-right"></i></button>
+            <button (click)="gotoNextStep(stepper);" class="btn btn-primary continue-btn" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
             <button (click)="markAsTouched(); producePDF();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>&nbsp;
             <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="!submitting && stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
             <button class="btn btn-primary disabled" *ngIf="submitting && stepper.selectedIndex == 9">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button>

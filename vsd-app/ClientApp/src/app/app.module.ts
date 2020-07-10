@@ -81,8 +81,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { TestComponent } from './test/test.component';
 import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
-import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
-import { AddressBlockComponent } from './address-block/address-block.component';
+// import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
 import { NameBlockComponent } from './name-block/name-block.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { FilenameBlockComponent } from './filename-block/filename-block.component';
@@ -98,6 +97,7 @@ import { IntroductionComponent } from './shared/introduction/introduction.compon
 import { DeclarationInformationComponent } from './shared/declaration-information/declaration-information.component';
 import { ExpenseInformationComponent } from './shared/expense-information/expense-information.component';
 import { ApplicationReviewComponent } from './shared/application-review/application-review.component';
+import { EmploymentInformationComponent } from './shared/employment-information/employment-information.component';
 
 @NgModule({
   declarations: [
@@ -136,8 +136,8 @@ import { ApplicationReviewComponent } from './shared/application-review/applicat
     VersionInfoDialog,
     TestComponent,
     FileUploaderBoxComponent,
-    EmploymentIncomeComponent,
-    AddressBlockComponent,
+    // EmploymentIncomeComponent,
+    EmploymentInformationComponent,
     VictimInformationComponent,
     PersonalInformationComponent,
     RepresentativeInformationComponent,
