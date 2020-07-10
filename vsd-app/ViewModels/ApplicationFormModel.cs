@@ -86,6 +86,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public float? expensesAwarded { get; set; }
         public float? expensesReceived { get; set; }
         public int? willBeTakingLegalAction { get; set; }
+        public int? haveLawyer { get; set; }
         public string lawyerOrFirmName { get; set; }
         public Address lawyerAddress { get; set; }
         public string signName { get; set; }

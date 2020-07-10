@@ -48,6 +48,7 @@ export class CrimeInfoHelper {
                 expensesAwarded: [null],
                 expensesReceived: [null],
                 willBeTakingLegalAction: [null, [Validators.min(100000000), Validators.max(100000002)]],
+                haveLawyer: [null, [Validators.min(100000000), Validators.max(100000001)]],
                 lawyerOrFirmName: [''],
                 lawyerAddress: fb.group({
                     line1: [''],
