@@ -22,7 +22,7 @@ export class CrimeInfoHelper {
 
             wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]], // No: 100000000 Yes: 100000001
 
-            policeReports: fb.array([this.createPoliceReport(fb)]),
+            policeReports: fb.array([]),
             noPoliceReportIdentification: [''],
 
             offenderFirstName: [''],
@@ -79,7 +79,8 @@ export class CrimeInfoHelper {
         return fb.group({
             policeFileNumber: '',
             investigatingOfficer: '',
-            policeDetachment: '',
+            policeDetachment: 'Surrey RCMP',
+            policeDetachmentOther: '',
             reportStartDate: '',
             reportEndDate: '',
             policeReportedMultipleTimes: ['']

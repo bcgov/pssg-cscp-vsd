@@ -135,3 +135,9 @@ export enum ApplicationType {
   IFM_Application = 100000001,
   Witness_Application = 100000000
 }
+
+export enum OnBehalfOf {
+  Myself = 100000000,
+  Parent = 100000002,
+  Legal_Guardian = 100000003
+}

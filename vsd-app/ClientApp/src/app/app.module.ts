@@ -97,6 +97,7 @@ import { RepresentativeInformationComponent } from './shared/representative-info
 import { IntroductionComponent } from './shared/introduction/introduction.component';
 import { DeclarationInformationComponent } from './shared/declaration-information/declaration-information.component';
 import { ExpenseInformationComponent } from './shared/expense-information/expense-information.component';
+import { ApplicationReviewComponent } from './shared/application-review/application-review.component';
 
 @NgModule({
   declarations: [
@@ -131,6 +132,7 @@ import { ExpenseInformationComponent } from './shared/expense-information/expens
     QuickExitComponent,
     ToolTipTriggerComponent,
     TermsAndConditionsComponent,
+    ApplicationReviewComponent,
     VersionInfoDialog,
     TestComponent,
     FileUploaderBoxComponent,

@@ -55,7 +55,6 @@
           <span *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
 
             <section>
-              <!-- <p>This section provides information regarding employment information. This information is only necessary if you are requesting benefits for lost employment income.</p> -->
               <p>You have not requested income benefit, if this is correct continue to the next page. If you are requesting this benefit, go back to Expense & Loss Information.</p>
             </section>
             <section class="button-container">
@@ -68,8 +67,6 @@
           </span>
           <span *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
             <section>
-              <!-- this whole project seems to e reactive forms, and weirdly this one component is template, that's fun -->
-              <!-- formControlName="employmentIncomeInformation" -->
               <app-employment-income [value]="form.get('employmentIncomeInformation').value" (valueChange)="setEmploymentInformation($event)" (employerAdded)="addEmployer()" #employmentIncomeInfo></app-employment-income>
             </section>
             <section class="button-container">
@@ -77,8 +74,6 @@
               <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
               <span style="float: right;">
                 <button [disabled]="!employmentInfoFormIsValid" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE <i class="fas fa-chevron-right"></i></button>
-                <!-- || (form.get('employmentIncomeInformation.didYouLoseWages').value === 100000001 && form.get('employmentIncomeInformation.areYouSelfEmployed').value < 10) -->
-                <!-- <button *ngIf="form.get('employmentIncomeInformation').valid===true" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE <i class="fas fa-chevron-right"></i></button> -->
               </span>
             </section>
           </span>
@@ -90,13 +85,7 @@
 
         <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8"></app-authorization-information>
 
-        <div *ngIf="this.currentFormStep == 9">
-          <div class="page-header">
-            <h1>Review & Submit</h1>
-          </div>
-          <p>Please check the accuracy of the information entered in your application before submitting.</p>
-          <app-victim-review [group]="form" [parentStepper]="stepper"></app-victim-review>
-        </div>
+        <app-application-review [formGroup]="form" [formType]="FORM_TYPE" [parentStepper]="stepper" *ngIf="this.currentFormStep == 9"></app-application-review>
 
         <div *ngIf="showValidationMessage" class="error-summary">
           <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>

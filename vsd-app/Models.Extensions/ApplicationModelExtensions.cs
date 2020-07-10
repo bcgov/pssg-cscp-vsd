@@ -170,7 +170,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             ++documentIndex;
                         }
                     }
-                    
+
                 }
                 catch (Exception e)
                 {
@@ -181,7 +181,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_crimereportedto = model.CrimeInformation.noPoliceReportIdentification; // TODO: verify mapping - I think it's right, but different names
 
                 // Setup policeFiles, don't show if there isn't any
-                if (model.CrimeInformation.policeReports != null)
+                if (model.CrimeInformation.policeReports != null && model.CrimeInformation.policeReports.Length > 0)
                 {
                     if (model.CrimeInformation.policeReports[0].policeFileNumber.Length > 0)
                     {
@@ -189,7 +189,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         {
                             vsd_investigatingpoliceofficername = r.investigatingOfficer,
                             vsd_policefilenumber = r.policeFileNumber,
-                            vsd_policedetachment = r.policeDetachment,
+                            vsd_policedetachment = r.policeDetachment.Equals("Other") ? r.policeDetachmentOther : r.policeDetachment,
                             vsd_policereportingstartdate = r.reportStartDate,
                             vsd_policereportingenddate = r.reportEndDate
                         }).ToArray();
@@ -270,7 +270,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                                 vsd_province = t.providerAddress != null ? t.providerAddress.province : "",
                                 vsd_country = t.providerAddress != null ? t.providerAddress.country : "",
                                 vsd_postalcode = t.providerAddress != null ? t.providerAddress.postalCode : "",
-                                vsd_relationship1 = "Other",//t.providerType.ToString(),
+                                vsd_relationship1 = t.providerType,
                                 vsd_relationship1other = t.providerTypeText,// t.providerType.ToString(),
                                 //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
                                 //    vsd_firstname = "", // TODO: We don't collect a split name here
@@ -501,6 +501,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_benefitsrequested = tempExpenses;
                 }
                 application.Application.vsd_cvap_benefitsrequestedother = model.ExpenseInformation.otherSpecificExpenses;
+                application.Application.vsd_cvap_benefitsrequesteddescription = model.ExpenseInformation.additionalBenefitsDetails;
 
                 // Build Benefits CSV String
                 string tempBenefits = "";

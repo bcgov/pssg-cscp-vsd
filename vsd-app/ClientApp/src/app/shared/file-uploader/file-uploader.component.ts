@@ -20,8 +20,8 @@ export class FileUploaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("file uploader");
-    console.log(this.documents);
+    // console.log("file uploader");
+    // console.log(this.documents);
   }
 
   fakeBrowseClick(): void {

@@ -102,6 +102,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string policeFileNumber { get; set; }
         public string investigatingOfficer { get; set; }
         public string policeDetachment { get; set; }
+        public string policeDetachmentOther { get; set; }
         public DateTime? reportStartDate { get; set; }
         public DateTime? reportEndDate { get; set; }
         public string policeReportedMultipleTimes { get; set; }
@@ -161,6 +162,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public bool haveOtherBenefits { get; set; }
         public string otherSpecificBenefits { get; set; }
         public bool noneOfTheAboveBenefits { get; set; }
+        public string additionalBenefitsDetails { get; set; }
     }
 
     public class Employmentincomeinformation

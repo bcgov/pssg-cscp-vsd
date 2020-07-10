@@ -124,6 +124,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_benefitsrequestedother { get; set; }
         public string vsd_cvap_otherbenefits { get; set; }
         public string vsd_cvap_otherbenefitsother { get; set; }
+        public string vsd_cvap_benefitsrequesteddescription { get; set; }
 
         public int? vsd_cvap_ifmemployedduringcrime { get; set; }
         public int? vsd_cvap_ifmatworkduringcrime { get; set; }
