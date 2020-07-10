@@ -158,10 +158,16 @@
                                 <input class="form-control" type="text" formControlName="policeFileNumber">
                             </td>
                             <td>
-                                <!-- <input class="form-control standard" type="text" formControlName="policeDetachment"> -->
-                                <select class="form-control standard" formControlName="policeDetachment">
-                                    <option *ngFor="let policeForce of policeForceList">{{policeForce}}</option>
-                                </select>
+                                <div>
+                                    <!-- <input class="form-control standard" type="text" formControlName="policeDetachment"> -->
+                                    <select class="form-control standard" formControlName="policeDetachment" (change)="policeForceSelected(i)">
+                                        <option *ngFor="let policeForce of policeForceList" [value]="policeForce.name">{{policeForce.name}}</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <input class="form-control mt-2" *ngIf="item.get('policeDetachment').value == 'Other'" type="text" formControlName="policeDetachmentOther">
+                                </div>
                             </td>
                             <td>
                                 <input class="form-control" type="text" formControlName="investigatingOfficer">

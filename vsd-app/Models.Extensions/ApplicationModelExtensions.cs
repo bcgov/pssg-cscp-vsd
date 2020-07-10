@@ -170,7 +170,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             ++documentIndex;
                         }
                     }
-                    
+
                 }
                 catch (Exception e)
                 {
@@ -189,7 +189,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         {
                             vsd_investigatingpoliceofficername = r.investigatingOfficer,
                             vsd_policefilenumber = r.policeFileNumber,
-                            vsd_policedetachment = r.policeDetachment,
+                            vsd_policedetachment = r.policeDetachment.Equals("Other") ? r.policeDetachmentOther : r.policeDetachment,
                             vsd_policereportingstartdate = r.reportStartDate,
                             vsd_policereportingenddate = r.reportEndDate
                         }).ToArray();
