@@ -71,7 +71,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     }
 
     ngOnInit() {
-        this.form = <FormGroup>this.controlContainer.control;
+      this.form = <FormGroup>this.controlContainer.control;
+      this.copyApplicantToRACAFSignature(this.form.parent);
     }
 
     addCrimeLocation(): void {

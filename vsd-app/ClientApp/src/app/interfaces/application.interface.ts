@@ -178,6 +178,7 @@ interface Racafinformation {
   expensesAwarded?: number;
   expensesReceived?: number;
   willBeTakingLegalAction?: number;
+  haveLawyer?: number;
   lawyerOrFirmName: string;
   lawyerAddress: Address;
   signName: string;
