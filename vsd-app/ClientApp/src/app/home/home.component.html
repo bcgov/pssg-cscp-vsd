@@ -95,6 +95,14 @@
               </section>
             </div>
           </div>
+
+          <div *ngIf="isLocalHost">
+            <label style="display: block; padding-top: 80px;">These only show when running locally - quick links to other forms</label>
+            <button [routerLink]="'/victim-restitution'" class="btn btn-primary mr-2">Victim Restitution</button>
+            <button [routerLink]="'/offender-restitution'" class="btn btn-primary mr-2">Offender Restitution</button>
+            <button [routerLink]="'/submit-invoice'" class="btn btn-primary mr-2">Submit Invoice</button>
+          </div>
+
         </div>
       </div>
     </div>

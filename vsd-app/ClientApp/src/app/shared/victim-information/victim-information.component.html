@@ -49,7 +49,7 @@
             </div>
             <div class="col-4">
                 <app-field label="Date of Name Change">
-                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
+                    <input type="text" [max]="todaysDate" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
                     <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
                 </app-field>
             </div>

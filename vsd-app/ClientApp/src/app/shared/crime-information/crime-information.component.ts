@@ -8,6 +8,7 @@ import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import * as moment from 'moment';
 import { CrimeInfoHelper } from "./crime-information.helper";
+import { config } from '../../../config';
 
 @Component({
     selector: 'app-crime-information',
@@ -48,19 +49,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     showWhyDidYouNotApplySooner: boolean = false;
     crimeInfoHelper = new CrimeInfoHelper();
 
-
-    policeForceList = ["Surrey RCMP",
-        "Vancouver Police Department",
-        "Abbotsford Police Department",
-        "Kelowna RCMP",
-        "Chilliwack RCMP",
-        "New Westminster Police Department",
-        "Burnaby RCMP",
-        "Victoria Police Department",
-        "Coquitlam RCMP",
-        "Langley RCMP",
-        "Nanaimo",
-        "Kamloops"];
+    policeForceList = [];
 
     constructor(
         private controlContainer: ControlContainer,
@@ -73,6 +62,17 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     ngOnInit() {
       this.form = <FormGroup>this.controlContainer.control;
       this.copyApplicantToRACAFSignature(this.form.parent);
+
+        this.form.get('wasReportMadeToPolice').valueChanges.subscribe(value => {
+            if (value === 100000001) {
+                this.addPoliceReport();
+            }
+            else {
+                this.removeAllPoliceReports();
+            }
+        });
+
+        this.policeForceList = config.police_detachments;
     }
 
     addCrimeLocation(): void {
@@ -104,6 +104,15 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         this.showAddPoliceReport = this.policeReportItems.length < 5;
         this.showRemovePoliceReport = this.policeReportItems.length > 1;
         this.policeReportMinDates.splice(index, 1);
+    }
+
+    removeAllPoliceReports() {
+        console.log("remove ALL pr");
+        this.policeReportItems = this.form.get('policeReports') as FormArray;
+        while (this.policeReportItems.length !== 0) {
+            this.policeReportItems.removeAt(0);
+        }
+        this.policeReportMinDates = [];
     }
 
     addCourtInfo(): void {
@@ -188,6 +197,10 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         if (thisReport.get('policeReportedMultipleTimes').value) {
             thisReport.get('reportEndDate').patchValue(null);
         }
+    }
+
+    policeForceSelected(index: number) {
+
     }
 
 }

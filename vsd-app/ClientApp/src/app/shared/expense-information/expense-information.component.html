@@ -262,10 +262,10 @@
 
             <section *ngIf="form.get('missedWorkDueToDeathOfVictim').value === true">
                 <app-field label="Please provide days of work missed" [valid]="isFieldValid('daysWorkMissedStart')" [required]="true" errorMessage="Please select an option">
-                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
+                    <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
                     <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
                     <span> - </span>
-                    <input type="text" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
+                    <input type="text" [max]="today" [min]="minEndDate" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
                     <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
                 </app-field>
                 <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [valid]="isFieldValid('didYouLoseWages')" [required]="true" errorMessage="Please select an option">

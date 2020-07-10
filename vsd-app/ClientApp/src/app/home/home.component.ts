@@ -19,15 +19,20 @@ export class HomeComponent extends FormBase implements OnInit {
   public selectedApplicationName: string;
   showValidationMessage: boolean;
 
+  isLocalHost: boolean = false;
+
   constructor(
     private titleService: Title,
     private fb: FormBuilder,
-    private router: Router)
-  {
+    private router: Router) {
     super();
   }
 
   ngOnInit() {
+    if (window.location.origin === "http://localhost:5000") {
+      this.isLocalHost = true;
+    }
+
     this.titleService.setTitle('Home - Crime Victim Assistance Program');
 
     this.form = this.fb.group({
@@ -47,15 +52,15 @@ export class HomeComponent extends FormBase implements OnInit {
     this.form.get('wasCrimeInBC').setValue('');
   }
 
-  canProceedWithApplication() : boolean {
-    let applicationType = parseInt(this.form.get('applicationType').value) > 0; 
+  canProceedWithApplication(): boolean {
+    let applicationType = parseInt(this.form.get('applicationType').value) > 0;
     let behalfOf = parseInt(this.form.get('completingOnBehalfOf').value) > 0;
     let isInBc = this.form.get('wasCrimeInBC').value === true;
 
     return applicationType && behalfOf && isInBc;
   }
 
-  getApplicationName(applicationNumber: number) : string {
+  getApplicationName(applicationNumber: number): string {
     switch (applicationNumber) {
       case 100000002:
         return 'Victim Application';
@@ -72,7 +77,7 @@ export class HomeComponent extends FormBase implements OnInit {
     this.form.markAsTouched();
   }
 
-  gotoApplication() : void {
+  gotoApplication(): void {
     if (this.form.valid && this.form.get('wasCrimeInBC').value === true) {
       this.showValidationMessage = false;
       let applicationType = parseInt(this.form.get('applicationType').value);

@@ -15,6 +15,10 @@ export class FormBase {
     return this.form.get(field).valid || !this.form.get(field).touched;
   }
 
+  isMyControlValid(control: AbstractControl) {
+    return control.valid || !control.touched;
+  }
+
   validateSIN(sin) {
     var check, even, tot;
 
