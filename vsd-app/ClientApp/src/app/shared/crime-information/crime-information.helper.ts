@@ -43,23 +43,23 @@ export class CrimeInfoHelper {
             intendToSueOffender: [null], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
             racafInformation: fb.group({
-                applyToCourtForMoneyFromOffender: [null, [Validators.min(100000000), Validators.max(100000002)]],
-                expensesRequested: [''],
-                expensesAwarded: [null],
-                expensesReceived: [null],
-                willBeTakingLegalAction: [null, [Validators.min(100000000), Validators.max(100000002)]],
-                haveLawyer: [null, [Validators.min(100000000), Validators.max(100000001)]],
-                lawyerOrFirmName: [''],
-                lawyerAddress: fb.group({
+              applyToCourtForMoneyFromOffender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
+              expensesRequested: [''],
+              expensesAwarded: [null],
+              expensesReceived: [null],
+              willBeTakingLegalAction: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
+              haveLawyer: [null, [Validators.min(100000000), Validators.max(100000001)]],
+              lawyerOrFirmName: [''],
+              lawyerAddress: fb.group({
                     line1: [''],
                     line2: [''],
                     city: [''],
                     postalCode: ['', [Validators.pattern(this.postalRegex)]],
                     province: [{ value: 'British Columbia', disabled: false }],
                     country: [{ value: 'Canada', disabled: false }],
-                }),
-                signName: [''],
-                signature: [''],
+              }),
+              signName: ['', [Validators.required]],
+              signature: ['', [Validators.required]],
             }),
         };
 

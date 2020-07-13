@@ -173,11 +173,11 @@ interface Policereport {
 }
 
 interface Racafinformation {
-  applyToCourtForMoneyFromOffender?: number;
+  applyToCourtForMoneyFromOffender: number;
   expensesRequested: string;
   expensesAwarded?: number;
   expensesReceived?: number;
-  willBeTakingLegalAction?: number;
+  willBeTakingLegalAction: number;
   haveLawyer?: number;
   lawyerOrFirmName: string;
   lawyerAddress: Address;
