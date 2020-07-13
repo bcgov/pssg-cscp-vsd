@@ -106,7 +106,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     }
 
     removeAllPoliceReports() {
-        console.log("remove ALL pr");
         this.policeReportItems = this.form.get('policeReports') as FormArray;
         while (this.policeReportItems.length !== 0) {
             this.policeReportItems.removeAt(0);

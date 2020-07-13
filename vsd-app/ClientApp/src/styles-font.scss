@@ -273,7 +273,8 @@ hr {
     margin-bottom: 20px;
     padding: 30px;
     padding-top: 20px;
-    h2, h3 {
+    h2,
+    h3 {
         color: #fff;
     }
 }
@@ -300,3 +301,7 @@ input.form-control {
     z-index: 1000 !important;
     background-color: white;
 }
+
+// .ng-busy-default-sign {
+//     position: fixed;
+// }

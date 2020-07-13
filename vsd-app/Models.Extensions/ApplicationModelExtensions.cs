@@ -272,8 +272,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                                 vsd_postalcode = t.providerAddress != null ? t.providerAddress.postalCode : "",
                                 vsd_relationship1 = t.providerType,
                                 vsd_email = !String.IsNullOrEmpty(t.providerEmail) ? t.providerEmail : "",
-                                //this fax field doesn't exist in CRM yet
-                                // vsd_fax = !String.IsNullOrEmpty(t.providerFax) ? t.providerFax : "",
+                                vsd_fax = !String.IsNullOrEmpty(t.providerFax) ? t.providerFax : "",
                                 vsd_relationship1other = t.providerTypeText,// t.providerType.ToString(),
                                 //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
                                 //    vsd_firstname = "", // TODO: We don't collect a split name here
@@ -334,8 +333,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_lastname = f.employerLastName,
                             vsd_relationship1 = "Employer",
                             vsd_email = f.employerEmail,
-                            //VS-1772 mentioned adding a fax field, doesn't currently exist in CRM on the Participant
-                            // vsd_fax = f.employerFax,
+                            vsd_fax = f.employerFax,
                         }).ToArray();
 
                         int tempProviderCount = 0;
@@ -375,7 +373,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     tempProviderCollection[0].vsd_name = model.MedicalInformation.familyDoctorName;
                     tempProviderCollection[0].vsd_email = model.MedicalInformation.familyDoctorEmail;
                     tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
-                    // tempProviderCollection[0].vsd_fax = model.MedicalInformation.familyDoctorFax;
+                    tempProviderCollection[0].vsd_fax = model.MedicalInformation.familyDoctorFax;
                     tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddressLine1;
                     tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddressLine2;
                     tempProviderCollection[0].vsd_relationship1 = "Family Doctor";

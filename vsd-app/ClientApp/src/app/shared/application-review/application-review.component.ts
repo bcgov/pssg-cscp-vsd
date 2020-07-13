@@ -53,8 +53,8 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
         if (this.formType === ApplicationType.IFM_Application) {
             this.employers = this.form.get('expenseInformation.employers') as FormArray;
         }
-        console.log("review component");
-        console.log(this.form);
+        // console.log("review component");
+        // console.log(this.form);
 
     }
 

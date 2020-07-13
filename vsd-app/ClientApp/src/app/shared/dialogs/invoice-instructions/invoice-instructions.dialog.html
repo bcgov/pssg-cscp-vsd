@@ -1,0 +1,46 @@
+<div mat-dialog-title>
+    <span>Invoice Instructions</span>
+</div>
+<div mat-dialog-content>
+    <p><strong>Who may use this invoice form?</strong></p>
+    <p>Invoices can only be submitted for counsellors that are registered with CVAP.
+        If the counsellor is not registered, please contact CVAP to obtain the registration package.
+        You will obtain a vendor number and counsellor registration number once registered.</p>
+    <p><strong>What types of counselling sessions can be submitted?</strong></p>
+    <ul>
+        <li>Individual sessions</li>
+        <li>Psycho-educational sessions</li>
+        <li>Court support sessions</li>
+        <li>Missed session (up to 3)</li>
+    </ul>
+    <p><strong>What type of invoice cannot be submitted?</strong></p>
+    <ul>
+        <li>Progress report (progress reports and invoices for this service should be submitted to cvap@gov.bc.ca for payment)</li>
+    </ul>
+    <p><strong>Can more than one invoice be submitted?</strong></p>
+    <p>An invoice will need to be submitted for each individual claimant.
+        However, multiple invoices can be created for more than one claimant or different counsellors
+        working for the same practice and submitted together.
+        Please note that the invoice for each claimant will be forwarded to CVAP individually.
+        You will have the option to exit upon submission or continue and create a new invoice with
+        some information, such as payee and counsellor information, being auto-populated for your
+        convenience but can be edited if required.</p>
+    <p><strong>What you need to have on hand to successfully submit an invoice:</strong></p>
+    <ol>
+        <li>Vender number</li>
+        <li>Counsellor registration number</li>
+        <li>Name of CVAP claimant (who service was provided to)</li>
+        <li>CVAP claim number</li>
+        <li>Invoice number</li>
+        <li>Date of service</li>
+        <li>Session duration</li>
+    </ol>
+
+    <p>If you do not have all the required information to submit your invoice or encounter any
+        problems, please contact CVAP for assistance. Refer to the CVAP Contact Information on
+        the left.</p>
+</div>
+
+<div mat-dialog-actions>
+    <button class="btn btn-primary mt-2 float-right" (click)="close()">Close</button>
+</div>

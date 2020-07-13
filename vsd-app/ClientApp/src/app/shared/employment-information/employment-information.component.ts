@@ -1,13 +1,10 @@
 import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { FormBase } from "../form-base";
-import { MatDialogConfig, MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepickerInputEvent } from "@angular/material";
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepickerInputEvent } from "@angular/material";
 import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer } from "@angular/forms";
-import { FileBundle } from "../../models/file-bundle";
-import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType, CRMBoolean } from "../enums-list";
 import * as moment from 'moment';
-import { config } from '../../../config';
 import { POSTAL_CODE } from "../regex.constants";
 import { COUNTRIES_ADDRESS_2 } from "../address/country-list";
 import { EmploymentInfoHelper } from "./employment-information.helper";
@@ -58,6 +55,27 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         this.form = <FormGroup>this.controlContainer.control;
         console.log("employment info");
         console.log(this.form);
+
+        if (this.form.parent.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true) {
+            let emplaoyedAtTimeOfCrimeControl = this.form.get('wereYouEmployedAtTimeOfCrime');
+            let didYouMissWorkDueToCrimeControl = this.form.get('didYouMissWorkDueToCrime');
+            emplaoyedAtTimeOfCrimeControl.setValidators([Validators.required]);
+            emplaoyedAtTimeOfCrimeControl.updateValueAndValidity();
+            didYouMissWorkDueToCrimeControl.setValidators([Validators.required]);
+            didYouMissWorkDueToCrimeControl.updateValueAndValidity();
+        }
+        else {
+            let options = { onlySelf: true, emitEvent: false };
+            let emplaoyedAtTimeOfCrimeControl = this.form.get('wereYouEmployedAtTimeOfCrime');
+            let didYouMissWorkDueToCrimeControl = this.form.get('didYouMissWorkDueToCrime');
+
+            emplaoyedAtTimeOfCrimeControl.clearValidators();
+            emplaoyedAtTimeOfCrimeControl.setErrors(null, options);
+            emplaoyedAtTimeOfCrimeControl.updateValueAndValidity(options);
+            didYouMissWorkDueToCrimeControl.clearValidators();
+            didYouMissWorkDueToCrimeControl.setErrors(null, options);
+            didYouMissWorkDueToCrimeControl.updateValueAndValidity(options);
+        }
 
 
         this.employedAtTimeOfCrimeSubscription = this.form.get('wereYouEmployedAtTimeOfCrime').valueChanges.subscribe((value) => {

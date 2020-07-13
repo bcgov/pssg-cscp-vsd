@@ -1,33 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../models/user.model';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
 import { defaultFormat as _rollupMoment } from 'moment';
-import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
-import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
-import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { FormBase } from '../shared/form-base';
-import { HOSPITALS } from '../shared/hospital-list';
-import { EnumHelper, ApplicationType } from '../shared/enums-list';
+import { ApplicationType } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
-import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
-import { REPRESENTATIVE_LIST } from '../constants/representative-list';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
-import { POSTAL_CODE } from '../shared/regex.constants';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
 import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
+import { Subscription } from 'rxjs';
+import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 
 const moment = _rollupMoment || _moment;
 
@@ -46,37 +41,15 @@ const moment = _rollupMoment || _moment;
 
 export class IfmApplicationComponent extends FormBase implements OnInit {
   FORM_TYPE = ApplicationType.IFM_Application;
-  postalRegex = POSTAL_CODE;
-  currentUser: User;
-  dataLoaded = false;
-  busy: Promise<any>;
-  busy2: Promise<any>;
-  busy3: Promise<any>;
+  busy: Subscription;
   form: FormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
   submitting: boolean = false; // this controls the button state for
 
-  otherTreatmentItems: FormArray;
-  employerItems: FormArray;
-  courtFileItems: FormArray;
-  crimeLocationItems: FormArray;
-  policeReportItems: FormArray;
-  authorizedPersons: FormArray;
-
-  hospitalList = HOSPITALS;
-  provinceList: string[];
-  relationshipList: string[];
-  enumHelper = new EnumHelper();
-
   public currentFormStep: number;
 
   saveFormData: any;
-
-  todaysDate = new Date(); // for the birthdate validation
-  oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
-
-  get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
 
   ApplicationType = ApplicationType;
 
@@ -98,10 +71,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     private dialog: MatDialog,
   ) {
     super();
-    var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
-    this.provinceList = canada.areas;
-    this.relationshipList = REPRESENTATIVE_LIST.name;
-
     this.formFullyValidated = false;
     this.currentFormStep = 0;
   }
@@ -116,20 +85,17 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   verifyCancellation(): void {
-    const verifyDialogConfig = new MatDialogConfig();
-    verifyDialogConfig.disableClose = true;
-    verifyDialogConfig.autoFocus = true;
-    verifyDialogConfig.data = 'witness';
+    let self = this;
+    let dialogRef = this.dialog.open(CancelDialog, {
+      autoFocus: false,
+      data: { type: "Application" }
+    });
 
-    const verifyDialogRef = this.dialog.open(CancelApplicationDialog, verifyDialogConfig);
-    verifyDialogRef.afterClosed().subscribe(
-      data => {
-        if (data === true) {
-          this.router.navigate(['/application-cancelled']);
-          return;
-        }
+    dialogRef.afterClosed().subscribe((res: any) => {
+      if (res.cancel) {
+        self.router.navigate(['/application-cancelled']);
       }
-    );
+    });
   }
 
   showSummaryOfBenefits(): void {
@@ -139,12 +105,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   getFormGroupName(groupIndex: any) {
     let elements: Array<string> = ['introduction', 'personalInformation', 'victimInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
     return elements[groupIndex];
-  }
-
-  gotoPageIndex(stepper: MatStepper, selectPage: number): void {
-    window.scroll(0, 0);
-    stepper.selectedIndex = selectPage;
-    this.currentFormStep = selectPage;
   }
 
   gotoPage(selectPage: MatStepper): void {
@@ -180,23 +140,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     }
   }
 
-  createEmployerItem(): FormGroup {
-    return this.fb.group({
-      employerName: [''],//, Validators.required],
-      employerPhoneNumber: [''],//, Validators.required],
-      employerFirstName: [''],
-      employerLastName: [''],
-      employerAddress: this.fb.group({
-        line1: [''],
-        line2: [''],
-        city: [''],
-        postalCode: [''],  // , [Validators.pattern(postalRegex)]
-        province: [{ value: 'British Columbia', disabled: false }],
-        country: [{ value: 'Canada', disabled: false }],
-      })
-    });
-  }
-
   submitPartialApplication() {
     this.justiceDataService.submitApplication(this.harvestForm())
       .subscribe(
@@ -216,7 +159,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     // show the button as submitting and disable it
     this.submitting = true;
     if (this.form.valid) {
-      this.justiceDataService.submitApplication(this.harvestForm())
+      this.busy = this.justiceDataService.submitApplication(this.harvestForm())
         .subscribe(
           data => {
             if (data['isSuccess'] == true) {
@@ -282,14 +225,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     }
 
     return data;
-  }
-
-  save(): void {
-    this.justiceDataService.submitApplication(this.harvestForm())
-      .subscribe(
-        data => { },
-        err => { }
-      );
   }
 
   // marking the form as touched makes the validation messages show

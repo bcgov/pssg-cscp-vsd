@@ -6,11 +6,11 @@ export class EmploymentInfoHelper {
     postalRegex = POSTAL_CODE;
     public setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
         let group = {
-            wereYouEmployedAtTimeOfCrime: ['', Validators.required],
+            wereYouEmployedAtTimeOfCrime: [''], //, Validators.required],
             wereYouAtWorkAtTimeOfIncident: [''],
             haveYouAppliedToWorkSafe: [''],
             wsbcClaimNumber: [''],
-            didYouMissWorkDueToCrime: ['', Validators.required],
+            didYouMissWorkDueToCrime: [''], //, Validators.required],
             didYouLoseWages: [''],
             areYouSelfEmployed: [''],
             mayContactEmployer: [''],

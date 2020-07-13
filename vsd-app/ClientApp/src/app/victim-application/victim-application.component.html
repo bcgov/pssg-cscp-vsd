@@ -1,5 +1,5 @@
 <div class="form-wrapper" style="position: relative;">
-  <div [ngBusy]="[busy, busy2]"></div>
+  <div [ngBusy]="[busy]"></div>
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter ">
       <h3>Victim Application</h3>
@@ -50,37 +50,6 @@
 
         <app-employment-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="employmentIncomeInformation" *ngIf="this.currentFormStep == 5"></app-employment-information>
 
-        <!-- <div *ngIf="this.currentFormStep == 5">
-          <div class="page-header">
-            <h1>Employment Income</h1>
-          </div>
-          <span *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
-
-            <section>
-              <p>You have not requested income benefit, if this is correct continue to the next page. If you are requesting this benefit, go back to Expense & Loss Information.</p>
-            </section>
-            <section class="button-container">
-              <div [ngBusy]="[busy3]"></div>
-              <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
-              <span style="float: right;">
-                <button (click)="gotoNextStep(stepper, true)" class="btn btn-primary">CONTINUE <i class="fas fa-chevron-right"></i></button>
-              </span>
-            </section>
-          </span>
-          <span *ngIf="form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
-            <section>
-              <app-employment-income [value]="form.get('employmentIncomeInformation').value" (valueChange)="setEmploymentInformation($event)" (employerAdded)="addEmployer()" #employmentIncomeInfo></app-employment-income>
-            </section>
-            <section class="button-container">
-              <div [ngBusy]="[busy3]"></div>
-              <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
-              <span style="float: right;">
-                <button [disabled]="!employmentInfoFormIsValid" (click)="gotoNextStep(stepper)" class="btn btn-primary">CONTINUE <i class="fas fa-chevron-right"></i></button>
-              </span>
-            </section>
-          </span>
-        </div> -->
-
         <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6"></app-representative-information>
 
         <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7"></app-declaration-information>
@@ -95,7 +64,7 @@
         </div>
 
         <section class="button-container">
-          <div [ngBusy]="[busy3]"></div>
+          <!-- <div [ngBusy]="[busy3]"></div> -->
           <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span style="float: right;">
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary continue-btn" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>

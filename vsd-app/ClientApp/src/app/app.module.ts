@@ -55,11 +55,8 @@ import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefi
 import { CancelApplicationDialog } from './shared/cancel-dialog/cancel-dialog.component';
 import { DeactivateGuardDialog } from './shared/guard-dialog/guard-dialog.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
-import { VictimReviewComponent } from './victim-application/victim-review.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
-import { IfmReviewComponent } from './ifm-application/ifm-review.component';
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
-import { WitnessReviewComponent } from './witness-application/witness-review.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
@@ -98,6 +95,8 @@ import { DeclarationInformationComponent } from './shared/declaration-informatio
 import { ExpenseInformationComponent } from './shared/expense-information/expense-information.component';
 import { ApplicationReviewComponent } from './shared/application-review/application-review.component';
 import { EmploymentInformationComponent } from './shared/employment-information/employment-information.component';
+import { CancelDialog } from './shared/dialogs/cancel/cancel.dialog';
+import { InvoiceInstructionsDialog } from './shared/dialogs/invoice-instructions/invoice-instructions.dialog';
 
 @NgModule({
   declarations: [
@@ -106,13 +105,11 @@ import { EmploymentInformationComponent } from './shared/employment-information/
     SignPadDialog,
     SummaryOfBenefitsDialog,
     CancelApplicationDialog,
+    CancelDialog,
     DeactivateGuardDialog,
     VictimApplicationComponent,
-    VictimReviewComponent,
     IfmApplicationComponent,
-    IfmReviewComponent,
     WitnessApplicationComponent,
-    WitnessReviewComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
     SubmitInvoiceComponent,
@@ -136,7 +133,7 @@ import { EmploymentInformationComponent } from './shared/employment-information/
     VersionInfoDialog,
     TestComponent,
     FileUploaderBoxComponent,
-    // EmploymentIncomeComponent,
+    InvoiceInstructionsDialog,
     EmploymentInformationComponent,
     VictimInformationComponent,
     PersonalInformationComponent,
@@ -259,7 +256,9 @@ import { EmploymentInformationComponent } from './shared/employment-information/
     SignPadDialog,
     SummaryOfBenefitsDialog,
     CancelApplicationDialog,
-    DeactivateGuardDialog
+    CancelDialog,
+    DeactivateGuardDialog,
+    InvoiceInstructionsDialog
   ],
   bootstrap: [AppComponent]
 })
