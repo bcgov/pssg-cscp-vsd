@@ -60,7 +60,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
     }
 
     ngOnInit() {
-        this.form = <FormGroup>this.controlContainer.control;
+      this.form = <FormGroup>this.controlContainer.control;
+      this.copyApplicantToRACAFSignature(this.form.parent);
 
         this.form.get('wasReportMadeToPolice').valueChanges.subscribe(value => {
             if (value === 100000001) {
