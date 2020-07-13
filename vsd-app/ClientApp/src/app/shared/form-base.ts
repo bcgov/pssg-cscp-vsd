@@ -482,12 +482,13 @@ export class FormBase {
     control.setValue(value.trim());
   }
 
-  copyApplicantToRACAFSignature(form: FormGroup | FormArray) {
-    let source = form.get('personalInformation');
-    let target = form.get('crimeInformation.racafInformation');
-    let options = { onlySelf: true, emitEvent: true };
-    target.get('signName').patchValue(source.get('firstName').value + ' ' + source.get('middleName').value + ' ' + source.get('lastName').value, options);
-  }
+//  copyApplicantToRACAFSignature(form: FormGroup | FormArray) {
+    // Temporarily taken out. Return if they decide to populate the applicant value to the RACAF signature
+//    let source = form.get('personalInformation');
+//    let target = form.get('crimeInformation.racafInformation');
+//    let options = { onlySelf: true, emitEvent: true };
+//    target.get('signName').patchValue(source.get('firstName').value + ' ' + source.get('middleName').value + ' ' + source.get('lastName').value, options);
+//  }
 
   copyPersonalAddressToVictimAddress(form: FormGroup | FormArray) {
     let copyAddress = form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value === true;
