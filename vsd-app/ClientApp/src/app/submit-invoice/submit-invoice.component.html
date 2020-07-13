@@ -41,7 +41,9 @@
               <div class="page-header">
                 <h1>Submit an Invoice</h1>
               </div>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+              <p>Welcome to the Crime Victim Assistance Program's (CVAP) invoice submission form for counselling services.</p>
+              <p>First time users please click the link to review instructions. <a [routerLink]="" (click)="showInvoiceInstructions()">Link</a></p>
+
               <p>This form is best used on Chrome, Firefox and Edge.</p>
 
               <h3>Vendor Information</h3>
@@ -256,7 +258,10 @@
                         </label>
                       </div>
                     </div>
-                    <ng-template #gstExemptionInfo><h3>Exempt from GST</h3><p>For example Registered psychologist are exempted from GST.</p></ng-template>
+                    <ng-template #gstExemptionInfo>
+                      <h3>Exempt from GST</h3>
+                      <p>For example Registered psychologist are exempted from GST.</p>
+                    </ng-template>
                     <br />
 
                     <div class="row grand-total">
@@ -342,7 +347,8 @@
                   </div>
 
                   <section class="button-container">
-                    <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
+                    <a [routerLink]="" (click)="showCancelDialog()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
+                    <!-- <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a> -->
                     <span style="float: right;">
                       <button (click)="markAsTouched(); reviewInvoice();" class="btn btn-primary">REVIEW INVOICE <i class="fas fa-chevron-right"></i></button>
                     </span>
@@ -509,7 +515,8 @@
         </div>
 
         <section class="button-container" *ngIf="!showPrintView">
-          <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
+          <a [routerLink]="" (click)="showCancelDialog()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
+          <!-- <a href="#" (click)="showCancelDialog($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a> -->
           <span style="float: right;">
             <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
             <!--<button (click)="invoiceSuccess()" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>-->
@@ -524,19 +531,20 @@
               <h1>Thank you for your invoice submission</h1>
             </div>
             <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program if you would like to print your invoice then please click <a class="print-link" [routerLink]="" (click)="printInvoice()">here</a>.</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+            <p>In the event that there is an issue with the information submitted, a staff member from the Crime Victim Assistance Program will contact you.</p>
             <p><a href="/submit-invoice">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
           </div>
         </div>
       </div>
 
       <div class="container" *ngIf="showCancelPanel">
+        <div class="page-header">
+          <h1>Invoice submission cancelled</h1>
+        </div>
         <div class="row">
-          <div class="col">
-            <div class="page-header">
-              <h1>Invoice submission cancelled</h1>
-            </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+          <div class="col-md-9">
+            <p>You have successfully cancelled the invoice.</p>
+            <p>Please contact the Crime Victim Assistance Program (CVAP) if you need information to assist you in completing the invoice submission process. <em>Refer to the CVAP Contact Information on the left.</em>"</p>
             <p><a href="/submit-invoice">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
           </div>
         </div>

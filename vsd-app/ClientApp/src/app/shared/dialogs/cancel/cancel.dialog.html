@@ -1,0 +1,12 @@
+<div mat-dialog-title>
+    <h1>Cancel {{type}}</h1>
+</div>
+<div mat-dialog-content>
+    <p><strong>Are you sure?</strong></p>
+      <p>Cancelling this {{type.toLowerCase()}} will result in the loss of all information you've entered so far</p>
+</div>
+
+<div mat-dialog-actions>
+    <button class="btn btn-secondary" (click)="closeMe()">No, take me back</button>
+    <button class="btn btn-primary float-right" (click)="cancel()">Yes, Cancel {{type}}</button>
+</div>

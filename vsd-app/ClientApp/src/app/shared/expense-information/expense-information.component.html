@@ -284,24 +284,24 @@
                 <div class="employers" formArrayName="employers" *ngFor="let item of form.get('employers')['controls']; let i = index;">
                     <div [formGroupName]="i" class="employer">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-md-6">
                                 <app-field label="Name of Company / Organization" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a company name">
                                     <input type="text" class="form-control" formControlName="employerName">
                                 </app-field>
                             </div>
-                            <div class="col">
-                                <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isFieldValid('item.employerName')" errorMessage="Please enter a contact phone number">
+                            <div class="col-md-6">
+                                <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isFieldValid('item.employerPhoneNumber')" errorMessage="Please enter a contact phone number">
                                     <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
                                 </app-field>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col">
+                            <div class="col-md-6">
                                 <app-field label="Employer First Name">
                                     <input type="text" class="form-control" formControlName="employerFirstName">
                                 </app-field>
                             </div>
-                            <div class="col">
+                            <div class="col-md-6">
                                 <app-field label="Employer Last name">
                                     <input type="text" class="form-control" formControlName="employerLastName">
                                 </app-field>

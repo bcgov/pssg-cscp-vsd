@@ -168,6 +168,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string odatatype => "Microsoft.Dynamics.CRM.vsd_participant";
         public string vsd_name { get; set; }
         public string vsd_phonenumber { get; set; }
+        public string vsd_fax { get; set; }
         public string vsd_addressline1 { get; set; }
         public string vsd_addressline2 { get; set; }
         public string vsd_city { get; set; }

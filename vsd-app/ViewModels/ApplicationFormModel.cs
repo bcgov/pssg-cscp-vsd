@@ -125,7 +125,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public DateTime? treatedAtHospitalDate { get; set; }
         public string beingTreatedByFamilyDoctor { get; set; }
         public string familyDoctorName { get; set; }
+        public string familyDoctorEmail { get; set; }
         public string familyDoctorPhoneNumber { get; set; }
+        public string familyDoctorFax { get; set; }
         public string familyDoctorAddressLine1 { get; set; }
         public string familyDoctorAddressLine2 { get; set; }
         public string hadOtherTreatments { get; set; }
@@ -137,7 +139,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string providerType { get; set; }
         public string providerTypeText { get; set; } // Extra text for "Other" provider type
         public string providerName { get; set; }
+        public string providerEmail { get; set; }
         public string providerPhoneNumber { get; set; }
+        public string providerFax { get; set; }
         public Address providerAddress { get; set; }
     }
 

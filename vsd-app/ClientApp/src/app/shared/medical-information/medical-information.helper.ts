@@ -15,7 +15,9 @@ export class MedicalInfoHelper {
 
             beingTreatedByFamilyDoctor: ['', Validators.required],
             familyDoctorName: [''],
+            familyDoctorEmail: ['', [Validators.email]],
             familyDoctorPhoneNumber: [''],
+            familyDoctorFax: [''],
             familyDoctorAddressLine1: [''],
             familyDoctorAddressLine2: [''],
 

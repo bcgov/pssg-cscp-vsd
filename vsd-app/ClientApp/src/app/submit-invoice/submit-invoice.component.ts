@@ -14,6 +14,8 @@ import { EnumHelper } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
+import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
+import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -64,7 +66,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
     public snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {
     super();
     this.formFullyValidated = false;
@@ -141,6 +143,13 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       });
   }
 
+  showInvoiceInstructions() {
+    this.dialog.open(InvoiceInstructionsDialog, {
+      autoFocus: false,
+      data: {}
+    });
+  }
+
   debugFormData(): void {
     let formData = {
       InvoiceDetails: this.form.get('invoiceDetails').value
@@ -202,10 +211,26 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.showCancelPanel = false;
   }
 
-  invoiceCancel($event): void {
+  showCancelDialog() {
+    console.log("show cancel dialog");
+    // $event.preventDefault();
+    let self = this;
+    let dialogRef = this.dialog.open(CancelDialog, {
+      autoFocus: false,
+      data: { type: "Invoice" }
+    });
+
+    dialogRef.afterClosed().subscribe((res: any) => {
+      if (res.cancel) {
+        self.invoiceCancel();
+      }
+    });
+  }
+
+  invoiceCancel(): void {
     window.scroll(0, 0);
 
-    $event.preventDefault();
+    // $event.preventDefault();
     this.showFormPanel = false;
     this.showReviewPanel = false;
     this.showSuccessPanel = false;

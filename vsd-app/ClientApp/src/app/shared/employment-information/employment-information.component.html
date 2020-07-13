@@ -1,0 +1,201 @@
+<div [formGroup]="form">
+    <div class="page-header">
+        <h1>Employment Income</h1>
+    </div>
+    <span *ngIf="form.parent.get('expenseInformation.haveLostEmploymentIncomeExpenses') == undefined || form.parent.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === false">
+
+        <section>
+            <p>You have not requested income benefit, if this is correct continue to the next page. If you are requesting this benefit, go back to Expense & Loss Information.</p>
+        </section>
+
+    </span>
+    <span *ngIf="form.parent.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
+        <!-- <app-employment-income [value]="form.get('employmentIncomeInformation').value" (valueChange)="setEmploymentInformation($event)" (employerAdded)="addEmployer()" #employmentIncomeInfo></app-employment-income> -->
+        <!-- form goes here -->
+        <p>This section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
+
+        <section>
+            <h2 class="blue-header">Income Loss Information</h2>
+            <app-field label="Were you employed when the crime occured?" [required]="true" [valid]="isFieldValid('wereYouEmployedAtTimeOfCrime')" errorMessage="Please select an option">
+                <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.True" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
+                    <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.False" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
+                    <span>No</span>
+                </label>
+            </app-field>
+            <div *ngIf="form.get('wereYouEmployedAtTimeOfCrime').value === CRMBoolean.True">
+                <app-field label="Were you at work at the time of the incident?" [required]="form.get('wereYouEmployedAtTimeOfCrime').value === CRMBoolean.True" [valid]="isFieldValid('wereYouAtWorkAtTimeOfIncident')" errorMessage="Please select an option">
+                    <label class="inline-label">
+                        <input type="radio" [value]="CRMBoolean.True" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
+                        <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                        <input type="radio" [value]="CRMBoolean.False" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
+                        <span>No</span>
+                    </label>
+                </app-field>
+            </div>
+            <div *ngIf="form.get('wereYouAtWorkAtTimeOfIncident').value === CRMBoolean.True">
+                <app-field label="Have you applied to WorkerSafe BC?" [required]="form.get('wereYouAtWorkAtTimeOfIncident').value === CRMBoolean.True" [valid]="isFieldValid('haveYouAppliedToWorkSafe')" errorMessage="Please select an option">
+                    <label class="inline-label">
+                        <input type="radio" [value]="CRMBoolean.True" name="haveYouAppliedToWorkSafe" formControlName="haveYouAppliedToWorkSafe">
+                        <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                        <input type="radio" [value]="CRMBoolean.False" name="haveYouAppliedToWorkSafe" formControlName="haveYouAppliedToWorkSafe">
+                        <span>No</span>
+                    </label>
+                </app-field>
+            </div>
+            <div class="row" *ngIf="form.get('haveYouAppliedToWorkSafe').value === CRMBoolean.True">
+                <div class="col-md-6">
+                    <app-field label="WorkSafe BC Claim #" [required]="form.get('haveYouAppliedToWorkSafe').value === CRMBoolean.True" [valid]="isFieldValid('workersCompensationClaimNumber')" errorMessage="Please include a WorkSafe BC Claim Number">
+                        <input class="form-control" name="workersCompensationClaimNumber" type="text" formControlName="workersCompensationClaimNumber">
+                    </app-field>
+                </div>
+            </div>
+            <div>
+                <app-field label="As a result of any crime-related injuries, did you miss work?" [required]="true" [valid]="isFieldValid('didYouMissWorkDueToCrime')" errorMessage="Please select an option">
+                    <label class="inline-label">
+                        <input type="radio" [value]="CRMBoolean.True" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
+                        <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                        <input type="radio" [value]="CRMBoolean.False" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
+                        <span>No</span>
+                    </label>
+                </app-field>
+            </div>
+            <ng-container *ngIf="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True">
+                <div>
+                    <app-field label="Please provide days of work missed" [valid]="isFieldValid('daysWorkMissedStart') && isFieldValid('daysWorkMissedEnd')" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" errorMessage="Please select an option">
+                        <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
+                        <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
+                        <span> - </span>
+                        <input type="text" [max]="today" [min]="minEndDate" (dateChange)="daysWorkMissedEndChange($event)" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
+                        <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+                    </app-field>
+                </div>
+                <div *ngIf="showCurrentlyOffWork">
+                    <app-field label="Are you currently off work?" [tooltipReference]="stillOfWorkTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('areYouStillOffWork')" errorMessage="Please select an option">
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMBoolean.True" name="areYouStillOffWork" formControlName="areYouStillOffWork">
+                            <span>Yes</span>
+                        </label>
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMBoolean.False" name="areYouStillOffWork" formControlName="areYouStillOffWork">
+                            <span>No</span>
+                        </label>
+                    </app-field>
+                    <ng-template #stillOfWorkTemplate>
+                        <p><strong>Still off work</strong></p>
+                        <p>If you are still off work, select yes. Enter the end of days missed to today's date as well.</p>
+                    </ng-template>
+                </div>
+                <div>
+                    <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('didYouLoseWages')" errorMessage="Please select an option">
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMBoolean.True" name="didYouLoseWages" formControlName="didYouLoseWages">
+                            <span>Yes</span>
+                        </label>
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMBoolean.False" name="didYouLoseWages" formControlName="didYouLoseWages">
+                            <span>No</span>
+                        </label>
+                    </app-field>
+                    <ng-template #lostWagesTemplate>
+                        <p><strong>Lost wages or income</strong></p>
+                        <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
+                    </ng-template>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="form.get('didYouLoseWages').value === CRMBoolean.True">
+                <h2 class="blue-header">Employer Information</h2>
+
+                <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
+                <div>
+                    <app-field label="Are you self employed?" [required]="form.get('didYouLoseWages').value === CRMBoolean.True" [valid]="isFieldValid('areYouSelfEmployed')" errorMessage="Please select an option">
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMBoolean.True" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
+                            <span>Yes</span>
+                        </label>
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMBoolean.False" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
+                            <span>No</span>
+                        </label>
+                    </app-field>
+                </div>
+
+                <div class="employers" formArrayName="employers" *ngFor="let item of form.get('employers')['controls']; let i = index;">
+                    <div [formGroupName]="i" class="employer">
+                        <div *ngIf="form.get('areYouSelfEmployed').value !== CRMBoolean.True">
+                            <app-field label="If you are requesting benefits for lost wages, may we contact your employer?" [required]="form.get('areYouSelfEmployed').value !== CRMBoolean.True" [valid]="isMyControlValid(item.get('contactable'))" errorMessage="Please select an option">
+                                <label class="inline-label">
+                                    <input type="radio" [value]="CRMBoolean.True" name="contactable" formControlName="contactable">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="inline-label">
+                                    <input type="radio" [value]="CRMBoolean.False" name="contactable" formControlName="contactable">
+                                    <span>No</span>
+                                </label>
+                            </app-field>
+                        </div>
+                        <div *ngIf="form.get('employers')['controls'].length>1">
+                            <a href="javascript:void(0);" (click)="removeEmployer(i)" class="float-right">
+                                <i class="fas fa-trash-alt"></i> Delete Employer
+                            </a>
+                            <h2>{{item.get('employerName').value|titlecase}}</h2>
+                        </div>
+
+                        <h3>Name &amp; Phone Number</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <app-field label="Name of Company / Organization" [required]="true" [valid]="isMyControlValid(item.get('employerName'))" errorMessage="Please enter a company name">
+                                    <input type="text" class="form-control" formControlName="employerName">
+                                </app-field>
+                            </div>
+                            <div class="col-md-6">
+                                <app-field label="Email Address" [required]="true" [valid]="isMyControlValid(item.get('employerEmail'))" errorMessage="Please enter your employer's email address">
+                                    <input type="text" class="form-control" (blur)="trimEmail(item.get('employerEmail'))" formControlName="employerEmail" maxlength="100">
+                                </app-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <app-field label="Contact First Name" [required]="false" [valid]="isMyControlValid(item.get('employerFirstName'))" errorMessage="Please include your employer's given name">
+                                    <input type="text" class="form-control" formControlName="employerFirstName">
+                                </app-field>
+                            </div>
+                            <div class="col-md-6">
+                                <app-field label="Contact Last name" [required]="false" [valid]="isMyControlValid(item.get('employerLastName'))" errorMessage="Please include your employer's last name">
+                                    <input type="text" class="form-control" formControlName="employerLastName">
+                                </app-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
+                                    <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
+                                </app-field>
+                            </div>
+                            <div class="col-md-6">
+                                <app-field label="Fax" [required]="false" [valid]="isMyControlValid(item.get('employerFax'))">
+                                    <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerFax">
+                                </app-field>
+                            </div>
+                        </div>
+
+                        <h3>Mailing Address</h3>
+                        <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="true"></app-address>
+                    </div>
+                </div>
+                <button class="btn btn-secondary mb-3" (click)="addEmployer()">Add Additional Employer</button>
+            </ng-container>
+
+        </section>
+    </span>
+</div>

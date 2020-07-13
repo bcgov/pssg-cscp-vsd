@@ -6,6 +6,7 @@ import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { COUNTRIES_ADDRESS } from "../address/country-list";
 import { HOSPITALS } from "../hospital-list";
+import { POSTAL_CODE } from "../regex.constants";
 
 @Component({
     selector: 'app-medical-information',
@@ -32,8 +33,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
     provinceList: string[];
     hospitalList = HOSPITALS;
-
-    showOtherProvider: boolean[] = [];
+    postalRegex = POSTAL_CODE;
 
     otherTreatmentLabel: string = "";
 
@@ -73,7 +73,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
                 hospitalControl.updateValueAndValidity();
             });
-      }
+        }
     }
 
     addProvider(): void {
@@ -83,7 +83,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
         this.showAddProvider = this.otherTreatmentItems.length < 5;
         this.showRemoveProvider = this.otherTreatmentItems.length > 1;
 
-        this.showOtherProvider.push(false);
+
     }
     clearProviders(): void {
         // remove all providers
@@ -91,8 +91,6 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
         while (this.otherTreatmentItems.length > 0) {
             this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
         }
-
-        this.showOtherProvider = [];
     }
 
     removeProvider(index: number): void {
@@ -101,26 +99,26 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
         this.otherTreatmentItems.removeAt(index);
         this.showAddProvider = this.otherTreatmentItems.length < 5;
         this.showRemoveProvider = this.otherTreatmentItems.length > 1;
-
-        this.showOtherProvider.splice(index, 1);
     }
 
     createTreatmentItem(): FormGroup {
         // make a form group for insertion into the form
         return this.fb.group({
-            providerType: [''],   // 100000001 = Specialist, 100000002 = Counsellor/Psychologist, 100000003 = Dentist, 100000004 = Other
+            providerType: [''],
             providerTypeText: [''],
             providerName: ['', Validators.required],
+            providerEmail: ['', [Validators.email]],
             providerPhoneNumber: [''],
-            providerAddress: [''],
-            //      providerAddress: this.fb.group({
-            //        line1: [''],
-            //        line2: [''],
-            //        city: [''],
-            //        postalCode: [''],  // , [Validators.pattern(postalRegex)]
-            //        province: [{ value: 'British Columbia', disabled: false }],
-            //        country: [{ value: 'Canada', disabled: false }],
-            //      }),
+            providerFax: [''],
+            // providerAddress: [''],
+            providerAddress: this.fb.group({
+                line1: [''],
+                line2: [''],
+                city: [''],
+                postalCode: ['', [Validators.pattern(this.postalRegex)]],
+                province: [{ value: 'British Columbia', disabled: false }],
+                country: [{ value: 'Canada', disabled: false }],
+            }),
         });
     }
 
@@ -135,13 +133,4 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
         this.familyDoctorNameItem.disable();
         this.familyDoctorNameItem.setValidators(null);
     }
-
-    showOtherProviderInput(index: number) {
-        this.showOtherProvider[index] = true;
-    }
-
-    hideOtherProviderInput(index: number) {
-        this.showOtherProvider[index] = false;
-    }
-
 }

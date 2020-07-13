@@ -130,6 +130,11 @@ export class EnumHelper {
   }
 }
 
+export enum CRMBoolean {
+  True = 100000001,
+  False = 100000000
+}
+
 export enum ApplicationType {
   Victim_Application = 100000002,
   IFM_Application = 100000001,

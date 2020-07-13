@@ -1,32 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../models/user.model';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { CanDeactivateGuard } from '../services/can-deactivate-guard.service';
-import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
-import { DeactivateGuardDialog } from '../shared/guard-dialog/guard-dialog.component';
-import { CancelApplicationDialog } from '../shared/cancel-dialog/cancel-dialog.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { FormBase } from '../shared/form-base';
-import { HOSPITALS } from '../shared/hospital-list';
-import { EnumHelper, ApplicationType } from '../shared/enums-list';
+import { ApplicationType } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
 import { window } from 'ngx-bootstrap';
-import { COUNTRIES_ADDRESS } from '../shared/address/country-list';
-import { REPRESENTATIVE_LIST } from '../constants/representative-list';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
-import { POSTAL_CODE } from '../shared/regex.constants';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
 import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
+import { EmploymentInfoHelper } from '../shared/employment-information/employment-information.helper';
+import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 
 @Component({
   selector: 'app-victim-application',
@@ -41,48 +35,23 @@ import { ExpenseInfoHelper } from '../shared/expense-information/expense-informa
   ],
 })
 
-export class VictimApplicationComponent extends FormBase implements OnInit, CanDeactivateGuard {
+export class VictimApplicationComponent extends FormBase implements OnInit {
   FORM_TYPE = ApplicationType.Victim_Application;
-  postalRegex = POSTAL_CODE;
-  currentUser: User;
-
   busy: Promise<any>;
-  busy2: Promise<any>;
-  busy3: Promise<any>;
   showValidationMessage: boolean;
-  familyDoctorNameItem: FormControl;
-  otherTreatmentItems: FormArray;
-  employerItems: FormArray;
-  courtFileItems: FormArray;
-  crimeLocationItems: FormArray;
-  policeReportItems: FormArray;
-  authorizedPersons: FormArray;
   submitting: boolean = false; // this controls the button state for
-
-  hospitalList = HOSPITALS;
-  provinceList: string[];
-  relationshipList: string[];
-  enumHelper = new EnumHelper();
-
-  showAddEmployer: boolean = true;
-  showRemoveEmployer: boolean = false;
 
   public currentFormStep: number = 0; // form flow. Which step are we on?
 
-  expenseMinimumMet: boolean = null;
+  // expenseMinimumMet: boolean = null;
   saveFormData: any;
 
   ApplicationType = ApplicationType;
 
-  // a field that represents the current employment income information state
-  employmentIncomeInformation: EmploymentIncomeInformation;
-  employmentInfoFormIsValid: boolean = false;
-
-  get preferredMethodOfContact() { return this.form.get('personalInformation.preferredMethodOfContact'); }
-
   personalInfoHelper = new PersonalInfoHelper();
   crimeInfoHelper = new CrimeInfoHelper();
   medicalInfoHelper = new MedicalInfoHelper();
+  employmentInfoHelper = new EmploymentInfoHelper();
   expenseInfoHelper = new ExpenseInfoHelper();
   representativeInfoHelper = new RepresentativeInfoHelper();
   declarationInfoHelper = new DeclarationInfoHelper();
@@ -97,36 +66,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     private matDialog: MatDialog, // popup to show static content,
   ) {
     super();
-    var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
-    this.provinceList = canada.areas;
-    this.relationshipList = REPRESENTATIVE_LIST.name;
   }
-
-  canDeactivate() {
-    // TODO: IDK. It seems like this is part of a system to detect if a user backs away from a page.
-    let formDirty = false;
-
-    formDirty = this.form.dirty && this.form.touched;
-    console.log('Form Dirty: ' + formDirty);
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-
-    const dialogRef = this.matDialog.open(DeactivateGuardDialog, dialogConfig);
-    dialogRef.afterClosed().subscribe(
-      data => {
-        console.log(data);
-        return data;
-      }
-    );
-
-    return false;
-  }
-
 
   ngOnInit() {
-
     // initialize the form
     this.buildApplicationForm();
 
@@ -136,8 +78,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     this.form.get('representativeInformation').patchValue({
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
-
-    this.form.get('employmentIncomeInformation').valueChanges.subscribe(() => this.validateEmploymentInfoForm());
   }
 
   buildApplicationForm(): void {
@@ -149,24 +89,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
       crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      employmentIncomeInformation: this.fb.group({
-        wereYouEmployedAtTimeOfCrime: ['', Validators.required],
-        wereYouAtWorkAtTimeOfIncident: [''],
-        haveYouAppliedToWorkSafe: [''],
-        wsbcClaimNumber: [''],
-        didYouMissWorkDueToCrime: ['', Validators.required],
-        didYouLoseWages: [''],
-        areYouSelfEmployed: [''],
-        mayContactEmployer: [''],
-        haveYouAppliedForWorkersCompensation: [''],
-        areYouStillOffWork: [''],
-        daysWorkMissedStart: [''],
-        daysWorkMissedEnd: [''],
-        workersCompensationClaimNumber: [''],
-        employers: this.fb.array([this.createEmployerInfo()]),
-      }),
-      // employmentIncomeInformation: [null],//, Validators.required],
-
+      employmentIncomeInformation: this.employmentInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
@@ -177,29 +100,19 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
     const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
   }
   verifyCancellation(): void {
-    const verifyDialogConfig = new MatDialogConfig();
-    verifyDialogConfig.disableClose = true;
-    verifyDialogConfig.autoFocus = true;
-    verifyDialogConfig.data = 'witness';
+    let self = this;
+    let dialogRef = this.matDialog.open(CancelDialog, {
+      autoFocus: false,
+      data: { type: "Application" }
+    });
 
-    const verifyDialogRef = this.matDialog.open(CancelApplicationDialog, verifyDialogConfig);
-    verifyDialogRef.afterClosed().subscribe(
-      data => {
-        if (data === true) {
-          this.router.navigate(['/application-cancelled']);
-          return;
-        }
-      },
-      err => { console.log(err) }
-    );
+    dialogRef.afterClosed().subscribe((res: any) => {
+      if (res.cancel) {
+        self.router.navigate(['/application-cancelled']);
+      }
+    });
   }
 
-  gotoPageIndex(stepper: MatStepper, selectPage: number): void {
-    // TODO: Cannot find where this method is called.
-    window.scroll(0, 0);
-    stepper.selectedIndex = selectPage;
-    this.currentFormStep = selectPage;
-  }
   gotoPage(selectPage: MatStepper): void {
     // When a user clicks on the stepper this is triggered
     window.scroll(0, 0);
@@ -253,59 +166,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
         }
       }
     }
-  }
-
-
-  addEmployer(): void {
-    // add an employer to the list
-    console.log("add employer");
-    this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
-    this.employerItems.push(this.createEmployerInfo());
-    this.showAddEmployer = this.employerItems.length < 5;
-    this.showRemoveEmployer = this.employerItems.length > 1;
-    //let the form render and update status before validating it
-    setTimeout(() => {
-      this.validateEmploymentInfoForm();
-    }, 200)
-
-  }
-
-  removeEmployer(index: number): void {
-    // remove the employer from the list of employers
-    this.employerItems = this.form.get('employmentIncomeInformation.employers') as FormArray;
-    this.employerItems.removeAt(index);
-    this.showAddEmployer = this.employerItems.length < 5;
-    this.showRemoveEmployer = this.employerItems.length > 1;
-  }
-
-  getEmployerItem(index: number): FormControl {
-    // TODO: this appears to be unused.
-    // collect item from the employer array.
-    return (<FormArray>this.form.get('employmentIncomeInformation.employers')).controls[index] as FormControl;
-  }
-
-  setEmploymentInformation(ei: EmploymentIncomeInformation) {
-    this.form.get('employmentIncomeInformation').patchValue(ei);
-  }
-
-  createEmployerInfo(): FormGroup {
-    return this.fb.group({
-      employerName: '',
-      employerPhoneNumber: '',
-      employerFax: '',
-      employerEmail: '',
-      employerFirstName: '',
-      employerLastName: '',
-      employerAddress: this.fb.group({
-        line1: [''],
-        line2: [''],
-        city: [''],
-        postalCode: [''], //// postalCode: ['', [Validators.pattern(postalRegex), Validators.required]],
-        province: [{ value: 'British Columbia', disabled: false }],
-        country: [{ value: 'Canada', disabled: false }],
-      }),
-      contactable: '',
-    });
   }
 
   submitPartialApplication() {
@@ -498,105 +358,4 @@ export class VictimApplicationComponent extends FormBase implements OnInit, CanD
   markAsTouched() {
     this.form.markAsTouched();
   }
-  // -----------METHODS TO ADJUST FORM STATE ---------------------------------
-
-
-  setLostEmploymentIncomeExpenses(): void {
-    // if the employment income expenses are set to true
-    // the employed when crime occured should become required
-    // the as a result of any crime related injuries did you miss work should become required.
-    const isChecked: boolean = this.form.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === 'true';
-    if (typeof isChecked != 'boolean') console.log('Set lost employment income expenses should be a boolean but is not for some reason. ' + typeof isChecked);
-
-    let employmentIncomeInformation = this.form.get('employmentIncomeInformation');
-
-    if (isChecked) {
-      employmentIncomeInformation.clearValidators();
-      employmentIncomeInformation.setErrors(null);
-      employmentIncomeInformation.setValidators([Validators.required]);
-    } else {
-      employmentIncomeInformation.clearValidators();
-      employmentIncomeInformation.setErrors(null);
-    }
-  }
-  setEmployedAtCrimeTime(): void {
-    const responseCode: number = parseInt(this.form.get('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime').value);
-    if (typeof responseCode != 'number') console.log('Set representative preferred contact method should be a number but is not for some reason. ' + typeof responseCode);
-    let wereYouAtWork = this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident');
-    wereYouAtWork.clearValidators();
-    wereYouAtWork.setErrors(null);
-
-    // if value matches encoded
-    if (responseCode === 100000000) {
-      wereYouAtWork.setValidators([Validators.required]);
-    }
-  }
-  setIncidentAtWork(): void {
-    const isChecked: boolean = this.form.get('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident').value === 'true';
-    if (typeof isChecked != 'boolean') console.log('Set injured at work should be a boolean but is not for some reason. ' + typeof isChecked);
-
-    let appliedForWorkersComp = this.form.get('employmentIncomeInformation.haveYouAppliedForWorkersCompensation');
-    let appliedForWorkSafeBC = this.form.get('employmentIncomeInformation.haveYouAppliedToWorkSafe');
-
-    appliedForWorkersComp.clearValidators();
-    appliedForWorkersComp.setErrors(null);
-    appliedForWorkSafeBC.clearValidators();
-    appliedForWorkSafeBC.setErrors(null);
-
-    let useValidation = isChecked === true;
-    if (useValidation) {
-      appliedForWorkersComp.setValidators([Validators.required]);
-      appliedForWorkSafeBC.setValidators([Validators.required]);
-    }
-  }
-  setMissedWorkDueToCrime(): void {
-    const isChecked: boolean = this.form.get('employmentIncomeInformation.didYouMissWorkDueToCrime').value === 'true';
-    if (typeof isChecked != 'boolean') console.log('Set missed work due to crime should be a boolean but is not for some reason. ' + typeof isChecked);
-
-    let missedWorkStartDate = this.form.get('employmentIncomeInformation.daysWorkMissedStart');
-    let lostWages = this.form.get('employmentIncomeInformation.didYouLoseWages');
-    let selfEmployed = this.form.get('employmentIncomeInformation.areYouSelfEmployed');
-    let mayContactEmployer = this.form.get('employmentIncomeInformation.mayContactEmployer');
-    let employerControls = this.form.get('employmentIncomeInformation.employers') as FormArray;
-
-    missedWorkStartDate.clearValidators();
-    missedWorkStartDate.setErrors(null);
-    lostWages.clearValidators();
-    lostWages.setErrors(null);
-    selfEmployed.clearValidators();
-    selfEmployed.setErrors(null);
-    console.log("doing stuff we don't want...")
-    mayContactEmployer.clearValidators();
-    mayContactEmployer.setErrors(null);
-    for (let control of employerControls.controls) {
-      let control1 = control.get('employerName');
-      let control2 = control.get('employerPhoneNumber');
-      control1.clearValidators();
-      control1.setErrors(null);
-      control2.clearValidators();
-      control2.setErrors(null);
-    }
-
-    let useValidation = isChecked === true;
-    if (useValidation) {
-      missedWorkStartDate.setValidators([Validators.required]);
-      lostWages.setValidators([Validators.required]);
-      selfEmployed.setValidators([Validators.required]);
-      mayContactEmployer.setValidators([Validators.required]);
-      for (let control of employerControls.controls) {
-        let control1 = control.get('employerName');
-        let control2 = control.get('employerPhoneNumber');
-        control1.setValidators([Validators.required]);
-        control2.setValidators([Validators.required]);
-      }
-    }
-  }
-
-  validateEmploymentInfoForm() {
-    console.log("validateEmploymentInfoForm");
-    let eiForm = document.querySelector(".employment-info-form");
-    this.employmentInfoFormIsValid = eiForm.classList.contains("ng-valid");
-    console.log(this.employmentInfoFormIsValid);
-  }
-
 }

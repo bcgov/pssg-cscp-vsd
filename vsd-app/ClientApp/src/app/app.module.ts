@@ -55,11 +55,8 @@ import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefi
 import { CancelApplicationDialog } from './shared/cancel-dialog/cancel-dialog.component';
 import { DeactivateGuardDialog } from './shared/guard-dialog/guard-dialog.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
-import { VictimReviewComponent } from './victim-application/victim-review.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
-import { IfmReviewComponent } from './ifm-application/ifm-review.component';
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
-import { WitnessReviewComponent } from './witness-application/witness-review.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
@@ -81,8 +78,7 @@ import { VersionInfoDialog } from './version-info/version-info.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { TestComponent } from './test/test.component';
 import { FileUploaderBoxComponent } from './file-uploader-box/file-uploader-box.component';
-import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
-import { AddressBlockComponent } from './address-block/address-block.component';
+// import { EmploymentIncomeComponent } from './employment-income/employment-income.component';
 import { NameBlockComponent } from './name-block/name-block.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { FilenameBlockComponent } from './filename-block/filename-block.component';
@@ -98,6 +94,9 @@ import { IntroductionComponent } from './shared/introduction/introduction.compon
 import { DeclarationInformationComponent } from './shared/declaration-information/declaration-information.component';
 import { ExpenseInformationComponent } from './shared/expense-information/expense-information.component';
 import { ApplicationReviewComponent } from './shared/application-review/application-review.component';
+import { EmploymentInformationComponent } from './shared/employment-information/employment-information.component';
+import { CancelDialog } from './shared/dialogs/cancel/cancel.dialog';
+import { InvoiceInstructionsDialog } from './shared/dialogs/invoice-instructions/invoice-instructions.dialog';
 
 @NgModule({
   declarations: [
@@ -106,13 +105,11 @@ import { ApplicationReviewComponent } from './shared/application-review/applicat
     SignPadDialog,
     SummaryOfBenefitsDialog,
     CancelApplicationDialog,
+    CancelDialog,
     DeactivateGuardDialog,
     VictimApplicationComponent,
-    VictimReviewComponent,
     IfmApplicationComponent,
-    IfmReviewComponent,
     WitnessApplicationComponent,
-    WitnessReviewComponent,
     ApplicationSuccessComponent,
     ApplicationCancelledComponent,
     SubmitInvoiceComponent,
@@ -136,8 +133,8 @@ import { ApplicationReviewComponent } from './shared/application-review/applicat
     VersionInfoDialog,
     TestComponent,
     FileUploaderBoxComponent,
-    EmploymentIncomeComponent,
-    AddressBlockComponent,
+    InvoiceInstructionsDialog,
+    EmploymentInformationComponent,
     VictimInformationComponent,
     PersonalInformationComponent,
     RepresentativeInformationComponent,
@@ -259,7 +256,9 @@ import { ApplicationReviewComponent } from './shared/application-review/applicat
     SignPadDialog,
     SummaryOfBenefitsDialog,
     CancelApplicationDialog,
-    DeactivateGuardDialog
+    CancelDialog,
+    DeactivateGuardDialog,
+    InvoiceInstructionsDialog
   ],
   bootstrap: [AppComponent]
 })
