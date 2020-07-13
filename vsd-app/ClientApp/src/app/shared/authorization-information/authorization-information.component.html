@@ -94,8 +94,8 @@
       </div>
       <app-field [valid]="isFieldValid('authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration" [required]="true">
         <label>
-          <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion">
-          I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.
+          <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion" [required]="true">
+          I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.  <span class="error-states ng-star-inserted">*</span>
         </label>
       </app-field>
 
