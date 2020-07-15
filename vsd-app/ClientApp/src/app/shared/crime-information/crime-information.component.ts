@@ -197,10 +197,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     else {
       this.signName.clearValidators();
       this.signName.setErrors(null);
+      this.signName.setValue(null);
       this.signName.markAsTouched();
       this.signName.updateValueAndValidity();
       this.signature.clearValidators();
       this.signature.setErrors(null);
+      this.signature.setValue(null);
       this.signature.markAsTouched();
       this.signature.updateValueAndValidity();
     }
@@ -221,10 +223,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     else {
       this.signName.clearValidators();
       this.signName.setErrors(null);
+      this.signName.setValue(null);
       this.signName.markAsTouched();
       this.signName.updateValueAndValidity();
       this.signature.clearValidators();
       this.signature.setErrors(null);
+      this.signature.setValue(null);
       this.signature.markAsTouched();
       this.signature.updateValueAndValidity();
     }
@@ -256,10 +260,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     else {
       this.willBeTakingLegalAction.clearValidators();
       this.willBeTakingLegalAction.setErrors(null);
+      this.willBeTakingLegalAction.setValue(null);
       this.willBeTakingLegalAction.markAsTouched();
       this.willBeTakingLegalAction.updateValueAndValidity();
       this.applyToCourtForMoneyFromOffender.clearValidators();
       this.applyToCourtForMoneyFromOffender.setErrors(null);
+      this.applyToCourtForMoneyFromOffender.setValue(null);
       this.applyToCourtForMoneyFromOffender.markAsTouched();
       this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
     }
@@ -280,10 +286,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     else {
       this.willBeTakingLegalAction.clearValidators();
       this.willBeTakingLegalAction.setErrors(null);
+      this.willBeTakingLegalAction.setValue(null);
       this.willBeTakingLegalAction.markAsTouched();
       this.willBeTakingLegalAction.updateValueAndValidity();
       this.applyToCourtForMoneyFromOffender.clearValidators();
       this.applyToCourtForMoneyFromOffender.setErrors(null);
+      this.applyToCourtForMoneyFromOffender.setValue(null);
       this.applyToCourtForMoneyFromOffender.markAsTouched();
       this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
     }
