@@ -61,7 +61,7 @@ export interface CrimeInformation {
   noPoliceReportIdentification: string;
   offenderBeenCharged: number;
   haveYouSuedOffender: number;
-  intendToSueOffender: number;
+  intendToSueOffender?: number;
   crimeLocations: Crimelocation[];
   policeReports: Policereport[];
   courtFiles: Courtfile[];
@@ -181,8 +181,8 @@ interface Racafinformation {
   haveLawyer?: number;
   lawyerOrFirmName: string;
   lawyerAddress: Address;
-  signName: string;
-  signature: string;
+  signName?: string;
+  signature?: string;
 }
 interface Othertreatment {
   providerType: string;

@@ -1,7 +1,7 @@
-import { OnInit, Component, Input } from "@angular/core";
+import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { FormBase } from "../form-base";
 import { MatDialogConfig, MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepickerInputEvent } from "@angular/material";
-import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer } from "@angular/forms";
+import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormControl } from "@angular/forms";
 import { FileBundle } from "../../models/file-bundle";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -9,6 +9,7 @@ import { MY_FORMATS, ApplicationType } from "../enums-list";
 import * as moment from 'moment';
 import { CrimeInfoHelper } from "./crime-information.helper";
 import { config } from '../../../config';
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'app-crime-information',
@@ -22,12 +23,23 @@ import { config } from '../../../config';
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class CrimeInformationComponent extends FormBase implements OnInit {
+export class CrimeInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
     public form: FormGroup;
     crimeLocationItems: FormArray;
     showAddCrimeLocation: boolean = true;
-    showRemoveCrimeLocation: boolean = false;
+  showRemoveCrimeLocation: boolean = false;
+
+  wasReportMadeToPoliceSubscription: Subscription;
+  applyToCourtForMoneyFromOffenderSubscription: Subscription;
+  willBeTakingLegalActionSubscription: Subscription;
+  haveYouSuedOffenderSubscription: Subscription;
+  intendToSueOffenderSubscription: Subscription;
+
+  applyToCourtForMoneyFromOffender: FormControl;
+  willBeTakingLegalAction: FormControl;
+  signName: FormControl;
+  signature: FormControl;
 
     policeReportItems: FormArray;
     showAddPoliceReport: boolean = true;
@@ -64,7 +76,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
       // Commented out in case they actually want to return this functionality
       //this.copyApplicantToRACAFSignature(this.form.parent);
 
-        this.form.get('wasReportMadeToPolice').valueChanges.subscribe(value => {
+      this.wasReportMadeToPoliceSubscription = this.form.get('wasReportMadeToPolice').valueChanges.subscribe(value => {
             if (value === 100000001) {
                 this.addPoliceReport();
             }
@@ -73,8 +85,52 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
             }
         });
 
+      this.applyToCourtForMoneyFromOffenderSubscription = this.form.get('racafInformation.applyToCourtForMoneyFromOffender').valueChanges.subscribe(value => {
+        if (value === 100000000) {
+          this.applyToCourtOrLegalYes();
+        }
+        else {
+          this.applyToCourtNo();
+        }
+      });
+
+      this.willBeTakingLegalActionSubscription = this.form.get('racafInformation.willBeTakingLegalAction').valueChanges.subscribe(value => {
+        if (value === 100000000) {
+          this.applyToCourtOrLegalYes();
+        }
+        else {
+          this.legalChangesNo();
+        }
+      });
+
+      this.haveYouSuedOffenderSubscription = this.form.get('haveYouSuedOffender').valueChanges.subscribe(value => {
+        if (value === 100000001) {
+          this.suedOrIntendToSueYes();
+        }
+        else {
+
+        }
+      });
+
+      this.intendToSueOffenderSubscription = this.form.get('intendToSueOffender').valueChanges.subscribe(value => {
+        if (value === 100000000) {
+          this.suedOrIntendToSueYes();
+        }
+        else {
+
+        }
+      });
+
         this.policeForceList = config.police_detachments;
     }
+
+  ngOnDestroy() {
+    this.wasReportMadeToPoliceSubscription.unsubscribe();
+    this.applyToCourtForMoneyFromOffenderSubscription.unsubscribe();
+    this.willBeTakingLegalActionSubscription.unsubscribe();
+    this.haveYouSuedOffenderSubscription.unsubscribe();
+    this.intendToSueOffenderSubscription.unsubscribe();
+  }
 
     addCrimeLocation(): void {
         this.crimeLocationItems = this.form.get('crimeLocations') as FormArray;
@@ -114,6 +170,144 @@ export class CrimeInformationComponent extends FormBase implements OnInit {
         }
         this.policeReportMinDates = [];
     }
+
+  applyToCourtOrLegalYes(): void {
+    this.signName = this.form.get('racafInformation.signName') as FormControl;
+    this.signature = this.form.get('racafInformation.signature') as FormControl;
+    this.signName.setValidators([Validators.required]);
+    this.signName.markAsTouched();
+    this.signName.updateValueAndValidity();
+    this.signature.setValidators([Validators.required]);
+    this.signature.markAsTouched();
+    this.signature.updateValueAndValidity();
+  }
+
+  applyToCourtNo(): void {
+    let willBeTakingLegal = this.form.get('racafInformation.willBeTakingLegalAction').value;
+    this.signName = this.form.get('racafInformation.signName') as FormControl;
+    this.signature = this.form.get('racafInformation.signature') as FormControl;
+    if (willBeTakingLegal === 100000000) {
+      this.signName.setValidators([Validators.required]);
+      this.signName.markAsTouched();
+      this.signName.updateValueAndValidity();
+      this.signature.setValidators([Validators.required]);
+      this.signature.markAsTouched();
+      this.signature.updateValueAndValidity();
+    }
+    else {
+      this.signName.clearValidators();
+      this.signName.setErrors(null);
+      this.signName.markAsTouched();
+      this.signName.updateValueAndValidity();
+      this.signature.clearValidators();
+      this.signature.setErrors(null);
+      this.signature.markAsTouched();
+      this.signature.updateValueAndValidity();
+    }
+  }
+
+  legalChangesNo(): void {
+    let applyToCourt = this.form.get('racafInformation.applyToCourtForMoneyFromOffender').value;
+    this.signature = this.form.get('racafInformation.signature') as FormControl;
+    this.signName = this.form.get('racafInformation.signName') as FormControl;
+    if (applyToCourt === 100000000) {
+      this.signName.setValidators([Validators.required]);
+      this.signName.markAsTouched();
+      this.signName.updateValueAndValidity();
+      this.signature.setValidators([Validators.required]);
+      this.signature.markAsTouched();
+      this.signature.updateValueAndValidity();
+    }
+    else {
+      this.signName.clearValidators();
+      this.signName.setErrors(null);
+      this.signName.markAsTouched();
+      this.signName.updateValueAndValidity();
+      this.signature.clearValidators();
+      this.signature.setErrors(null);
+      this.signature.markAsTouched();
+      this.signature.updateValueAndValidity();
+    }
+  }
+
+  suedOrIntendToSueYes(): void {
+    this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
+    this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
+    this.willBeTakingLegalAction.setValidators([Validators.required]);
+    this.willBeTakingLegalAction.markAsTouched();
+    this.willBeTakingLegalAction.updateValueAndValidity();
+    this.applyToCourtForMoneyFromOffender.setValidators([Validators.required]);
+    this.applyToCourtForMoneyFromOffender.markAsTouched();
+    this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
+  }
+
+  suedNo(): void {
+    let intendToSue = this.form.get('intendToSueOffender').value;
+    this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
+    this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
+    if (intendToSue === 100000000) {
+      this.willBeTakingLegalAction.setValidators([Validators.required]);
+      this.willBeTakingLegalAction.markAsTouched();
+      this.willBeTakingLegalAction.updateValueAndValidity();
+      this.applyToCourtForMoneyFromOffender.setValidators([Validators.required]);
+      this.applyToCourtForMoneyFromOffender.markAsTouched();
+      this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
+    }
+    else {
+      this.willBeTakingLegalAction.clearValidators();
+      this.willBeTakingLegalAction.setErrors(null);
+      this.willBeTakingLegalAction.markAsTouched();
+      this.willBeTakingLegalAction.updateValueAndValidity();
+      this.applyToCourtForMoneyFromOffender.clearValidators();
+      this.applyToCourtForMoneyFromOffender.setErrors(null);
+      this.applyToCourtForMoneyFromOffender.markAsTouched();
+      this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
+    }
+  }
+
+  intendToSueNo(): void {
+    let haveYouSued = this.form.get('haveYouSuedOffender').value;
+    this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
+    this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
+    if (haveYouSued === 100000001) {
+      this.willBeTakingLegalAction.setValidators([Validators.required]);
+      this.willBeTakingLegalAction.markAsTouched();
+      this.willBeTakingLegalAction.updateValueAndValidity();
+      this.applyToCourtForMoneyFromOffender.setValidators([Validators.required]);
+      this.applyToCourtForMoneyFromOffender.markAsTouched();
+      this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
+    }
+    else {
+      this.willBeTakingLegalAction.clearValidators();
+      this.willBeTakingLegalAction.setErrors(null);
+      this.willBeTakingLegalAction.markAsTouched();
+      this.willBeTakingLegalAction.updateValueAndValidity();
+      this.applyToCourtForMoneyFromOffender.clearValidators();
+      this.applyToCourtForMoneyFromOffender.setErrors(null);
+      this.applyToCourtForMoneyFromOffender.markAsTouched();
+      this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
+    }
+  }
+
+  //addOrRemoveSignature(): void {
+  //  this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
+  //  this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
+  //  this.signName = this.form.get('racafInformation.signName') as FormControl;
+
+  //  let applyForMoney = this.form.get('racafInformation.applyToCourtForMoneyFromOffender').value;
+  //  let willBeTakingLegal = this.form.get('racafInformation.willBeTakingLegalAction').value;
+
+  //  if (applyForMoney === 100000000 || willBeTakingLegal === 100000000) {
+  //    this.signName.setValidators([Validators.required]);
+  //    this.signName.markAsTouched();
+  //    this.signName.updateValueAndValidity();
+  //  }
+  //  else {
+  //    this.signName.clearValidators();
+  //    this.signName.markAsTouched();
+  //    this.signName.updateValueAndValidity();
+  //  }
+  //}
 
     addCourtInfo(): void {
         this.courtFileItems = this.form.get('courtFiles') as FormArray;

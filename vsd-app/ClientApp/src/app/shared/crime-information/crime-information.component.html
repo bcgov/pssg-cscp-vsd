@@ -289,7 +289,7 @@
                 </label>
             </app-field>
             <section *ngIf="form.get('haveYouSuedOffender').value === 100000000">
-                <app-field label="Do you intend to sue the Person(s) Responsible?">
+                <app-field label="Do you intend to sue the Person(s) Responsible?" [required]="form.get('haveYouSuedOffender').value === 100000000" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
                     <label class="inline-label">
                         <input type="radio" [value]="100000000" name="intendToSueOffender" formControlName="intendToSueOffender">
                         <span>Yes</span>
@@ -305,7 +305,7 @@
                 </app-field>
             </section>
 
-            <section *ngIf="form.get('haveYouSuedOffender').value === 100000001 || form.get('intendToSueOffender').value === 100000000">
+            <section *ngIf="form.get('haveYouSuedOffender').value === 100000001 || form.get('intendToSueOffender').value === 100000000 || form.get('intendToSueOffender').value === 100000002">
 
                 <div formGroupName="racafInformation">
                     <h2 class="blue-header">Restitution and Civil Action</h2>
@@ -319,7 +319,7 @@
                     <p><strong>Restitution</strong> refers to money that an offender is ordered to pay a victim, to help cover the victim’s monetary loss. Restitution is ordered by a judge in a criminal court as part of the offender’s sentence.</p>
                     <br />
 
-                    <app-field label="Did you apply to the court for money from the offender?" [valid]="isFieldValid('applyToCourtForMoneyFromOffender')" [required]="true" errorMessage="Please make a selection">
+                    <app-field label="Did you apply to the court for money from the offender?" [required]="form.get('haveYouSuedOffender').value === 100000001 || form.get('intendToSueOffender').value === 100000000 || form.get('intendToSueOffender').value === 100000002" [valid]="isFieldValid('racafInformation.applyToCourtForMoneyFromOffender')" errorMessage="Please make a selection">
                         <label class="inline-label">
                             <input type="radio" [value]="100000000" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
                             <span>Yes</span>
@@ -337,7 +337,7 @@
                     <h3>Civil Action</h3>
                     <p><strong>Civil action</strong> refers to taking legal action against, or suing, a person or party responsible for the claimant’s injury or loss.</p>
 
-                    <app-field label="Have you taken, or will you be taking, legal action?" [valid]="isFieldValid('willBeTakingLegalAction')" [required]="true" errorMessage="Please make a selection">
+                    <app-field label="Have you taken, or will you be taking, legal action?" [required]="form.get('haveYouSuedOffender').value === 100000001 || form.get('intendToSueOffender').value === 100000000 || form.get('intendToSueOffender').value === 100000002" [valid]="isFieldValid('racafInformation.willBeTakingLegalAction')" errorMessage="Please make a selection">
                         <label class="inline-label">
                             <input type="radio" [value]="100000000" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
                             <span>Yes</span>
@@ -352,7 +352,7 @@
                         </label>
                     </app-field>
 
-                    <span *ngIf="form.value.racafInformation.willBeTakingLegalAction===100000000">
+                    <span *ngIf="form.get('racafInformation.willBeTakingLegalAction').value===100000000">
                       <app-field label="Do you have a lawyer?">
                         <label class="inline-label">
                           <input type="radio" [value]="100000000" name="haveLawyer" formControlName="haveLawyer">
@@ -365,38 +365,38 @@
                       </app-field>
                     </span>
 
-                    <span *ngIf="form.value.racafInformation.haveLawyer===100000000">
-                        <h3>Lawyer Information</h3>
-                        <p>Please provide the name and address of your lawyer or law firm: </p>
+                    <section *ngIf="form.get('racafInformation.haveLawyer').value===100000000">
+                      <h3>Lawyer Information</h3>
+                      <p>Please provide the name and address of your lawyer or law firm: </p>
 
-                        <app-field label="Lawyer or Law Firm Name">
-                            <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
-                        </app-field>
+                      <app-field label="Lawyer or Law Firm Name">
+                        <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
+                      </app-field>Please provide your digital signature
 
-                        <app-address [group]="form.get('racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
-                    </span>
-                    <span *ngIf="form.value.racafInformation.willBeTakingLegalAction===100000000 || form.value.racafInformation.applyToCourtForMoneyFromOffender===100000000">
-                        <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
-                        <div class="terms">
-                            <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name" [required]="true" errorMessage="Please enter your name"><span class="error-states ng-star-inserted">*</span>, understand the following:</p>
-                            <ol class="list">
-                                <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
-                                <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
-                                <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
-                                <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
-                            </ol>
+                      <app-address [group]="form.get('racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
+                    </section>
+                    <section *ngIf="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000">
+                      <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
+                      <div class="terms">
+                        <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name" errorMessage="Please enter your name">, understand the following:<span class="error-states ng-star-inserted">*</span></p>
+                        <ol class="list">
+                          <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
+                          <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
+                          <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
+                          <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
+                        </ol>
+                      </div>
+
+                      <app-field label="Applicant's Signature" [required]="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
+                        <div class="signature-trigger" (click)="showSignPad('racafInformation', 'signature')" *ngIf="!hasSignature('racafInformation.signature')">
                         </div>
-
-                        <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
-                            <div class="signature-trigger" (click)="showSignPad('racafInformation', 'signature')" *ngIf="!hasSignature('racafInformation.signature')">
-                            </div>
-                            <div *ngIf="hasSignature('racafInformation.signature')" class="signature-preview">
-                                <img src="{{ valueOrEmpty('racafInformation.signature') }}" />
-                                <a class="redo" (click)="showSignPad('racafInformation', 'signature')">Redo Signature</a>
-                            </div>
-                        </app-field>
-                        <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
-                    </span>
+                        <div *ngIf="hasSignature('racafInformation.signature')" class="signature-preview">
+                          <img src="{{ valueOrEmpty('racafInformation.signature') }}" />
+                          <a class="redo" (click)="showSignPad('racafInformation', 'signature')">Redo Signature</a>
+                        </div>
+                      </app-field>
+                      <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
+                    </section>
                 </div>
             </section>
         </section>
