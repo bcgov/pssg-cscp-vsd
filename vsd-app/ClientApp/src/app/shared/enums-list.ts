@@ -132,7 +132,8 @@ export class EnumHelper {
 
 export enum CRMBoolean {
   True = 100000001,
-  False = 100000000
+  False = 100000000,
+  Undecided = 100000002
 }
 
 export enum ApplicationType {
