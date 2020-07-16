@@ -131,7 +131,8 @@
             </app-field>
         </div>
         <div class="col-md-6">
-            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter a valid SIN" [tooltipReference]="sinTemplate">
+            <!-- [tooltipReference]="sinTemplate" -->
+            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter a valid SIN">
                 <input class="form-control" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
                 <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />text to be provided by CVAP</ng-template>
             </app-field>

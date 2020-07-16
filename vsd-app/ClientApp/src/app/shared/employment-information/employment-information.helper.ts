@@ -12,6 +12,7 @@ export class EmploymentInfoHelper {
             wsbcClaimNumber: [''],
             didYouMissWorkDueToCrime: [''], //, Validators.required],
             didYouLoseWages: [''],
+            sin: ['', [Validators.minLength(9), Validators.maxLength(9)]],
             areYouSelfEmployed: [''],
             mayContactEmployer: [''],
             haveYouAppliedForWorkersCompensation: [''],

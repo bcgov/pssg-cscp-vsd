@@ -44,6 +44,7 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     didMissWorkSubscription: Subscription;
     loseWagesSubscription: Subscription;
     selfEmployedSubscription: Subscription;
+    sinSubscription: Subscription;
 
     constructor(private controlContainer: ControlContainer,
         private fb: FormBuilder,
@@ -157,19 +158,30 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         this.loseWagesSubscription = this.form.get('didYouLoseWages').valueChanges.subscribe((value) => {
             let options = { onlySelf: true, emitEvent: false };
             let control = this.form.get('areYouSelfEmployed');
+            let sinControl = this.form.get('sin');
 
 
             if (value === CRMBoolean.True) {
                 this.addEmployer();
                 control.setValidators([Validators.required]);
                 control.updateValueAndValidity();
+                sinControl.setValidators([Validators.required]);
+                sinControl.updateValueAndValidity();
             }
             else {
                 this.removeAllEmployers();
                 control.clearValidators();
                 control.setErrors(null, options);
                 control.updateValueAndValidity(options);
+                sinControl.clearValidators();
+                sinControl.setErrors(null, options);
+                sinControl.updateValueAndValidity(options);
             }
+        });
+
+        this.sinSubscription = this.form.get('sin').valueChanges.subscribe((value) => {
+            if (value === null) value = '';
+            this.form.parent.get('personalInformation').get('sin').patchValue(value);
         });
 
         this.selfEmployedSubscription = this.form.get('areYouSelfEmployed').valueChanges.subscribe((value) => {
@@ -200,6 +212,7 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         this.appliedToWorkSafeBCSubscription.unsubscribe();
         this.didMissWorkSubscription.unsubscribe();
         this.loseWagesSubscription.unsubscribe();
+        this.sinSubscription.unsubscribe();
         this.selfEmployedSubscription.unsubscribe();
     }
 

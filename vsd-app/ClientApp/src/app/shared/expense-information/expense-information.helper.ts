@@ -76,6 +76,7 @@ export class ExpenseInfoHelper {
                 noneOfTheAboveExpenses: [''],
                 missedWorkDueToDeathOfVictim: [''],//, Validators.required],
                 didYouLoseWages: [''], //, Validators.required],
+                sin: ['', [Validators.minLength(9), Validators.maxLength(9)]],
                 daysWorkMissedStart: [''], //, Validators.required],
                 daysWorkMissedEnd: [''],
                 employers: fb.array([this.createEmployerItem(fb)]),

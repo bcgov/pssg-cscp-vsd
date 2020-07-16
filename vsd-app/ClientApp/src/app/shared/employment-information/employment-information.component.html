@@ -111,6 +111,11 @@
                         <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
                     </ng-template>
                 </div>
+                <div *ngIf="form.get('didYouLoseWages').value === CRMBoolean.True">
+                    <app-field label="Social Insurance Number (SIN)" [required]="form.get('didYouLoseWages').value === CRMBoolean.True" [valid]="isFieldValid('sin')" errorMessage="Please enter your SIN">
+                        <input class="form-control sin-input" maxlength="9" type="text" formControlName="sin">
+                    </app-field>
+                </div>
             </ng-container>
 
             <ng-container *ngIf="form.get('didYouLoseWages').value === CRMBoolean.True">
