@@ -108,7 +108,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
           this.suedOrIntendToSueYes();
         }
         else {
-
+          this.suedNo();
         }
       });
 
@@ -117,7 +117,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
           this.suedOrIntendToSueYes();
         }
         else {
-
+          this.intendToSueNo();
         }
       });
 
