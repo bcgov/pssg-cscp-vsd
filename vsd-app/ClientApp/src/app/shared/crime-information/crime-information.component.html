@@ -261,13 +261,13 @@
                                 </app-field>
                             </div>
                             <div class="col-4">
-                                <app-field label="Court Location">
-                                    <input class="form-control" type="text" formControlName="courtLocation" required>
+                                <app-field label="Court Location" [required]="true">
+                                    <input class="form-control" type="text" formControlName="courtLocation" required errorMessage="Please enter a court location">
                                 </app-field>
                             </div>
                             <div class="col-4">
                                 <br />
-                                <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo">
+                                <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo" required errorMessage="Please enter a court location">
                                     <i class="fas fa-trash-alt"></i> Remove Court File
                                 </a>
                             </div>
