@@ -4,8 +4,8 @@ export interface iRepresentative {
 
 export const REPRESENTATIVE_LIST = {
   name: [
-    'POA',
-    'MCFD',
-    'Guardian',
-    'PGT']
+    'Power of Attorney',
+    'Ministry of Children and Family Development',
+    'Legal Guardian',
+    'Public Guardian and Trustee']
 }
