@@ -81,20 +81,20 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
             let daysMissedEndControl = this.form.get('daysWorkMissedEnd');
             if (this.form.parent.get('crimeInformation.victimDeceasedFromCrime').value == true) {
                 didMissWorkControl.setValidators([Validators.required]);
-                // daysMissedStartControl.setValidators([Validators.required]);
-                // daysMissedEndControl.setValidators([Validators.required]);
+                daysMissedStartControl.setValidators([Validators.required]);
+                daysMissedEndControl.setValidators([Validators.required]);
             }
             else {
                 didMissWorkControl.clearValidators();
                 didMissWorkControl.setErrors(null);
-                // daysMissedStartControl.clearValidators();
-                // daysMissedStartControl.setErrors(null);
-                // daysMissedEndControl.clearValidators();
-                // daysMissedEndControl.setErrors(null);
+                daysMissedStartControl.clearValidators();
+                daysMissedStartControl.setErrors(null);
+                daysMissedEndControl.clearValidators();
+                daysMissedEndControl.setErrors(null);
             }
             didMissWorkControl.updateValueAndValidity();
-            // daysMissedStartControl.updateValueAndValidity();
-            // daysMissedEndControl.updateValueAndValidity();
+            daysMissedStartControl.updateValueAndValidity();
+            daysMissedEndControl.updateValueAndValidity();
 
             this.sinSubscription = this.form.get('sin').valueChanges.subscribe((value) => {
                 if (value === null) value = '';
@@ -176,7 +176,8 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
 
         let endDate = this.form.get('daysWorkMissedEnd').value;
         if (endDate && moment(endDate).isBefore(startDate)) {
-            this.form.get('daysWorkMissedEnd').patchValue(null);
+            this.form.get('daysWorkMissedEnd').patchValue('');
+            this.form.get('daysWorkMissedEnd').updateValueAndValidity();
         }
     }
 

@@ -114,7 +114,7 @@
         <section *ngIf="form.get('beingTreatedByFamilyDoctor').value === true">
             <div class="row">
                 <div class="col-md-6">
-                    <app-field label="Name of Medical Doctor/Clinic" [required]="true">
+                    <app-field label="Name of Medical Doctor/Clinic" [required]="true" [valid]="isFieldValid('familyDoctorName')" [errorMessage]="'Please enter the Medical Doctor/Clinic name'">
                         <input class="form-control" type="text" formControlName="familyDoctorName">
                     </app-field>
                 </div>

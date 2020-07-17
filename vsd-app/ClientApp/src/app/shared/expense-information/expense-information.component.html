@@ -261,7 +261,7 @@
             </app-field>
 
             <section *ngIf="form.get('missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
-                <app-field label="Please provide days of work missed" [valid]="isFieldValid('daysWorkMissedStart')" [required]="true" errorMessage="Please select an option">
+                <app-field label="Please provide days of work missed" [valid]="isFieldValid('daysWorkMissedStart') && isFieldValid('daysWorkMissedEnd')" [required]="true" errorMessage="Please select an option">
                     <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
                     <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
                     <span> - </span>

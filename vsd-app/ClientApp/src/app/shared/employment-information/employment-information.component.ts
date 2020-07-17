@@ -244,7 +244,8 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
 
         let endDate = this.form.get('daysWorkMissedEnd').value;
         if (endDate && moment(endDate).isBefore(startDate)) {
-            this.form.get('daysWorkMissedEnd').patchValue(null);
+            this.form.get('daysWorkMissedEnd').patchValue('');
+            this.form.get('daysWorkMissedEnd').updateValueAndValidity();
         }
     }
 
