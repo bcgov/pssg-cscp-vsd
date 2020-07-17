@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { CrimeInfoHelper } from "./crime-information.helper";
 import { config } from '../../../config';
 import { Subscription } from "rxjs";
+import { forEach } from "@angular/router/src/utils/collection";
 
 @Component({
     selector: 'app-crime-information',
@@ -41,8 +42,13 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   willBeTakingLegalAction: FormControl;
   signName: FormControl;
   signature: FormControl;
+  thisCourtFileLocation: FormControl;
 
-    policeReportItems: FormArray;
+  CourtFileGroup: FormGroup;
+
+  courtLocationItems: FormArray;
+  policeReportItems: FormArray;
+
     showAddPoliceReport: boolean = true;
     showRemovePoliceReport: boolean = false;
 
@@ -107,9 +113,11 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       this.offenderBeenChargedSubscription = this.form.get('offenderBeenCharged').valueChanges.subscribe(value => {
         if (value === 100000000) {
           // Yes
+          this.offenderBeenChargedYes();
         }
         else {
           // No or Unknown
+          this.offenderBeenChargedNo();
         }
       });
 
@@ -140,6 +148,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.willBeTakingLegalActionSubscription.unsubscribe();
     this.haveYouSuedOffenderSubscription.unsubscribe();
     this.intendToSueOffenderSubscription.unsubscribe();
+    this.offenderBeenChargedSubscription.unsubscribe();
   }
 
     addCrimeLocation(): void {
@@ -180,6 +189,29 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
         }
         this.policeReportMinDates = [];
     }
+
+  offenderBeenChargedYes(): void {
+    this.courtLocationItems = this.form.get('courtFiles') as FormArray;
+    for (let i = 0; i < this.courtLocationItems.length; ++i) {
+      this.CourtFileGroup = this.courtLocationItems.controls[i] as FormGroup;
+      this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as FormControl;
+      this.thisCourtFileLocation.setValidators([Validators.required]);
+      this.thisCourtFileLocation.updateValueAndValidity();
+    }
+  }
+
+  offenderBeenChargedNo(): void {
+    this.courtLocationItems = this.form.get('courtFiles') as FormArray;
+    for (let i = 0; i < this.courtLocationItems.length; ++i) {
+      this.CourtFileGroup = this.courtLocationItems.controls[i] as FormGroup;
+      this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as FormControl;
+      this.thisCourtFileLocation.clearValidators();
+      this.thisCourtFileLocation.setErrors(null);
+      this.thisCourtFileLocation.setValue(null);
+      this.thisCourtFileLocation.markAsTouched();
+      this.thisCourtFileLocation.updateValueAndValidity();
+    }
+  }
 
   applyToCourtOrLegalYes(): void {
     this.signName = this.form.get('racafInformation.signName') as FormControl;
