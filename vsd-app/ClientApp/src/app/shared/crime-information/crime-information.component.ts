@@ -33,6 +33,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   wasReportMadeToPoliceSubscription: Subscription;
   applyToCourtForMoneyFromOffenderSubscription: Subscription;
   willBeTakingLegalActionSubscription: Subscription;
+  offenderBeenChargedSubscription: Subscription;
   haveYouSuedOffenderSubscription: Subscription;
   intendToSueOffenderSubscription: Subscription;
 
@@ -100,6 +101,15 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
         }
         else {
           this.legalChangesNo();
+        }
+      });
+
+      this.offenderBeenChargedSubscription = this.form.get('offenderBeenCharged').valueChanges.subscribe(value => {
+        if (value === 100000000) {
+          // Yes
+        }
+        else {
+          // No or Unknown
         }
       });
 
