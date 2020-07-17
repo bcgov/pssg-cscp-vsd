@@ -430,7 +430,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
         let thisReport = this.policeReportItems.at(index) as FormGroup;
         let endDate = moment(thisReport.get('reportEndDate').value);
         if (endDate.isBefore(startDate)) {
-            thisReport.get('reportEndDate').patchValue(null);
+            thisReport.get('reportEndDate').patchValue('');
         }
     }
 

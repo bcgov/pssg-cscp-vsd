@@ -9,8 +9,11 @@ export class FormBase {
     let formField = this.form.get(field);
     if (!formField || formField.value === null)
       return true;
-    if (field === 'personalInformation.sin' || field === 'victimInformation.sin' || field === 'sin')
-      return this.validateSIN(formField.value);
+    if (field === 'personalInformation.sin' || field === 'victimInformation.sin' || field === 'sin') {
+      let validator = formField.validator({} as AbstractControl);
+      let isRequired = validator && validator.required ? true : false;
+      return this.validateSIN(formField.value, isRequired);
+    }
 
     return this.form.get(field).valid || !this.form.get(field).touched;
   }
@@ -19,11 +22,11 @@ export class FormBase {
     return control.valid || !control.touched;
   }
 
-  validateSIN(sin) {
+  validateSIN(sin, isRequired) {
     var check, even, tot;
 
     // Allow blank SIN
-    if (sin === '') {
+    if (!isRequired && sin === '') {
       return true;
     }
 
@@ -482,13 +485,13 @@ export class FormBase {
     control.setValue(value.trim());
   }
 
-//  copyApplicantToRACAFSignature(form: FormGroup | FormArray) {
-    // Temporarily taken out. Return if they decide to populate the applicant value to the RACAF signature
-//    let source = form.get('personalInformation');
-//    let target = form.get('crimeInformation.racafInformation');
-//    let options = { onlySelf: true, emitEvent: true };
-//    target.get('signName').patchValue(source.get('firstName').value + ' ' + source.get('middleName').value + ' ' + source.get('lastName').value, options);
-//  }
+  //  copyApplicantToRACAFSignature(form: FormGroup | FormArray) {
+  // Temporarily taken out. Return if they decide to populate the applicant value to the RACAF signature
+  //    let source = form.get('personalInformation');
+  //    let target = form.get('crimeInformation.racafInformation');
+  //    let options = { onlySelf: true, emitEvent: true };
+  //    target.get('signName').patchValue(source.get('firstName').value + ' ' + source.get('middleName').value + ' ' + source.get('lastName').value, options);
+  //  }
 
   copyPersonalAddressToVictimAddress(form: FormGroup | FormArray) {
     let copyAddress = form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value === true;

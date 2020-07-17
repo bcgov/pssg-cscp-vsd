@@ -1,11 +1,12 @@
 import { FormBase } from "../form-base";
-import { OnInit, Component, Input } from "@angular/core";
+import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDatepickerInputEvent } from "@angular/material";
-import { FormGroup, ControlContainer, FormControl, AbstractControl } from "@angular/forms";
+import { FormGroup, ControlContainer, FormControl, AbstractControl, Validators } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, ApplicationType } from "../enums-list";
+import { MY_FORMATS, ApplicationType, CRMBoolean } from "../enums-list";
 import { SummaryOfBenefitsDialog } from "../../summary-of-benefits/summary-of-benefits.component";
 import * as moment from 'moment';
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'app-expense-information',
@@ -19,7 +20,7 @@ import * as moment from 'moment';
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class ExpenseInformationComponent extends FormBase implements OnInit {
+export class ExpenseInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
     public form: FormGroup;
     ApplicationType = ApplicationType;
@@ -30,6 +31,12 @@ export class ExpenseInformationComponent extends FormBase implements OnInit {
 
     today = new Date();
     minEndDate: Date;
+
+    CRMBoolean = CRMBoolean;
+
+    sinSubscription: Subscription;
+    didMissWorkSubscription: Subscription;
+    loseWagesSubscription: Subscription;
 
     constructor(
         private controlContainer: ControlContainer,
@@ -69,6 +76,58 @@ export class ExpenseInformationComponent extends FormBase implements OnInit {
             ];
         }
         if (this.formType === ApplicationType.IFM_Application) {
+            let didMissWorkControl = this.form.get('missedWorkDueToDeathOfVictim');
+            let daysMissedStartControl = this.form.get('daysWorkMissedStart');
+            let daysMissedEndControl = this.form.get('daysWorkMissedEnd');
+            if (this.form.parent.get('crimeInformation.victimDeceasedFromCrime').value == true) {
+                didMissWorkControl.setValidators([Validators.required]);
+                daysMissedStartControl.setValidators([Validators.required]);
+                daysMissedEndControl.setValidators([Validators.required]);
+            }
+            else {
+                didMissWorkControl.clearValidators();
+                didMissWorkControl.setErrors(null);
+                daysMissedStartControl.clearValidators();
+                daysMissedStartControl.setErrors(null);
+                daysMissedEndControl.clearValidators();
+                daysMissedEndControl.setErrors(null);
+            }
+            didMissWorkControl.updateValueAndValidity();
+            daysMissedStartControl.updateValueAndValidity();
+            daysMissedEndControl.updateValueAndValidity();
+
+            this.sinSubscription = this.form.get('sin').valueChanges.subscribe((value) => {
+                if (value === null) value = '';
+                this.form.parent.get('personalInformation').get('sin').patchValue(value);
+            });
+
+            this.didMissWorkSubscription = didMissWorkControl.valueChanges.subscribe((value) => {
+                let didYouLoseWagesControl = this.form.get('didYouLoseWages');
+                if (value === CRMBoolean.True) {
+                    didYouLoseWagesControl.setValidators([Validators.required]);
+                }
+                else {
+                    didYouLoseWagesControl.clearValidators();
+                    didYouLoseWagesControl.setErrors(null);
+                    // didYouLoseWagesControl.patchValue(null);
+                }
+                didYouLoseWagesControl.updateValueAndValidity();
+            });
+
+            this.loseWagesSubscription = this.form.get('didYouLoseWages').valueChanges.subscribe((value) => {
+                let sinControl = this.form.get('sin');
+                if (value === CRMBoolean.True) {
+                    sinControl.setValidators([Validators.required]);
+                }
+                else {
+                    sinControl.clearValidators();
+                    sinControl.setErrors(null);
+                }
+                sinControl.updateValueAndValidity();
+            });
+
+
+
             this.header = "Benefits";
             this.BENEFITS = [
                 'haveCounsellingExpenses',
@@ -100,7 +159,14 @@ export class ExpenseInformationComponent extends FormBase implements OnInit {
                 'noneOfTheAboveExpenses'
             ];
         }
+    }
 
+    ngOnDestroy() {
+        if (this.formType === ApplicationType.IFM_Application) {
+            this.sinSubscription.unsubscribe();
+            this.didMissWorkSubscription.unsubscribe();
+            this.loseWagesSubscription.unsubscribe();
+        }
     }
 
     daysWorkMissedStartChange(event: MatDatepickerInputEvent<Date>) {
@@ -110,7 +176,8 @@ export class ExpenseInformationComponent extends FormBase implements OnInit {
 
         let endDate = this.form.get('daysWorkMissedEnd').value;
         if (endDate && moment(endDate).isBefore(startDate)) {
-            this.form.get('daysWorkMissedEnd').patchValue(null);
+            this.form.get('daysWorkMissedEnd').patchValue('');
+            this.form.get('daysWorkMissedEnd').updateValueAndValidity();
         }
     }
 

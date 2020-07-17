@@ -117,6 +117,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     if (stepper != null) {
       var desiredFormIndex = stepper.selectedIndex;
       var formGroupName = this.getFormGroupName(desiredFormIndex);
+      console.log(`Form for validation is ${formGroupName}.`);
 
       this.formFullyValidated = this.form.valid;
 
@@ -126,6 +127,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
         if (formParts != null) {
           formValid = formParts.valid;
+          console.log(formParts);
         }
 
         if (formValid) {

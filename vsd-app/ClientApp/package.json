@@ -31,6 +31,7 @@
     "@angular/router": "7.1.0",
     "@ngrx/store": "^7.4.0",
     "@nguniversal/module-map-ngfactory-loader": "^7.1.1",
+    "@types/lodash": "^4.14.157",
     "angular-url-encode": "^1.0.0",
     "angular2-signaturepad": "^2.8.0",
     "aspnet-prerendering": "^3.0.1",

@@ -73,6 +73,19 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
                 hospitalControl.updateValueAndValidity();
             });
+
+            this.form.get('treatedOutsideBc').valueChanges.subscribe(value => {
+                let hospitalControl = this.form.get('treatedAtHospitalName');
+                if (value === true) {
+                    hospitalControl.clearValidators();
+                    hospitalControl.setErrors(null);
+                }
+                else {
+                    hospitalControl.setValidators([Validators.required]);
+                }
+                hospitalControl.updateValueAndValidity();
+
+            });
         }
     }
 

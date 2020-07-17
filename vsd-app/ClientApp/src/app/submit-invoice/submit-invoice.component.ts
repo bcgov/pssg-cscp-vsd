@@ -16,6 +16,8 @@ import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
+import { POSTAL_CODE } from '../shared/regex.constants';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -33,7 +35,7 @@ import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 
 
 export class SubmitInvoiceComponent extends FormBase implements OnInit {
-
+  postalRegex = POSTAL_CODE;
   currentUser: User;
   dataLoaded = false;
   busy: Promise<any>;
@@ -60,6 +62,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   invoiceSubTotal: number = 0.00;
   invoiceGrandTotal: number = 0.00;
 
+  today = new Date();
+
   saveFormData: any;
 
   constructor(
@@ -77,70 +81,70 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
     this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
 
-    this.form.get('invoiceDetails.doYouHaveCvapCounsellorNumber')
-      .valueChanges
-      .subscribe(value => {
-        const counsellorRegistrationNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber');
+    // this.form.get('invoiceDetails.doYouHaveCvapCounsellorNumber')
+    //   .valueChanges
+    //   .subscribe(value => {
+    //     const counsellorRegistrationNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber');
 
-        const counsellorFirstName = this.form.get('invoiceDetails.counsellorFirstName');
-        const counsellorLastName = this.form.get('invoiceDetails.counsellorLastName');
-        const counsellorEmail = this.form.get('invoiceDetails.counsellorEmail');
+    //     const counsellorFirstName = this.form.get('invoiceDetails.counsellorFirstName');
+    //     const counsellorLastName = this.form.get('invoiceDetails.counsellorLastName');
+    //     const counsellorEmail = this.form.get('invoiceDetails.counsellorEmail');
 
-        counsellorRegistrationNumber.clearValidators();
-        counsellorRegistrationNumber.setErrors(null);
-        counsellorFirstName.clearValidators();
-        counsellorFirstName.setErrors(null);
-        counsellorLastName.clearValidators();
-        counsellorLastName.setErrors(null);
-        counsellorEmail.clearValidators();
-        counsellorEmail.setErrors(null);
+    //     counsellorRegistrationNumber.clearValidators();
+    //     counsellorRegistrationNumber.setErrors(null);
+    //     counsellorFirstName.clearValidators();
+    //     counsellorFirstName.setErrors(null);
+    //     counsellorLastName.clearValidators();
+    //     counsellorLastName.setErrors(null);
+    //     counsellorEmail.clearValidators();
+    //     counsellorEmail.setErrors(null);
 
-        const validateNumber = value === true;
-        if (validateNumber) {
-          counsellorRegistrationNumber.setValidators([Validators.required]);
-        }
+    //     const validateNumber = value === true;
+    //     if (validateNumber) {
+    //       counsellorRegistrationNumber.setValidators([Validators.required]);
+    //     }
 
-        if (!validateNumber) {
-          counsellorFirstName.setValidators([Validators.required]);
-          counsellorLastName.setValidators([Validators.required]);
-          counsellorEmail.setValidators([Validators.required, Validators.email]);
-        }
+    //     if (!validateNumber) {
+    //       counsellorFirstName.setValidators([Validators.required]);
+    //       counsellorLastName.setValidators([Validators.required]);
+    //       counsellorEmail.setValidators([Validators.required, Validators.email]);
+    //     }
 
-        counsellorRegistrationNumber.updateValueAndValidity();
-        counsellorFirstName.updateValueAndValidity();
-        counsellorLastName.updateValueAndValidity();
-        counsellorEmail.updateValueAndValidity();
-      });
+    //     counsellorRegistrationNumber.updateValueAndValidity();
+    //     counsellorFirstName.updateValueAndValidity();
+    //     counsellorLastName.updateValueAndValidity();
+    //     counsellorEmail.updateValueAndValidity();
+    //   });
 
-    this.form.get('invoiceDetails.doYouHaveVendorNumberOnFile')
-      .valueChanges
-      .subscribe(value => {
-        const vendorNumber = this.form.get('invoiceDetails.vendorNumber');
+    // this.form.get('invoiceDetails.doYouHaveVendorNumberOnFile')
+    //   .valueChanges
+    //   .subscribe(value => {
+    //     const vendorNumber = this.form.get('invoiceDetails.vendorNumber');
 
-        const vendorName = this.form.get('invoiceDetails.vendorName');
-        const vendorEmail = this.form.get('invoiceDetails.vendorEmail');
+    //     const vendorName = this.form.get('invoiceDetails.vendorName');
+    //     const vendorEmail = this.form.get('invoiceDetails.vendorEmail');
 
-        vendorNumber.clearValidators();
-        vendorNumber.setErrors(null);
-        vendorName.clearValidators();
-        vendorName.setErrors(null);
-        vendorEmail.clearValidators();
-        vendorEmail.setErrors(null);
+    //     vendorNumber.clearValidators();
+    //     vendorNumber.setErrors(null);
+    //     vendorName.clearValidators();
+    //     vendorName.setErrors(null);
+    //     vendorEmail.clearValidators();
+    //     vendorEmail.setErrors(null);
 
-        const validateNumber = value === true;
-        if (validateNumber) {
-          vendorNumber.setValidators([Validators.required]);
-        }
+    //     const validateNumber = value === true;
+    //     if (validateNumber) {
+    //       vendorNumber.setValidators([Validators.required]);
+    //     }
 
-        if (!validateNumber) {
-          vendorName.setValidators([Validators.required]);
-          vendorEmail.setValidators([Validators.required, Validators.email]);
-        }
+    //     if (!validateNumber) {
+    //       vendorName.setValidators([Validators.required]);
+    //       vendorEmail.setValidators([Validators.required, Validators.email]);
+    //     }
 
-        vendorNumber.updateValueAndValidity();
-        vendorName.updateValueAndValidity();
-        vendorEmail.updateValueAndValidity();
-      });
+    //     vendorNumber.updateValueAndValidity();
+    //     vendorName.updateValueAndValidity();
+    //     vendorEmail.updateValueAndValidity();
+    //   });
   }
 
   showInvoiceInstructions() {
@@ -256,9 +260,10 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   createLineItem(sessionHours: string = ''): FormGroup {
     return this.fb.group({
-      counsellingType: [0, Validators.required],  // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
+      counsellingType: [0, [Validators.required, Validators.min(100000000)]],  // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
+      missedSession: [false],
       sessionDate: ['', Validators.required],
-      sessionHours: [sessionHours, Validators.required],
+      sessionHours: [0, [Validators.required, Validators.min(0.5)]],
       sessionAmount: [0],  // used for row calculation, not required for submission - could probably subscribe to value changes on controls that need it
     });
   }
@@ -342,6 +347,44 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     }
   }
 
+  submitAndCreateNew() {
+    //first submit, then
+    if (this.form.valid) {
+      this.save().subscribe(
+        data => {
+          console.log(data);
+          if (data['isSuccess'] == true) {
+            console.log(data['isSuccess']);
+            // this.snackBar.open('Successfully submitted invoice. ' + data['message'], 'Success', { duration: 3500, panelClass: ['green-snackbar'] });
+            this.invoiceEdit();
+            this.cloneInvoice(_.cloneDeep(this.form));
+          }
+          else {
+            this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+            console.log('Error submitting invoice. ' + data['message']);
+          }
+        },
+        error => {
+          this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+          console.log('Error submitting invoice');
+        },
+        () => { }
+      );
+    } else {
+      console.log("form not validated");
+      this.formFullyValidated = false;
+      this.markAsTouched();
+    }
+
+    console.log("invoice 'successfully' submitted");
+    window.scroll(0, 0);
+
+
+
+
+
+  }
+
   save(): Subject<{}> {
     const subResult = new Subject<{}>();
     const formData = <CounsellorInvoice>{
@@ -361,42 +404,51 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.validateAllFormFields(this.form.get('invoiceDetails'));
   }
 
+  private cloneInvoice(formCopy: FormGroup) {
+    this.form.reset();
+    this.form = this.buildInvoiceForm();
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
+
+    this.form.get('invoiceDetails.counsellorRegistrationNumber').patchValue(formCopy.get('invoiceDetails.counsellorRegistrationNumber').value);
+    this.form.get('invoiceDetails.counsellorLastName').patchValue(formCopy.get('invoiceDetails.counsellorLastName').value);
+    this.form.get('invoiceDetails.vendorNumber').patchValue(formCopy.get('invoiceDetails.vendorNumber').value);
+    this.form.get('invoiceDetails.postalCode').patchValue(formCopy.get('invoiceDetails.postalCode').value);
+    this.form.get('invoiceDetails.submittersFullName').patchValue(formCopy.get('invoiceDetails.submittersFullName').value);
+    this.form.get('invoiceDetails.submittersEmail').patchValue(formCopy.get('invoiceDetails.submittersEmail').value);
+  }
+
   private buildInvoiceForm(): FormGroup {
     return this.fb.group({
       invoiceDetails: this.fb.group({
+        counsellorRegistrationNumber: ['', [Validators.required]],
 
-        registeredCounsellorWithCvap: ['', Validators.required],
-        doYouHaveCvapCounsellorNumber: ['', Validators.required],
-        doYouHaveVendorNumberOnFile: ['', Validators.required],
-
-        // doYouHaveCvapCounsellorNumber == true
-        counsellorRegistrationNumber: [''],
-
-        // doYouHaveCvapCounsellorNumber == false
         counsellorFirstName: [''],
-        counsellorLastName: [''],
+        counsellorLastName: ['', [Validators.required]],
         counsellorEmail: [''],
 
-        // doYouHaveVendorNumberOnFile == true
-        vendorNumber: [''],
+        vendorNumber: ['', [Validators.required]],
+        postalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
 
-        // doYouHaveVendorNumberOnFile == false
         vendorName: [''],
         vendorEmail: [''],
 
         claimNumber: ['', Validators.required],
-        claimantsName: ['', Validators.required],
+        claimantsFirstName: ['', Validators.required],
+        claimantsLastName: ['', Validators.required],
         invoiceNumber: ['', Validators.required],
         invoiceDate: ['', Validators.required],
 
         descriptionOfServicesProvided: [''],
 
         exemptFromGst: [false],
+        gstApplicable: [false],
 
         lineItems: this.fb.array([this.createLineItem()], Validators.minLength(1)),
 
+        submittersFullName: ['', Validators.required],
+        submittersEmail: ['', [Validators.required, Validators.email]],
         declaredAndSigned: ['', Validators.required],
-        signature: ['', Validators.required],
       }),
     });
   }

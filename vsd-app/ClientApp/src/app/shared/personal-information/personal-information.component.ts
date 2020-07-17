@@ -1,4 +1,4 @@
-import { OnInit, Component, Input } from "@angular/core";
+import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { FormBase } from "../form-base";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material";
 import { FormGroup, ControlContainer, AbstractControl, Validators } from "@angular/forms";
@@ -7,6 +7,7 @@ import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { POSTAL_CODE } from "../regex.constants";
 import { AddressHelper } from "../address/address.helper";
 import { EmailValidator } from "../validators/email.validator";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'app-personal-information',
@@ -20,7 +21,7 @@ import { EmailValidator } from "../validators/email.validator";
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class PersonalInformationComponent extends FormBase implements OnInit {
+export class PersonalInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
     public form: FormGroup;
     ApplicationType = ApplicationType;
@@ -37,6 +38,9 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
     alternateAddressIsRequired: boolean = false;
 
     addressHelper = new AddressHelper();
+
+    preferredMethodOfContactSubscription: Subscription;
+    sinSubscription: Subscription;
 
     get preferredMethodOfContact() { return this.form.get('preferredMethodOfContact'); }
 
@@ -62,7 +66,17 @@ export class PersonalInformationComponent extends FormBase implements OnInit {
             });
         }
 
-        this.form.get('preferredMethodOfContact').valueChanges.subscribe(value => this.preferredMethodOfContactChange(value));
+        this.preferredMethodOfContactSubscription = this.form.get('preferredMethodOfContact').valueChanges.subscribe(value => this.preferredMethodOfContactChange(value));
+
+        this.sinSubscription = this.form.get('sin').valueChanges.subscribe((value) => {
+            if (value === null) value = '';
+            this.form.parent.get('employmentIncomeInformation').get('sin').patchValue(value);
+        });
+    }
+
+    ngOnDestroy() {
+        this.preferredMethodOfContactSubscription.unsubscribe();
+        this.sinSubscription.unsubscribe();
     }
 
     preferredMethodOfContactChange(value) {
