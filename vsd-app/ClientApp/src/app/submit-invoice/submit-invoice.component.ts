@@ -17,6 +17,7 @@ import { DynamicsApplicationModel } from '../models/dynamics-application.model';
 import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { POSTAL_CODE } from '../shared/regex.constants';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -259,10 +260,10 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   createLineItem(sessionHours: string = ''): FormGroup {
     return this.fb.group({
-      counsellingType: [0, Validators.required],  // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
+      counsellingType: [0, [Validators.required, Validators.min(100000000)]],  // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
       missedSession: [false],
       sessionDate: ['', Validators.required],
-      sessionHours: [0, Validators.required],
+      sessionHours: [0, [Validators.required, Validators.min(0.5)]],
       sessionAmount: [0],  // used for row calculation, not required for submission - could probably subscribe to value changes on controls that need it
     });
   }
@@ -347,6 +348,40 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   submitAndCreateNew() {
+    //first submit, then
+    if (this.form.valid) {
+      this.save().subscribe(
+        data => {
+          console.log(data);
+          if (data['isSuccess'] == true) {
+            console.log(data['isSuccess']);
+            // this.snackBar.open('Successfully submitted invoice. ' + data['message'], 'Success', { duration: 3500, panelClass: ['green-snackbar'] });
+            this.invoiceEdit();
+            this.cloneInvoice(_.cloneDeep(this.form));
+          }
+          else {
+            this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+            console.log('Error submitting invoice. ' + data['message']);
+          }
+        },
+        error => {
+          this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+          console.log('Error submitting invoice');
+        },
+        () => { }
+      );
+    } else {
+      console.log("form not validated");
+      this.formFullyValidated = false;
+      this.markAsTouched();
+    }
+
+    console.log("invoice 'successfully' submitted");
+    window.scroll(0, 0);
+
+
+
+
 
   }
 
@@ -369,32 +404,36 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.validateAllFormFields(this.form.get('invoiceDetails'));
   }
 
+  private cloneInvoice(formCopy: FormGroup) {
+    this.form.reset();
+    this.form = this.buildInvoiceForm();
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
+
+    this.form.get('invoiceDetails.counsellorRegistrationNumber').patchValue(formCopy.get('invoiceDetails.counsellorRegistrationNumber').value);
+    this.form.get('invoiceDetails.counsellorLastName').patchValue(formCopy.get('invoiceDetails.counsellorLastName').value);
+    this.form.get('invoiceDetails.vendorNumber').patchValue(formCopy.get('invoiceDetails.vendorNumber').value);
+    this.form.get('invoiceDetails.postalCode').patchValue(formCopy.get('invoiceDetails.postalCode').value);
+    this.form.get('invoiceDetails.submittersFullName').patchValue(formCopy.get('invoiceDetails.submittersFullName').value);
+    this.form.get('invoiceDetails.submittersEmail').patchValue(formCopy.get('invoiceDetails.submittersEmail').value);
+  }
+
   private buildInvoiceForm(): FormGroup {
     return this.fb.group({
       invoiceDetails: this.fb.group({
-
-        // registeredCounsellorWithCvap: ['', Validators.required],
-        // doYouHaveCvapCounsellorNumber: ['', Validators.required],
-        // doYouHaveVendorNumberOnFile: ['', Validators.required],
-
-        // doYouHaveCvapCounsellorNumber == true
         counsellorRegistrationNumber: ['', [Validators.required]],
 
-        // doYouHaveCvapCounsellorNumber == false
         counsellorFirstName: [''],
         counsellorLastName: ['', [Validators.required]],
         counsellorEmail: [''],
 
-        // doYouHaveVendorNumberOnFile == true
         vendorNumber: ['', [Validators.required]],
         postalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
 
-        // doYouHaveVendorNumberOnFile == false
         vendorName: [''],
         vendorEmail: [''],
 
         claimNumber: ['', Validators.required],
-        // claimantsName: ['', Validators.required],
         claimantsFirstName: ['', Validators.required],
         claimantsLastName: ['', Validators.required],
         invoiceNumber: ['', Validators.required],
@@ -410,7 +449,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         submittersFullName: ['', Validators.required],
         submittersEmail: ['', [Validators.required, Validators.email]],
         declaredAndSigned: ['', Validators.required],
-        // signature: ['', Validators.required],
       }),
     });
   }

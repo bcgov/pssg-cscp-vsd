@@ -235,10 +235,6 @@ hr {
 .button-container {
   position: relative;
   margin: 30px 0 15px;
-
-  .btn {
-    margin-left: 0 !important;
-  }
 }
 
 .submitted-header {
@@ -385,4 +381,8 @@ hr {
 
 .print-link:hover {
   color: #0f3355 !important;
+}
+
+.white-icon {
+  color: white;
 }

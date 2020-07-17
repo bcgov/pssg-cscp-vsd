@@ -451,8 +451,12 @@
           <a [routerLink]="" (click)="showCancelDialog()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
           <!-- <a href="#" (click)="showCancelDialog($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a> -->
           <span style="float: right;">
-            <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE <i class="fas fa-chevron-right"></i></button>
-            <!-- <button (click)="submitAndCreateNew()" class="btn btn-primary">SUBMIT AND CREATE A NEW INVOICE <i class="fas fa-chevron-right"></i></button> -->
+            <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE AND EXIT <i class="fas fa-chevron-right"></i></button>
+            <button (click)="submitAndCreateNew()" class="btn btn-primary ml-2">SUBMIT AND CREATE A NEW INVOICE <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='submitToolTip'><i class='fa fa-info-circle white-icon'> </i></span><i class="fas fa-chevron-right"></i></button>
+            <ng-template #submitToolTip>
+              <!-- <h3>Line Item: Hours</h3> -->
+              <p>Some information (Payee, Counselor, Submitted) will be auto-populated and are editable if needed.</p>
+            </ng-template>
           </span>
         </section>
       </div>
