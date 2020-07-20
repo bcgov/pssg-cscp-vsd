@@ -1,6 +1,7 @@
 //using Gov.Cscp.VictimServices.Interfaces;
 //using Gov.Cscp.VictimServices.Public.Authentication;
 using Gov.Cscp.VictimServices.Public.Authorization;
+using Gov.Cscp.VictimServices.Public.Services;
 //using Gov.Cscp.VictimServices.Public.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,7 @@ namespace Gov.Cscp.VictimServices.Public
         {            
             // add singleton to allow Controllers to query the Request object
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IDynamicsResultService, DynamicsResultService>();
 
             // determine if we wire up Dynamics.
             if (!string.IsNullOrEmpty(Configuration["DYNAMICS_ODATA_URI"]))

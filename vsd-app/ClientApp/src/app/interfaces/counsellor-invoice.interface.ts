@@ -6,21 +6,19 @@ export interface InvoiceDetails {
   doYouHaveCvapCounsellorNumber: boolean;  // Not used in transfer to Dynamics
   doYouHaveVendorNumberOnFile: boolean;  // Not used in transfer to Dynamics
   counsellorRegistrationNumber: string;
-  counsellorFirstName: string;
   counsellorLastName: string;
-  counsellorEmail: string;
   vendorNumber: string;
-  vendorName: string;
-  vendorEmail: string;
+  vendorPostalCode: string;
   claimNumber: string;
-  claimantsName: string;
+  claimantsFirstName: string;
+  claimantLastName: string;
   invoiceNumber: string;
   invoiceDate: Date;
-  descriptionOfServicesProvided: string;
+  submitterFullName: string;
+  submitterEmailAddress: string;
   exemptFromGst: boolean;
   lineItems: LineItem[];
   declaredAndSigned: boolean;  // Not used in transfer to Dynamics
-  signature: string;
 }
 export interface LineItem {
   counsellingType: number;

@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { User } from '../models/user.model';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -38,7 +38,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   postalRegex = POSTAL_CODE;
   currentUser: User;
   dataLoaded = false;
-  busy: Promise<any>;
+  busy: Subscription;
   busy2: Promise<any>;
   busy3: Promise<any>;
 
@@ -62,6 +62,11 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   invoiceSubTotal: number = 0.00;
   invoiceGrandTotal: number = 0.00;
 
+  isVendorValid: boolean = false;
+  didValidateVendor: boolean = false;
+  isCounsellorValid: boolean = false;
+  didValidateCounsellor: boolean = false;
+
   today = new Date();
 
   saveFormData: any;
@@ -80,71 +85,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.form = this.buildInvoiceForm();
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
     this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
-
-    // this.form.get('invoiceDetails.doYouHaveCvapCounsellorNumber')
-    //   .valueChanges
-    //   .subscribe(value => {
-    //     const counsellorRegistrationNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber');
-
-    //     const counsellorFirstName = this.form.get('invoiceDetails.counsellorFirstName');
-    //     const counsellorLastName = this.form.get('invoiceDetails.counsellorLastName');
-    //     const counsellorEmail = this.form.get('invoiceDetails.counsellorEmail');
-
-    //     counsellorRegistrationNumber.clearValidators();
-    //     counsellorRegistrationNumber.setErrors(null);
-    //     counsellorFirstName.clearValidators();
-    //     counsellorFirstName.setErrors(null);
-    //     counsellorLastName.clearValidators();
-    //     counsellorLastName.setErrors(null);
-    //     counsellorEmail.clearValidators();
-    //     counsellorEmail.setErrors(null);
-
-    //     const validateNumber = value === true;
-    //     if (validateNumber) {
-    //       counsellorRegistrationNumber.setValidators([Validators.required]);
-    //     }
-
-    //     if (!validateNumber) {
-    //       counsellorFirstName.setValidators([Validators.required]);
-    //       counsellorLastName.setValidators([Validators.required]);
-    //       counsellorEmail.setValidators([Validators.required, Validators.email]);
-    //     }
-
-    //     counsellorRegistrationNumber.updateValueAndValidity();
-    //     counsellorFirstName.updateValueAndValidity();
-    //     counsellorLastName.updateValueAndValidity();
-    //     counsellorEmail.updateValueAndValidity();
-    //   });
-
-    // this.form.get('invoiceDetails.doYouHaveVendorNumberOnFile')
-    //   .valueChanges
-    //   .subscribe(value => {
-    //     const vendorNumber = this.form.get('invoiceDetails.vendorNumber');
-
-    //     const vendorName = this.form.get('invoiceDetails.vendorName');
-    //     const vendorEmail = this.form.get('invoiceDetails.vendorEmail');
-
-    //     vendorNumber.clearValidators();
-    //     vendorNumber.setErrors(null);
-    //     vendorName.clearValidators();
-    //     vendorName.setErrors(null);
-    //     vendorEmail.clearValidators();
-    //     vendorEmail.setErrors(null);
-
-    //     const validateNumber = value === true;
-    //     if (validateNumber) {
-    //       vendorNumber.setValidators([Validators.required]);
-    //     }
-
-    //     if (!validateNumber) {
-    //       vendorName.setValidators([Validators.required]);
-    //       vendorEmail.setValidators([Validators.required, Validators.email]);
-    //     }
-
-    //     vendorNumber.updateValueAndValidity();
-    //     vendorName.updateValueAndValidity();
-    //     vendorEmail.updateValueAndValidity();
-    //   });
   }
 
   showInvoiceInstructions() {
@@ -160,7 +100,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     };
 
     console.log(JSON.stringify(formData));
-    //console.log(formData);
   }
 
   printInvoice() {
@@ -324,8 +263,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       this.save().subscribe(
         data => {
           console.log(data);
-          if (data['isSuccess'] == true) {
-            console.log(data['isSuccess']);
+          if (data['IsSuccess'] == true) {
+            console.log(data['IsSuccess']);
             console.log("submitting");
             this.invoiceSuccess();
           }
@@ -350,11 +289,15 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   submitAndCreateNew() {
     //first submit, then
     if (this.form.valid) {
-      this.save().subscribe(
+      const formData = <CounsellorInvoice>{
+        InvoiceDetails: this.form.get('invoiceDetails').value,
+      };
+      this.busy = this.justiceDataService.submitCounsellorInvoice(formData).subscribe(
         data => {
+          console.log("submit and create new res");
           console.log(data);
-          if (data['isSuccess'] == true) {
-            console.log(data['isSuccess']);
+          if (data['IsSuccess'] == true) {
+            console.log(data['IsSuccess']);
             // this.snackBar.open('Successfully submitted invoice. ' + data['message'], 'Success', { duration: 3500, panelClass: ['green-snackbar'] });
             this.invoiceEdit();
             this.cloneInvoice(_.cloneDeep(this.form));
@@ -375,14 +318,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       this.formFullyValidated = false;
       this.markAsTouched();
     }
-
-    console.log("invoice 'successfully' submitted");
-    window.scroll(0, 0);
-
-
-
-
-
+    // window.scroll(0, 0);
   }
 
   save(): Subject<{}> {
@@ -391,8 +327,9 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
     this.busy = this.justiceDataService.submitCounsellorInvoice(formData)
-      .toPromise()
-      .then(res => {
+      .subscribe(res => {
+        console.log("save() res");
+        console.log(res);
         subResult.next(res);
       }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
@@ -413,25 +350,18 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.form.get('invoiceDetails.counsellorRegistrationNumber').patchValue(formCopy.get('invoiceDetails.counsellorRegistrationNumber').value);
     this.form.get('invoiceDetails.counsellorLastName').patchValue(formCopy.get('invoiceDetails.counsellorLastName').value);
     this.form.get('invoiceDetails.vendorNumber').patchValue(formCopy.get('invoiceDetails.vendorNumber').value);
-    this.form.get('invoiceDetails.postalCode').patchValue(formCopy.get('invoiceDetails.postalCode').value);
-    this.form.get('invoiceDetails.submittersFullName').patchValue(formCopy.get('invoiceDetails.submittersFullName').value);
-    this.form.get('invoiceDetails.submittersEmail').patchValue(formCopy.get('invoiceDetails.submittersEmail').value);
+    this.form.get('invoiceDetails.vendorPostalCode').patchValue(formCopy.get('invoiceDetails.vendorPostalCode').value);
+    this.form.get('invoiceDetails.submitterFullName').patchValue(formCopy.get('invoiceDetails.submitterFullName').value);
+    this.form.get('invoiceDetails.submitterEmailAddress').patchValue(formCopy.get('invoiceDetails.submitterEmailAddress').value);
   }
 
   private buildInvoiceForm(): FormGroup {
     return this.fb.group({
       invoiceDetails: this.fb.group({
         counsellorRegistrationNumber: ['', [Validators.required]],
-
-        counsellorFirstName: [''],
         counsellorLastName: ['', [Validators.required]],
-        counsellorEmail: [''],
-
         vendorNumber: ['', [Validators.required]],
-        postalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
-
-        vendorName: [''],
-        vendorEmail: [''],
+        vendorPostalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
 
         claimNumber: ['', Validators.required],
         claimantsFirstName: ['', Validators.required],
@@ -439,17 +369,61 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         invoiceNumber: ['', Validators.required],
         invoiceDate: ['', Validators.required],
 
-        descriptionOfServicesProvided: [''],
-
         exemptFromGst: [false],
         gstApplicable: [false],
 
         lineItems: this.fb.array([this.createLineItem()], Validators.minLength(1)),
 
-        submittersFullName: ['', Validators.required],
-        submittersEmail: ['', [Validators.required, Validators.email]],
+        submitterFullName: ['', Validators.required],
+        submitterEmailAddress: ['', [Validators.required, Validators.email]],
         declaredAndSigned: ['', Validators.required],
       }),
     });
+  }
+
+  checkVendorStatus(source: string) {
+    switch (source) {
+      case 'vendor': {
+        let vendorNumber = this.form.get('invoiceDetails.vendorNumber').value;
+        let vendorPostalCode = this.form.get('invoiceDetails.vendorPostalCode').value;
+        if (vendorNumber && vendorPostalCode) {
+          console.log("validating vendor");
+          console.log(vendorNumber, vendorPostalCode);
+          this.justiceDataService.validateVendor(vendorNumber, vendorPostalCode).subscribe((res: any) => {
+            this.didValidateVendor = true;
+            console.log(res);
+            this.isVendorValid = res.IsSuccess;
+          });
+        }
+        else {
+          this.isVendorValid = false;
+        }
+        break;
+      }
+      case 'counsellor': {
+        let vendorNumber = this.form.get('invoiceDetails.vendorNumber').value;
+        let vendorPostalCode = this.form.get('invoiceDetails.vendorPostalCode').value;
+        let counsellorNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber').value;
+        let counsellorLastName = this.form.get('invoiceDetails.counsellorLastName').value;
+        if (vendorNumber && vendorPostalCode && counsellorNumber && counsellorLastName) {
+          console.log("validating vendor and counsellor");
+          console.log(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName);
+          this.justiceDataService.validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName).subscribe((res: any) => {
+            this.didValidateCounsellor = true;
+            console.log(res);
+            this.isCounsellorValid = res.IsSuccess;
+          });
+        }
+        else {
+          this.isCounsellorValid = false;
+        }
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    // this.justiceDataService.submitCounsellorInvoice(formData)
   }
 }
