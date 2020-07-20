@@ -63,7 +63,9 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   invoiceGrandTotal: number = 0.00;
 
   isVendorValid: boolean = false;
+  didValidateVendor: boolean = false;
   isCounsellorValid: boolean = false;
+  didValidateCounsellor: boolean = false;
 
   today = new Date();
 
@@ -83,71 +85,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.form = this.buildInvoiceForm();
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
     this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
-
-    // this.form.get('invoiceDetails.doYouHaveCvapCounsellorNumber')
-    //   .valueChanges
-    //   .subscribe(value => {
-    //     const counsellorRegistrationNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber');
-
-    //     const counsellorFirstName = this.form.get('invoiceDetails.counsellorFirstName');
-    //     const counsellorLastName = this.form.get('invoiceDetails.counsellorLastName');
-    //     const counsellorEmail = this.form.get('invoiceDetails.counsellorEmail');
-
-    //     counsellorRegistrationNumber.clearValidators();
-    //     counsellorRegistrationNumber.setErrors(null);
-    //     counsellorFirstName.clearValidators();
-    //     counsellorFirstName.setErrors(null);
-    //     counsellorLastName.clearValidators();
-    //     counsellorLastName.setErrors(null);
-    //     counsellorEmail.clearValidators();
-    //     counsellorEmail.setErrors(null);
-
-    //     const validateNumber = value === true;
-    //     if (validateNumber) {
-    //       counsellorRegistrationNumber.setValidators([Validators.required]);
-    //     }
-
-    //     if (!validateNumber) {
-    //       counsellorFirstName.setValidators([Validators.required]);
-    //       counsellorLastName.setValidators([Validators.required]);
-    //       counsellorEmail.setValidators([Validators.required, Validators.email]);
-    //     }
-
-    //     counsellorRegistrationNumber.updateValueAndValidity();
-    //     counsellorFirstName.updateValueAndValidity();
-    //     counsellorLastName.updateValueAndValidity();
-    //     counsellorEmail.updateValueAndValidity();
-    //   });
-
-    // this.form.get('invoiceDetails.doYouHaveVendorNumberOnFile')
-    //   .valueChanges
-    //   .subscribe(value => {
-    //     const vendorNumber = this.form.get('invoiceDetails.vendorNumber');
-
-    //     const vendorName = this.form.get('invoiceDetails.vendorName');
-    //     const vendorEmail = this.form.get('invoiceDetails.vendorEmail');
-
-    //     vendorNumber.clearValidators();
-    //     vendorNumber.setErrors(null);
-    //     vendorName.clearValidators();
-    //     vendorName.setErrors(null);
-    //     vendorEmail.clearValidators();
-    //     vendorEmail.setErrors(null);
-
-    //     const validateNumber = value === true;
-    //     if (validateNumber) {
-    //       vendorNumber.setValidators([Validators.required]);
-    //     }
-
-    //     if (!validateNumber) {
-    //       vendorName.setValidators([Validators.required]);
-    //       vendorEmail.setValidators([Validators.required, Validators.email]);
-    //     }
-
-    //     vendorNumber.updateValueAndValidity();
-    //     vendorName.updateValueAndValidity();
-    //     vendorEmail.updateValueAndValidity();
-    //   });
   }
 
   showInvoiceInstructions() {
@@ -163,7 +100,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     };
 
     console.log(JSON.stringify(formData));
-    //console.log(formData);
   }
 
   printInvoice() {
@@ -454,6 +390,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
           console.log("validating vendor");
           console.log(vendorNumber, vendorPostalCode);
           this.justiceDataService.validateVendor(vendorNumber, vendorPostalCode).subscribe((res: any) => {
+            this.didValidateVendor = true;
             console.log(res);
             this.isVendorValid = res.IsSuccess;
           });
@@ -472,6 +409,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
           console.log("validating vendor and counsellor");
           console.log(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName);
           this.justiceDataService.validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName).subscribe((res: any) => {
+            this.didValidateCounsellor = true;
             console.log(res);
             this.isCounsellorValid = res.IsSuccess;
           });

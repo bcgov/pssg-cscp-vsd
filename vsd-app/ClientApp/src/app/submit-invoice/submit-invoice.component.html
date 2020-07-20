@@ -49,13 +49,14 @@
               <h3>Payee Information</h3>
               <div class="row">
                 <div class="col-md-6">
-                  <app-field label="Vendor Number" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorNumber')" errorMessage="Please enter the vendor number">
-                    <input class="form-control" type="text" formControlName="vendorNumber" maxlength="100" (change)="checkVendorStatus('vendor')">
+                  <app-field label="Vendor Number" [required]="true"  [valid]="isFieldValid('invoiceDetails.vendorNumber')" errorMessage="Please enter the vendor number">
+                    <input class="form-control" type="text" formControlName="vendorNumber" maxlength="100" (change)="checkVendorStatus('vendor')" [class.input-valid]="isVendorValid && didValidateVendor" [class.input-invalid]="!isVendorValid && didValidateVendor">
+                    <!-- <i *ngIf="isVendorValid" class="fa fa-check vendor-number-check"></i> -->
                   </app-field>
                 </div>
                 <div class="col-md-6">
                   <app-field label="Postal Code" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorPostalCode')" errorMessage="Please enter your postal code">
-                    <input class="form-control" type="text" placeholder="V9A 0A9" formControlName="vendorPostalCode" (change)="checkVendorStatus('vendor')">
+                    <input class="form-control" type="text" placeholder="V9A 0A9" formControlName="vendorPostalCode" (change)="checkVendorStatus('vendor')" [class.input-valid]="isVendorValid && didValidateVendor" [class.input-invalid]="!isVendorValid && didValidateVendor">
                   </app-field>
                 </div>
               </div>
@@ -63,12 +64,12 @@
               <div class="row">
                 <div class="col-md-6">
                   <app-field label="Counsellor Registration Number" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorRegistrationNumber')" errorMessage="Please enter the registration number">
-                    <input class="form-control" type="text" formControlName="counsellorRegistrationNumber" maxlength="100" (change)="checkVendorStatus('counsellor')">
+                    <input class="form-control" type="text" formControlName="counsellorRegistrationNumber" maxlength="100" (change)="checkVendorStatus('counsellor')" [class.input-valid]="isCounsellorValid && didValidateCounsellor" [class.input-invalid]="!isCounsellorValid && didValidateCounsellor">
                   </app-field>
                 </div>
                 <div class="col-md-6">
                   <app-field label="Counsellor Last Name" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorLastName')" errorMessage="Please enter the last name">
-                    <input class="form-control" type="text" formControlName="counsellorLastName" maxlength="100" (change)="checkVendorStatus('counsellor')">
+                    <input class="form-control" type="text" formControlName="counsellorLastName" maxlength="100" (change)="checkVendorStatus('counsellor')" [class.input-valid]="isCounsellorValid && didValidateCounsellor" [class.input-invalid]="!isCounsellorValid && didValidateCounsellor">
                   </app-field>
                 </div>
               </div>
