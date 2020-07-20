@@ -13,26 +13,26 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 return outputModel;
 
             var invoiceDetails = model.InvoiceDetails;
-            outputModel.CounselorNumber = invoiceDetails.counsellorRegistrationNumber;
-            outputModel.CounselorName = $"{invoiceDetails.counsellorFirstName} {invoiceDetails.counsellorLastName}"?.Trim();
-            outputModel.CounselorEmail = invoiceDetails.counsellorEmail;
-
-            outputModel.VendorName = invoiceDetails.vendorName;
             outputModel.VendorNumber = invoiceDetails.vendorNumber;
-            outputModel.VendorEmail = invoiceDetails.vendorEmail;
+            outputModel.VendorPostalCode = invoiceDetails.vendorPostalCode;
+
+            outputModel.CounselorNumber = invoiceDetails.counsellorRegistrationNumber;
+            outputModel.CounselorLastName = invoiceDetails.counsellorLastName;
 
             outputModel.ClaimNumber = invoiceDetails.claimNumber;
-            outputModel.ClaimantName = invoiceDetails.claimantsName;
+            outputModel.ClaimantFirstName = invoiceDetails.claimantsFirstName;
+            outputModel.ClaimantLastName = invoiceDetails.claimantsLastName;
 
             outputModel.InvoiceNumber = invoiceDetails.invoiceNumber;
             outputModel.InvoiceDate = invoiceDetails.invoiceDate;
 
-            outputModel.DescriptionOfServices = invoiceDetails.descriptionOfServicesProvided;
+            outputModel.SubmitterFullName = invoiceDetails.submitterFullName;
+            outputModel.SubmitterEmailAddress = invoiceDetails.submitterEmailAddress;
+
             outputModel.ExemptFromGST = invoiceDetails.exemptFromGst;
-            outputModel.Signature = invoiceDetails.signature;
 
             var lineItems = new List<CounsellorInvoiceLineItem>();
-            foreach(var lineItem in invoiceDetails.lineItems)
+            foreach (var lineItem in invoiceDetails.lineItems)
             {
                 lineItems.Add(new CounsellorInvoiceLineItem
                 {

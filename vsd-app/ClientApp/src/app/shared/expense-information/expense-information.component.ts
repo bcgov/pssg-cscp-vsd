@@ -29,9 +29,9 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     OTHER_BENEFITS: string[];
     header: string;
 
+    showCurrentlyOffWork: boolean = false;
     today = new Date();
     minEndDate: Date;
-
     CRMBoolean = CRMBoolean;
 
     sinSubscription: Subscription;
@@ -76,6 +76,11 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
             ];
         }
         if (this.formType === ApplicationType.IFM_Application) {
+            let endDate = this.form.get('daysWorkMissedEnd').value;
+            if (endDate) {
+                this.showCurrentlyOffWork = moment(endDate).isSame(new Date(), "day");
+            }
+
             let didMissWorkControl = this.form.get('missedWorkDueToDeathOfVictim');
             let daysMissedStartControl = this.form.get('daysWorkMissedStart');
             let daysMissedEndControl = this.form.get('daysWorkMissedEnd');
@@ -179,6 +184,21 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
             this.form.get('daysWorkMissedEnd').patchValue('');
             this.form.get('daysWorkMissedEnd').updateValueAndValidity();
         }
+    }
+
+    daysWorkMissedEndChange(event: MatDatepickerInputEvent<Date>) {
+        let endDate = moment(event.target.value);
+        this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
+        let control = this.form.get('areYouStillOffWork');
+        if (!this.showCurrentlyOffWork) {
+            control.patchValue('');
+            control.clearValidators();
+            control.setErrors(null);
+        }
+        else {
+            control.setValidators([Validators.required]);
+        }
+        control.updateValueAndValidity();
     }
 
     changeGroupValidity(values: any): void {

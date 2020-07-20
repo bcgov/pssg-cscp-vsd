@@ -35,28 +35,30 @@ export class ExpenseInfoHelper {
                 haveCounsellingExpenses: [false],
                 haveCounsellingTransportation: [false],
                 havePrescriptionDrugExpenses: [false],
-                haveCrimeSceneCleaningExpenses: [false],
-                noneOfTheAboveExpenses: [''],
-                minimumAdditionalBenefitsSelected: [''], // Dynamically required
-                missedWorkDueToDeathOfVictim: [''], // Dynamically required
-                didYouLoseWages: [''], //, Validators.required],
-                daysWorkMissedStart: [''], //, Validators.required],
-                daysWorkMissedEnd: [''],
-                employers: fb.array([this.createEmployerItem(fb)]),
-                mayContactEmployer: [''],
                 minimumExpensesSelected: ['', Validators.required],
 
+                haveCrimeSceneCleaningExpenses: [false],
+                noneOfTheAboveExpenses: [''],
                 additionalBenefitsDetails: [''],//, Validators.required], ??
-                haveDisabilityPlanBenefits: [false],
-                haveEmploymentInsuranceBenefits: [false],
-                haveIncomeAssistanceBenefits: [false],
-                haveCanadaPensionPlanBenefits: [false],
-                haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
-                haveCivilActionBenefits: [false],
-                haveOtherBenefits: [false],
-                otherSpecificBenefits: [''],
-                noneOfTheAboveBenefits: [false],
-                minimumOtherBenefitsSelected: [''], // Dynamically required
+                minimumAdditionalBenefitsSelected: [''], // Dynamically required
+
+                // missedWorkDueToDeathOfVictim: [''], // Dynamically required
+                // didYouLoseWages: [''], //, Validators.required],
+                // daysWorkMissedStart: [''], //, Validators.required],
+                // daysWorkMissedEnd: [''],
+                // employers: fb.array([this.createEmployerItem(fb)]),
+                // mayContactEmployer: [''],
+
+                // haveDisabilityPlanBenefits: [false],
+                // haveEmploymentInsuranceBenefits: [false],
+                // haveIncomeAssistanceBenefits: [false],
+                // haveCanadaPensionPlanBenefits: [false],
+                // haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
+                // haveCivilActionBenefits: [false],
+                // haveOtherBenefits: [false],
+                // otherSpecificBenefits: [''],
+                // noneOfTheAboveBenefits: [false],
+                // minimumOtherBenefitsSelected: [''], // Dynamically required
             };
         }
         if (form_type === ApplicationType.IFM_Application) {
@@ -77,6 +79,7 @@ export class ExpenseInfoHelper {
                 missedWorkDueToDeathOfVictim: [''],//, Validators.required],
                 didYouLoseWages: [''], //, Validators.required],
                 sin: ['', [Validators.minLength(9), Validators.maxLength(9)]],
+                areYouStillOffWork: [''],
                 daysWorkMissedStart: [''], //, Validators.required],
                 daysWorkMissedEnd: [''],
                 employers: fb.array([this.createEmployerItem(fb)]),

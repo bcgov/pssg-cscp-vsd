@@ -57,6 +57,11 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         console.log("employment info");
         console.log(this.form);
 
+        let endDate = this.form.get('daysWorkMissedEnd').value;
+        if (endDate) {
+            this.showCurrentlyOffWork = moment(endDate).isSame(new Date(), "day");
+        }
+
         if (this.form.parent.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true) {
             let emplaoyedAtTimeOfCrimeControl = this.form.get('wereYouEmployedAtTimeOfCrime');
             let didYouMissWorkDueToCrimeControl = this.form.get('didYouMissWorkDueToCrime');
@@ -252,8 +257,15 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     daysWorkMissedEndChange(event: MatDatepickerInputEvent<Date>) {
         let endDate = moment(event.target.value);
         this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
+        let control = this.form.get('areYouStillOffWork');
         if (!this.showCurrentlyOffWork) {
-            this.form.get('areYouStillOffWork').patchValue(null);
+            control.patchValue('');
+            control.clearValidators();
+            control.setErrors(null);
         }
+        else {
+            control.setValidators([Validators.required]);
+        }
+        control.updateValueAndValidity();
     }
 }

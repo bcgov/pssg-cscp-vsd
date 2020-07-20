@@ -50,12 +50,12 @@
               <div class="row">
                 <div class="col-md-6">
                   <app-field label="Vendor Number" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorNumber')" errorMessage="Please enter the vendor number">
-                    <input class="form-control" type="text" formControlName="vendorNumber" maxlength="100">
+                    <input class="form-control" type="text" formControlName="vendorNumber" maxlength="100" (change)="checkVendorStatus('vendor')">
                   </app-field>
                 </div>
                 <div class="col-md-6">
-                  <app-field label="Postal Code" [required]="true" [valid]="isFieldValid('invoiceDetails.postalCode')" errorMessage="Please enter your postal code">
-                    <input class="form-control" type="text" placeholder="V9A 0A9" formControlName="postalCode">
+                  <app-field label="Postal Code" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorPostalCode')" errorMessage="Please enter your postal code">
+                    <input class="form-control" type="text" placeholder="V9A 0A9" formControlName="vendorPostalCode" (change)="checkVendorStatus('vendor')">
                   </app-field>
                 </div>
               </div>
@@ -63,12 +63,12 @@
               <div class="row">
                 <div class="col-md-6">
                   <app-field label="Counsellor Registration Number" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorRegistrationNumber')" errorMessage="Please enter the registration number">
-                    <input class="form-control" type="text" formControlName="counsellorRegistrationNumber" maxlength="100">
+                    <input class="form-control" type="text" formControlName="counsellorRegistrationNumber" maxlength="100" (change)="checkVendorStatus('counsellor')">
                   </app-field>
                 </div>
                 <div class="col-md-6">
                   <app-field label="Counsellor Last Name" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorLastName')" errorMessage="Please enter the last name">
-                    <input class="form-control" type="text" formControlName="counsellorLastName" maxlength="100">
+                    <input class="form-control" type="text" formControlName="counsellorLastName" maxlength="100" (change)="checkVendorStatus('counsellor')">
                   </app-field>
                 </div>
               </div>
@@ -96,7 +96,7 @@
                 <div class="row">
                   <div class="col-6">
                     <app-field label="Claim Number" [required]="true" [valid]="isFieldValid('invoiceDetails.claimNumber')" errorMessage="Please enter the claim number">
-                      <input class="form-control" mask="00-0000-00" [validation]="false" type="text" formControlName="claimNumber" maxlength="100">
+                      <input class="form-control" mask="00-0000-00" [dropSpecialCharacters]="false" [validation]="false" type="text" formControlName="claimNumber" maxlength="100">
                     </app-field>
                   </div>
                 </div>
@@ -248,13 +248,13 @@
                   <h2 class="blue-header">Declaration</h2>
                   <div class="row">
                     <div class="col-6">
-                      <app-field label="Submitters's Full Name" [required]="true" [valid]="isFieldValid('invoiceDetails.submittersFullName')" errorMessage="Please enter the submitters's name">
-                        <input class="form-control" type="text" formControlName="submittersFullName" maxlength="100">
+                      <app-field label="Submitters's Full Name" [required]="true" [valid]="isFieldValid('invoiceDetails.submitterFullName')" errorMessage="Please enter the submitters's name">
+                        <input class="form-control" type="text" formControlName="submitterFullName" maxlength="100">
                       </app-field>
                     </div>
                     <div class="col-6">
-                      <app-field label="Submitters's Email Address" [required]="true" [valid]="isFieldValid('invoiceDetails.submittersEmail')" errorMessage="Please enter the submitters's email">
-                        <input class="form-control" type="text" formControlName="submittersEmail" maxlength="100">
+                      <app-field label="Submitters's Email Address" [required]="true" [valid]="isFieldValid('invoiceDetails.submitterEmailAddress')" errorMessage="Please enter the submitters's email">
+                        <input class="form-control" type="text" formControlName="submitterEmailAddress" maxlength="100">
                       </app-field>
                     </div>
                   </div>
@@ -275,7 +275,7 @@
                   <a [routerLink]="" (click)="showCancelDialog()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
                   <!-- <a href="#" (click)="invoiceCancel($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a> -->
                   <span style="float: right;">
-                    <button (click)="markAsTouched(); reviewInvoice();" class="btn btn-primary">REVIEW INVOICE <i class="fas fa-chevron-right"></i></button>
+                    <button (click)="markAsTouched(); reviewInvoice();" [disabled]="!isVendorValid || !isCounsellorValid" class="btn btn-primary">REVIEW INVOICE <i class="fas fa-chevron-right"></i></button>
                   </span>
                 </section>
               </section>
@@ -308,7 +308,7 @@
                   </tr>
                   <tr>
                     <th>Postal Code</th>
-                    <td>{{ valueOrEmpty('invoiceDetails.postalCode') }} </td>
+                    <td>{{ valueOrEmpty('invoiceDetails.vendorPostalCode') }} </td>
                   </tr>
                   <!-- <tr>
                     <th>Are you a registered Vendor with CVAP?</th>
@@ -461,7 +461,7 @@
         </section>
       </div>
 
-      <div class="container" *ngIf="showSuccessPanel && !showPrintView">
+      <div *ngIf="showSuccessPanel && !showPrintView">
         <div class="row">
           <div class="col">
             <div class="page-header">
@@ -474,7 +474,7 @@
         </div>
       </div>
 
-      <div class="container" *ngIf="showCancelPanel">
+      <div *ngIf="showCancelPanel">
         <div class="page-header">
           <h1>Invoice submission cancelled</h1>
         </div>

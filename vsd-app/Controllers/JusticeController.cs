@@ -18,6 +18,8 @@ using Microsoft.Rest;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
 using Gov.Cscp.VictimServices.Public.Utils;
 using System.IO;
+using Gov.Cscp.VictimServices.Public.Models;
+using Gov.Cscp.VictimServices.Public.Services;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -35,11 +37,13 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IDynamicsResultService _dynamicsResultService;
 
-        public JusticeController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public JusticeController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDynamicsResultService dynamicsResultService)
         {
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            this._dynamicsResultService = dynamicsResultService;
         }
 
         [HttpPost("saveapplication")]
@@ -93,7 +97,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             var result = InterfaceUtilities.ReturnErrorMessaging(tempString);
 
             Console.WriteLine(DateTime.Now + " Exit SubmitCounsellorInvoice");
-            return new JsonResult(result);
+            var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(tempString);
+            return StatusCode(200, dynamicsResponse.Result.ToString());
         }
 
         [HttpPost("submitvictimrestitution")]
@@ -148,10 +153,32 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             //var dynamicsResponse = JsonConvert.DeserializeObject<DynamicsResponse>(t.Result);
             string tempString = Newtonsoft.Json.JsonConvert.SerializeObject(t);
             var result = InterfaceUtilities.ReturnErrorMessaging(tempString);
-//            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Restitution Save", Message = dynamicsResponse.Result };
+            //            var result = new { IsSuccess = dynamicsResponse.IsSuccess, Status = "Restitution Save", Message = dynamicsResponse.Result };
 
             Console.WriteLine(DateTime.Now + " Exit SubmitOffenderRestitution");
             return new JsonResult(result);
+        }
+
+        [HttpGet("validate_vendor/{VendorNumber}/{VendorPostalCode}")]
+        public async Task<IActionResult> ValidateVendor(String VendorNumber, String VendorPostalCode)
+        {
+            string requestJson = "{\"VendorNumber\":\"" + VendorNumber + "\",\"VendorPostalCode\":\"" + VendorPostalCode + "\"}";
+            string endpointUrl = "vsd_CheckVendorStatus";
+
+            DynamicsResult result = await _dynamicsResultService.GetResultAsync(endpointUrl, requestJson);
+
+            return StatusCode(200, result.result.ToString());
+        }
+
+        [HttpGet("validate_vendor_and_counsellor/{VendorNumber}/{VendorPostalCode}/{CounsellorNumber}/{CounsellorLastName}")]
+        public async Task<IActionResult> ValidateVendorAndCounsellor(String VendorNumber, String VendorPostalCode, String CounsellorNumber, String CounsellorLastName)
+        {
+            string requestJson = "{\"VendorNumber\":\"" + VendorNumber + "\",\"VendorPostalCode\":\"" + VendorPostalCode + "\",\"CounselorNumber\":\"" + CounsellorNumber + "\",\"CounselorLastName\":\"" + CounsellorLastName + "\"}";
+            string endpointUrl = "vsd_CheckVendorStatus";
+
+            DynamicsResult result = await _dynamicsResultService.GetResultAsync(endpointUrl, requestJson);
+
+            return StatusCode(200, result.result.ToString());
         }
 
         private static async Task<string> CreateCaseAction(IConfiguration configuration, ApplicationFormModel model)
@@ -199,7 +226,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     httpClient.Dispose();
             }
         }
-        
+
         private static async Task<String> CreateInvoiceAction(IConfiguration configuration, CounsellorInvoiceFormModel model)
         {
             HttpClient httpClient = null;
@@ -234,7 +261,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 dynamicsResponse.Result = tempResult;
                 dynamicsResponse.odatacontext = tuple.Item2.ToString();
 
-                return dynamicsResponse.Result;
+                string result = tuple.Item3;
+
+                return result;
             }
             finally
             {
@@ -341,7 +370,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             var builder = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
-                .AddUserSecrets<Program>(); // must also define a project guid for secrets in the .cspro – add tag <UserSecretsId> containing a guid
+                .AddUserSecrets<Program>(); // must also define a project guid for secrets in the .cspro ï¿½ add tag <UserSecretsId> containing a guid
             var Configuration = builder.Build();
 
             string dynamicsOdataUri = Configuration["DYNAMICS_ODATA_URI"]; // Dynamics ODATA endpoint
