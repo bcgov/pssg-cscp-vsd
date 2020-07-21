@@ -120,26 +120,26 @@
 
         <app-field label="Was a report made to the police?" [required]="true" [valid]="isFieldValid('wasReportMadeToPolice')" errorMessage="Please make a selection" [showChevrons]="false">
             <label class="inline-label">
-                <input type="radio" [value]="100000001" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+                <input type="radio" [value]="CRMMultiBoolean.True" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
                 <span>Yes</span>
             </label>
             <label class="inline-label">
-                <input type="radio" [value]="100000000" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+                <input type="radio" [value]="CRMMultiBoolean.False" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
                 <span>No</span>
             </label>
             <label class="inline-label">
-                <input type="radio" [value]="100000002" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+                <input type="radio" [value]="CRMMultiBoolean.Undecided" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
                 <span>Unknown</span>
             </label>
         </app-field>
 
-        <section *ngIf="form.get('wasReportMadeToPolice').value === 100000000 || form.get('wasReportMadeToPolice').value === 100000002">
+        <section *ngIf="form.get('wasReportMadeToPolice').value === CRMMultiBoolean.False || form.get('wasReportMadeToPolice').value === CRMMultiBoolean.Undecided">
             <app-field label="Please identify who you may have disclosed this incident to (e.g. doctor, social worker, counsellor, relative)">
                 <input class="form-control standard" type="text" formControlName="noPoliceReportIdentification">
             </app-field>
         </section>
 
-        <section *ngIf="form.get('wasReportMadeToPolice').value === 100000001">
+        <section *ngIf="form.get('wasReportMadeToPolice').value === CRMMultiBoolean.True">
             <table class="table table-striped police-file-table">
                 <thead>
                     <th scope="col" class="police-file-header">Police File Number</th>
@@ -233,15 +233,15 @@
                 <div class="col-6">
                     <app-field label="Has this person been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
                         <label class="inline-label">
-                            <input type="radio" [value]="100000000" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                            <input type="radio" [value]="CRMMultiBoolean.True" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                             <span>Yes</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="100000001" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                            <input type="radio" [value]="CRMMultiBoolean.False" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                             <span>No</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="100000002" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                             <span>Unknown</span>
                         </label>
                     </app-field>
@@ -250,7 +250,7 @@
                 </div>
             </div>
 
-            <div *ngIf="form.get('offenderBeenCharged').value === 100000000">
+            <div *ngIf="form.get('offenderBeenCharged').value === CRMMultiBoolean.True">
                 <h3>Court Information</h3>
                 <div class="court-information">
                     <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('courtFiles')['controls']; let i = index;">
@@ -280,32 +280,32 @@
 
             <app-field label="Have you sued the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('haveYouSuedOffender')" errorMessage="Please make a selection">
                 <label class="inline-label">
-                    <input type="radio" [value]="100000001" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
+                    <input type="radio" [value]="CRMBoolean.True" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
                     <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                    <input type="radio" [value]="100000000" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
+                    <input type="radio" [value]="CRMBoolean.False" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
                     <span>No</span>
                 </label>
             </app-field>
-            <section *ngIf="form.get('haveYouSuedOffender').value === 100000000">
-                <app-field label="Do you intend to sue the Person(s) Responsible?" [required]="form.get('haveYouSuedOffender').value === 100000000" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
+            <section *ngIf="form.get('haveYouSuedOffender').value === CRMBoolean.False">
+                <app-field label="Do you intend to sue the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
                     <label class="inline-label">
-                        <input type="radio" [value]="100000000" name="intendToSueOffender" formControlName="intendToSueOffender">
+                        <input type="radio" [value]="CRMMultiBoolean.True" name="intendToSueOffender" formControlName="intendToSueOffender">
                         <span>Yes</span>
                     </label>
                     <label class="inline-label">
-                        <input type="radio" [value]="100000001" name="intendToSueOffender" formControlName="intendToSueOffender">
+                        <input type="radio" [value]="CRMMultiBoolean.False" name="intendToSueOffender" formControlName="intendToSueOffender">
                         <span>No</span>
                     </label>
                     <label class="inline-label">
-                        <input type="radio" [value]="100000002" name="intendToSueOffender" formControlName="intendToSueOffender">
+                        <input type="radio" [value]="CRMMultiBoolean.Undecided" name="intendToSueOffender" formControlName="intendToSueOffender">
                         <span>Undecided</span>
                     </label>
                 </app-field>
             </section>
 
-            <section *ngIf="form.get('haveYouSuedOffender').value === 100000001 || form.get('intendToSueOffender').value === 100000000 || form.get('intendToSueOffender').value === 100000002">
+            <section *ngIf="form.get('haveYouSuedOffender').value === CRMBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided">
 
                 <div formGroupName="racafInformation">
                     <h2 class="blue-header">Restitution and Civil Action</h2>
@@ -319,17 +319,17 @@
                     <p><strong>Restitution</strong> refers to money that an offender is ordered to pay a victim, to help cover the victim’s monetary loss. Restitution is ordered by a judge in a criminal court as part of the offender’s sentence.</p>
                     <br />
 
-                    <app-field label="Did you apply to the court for money from the offender?" [required]="form.get('haveYouSuedOffender').value === 100000001 || form.get('intendToSueOffender').value === 100000000 || form.get('intendToSueOffender').value === 100000002" [valid]="isFieldValid('racafInformation.applyToCourtForMoneyFromOffender')" errorMessage="Please make a selection">
+                    <app-field label="Did you apply to the court for money from the offender?" [required]="form.get('haveYouSuedOffender').value === CRMMultiBoolean.False || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.applyToCourtForMoneyFromOffender')" errorMessage="Please make a selection">
                         <label class="inline-label">
-                            <input type="radio" [value]="100000000" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                            <input type="radio" [value]="CRMMultiBoolean.True" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
                             <span>Yes</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="100000001" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                            <input type="radio" [value]="CRMMultiBoolean.False" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
                             <span>No</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="100000002" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
                             <span>Not Applicable (No trial/conviction)</span>
                         </label>
                     </app-field>
@@ -337,65 +337,65 @@
                     <h3>Civil Action</h3>
                     <p><strong>Civil action</strong> refers to taking legal action against, or suing, a person or party responsible for the claimant’s injury or loss.</p>
 
-                    <app-field label="Have you taken, or will you be taking, legal action?" [required]="form.get('haveYouSuedOffender').value === 100000001 || form.get('intendToSueOffender').value === 100000000 || form.get('intendToSueOffender').value === 100000002" [valid]="isFieldValid('racafInformation.willBeTakingLegalAction')" errorMessage="Please make a selection">
+                    <app-field label="Have you taken, or will you be taking, legal action?" [required]="form.get('haveYouSuedOffender').value === CRMMultiBoolean.False || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.willBeTakingLegalAction')" errorMessage="Please make a selection">
                         <label class="inline-label">
-                            <input type="radio" [value]="100000000" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+                            <input type="radio" [value]="CRMMultiBoolean.True" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
                             <span>Yes</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="100000001" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+                            <input type="radio" [value]="CRMMultiBoolean.False" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
                             <span>No</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="100000002" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
                             <span>Unsure</span>
                         </label>
                     </app-field>
 
-                    <span *ngIf="form.get('racafInformation.willBeTakingLegalAction').value===100000000">
-                      <app-field label="Do you have a lawyer?">
-                        <label class="inline-label">
-                          <input type="radio" [value]="100000000" name="haveLawyer" formControlName="haveLawyer">
-                          <span>Yes</span>
-                        </label>
-                        <label class="inline-label">
-                          <input type="radio" [value]="100000001" name="haveLawyer" formControlName="haveLawyer">
-                          <span>No</span>
-                        </label>
-                      </app-field>
+                    <span *ngIf="form.get('racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
+                        <app-field label="Do you have a lawyer?">
+                            <label class="inline-label">
+                                <input type="radio" [value]="CRMBoolean.True" name="haveLawyer" formControlName="haveLawyer">
+                                <span>Yes</span>
+                            </label>
+                            <label class="inline-label">
+                                <input type="radio" [value]="CRMBoolean.False" name="haveLawyer" formControlName="haveLawyer">
+                                <span>No</span>
+                            </label>
+                        </app-field>
                     </span>
 
-                    <section *ngIf="form.get('racafInformation.haveLawyer').value===100000000">
-                      <h3>Lawyer Information</h3>
-                      <p>Please provide the name and address of your lawyer or law firm: </p>
+                    <section *ngIf="form.get('racafInformation.haveLawyer').value === CRMBoolean.True">
+                        <h3>Lawyer Information</h3>
+                        <p>Please provide the name and address of your lawyer or law firm: </p>
 
-                      <app-field label="Lawyer or Law Firm Name">
-                        <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
-                      </app-field>Please provide your digital signature
+                        <app-field label="Lawyer or Law Firm Name">
+                            <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
+                        </app-field>
 
-                      <app-address [group]="form.get('racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
+                        <app-address [group]="form.get('racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
                     </section>
-                    <section *ngIf="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000">
-                      <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
-                      <div class="terms">
-                        <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name" errorMessage="Please enter your name">, understand the following:<span class="error-states ng-star-inserted">*</span></p>
-                        <ol class="list">
-                          <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
-                          <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
-                          <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
-                          <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
-                        </ol>
-                      </div>
+                    <section *ngIf="form.get('racafInformation.willBeTakingLegalAction').value===CRMMultiBoolean.True || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000">
+                        <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
+                        <div class="terms">
+                            <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name" errorMessage="Please enter your name">, understand the following:<span class="error-states ng-star-inserted">*</span></p>
+                            <ol class="list">
+                                <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
+                                <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
+                                <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
+                                <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
+                            </ol>
+                        </div>
 
-                      <app-field label="Applicant's Signature" [required]="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
-                        <div class="signature-trigger" (click)="showSignPad('racafInformation', 'signature')" *ngIf="!hasSignature('racafInformation.signature')">
-                        </div>
-                        <div *ngIf="hasSignature('racafInformation.signature')" class="signature-preview">
-                          <img src="{{ valueOrEmpty('racafInformation.signature') }}" />
-                          <a class="redo" (click)="showSignPad('racafInformation', 'signature')">Redo Signature</a>
-                        </div>
-                      </app-field>
-                      <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
+                        <app-field label="Applicant's Signature" [required]="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
+                            <div class="signature-trigger" (click)="showSignPad('racafInformation', 'signature')" *ngIf="!hasSignature('racafInformation.signature')">
+                            </div>
+                            <div *ngIf="hasSignature('racafInformation.signature')" class="signature-preview">
+                                <img src="{{ valueOrEmpty('racafInformation.signature') }}" />
+                                <a class="redo" (click)="showSignPad('racafInformation', 'signature')">Redo Signature</a>
+                            </div>
+                        </app-field>
+                        <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
                     </section>
                 </div>
             </section>

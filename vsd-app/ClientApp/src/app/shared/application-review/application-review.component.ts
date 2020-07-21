@@ -5,6 +5,7 @@ import { FormGroup, ControlContainer, FormArray } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType, EnumHelper, OnBehalfOf, CRMBoolean, CRMMultiBoolean } from "../enums-list";
 import { AddressHelper } from "../address/address.helper";
+import { ConsoleLoggerService } from "../../services/logger.service";
 
 @Component({
     selector: 'app-application-review',
@@ -39,6 +40,7 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
+        private logger: ConsoleLoggerService
     ) {
         super();
     }
@@ -55,8 +57,8 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
         if (this.formType === ApplicationType.IFM_Application) {
             this.employers = this.form.get('expenseInformation.employers') as FormArray;
         }
-        // console.log("review component");
-        // console.log(this.form);
+        this.logger.log("review component");
+        this.logger.log(this.form);
 
     }
 

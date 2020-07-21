@@ -51,8 +51,9 @@ export class EnumHelper {
 
   public ReportMadeToPolice = {
     0: '--',
-    100000000: 'No',
-    100000001: 'Yes',
+    100000000: 'Yes',
+    100000001: 'No',
+    100000002: 'Unknown',
   }
 
   public OffenderBeenCharged = {

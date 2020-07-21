@@ -14,22 +14,38 @@ export interface ILoggerService {
 export class ConsoleLoggerService implements ILoggerService {
 
     info(value: any, ...rest: any[]): void {
-        if (!environment.production)
-            console.info(value, rest);
+        if (!environment.production) {
+            if (rest.length > 0)
+                console.info(value, rest);
+            else
+                console.info(value);
+        }
     }
 
     log(value: any, ...rest: any[]): void {
-        if (!environment.production)
-            console.log(value, rest);
+        if (!environment.production) {
+            if (rest.length > 0)
+                console.log(value, rest);
+            else
+                console.log(value);
+        }
     }
 
     warn(value: any, ...rest: any[]): void {
-        if (!environment.production)
-            console.warn(value, rest);
-    }   
+        if (!environment.production) {
+            if (rest.length > 0)
+                console.warn(value, rest);
+            else
+                console.warn(value);
+        }
+    }
 
     error(value: any, ...rest: any[]): void {
-        if (!environment.production)
-            console.error(value, rest);
+        if (!environment.production) {
+            if (rest.length > 0)
+                console.error(value, rest);
+            else
+                console.error(value);
+        }
     }
 }

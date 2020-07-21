@@ -5,7 +5,7 @@ import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormCo
 import { FileBundle } from "../../models/file-bundle";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, ApplicationType } from "../enums-list";
+import { MY_FORMATS, ApplicationType, CRMBoolean, CRMMultiBoolean } from "../enums-list";
 import * as moment from 'moment';
 import { CrimeInfoHelper } from "./crime-information.helper";
 import { config } from '../../../config';
@@ -27,6 +27,8 @@ import { forEach } from "@angular/router/src/utils/collection";
 export class CrimeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   public form: FormGroup;
+  CRMBoolean = CRMBoolean;
+  CRMMultiBoolean = CRMMultiBoolean;
   crimeLocationItems: FormArray;
   showAddCrimeLocation: boolean = true;
   showRemoveCrimeLocation: boolean = false;
@@ -85,8 +87,11 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.policeReportItems = this.form.get('policeReports') as FormArray;
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
 
+    let startDate = this.form.get('crimePeriodStart').value;
+    this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
+
     this.wasReportMadeToPoliceSubscription = this.form.get('wasReportMadeToPolice').valueChanges.subscribe(value => {
-      if (value === 100000001) {
+      if (value === CRMMultiBoolean.True) {
         this.addPoliceReport();
       }
       else {
@@ -95,7 +100,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     });
 
     this.applyToCourtForMoneyFromOffenderSubscription = this.form.get('racafInformation.applyToCourtForMoneyFromOffender').valueChanges.subscribe(value => {
-      if (value === 100000000) {
+      if (value === CRMMultiBoolean.True) {
         this.applyToCourtOrLegalYes();
       }
       else {
@@ -104,7 +109,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     });
 
     this.willBeTakingLegalActionSubscription = this.form.get('racafInformation.willBeTakingLegalAction').valueChanges.subscribe(value => {
-      if (value === 100000000) {
+      if (value === CRMMultiBoolean.True) {
         this.applyToCourtOrLegalYes();
       }
       else {
@@ -113,7 +118,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     });
 
     this.offenderBeenChargedSubscription = this.form.get('offenderBeenCharged').valueChanges.subscribe(value => {
-      if (value === 100000000) {
+      if (value === CRMMultiBoolean.True) {
         // Yes
         this.offenderBeenChargedYes();
       }
@@ -124,7 +129,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     });
 
     this.haveYouSuedOffenderSubscription = this.form.get('haveYouSuedOffender').valueChanges.subscribe(value => {
-      if (value === 100000001) {
+      if (value === CRMBoolean.True) {
         this.suedOrIntendToSueYes();
       }
       else {
@@ -133,7 +138,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     });
 
     this.intendToSueOffenderSubscription = this.form.get('intendToSueOffender').valueChanges.subscribe(value => {
-      if (value === 100000000) {
+      if (value === CRMMultiBoolean.True) {
         this.suedOrIntendToSueYes();
       }
       else {

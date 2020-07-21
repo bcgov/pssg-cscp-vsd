@@ -229,7 +229,7 @@
                     <th>Is this application being filed within one year of the date of the crime?</th>
                     <td>{{ valueOrEmpty('crimeInformation.applicationFiledWithinOneYearFromCrime') }} </td>
                 </tr>
-                <tr>
+                <tr *ngIf="form.get('crimeInformation.applicationFiledWithinOneYearFromCrime').value === false">
                     <th>Why you did not apply sooner?</th>
                     <td>{{ valueOrEmpty('crimeInformation.whyDidYouNotApplySooner') }} </td>
                 </tr>
@@ -262,7 +262,7 @@
             </tbody>
         </table>
         <h3>Police Involvement</h3>
-        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000000">
+        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.False || form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.Undecided">
             <tbody>
                 <tr>
                     <th>Was the report made to the police?</th>
@@ -276,7 +276,7 @@
                 </tr>
             </tbody>
         </table>
-        <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000001">
+        <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.True">
             <table class="table table-striped review-table">
                 <tbody>
                     <tr>
@@ -338,18 +338,20 @@
                 </tr>
             </tbody>
         </table>
-        <table class="table table-striped review-table" *ngFor="let item of courtFiles.controls; let i = index">
-            <tbody>
-                <tr>
-                    <th>Court File Number</th>
-                    <td>{{ valueOrEmpty(item.get('courtFileNumber')) }} </td>
-                </tr>
-                <tr>
-                    <th>Court Location</th>
-                    <td>{{ valueOrEmpty(item.get('courtLocation')) }} </td>
-                </tr>
-            </tbody>
-        </table>
+        <ng-container *ngIf="form.get('crimeInformation.offenderBeenCharged').value === CRMMultiBoolean.True">
+            <table class="table table-striped review-table" *ngFor="let item of courtFiles.controls; let i = index">
+                <tbody>
+                    <tr>
+                        <th>Court File Number</th>
+                        <td>{{ valueOrEmpty(item.get('courtFileNumber')) }} </td>
+                    </tr>
+                    <tr>
+                        <th>Court Location</th>
+                        <td>{{ valueOrEmpty(item.get('courtLocation')) }} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
         <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === CRMBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.Undecided">
             <tbody>
                 <tr>
@@ -364,6 +366,16 @@
                     <th>Do you have a lawyer?</th>
                     <td>{{ enumHelper.boolEnum[valueForEnum('crimeInformation.racafInformation.haveLawyer')] }} </td>
                 </tr>
+                <ng-container *ngIf="form.get('crimeInformation.racafInformation.haveLawyer').value === CRMBoolean.True">
+                    <tr>
+                        <th>Lawyer or Law Firm Name</th>
+                        <td>{{ valueOrEmpty('crimeInformation.racafInformation.lawyerOrFirmName') }} </td>
+                    </tr>
+                    <tr>
+                        <th>Lawyer Address</th>
+                        <td><span *ngIf="addressHelper.hasAddressInfo(form.get('crimeInformation.racafInformation.lawyerAddress').value)" [innerHTML]="addressHelper.displayAddress(form.get('crimeInformation.racafInformation.lawyerAddress').value)"></span></td>
+                    </tr>
+                </ng-container>
             </tbody>
         </table>
         <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
