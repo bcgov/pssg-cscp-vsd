@@ -133,6 +133,10 @@ export class EnumHelper {
 export enum CRMBoolean {
   True = 100000001,
   False = 100000000,
+}
+export enum CRMMultiBoolean {
+  True = 100000000,
+  False = 100000001,
   Undecided = 100000002
 }
 

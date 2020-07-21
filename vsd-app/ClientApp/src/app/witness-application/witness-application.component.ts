@@ -80,54 +80,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     this.form.get('representativeInformation').patchValue({
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
-
-    this.form.get('expenseInformation.missedWorkDueToDeathOfVictim')
-      .valueChanges
-      .subscribe(value => {
-        let didYouLoseWages = this.form.get('expenseInformation.didYouLoseWages');
-        let daysWorkMissedStart = this.form.get('expenseInformation.daysWorkMissedStart');
-        let mayContactEmployer = this.form.get('expenseInformation.mayContactEmployer');
-        let minimumOtherBenefitsSelected = this.form.get('expenseInformation.minimumOtherBenefitsSelected');
-
-        let employerControls = this.form.get('expenseInformation.employers') as FormArray;
-
-        didYouLoseWages.clearValidators();
-        didYouLoseWages.setErrors(null);
-        daysWorkMissedStart.clearValidators();
-        daysWorkMissedStart.setErrors(null);
-        mayContactEmployer.clearValidators();
-        mayContactEmployer.setErrors(null);
-        minimumOtherBenefitsSelected.clearValidators();
-        minimumOtherBenefitsSelected.setErrors(null);
-
-        let useValidation = value === true;
-        if (useValidation) {
-          didYouLoseWages.setValidators([Validators.required]);
-          daysWorkMissedStart.setValidators([Validators.required]);
-          mayContactEmployer.setValidators([Validators.required]);
-          minimumOtherBenefitsSelected.setValidators([Validators.required]);
-        }
-
-        for (let employer of employerControls.controls) {
-          console.log('Employer Control');
-          let employerName = employer.get('employerName');
-          let employerPhoneNumber = employer.get('employerPhoneNumber');
-
-          console.log(employerName);
-          employerName.clearValidators();
-          employerName.setErrors(null);
-          employerPhoneNumber.clearValidators();
-          employerPhoneNumber.setErrors(null);
-
-          if (useValidation) {
-            employerName.setValidators([Validators.required]);
-            employerPhoneNumber.setValidators([Validators.required]);
-          }
-        }
-
-        minimumOtherBenefitsSelected.updateValueAndValidity();
-        //  employers: this.fb.array([this.createEmployerItem()]),
-      });
   }
 
   verifyCancellation(): void {

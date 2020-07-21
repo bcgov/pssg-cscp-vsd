@@ -127,7 +127,7 @@
         <h2 class="blue-header">
             Victim Information <button (click)="gotoPageIndex(2);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
         </h2>
-        <h3>Applicant Name</h3>
+        <h3>Victim Name</h3>
         <table class="table table-striped review-table">
             <tbody>
                 <tr>
@@ -329,10 +329,10 @@
                 </tr>
                 <tr>
                     <th>Have you sued the Person(s) Responsible?</th>
-                    <td>{{ enumHelper.HaveYouSuedOffender[valueForEnum('crimeInformation.offenderBeenCharged')] }}</td>
+                    <td>{{ enumHelper.HaveYouSuedOffender[valueForEnum('crimeInformation.haveYouSuedOffender')] }}</td>
 
                 </tr>
-                <tr>
+                <tr *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === CRMBoolean.False">
                     <th>Do you intend to sue the Person(s) Responsible?</th>
                     <td>{{ enumHelper.IntendToSueOffender[valueForEnum('crimeInformation.intendToSueOffender')] }}</td>
                 </tr>
@@ -347,6 +347,30 @@
                 <tr>
                     <th>Court Location</th>
                     <td>{{ valueOrEmpty(item.get('courtLocation')) }} </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === CRMBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.Undecided">
+            <tbody>
+                <tr>
+                    <th>Did you apply to the court for money from the offender?</th>
+                    <td>{{ enumHelper.ApplyToCourtForMoneyFromOffender[valueForEnum('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender')] }} </td>
+                </tr>
+                <tr>
+                    <th>Have you taken, or will you be taking, legal action?</th>
+                    <td>{{ enumHelper.WillBeTakingLegalAction[valueForEnum('crimeInformation.racafInformation.willBeTakingLegalAction')] }} </td>
+                </tr>
+                <tr *ngIf="form.get('crimeInformation.racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
+                    <th>Do you have a lawyer?</th>
+                    <td>{{ enumHelper.boolEnum[valueForEnum('crimeInformation.racafInformation.haveLawyer')] }} </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
+            <tbody>
+                <tr>
+                    <th>Applicant's Signature</th>
+                    <td><img class="review-signature" *ngIf="valueOrEmpty('crimeInformation.racafInformation.signature', '') != ''" src="{{ valueOrEmpty('crimeInformation.racafInformation.signature', '') }}" /></td>
                 </tr>
             </tbody>
         </table>
@@ -976,7 +1000,7 @@
                         <th>Agency Name</th>
                         <td>{{ valueOrEmpty(item.get('authorizedPersonAgencyName')) }}</td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="addressHelper.hasAddressInfo(item.get('authorizedPersonAgencyAddress').value)">
                         <th>Agency Address</th>
                         <td><span [innerHTML]="displayMailingAddress(item.get('authorizedPersonAgencyAddress'))"></span></td>
                     </tr>
