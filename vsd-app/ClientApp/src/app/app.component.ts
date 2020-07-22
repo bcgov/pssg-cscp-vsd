@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, enableProdMode } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { VersionInfoDataService } from './services/version-info-data.service';
 import { User } from './models/user.model';
@@ -7,6 +7,7 @@ import { isDevMode } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import 'rxjs/add/operator/filter';
 import { VersionInfoDialog } from './version-info/version-info.component';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -20,13 +21,20 @@ export class AppComponent implements OnInit {
   public versionInfo: VersionInfo;
   public isNewUser: boolean;
   public isDevMode: boolean;
-  
+
   constructor(
     private renderer: Renderer2,
     private router: Router,
     private versionInfoDataService: VersionInfoDataService,
     private dialog: MatDialog
   ) {
+
+    if (environment.production) {
+      enableProdMode();
+      if (window) {
+        window.console.log = function () { };
+      }
+    }
     this.isDevMode = isDevMode();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
