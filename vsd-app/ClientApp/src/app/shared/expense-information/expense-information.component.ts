@@ -1,7 +1,7 @@
 import { FormBase } from "../form-base";
 import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDatepickerInputEvent } from "@angular/material";
-import { FormGroup, ControlContainer, FormControl, AbstractControl, Validators } from "@angular/forms";
+import { FormGroup, ControlContainer, FormControl, AbstractControl, Validators, FormArray } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType, CRMBoolean } from "../enums-list";
 import { SummaryOfBenefitsDialog } from "../../summary-of-benefits/summary-of-benefits.component";
@@ -26,7 +26,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     ApplicationType = ApplicationType;
 
     BENEFITS: string[];
-    OTHER_BENEFITS: string[];
+    ADDITIONAL_BENEFITS: string[];
     header: string;
 
     showCurrentlyOffWork: boolean = false;
@@ -36,9 +36,18 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
 
     sinSubscription: Subscription;
     didMissWorkSubscription: Subscription;
-    loseWagesSubscription: Subscription;
+  loseWagesSubscription: Subscription;
+  missedWorkDueToDeathOfVictimSubscription: Subscription;
 
-    constructor(
+  daysWorkMissedStart: FormControl;
+  daysWorkMissedEnd: FormControl;
+  didYouLoseWages: FormControl;
+  employers: FormArray;
+  employerGroup: FormGroup;
+  employersEmployerName: FormControl;
+  employersEmployerPhoneNumber: FormControl;
+
+  constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
     ) {
@@ -65,7 +74,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
                 'haveCrimeSceneCleaningExpenses',
                 'haveOtherExpenses'
             ];
-            this.OTHER_BENEFITS = ['haveDisabilityPlanBenefits',
+          this.ADDITIONAL_BENEFITS = ['haveDisabilityPlanBenefits',
                 'haveEmploymentInsuranceBenefits',
                 'haveIncomeAssistanceBenefits',
                 'haveCanadaPensionPlanBenefits',
@@ -139,7 +148,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
                 'haveCounsellingTransportation',
                 'havePrescriptionDrugExpenses'
             ];
-            this.OTHER_BENEFITS = [
+          this.ADDITIONAL_BENEFITS = [
                 'haveVocationalServicesExpenses',
                 'haveIncomeSupportExpenses',
                 'haveChildcareExpenses',
@@ -159,18 +168,28 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
                 'haveCounsellingTransportation',
                 'havePrescriptionDrugExpenses'
             ];
-            this.OTHER_BENEFITS = [
+          this.ADDITIONAL_BENEFITS = [
                 'haveCrimeSceneCleaningExpenses',
                 'noneOfTheAboveExpenses'
             ];
         }
+
+      this.missedWorkDueToDeathOfVictimSubscription = this.form.get('missedWorkDueToDeathOfVictim').valueChanges.subscribe(value => {
+        if (value === CRMBoolean.True) {
+          this.missedWorkTrue();
+        }
+        else {
+          this.missedWorkFalse();
+        }
+      });
     }
 
     ngOnDestroy() {
         if (this.formType === ApplicationType.IFM_Application) {
             this.sinSubscription.unsubscribe();
             this.didMissWorkSubscription.unsubscribe();
-            this.loseWagesSubscription.unsubscribe();
+          this.loseWagesSubscription.unsubscribe();
+          this.missedWorkDueToDeathOfVictimSubscription.unsubscribe();
         }
     }
 
@@ -231,7 +250,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     changeAdditionalBenefitGroupValidity(values: any): void {
         let minimumBenefitsMet = '';
         let x: AbstractControl[] = [];
-        this.OTHER_BENEFITS.forEach((benefit) => {
+      this.ADDITIONAL_BENEFITS.forEach((benefit) => {
             x.push(this.form.get(benefit));
         });
         let oneChecked = false;
@@ -256,4 +275,78 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     showSummaryOfBenefits(): void {
         const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
     }
+
+  missedWorkTrue(): void {
+    this.daysWorkMissedStart = this.form.get('daysWorkMissedStart') as FormControl;
+    this.daysWorkMissedEnd = this.form.get('daysWorkMissedEnd') as FormControl;
+    this.didYouLoseWages = this.form.get('didYouLoseWages') as FormControl;
+    this.employers = this.form.get('employers') as FormArray;
+    this.daysWorkMissedStart.setValidators([Validators.required]);
+    this.daysWorkMissedStart.markAsTouched();
+    this.daysWorkMissedStart.updateValueAndValidity();
+    this.daysWorkMissedEnd.setValidators([Validators.required]);
+    this.daysWorkMissedEnd.markAsTouched();
+    this.daysWorkMissedEnd.updateValueAndValidity();
+    this.didYouLoseWages.setValidators([Validators.required]);
+    this.didYouLoseWages.markAsTouched();
+    this.didYouLoseWages.updateValueAndValidity();
+    for (let i = 0; i < this.employers.length; ++i) {
+      this.employerGroup = this.employers.controls[i] as FormGroup;
+      this.employersEmployerName = this.employerGroup.controls['employerName'] as FormControl;
+      this.employersEmployerName.setValidators([Validators.required]);
+      this.employersEmployerName.markAsTouched();
+      this.employersEmployerName.updateValueAndValidity();
+      this.employersEmployerPhoneNumber = this.employerGroup.controls['employerPhoneNumber'] as FormControl;
+      this.employersEmployerPhoneNumber.setValidators([Validators.required]);
+      this.employersEmployerPhoneNumber.markAsTouched();
+      this.employersEmployerPhoneNumber.updateValueAndValidity();
+    }
+    //this.noneOfTheAboveBenefitsForm = this.form.get('noneOfTheAboveBenefits') as FormControl;
+    //this.noneOfTheAboveBenefitsForm.setValidators([Validators.required]);
+    //this.noneOfTheAboveBenefitsForm.markAsTouched();
+    //this.noneOfTheAboveBenefitsForm.updateValueAndValidity();
+  }
+
+  missedWorkFalse(): void {
+    this.daysWorkMissedStart = this.form.get('daysWorkMissedStart') as FormControl;
+    this.daysWorkMissedEnd = this.form.get('daysWorkMissedEnd') as FormControl;
+    this.didYouLoseWages = this.form.get('didYouLoseWages') as FormControl;
+    this.employers = this.form.get('employers') as FormArray;
+    this.daysWorkMissedStart.clearValidators();
+    this.daysWorkMissedStart.setErrors(null);
+    this.daysWorkMissedStart.setValue(null);
+    this.daysWorkMissedStart.markAsTouched();
+    this.daysWorkMissedStart.updateValueAndValidity();
+    this.daysWorkMissedEnd.clearValidators();
+    this.daysWorkMissedEnd.setErrors(null);
+    this.daysWorkMissedEnd.setValue(null);
+    this.daysWorkMissedEnd.markAsTouched();
+    this.daysWorkMissedEnd.updateValueAndValidity();
+    this.didYouLoseWages.clearValidators();
+    this.didYouLoseWages.setErrors(null);
+    this.didYouLoseWages.setValue(null);
+    this.didYouLoseWages.markAsTouched();
+    this.didYouLoseWages.updateValueAndValidity();
+    for (let i = 0; i < this.employers.length; ++i) {
+      this.employerGroup = this.employers.controls[i] as FormGroup;
+      this.employersEmployerName = this.employerGroup.controls['employerName'] as FormControl;
+      this.employersEmployerName.clearValidators();
+      this.employersEmployerName.setErrors(null);
+      this.employersEmployerName.setValue(null);
+      this.employersEmployerName.markAsTouched();
+      this.employersEmployerName.updateValueAndValidity();
+      this.employersEmployerPhoneNumber = this.employerGroup.controls['employerPhoneNumber'] as FormControl;
+      this.employersEmployerPhoneNumber.clearValidators();
+      this.employersEmployerPhoneNumber.setErrors(null);
+      this.employersEmployerPhoneNumber.setValue(null);
+      this.employersEmployerPhoneNumber.markAsTouched();
+      this.employersEmployerPhoneNumber.updateValueAndValidity();
+    }
+    //this.noneOfTheAboveBenefitsForm = this.form.get('noneOfTheAboveBenefits') as FormControl;
+    //this.noneOfTheAboveBenefitsForm.clearValidators();
+    //this.noneOfTheAboveBenefitsForm.setErrors(null);
+    //this.noneOfTheAboveBenefitsForm.setValue(null);
+    //this.noneOfTheAboveBenefitsForm.markAsTouched();
+    //this.noneOfTheAboveBenefitsForm.updateValueAndValidity();
+  }
 }
