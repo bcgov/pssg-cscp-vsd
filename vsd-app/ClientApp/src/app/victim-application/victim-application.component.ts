@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -69,19 +69,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   ngOnInit() {
-    // initialize the form
-    this.buildApplicationForm();
-
-    // check the route for info about a person filling it in on their behalf
-    // TODO: if the user changes this can they spoof an agent?
     let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
+    this.form = this.buildApplicationForm();
+
     this.form.get('representativeInformation').patchValue({
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
   }
 
-  buildApplicationForm(): void {
-    this.form = this.fb.group({
+  buildApplicationForm(): FormGroup {
+    return this.fb.group({
       introduction: this.fb.group({
         understoodInformation: [null, Validators.requiredTrue]
       }),

@@ -51,8 +51,9 @@ export class EnumHelper {
 
   public ReportMadeToPolice = {
     0: '--',
-    100000000: 'No',
-    100000001: 'Yes',
+    100000000: 'Yes',
+    100000001: 'No',
+    100000002: 'Unknown',
   }
 
   public OffenderBeenCharged = {
@@ -133,6 +134,10 @@ export class EnumHelper {
 export enum CRMBoolean {
   True = 100000001,
   False = 100000000,
+}
+export enum CRMMultiBoolean {
+  True = 100000000,
+  False = 100000001,
   Undecided = 100000002
 }
 

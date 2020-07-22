@@ -1,6 +1,7 @@
 import { formatDate } from '@angular/common';
 import { ValidatorFn, ValidationErrors, AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import * as _moment from 'moment';
+import { ConsoleLoggerService } from '../services/logger.service';
 
 export class FormBase {
   form: FormGroup;
@@ -172,6 +173,9 @@ export class FormBase {
   validateAllFormFields(formGroup: any) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
+      if (control.valid === false) {
+        console.log("invalid: ", field);
+      }
 
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });

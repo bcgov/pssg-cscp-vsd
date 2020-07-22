@@ -4,7 +4,7 @@ import { POSTAL_CODE } from "../regex.constants";
 
 export class ExpenseInfoHelper {
     postalRegex = POSTAL_CODE;
-    public setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
+    public  setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
         let group: any = {
             haveMedicalExpenses: [false],
             haveDentalExpenses: [false],

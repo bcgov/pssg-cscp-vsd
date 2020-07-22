@@ -68,15 +68,22 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
         this.preferredMethodOfContactSubscription = this.form.get('preferredMethodOfContact').valueChanges.subscribe(value => this.preferredMethodOfContactChange(value));
 
-        this.sinSubscription = this.form.get('sin').valueChanges.subscribe((value) => {
-            if (value === null) value = '';
-            this.form.parent.get('employmentIncomeInformation').get('sin').patchValue(value);
-        });
+        if (this.formType === ApplicationType.Victim_Application || this.formType === ApplicationType.IFM_Application) {
+            this.sinSubscription = this.form.get('sin').valueChanges.subscribe((value) => {
+                if (value === null) value = '';
+                let incomeForm = 'employmentIncomeInformation';
+                if (this.formType === ApplicationType.IFM_Application)
+                    incomeForm = 'expenseInformation';
+                this.form.parent.get(incomeForm).get('sin').patchValue(value);
+            });
+        }
     }
 
     ngOnDestroy() {
         this.preferredMethodOfContactSubscription.unsubscribe();
-        this.sinSubscription.unsubscribe();
+        if (this.formType === ApplicationType.Victim_Application || this.formType === ApplicationType.IFM_Application) {
+            this.sinSubscription.unsubscribe();
+        }
     }
 
     preferredMethodOfContactChange(value) {

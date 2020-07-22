@@ -192,7 +192,7 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         this.selfEmployedSubscription = this.form.get('areYouSelfEmployed').valueChanges.subscribe((value) => {
             let options = { onlySelf: true, emitEvent: false };
             let currentEmployers = this.form.get('employers') as FormArray;
-            console.log(currentEmployers);
+            // console.log(currentEmployers);
 
             for (let i = 0; i < currentEmployers.length; ++i) {
                 let thisEmployer = currentEmployers.controls[i] as FormGroup;

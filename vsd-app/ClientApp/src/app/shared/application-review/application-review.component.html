@@ -127,7 +127,7 @@
         <h2 class="blue-header">
             Victim Information <button (click)="gotoPageIndex(2);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
         </h2>
-        <h3>Applicant Name</h3>
+        <h3>Victim Name</h3>
         <table class="table table-striped review-table">
             <tbody>
                 <tr>
@@ -229,7 +229,7 @@
                     <th>Is this application being filed within one year of the date of the crime?</th>
                     <td>{{ valueOrEmpty('crimeInformation.applicationFiledWithinOneYearFromCrime') }} </td>
                 </tr>
-                <tr>
+                <tr *ngIf="form.get('crimeInformation.applicationFiledWithinOneYearFromCrime').value === false">
                     <th>Why you did not apply sooner?</th>
                     <td>{{ valueOrEmpty('crimeInformation.whyDidYouNotApplySooner') }} </td>
                 </tr>
@@ -244,7 +244,7 @@
                     </tr>
                     <tr *ngIf="form.get('crimeInformation.victimDeceasedFromCrime').value == true">
                         <th>Date of Death</th>
-                        <td>{{ valueOrEmpty('crimeInformation.dateOfDeath') | date }} </td>
+                        <td>{{ valueOrEmpty('crimeInformation.dateOfDeath', '') | date }} </td>
                     </tr>
                 </ng-container>
                 <tr>
@@ -262,7 +262,7 @@
             </tbody>
         </table>
         <h3>Police Involvement</h3>
-        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000000">
+        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.False || form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.Undecided">
             <tbody>
                 <tr>
                     <th>Was the report made to the police?</th>
@@ -276,7 +276,7 @@
                 </tr>
             </tbody>
         </table>
-        <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === 100000001">
+        <section *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.True">
             <table class="table table-striped review-table">
                 <tbody>
                     <tr>
@@ -329,24 +329,60 @@
                 </tr>
                 <tr>
                     <th>Have you sued the Person(s) Responsible?</th>
-                    <td>{{ enumHelper.HaveYouSuedOffender[valueForEnum('crimeInformation.offenderBeenCharged')] }}</td>
+                    <td>{{ enumHelper.HaveYouSuedOffender[valueForEnum('crimeInformation.haveYouSuedOffender')] }}</td>
 
                 </tr>
-                <tr>
+                <tr *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === CRMBoolean.False">
                     <th>Do you intend to sue the Person(s) Responsible?</th>
                     <td>{{ enumHelper.IntendToSueOffender[valueForEnum('crimeInformation.intendToSueOffender')] }}</td>
                 </tr>
             </tbody>
         </table>
-        <table class="table table-striped review-table" *ngFor="let item of courtFiles.controls; let i = index">
+        <ng-container *ngIf="form.get('crimeInformation.offenderBeenCharged').value === CRMMultiBoolean.True">
+            <table class="table table-striped review-table" *ngFor="let item of courtFiles.controls; let i = index">
+                <tbody>
+                    <tr>
+                        <th>Court File Number</th>
+                        <td>{{ valueOrEmpty(item.get('courtFileNumber')) }} </td>
+                    </tr>
+                    <tr>
+                        <th>Court Location</th>
+                        <td>{{ valueOrEmpty(item.get('courtLocation')) }} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === CRMBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.Undecided">
             <tbody>
                 <tr>
-                    <th>Court File Number</th>
-                    <td>{{ valueOrEmpty(item.get('courtFileNumber')) }} </td>
+                    <th>Did you apply to the court for money from the offender?</th>
+                    <td>{{ enumHelper.ApplyToCourtForMoneyFromOffender[valueForEnum('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender')] }} </td>
                 </tr>
                 <tr>
-                    <th>Court Location</th>
-                    <td>{{ valueOrEmpty(item.get('courtLocation')) }} </td>
+                    <th>Have you taken, or will you be taking, legal action?</th>
+                    <td>{{ enumHelper.WillBeTakingLegalAction[valueForEnum('crimeInformation.racafInformation.willBeTakingLegalAction')] }} </td>
+                </tr>
+                <tr *ngIf="form.get('crimeInformation.racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
+                    <th>Do you have a lawyer?</th>
+                    <td>{{ enumHelper.boolEnum[valueForEnum('crimeInformation.racafInformation.haveLawyer')] }} </td>
+                </tr>
+                <ng-container *ngIf="form.get('crimeInformation.racafInformation.haveLawyer').value === CRMBoolean.True">
+                    <tr>
+                        <th>Lawyer or Law Firm Name</th>
+                        <td>{{ valueOrEmpty('crimeInformation.racafInformation.lawyerOrFirmName') }} </td>
+                    </tr>
+                    <tr>
+                        <th>Lawyer Address</th>
+                        <td><span *ngIf="addressHelper.hasAddressInfo(form.get('crimeInformation.racafInformation.lawyerAddress').value)" [innerHTML]="addressHelper.displayAddress(form.get('crimeInformation.racafInformation.lawyerAddress').value)"></span></td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
+            <tbody>
+                <tr>
+                    <th>Applicant's Signature</th>
+                    <td><img class="review-signature" *ngIf="valueOrEmpty('crimeInformation.racafInformation.signature', '') != ''" src="{{ valueOrEmpty('crimeInformation.racafInformation.signature', '') }}" /></td>
                 </tr>
             </tbody>
         </table>
@@ -629,22 +665,22 @@
                             <tbody>
                                 <tr>
                                     <th>Have you missed work as a result of the death of the victim?</th>
-                                    <td>{{ valueOrEmpty('expenseInformation.missedWorkDueToDeathOfVictim') }} </td>
+                                    <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.missedWorkDueToDeathOfVictim')] }} </td>
                                 </tr>
-                                <ng-container *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === true">
+                                <ng-container *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
                                     <tr>
                                         <th>Please provide days of work missed</th>
-                                        <td>{{ valueOrEmpty('expenseInformation.daysWorkMissedStart') | date}} - {{ valueOrEmpty('expenseInformation.daysWorkMissedEnd') | date}} </td>
+                                        <td>{{ valueOrEmpty('expenseInformation.daysWorkMissedStart', '') | date}} - {{ valueOrEmpty('expenseInformation.daysWorkMissedEnd', '') | date}} </td>
                                     </tr>
                                     <tr>
                                         <th>As a result of any crime-related injuries, did you lose wages?</th>
-                                        <td>{{ valueOrEmpty('expenseInformation.didYouLoseWages') }} </td>
+                                        <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.didYouLoseWages')] }} </td>
                                     </tr>
                                 </ng-container>
                             </tbody>
                         </table>
 
-                        <ng-container *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === true">
+                        <ng-container *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
                             <h3>Income Loss Information</h3>
                             <table class="table table-striped review-table" *ngFor="let item of employers.controls; let i = index">
                                 <tbody>
@@ -662,7 +698,7 @@
                                     </tr>
                                     <tr>
                                         <th>Contact Name</th>
-                                        <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName')) }}</td>
+                                        <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName'), '') }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -766,9 +802,7 @@
                 <ng-container *ngIf="enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.didYouMissWorkDueToCrime')] === 'Yes'">
                     <tr>
                         <th>Please provide days of work missed</th>
-                        <!-- handle piping '--' into date pipe because of fun empty handling from value or empty blah blah -->
-                        <td *ngIf="form.get('employmentIncomeInformation.daysWorkMissedStart').value != ''">{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart') | date}} - {{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd') | date}} </td>
-                        <td *ngIf="form.get('employmentIncomeInformation.daysWorkMissedStart').value == ''">--</td>
+                        <td>{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart', '') | date}} - {{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd', '') | date}} </td>
                     </tr>
                     <tr>
                         <th>As a result of any crime-related injuries, did you lose wages?</th>
@@ -784,16 +818,17 @@
                 <tbody>
                     <tr>
                         <th>Are you self employed?</th>
-                        <td>{{ enumHelper.boolEnum[valueOrEmpty('employmentIncomeInformation.areYouSelfEmployed')] }} </td>
+                        <td>{{ enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.areYouSelfEmployed')] }} </td>
                     </tr>
-                    <tr *ngIf="enumHelper.boolEnum[valueOrEmpty('employmentIncomeInformation.areYouSelfEmployed')] === 'No'">
-                        <th>If you are requesting benefits for lost wages, may we contact your employer?</th>
-                        <td>{{ valueOrEmpty('employmentIncomeInformation.mayContactEmployer') }} </td>
-                    </tr>
+
                 </tbody>
             </table>
             <table class="table table-striped review-table" *ngFor="let item of employers.controls; let i = index">
                 <tbody>
+                    <tr *ngIf="form.get('employmentIncomeInformation.areYouSelfEmployed').value !== CRMBoolean.True">
+                        <th>If you are requesting benefits for lost wages, may we contact your employer?</th>
+                        <td>{{ enumHelper.boolEnum[valueForEnum(item.get('contactable'))] }} </td>
+                    </tr>
                     <tr>
                         <th>Name of Company/Organization</th>
                         <td>{{ valueOrEmpty(item.get('employerName')) }}</td>
@@ -808,7 +843,7 @@
                     </tr>
                     <tr>
                         <th>Contact Name</th>
-                        <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName')) }}</td>
+                        <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName'), '') }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -976,7 +1011,7 @@
                         <th>Agency Name</th>
                         <td>{{ valueOrEmpty(item.get('authorizedPersonAgencyName')) }}</td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="addressHelper.hasAddressInfo(item.get('authorizedPersonAgencyAddress').value)">
                         <th>Agency Address</th>
                         <td><span [innerHTML]="displayMailingAddress(item.get('authorizedPersonAgencyAddress'))"></span></td>
                     </tr>
