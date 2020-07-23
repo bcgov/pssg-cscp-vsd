@@ -17,7 +17,9 @@ export class ExpenseInfoHelper {
             haveCrimeSceneCleaningExpenses: [false],
             haveOtherExpenses: [false],
             otherSpecificExpenses: [''],
-            minimumExpensesSelected: ['', Validators.required],
+          minimumExpensesSelected: ['', Validators.required],
+          minimumAdditionalBenefitsSelected: [''],
+          minimumOtherBenefitsSelected: [''],//, Validators.required],
 
             haveDisabilityPlanBenefits: [false],
             haveEmploymentInsuranceBenefits: [false],
@@ -27,7 +29,8 @@ export class ExpenseInfoHelper {
             haveCivilActionBenefits: [false],
             haveOtherBenefits: [false],
             otherSpecificBenefits: [''],
-            noneOfTheAboveBenefits: [false],
+          noneOfTheAboveBenefits: [false],
+          missedWorkDueToDeathOfVictim: [''],
         };
 
         if (form_type === ApplicationType.Witness_Application) {
@@ -35,12 +38,13 @@ export class ExpenseInfoHelper {
                 haveCounsellingExpenses: [false],
                 haveCounsellingTransportation: [false],
                 havePrescriptionDrugExpenses: [false],
-                minimumExpensesSelected: ['', Validators.required],
+              minimumExpensesSelected: ['', Validators.required],
+              minimumAdditionalBenefitsSelected: [''],//, Validators.required], // Dynamically required
+              minimumOtherBenefitsSelected: [''], // Dynamically required
 
                 haveCrimeSceneCleaningExpenses: [false],
                 noneOfTheAboveExpenses: [''],
                 additionalBenefitsDetails: [''],//, Validators.required], ??
-                minimumAdditionalBenefitsSelected: [''], // Dynamically required
 
                 // missedWorkDueToDeathOfVictim: [''], // Dynamically required
                 // didYouLoseWages: [''], //, Validators.required],
@@ -58,7 +62,6 @@ export class ExpenseInfoHelper {
                 // haveOtherBenefits: [false],
                 // otherSpecificBenefits: [''],
                 // noneOfTheAboveBenefits: [false],
-                // minimumOtherBenefitsSelected: [''], // Dynamically required
             };
         }
         if (form_type === ApplicationType.IFM_Application) {
@@ -84,7 +87,9 @@ export class ExpenseInfoHelper {
                 daysWorkMissedEnd: [''],
                 employers: fb.array([this.createEmployerItem(fb)]),
                 mayContactEmployer: [''],
-                minimumExpensesSelected: ['', Validators.required],
+              minimumExpensesSelected: ['', Validators.required],
+              minimumAdditionalBenefitsSelected: [''],//, Validators.required],
+              minimumOtherBenefitsSelected: [''],//, Validators.required],
 
                 additionalBenefitsDetails: [''],//, Validators.required], ??
                 haveDisabilityPlanBenefits: [false],
@@ -95,7 +100,9 @@ export class ExpenseInfoHelper {
                 haveCivilActionBenefits: [false],
                 haveOtherBenefits: [false],
                 otherSpecificBenefits: [''],
-                noneOfTheAboveBenefits: [false],
+              noneOfTheAboveBenefits: [false],
+              // Have to turn validation off for now - in case no death date. Though, if death date, then there should be validation
+              // TODO: Figure out how to do this.
             }
         }
         return fb.group(group);

@@ -26,7 +26,8 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     ApplicationType = ApplicationType;
 
     BENEFITS: string[];
-    ADDITIONAL_BENEFITS: string[];
+  ADDITIONAL_BENEFITS: string[];
+  OTHER_BENEFITS: string[];
     header: string;
 
     showCurrentlyOffWork: boolean = false;
@@ -46,6 +47,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   employerGroup: FormGroup;
   employersEmployerName: FormControl;
   employersEmployerPhoneNumber: FormControl;
+  minimumOtherBenefitsSelected: FormControl;
 
   constructor(
         private controlContainer: ControlContainer,
@@ -159,7 +161,17 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
                 'haveHomeMakerExpenses',
                 'haveCrimeSceneCleaningExpenses',
                 'noneOfTheAboveExpenses'
-            ];
+          ];
+          this.OTHER_BENEFITS = [
+            'haveDisabilityPlanBenefits',
+            'haveEmploymentInsuranceBenefits',
+            'haveIncomeAssistanceBenefits',
+            'haveCanadaPensionPlanBenefits',
+            'haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits',
+            'haveCivilActionBenefits',
+            'haveOtherBenefits',
+            'noneOfTheAboveBenefits'
+          ];
         }
         if (this.formType === ApplicationType.Witness_Application) {
             this.header = "Benefits";
@@ -186,8 +198,8 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
 
     ngOnDestroy() {
         if (this.formType === ApplicationType.IFM_Application) {
-            this.sinSubscription.unsubscribe();
-            this.didMissWorkSubscription.unsubscribe();
+          this.sinSubscription.unsubscribe();
+          this.didMissWorkSubscription.unsubscribe();
           this.loseWagesSubscription.unsubscribe();
           this.missedWorkDueToDeathOfVictimSubscription.unsubscribe();
         }
@@ -272,6 +284,33 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         });
     }
 
+  changeOtherBenefitValidity(values: any): void {
+    // whenever an expenseInformation checkbox is changed we
+    // set whether the minimum expenses value is met into part of the form that isn't user editable.
+    let expenseMinimumMet = '';
+    let x: AbstractControl[] = [];
+    this.OTHER_BENEFITS.forEach((benefit) => {
+      x.push(this.form.get(benefit));
+    });
+
+    //determine if one of the checkboxes is true
+    let oneChecked = false;
+    x.forEach(c => {
+      // TODO: This should always return if not null because truthy. Second if should never trigger?
+      if (oneChecked)
+        return;
+      if (c instanceof FormControl) {
+        if (c.value === true)
+          oneChecked = true;
+      }
+    });
+    // fake a 'true' as a string
+    expenseMinimumMet = oneChecked ? 'yes' : '';
+    this.form.patchValue({
+      minimumOtherBenefitsSelected: expenseMinimumMet
+    });
+  }
+
     showSummaryOfBenefits(): void {
         const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
     }
@@ -280,6 +319,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     this.daysWorkMissedStart = this.form.get('daysWorkMissedStart') as FormControl;
     this.daysWorkMissedEnd = this.form.get('daysWorkMissedEnd') as FormControl;
     this.didYouLoseWages = this.form.get('didYouLoseWages') as FormControl;
+    this.minimumOtherBenefitsSelected = this.form.get('minimumOtherBenefitsSelected') as FormControl;
     this.employers = this.form.get('employers') as FormArray;
     this.daysWorkMissedStart.setValidators([Validators.required]);
     this.daysWorkMissedStart.markAsTouched();
@@ -290,6 +330,9 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     this.didYouLoseWages.setValidators([Validators.required]);
     this.didYouLoseWages.markAsTouched();
     this.didYouLoseWages.updateValueAndValidity();
+    this.minimumOtherBenefitsSelected.setValidators([Validators.required]);
+    this.minimumOtherBenefitsSelected.markAsTouched();
+    this.minimumOtherBenefitsSelected.updateValueAndValidity();
     for (let i = 0; i < this.employers.length; ++i) {
       this.employerGroup = this.employers.controls[i] as FormGroup;
       this.employersEmployerName = this.employerGroup.controls['employerName'] as FormControl;
@@ -311,6 +354,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     this.daysWorkMissedStart = this.form.get('daysWorkMissedStart') as FormControl;
     this.daysWorkMissedEnd = this.form.get('daysWorkMissedEnd') as FormControl;
     this.didYouLoseWages = this.form.get('didYouLoseWages') as FormControl;
+    this.minimumOtherBenefitsSelected = this.form.get('minimumOtherBenefitsSelected') as FormControl;
     this.employers = this.form.get('employers') as FormArray;
     this.daysWorkMissedStart.clearValidators();
     this.daysWorkMissedStart.setErrors(null);
@@ -327,6 +371,11 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     this.didYouLoseWages.setValue(null);
     this.didYouLoseWages.markAsTouched();
     this.didYouLoseWages.updateValueAndValidity();
+    this.minimumOtherBenefitsSelected.clearValidators();
+    this.minimumOtherBenefitsSelected.setErrors(null);
+    this.minimumOtherBenefitsSelected.setValue(null);
+    this.minimumOtherBenefitsSelected.markAsTouched();
+    this.minimumOtherBenefitsSelected.updateValueAndValidity();
     for (let i = 0; i < this.employers.length; ++i) {
       this.employerGroup = this.employers.controls[i] as FormGroup;
       this.employersEmployerName = this.employerGroup.controls['employerName'] as FormControl;
