@@ -178,71 +178,75 @@
             <h2 class="blue-header">Additional Benefits</h2>
             <p>If the victim is deceased as a result of the crime, please indicate which additional expenses or benefits you wish to claim (at least one is required):</p>
             <div class="radio-list">
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="haveVocationalServicesExpenses" formControlName="haveVocationalServicesExpenses">
-                        Vocational services or training <app-tool-tip [trigger]="expensesVocational"></app-tool-tip>
-                    </label>
-                </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="haveIncomeSupportExpenses" formControlName="haveIncomeSupportExpenses">
-                        Income support <app-tool-tip [trigger]="expensesIncomeSupport"></app-tool-tip>
-                    </label>
-                </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="haveChildcareExpenses" formControlName="haveChildcareExpenses">
-                        Childcare <app-tool-tip [trigger]="expensesChildCare"></app-tool-tip>
-                    </label>
-                </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="haveLegalProceedingExpenses" formControlName="haveLegalProceedingExpenses">
-                        Transportation to attend legal proceedings <app-tool-tip [trigger]="expensesLegalTransportation"></app-tool-tip>
-                    </label>
-                </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="haveFuneralExpenses" formControlName="haveFuneralExpenses">
-                        Funeral expenses <app-tool-tip [trigger]="expensesFuneral"></app-tool-tip>
-                    </label>
-                </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="haveBereavementLeaveExpenses" formControlName="haveBereavementLeaveExpenses">
-                        Bereavement leave <app-tool-tip [trigger]="expensesBereavementLeave"></app-tool-tip>
-                    </label>
-                </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="haveLostOfParentalGuidanceExpenses" formControlName="haveLostOfParentalGuidanceExpenses">
-                        Loss of parental guidance <app-tool-tip [trigger]="expensesParentalLoss"></app-tool-tip>
-                    </label>
-                </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="haveHomeMakerExpenses" formControlName="haveHomeMakerExpenses">
-                        Homemaker services <app-tool-tip [trigger]="expensesHomemakerServices"></app-tool-tip>
-                    </label>
-                </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses">
-                        Crime scene cleaning <app-tool-tip [trigger]="expensesFamilyCrimeSceneCleaning"></app-tool-tip>
-                    </label>
-                </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="noneOfTheAboveExpenses" formControlName="noneOfTheAboveExpenses">
-                        None of the above
-                    </label>
-                </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="haveVocationalServicesExpenses" formControlName="haveVocationalServicesExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  Vocational services or training <app-tool-tip [trigger]="expensesVocational"></app-tool-tip>
+                </label>
+              </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="haveIncomeSupportExpenses" formControlName="haveIncomeSupportExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  Income support <app-tool-tip [trigger]="expensesIncomeSupport"></app-tool-tip>
+                </label>
+              </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="haveChildcareExpenses" formControlName="haveChildcareExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  Childcare <app-tool-tip [trigger]="expensesChildCare"></app-tool-tip>
+                </label>
+              </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="haveLegalProceedingExpenses" formControlName="haveLegalProceedingExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  Transportation to attend legal proceedings <app-tool-tip [trigger]="expensesLegalTransportation"></app-tool-tip>
+                </label>
+              </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="haveFuneralExpenses" formControlName="haveFuneralExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  Funeral expenses <app-tool-tip [trigger]="expensesFuneral"></app-tool-tip>
+                </label>
+              </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="haveBereavementLeaveExpenses" formControlName="haveBereavementLeaveExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  Bereavement leave <app-tool-tip [trigger]="expensesBereavementLeave"></app-tool-tip>
+                </label>
+              </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="haveLostOfParentalGuidanceExpenses" formControlName="haveLostOfParentalGuidanceExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  Loss of parental guidance <app-tool-tip [trigger]="expensesParentalLoss"></app-tool-tip>
+                </label>
+              </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="haveHomeMakerExpenses" formControlName="haveHomeMakerExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  Homemaker services <app-tool-tip [trigger]="expensesHomemakerServices"></app-tool-tip>
+                </label>
+              </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  Crime scene cleaning <app-tool-tip [trigger]="expensesFamilyCrimeSceneCleaning"></app-tool-tip>
+                </label>
+              </app-field>
+              <app-field>
+                <label>
+                  <input type="checkbox" [value]="true" name="noneOfTheAboveExpenses" formControlName="noneOfTheAboveExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                  None of the above
+                </label>
+              </app-field>
 
-                <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
-                <app-field label="Please provide details of your requests. (Maximum 250 words)" errorMessage="Please provide details of your requests.">
-                    <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="2000"></textarea>
-                </app-field>
+              <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
+              <app-field label="Please provide details of your requests. (Maximum 250 words)" errorMessage="Please provide details of your requests.">
+                <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="2000"></textarea>
+              </app-field>
+
+              <app-field [valid]="isFieldValid('minimumAdditionalBenefitsSelected')" errorMessage="Please select at least one option">
+                <input type="hidden" name="minimumAdditionalBenefitsSelected" formControlName="minimumAdditionalBenefitsSelected">
+              </app-field>
             </div>
 
 
@@ -348,59 +352,65 @@
                 <h2 class="blue-header">Other Benefits</h2>
                 <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply (at least one is required):</p>
                 <div class="radio-list">
+                  <ng-container>
                     <app-field>
-                        <label>
-                            <input type="checkbox" [value]="true" name="haveDisabilityPlanBenefits" formControlName="haveDisabilityPlanBenefits">
-                            Disability Plan benefits
-                        </label>
+                      <label>
+                        <input type="checkbox" [value]="true" name="haveDisabilityPlanBenefits" formControlName="haveDisabilityPlanBenefits" (change)="changeOtherBenefitValidity($event)">
+                        Disability Plan benefits
+                      </label>
                     </app-field>
                     <app-field>
-                        <label>
-                            <input type="checkbox" [value]="true" name="haveEmploymentInsuranceBenefits" formControlName="haveEmploymentInsuranceBenefits">
-                            Employment Insurance benefits
-                        </label>
+                      <label>
+                        <input type="checkbox" [value]="true" name="haveEmploymentInsuranceBenefits" formControlName="haveEmploymentInsuranceBenefits" (change)="changeOtherBenefitValidity($event)">
+                        Employment Insurance benefits
+                      </label>
                     </app-field>
                     <app-field>
-                        <label>
-                            <input type="checkbox" [value]="true" name="haveIncomeAssistance" formControlName="haveIncomeAssistanceBenefits">
-                            Income Assistance
-                        </label>
+                      <label>
+                        <input type="checkbox" [value]="true" name="haveIncomeAssistanceBenefits" formControlName="haveIncomeAssistanceBenefits" (change)="changeOtherBenefitValidity($event)">
+                        Income Assistance
+                      </label>
                     </app-field>
                     <app-field>
-                        <label>
-                            <input type="checkbox" [value]="true" name="haveCanadaPensionPlanBenefits" formControlName="haveCanadaPensionPlanBenefits">
-                            Canada Pension Plan
-                        </label>
+                      <label>
+                        <input type="checkbox" [value]="true" name="haveCanadaPensionPlanBenefits" formControlName="haveCanadaPensionPlanBenefits" (change)="changeOtherBenefitValidity($event)">
+                        Canada Pension Plan
+                      </label>
                     </app-field>
                     <app-field>
-                        <label>
-                            <input type="checkbox" [value]="true" name="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits" formControlName="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits">
-                            Aboriginal Affairs and Northern Development Canada
-                        </label>
+                      <label>
+                        <input type="checkbox" [value]="true" name="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits" formControlName="haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits" (change)="changeOtherBenefitValidity($event)">
+                        Aboriginal Affairs and Northern Development Canada
+                      </label>
                     </app-field>
                     <app-field>
-                        <label>
-                            <input type="checkbox" [value]="true" name="haveCivilActionBenefits" formControlName="haveCivilActionBenefits">
-                            Benefits you have recieved as a result of civil action
-                        </label>
+                      <label>
+                        <input type="checkbox" [value]="true" name="haveCivilActionBenefits" formControlName="haveCivilActionBenefits" (change)="changeOtherBenefitValidity($event)">
+                        Benefits you have recieved as a result of civil action
+                      </label>
                     </app-field>
                     <app-field>
-                        <label>
-                            <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits">
-                            Other
-                        </label>
-                        <section *ngIf="form.get('haveOtherBenefits').value === true" class="pushed">
-                            <app-field label="Please specify">
-                                <input class="form-control standard" type="text" formControlName="otherSpecificBenefits">
-                            </app-field>
-                        </section>
+                      <label>
+                        <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits" (change)="changeOtherBenefitValidity($event)">
+                        Other
+                      </label>
+                      <section *ngIf="form.get('haveOtherBenefits').value === true" class="pushed">
+                        <app-field label="Please specify">
+                          <input class="form-control standard" type="text" formControlName="otherSpecificBenefits">
+                        </app-field>
+                      </section>
                     </app-field>
                     <app-field>
-                        <label>
-                            <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits">
-                            None of the above
-                        </label>
+                      <label>
+                        <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits" (change)="changeOtherBenefitValidity($event)">
+                        None of the above
+                      </label>
                     </app-field>
+                  </ng-container>
+
+                  <app-field [valid]="isFieldValid('minimumOtherBenefitsSelected')" errorMessage="Please select at least one option">
+                    <input type="hidden" name="minimumOtherBenefitsSelected" formControlName="minimumOtherBenefitsSelected">
+                  </app-field>
                 </div>
             </section>
         </section>
