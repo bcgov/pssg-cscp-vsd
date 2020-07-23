@@ -28,13 +28,6 @@ export class AppComponent implements OnInit {
     private versionInfoDataService: VersionInfoDataService,
     private dialog: MatDialog
   ) {
-
-    if (environment.production) {
-      enableProdMode();
-      if (window) {
-        window.console.log = function () { };
-      }
-    }
     this.isDevMode = isDevMode();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
