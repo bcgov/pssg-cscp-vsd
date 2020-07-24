@@ -487,6 +487,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     tempExpenses = tempExpenses + "100000006,";
                 }
+                if (model.ExpenseInformation.haveMovingExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000018,";
+                }
                 if (model.ExpenseInformation.haveDisabilityExpenses)
                 {
                     tempExpenses = tempExpenses + "100000007,";
