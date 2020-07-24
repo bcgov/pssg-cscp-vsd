@@ -50,6 +50,14 @@ export class AddressComponent implements OnInit {
   ngOnInit() {
     if (this.showChildrenAsRequired === undefined)
       this.showChildrenAsRequired = true;
+
+    let selectedCountry = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == this.group['controls']['country'].value.toLowerCase())[0];
+    if (selectedCountry !== undefined) {
+      this.provinceList = selectedCountry.areas;
+      this.provinceType = selectedCountry.areaType;
+      this.postalCodeType = selectedCountry.postalCodeName;
+      this.postalCodeSample = selectedCountry.postalCodeSample;
+    }
   }
 
 }

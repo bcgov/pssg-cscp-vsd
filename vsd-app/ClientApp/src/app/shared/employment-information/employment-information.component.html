@@ -71,15 +71,18 @@
             </div>
             <ng-container *ngIf="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True">
                 <div>
-                    <app-field label="Please provide days of work missed" [valid]="isFieldValid('daysWorkMissedStart') && isFieldValid('daysWorkMissedEnd')" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" errorMessage="Please select an option">
+                    <app-field label="Please provide days of work missed" [valid]="form.get('areYouStillOffWork').value === CRMBoolean.True?isFieldValid('daysWorkMissedStart'):isFieldValid('daysWorkMissedStart') && isFieldValid('daysWorkMissedEnd')" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" errorMessage="Please select an option">
                         <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
                         <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
-                        <span> - </span>
-                        <input type="text" [max]="today" [min]="minEndDate" (dateChange)="daysWorkMissedEndChange($event)" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
-                        <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+                        <span *ngIf="form.get('areYouStillOffWork').value === CRMBoolean.False">
+                            <span> - </span>
+                            <input type="text" [max]="today" [min]="minEndDate" (dateChange)="daysWorkMissedEndChange($event)" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
+                            <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+                        </span>
                     </app-field>
                 </div>
-                <div *ngIf="showCurrentlyOffWork">
+                <!-- *ngIf="showCurrentlyOffWork" -->
+                <div>
                     <app-field label="Are you currently off work?" [tooltipReference]="stillOfWorkTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('areYouStillOffWork')" errorMessage="Please select an option">
                         <label class="inline-label">
                             <input type="radio" [value]="CRMBoolean.True" name="areYouStillOffWork" formControlName="areYouStillOffWork">

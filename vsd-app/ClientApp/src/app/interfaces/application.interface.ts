@@ -97,6 +97,7 @@ export interface ExpenseInformation {
   haveLostEmploymentIncomeExpenses: boolean;
   havePersonalPropertyLostExpenses: boolean;
   haveProtectiveMeasureExpenses: boolean;
+  haveMovingExpenses: boolean;
   haveDisabilityExpenses: boolean;
   haveOtherExpenses: boolean;
   haveDisabilityPlanBenefits: boolean;

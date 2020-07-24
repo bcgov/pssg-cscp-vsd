@@ -42,6 +42,7 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     atWorkAtTimeOfCrimeSubscription: Subscription;
     appliedToWorkSafeBCSubscription: Subscription;
     didMissWorkSubscription: Subscription;
+    areYouStillOffWorkSubscription: Subscription;
     loseWagesSubscription: Subscription;
     selfEmployedSubscription: Subscription;
     sinSubscription: Subscription;
@@ -132,15 +133,15 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         this.didMissWorkSubscription = this.form.get('didYouMissWorkDueToCrime').valueChanges.subscribe((value) => {
             let options = { onlySelf: true, emitEvent: false };
             let startDayControl = this.form.get('daysWorkMissedStart');
-            let endDayControl = this.form.get('daysWorkMissedEnd');
+            let offWorkControl = this.form.get('areYouStillOffWork');
             let loseWageControl = this.form.get('didYouLoseWages');
 
             if (value === CRMBoolean.True) {
                 startDayControl.setValidators([Validators.required]);
                 startDayControl.updateValueAndValidity();
 
-                endDayControl.setValidators([Validators.required]);
-                endDayControl.updateValueAndValidity();
+                offWorkControl.setValidators([Validators.required]);
+                offWorkControl.updateValueAndValidity();
 
                 loseWageControl.setValidators([Validators.required]);
                 loseWageControl.updateValueAndValidity();
@@ -150,13 +151,29 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
                 startDayControl.setErrors(null, options);
                 startDayControl.updateValueAndValidity(options);
 
-                endDayControl.clearValidators();
-                startDayControl.setErrors(null, options);
-                endDayControl.updateValueAndValidity(options);
+                offWorkControl.clearValidators();
+                offWorkControl.setErrors(null, options);
+                offWorkControl.updateValueAndValidity(options);
 
                 loseWageControl.clearValidators();
                 loseWageControl.setErrors(null, options);
                 loseWageControl.updateValueAndValidity(options);
+            }
+        });
+
+        this.areYouStillOffWorkSubscription = this.form.get('areYouStillOffWork').valueChanges.subscribe((value) => {
+            let options = { onlySelf: true, emitEvent: false };
+            let endDayControl = this.form.get('daysWorkMissedEnd');
+
+            if (value === CRMBoolean.False) {
+                endDayControl.setValidators([Validators.required]);
+                endDayControl.updateValueAndValidity();
+            }
+            else {
+                endDayControl.patchValue('');
+                endDayControl.clearValidators();
+                endDayControl.setErrors(null, options);
+                endDayControl.updateValueAndValidity(options);
             }
         });
 
@@ -216,6 +233,7 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         this.atWorkAtTimeOfCrimeSubscription.unsubscribe();
         this.appliedToWorkSafeBCSubscription.unsubscribe();
         this.didMissWorkSubscription.unsubscribe();
+        this.areYouStillOffWorkSubscription.unsubscribe();
         this.loseWagesSubscription.unsubscribe();
         this.sinSubscription.unsubscribe();
         this.selfEmployedSubscription.unsubscribe();
@@ -257,15 +275,6 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     daysWorkMissedEndChange(event: MatDatepickerInputEvent<Date>) {
         let endDate = moment(event.target.value);
         this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
-        let control = this.form.get('areYouStillOffWork');
-        if (!this.showCurrentlyOffWork) {
-            control.patchValue('');
-            control.clearValidators();
-            control.setErrors(null);
-        }
-        else {
-            control.setValidators([Validators.required]);
-        }
-        control.updateValueAndValidity();
+
     }
 }
