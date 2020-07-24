@@ -91,12 +91,20 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
 
     this.wasReportMadeToPoliceSubscription = this.form.get('wasReportMadeToPolice').valueChanges.subscribe(value => {
+      let noPoliceReportIdentification = this.form.get('noPoliceReportIdentification');
       if (value === CRMMultiBoolean.True) {
         this.addPoliceReport();
+        noPoliceReportIdentification.clearValidators();
+        noPoliceReportIdentification.setErrors(null);
+        noPoliceReportIdentification.setValue('');
       }
       else {
         this.removeAllPoliceReports();
+
+        noPoliceReportIdentification.setValidators([Validators.required]);
       }
+
+      noPoliceReportIdentification.updateValueAndValidity();
     });
 
     this.applyToCourtForMoneyFromOffenderSubscription = this.form.get('racafInformation.applyToCourtForMoneyFromOffender').valueChanges.subscribe(value => {
