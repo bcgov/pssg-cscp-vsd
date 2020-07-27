@@ -40,27 +40,9 @@ export class CrimeInfoHelper {
                 [
                     0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
                 ], // No: 100000000   Yes: 100000001
-          intendToSueOffender: [null], // Yes: 100000000 No: 100000001 Undecided: 100000002
+            intendToSueOffender: [null], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
-            racafInformation: fb.group({
-              applyToCourtForMoneyFromOffender: [null],
-              expensesRequested: [''],
-              expensesAwarded: [null],
-              expensesReceived: [null],
-              willBeTakingLegalAction: [null],
-              haveLawyer: [null, [Validators.min(100000000), Validators.max(100000001)]],
-              lawyerOrFirmName: [''],
-              lawyerAddress: fb.group({
-                    line1: [''],
-                    line2: [''],
-                    city: [''],
-                    postalCode: ['', [Validators.pattern(this.postalRegex)]],
-                    province: [{ value: 'British Columbia', disabled: false }],
-                    country: [{ value: 'Canada', disabled: false }],
-              }),
-              signName: [null],
-              signature: [null],
-            }),
+            racafInformation: this.createRACAFInformation(fb),
         };
 
         if (form_type === ApplicationType.IFM_Application || form_type === ApplicationType.Witness_Application) {
@@ -68,6 +50,28 @@ export class CrimeInfoHelper {
             group['dateOfDeath'] = [''];
         }
         return fb.group(group);
+    }
+
+    createRACAFInformation(fb: FormBuilder): FormGroup {
+        return fb.group({
+            applyToCourtForMoneyFromOffender: [null],
+            expensesRequested: [''],
+            expensesAwarded: [null],
+            expensesReceived: [null],
+            willBeTakingLegalAction: [null],
+            haveLawyer: [null, [Validators.min(100000000), Validators.max(100000001)]],
+            lawyerOrFirmName: [''],
+            lawyerAddress: fb.group({
+                line1: [''],
+                line2: [''],
+                city: [''],
+                postalCode: ['', [Validators.pattern(this.postalRegex)]],
+                province: [{ value: 'British Columbia', disabled: false }],
+                country: [{ value: 'Canada', disabled: false }],
+            }),
+            signName: [null],
+            signature: [null],
+        })
     }
 
     createCrimeLocationItem(fb: FormBuilder): FormGroup {

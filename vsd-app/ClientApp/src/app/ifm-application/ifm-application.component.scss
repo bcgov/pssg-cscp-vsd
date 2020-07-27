@@ -373,3 +373,14 @@ hr {
 
 ::ng-deep .tooltip-icon {
 }
+
+.submit-grid {
+  display: inline-grid;
+  button {
+    margin-bottom: 5px;
+
+    i {
+      color: white;
+    }
+  }
+}

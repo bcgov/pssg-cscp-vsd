@@ -82,6 +82,9 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   ngOnInit() {
     this.form = <FormGroup>this.controlContainer.control;
+
+    console.log("crime info component");
+    console.log(this.form);
     // Commented out in case they actually want to return this functionality
     //this.copyApplicantToRACAFSignature(this.form.parent);
     this.policeReportItems = this.form.get('policeReports') as FormArray;

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatStepper } from '@angular/material/stepper';
+import { MatStepper, MatVerticalStepper } from '@angular/material/stepper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBar, MatDialog } from '@angular/material';
@@ -21,6 +21,9 @@ import { DeclarationInfoHelper } from '../shared/declaration-information/declara
 import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
 import { EmploymentInfoHelper } from '../shared/employment-information/employment-information.helper';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
+import * as _ from 'lodash';
+import { StateService } from '../services/state.service';
+import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 
 @Component({
   selector: 'app-victim-application',
@@ -36,19 +39,20 @@ import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 })
 
 export class VictimApplicationComponent extends FormBase implements OnInit {
+  @ViewChild('stepper') victimStepper: MatVerticalStepper;
   FORM_TYPE = ApplicationType.Victim_Application;
   busy: Promise<any>;
   showValidationMessage: boolean;
-  submitting: boolean = false; // this controls the button state for
+  submitting: boolean = false;
 
-  public currentFormStep: number = 0; // form flow. Which step are we on?
+  public currentFormStep: number = 0;
 
-  // expenseMinimumMet: boolean = null;
   saveFormData: any;
 
   ApplicationType = ApplicationType;
 
   personalInfoHelper = new PersonalInfoHelper();
+  victimInfoHelper = new VictimInfoHelper();
   crimeInfoHelper = new CrimeInfoHelper();
   medicalInfoHelper = new MedicalInfoHelper();
   employmentInfoHelper = new EmploymentInfoHelper();
@@ -63,34 +67,51 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
-    private matDialog: MatDialog, // popup to show static content,
+    private matDialog: MatDialog,
+    public state: StateService,
   ) {
     super();
   }
 
   ngOnInit() {
     let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
-    this.form = this.buildApplicationForm();
+    if (this.state.cloning) {
+      this.form = this.state.data;
+      this.state.cloning = false;
+    }
+    else {
+      this.form = this.buildApplicationForm();
+    }
 
     this.form.get('representativeInformation').patchValue({
       completingOnBehalfOf: parseInt(completeOnBehalfOf)
     });
   }
 
-  buildApplicationForm(): FormGroup {
-    return this.fb.group({
+  buildApplicationForm(FORM: ApplicationType = this.FORM_TYPE): FormGroup {
+    let group = {
       introduction: this.fb.group({
         understoodInformation: [null, Validators.requiredTrue]
       }),
-      personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      employmentIncomeInformation: this.employmentInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-    });
+      personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, FORM),
+      crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, FORM),
+      medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, FORM),
+      expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, FORM),
+      // employmentIncomeInformation: this.employmentInfoHelper.setupFormGroup(this.fb, FORM),
+      representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, FORM),
+      declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, FORM),
+      authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, FORM),
+    };
+
+    if (FORM === ApplicationType.IFM_Application) {
+      group["victimInformation"] = this.victimInfoHelper.setupFormGroup(this.fb, FORM);
+    }
+
+    if (FORM === ApplicationType.Victim_Application) {
+      group["employmentIncomeInformation"] = this.employmentInfoHelper.setupFormGroup(this.fb, FORM);
+    }
+
+    return this.fb.group(group);
   }
 
   showSummaryOfBenefits(): void {
@@ -327,6 +348,56 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     }
   }
 
+  submitApplicationAndClone(type: string) {
+    this.submitting = true;
+    if (this.form.valid) {
+      let thisForm = _.cloneDeep(this.form);
+      this.justiceDataService.submitApplication(this.harvestForm())
+        .subscribe(
+          data => {
+            if (data['isSuccess'] == true) {
+              if (type === "VICTIM") {
+                this.submitting = false;
+                let victimForm = this.cloneFormToVictim(thisForm);
+                this.victimStepper.reset();
+
+                this.form = victimForm;
+              }
+              else if (type === "IFM") {
+                this.submitting = false;
+                let ifmForm = this.cloneFormToIFM(thisForm);
+
+                this.state.cloning = true;
+                this.state.data = ifmForm;
+
+                this.router.navigate(['/ifm-application']);
+              }
+              else {
+                this.router.navigate(['/application-success']);
+              }
+            }
+            else {
+              // re-enable the button
+              this.submitting = false;
+              this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              console.log('Error submitting application. ' + data['message']);
+            }
+          },
+          error => {
+            // re-enable the button
+            this.submitting = false;
+            this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+            console.log('Error submitting application');
+          }
+        );
+    } else {
+      // re-enable the button
+      this.submitting = false;
+      console.log("form not validated");
+      this.markAsTouched();
+    }
+  }
+
   harvestForm(): Application {
     return {
       ApplicationType: this.FORM_TYPE,
@@ -354,5 +425,91 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   // marking the form as touched makes the validation messages show
   markAsTouched() {
     this.form.markAsTouched();
+  }
+
+  cloneFormToVictim(currentForm) {
+    let ret = this.buildApplicationForm(ApplicationType.Victim_Application);
+
+    ret.get('personalInformation').patchValue(currentForm.get('personalInformation').value);
+    ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(false);
+    ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
+    let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
+    let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
+    let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
+    let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
+    let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
+    let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
+
+    for (let i = 0; i < crimeLocationsLength - 1; ++i) {
+      crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
+    }
+
+    for (let i = 0; i < crimeDocumentsLength; ++i) {
+      crimeDocuments.push(this.fb.group({
+        filename: [''],
+        body: [''],
+        subject: ['']
+      }));
+    }
+
+    for (let i = 0; i < policeReportsLength; ++i) {
+      policeReports.push(this.crimeInfoHelper.createPoliceReport(this.fb));
+    }
+
+    ret.get('crimeInformation').patchValue(currentForm.get('crimeInformation').value);
+    ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
+    ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
+    ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
+    ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
+    ret.get('authorizationInformation').patchValue(currentForm.get('authorizationInformation').value);
+    ret.get('authorizationInformation').get('approvedAuthorityNotification').patchValue('');
+    ret.get('authorizationInformation').get('readAndUnderstoodTermsAndConditions').patchValue('');
+    ret.get('authorizationInformation').get('signature').patchValue('');
+
+    return ret;
+  }
+
+  cloneFormToIFM(currentForm) {
+    let ret = this.buildApplicationForm(ApplicationType.IFM_Application);
+
+    ret.get('personalInformation').patchValue(currentForm.get('personalInformation').value);
+    ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(false);
+    ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
+    ret.get('victimInformation').patchValue(currentForm.get('personalInformation').value);
+    ret.get('victimInformation').get('mostRecentMailingAddressSameAsPersonal').patchValue(true);
+    let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
+    let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
+    let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
+    let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
+    let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
+    let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
+
+    for (let i = 0; i < crimeLocationsLength - 1; ++i) {
+      crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
+    }
+
+    for (let i = 0; i < crimeDocumentsLength; ++i) {
+      crimeDocuments.push(this.fb.group({
+        filename: [''],
+        body: [''],
+        subject: ['']
+      }));
+    }
+
+    for (let i = 0; i < policeReportsLength; ++i) {
+      policeReports.push(this.crimeInfoHelper.createPoliceReport(this.fb));
+    }
+
+    ret.get('crimeInformation').patchValue(currentForm.get('crimeInformation').value);
+    ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
+    ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
+    ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
+    ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
+    ret.get('authorizationInformation').patchValue(currentForm.get('authorizationInformation').value);
+    ret.get('authorizationInformation').get('approvedAuthorityNotification').patchValue('');
+    ret.get('authorizationInformation').get('readAndUnderstoodTermsAndConditions').patchValue('');
+    ret.get('authorizationInformation').get('signature').patchValue('');
+
+    return ret;
   }
 }

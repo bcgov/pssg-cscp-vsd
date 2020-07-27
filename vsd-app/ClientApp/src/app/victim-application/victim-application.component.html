@@ -69,11 +69,17 @@
           <span style="float: right;">
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary continue-btn" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
             <button (click)="markAsTouched(); producePDF();" class="btn btn-primary" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>&nbsp;
-            <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="!submitting && stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
-            <button class="btn btn-primary disabled" *ngIf="submitting && stepper.selectedIndex == 9">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button>
+            <div class="submit-grid">
+              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT VICTIM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
+              <button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <i class="fas fa-chevron-right"></i></button>
+              <button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW IFM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='IFMToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
+            </div>
+            <!-- <button class="btn btn-primary disabled" *ngIf="submitting && stepper.selectedIndex == 9">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button> -->
           </span>
         </section>
       </form>
     </div>
   </div>
 </div>
+
+<ng-template #IFMToolTip>Submit Application and start new Immediate Family Member Application</ng-template>
