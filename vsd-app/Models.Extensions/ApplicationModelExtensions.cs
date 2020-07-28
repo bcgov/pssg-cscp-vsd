@@ -11,7 +11,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
     {
         public static ApplicationDynamicsModel ToVsdVictimsModel(this ApplicationFormModel model)
         {
-            var application = GetApplicationDefaults();
+            var application = new ApplicationDynamicsModel(); //GetApplicationDefaults();
             application.Application.vsd_applicanttype = (int)ApplicationType.Victim;
 
             if (model == null)
@@ -491,6 +491,14 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     tempExpenses = tempExpenses + "100000018,";
                 }
+                if (model.ExpenseInformation.haveProtectiveMovingExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000023,";
+                }
+                if (model.ExpenseInformation.haveTransportationToObtainBenefits)
+                {
+                    tempExpenses = tempExpenses + "100000024,";
+                }
                 if (model.ExpenseInformation.haveDisabilityExpenses)
                 {
                     tempExpenses = tempExpenses + "100000007,";
@@ -610,9 +618,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
         {
             return new ApplicationDynamicsModel
             {
-                Application = new Application
-                {
-                    vsd_applicanttype = 100000002,
+                // Application = new Application
+                // {
+                    // vsd_applicanttype = 100000002,
                     //VsdApplicantsfirstname = "CVAP DEV",
                     //VsdApplicantslastname = "Form Test",
                     //VsdApplicantsbirthdate = "1982-05-05T00:00:00",
@@ -620,25 +628,25 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     //VsdApplicantsgendercode = 100000000,
                     //VsdApplicantsmaritalstatus = 100000000,
                     //VsdCvapTypeofcrime = "Break-in",
-                    vsd_applicantsemail = "test@test.com",
-                    vsd_applicantsprimaryphonenumber = "250-444-5656",
-                    vsd_applicantssignature = "Crime Victim Guy",
+                    // vsd_applicantsemail = "test@test.com",
+                    // vsd_applicantsprimaryphonenumber = "250-444-5656",
+                    // vsd_applicantssignature = "Crime Victim Guy",
 
-                    vsd_cvap_crimestartdate = new DateTime(2018, 6, 14), //"2018-06-03T00:00:00",
+                    // vsd_cvap_crimestartdate = new DateTime(2018, 6, 14), //"2018-06-03T00:00:00",
 
                     // TODO: Don't know where these two fields went...
                     // vsd_cvap_authorizationsigneddate = "2019-02-07T00:00:00",
                     // vsd_cvap_declarationsigneddate = "2019-02-07T00:00:00",
-                    vsd_cvap_onbehalfofdeclaration = 100000000,
-                },
-                CourtInfoCollection = new List<Courtinfocollection>
-                {
-                    new Courtinfocollection
-                    {
-                        vsd_courtfilenumber = "1234567",
-                        vsd_courtlocation = "Victoria"
-                    }
-                }.ToArray(),
+                    // vsd_cvap_onbehalfofdeclaration = 100000000,
+                // },
+                // CourtInfoCollection = new List<Courtinfocollection>
+                // {
+                //     new Courtinfocollection
+                //     {
+                //         vsd_courtfilenumber = "1234567",
+                //         vsd_courtlocation = "Victoria"
+                //     }
+                // }.ToArray(),
                 //ProviderCollection = new List<Providercollection>
                 //{
                 //    new Providercollection

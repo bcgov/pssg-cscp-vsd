@@ -14,7 +14,7 @@ export class ExpenseInfoHelper {
       haveLostEmploymentIncomeExpenses: [false],
       havePersonalPropertyLostExpenses: [false],
       haveProtectiveMeasureExpenses: [false],
-      haveMovingExpenses: [false],
+      haveProtectiveMovingExpenses: [false],
       haveTransportationToObtainBenefits: [false],
       haveDisabilityExpenses: [false],
       haveCrimeSceneCleaningExpenses: [false],

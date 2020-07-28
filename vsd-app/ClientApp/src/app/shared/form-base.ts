@@ -541,6 +541,17 @@ export class FormBase {
     target.get('province').updateValueAndValidity(options);
     target.get('country').updateValueAndValidity(options);
   }
+
+  setControlValidators(control: AbstractControl | FormControl, newValidator: ValidatorFn | ValidatorFn[]) {
+    control.setValidators(newValidator);
+    control.updateValueAndValidity();
+  }
+
+  clearControlValidators(control: AbstractControl | FormControl) {
+    control.clearValidators();
+    control.setErrors(null);
+    control.updateValueAndValidity();
+  }
 }
 // More custom validation
 // https://stackoverflow.com/questions/38204812/angular2-forms-validator-with-interrelated-fields/40416197#40416197

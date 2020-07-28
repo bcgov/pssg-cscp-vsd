@@ -29,17 +29,11 @@ export class CrimeInfoHelper {
             offenderMiddleName: [''],
             offenderLastName: [''],
             offenderRelationship: [''],
-            offenderBeenCharged:
-                [
-                    0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]
-                ], // Yes: 100000000 No: 100000001 Undecided: 100000002
+            offenderBeenCharged: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
 
-            courtFiles: fb.array([this.createCourtInfoItem(fb)]),
+            courtFiles: fb.array([]),
 
-            haveYouSuedOffender:
-                [
-                    0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]
-                ], // No: 100000000   Yes: 100000001
+            haveYouSuedOffender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]],
             intendToSueOffender: [null], // Yes: 100000000 No: 100000001 Undecided: 100000002
 
             racafInformation: this.createRACAFInformation(fb),
@@ -54,11 +48,11 @@ export class CrimeInfoHelper {
 
     createRACAFInformation(fb: FormBuilder): FormGroup {
         return fb.group({
-            applyToCourtForMoneyFromOffender: [null],
+            applyToCourtForMoneyFromOffender: [''],
             expensesRequested: [''],
             expensesAwarded: [null],
             expensesReceived: [null],
-            willBeTakingLegalAction: [null],
+            willBeTakingLegalAction: [''],
             haveLawyer: [null, [Validators.min(100000000), Validators.max(100000001)]],
             lawyerOrFirmName: [''],
             lawyerAddress: fb.group({
@@ -82,20 +76,20 @@ export class CrimeInfoHelper {
 
     createPoliceReport(fb: FormBuilder): FormGroup {
         return fb.group({
-            policeFileNumber: '',
-            investigatingOfficer: '',
+            policeFileNumber: [''],
+            investigatingOfficer: [''],
             policeDetachment: 'Surrey RCMP',
-            policeDetachmentOther: '',
-            reportStartDate: '',
-            reportEndDate: '',
+            policeDetachmentOther: [''],
+            reportStartDate: [''],
+            reportEndDate: [''],
             policeReportedMultipleTimes: ['']
         });
     }
 
     createCourtInfoItem(fb: FormBuilder): FormGroup {
         return fb.group({
-            courtFileNumber: '',
-            courtLocation: ''
+            courtFileNumber: [''],
+            courtLocation: ['', [Validators.required]]
         });
     }
 }
