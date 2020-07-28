@@ -83,8 +83,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   ngOnInit() {
     this.form = <FormGroup>this.controlContainer.control;
 
-    console.log("crime info component");
-    console.log(this.form);
+    // console.log("crime info component");
+    // console.log(this.form);
     // Commented out in case they actually want to return this functionality
     //this.copyApplicantToRACAFSignature(this.form.parent);
     this.policeReportItems = this.form.get('policeReports') as FormArray;
@@ -267,7 +267,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   suedOrIntendToSueYes(): void {
-    console.log("suedOrIntendToSueYes");
     this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
     this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
     this.setControlValidators(this.willBeTakingLegalAction, [Validators.required]);
@@ -275,7 +274,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   suedNo(): void {
-    console.log("suedNo");
     let intendToSue = this.form.get('intendToSueOffender') as FormControl;
     this.setControlValidators(intendToSue, [Validators.required]);
     this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
@@ -291,11 +289,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   intendToSueNo(): void {
-    console.log("intendToSueNo");
     this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
     this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
-    // this.setControlValidators(this.willBeTakingLegalAction, [Validators.required]);
-    // this.setControlValidators(this.applyToCourtForMoneyFromOffender, [Validators.required]);
     this.clearControlValidators(this.willBeTakingLegalAction);
     this.clearControlValidators(this.applyToCourtForMoneyFromOffender);
   }
