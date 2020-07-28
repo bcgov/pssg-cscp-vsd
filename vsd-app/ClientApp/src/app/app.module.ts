@@ -97,6 +97,7 @@ import { ApplicationReviewComponent } from './shared/application-review/applicat
 import { EmploymentInformationComponent } from './shared/employment-information/employment-information.component';
 import { CancelDialog } from './shared/dialogs/cancel/cancel.dialog';
 import { InvoiceInstructionsDialog } from './shared/dialogs/invoice-instructions/invoice-instructions.dialog';
+import { StateService } from './services/state.service';
 
 @NgModule({
   declarations: [
@@ -250,6 +251,7 @@ import { InvoiceInstructionsDialog } from './shared/dialogs/invoice-instructions
     JusticeApplicationDataService,
     Title,
     VersionInfoDataService,
+    StateService,
   ],
   entryComponents: [
     VersionInfoDialog,

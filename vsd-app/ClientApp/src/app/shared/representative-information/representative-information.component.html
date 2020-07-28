@@ -34,7 +34,7 @@
       <app-field label="Relationship to Person" [required]="true" errorMessage="Please select a relationship">
         <select class="form-control" formControlName="relationshipToPerson">
           <option value="">Select...</option>
-          <option *ngFor="let item of relationshipList">{{ item }}</option>
+          <option *ngFor="let item of relationshipList" [value]="item">{{ item }}</option>
         </select>
       </app-field>
     </div>

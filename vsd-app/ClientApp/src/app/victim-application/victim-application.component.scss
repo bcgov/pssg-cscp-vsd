@@ -377,3 +377,14 @@ hr {
 .continue-btn {
   float: right;
 }
+
+.submit-grid {
+  display: inline-grid;
+  button {
+    margin-bottom: 5px;
+  }
+}
+
+.tooltip-icon .fa {
+  color: white !important;
+}

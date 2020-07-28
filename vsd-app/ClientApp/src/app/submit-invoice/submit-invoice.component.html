@@ -49,10 +49,10 @@
               <h3>Payee Information</h3>
               <div class="row">
                 <div class="col-md-6">
-                  <app-field label="Vendor Number" [required]="true"  [valid]="isFieldValid('invoiceDetails.vendorNumber')" errorMessage="Please enter the vendor number">
+                  <app-field label="Vendor Number" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorNumber')" errorMessage="Please enter the vendor number">
                     <input class="form-control" type="text" formControlName="vendorNumber" maxlength="100" (change)="checkVendorStatus('vendor')" [class.input-valid]="isVendorValid && didValidateVendor" [class.input-invalid]="!isVendorValid && didValidateVendor">
-                    <!-- <i *ngIf="isVendorValid" class="fa fa-check vendor-number-check"></i> -->
                   </app-field>
+                  <span *ngIf="!isVendorValid && didValidateVendor" class="error-states error-container">The Vendor Number and Postal Code you entered do not match our system record</span>
                 </div>
                 <div class="col-md-6">
                   <app-field label="Postal Code" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorPostalCode')" errorMessage="Please enter your postal code">
@@ -66,6 +66,7 @@
                   <app-field label="Counsellor Registration Number" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorRegistrationNumber')" errorMessage="Please enter the registration number">
                     <input class="form-control" type="text" formControlName="counsellorRegistrationNumber" maxlength="100" (change)="checkVendorStatus('counsellor')" [class.input-valid]="isCounsellorValid && didValidateCounsellor" [class.input-invalid]="!isCounsellorValid && didValidateCounsellor">
                   </app-field>
+                  <span *ngIf="!isCounsellorValid && didValidateCounsellor" class="error-states error-container">The Counsellor Registration Number and Last Name you entered do not match our system record</span>
                 </div>
                 <div class="col-md-6">
                   <app-field label="Counsellor Last Name" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorLastName')" errorMessage="Please enter the last name">

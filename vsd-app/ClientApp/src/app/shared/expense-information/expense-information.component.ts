@@ -63,12 +63,14 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveLostEmploymentIncomeExpenses',
         'havePersonalPropertyLostExpenses',
         'haveProtectiveMeasureExpenses',
-        'haveMovingExpenses',
+        'haveProtectiveMovingExpenses',
+        'haveTransportationToObtainBenefits',
         'haveDisabilityExpenses',
         'haveCrimeSceneCleaningExpenses',
         'haveOtherExpenses'
       ];
-      this.ADDITIONAL_BENEFITS = ['haveDisabilityPlanBenefits',
+      this.ADDITIONAL_BENEFITS = [
+        'haveDisabilityPlanBenefits',
         'haveEmploymentInsuranceBenefits',
         'haveIncomeAssistanceBenefits',
         'haveCanadaPensionPlanBenefits',

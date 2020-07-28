@@ -82,6 +82,9 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   ngOnInit() {
     this.form = <FormGroup>this.controlContainer.control;
+
+    // console.log("crime info component");
+    // console.log(this.form);
     // Commented out in case they actually want to return this functionality
     //this.copyApplicantToRACAFSignature(this.form.parent);
     this.policeReportItems = this.form.get('policeReports') as FormArray;
@@ -90,13 +93,24 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     let startDate = this.form.get('crimePeriodStart').value;
     this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
 
+    this.courtFileItems = this.form.get('courtFiles') as FormArray;
+    this.showRemoveCourtInfo = this.courtFileItems.length > 1;
+
     this.wasReportMadeToPoliceSubscription = this.form.get('wasReportMadeToPolice').valueChanges.subscribe(value => {
+      let noPoliceReportIdentification = this.form.get('noPoliceReportIdentification');
       if (value === CRMMultiBoolean.True) {
         this.addPoliceReport();
+        noPoliceReportIdentification.clearValidators();
+        noPoliceReportIdentification.setErrors(null);
+        noPoliceReportIdentification.setValue('');
       }
       else {
         this.removeAllPoliceReports();
+
+        noPoliceReportIdentification.setValidators([Validators.required]);
       }
+
+      noPoliceReportIdentification.updateValueAndValidity();
     });
 
     this.applyToCourtForMoneyFromOffenderSubscription = this.form.get('racafInformation.applyToCourtForMoneyFromOffender').valueChanges.subscribe(value => {
@@ -130,18 +144,20 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
     this.haveYouSuedOffenderSubscription = this.form.get('haveYouSuedOffender').valueChanges.subscribe(value => {
       if (value === CRMBoolean.True) {
+        let intendToSue = this.form.get('intendToSueOffender');
+        this.clearControlValidators(intendToSue);
         this.suedOrIntendToSueYes();
       }
-      else {
+      else if (value === CRMBoolean.False) {
         this.suedNo();
       }
     });
 
     this.intendToSueOffenderSubscription = this.form.get('intendToSueOffender').valueChanges.subscribe(value => {
-      if (value === CRMMultiBoolean.True) {
+      if (value === CRMMultiBoolean.True || value === CRMMultiBoolean.Undecided) {
         this.suedOrIntendToSueYes();
       }
-      else {
+      else if (value === CRMMultiBoolean.False) {
         this.intendToSueNo();
       }
     });
@@ -202,8 +218,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     for (let i = 0; i < this.courtLocationItems.length; ++i) {
       this.CourtFileGroup = this.courtLocationItems.controls[i] as FormGroup;
       this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as FormControl;
-      this.thisCourtFileLocation.setValidators([Validators.required]);
-      this.thisCourtFileLocation.updateValueAndValidity();
+      this.setControlValidators(this.thisCourtFileLocation, [Validators.required]);
     }
   }
 
@@ -212,23 +227,15 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     for (let i = 0; i < this.courtLocationItems.length; ++i) {
       this.CourtFileGroup = this.courtLocationItems.controls[i] as FormGroup;
       this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as FormControl;
-      this.thisCourtFileLocation.clearValidators();
-      this.thisCourtFileLocation.setErrors(null);
-      this.thisCourtFileLocation.setValue(null);
-      this.thisCourtFileLocation.markAsTouched();
-      this.thisCourtFileLocation.updateValueAndValidity();
+      this.clearControlValidators(this.thisCourtFileLocation);
     }
   }
 
   applyToCourtOrLegalYes(): void {
     this.signName = this.form.get('racafInformation.signName') as FormControl;
     this.signature = this.form.get('racafInformation.signature') as FormControl;
-    this.signName.setValidators([Validators.required]);
-    this.signName.markAsTouched();
-    this.signName.updateValueAndValidity();
-    this.signature.setValidators([Validators.required]);
-    this.signature.markAsTouched();
-    this.signature.updateValueAndValidity();
+    this.setControlValidators(this.signName, [Validators.required]);
+    this.setControlValidators(this.signature, [Validators.required]);
   }
 
   applyToCourtNo(): void {
@@ -236,24 +243,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.signName = this.form.get('racafInformation.signName') as FormControl;
     this.signature = this.form.get('racafInformation.signature') as FormControl;
     if (willBeTakingLegal === 100000000) {
-      this.signName.setValidators([Validators.required]);
-      this.signName.markAsTouched();
-      this.signName.updateValueAndValidity();
-      this.signature.setValidators([Validators.required]);
-      this.signature.markAsTouched();
-      this.signature.updateValueAndValidity();
+      this.setControlValidators(this.signName, [Validators.required]);
+      this.setControlValidators(this.signature, [Validators.required]);
     }
     else {
-      this.signName.clearValidators();
-      this.signName.setErrors(null);
-      this.signName.setValue(null);
-      this.signName.markAsTouched();
-      this.signName.updateValueAndValidity();
-      this.signature.clearValidators();
-      this.signature.setErrors(null);
-      this.signature.setValue(null);
-      this.signature.markAsTouched();
-      this.signature.updateValueAndValidity();
+      this.clearControlValidators(this.signName);
+      this.clearControlValidators(this.signature);
     }
   }
 
@@ -262,88 +257,42 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.signature = this.form.get('racafInformation.signature') as FormControl;
     this.signName = this.form.get('racafInformation.signName') as FormControl;
     if (applyToCourt === 100000000) {
-      this.signName.setValidators([Validators.required]);
-      this.signName.markAsTouched();
-      this.signName.updateValueAndValidity();
-      this.signature.setValidators([Validators.required]);
-      this.signature.markAsTouched();
-      this.signature.updateValueAndValidity();
+      this.setControlValidators(this.signName, [Validators.required]);
+      this.setControlValidators(this.signature, [Validators.required]);
     }
     else {
-      this.signName.clearValidators();
-      this.signName.setErrors(null);
-      this.signName.setValue(null);
-      this.signName.markAsTouched();
-      this.signName.updateValueAndValidity();
-      this.signature.clearValidators();
-      this.signature.setErrors(null);
-      this.signature.setValue(null);
-      this.signature.markAsTouched();
-      this.signature.updateValueAndValidity();
+      this.clearControlValidators(this.signName);
+      this.clearControlValidators(this.signature);
     }
   }
 
   suedOrIntendToSueYes(): void {
     this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
     this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
-    this.willBeTakingLegalAction.setValidators([Validators.required]);
-    this.willBeTakingLegalAction.markAsTouched();
-    this.willBeTakingLegalAction.updateValueAndValidity();
-    this.applyToCourtForMoneyFromOffender.setValidators([Validators.required]);
-    this.applyToCourtForMoneyFromOffender.markAsTouched();
-    this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
+    this.setControlValidators(this.willBeTakingLegalAction, [Validators.required]);
+    this.setControlValidators(this.applyToCourtForMoneyFromOffender, [Validators.required]);
   }
 
   suedNo(): void {
-    let intendToSue = this.form.get('intendToSueOffender').value;
+    let intendToSue = this.form.get('intendToSueOffender') as FormControl;
+    this.setControlValidators(intendToSue, [Validators.required]);
     this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
     this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
-    if (intendToSue === 100000000) {
-      this.willBeTakingLegalAction.setValidators([Validators.required]);
-      this.willBeTakingLegalAction.markAsTouched();
-      this.willBeTakingLegalAction.updateValueAndValidity();
-      this.applyToCourtForMoneyFromOffender.setValidators([Validators.required]);
-      this.applyToCourtForMoneyFromOffender.markAsTouched();
-      this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
+    if (intendToSue.value === CRMMultiBoolean.True || intendToSue.value === CRMMultiBoolean.Undecided) {
+      this.setControlValidators(this.willBeTakingLegalAction, [Validators.required]);
+      this.setControlValidators(this.applyToCourtForMoneyFromOffender, [Validators.required]);
     }
     else {
-      this.willBeTakingLegalAction.clearValidators();
-      this.willBeTakingLegalAction.setErrors(null);
-      this.willBeTakingLegalAction.setValue(null);
-      this.willBeTakingLegalAction.markAsTouched();
-      this.willBeTakingLegalAction.updateValueAndValidity();
-      this.applyToCourtForMoneyFromOffender.clearValidators();
-      this.applyToCourtForMoneyFromOffender.setErrors(null);
-      this.applyToCourtForMoneyFromOffender.setValue(null);
-      this.applyToCourtForMoneyFromOffender.markAsTouched();
-      this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
+      this.clearControlValidators(this.willBeTakingLegalAction);
+      this.clearControlValidators(this.applyToCourtForMoneyFromOffender);
     }
   }
 
   intendToSueNo(): void {
-    let haveYouSued = this.form.get('haveYouSuedOffender').value;
     this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
     this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
-    if (haveYouSued === 100000001) {
-      this.willBeTakingLegalAction.setValidators([Validators.required]);
-      this.willBeTakingLegalAction.markAsTouched();
-      this.willBeTakingLegalAction.updateValueAndValidity();
-      this.applyToCourtForMoneyFromOffender.setValidators([Validators.required]);
-      this.applyToCourtForMoneyFromOffender.markAsTouched();
-      this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
-    }
-    else {
-      this.willBeTakingLegalAction.clearValidators();
-      this.willBeTakingLegalAction.setErrors(null);
-      this.willBeTakingLegalAction.setValue(null);
-      this.willBeTakingLegalAction.markAsTouched();
-      this.willBeTakingLegalAction.updateValueAndValidity();
-      this.applyToCourtForMoneyFromOffender.clearValidators();
-      this.applyToCourtForMoneyFromOffender.setErrors(null);
-      this.applyToCourtForMoneyFromOffender.setValue(null);
-      this.applyToCourtForMoneyFromOffender.markAsTouched();
-      this.applyToCourtForMoneyFromOffender.updateValueAndValidity();
-    }
+    this.clearControlValidators(this.willBeTakingLegalAction);
+    this.clearControlValidators(this.applyToCourtForMoneyFromOffender);
   }
 
   //addOrRemoveSignature(): void {
@@ -416,16 +365,11 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     let crimePeriodEndControl = this.form.get('crimePeriodEnd');
 
     if (this.form.get('whenDidCrimeOccur').value) {
-      crimePeriodEndControl.setValidators([Validators.required]);
-      crimePeriodEndControl.markAsTouched();
-      crimePeriodEndControl.updateValueAndValidity();
+      this.setControlValidators(crimePeriodEndControl, [Validators.required]);
     }
     else {
       this.form.get('crimePeriodEnd').patchValue(null);
-      crimePeriodEndControl.clearValidators();
-      crimePeriodEndControl.setErrors(null);
-      crimePeriodEndControl.markAsTouched();
-      crimePeriodEndControl.updateValueAndValidity();
+      this.clearControlValidators(crimePeriodEndControl);
     }
   }
 
@@ -453,5 +397,4 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   policeForceSelected(index: number) {
 
   }
-
 }

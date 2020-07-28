@@ -40,6 +40,10 @@ export class VictimInformationComponent extends FormBase implements OnInit {
         // console.log("victim info component");
         // console.log(this.form);
 
+        if (this.form.get('mostRecentMailingAddressSameAsPersonal').value === true) {
+            this.copyPersonalAddressToVictimAddress(this.form.parent);
+        }
+
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
             this.form.get('mostRecentMailingAddressSameAsPersonal').valueChanges.subscribe(value => {
                 this.copyPersonalAddressToVictimAddress(this.form.parent);

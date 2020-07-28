@@ -134,7 +134,7 @@
         </app-field>
 
         <section *ngIf="form.get('wasReportMadeToPolice').value === CRMMultiBoolean.False || form.get('wasReportMadeToPolice').value === CRMMultiBoolean.Undecided">
-            <app-field label="Please identify who you may have disclosed this incident to (e.g. doctor, social worker, counsellor, relative)">
+            <app-field label="Please identify who you may have disclosed this incident to (e.g. doctor, social worker, counsellor, relative)" [required]="true" [valid]="isFieldValid('noPoliceReportIdentification')" errorMessage="Please enter who you may have disclosed this incident to">
                 <input class="form-control standard" type="text" formControlName="noPoliceReportIdentification">
             </app-field>
         </section>
@@ -261,13 +261,13 @@
                                 </app-field>
                             </div>
                             <div class="col-5">
-                                <app-field label="Court Location" [required]="true">
+                                <app-field label="Court Location" [required]="true" [valid]="isMyControlValid(item.get('courtLocation'))" errorMessage="Please enter a court location">
                                     <input class="form-control" type="text" formControlName="courtLocation">
                                 </app-field>
                             </div>
                             <div class="col-2">
                                 <br />
-                                <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo" required errorMessage="Please enter a court location">
+                                <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo" required>
                                     <i class="fas fa-trash-alt"></i> Remove
                                 </a>
                             </div>
@@ -319,7 +319,7 @@
                     <p><strong>Restitution</strong> refers to money that an offender is ordered to pay a victim, to help cover the victim’s monetary loss. Restitution is ordered by a judge in a criminal court as part of the offender’s sentence.</p>
                     <br />
 
-                    <app-field label="Did you apply to the court for money from the offender?" [required]="form.get('haveYouSuedOffender').value === CRMMultiBoolean.False || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.applyToCourtForMoneyFromOffender')" errorMessage="Please make a selection">
+                    <app-field label="Did you apply to the court for money from the offender?" [required]="form.get('haveYouSuedOffender').value === CRMBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.applyToCourtForMoneyFromOffender')" errorMessage="Please make a selection">
                         <label class="inline-label">
                             <input type="radio" [value]="CRMMultiBoolean.True" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
                             <span>Yes</span>
@@ -377,8 +377,8 @@
                     </section>
                     <section *ngIf="form.get('racafInformation.willBeTakingLegalAction').value===CRMMultiBoolean.True || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000">
                         <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
-                        <div class="terms">
-                            <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name" errorMessage="Please enter your name">, understand the following:<span class="error-states ng-star-inserted">*</span></p>
+                        <div class="terms" [class.with-error]="!form.get('racafInformation.signName').valid && form.get('racafInformation.signName').touched">
+                            <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following: <span class="error-states ng-star-inserted">*</span></p>
                             <ol class="list">
                                 <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
                                 <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
