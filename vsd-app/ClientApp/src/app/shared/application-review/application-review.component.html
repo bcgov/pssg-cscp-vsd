@@ -810,7 +810,14 @@
                 <ng-container *ngIf="enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.didYouMissWorkDueToCrime')] === 'Yes'">
                     <tr>
                         <th>Please provide days of work missed</th>
-                        <td>{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart', '') | date}} - {{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd', '') | date}} </td>
+                        <td>{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart', '') | date}} -
+                            <span *ngIf="form.get('employmentIncomeInformation.areYouStillOffWork').value === CRMBoolean.True">Present</span>
+                            <span *ngIf="form.get('employmentIncomeInformation.areYouStillOffWork').value === CRMBoolean.False">{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd', '') | date}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Are you currently off work?</th>
+                        <td>{{ enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.areYouStillOffWork')] }} </td>
                     </tr>
                     <tr>
                         <th>As a result of any crime-related injuries, did you lose wages?</th>
@@ -865,6 +872,10 @@
                 <tr>
                     <th>I am:</th>
                     <td>{{ enumHelper.CompletingOnBehalfOf[valueForEnum('representativeInformation.completingOnBehalfOf')] }}</td>
+                </tr>
+                <tr *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === OnBehalfOf.Legal_Guardian">
+                    <th>Relationship to Person</th>
+                    <td>{{ valueOrEmpty('representativeInformation.relationshipToPerson') }}</td>
                 </tr>
             </tbody>
         </table>
