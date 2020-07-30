@@ -12,6 +12,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
         public static ApplicationDynamicsModel ToVsdVictimsModel(this ApplicationFormModel model)
         {
             var application = new ApplicationDynamicsModel(); //GetApplicationDefaults();
+            application.Application = new Application();
+            application.CourtInfoCollection = new List<Courtinfocollection> { new Courtinfocollection { } }.ToArray();
+            application.ProviderCollection = new List<Providercollection> { new Providercollection { } }.ToArray();
             application.Application.vsd_applicanttype = (int)ApplicationType.Victim;
 
             if (model == null)
@@ -206,13 +209,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // Setup courtFiles, don't show if there isn't any
                 if (model.CrimeInformation.courtFiles != null)
                 {
-                    if (model.CrimeInformation.courtFiles[0].courtFileNumber.Length > 0)
+                    if (model.CrimeInformation.courtFiles.Count() > 0)
                     {
-                        application.CourtInfoCollection = model.CrimeInformation.courtFiles.Select(f => new Courtinfocollection
+                        if (model.CrimeInformation.courtFiles[0].courtFileNumber.Length > 0)
                         {
-                            vsd_courtfilenumber = f.courtFileNumber,
-                            vsd_courtlocation = f.courtLocation
-                        }).ToArray();
+                            application.CourtInfoCollection = model.CrimeInformation.courtFiles.Select(f => new Courtinfocollection
+                            {
+                                vsd_courtfilenumber = f.courtFileNumber,
+                                vsd_courtlocation = f.courtLocation
+                            }).ToArray();
+                        }
                     }
                 }
 
