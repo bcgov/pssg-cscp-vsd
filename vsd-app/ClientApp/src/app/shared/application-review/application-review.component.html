@@ -691,24 +691,32 @@
                         <ng-container *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
                             <h3>Income Loss Information</h3>
                             <table class="table table-striped review-table" *ngFor="let item of employers.controls; let i = index">
-                                <tbody>
-                                    <tr>
-                                        <th>Name of Company/Organization</th>
-                                        <td>{{ valueOrEmpty(item.get('employerName')) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Phone Number of Contact Person</th>
-                                        <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) | phone}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Mailing Address</th>
-                                        <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Contact Name</th>
-                                        <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName'), '') }}</td>
-                                    </tr>
-                                </tbody>
+                              <tbody>
+                                <tr>
+                                  <th>Name of Company/Organization</th>
+                                  <td>{{ valueOrEmpty(item.get('employerName')) }}</td>
+                                </tr>
+                                <tr>
+                                  <th>Phone Number of Contact Person</th>
+                                  <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) | phone}}</td>
+                                </tr>
+                                <tr>
+                                  <th>employer email</th>
+                                  <td>{{ valueOrEmpty(item.get('employerEmail')) }}</td>
+                                </tr>
+                                <tr>
+                                  <th>Mailing Address</th>
+                                  <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
+                                </tr>
+                                <tr>
+                                  <th>Contact Name</th>
+                                  <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName'), '') }}</td>
+                                </tr>
+                                <tr>
+                                  <th>Fax</th>
+                                  <td>{{ valueOrEmpty(item.get('employerFax')) | phone}}</td>
+                                </tr>
+                              </tbody>
                             </table>
                             <table class="table table-striped review-table">
                                 <tbody>
@@ -839,28 +847,36 @@
                 </tbody>
             </table>
             <table class="table table-striped review-table" *ngFor="let item of employers.controls; let i = index">
-                <tbody>
-                    <tr *ngIf="form.get('employmentIncomeInformation.areYouSelfEmployed').value !== CRMBoolean.True">
-                        <th>If you are requesting benefits for lost wages, may we contact your employer?</th>
-                        <td>{{ enumHelper.boolEnum[valueForEnum(item.get('contactable'))] }} </td>
-                    </tr>
-                    <tr>
-                        <th>Name of Company/Organization</th>
-                        <td>{{ valueOrEmpty(item.get('employerName')) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Phone Number of Contact Person</th>
-                        <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) | phone}}</td>
-                    </tr>
-                    <tr>
-                        <th>Mailing Address</th>
-                        <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
-                    </tr>
-                    <tr>
-                        <th>Contact Name</th>
-                        <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName'), '') }}</td>
-                    </tr>
-                </tbody>
+              <tbody>
+                <tr *ngIf="form.get('employmentIncomeInformation.areYouSelfEmployed').value !== CRMBoolean.True">
+                  <th>If you are requesting benefits for lost wages, may we contact your employer?</th>
+                  <td>{{ enumHelper.boolEnum[valueForEnum(item.get('contactable'))] }} </td>
+                </tr>
+                <tr>
+                  <th>Name of Company/Organization</th>
+                  <td>{{ valueOrEmpty(item.get('employerName')) }}</td>
+                </tr>
+                <tr>
+                  <th>Phone Number of Contact Person</th>
+                  <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) | phone}}</td>
+                </tr>
+                <tr>
+                  <th>employer email</th>
+                  <td>{{ valueOrEmpty(item.get('employerEmail')) }}</td>
+                </tr>
+                <tr>
+                  <th>Mailing Address</th>
+                  <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
+                </tr>
+                <tr>
+                  <th>Contact Name</th>
+                  <td>{{ valueOrEmpty(item.get('employerFirstName')) }} {{ valueOrEmpty(item.get('employerLastName'), '') }}</td>
+                </tr>
+                <tr>
+                  <th>Fax</th>
+                  <td>{{ valueOrEmpty(item.get('employerFax')) | phone}}</td>
+                </tr>
+              </tbody>
             </table>
         </div>
     </section>
