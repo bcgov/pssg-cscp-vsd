@@ -6,6 +6,7 @@ import { MY_FORMATS, ApplicationType, EnumHelper } from "../enums-list";
 import { FormGroup, ControlContainer, FormBuilder, FormArray, Validators } from "@angular/forms";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { POSTAL_CODE } from "../regex.constants";
+import { AuthInfoHelper } from "./authorization-information.helper";
 
 
 @Component({
@@ -30,6 +31,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
     showAddAuthorizationInformation: boolean = true;
     showRemoveAuthorization: boolean = true;
     postalRegex = POSTAL_CODE;
+    authInfoHelper = new AuthInfoHelper();
 
     constructor(
         private controlContainer: ControlContainer,
@@ -41,8 +43,8 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        // console.log("auth info component");
-        // console.log(this.form);
+        console.log("auth info component");
+        console.log(this.form);
 
         this.form.get('allowCvapStaffSharing').valueChanges.subscribe(value => {
             let options = { onlySelf: true, emitEvent: false };
@@ -68,7 +70,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
     addAuthorizationInformation(makeAuthorizedSignatureRequired: boolean = false): void {
         let options = { onlySelf: true, emitEvent: false };
         this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
-        this.authorizedPersons.push(this.createAuthorizedPerson());
+        this.authorizedPersons.push(this.authInfoHelper.createAuthorizedPerson(this.fb));
         this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
         this.showRemoveAuthorization = this.authorizedPersons.length > 1;
 
@@ -80,6 +82,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         }
     }
     clearAuthorizationInformation(): void {
+        console.log("clearAuthorizationInformation");
         // remove all AuthorizedInformation items
         this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
         while (this.authorizedPersons.length > 0) {
@@ -92,30 +95,14 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         authorizedPersonSignature.updateValueAndValidity();
     }
     removeAuthorizationInformation(index: number): void {
+        console.log("removeAuthorizationInformation");
         this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
         this.authorizedPersons.removeAt(index);
         this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
         this.showRemoveAuthorization = this.authorizedPersons.length > 1;
     }
 
-    createAuthorizedPerson(): FormGroup {
-        return this.fb.group({
-            providerType: [''],
-            providerTypeText: [''],
-            authorizedPersonFullName: ['', Validators.required],
-            authorizedPersonPhoneNumber: [''],
-            authorizedPersonAgencyAddress: this.fb.group({
-                line1: [''],
-                line2: [''],
-                city: [''],
-                postalCode: ['', [Validators.pattern(this.postalRegex)]],  // 
-                province: [{ value: 'British Columbia', disabled: false }],
-                country: [{ value: 'Canada', disabled: false }],
-            }),
-            authorizedPersonRelationship: ['', Validators.required],
-            authorizedPersonAgencyName: [''],
-        });
-    }
+
 
     showSignPad(control): void {
         const dialogConfig = new MatDialogConfig();

@@ -35,6 +35,8 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
     hospitalList = HOSPITALS;
     postalRegex = POSTAL_CODE;
 
+    today = new Date();
+
     otherTreatmentLabel: string = "";
 
     constructor(
@@ -137,13 +139,13 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
     addDoctor(): void {
         this.familyDoctorNameItem = this.form.get('familyDoctorName') as FormControl;
-        this.familyDoctorNameItem.enable();
         this.familyDoctorNameItem.setValidators([Validators.required]);// .validator = Validators.required;
+        this.familyDoctorNameItem.updateValueAndValidity();
     }
 
     clearDoctor(): void {
         this.familyDoctorNameItem = this.form.get('familyDoctorName') as FormControl;
-        this.familyDoctorNameItem.disable();
-        this.familyDoctorNameItem.setValidators(null);
+        this.familyDoctorNameItem.clearValidators();
+        this.familyDoctorNameItem.updateValueAndValidity();
     }
 }

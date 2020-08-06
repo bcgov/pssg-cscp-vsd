@@ -33,6 +33,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string otherLastName { get; set; }
         public DateTime? dateOfNameChange { get; set; }
         public int gender { get; set; }
+        public string relationshipToVictim { get; set; }
         public DateTime? birthDate { get; set; }
         public int? maritalStatus { get; set; }
         public string sin { get; set; }
@@ -50,34 +51,36 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Crimeinformation
     {
-        public string typeOfCrime { get; set; }
-        public string unsureOfCrimeDates { get; set; }
-        public string whenDidCrimeOccur { get; set; }
-        public DateTime? crimePeriodStart { get; set; }
-        public DateTime? crimePeriodEnd { get; set; }
-        public string applicationFiledWithinOneYearFromCrime { get; set; }
-        public string whyDidYouNotApplySooner { get; set; }
-        public string crimeLocation { get; set; }
-        public Crimelocation[] crimeLocations { get; set; }
-        public string crimeDetails { get; set; }
-        public string crimeInjuries { get; set; }
-        public DocumentCollectioninformation[] documents { get; set; }
-        public int wasReportMadeToPolice { get; set; }
-        // public string policeReportedWhichPoliceForce { get; set; }
-        public string policeReportedMultipleTimes { get; set; }
         // public DateTime? policeReportedDate { get; set; }
         // public DateTime? policeReportedEndDate { get; set; }
+        // public string policeReportedWhichPoliceForce { get; set; }
+        public Courtfile[] courtFiles { get; set; }
+        public Crimelocation[] crimeLocations { get; set; }
+        public DateTime? crimePeriodEnd { get; set; }
+        public DateTime? crimePeriodStart { get; set; }
+        public DateTime? dateOfDeath { get; set; }
+        public DocumentCollectioninformation[] documents { get; set; }
         public Policereport[] policeReports { get; set; }
+        public Racafinformation racafInformation { get; set; }
+        public int haveYouSuedOffender { get; set; }
+        public int offenderBeenCharged { get; set; }
+        public int wasReportMadeToPolice { get; set; }
+        public int? intendToSueOffender { get; set; }
+        public string applicationFiledWithinOneYearFromCrime { get; set; }
+        public string crimeDetails { get; set; }
+        public string crimeInjuries { get; set; }
+        public string crimeLocation { get; set; }
         public string noPoliceReportIdentification { get; set; }
         public string offenderFirstName { get; set; }
-        public string offenderMiddleName { get; set; }
         public string offenderLastName { get; set; }
+        public string offenderMiddleName { get; set; }
         public string offenderRelationship { get; set; }
-        public int offenderBeenCharged { get; set; }
-        public Courtfile[] courtFiles { get; set; }
-        public int haveYouSuedOffender { get; set; }
-        public int? intendToSueOffender { get; set; }
-        public Racafinformation racafInformation { get; set; }
+        public string policeReportedMultipleTimes { get; set; }
+        public string typeOfCrime { get; set; }
+        public string unsureOfCrimeDates { get; set; }
+        public int? victimDeceasedFromCrime { get; set; }
+        public string whenDidCrimeOccur { get; set; }
+        public string whyDidYouNotApplySooner { get; set; }
     }
 
     public class Racafinformation
@@ -172,6 +175,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string otherSpecificBenefits { get; set; }
         public bool noneOfTheAboveBenefits { get; set; }
         public string additionalBenefitsDetails { get; set; }
+        //TODO - add employer related fields
+        // public Employer[] employers { get; set; }
     }
 
     public class Employmentincomeinformation
