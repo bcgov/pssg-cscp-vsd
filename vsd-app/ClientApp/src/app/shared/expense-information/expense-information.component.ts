@@ -166,6 +166,8 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
             employerGroup.controls['employerFirstName'].patchValue('');
             employerGroup.controls['employerLastName'].patchValue('');
             employerGroup.controls['employerPhoneNumber'].patchValue('');
+            employerGroup.controls['employerFax'].patchValue('');
+            employerGroup.controls['employerEmail'].patchValue('');
             employerGroup.controls['employerAddress'].get('line1').patchValue('');
             employerGroup.controls['employerAddress'].get('line2').patchValue('');
             employerGroup.controls['employerAddress'].get('city').patchValue('');
