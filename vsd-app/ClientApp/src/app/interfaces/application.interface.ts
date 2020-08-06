@@ -33,6 +33,7 @@ export interface PersonalInformation {
   occupation: string;
   agreeToCvapCommunicationExchange: string;
   phoneNumber: string;
+  leaveVoicemail: boolean;
   alternatePhoneNumber: string;
   email: string;
   primaryAddress: Address;

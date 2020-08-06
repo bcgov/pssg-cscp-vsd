@@ -41,6 +41,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public bool permissionToContactViaMethod { get; set; }
         public string agreeToCvapCommunicationExchange { get; set; }
         public string phoneNumber { get; set; }
+        public bool leaveVoicemail { get; set; }
         public string alternatePhoneNumber { get; set; }
         public string email { get; set; }
         public Address primaryAddress { get; set; }

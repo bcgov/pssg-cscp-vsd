@@ -146,12 +146,20 @@
             <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2'" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number">
                 <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber">
             </app-field>
-            <label class="italic">I authorize you to leave a voicemail on this phone #</label>
         </div>
         <div class="col-md-6">
             <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('alternatePhoneNumber')" errorMessage="Please enter your phone number">
                 <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber">
             </app-field>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <label class="inline-label inline-checkbox-label">
+                <input type="checkbox" style="margin-right: 10px;" formControlName="leaveVoicemail" [value]="true">
+                <span class="italic">I authorize the CVAP to leave a voicemail on this phone #</span>
+            </label>
         </div>
     </div>
 

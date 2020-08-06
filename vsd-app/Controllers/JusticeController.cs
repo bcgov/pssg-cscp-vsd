@@ -192,6 +192,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 var applicationJson = JsonConvert.SerializeObject(application, settings);
                 applicationJson = applicationJson.Replace("odatatype", "@odata.type");
 
+                Console.WriteLine("Application JSON:");
+                Console.WriteLine(applicationJson);
+
                 // Get results into the tuple
                 var endpointAction = "vsd_CreateCVAPClaim";
                 var tuple = await GetDynamicsHttpClientNew(configuration, applicationJson, endpointAction);
@@ -488,7 +491,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     var _responseString = _httpResponse2.ToString();
                     var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
 
-                    Console.Out.WriteLine(model);
+                    // Console.Out.WriteLine(model);
                     Console.Out.WriteLine(_responseString);
                     Console.Out.WriteLine(_responseContent2);
 
