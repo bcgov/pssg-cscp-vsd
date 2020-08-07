@@ -21,6 +21,8 @@ export interface Introduction {
 }
 export interface PersonalInformation {
   permissionToContactViaMethod: boolean;
+  relationshipToVictim: string;
+  relationshipToVictimOther: string;
   gender: number;
   maritalStatus: number;
   preferredMethodOfContact: number;
@@ -33,40 +35,43 @@ export interface PersonalInformation {
   occupation: string;
   agreeToCvapCommunicationExchange: string;
   phoneNumber: string;
+  leaveVoicemail: boolean;
   alternatePhoneNumber: string;
   email: string;
   primaryAddress: Address;
   alternateAddress: Address;
 }
 export interface CrimeInformation {
-  unsureOfCrimeDates: string;
-  whenDidCrimeOccur: string;
-  crimePeriodStart?: Date;
-  crimePeriodEnd?: Date;
-  typeOfCrime: string;
-  whyDidYouNotApplySooner: string;
-  crimeLocation: string;
-  crimeInjuries: string;
-  applicationFiledWithinOneYearFromCrime: string;
-  wasReportMadeToPolice: number;
-  policeReportedMultipleTimes: string;
-  crimeDetails: string;
   // policeReportedDate?: Date;
   // policeReportedEndDate?: Date;
   // policeReportedWhichPoliceForce: string;
-  offenderFirstName: string;
-  offenderMiddleName: string;
-  offenderLastName: string;
-  offenderRelationship: string;
-  noPoliceReportIdentification: string;
-  offenderBeenCharged: number;
+  applicationFiledWithinOneYearFromCrime: string;
+  courtFiles: Courtfile[];
+  crimeDetails: string;
+  crimeInjuries: string;
+  crimeLocation: string;
+  crimeLocations: Crimelocation[];
+  crimePeriodEnd?: Date;
+  crimePeriodStart?: Date;
+  dateOfDeath?: Date;
+  documents: DocumentCollectioninformation[];
   haveYouSuedOffender: number;
   intendToSueOffender?: number;
-  crimeLocations: Crimelocation[];
+  noPoliceReportIdentification: string;
+  offenderBeenCharged: number;
+  offenderFirstName: string;
+  offenderLastName: string;
+  offenderMiddleName: string;
+  offenderRelationship: string;
+  policeReportedMultipleTimes: string;
   policeReports: Policereport[];
-  courtFiles: Courtfile[];
   racafInformation: Racafinformation;
-  documents: DocumentCollectioninformation[];
+  typeOfCrime: string;
+  unsureOfCrimeDates: string;
+  victimDeceasedFromCrime?: boolean;
+  wasReportMadeToPolice: number;
+  whenDidCrimeOccur: string;
+  whyDidYouNotApplySooner: string;
 }
 export interface MedicalInformation {
   doYouHaveMedicalServicesCoverage: string;

@@ -95,7 +95,7 @@
                 </section>
 
                 <app-field label="Date of Initial treatment">
-                    <input type="text" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
+                    <input type="text" [max]="today" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
                     <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
                 </app-field>
             </section>
@@ -119,19 +119,19 @@
                     </app-field>
                 </div>
                 <div class="col-md-6">
-                    <app-field label="Email Address">
+                    <app-field label="Email Address" [valid]="isMyControlValid(form.get('familyDoctorEmail'))" errorMessage="Please enter a valid email address">
                         <input class="form-control" type="text" formControlName="familyDoctorEmail" maxlength="100">
                     </app-field>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <app-field label="Phone Number (incl. area code)">
+                    <app-field label="Phone Number (incl. area code)" [valid]="isMyControlValid(form.get('familyDoctorPhoneNumber'))" errorMessage="Please enter a valid phone number">
                         <input mask='(000) 000 0000' class="form-control" type="text" formControlName="familyDoctorPhoneNumber">
                     </app-field>
                 </div>
                 <div class="col-md-6">
-                    <app-field label="Fax">
+                    <app-field label="Fax" [valid]="isMyControlValid(form.get('familyDoctorFax'))" errorMessage="Please enter a valid fax number">
                         <input mask='(000) 000 0000' class="form-control" type="text" formControlName="familyDoctorFax">
                     </app-field>
                 </div>

@@ -85,16 +85,16 @@
             <div *ngIf="formType != ApplicationType.Victim_Application">
                 <app-field label="Is the Victim deceased as a result of the crime?" [valid]="isFieldValid('victimDeceasedFromCrime')" [required]="true" errorMessage="Please make a selection">
                     <label class="inline-label">
-                        <input type="radio" [value]="true" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
+                        <input type="radio" [value]="CRMBoolean.True" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
                         <span>Yes</span>
                     </label>
                     <label class="inline-label">
-                        <input type="radio" [value]="false" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
+                        <input type="radio" [value]="CRMBoolean.False" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
                         <span>No</span>
                     </label>
                 </app-field>
 
-                <app-field label="Date of Death" *ngIf="form.get('victimDeceasedFromCrime').value === true">
+                <app-field label="Date of Death" *ngIf="form.get('victimDeceasedFromCrime').value === CRMBoolean.True">
                     <input type="text" [max]="todaysDate" class="form-control date-picker" formControlName="dateOfDeath" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfDeathPicker" (focus)="dateOfDeathPicker.open()" (click)="dateOfDeathPicker.open()" readonly>
                     <mat-datepicker #dateOfDeathPicker></mat-datepicker>
                 </app-field>

@@ -96,6 +96,8 @@ export class ExpenseInfoHelper {
     return fb.group({
       employerName: [''],
       employerPhoneNumber: [''],
+      employerFax: [''],
+      employerEmail: ['', [Validators.email]],
       employerFirstName: [''],
       employerLastName: [''],
       employerAddress: fb.group({

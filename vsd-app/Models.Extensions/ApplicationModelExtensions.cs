@@ -13,9 +13,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
         {
             var application = new ApplicationDynamicsModel(); //GetApplicationDefaults();
             application.Application = new Application();
-            application.CourtInfoCollection = new List<Courtinfocollection> { new Courtinfocollection { } }.ToArray();
-            application.ProviderCollection = new List<Providercollection> { new Providercollection { } }.ToArray();
-            application.Application.vsd_applicanttype = (int)ApplicationType.Victim;
+            // application.CourtInfoCollection = new List<Courtinfocollection> { new Courtinfocollection { } }.ToArray();
+            // application.ProviderCollection = new List<Providercollection> { new Providercollection { } }.ToArray();
+            // application.Application.vsd_applicanttype = (int)ApplicationType.Victim;
 
             if (model == null)
                 return null;
@@ -31,6 +31,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 if (model.PersonalInformation.dateOfNameChange.HasValue)
                 {
                     application.Application.vsd_dateofnamechange = model.PersonalInformation.dateOfNameChange;
+                }
+
+                if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember)
+                {
+                    application.Application.vsd_cvap_relationshiptovictim = model.PersonalInformation.relationshipToVictim;
                 }
 
                 application.Application.vsd_applicantsgendercode = model.PersonalInformation.gender;
@@ -50,6 +55,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // (see https://www.sitepoint.com/working-phone-numbers-javascript/ for inspiration)
                 // but for now we should only support whatever the Dynamics UI supports - no sense adding extra features that can't be used because of the Dynamics side
                 application.Application.vsd_applicantsprimaryphonenumber = model.PersonalInformation.phoneNumber;
+                application.Application.vsd_leavevoicemail = model.PersonalInformation.leaveVoicemail;
                 application.Application.vsd_applicantsalternatephonenumber = model.PersonalInformation.alternatePhoneNumber;
                 application.Application.vsd_applicantsemail = model.PersonalInformation.email;
                 application.Application.vsd_applicantspreferredmethodofcontact = model.PersonalInformation.preferredMethodOfContact;
@@ -128,6 +134,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_crimeenddate = model.CrimeInformation.crimePeriodEnd;
                 }
                 application.Application.vsd_cvap_reasontoapplylate = model.CrimeInformation.whyDidYouNotApplySooner; // TODO: Verify mapping - I think it's right but just different names
+
+                if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember || application.Application.vsd_applicanttype == (int)ApplicationType.Witness) {
+                    application.Application.vsd_cvap_victimdeceased = model.CrimeInformation.victimDeceasedFromCrime;
+                    application.Application.vsd_cvap_victimdateofdeath = model.CrimeInformation.dateOfDeath;
+                }
 
                 // Add Crime Locations as an array separated by line feeds
                 if (model.CrimeInformation.crimeLocations.Count() > 0)
@@ -626,24 +637,24 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             {
                 // Application = new Application
                 // {
-                    // vsd_applicanttype = 100000002,
-                    //VsdApplicantsfirstname = "CVAP DEV",
-                    //VsdApplicantslastname = "Form Test",
-                    //VsdApplicantsbirthdate = "1982-05-05T00:00:00",
-                    //VsdApplicantsbirthdate = new DateTime(1983, 6, 4), //"1982-05-05T00:00:00",
-                    //VsdApplicantsgendercode = 100000000,
-                    //VsdApplicantsmaritalstatus = 100000000,
-                    //VsdCvapTypeofcrime = "Break-in",
-                    // vsd_applicantsemail = "test@test.com",
-                    // vsd_applicantsprimaryphonenumber = "250-444-5656",
-                    // vsd_applicantssignature = "Crime Victim Guy",
+                // vsd_applicanttype = 100000002,
+                //VsdApplicantsfirstname = "CVAP DEV",
+                //VsdApplicantslastname = "Form Test",
+                //VsdApplicantsbirthdate = "1982-05-05T00:00:00",
+                //VsdApplicantsbirthdate = new DateTime(1983, 6, 4), //"1982-05-05T00:00:00",
+                //VsdApplicantsgendercode = 100000000,
+                //VsdApplicantsmaritalstatus = 100000000,
+                //VsdCvapTypeofcrime = "Break-in",
+                // vsd_applicantsemail = "test@test.com",
+                // vsd_applicantsprimaryphonenumber = "250-444-5656",
+                // vsd_applicantssignature = "Crime Victim Guy",
 
-                    // vsd_cvap_crimestartdate = new DateTime(2018, 6, 14), //"2018-06-03T00:00:00",
+                // vsd_cvap_crimestartdate = new DateTime(2018, 6, 14), //"2018-06-03T00:00:00",
 
-                    // TODO: Don't know where these two fields went...
-                    // vsd_cvap_authorizationsigneddate = "2019-02-07T00:00:00",
-                    // vsd_cvap_declarationsigneddate = "2019-02-07T00:00:00",
-                    // vsd_cvap_onbehalfofdeclaration = 100000000,
+                // TODO: Don't know where these two fields went...
+                // vsd_cvap_authorizationsigneddate = "2019-02-07T00:00:00",
+                // vsd_cvap_declarationsigneddate = "2019-02-07T00:00:00",
+                // vsd_cvap_onbehalfofdeclaration = 100000000,
                 // },
                 // CourtInfoCollection = new List<Courtinfocollection>
                 // {

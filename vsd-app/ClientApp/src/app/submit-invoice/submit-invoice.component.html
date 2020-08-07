@@ -98,7 +98,7 @@
                 <div class="row">
                   <div class="col-6">
                     <app-field label="Claim Number" [required]="true" [valid]="isFieldValid('invoiceDetails.claimNumber')" errorMessage="Please enter the claim number">
-                      <input class="form-control" mask="00-0000-00" [dropSpecialCharacters]="false" [validation]="false" type="text" formControlName="claimNumber" maxlength="100">
+                      <input class="form-control" mask="00-00000-00" minlength="7" [dropSpecialCharacters]="false" [validation]="false" type="text" formControlName="claimNumber" maxlength="100">
                     </app-field>
                   </div>
                 </div>

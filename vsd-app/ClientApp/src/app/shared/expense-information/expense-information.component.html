@@ -186,7 +186,7 @@
 
     <!-- IFM Additional Benefits -->
     <ng-container *ngIf="formType === ApplicationType.IFM_Application">
-        <section *ngIf="form.parent.get('crimeInformation.victimDeceasedFromCrime').value == true">
+        <section *ngIf="form.parent.get('crimeInformation.victimDeceasedFromCrime').value == CRMBoolean.True">
             <h2 class="blue-header">Additional Benefits</h2>
             <p>If the victim is deceased as a result of the crime, please indicate which additional expenses or benefits you wish to claim (at least one is required):</p>
             <div class="radio-list">
@@ -417,7 +417,7 @@
 
     <!-- Witness Additional Benefits -->
     <ng-container *ngIf="formType === ApplicationType.Witness_Application">
-        <section *ngIf="form.parent.get('crimeInformation.victimDeceasedFromCrime').value == true">
+        <section *ngIf="form.parent.get('crimeInformation.victimDeceasedFromCrime').value == CRMBoolean.True">
             <h2 class="blue-header">Additional Benefits</h2>
             <p>If the victim is deceased as a result of the crime, please indicate which additional expenses or benefits you wish to claim (at least one is required):</p>
             <div class="radio-list">

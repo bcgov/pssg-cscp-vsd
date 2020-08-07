@@ -5,7 +5,7 @@ import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormCo
 import { FileBundle } from "../../models/file-bundle";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, ApplicationType, CRMBoolean, CRMMultiBoolean } from "../enums-list";
+import { MY_FORMATS, ApplicationType, CRMBoolean, CRMMultiBoolean, CRMMultiBoolean2 } from "../enums-list";
 import * as moment from 'moment';
 import { CrimeInfoHelper } from "./crime-information.helper";
 import { config } from '../../../config';
@@ -29,6 +29,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   public form: FormGroup;
   CRMBoolean = CRMBoolean;
   CRMMultiBoolean = CRMMultiBoolean;
+  CRMMultiBoolean2 = CRMMultiBoolean2;
   crimeLocationItems: FormArray;
   showAddCrimeLocation: boolean = true;
   showRemoveCrimeLocation: boolean = false;
@@ -215,6 +216,10 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   offenderBeenChargedYes(): void {
     this.courtLocationItems = this.form.get('courtFiles') as FormArray;
+    if (this.courtLocationItems.length == 0) {
+      this.addCourtInfo();
+    }
+
     for (let i = 0; i < this.courtLocationItems.length; ++i) {
       this.CourtFileGroup = this.courtLocationItems.controls[i] as FormGroup;
       this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as FormControl;

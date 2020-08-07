@@ -1,7 +1,9 @@
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { ApplicationType } from "../enums-list";
+import { POSTAL_CODE } from "../regex.constants";
 
 export class AuthInfoHelper {
+    postalRegex = POSTAL_CODE;
     public setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
 
         let group = {
@@ -15,5 +17,24 @@ export class AuthInfoHelper {
         };
 
         return fb.group(group);
+    }
+
+    createAuthorizedPerson(fb: FormBuilder): FormGroup {
+        return fb.group({
+            providerType: [''],
+            providerTypeText: [''],
+            authorizedPersonFullName: ['', Validators.required],
+            authorizedPersonPhoneNumber: [''],
+            authorizedPersonAgencyAddress: fb.group({
+                line1: [''],
+                line2: [''],
+                city: [''],
+                postalCode: ['', [Validators.pattern(this.postalRegex)]],  // 
+                province: [{ value: 'British Columbia', disabled: false }],
+                country: [{ value: 'Canada', disabled: false }],
+            }),
+            authorizedPersonRelationship: ['', Validators.required],
+            authorizedPersonAgencyName: [''],
+        });
     }
 }

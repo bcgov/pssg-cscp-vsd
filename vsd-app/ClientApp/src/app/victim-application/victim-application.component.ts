@@ -428,6 +428,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   cloneFormToVictim(currentForm) {
+    console.log("cloning Victim to Victim");
+    console.log(currentForm);
     let ret = this.buildApplicationForm(ApplicationType.Victim_Application);
 
     ret.get('personalInformation').patchValue(currentForm.get('personalInformation').value);
@@ -457,10 +459,20 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     }
 
     ret.get('crimeInformation').patchValue(currentForm.get('crimeInformation').value);
+    ret.get('crimeInformation').get('offenderRelationship').patchValue('');
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
+    
     ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
+    
+    let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
+    let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
+
+    for (let i = 0; i < authorizedPersonsLength; ++i) {
+      authorizedPersons.push(this.authInfoHelper.createAuthorizedPerson(this.fb));
+    }
+    
     ret.get('authorizationInformation').patchValue(currentForm.get('authorizationInformation').value);
     ret.get('authorizationInformation').get('approvedAuthorityNotification').patchValue('');
     ret.get('authorizationInformation').get('readAndUnderstoodTermsAndConditions').patchValue('');
@@ -470,13 +482,27 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   cloneFormToIFM(currentForm) {
+    console.log("cloning Victim to IFM");
+    console.log(currentForm);
     let ret = this.buildApplicationForm(ApplicationType.IFM_Application);
 
     ret.get('personalInformation').patchValue(currentForm.get('personalInformation').value);
-    ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(false);
+    ret.get('personalInformation').get('firstName').patchValue('');
+    ret.get('personalInformation').get('middleName').patchValue('');
+    ret.get('personalInformation').get('lastName').patchValue('');
+    ret.get('personalInformation').get('iHaveOtherNames').patchValue('');
+    ret.get('personalInformation').get('otherFirstName').patchValue('');
+    ret.get('personalInformation').get('otherLastName').patchValue('');
+    ret.get('personalInformation').get('dateOfNameChange').patchValue('');
+    ret.get('personalInformation').get('gender').patchValue(0);
+    ret.get('personalInformation').get('birthDate').patchValue('');
+    ret.get('personalInformation').get('sin').patchValue('');
+    ret.get('personalInformation').get('occupation').patchValue('');
     ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
+    
     ret.get('victimInformation').patchValue(currentForm.get('personalInformation').value);
     ret.get('victimInformation').get('mostRecentMailingAddressSameAsPersonal').patchValue(true);
+    
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
     let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
@@ -501,10 +527,21 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     }
 
     ret.get('crimeInformation').patchValue(currentForm.get('crimeInformation').value);
+    ret.get('crimeInformation').get('crimeInjuries').patchValue('');
+    ret.get('crimeInformation').get('offenderRelationship').patchValue('');
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
+    
     ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
+
+    let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
+    let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
+
+    for (let i = 0; i < authorizedPersonsLength; ++i) {
+      authorizedPersons.push(this.authInfoHelper.createAuthorizedPerson(this.fb));
+    }
+
     ret.get('authorizationInformation').patchValue(currentForm.get('authorizationInformation').value);
     ret.get('authorizationInformation').get('approvedAuthorityNotification').patchValue('');
     ret.get('authorizationInformation').get('readAndUnderstoodTermsAndConditions').patchValue('');

@@ -83,7 +83,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     if (this.formType === ApplicationType.IFM_Application) {
       let didMissWorkControl = this.form.get('missedWorkDueToDeathOfVictim');
 
-      if (this.form.parent.get('crimeInformation.victimDeceasedFromCrime').value == true) {
+      if (this.form.parent.get('crimeInformation.victimDeceasedFromCrime').value == CRMBoolean.True) {
         didMissWorkControl.setValidators([Validators.required]);
       }
       else {
@@ -100,6 +100,8 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
       this.didMissWorkSubscription = didMissWorkControl.valueChanges.subscribe((value) => {
         let didYouLoseWagesControl = this.form.get('didYouLoseWages');
         let minimumOtherBenefitsSelected = this.form.get('minimumOtherBenefitsSelected');
+        if (!didYouLoseWagesControl && !minimumOtherBenefitsSelected) return;
+
         if (value === CRMBoolean.True) {
           didYouLoseWagesControl.setValidators([Validators.required]);
           minimumOtherBenefitsSelected.setValidators([Validators.required]);
@@ -123,49 +125,38 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         let daysMissedEndControl = this.form.get('daysWorkMissedEnd');
         let employers = this.form.get('employers') as FormArray;
         if (value === CRMBoolean.True) {
-          daysMissedStartControl.setValidators([Validators.required]);
-          daysMissedEndControl.setValidators([Validators.required]);
-          sinControl.setValidators([Validators.required]);
+          this.setControlValidators(daysMissedStartControl, [Validators.required]);
+          this.setControlValidators(daysMissedEndControl, [Validators.required]);
+          this.setControlValidators(sinControl, [Validators.required]);
 
           for (let i = 0; i < employers.length; ++i) {
             let employerGroup = employers.controls[i] as FormGroup;
             let employersEmployerName = employerGroup.controls['employerName'] as FormControl;
-            employersEmployerName.setValidators([Validators.required]);
-            // employersEmployerName.markAsTouched();
-            employersEmployerName.updateValueAndValidity();
+            this.setControlValidators(employersEmployerName, [Validators.required]);
             let employersEmployerPhoneNumber = employerGroup.controls['employerPhoneNumber'] as FormControl;
-            employersEmployerPhoneNumber.setValidators([Validators.required]);
-            // employersEmployerPhoneNumber.markAsTouched();
-            employersEmployerPhoneNumber.updateValueAndValidity();
+            this.setControlValidators(employersEmployerPhoneNumber, [Validators.required]);
           }
         }
         else {
           daysMissedStartControl.patchValue('');
-          daysMissedStartControl.clearValidators();
-          daysMissedStartControl.setErrors(null);
+          this.clearControlValidators(daysMissedStartControl);
           daysMissedEndControl.patchValue('');
-          daysMissedEndControl.clearValidators();
-          daysMissedEndControl.setErrors(null);
-          sinControl.clearValidators();
-          sinControl.setErrors(null);
+          this.clearControlValidators(daysMissedEndControl);
+          this.clearControlValidators(sinControl);
           this.form.get('mayContactEmployer').patchValue('');
 
           for (let i = 0; i < employers.length; ++i) {
             let employerGroup = employers.controls[i] as FormGroup;
             let employersEmployerName = employerGroup.controls['employerName'] as FormControl;
-            employersEmployerName.patchValue('');
-            employersEmployerName.clearValidators();
-            employersEmployerName.setErrors(null);
-            employersEmployerName.updateValueAndValidity();
-            let employersEmployerPhoneNumber = employerGroup.controls['employerPhoneNumber'] as FormControl;
-            employersEmployerPhoneNumber.patchValue('');
-            employersEmployerPhoneNumber.clearValidators();
-            employersEmployerPhoneNumber.setErrors(null);
-            employersEmployerPhoneNumber.updateValueAndValidity();
+            this.clearControlValidators(employersEmployerName);
 
+            let employersEmployerPhoneNumber = employerGroup.controls['employerPhoneNumber'] as FormControl;
+            this.clearControlValidators(employersEmployerPhoneNumber);
+
+            employerGroup.controls['employerName'].patchValue('');
+            employerGroup.controls['employerPhoneNumber'].patchValue('');
             employerGroup.controls['employerFirstName'].patchValue('');
             employerGroup.controls['employerLastName'].patchValue('');
-            employerGroup.controls['employerPhoneNumber'].patchValue('');
             employerGroup.controls['employerFax'].patchValue('');
             employerGroup.controls['employerEmail'].patchValue('');
             employerGroup.controls['employerAddress'].get('line1').patchValue('');
