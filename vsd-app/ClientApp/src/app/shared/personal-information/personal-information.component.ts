@@ -41,6 +41,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
     preferredMethodOfContactSubscription: Subscription;
     sinSubscription: Subscription;
+    iHaveOtherNamesSubscription: Subscription;
 
     get preferredMethodOfContact() { return this.form.get('preferredMethodOfContact'); }
 
@@ -77,10 +78,27 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
                 this.form.parent.get(incomeForm).get('sin').patchValue(value);
             });
         }
+
+        this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
+            let otherFirstNameControl = this.form.get('otherFirstName');
+            let otherLastNameControl = this.form.get('otherLastName');
+            let dateOfNameChangeControl = this.form.get('dateOfNameChange');
+            if (value === true) {
+                this.setControlValidators(otherFirstNameControl, [Validators.required]);
+                this.setControlValidators(otherLastNameControl, [Validators.required]);
+                this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
+            }
+            else {
+                this.clearControlValidators(otherFirstNameControl);
+                this.clearControlValidators(otherLastNameControl);
+                this.clearControlValidators(dateOfNameChangeControl);
+            }
+        });
     }
 
     ngOnDestroy() {
         this.preferredMethodOfContactSubscription.unsubscribe();
+        this.iHaveOtherNamesSubscription.unsubscribe();
         if (this.formType === ApplicationType.Victim_Application || this.formType === ApplicationType.IFM_Application) {
             this.sinSubscription.unsubscribe();
         }

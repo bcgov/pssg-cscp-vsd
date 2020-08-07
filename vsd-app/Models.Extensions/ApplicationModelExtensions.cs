@@ -11,11 +11,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
     {
         public static ApplicationDynamicsModel ToVsdVictimsModel(this ApplicationFormModel model)
         {
-            var application = new ApplicationDynamicsModel(); //GetApplicationDefaults();
+            var application = new ApplicationDynamicsModel(); 
             application.Application = new Application();
-            // application.CourtInfoCollection = new List<Courtinfocollection> { new Courtinfocollection { } }.ToArray();
-            // application.ProviderCollection = new List<Providercollection> { new Providercollection { } }.ToArray();
-            // application.Application.vsd_applicanttype = (int)ApplicationType.Victim;
 
             if (model == null)
                 return null;
@@ -279,7 +276,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         {
                             application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
                             {
-                                vsd_name = t.providerName,
+                                vsd_firstname = t.providerName,
                                 vsd_phonenumber = t.providerPhoneNumber,
                                 vsd_addressline1 = t.providerAddress != null ? t.providerAddress.line1 : "",
                                 vsd_addressline2 = t.providerAddress != null ? t.providerAddress.line2 : "",
@@ -290,16 +287,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                                 vsd_relationship1 = t.providerType,
                                 vsd_email = !String.IsNullOrEmpty(t.providerEmail) ? t.providerEmail : "",
                                 vsd_fax = !String.IsNullOrEmpty(t.providerFax) ? t.providerFax : "",
-                                vsd_relationship1other = t.providerTypeText,// t.providerType.ToString(),
-                                //    // TODO: It looks like we're using this object in two different places - confirm that we can safely ignore the following fields in this context
-                                //    vsd_firstname = "", // TODO: We don't collect a split name here
-                                //    vsd_middlename = "", // TODO: We don't collect a split name here
-                                //    vsd_lastname = "", // TODO: We don't collect a split name here
-                                //    vsd_alternatephonenumber = "", // TODO: We don't collect an alternate phone number
-                                //    vsd_email = "", // TODO: We don't collect an email here
-                                //    //vsd_preferredmethodofcontact = 1, // TODO: We don't collect a contact method here
-                                //    //vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact, // TODO: This isn't correct either
-                                //    vsd_relationship1 = "", // TODO: We don't collect a relationship here
+                                vsd_relationship1other = t.providerTypeText,
                             }).ToArray();
                         }
                     }
@@ -313,7 +301,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     {
                         application.ProviderCollection = model.AuthorizationInformation.authorizedPerson.Select(t => new Providercollection
                         {
-                            vsd_name = t.authorizedPersonFullName,
+                            vsd_firstname = t.authorizedPersonFullName,
                             vsd_phonenumber = t.authorizedPersonPhoneNumber,
                             vsd_addressline1 = t.authorizedPersonAgencyAddress.line1,
                             vsd_addressline2 = t.authorizedPersonAgencyAddress.line2,
@@ -338,7 +326,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         Providercollection[] tempProviderCollection;
                         tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
                         {
-                            vsd_name = f.employerName,
+                            vsd_relationship1other = f.employerName,
                             vsd_phonenumber = f.employerPhoneNumber,
                             vsd_addressline1 = f.employerAddress.line1,
                             vsd_addressline2 = f.employerAddress.line2,
@@ -387,7 +375,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     Providercollection[] tempProviderCollection = new Providercollection[1];
                     tempProviderCollection[0] = new Providercollection();
-                    tempProviderCollection[0].vsd_name = model.MedicalInformation.familyDoctorName;
+                    tempProviderCollection[0].vsd_firstname = model.MedicalInformation.familyDoctorName;
                     tempProviderCollection[0].vsd_email = model.MedicalInformation.familyDoctorEmail;
                     tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
                     tempProviderCollection[0].vsd_fax = model.MedicalInformation.familyDoctorFax;
@@ -430,7 +418,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         // Add the Representative information to the JSON sent to Dynamics
                         Providercollection[] tempProviderCollection = new Providercollection[1];
                         tempProviderCollection[0] = new Providercollection();
-                        tempProviderCollection[0].vsd_name = "On Behalf of Victim";
+                        // tempProviderCollection[0].vsd_name = "On Behalf of Victim";
                         tempProviderCollection[0].vsd_phonenumber = model.RepresentativeInformation.representativePhoneNumber;
                         tempProviderCollection[0].vsd_alternatephonenumber = model.RepresentativeInformation.representativeAlternatePhoneNumber;
                         tempProviderCollection[0].vsd_addressline1 = model.RepresentativeInformation.representativeAddress.line1;
@@ -629,51 +617,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
 
             return application;
-        }
-
-        public static ApplicationDynamicsModel GetApplicationDefaults()
-        {
-            return new ApplicationDynamicsModel
-            {
-                // Application = new Application
-                // {
-                // vsd_applicanttype = 100000002,
-                //VsdApplicantsfirstname = "CVAP DEV",
-                //VsdApplicantslastname = "Form Test",
-                //VsdApplicantsbirthdate = "1982-05-05T00:00:00",
-                //VsdApplicantsbirthdate = new DateTime(1983, 6, 4), //"1982-05-05T00:00:00",
-                //VsdApplicantsgendercode = 100000000,
-                //VsdApplicantsmaritalstatus = 100000000,
-                //VsdCvapTypeofcrime = "Break-in",
-                // vsd_applicantsemail = "test@test.com",
-                // vsd_applicantsprimaryphonenumber = "250-444-5656",
-                // vsd_applicantssignature = "Crime Victim Guy",
-
-                // vsd_cvap_crimestartdate = new DateTime(2018, 6, 14), //"2018-06-03T00:00:00",
-
-                // TODO: Don't know where these two fields went...
-                // vsd_cvap_authorizationsigneddate = "2019-02-07T00:00:00",
-                // vsd_cvap_declarationsigneddate = "2019-02-07T00:00:00",
-                // vsd_cvap_onbehalfofdeclaration = 100000000,
-                // },
-                // CourtInfoCollection = new List<Courtinfocollection>
-                // {
-                //     new Courtinfocollection
-                //     {
-                //         vsd_courtfilenumber = "1234567",
-                //         vsd_courtlocation = "Victoria"
-                //     }
-                // }.ToArray(),
-                //ProviderCollection = new List<Providercollection>
-                //{
-                //    new Providercollection
-                //    {
-                //        vsd_name = "Mr. Smith",
-                //        // TODO: Don't know where this field went
-                //        // VsdType = 100000000
-                //    }
-                //}.ToArray()
-            };
         }
     }
 }

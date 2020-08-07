@@ -140,14 +140,6 @@ export enum CRMMultiBoolean {
   False = 100000001,
   Undecided = 100000002
 }
-//ok, the reason we have this is because CRM isn't consistent between the ordering if these values
-//like.... some of them use a yes/no/unassigned global option set that is great. Others have a custom one that matches, and others yet have a custom one that doesn't match\
-//it's so gross
-export enum CRMMultiBoolean2 {
-  False = 100000000,
-  True = 100000001,
-  Undecided = 100000002
-}
 
 export enum ApplicationType {
   Victim_Application = 100000002,

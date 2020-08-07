@@ -3,7 +3,7 @@ import { OnInit, Component, Input } from "@angular/core";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatStepper } from "@angular/material";
 import { FormGroup, ControlContainer, FormArray } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, ApplicationType, EnumHelper, OnBehalfOf, CRMBoolean, CRMMultiBoolean, CRMMultiBoolean2 } from "../enums-list";
+import { MY_FORMATS, ApplicationType, EnumHelper, OnBehalfOf, CRMBoolean, CRMMultiBoolean } from "../enums-list";
 import { AddressHelper } from "../address/address.helper";
 import { ConsoleLoggerService } from "../../services/logger.service";
 
@@ -26,7 +26,6 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
     ApplicationType = ApplicationType;
     CRMBoolean = CRMBoolean;
     CRMMultiBoolean = CRMMultiBoolean;
-    CRMMultiBoolean2 = CRMMultiBoolean2;
     OnBehalfOf = OnBehalfOf;
     enumHelper = new EnumHelper();
 
