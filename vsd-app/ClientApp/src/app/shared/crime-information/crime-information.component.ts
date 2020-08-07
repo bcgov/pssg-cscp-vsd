@@ -2,15 +2,13 @@ import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { FormBase } from "../form-base";
 import { MatDialogConfig, MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepickerInputEvent } from "@angular/material";
 import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormControl } from "@angular/forms";
-import { FileBundle } from "../../models/file-bundle";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, ApplicationType, CRMBoolean, CRMMultiBoolean, CRMMultiBoolean2 } from "../enums-list";
+import { MY_FORMATS, ApplicationType, CRMBoolean, CRMMultiBoolean } from "../enums-list";
 import * as moment from 'moment';
 import { CrimeInfoHelper } from "./crime-information.helper";
 import { config } from '../../../config';
 import { Subscription } from "rxjs";
-import { forEach } from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-crime-information',
@@ -29,7 +27,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   public form: FormGroup;
   CRMBoolean = CRMBoolean;
   CRMMultiBoolean = CRMMultiBoolean;
-  CRMMultiBoolean2 = CRMMultiBoolean2;
   crimeLocationItems: FormArray;
   showAddCrimeLocation: boolean = true;
   showRemoveCrimeLocation: boolean = false;

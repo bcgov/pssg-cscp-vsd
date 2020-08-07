@@ -1,9 +1,10 @@
-import { OnInit, Component, Input } from "@angular/core";
+import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { FormBase } from "../form-base";
 import { MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material";
-import { FormGroup, FormBuilder, ControlContainer, AbstractControl } from "@angular/forms";
+import { FormGroup, FormBuilder, ControlContainer, AbstractControl, Validators } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'app-victim-information',
@@ -17,7 +18,7 @@ import { MY_FORMATS, ApplicationType } from "../enums-list";
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class VictimInformationComponent extends FormBase implements OnInit {
+export class VictimInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
     public form: FormGroup;
     ApplicationType = ApplicationType;
@@ -26,6 +27,8 @@ export class VictimInformationComponent extends FormBase implements OnInit {
     phoneIsRequired: boolean = false;
     emailIsRequired: boolean = false;
     addressIsRequired: boolean = false;
+
+    iHaveOtherNamesSubscription: Subscription;
 
     constructor(
         private controlContainer: ControlContainer,
@@ -49,5 +52,25 @@ export class VictimInformationComponent extends FormBase implements OnInit {
                 this.copyPersonalAddressToVictimAddress(this.form.parent);
             });
         }
+
+        this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
+            let otherFirstNameControl = this.form.get('otherFirstName');
+            let otherLastNameControl = this.form.get('otherLastName');
+            let dateOfNameChangeControl = this.form.get('dateOfNameChange');
+            if (value === true) {
+                this.setControlValidators(otherFirstNameControl, [Validators.required]);
+                this.setControlValidators(otherLastNameControl, [Validators.required]);
+                this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
+            }
+            else {
+                this.clearControlValidators(otherFirstNameControl);
+                this.clearControlValidators(otherLastNameControl);
+                this.clearControlValidators(dateOfNameChangeControl);
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        this.iHaveOtherNamesSubscription.unsubscribe();
     }
 }

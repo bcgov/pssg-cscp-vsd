@@ -167,7 +167,6 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
 
     public class Providercollection
     {
-        // TODO: Looks like we might use this object for two different purposes... vsd_applicationserviceprovider and vs_participant, so we either need to split, or set the odatatype in situ instead of here
         public string odatatype => "Microsoft.Dynamics.CRM.vsd_participant";
         public string vsd_name { get; set; }
         public string vsd_phonenumber { get; set; }
@@ -179,6 +178,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_postalcode { get; set; }
         public string vsd_email { get; set; }
         public string vsd_relationship1 { get; set; }
+        public string vsd_relationship2 { get; set; }
         public string vsd_relationship1other { get; set; }
         public string vsd_country { get; set; }
         public string vsd_firstname { get; set; }

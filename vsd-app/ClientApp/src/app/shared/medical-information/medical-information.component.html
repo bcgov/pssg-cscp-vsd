@@ -157,7 +157,7 @@
                 <span>No</span>
             </label>
         </app-field>
-        <section *ngIf="form.get('hadOtherTreatments').value === true">
+        <section *ngIf="form.get('hadOtherTreatments').value === true" class="bottom-section-margin">
             <div class="other-treatments" formArrayName="otherTreatments" *ngFor="let item of form.get('otherTreatments')['controls']; let i = index;">
                 <ng-container [formGroupName]="i" class="other-treatment">
                     <a href="javascript:void(0);" (click)="removeProvider(i)" class="float-right" *ngIf="showRemoveProvider">

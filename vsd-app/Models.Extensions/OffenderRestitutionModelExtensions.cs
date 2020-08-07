@@ -11,7 +11,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
     {
         public static OffenderRestitutionDynamicsModel ToOffenderRestitutionModel(this OffenderRestitutionFormModel model)
         {
-            var application = GetApplicationDefaults();
+            var application = new OffenderRestitutionDynamicsModel{};
 
             if (model == null)
                 return null;
@@ -116,51 +116,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             //}).ToArray();
 
             return application;
-        }
-
-        public static OffenderRestitutionDynamicsModel GetApplicationDefaults()
-        {
-            return new OffenderRestitutionDynamicsModel
-            {
-                Application = new Application
-                {
-                    //vsd_applicanttype = 100000002,
-                    //VsdApplicantsfirstname = "CVAP DEV",
-                    //VsdApplicantslastname = "Form Test",
-                    //VsdApplicantsbirthdate = "1982-05-05T00:00:00",
-                    //VsdApplicantsbirthdate = new DateTime(1983, 6, 4), //"1982-05-05T00:00:00",
-                    //VsdApplicantsgendercode = 100000000,
-                    //VsdApplicantsmaritalstatus = 100000000,
-                    //VsdCvapTypeofcrime = "Break-in",
-                    vsd_applicantsemail = "test@test.com",
-                    vsd_applicantsprimaryphonenumber = "250-444-5656",
-                    vsd_applicantssignature = "Crime Victim Guy",
-
-                    //vsd_cvap_crimestartdate = new DateTime(2018, 6, 14), //"2018-06-03T00:00:00",
-
-                    // TODO: Don't know where these two fields went...
-                    // vsd_cvap_authorizationsigneddate = "2019-02-07T00:00:00",
-                    // vsd_cvap_declarationsigneddate = "2019-02-07T00:00:00",
-                    vsd_cvap_onbehalfofdeclaration = 100000000,
-                },
-                //CourtInfoCollection = new List<Courtinfocollection>
-                //{
-                //    new Courtinfocollection
-                //    {
-                //        vsd_courtfilenumber = "1234567",
-                //        vsd_courtlocation = "Victoria"
-                //    }
-                //}.ToArray(),
-                //ProviderCollection = new List<Providercollection>
-                //{
-                //    new Providercollection
-                //    {
-                //        vsd_name = "Mr. Smith",
-                //        // TODO: Don't know where this field went
-                //        // VsdType = 100000000
-                //    }
-                //}.ToArray()
-            };
         }
     }
 }
