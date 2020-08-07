@@ -42,10 +42,6 @@
 
   <hr />
 
-  <section *ngIf="form.get('completingOnBehalfOf').value === 100000000">
-    <p>Continue to the next step in the application.</p>
-  </section>
-
   <section *ngIf="form.get('completingOnBehalfOf').value === 100000001 || form.get('completingOnBehalfOf').value === 100000002 || form.get('completingOnBehalfOf').value === 100000003">
     <p>Complete the following before continuing with the application.</p>
     <h2 class="blue-header">Person Completing the Application</h2>
