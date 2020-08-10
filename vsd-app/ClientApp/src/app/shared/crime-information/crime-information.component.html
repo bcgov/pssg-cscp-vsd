@@ -15,7 +15,7 @@
 
         <app-field label="Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates." errorMessage="Please make a selection" [showChevrons]="false">
             <label class="inline-label">
-                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
+                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates" (change)="unsureOfCrimeDateChange($event)"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
             </label>
         </app-field>
         <app-field label="Crime occurred over a period of time" errorMessage="Please make a selection" [showChevrons]="false">
@@ -29,28 +29,15 @@
             </label>
         </app-field>
 
-        <section>
-            <app-field label="Date(s) of crime" [required]="true" [valid]="form.get('whenDidCrimeOccur').value === true?isFieldValid('crimePeriodStart') && isFieldValid('crimePeriodEnd'):isFieldValid('crimePeriodStart')" errorMessage="Please enter the crime date">
-                <input type="text" (dateChange)="crimePeriodStartChange($event)" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" [max]="todaysDate" (click)="crimePeriodStartPicker.open()" readonly>
-                <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
-                <span *ngIf="form.get('whenDidCrimeOccur').value === true || form.get('unsureOfCrimeDates').value === true">
-                    <span> - </span>
-                    <input type="text" [min]="crimePeriodStartDate" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" [max]="todaysDate" (click)="crimePeriodEndDatePicker.open()" readonly>
-                    <mat-datepicker #crimePeriodEndDatePicker></mat-datepicker>
-                </span>
-            </app-field>
-        </section>
-
-        <!-- <app-field label="Is this application being filed within one year of the date of the crime?" [valid]="isFieldValid('applicationFiledWithinOneYearFromCrime')" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
-            <label class="inline-label">
-                <input type="radio" [value]="true" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
-                <span>Yes</span>
-            </label>
-            <label class="inline-label">
-                <input type="radio" [value]="false" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
-                <span>No</span>
-            </label>
-        </app-field> -->
+        <app-field label="Date(s) of crime" [required]="true" [valid]="form.get('whenDidCrimeOccur').value === true||form.get('unsureOfCrimeDates').value === true?isMyControlValid(form.get('crimePeriodStart')) && isMyControlValid(form.get('crimePeriodEnd')):isMyControlValid(form.get('crimePeriodStart'))" errorMessage="Please enter the crime date">
+            <input type="text" (dateChange)="crimePeriodStartChange($event)" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" [max]="todaysDate" (click)="crimePeriodStartPicker.open()" readonly>
+            <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
+            <span *ngIf="form.get('whenDidCrimeOccur').value === true || form.get('unsureOfCrimeDates').value === true">
+                <span> - </span>
+                <input type="text" [min]="crimePeriodStartDate" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" [max]="todaysDate" (click)="crimePeriodEndDatePicker.open()" readonly>
+                <mat-datepicker #crimePeriodEndDatePicker></mat-datepicker>
+            </span>
+        </app-field>
 
         <section *ngIf="showWhyDidYouNotApplySooner">
             <app-field label="Please briefly explain why you did not apply sooner" [tooltipReference]="fileWithinYearTemplate">
@@ -178,7 +165,7 @@
                             </td>
                             <td>
                                 <span *ngIf="item.controls.policeReportedMultipleTimes.value === true">
-                                    <input type="text" [max]="today" [min]="policeReportMinDates[i]" class="form-control date-picker" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
+                                    <input type="text" [max]="today" [min]="policeReportMinDates[i]" class="form-control date-picker" [class.input-error]="!isMyControlValid(item.get('reportEndDate'))" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
                                     <mat-datepicker #reportEndDatePicker></mat-datepicker>
                                 </span>
                             </td>

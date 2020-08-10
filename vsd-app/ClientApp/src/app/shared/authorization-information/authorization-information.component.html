@@ -87,6 +87,18 @@
               </app-field>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-6">
+              <app-field label="Email Address" [valid]="isMyControlValid(item.get('authorizedPersonEmail'))" errorMessage="Please enter an email address">
+                <input class="form-control" type="text" (blur)="trimEmail(item.get('authorizedPersonEmail'))" formControlName="authorizedPersonEmail" maxlength="100">
+              </app-field>
+            </div>
+            <div class="col-md-6">
+              <app-field label="Confirm Email Address" [valid]="isMyControlValid(item.get('authorizedPersonConfirmEmail'))" errorMessage="Please confirm email address">
+                <input class="form-control" type="text" (blur)="trimEmail(item.get('authorizedPersonConfirmEmail'))" formControlName="authorizedPersonConfirmEmail" maxlength="100">
+              </app-field>
+            </div>
+          </div>
 
           <app-address [group]="item.get('authorizedPersonAgencyAddress')" [showChildrenAsRequired]="false"></app-address>
 
@@ -95,7 +107,7 @@
       <app-field [valid]="isFieldValid('authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration" [required]="true">
         <label>
           <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion" [required]="true">
-          I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person.  <span class="error-states ng-star-inserted">*</span>
+          I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person. <span class="error-states ng-star-inserted">*</span>
         </label>
       </app-field>
 

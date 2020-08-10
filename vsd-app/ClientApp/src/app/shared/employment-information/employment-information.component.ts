@@ -86,118 +86,97 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
 
 
         this.employedAtTimeOfCrimeSubscription = this.form.get('wereYouEmployedAtTimeOfCrime').valueChanges.subscribe((value) => {
-            let options = { onlySelf: true, emitEvent: false };
             let control = this.form.get('wereYouAtWorkAtTimeOfIncident');
 
             if (value === CRMBoolean.True) {
-                control.setValidators([Validators.required]);
-                control.updateValueAndValidity();
+                this.setControlValidators(control, [Validators.required]);
             }
             else {
-                control.clearValidators();
-                control.setErrors(null, options);
-                control.updateValueAndValidity(options);
+                control.patchValue('');
+                this.clearControlValidators(control);
             }
         });
 
         this.atWorkAtTimeOfCrimeSubscription = this.form.get('wereYouAtWorkAtTimeOfIncident').valueChanges.subscribe((value) => {
-            let options = { onlySelf: true, emitEvent: false };
             let control = this.form.get('haveYouAppliedToWorkSafe');
 
             if (value === CRMBoolean.True) {
-                control.setValidators([Validators.required]);
-                control.updateValueAndValidity();
+                this.setControlValidators(control, [Validators.required]);
             }
             else {
-                control.clearValidators();
-                control.setErrors(null, options);
-                control.updateValueAndValidity(options);
+                control.patchValue('');
+                this.clearControlValidators(control);
             }
         });
 
         this.appliedToWorkSafeBCSubscription = this.form.get('haveYouAppliedToWorkSafe').valueChanges.subscribe((value) => {
-            let options = { onlySelf: true, emitEvent: false };
             let control = this.form.get('workersCompensationClaimNumber');
 
             if (value === CRMBoolean.True) {
-                control.setValidators([Validators.required]);
-                control.updateValueAndValidity();
+                this.setControlValidators(control, [Validators.required]);
             }
             else {
-                control.clearValidators();
-                control.setErrors(null, options);
-                control.updateValueAndValidity(options);
+                control.patchValue('');
+                this.clearControlValidators(control);
             }
         });
 
         this.didMissWorkSubscription = this.form.get('didYouMissWorkDueToCrime').valueChanges.subscribe((value) => {
-            let options = { onlySelf: true, emitEvent: false };
             let startDayControl = this.form.get('daysWorkMissedStart');
+            let endDayControl = this.form.get('daysWorkMissedEnd');
             let offWorkControl = this.form.get('areYouStillOffWork');
             let loseWageControl = this.form.get('didYouLoseWages');
 
             if (value === CRMBoolean.True) {
-                startDayControl.setValidators([Validators.required]);
-                startDayControl.updateValueAndValidity();
-
-                offWorkControl.setValidators([Validators.required]);
-                offWorkControl.updateValueAndValidity();
-
-                loseWageControl.setValidators([Validators.required]);
-                loseWageControl.updateValueAndValidity();
+                this.setControlValidators(startDayControl, [Validators.required]);
+                this.setControlValidators(offWorkControl, [Validators.required]);
+                this.setControlValidators(loseWageControl, [Validators.required]);
+                if (this.form.get('areYouStillOffWork').value === CRMBoolean.False) {
+                    this.setControlValidators(endDayControl, [Validators.required]);
+                }
+                else {
+                    this.clearControlValidators(endDayControl);
+                }
             }
             else {
-                startDayControl.clearValidators();
-                startDayControl.setErrors(null, options);
-                startDayControl.updateValueAndValidity(options);
-
-                offWorkControl.clearValidators();
-                offWorkControl.setErrors(null, options);
-                offWorkControl.updateValueAndValidity(options);
-
-                loseWageControl.clearValidators();
-                loseWageControl.setErrors(null, options);
-                loseWageControl.updateValueAndValidity(options);
+                startDayControl.patchValue('');
+                endDayControl.patchValue('');
+                offWorkControl.patchValue('');
+                loseWageControl.patchValue('');
+                this.clearControlValidators(startDayControl);
+                this.clearControlValidators(endDayControl);
+                this.clearControlValidators(offWorkControl);
+                this.clearControlValidators(loseWageControl);
             }
         });
 
         this.areYouStillOffWorkSubscription = this.form.get('areYouStillOffWork').valueChanges.subscribe((value) => {
-            let options = { onlySelf: true, emitEvent: false };
             let endDayControl = this.form.get('daysWorkMissedEnd');
 
             if (value === CRMBoolean.False) {
-                endDayControl.setValidators([Validators.required]);
-                endDayControl.updateValueAndValidity();
+                this.setControlValidators(endDayControl, [Validators.required]);
             }
             else {
                 endDayControl.patchValue('');
-                endDayControl.clearValidators();
-                endDayControl.setErrors(null, options);
-                endDayControl.updateValueAndValidity(options);
+                this.clearControlValidators(endDayControl);
             }
         });
 
         this.loseWagesSubscription = this.form.get('didYouLoseWages').valueChanges.subscribe((value) => {
-            let options = { onlySelf: true, emitEvent: false };
             let control = this.form.get('areYouSelfEmployed');
             let sinControl = this.form.get('sin');
 
 
             if (value === CRMBoolean.True) {
                 this.addEmployer();
-                control.setValidators([Validators.required]);
-                control.updateValueAndValidity();
-                sinControl.setValidators([Validators.required]);
-                sinControl.updateValueAndValidity();
+                this.setControlValidators(control, [Validators.required]);
+                this.setControlValidators(sinControl, [Validators.required]);
             }
             else {
                 this.removeAllEmployers();
-                control.clearValidators();
-                control.setErrors(null, options);
-                control.updateValueAndValidity(options);
-                sinControl.clearValidators();
-                sinControl.setErrors(null, options);
-                sinControl.updateValueAndValidity(options);
+                control.patchValue('');
+                this.clearControlValidators(control);
+                this.clearControlValidators(sinControl);
             }
         });
 
@@ -216,13 +195,10 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
                 let control = thisEmployer.get('contactable');
 
                 if (value === CRMBoolean.True) {
-                    control.clearValidators();
-                    control.setErrors(null, options);
-                    control.updateValueAndValidity(options);
+                    this.clearControlValidators(control);
                 }
                 else {
-                    control.setValidators([Validators.required]);
-                    control.updateValueAndValidity();
+                    this.setControlValidators(control, [Validators.required]);
                 }
             }
         });

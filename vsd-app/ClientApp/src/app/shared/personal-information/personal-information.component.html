@@ -131,10 +131,24 @@
             </app-field>
         </div>
         <div class="col-md-6">
-            <!-- [tooltipReference]="sinTemplate" -->
             <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter a valid SIN">
                 <input class="form-control" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
                 <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />text to be provided by CVAP</ng-template>
+            </app-field>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Do you identify as an Indigenous person?" [required]="true" [valid]="isMyControlValid(form.get('indigenousStatus'))" errorMessage="Please select an option">
+                <select class="form-control" formControlName="indigenousStatus">
+                    <option value="0">Select...</option>
+                    <option value="100000000">First Nations</option>
+                    <option value="100000001">Métis</option>
+                    <option value="100000002">Inuit</option>
+                    <option value="100000003">Prefer Not to Answer</option>
+                    <option value="100000004">Not Applicable</option>
+                </select>
             </app-field>
         </div>
     </div>
@@ -180,10 +194,12 @@
 
     <div class="row">
         <div class="col-12">
-            <label class="inline-label inline-checkbox-label">
-                <input type="checkbox" style="margin-right: 10px;" formControlName="agreeToCvapCommunicationExchange" [value]="true">
-                <span>I agree that the Crime Victim Assistance Program can communicate with me about my application and exchange documents via my email address.</span>
-            </label>
+            <app-field [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('agreeToCvapCommunicationExchange')" errorMessage="Please check agreement">
+                <label class="inline-label inline-checkbox-label">
+                    <input type="checkbox" style="margin-right: 10px;" formControlName="agreeToCvapCommunicationExchange" [value]="true">
+                    <span>I agree that the Crime Victim Assistance Program can communicate with me about my application and exchange documents via my email address.<span *ngIf="preferredMethodOfContact.value === '1'" class="error-states">*</span></span>
+                </label>
+            </app-field>
         </div>
     </div>
 

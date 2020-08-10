@@ -337,11 +337,11 @@
 
                     <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
                         <label class="inline-label">
-                            <input type="radio" [value]="true" name="mayContactEmployer" formControlName="mayContactEmployer">
+                            <input type="radio" [value]="CRMBoolean.True" name="mayContactEmployer" formControlName="mayContactEmployer">
                             <span>Yes</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="false" name="mayContactEmployer" formControlName="mayContactEmployer">
+                            <input type="radio" [value]="CRMBoolean.False" name="mayContactEmployer" formControlName="mayContactEmployer">
                             <span>No</span>
                         </label>
                     </app-field>

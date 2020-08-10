@@ -38,6 +38,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int? maritalStatus { get; set; }
         public string sin { get; set; }
         public string occupation { get; set; }
+        public int? indigenousStatus { get; set; }
         public int preferredMethodOfContact { get; set; }
         public bool permissionToContactViaMethod { get; set; }
         public string agreeToCvapCommunicationExchange { get; set; }
@@ -175,8 +176,19 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string otherSpecificBenefits { get; set; }
         public bool noneOfTheAboveBenefits { get; set; }
         public string additionalBenefitsDetails { get; set; }
-        //TODO - add employer related fields
-        // public Employer[] employers { get; set; }
+
+        // public int? wereYouEmployedAtTimeOfCrime { get; set; }
+        // public int? wereYouAtWorkAtTimeOfIncident { get; set; }
+        // public string haveYouAppliedForWorkersCompensation { get; set; }
+        // public string workersCompensationClaimNumber { get; set; }
+        // public int? didYouMissWorkDueToCrime { get; set; }
+        public DateTime? daysWorkMissedStart { get; set; }
+        public DateTime? daysWorkMissedEnd { get; set; }
+        // public int? areYouStillOffWork { get; set; }
+        public int? didYouLoseWages { get; set; }
+        // public int? areYouSelfEmployed { get; set; }
+        public Employer[] employers { get; set; }
+        public int? mayContactEmployer { get; set; }
     }
 
     public class Employmentincomeinformation
@@ -242,6 +254,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     {
         public string authorizedPersonFullName { get; set; }
         public string authorizedPersonPhoneNumber { get; set; }
+        public string authorizedPersonEmail { get; set; }
         public string authorizedPersonRelationship { get; set; }
         public string authorizedPersonAgencyName { get; set; }
         public Address authorizedPersonAgencyAddress { get; set; }

@@ -29,6 +29,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
 
         public string vsd_applicantsoccupation { get; set; }
         public string vsd_applicantssocialinsurancenumber { get; set; }
+        public int? vsd_indigenous { get; set; }
 
         public string vsd_applicantsprimaryphonenumber { get; set; }
         public bool vsd_leavevoicemail {get; set;}

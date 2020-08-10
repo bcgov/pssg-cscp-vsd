@@ -108,55 +108,43 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         let phoneControl = this.form.get('phoneNumber');
         let emailControl = this.form.get('email');
         let emailConfirmControl = this.form.get('confirmEmail');
+        let agreeToCVAPControl = this.form.get('agreeToCvapCommunicationExchange');
 
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'primaryAddress');
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'alternateAddress');
         this.addressHelper.setAddressAsRequired(this.form, 'primaryAddress');
         this.addressHelper.markAsTouched(this.form, 'primaryAddress');
 
-        phoneControl.setValidators([Validators.minLength(10), Validators.maxLength(10)]);
-        phoneControl.setErrors(null);
-        emailControl.setValidators([Validators.email]);
-        emailControl.setErrors(null);
-        emailConfirmControl.setValidators([Validators.email, EmailValidator('email')]);
-        emailConfirmControl.setErrors(null);
+        this.setControlValidators(phoneControl, [Validators.minLength(10), Validators.maxLength(10)]);
+        this.setControlValidators(emailControl, [Validators.email]);
+        this.setControlValidators(emailConfirmControl, [Validators.email, EmailValidator('email')]);
+        this.clearControlValidators(agreeToCVAPControl);
 
         let contactMethod = parseInt(value);
-        if (contactMethod === 2) {
-            phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+        if (contactMethod === 2) { //phone call
+            this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
             this.phoneIsRequired = true;
             this.emailIsRequired = false;
             this.addressIsRequired = false;
-        } else if (contactMethod === 1) {
-            emailControl.setValidators([Validators.required, Validators.email]);
-            emailConfirmControl.setValidators([Validators.required, Validators.email, EmailValidator('email')]);
+        } else if (contactMethod === 1) { //Email
+            this.setControlValidators(emailControl, [Validators.required, Validators.email]);
+            this.setControlValidators(emailConfirmControl, [Validators.required, Validators.email, EmailValidator('email')]);
+            this.setControlValidators(agreeToCVAPControl, [Validators.requiredTrue]);
             this.phoneIsRequired = false;
             this.emailIsRequired = true;
             this.addressIsRequired = false;
-        } else if (contactMethod === 4) {
-            // this.addressHelper.setAddressAsRequired(this.form, 'primaryAddress');
-
+        } else if (contactMethod === 4) { //Primary Mail
             this.phoneIsRequired = false;
             this.emailIsRequired = false;
             this.addressIsRequired = true;
             this.alternateAddressIsRequired = false;
-        }
-        else if (contactMethod === 100000002) {
+        } else if (contactMethod === 100000002) { //Alternate Mail
             this.addressHelper.setAddressAsRequired(this.form, 'alternateAddress');
             this.addressHelper.markAsTouched(this.form, 'alternateAddress');
-
             this.phoneIsRequired = false;
             this.emailIsRequired = false;
             this.addressIsRequired = false;
             this.alternateAddressIsRequired = true;
         }
-
-        phoneControl.markAsTouched();
-        phoneControl.updateValueAndValidity();
-        emailControl.markAsTouched();
-        emailControl.updateValueAndValidity();
-        emailConfirmControl.markAsTouched();
-        emailConfirmControl.updateValueAndValidity();
-
     }
 }

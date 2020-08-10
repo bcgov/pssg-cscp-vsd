@@ -31,6 +31,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   showAddCrimeLocation: boolean = true;
   showRemoveCrimeLocation: boolean = false;
 
+  unsureOfCrimeDateSubscription: Subscription;
   wasReportMadeToPoliceSubscription: Subscription;
   applyToCourtForMoneyFromOffenderSubscription: Subscription;
   willBeTakingLegalActionSubscription: Subscription;
@@ -297,26 +298,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.clearControlValidators(this.applyToCourtForMoneyFromOffender);
   }
 
-  //addOrRemoveSignature(): void {
-  //  this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
-  //  this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
-  //  this.signName = this.form.get('racafInformation.signName') as FormControl;
-
-  //  let applyForMoney = this.form.get('racafInformation.applyToCourtForMoneyFromOffender').value;
-  //  let willBeTakingLegal = this.form.get('racafInformation.willBeTakingLegalAction').value;
-
-  //  if (applyForMoney === 100000000 || willBeTakingLegal === 100000000) {
-  //    this.signName.setValidators([Validators.required]);
-  //    this.signName.markAsTouched();
-  //    this.signName.updateValueAndValidity();
-  //  }
-  //  else {
-  //    this.signName.clearValidators();
-  //    this.signName.markAsTouched();
-  //    this.signName.updateValueAndValidity();
-  //  }
-  //}
-
   addCourtInfo(): void {
     this.courtFileItems = this.form.get('courtFiles') as FormArray;
     this.courtFileItems.push(this.crimeInfoHelper.createCourtInfoItem(this.fb));
@@ -365,12 +346,30 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   whenDidCrimeOccurChange(event) {
     let crimePeriodEndControl = this.form.get('crimePeriodEnd');
+    let unsureOfCrimeDatesControl = this.form.get('unsureOfCrimeDates');
 
     if (this.form.get('whenDidCrimeOccur').value) {
       this.setControlValidators(crimePeriodEndControl, [Validators.required]);
     }
-    else {
-      this.form.get('crimePeriodEnd').patchValue(null);
+    else if (!unsureOfCrimeDatesControl.value) {
+      crimePeriodEndControl.patchValue(null);
+      this.clearControlValidators(crimePeriodEndControl);
+    }
+  }
+
+  unsureOfCrimeDateChange(event) {
+    let unsureOfCrimeDatesControl = this.form.get('unsureOfCrimeDates');
+    let crimePeriodEndControl = this.form.get('crimePeriodEnd');
+    let whenDidCrimeOccurControl = this.form.get('whenDidCrimeOccur');
+    console.log(unsureOfCrimeDatesControl.value);
+    console.log(whenDidCrimeOccurControl.value);
+    if (unsureOfCrimeDatesControl.value) {
+      console.log("setting end date validator");
+      this.setControlValidators(crimePeriodEndControl, [Validators.required]);
+    }
+    else if (!whenDidCrimeOccurControl.value) {
+      console.log("clearing end date validator");
+      crimePeriodEndControl.patchValue(null);
       this.clearControlValidators(crimePeriodEndControl);
     }
   }
@@ -390,9 +389,14 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   clearReportEndDate(index: number) {
     this.policeReportItems = this.form.get('policeReports') as FormArray;
     let thisReport = this.policeReportItems.at(index) as FormGroup;
+    let thisEndDateControl = thisReport.get('reportEndDate');
 
     if (thisReport.get('policeReportedMultipleTimes').value) {
-      thisReport.get('reportEndDate').patchValue(null);
+      thisEndDateControl.patchValue(null);
+      this.clearControlValidators(thisEndDateControl);
+    }
+    else {
+      this.setControlValidators(thisEndDateControl, [Validators.required]);
     }
   }
 
