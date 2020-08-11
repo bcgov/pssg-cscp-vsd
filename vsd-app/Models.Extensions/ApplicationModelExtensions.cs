@@ -239,8 +239,15 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     application.Application.vsd_racaf_appliedforrestitution = model.CrimeInformation.racafInformation.applyToCourtForMoneyFromOffender;
                     application.Application.vsd_racaf_requestedexpenses = model.CrimeInformation.racafInformation.expensesRequested;
-                    application.Application.vsd_racaf_expensesawarded = model.CrimeInformation.racafInformation.expensesAwarded;
-                    application.Application.vsd_racaf_amountreceived = model.CrimeInformation.racafInformation.expensesReceived;
+                    if (!string.IsNullOrEmpty(model.CrimeInformation.racafInformation.expensesAwarded))
+                    {
+                        application.Application.vsd_racaf_expensesawarded = float.Parse(model.CrimeInformation.racafInformation.expensesAwarded);
+                    }
+
+                    if (!string.IsNullOrEmpty(model.CrimeInformation.racafInformation.expensesReceived))
+                    {
+                        application.Application.vsd_racaf_amountreceived = float.Parse(model.CrimeInformation.racafInformation.expensesReceived);
+                    }
 
                     application.Application.vsd_racaf_legalactiontaken = model.CrimeInformation.racafInformation.willBeTakingLegalAction;
                     application.Application.vsd_racaf_lawyerorfirmname = model.CrimeInformation.racafInformation.lawyerOrFirmName;

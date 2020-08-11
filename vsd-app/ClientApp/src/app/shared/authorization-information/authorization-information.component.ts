@@ -43,6 +43,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
+        setTimeout(() => { this.form.markAsTouched(); }, 0);
         console.log("auth info component");
         console.log(this.form);
 

@@ -189,8 +189,8 @@ interface Policereport {
 interface Racafinformation {
   applyToCourtForMoneyFromOffender: number;
   expensesRequested: string;
-  expensesAwarded?: number;
-  expensesReceived?: number;
+  expensesAwarded?: string;
+  expensesReceived?: string;
   willBeTakingLegalAction: number;
   haveLawyer?: number;
   lawyerOrFirmName: string;

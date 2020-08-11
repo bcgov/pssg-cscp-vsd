@@ -51,8 +51,9 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        // console.log("medical info component");
-        // console.log(this.form);
+        setTimeout(() => { this.form.markAsTouched(); }, 0);
+        console.log("medical info component");
+        console.log(this.form);
 
         if (this.formType === ApplicationType.Victim_Application) {
             this.otherTreatmentLabel = "Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?";
@@ -61,7 +62,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
             this.otherTreatmentLabel = "Do you have a counsellor/therapist who has been treating you as a result of the incident?";
         }
 
-        if (this.formType === ApplicationType.Victim_Application || this.formType === ApplicationType.IFM_Application) {
+        if (this.formType === ApplicationType.Victim_Application) {
             this.form.get('wereYouTreatedAtHospital').valueChanges.subscribe(value => {
                 let hospitalControl = this.form.get('treatedAtHospitalName');
 
@@ -117,10 +118,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
     }
 
     createTreatmentItem(): FormGroup {
-        // make a form group for insertion into the form
-        return this.fb.group({
-            providerType: [''],
-            providerTypeText: [''],
+        let group = {
             providerName: ['', Validators.required],
             providerEmail: ['', [Validators.email]],
             providerPhoneNumber: [''],
@@ -134,7 +132,17 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
                 province: [{ value: 'British Columbia', disabled: false }],
                 country: [{ value: 'Canada', disabled: false }],
             }),
-        });
+        };
+
+        if (this.formType === ApplicationType.Victim_Application) {
+            group['providerType'] = [''];
+            group['providerTypeText'] = [''];
+        }
+        else {
+            group['providerType'] = ['Counsellor']
+        }
+
+        return this.fb.group(group);
     }
 
     addDoctor(): void {

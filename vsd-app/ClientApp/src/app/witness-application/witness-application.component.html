@@ -9,17 +9,20 @@
             <ng-template matStepperIcon="edit">
               <mat-icon>done</mat-icon>
             </ng-template>
+            <ng-template matStepperIcon="error">
+              <mat-icon>clear</mat-icon>
+            </ng-template>
             <ng-template matStepperIcon="number">
             </ng-template>
-            <mat-step label="Overview"></mat-step>
-            <mat-step label="Personal Information & Addresses"></mat-step>
-            <mat-step label="Victim Information"></mat-step>
-            <mat-step label="Crime Information"></mat-step>
-            <mat-step label="Medical & Dental Information"></mat-step>
-            <mat-step label="Expense & Benefits"></mat-step>
-            <mat-step label="Application on Behalf of Witness"></mat-step>
-            <mat-step label="Declaration"></mat-step>
-            <mat-step label="Authorization"></mat-step>
+            <mat-step label="Overview" [hasError]="!isMyControlValid(form.get('introduction'))"></mat-step>
+            <mat-step label="Personal Information & Addresses" [hasError]="!isMyControlValid(form.get('personalInformation'))"></mat-step>
+            <mat-step label="Victim Information" [hasError]="!isMyControlValid(form.get('victimInformation'))"></mat-step>
+            <mat-step label="Crime Information" [hasError]="!isMyControlValid(form.get('crimeInformation'))"></mat-step>
+            <mat-step label="Medical Information" [hasError]="!isMyControlValid(form.get('medicalInformation'))"></mat-step>
+            <mat-step label="Expense & Benefits" [hasError]="!isMyControlValid(form.get('expenseInformation'))"></mat-step>
+            <mat-step label="Application on Behalf of Witness" [hasError]="!isMyControlValid(form.get('representativeInformation'))"></mat-step>
+            <mat-step label="Declaration" [hasError]="!isMyControlValid(form.get('declarationInformation'))"></mat-step>
+            <mat-step label="Authorization" [hasError]="!isMyControlValid(form.get('authorizationInformation'))"></mat-step>
             <mat-step label="Review & Submit"></mat-step>
           </mat-vertical-stepper>
 

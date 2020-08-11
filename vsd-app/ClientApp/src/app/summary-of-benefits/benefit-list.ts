@@ -13,7 +13,7 @@ export class BenefitLists {
       title: 'Medical services or expenses',
       target: 'Victims who need health care because of their injuries from the crime',
       examples: [
-        'Ambulence or emergency transportation',
+        'Ambulance or emergency transportation',
         'Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)',
         'Health care services at a facility',
         'Medical equipment and supplies'

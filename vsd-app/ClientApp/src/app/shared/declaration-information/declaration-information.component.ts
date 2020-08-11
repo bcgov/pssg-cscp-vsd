@@ -33,8 +33,9 @@ export class DeclarationInformationComponent extends FormBase implements OnInit 
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        // console.log("declaration info component");
-        // console.log(this.form);
+        setTimeout(() => { this.form.markAsTouched(); }, 0);
+        console.log("declaration info component");
+        console.log(this.form);
 
         if (this.formType === ApplicationType.Victim_Application) {
             this.eligible_name = "Victims";

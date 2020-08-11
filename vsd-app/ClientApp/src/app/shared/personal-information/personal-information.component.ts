@@ -53,8 +53,9 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        // console.log("personal info component");
-        // console.log(this.form);
+        setTimeout(() => { this.form.markAsTouched(); }, 0);
+        console.log("personal info component");
+        console.log(this.form);
 
         this.header = "Personal";
         if (this.formType === ApplicationType.Victim_Application) {

@@ -22,6 +22,7 @@ export class IntroductionComponent extends FormBase implements OnInit {
     @Input() formType: number;
     public form: FormGroup;
     ApplicationType = ApplicationType;
+    applicant: string = "";
 
     constructor(
         private controlContainer: ControlContainer,
@@ -32,12 +33,22 @@ export class IntroductionComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        // console.log("intro component");
-        // console.log(this.form);
+        setTimeout(() => { this.form.markAsTouched(); }, 0);
+        console.log("intro component");
+        console.log(this.form);
 
+        if (this.formType === ApplicationType.Victim_Application) {
+            this.applicant = "Victims";
+        }
+        else if (this.formType === ApplicationType.IFM_Application) {
+            this.applicant = "Family Members";
+        }
+        else if (this.formType === ApplicationType.Witness_Application) {
+            this.applicant = "Witnesses";
+        }
     }
 
     showSummaryOfBenefits(): void {
         const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
-      }
+    }
 }

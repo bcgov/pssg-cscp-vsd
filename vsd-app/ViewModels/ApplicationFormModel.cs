@@ -88,8 +88,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     {
         public int? applyToCourtForMoneyFromOffender { get; set; }
         public string expensesRequested { get; set; }
-        public float? expensesAwarded { get; set; }
-        public float? expensesReceived { get; set; }
+        public string expensesAwarded { get; set; }
+        public string expensesReceived { get; set; }
         public int? willBeTakingLegalAction { get; set; }
         public int? haveLawyer { get; set; }
         public string lawyerOrFirmName { get; set; }

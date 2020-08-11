@@ -47,6 +47,7 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
+        setTimeout(() => { this.form.markAsTouched(); }, 0);
         this.crimeLocations = this.form.get('crimeInformation.crimeLocations') as FormArray;
         this.courtFiles = this.form.get('crimeInformation.courtFiles') as FormArray;
         this.policeReports = this.form.get('crimeInformation.policeReports') as FormArray;

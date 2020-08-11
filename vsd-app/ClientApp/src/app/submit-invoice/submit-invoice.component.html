@@ -44,7 +44,7 @@
               <p>Welcome to the Crime Victim Assistance Program's (CVAP) invoice submission form for counselling services.</p>
               <p>First time users please click the link to review instructions. <a [routerLink]="" (click)="showInvoiceInstructions()">Link</a></p>
 
-              <p>This form is best used on Chrome, Firefox and Edge.</p>
+              <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
 
               <h3>Payee Information</h3>
               <div class="row">
@@ -260,7 +260,7 @@
                       </app-field>
                     </div>
                   </div>
-                  <app-field [required]="true" [valid]="isFieldValid('invoiceDetails.declaredAndSigned')" errorMessage="Please check declaration">
+                  <app-field [required]="true" [valid]="isFieldValid('invoiceDetails.declaredAndSigned')" errorMessage="Please check this box to indicate that you accept Declaration">
                     <label>
                       <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
                       I declare the information provided on this invoice to be true and correct. <span class="error-states">*</span>

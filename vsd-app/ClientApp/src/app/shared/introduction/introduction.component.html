@@ -20,9 +20,9 @@
         <p>If this definition does not apply to you, please see the application forms for <a routerLink="/ifm-application">Immediate Family Members</a> or <a routerLink="/victim-application">Victims</a>.</p>
     </div>
 
-    <h3>What types of benefits does the Crime Victim's Assistance Program provide?</h3>
+    <h3>What types of benefits does the Crime Victim Assistance Program provide?</h3>
 
-    <p>Benefits that may be available to Victims of violent crime include:</p>
+    <p>Benefits that may be available to {{applicant}}<span *ngIf="formType === ApplicationType.Victim_Application"> of violent crime</span> include:</p>
     <ul class="list">
         <ng-container *ngIf="formType === ApplicationType.Victim_Application">
             <li>medical and dental expenses</li>
@@ -87,15 +87,15 @@
         <li>All information pertaining to the incident</li>
         <li>Your own health information (PHN)</li>
         <li>Police Officers contact (If Known)</li>
-        <li>Employment information (if requesting benefits for lost employment income)</li>
+        <li *ngIf="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application">Employment information (if requesting benefits for lost employment income)</li>
         <li>Info about the deceased (if it was a fatality)</li>
         <li>What benefits you are claiming (View <a [routerLink]="" (click)="showSummaryOfBenefits()">Summary of Benefits</a>)</li>
         <li>Victim Service Worker's information (if available)</li>
         <li>Court File Number (if known)</li>
         <li>Date of crime</li>
         <li>Date reported to police</li>
-        <li>Date of hospital visit (if applicable)</li>
-        <li>Name of hospital (if applicable)</li>
+        <li *ngIf="formType === ApplicationType.Victim_Application">Date of hospital visit (if applicable)</li>
+        <li *ngIf="formType === ApplicationType.Victim_Application">Name of hospital (if applicable)</li>
         <li>Date of any health care professional (ie., doctor, psychiatrist) visit</li>
         <li>Name of any health care professional (if applicable)</li>
     </ul>

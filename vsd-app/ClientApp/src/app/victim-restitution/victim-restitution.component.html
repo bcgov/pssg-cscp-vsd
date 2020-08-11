@@ -343,7 +343,7 @@
             </app-field>
             <app-file-uploader-box [initialValues]="form.value.restitutionInformation.restitutionOrders" (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
             <h2 class="blue-header">Declaration & Signature</h2>
-            <app-field [required]="true" [valid]="isFieldValid('restitutionInformation.declaredAndSigned')" errorMessage="Please check declaration">
+            <app-field [required]="true" [valid]="isFieldValid('restitutionInformation.declaredAndSigned')" errorMessage="Please check this box to indicate that you accept Declaration">
               <label>
                 <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
                 I submit this application in support of a claim for benefits available to Victims under the Crime Victim Assistance Act, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>

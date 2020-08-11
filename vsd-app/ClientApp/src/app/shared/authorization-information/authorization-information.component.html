@@ -21,14 +21,14 @@
 
   <section>
     <h2 class="blue-header">Standard Authorization & Signature</h2>
-    <app-field [required]="true" [valid]="isFieldValid('approvedAuthorityNotification')" errorMessage="Please check declaration">
+    <app-field [required]="true" [valid]="isFieldValid('approvedAuthorityNotification')" errorMessage="Please check this box to indicate that you accept Declaration">
       <label>
         <input type="checkbox" [value]="true" name="approvedAuthorityNotification" formControlName="approvedAuthorityNotification">
         I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the <em>Crime Victim Assistance Act</em>. <span class="error-states">*</span>
       </label>
     </app-field>
 
-    <app-field [required]="true" [valid]="isFieldValid('readAndUnderstoodTermsAndConditions')" errorMessage="Please check declaration">
+    <app-field [required]="true" [valid]="isFieldValid('readAndUnderstoodTermsAndConditions')" errorMessage="Please check this box to indicate that you accept Declaration">
       <label>
         <input type="checkbox" [value]="true" name="readAndUnderstoodTermsAndConditions" formControlName="readAndUnderstoodTermsAndConditions">
         I have read and understood the above information <span class="error-states">*</span>
@@ -70,7 +70,7 @@
               </app-field>
             </div>
             <div class="col">
-              <app-field label="Phone Number (incl. area code)">
+              <app-field label="Phone Number (incl. area code)" [valid]="isMyControlValid(item.get('authorizedPersonPhoneNumber'))" errorMessage="Please enter a valid phone number">
                 <input class="form-control" mask='(000) 000 0000' type="text" formControlName="authorizedPersonPhoneNumber">
               </app-field>
             </div>
@@ -104,7 +104,7 @@
 
         </div>
       </div>
-      <app-field [valid]="isFieldValid('authorizedPersonAuthorizesDiscussion')" errorMessage="Please check declaration" [required]="true">
+      <app-field [valid]="isFieldValid('authorizedPersonAuthorizesDiscussion')" errorMessage="Please check this box to indicate that you accept Declaration" [required]="true">
         <label>
           <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion" [required]="true">
           I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person. <span class="error-states ng-star-inserted">*</span>

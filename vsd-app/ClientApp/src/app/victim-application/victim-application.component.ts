@@ -24,6 +24,7 @@ import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import * as _ from 'lodash';
 import { StateService } from '../services/state.service';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-victim-application',
@@ -35,6 +36,7 @@ import { VictimInfoHelper } from '../shared/victim-information/victim-informatio
     // our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } },
   ],
 })
 
@@ -97,7 +99,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, FORM),
       medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, FORM),
       expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, FORM),
-      // employmentIncomeInformation: this.employmentInfoHelper.setupFormGroup(this.fb, FORM),
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, FORM),
       declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, FORM),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, FORM),
@@ -184,20 +185,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         }
       }
     }
-  }
-
-  submitPartialApplication() {
-    this.justiceDataService.submitApplication(this.harvestForm())
-      .subscribe(
-        data => {
-          console.log("submitting partial form");
-          this.router.navigate(['/application-success']);
-        },
-        err => {
-          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-          console.log('Error submitting application');
-        }
-      );
   }
 
   producePDF() {
@@ -463,16 +450,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
-    
+
     ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
-    
+
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
 
     for (let i = 0; i < authorizedPersonsLength; ++i) {
       authorizedPersons.push(this.authInfoHelper.createAuthorizedPerson(this.fb));
     }
-    
+
     ret.get('authorizationInformation').patchValue(currentForm.get('authorizationInformation').value);
     ret.get('authorizationInformation').get('approvedAuthorityNotification').patchValue('');
     ret.get('authorizationInformation').get('readAndUnderstoodTermsAndConditions').patchValue('');
@@ -499,10 +486,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('sin').patchValue('');
     ret.get('personalInformation').get('occupation').patchValue('');
     ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
-    
+
     ret.get('victimInformation').patchValue(currentForm.get('personalInformation').value);
     ret.get('victimInformation').get('mostRecentMailingAddressSameAsPersonal').patchValue(true);
-    
+
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
     let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
@@ -532,7 +519,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
-    
+
     ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;

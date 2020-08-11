@@ -5,21 +5,27 @@
       <h3>Victim Application</h3>
       <section class="application-nav sticky-top">
         <div>
-          <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
+          <mat-vertical-stepper linear (selectionChange)="gotoPage($event)" #stepper>
             <ng-template matStepperIcon="edit">
               <mat-icon>done</mat-icon>
             </ng-template>
+            <ng-template matStepperIcon="error">
+              <mat-icon>clear</mat-icon>
+            </ng-template>
             <ng-template matStepperIcon="number">
             </ng-template>
-            <mat-step label="Overview"></mat-step>
-            <mat-step label="Victim Information & Addresses"></mat-step>
-            <mat-step label="Crime Information"></mat-step>
-            <mat-step label="Medical & Dental Information"></mat-step>
-            <mat-step label="Expense & Loss Information"></mat-step>
-            <mat-step label="Employment Income"></mat-step>
-            <mat-step label="Application on Behalf of Victim"></mat-step>
-            <mat-step label="Declaration"></mat-step>
-            <mat-step label="Authorization"></mat-step>
+
+            <!-- can use stepControl if we want to enforce linear and not allow any progression when a form is invalid -->
+            <!-- [stepControl]="form.get('introduction')" -->
+            <mat-step label="Overview" [hasError]="!isMyControlValid(form.get('introduction'))"></mat-step>
+            <mat-step label="Victim Information & Addresses" [hasError]="!isMyControlValid(form.get('personalInformation'))"></mat-step>
+            <mat-step label="Crime Information" [hasError]="!isMyControlValid(form.get('crimeInformation'))"></mat-step>
+            <mat-step label="Medical & Dental Information" [hasError]="!isMyControlValid(form.get('medicalInformation'))"></mat-step>
+            <mat-step label="Expense & Loss Information" [hasError]="!isMyControlValid(form.get('expenseInformation'))"></mat-step>
+            <mat-step label="Employment Income" [hasError]="!isMyControlValid(form.get('employmentIncomeInformation'))"></mat-step>
+            <mat-step label="Application on Behalf of Victim" [hasError]="!isMyControlValid(form.get('representativeInformation'))"></mat-step>
+            <mat-step label="Declaration" [hasError]="!isMyControlValid(form.get('declarationInformation'))"></mat-step>
+            <mat-step label="Authorization" [hasError]="!isMyControlValid(form.get('authorizationInformation'))"></mat-step>
             <mat-step label="Review & Submit"></mat-step>
           </mat-vertical-stepper>
 

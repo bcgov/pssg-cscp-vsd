@@ -81,9 +81,10 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   ngOnInit() {
     this.form = <FormGroup>this.controlContainer.control;
+    setTimeout(() => { this.form.markAsTouched(); }, 0);
 
-    // console.log("crime info component");
-    // console.log(this.form);
+    console.log("crime info component");
+    console.log(this.form);
     // Commented out in case they actually want to return this functionality
     //this.copyApplicantToRACAFSignature(this.form.parent);
     this.policeReportItems = this.form.get('policeReports') as FormArray;
@@ -361,14 +362,10 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     let unsureOfCrimeDatesControl = this.form.get('unsureOfCrimeDates');
     let crimePeriodEndControl = this.form.get('crimePeriodEnd');
     let whenDidCrimeOccurControl = this.form.get('whenDidCrimeOccur');
-    console.log(unsureOfCrimeDatesControl.value);
-    console.log(whenDidCrimeOccurControl.value);
     if (unsureOfCrimeDatesControl.value) {
-      console.log("setting end date validator");
       this.setControlValidators(crimePeriodEndControl, [Validators.required]);
     }
     else if (!whenDidCrimeOccurControl.value) {
-      console.log("clearing end date validator");
       crimePeriodEndControl.patchValue(null);
       this.clearControlValidators(crimePeriodEndControl);
     }
@@ -402,5 +399,21 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   policeForceSelected(index: number) {
 
+  }
+
+  applyToCourtForMoneyFromOffenderChange(event) {
+    let applyToCourtForMoneyFromOffenderControl = this.form.get('racafInformation.applyToCourtForMoneyFromOffender');
+    let expensesRequestedControl = this.form.get('racafInformation.expensesRequested');
+    let expensesAwardedControl = this.form.get('racafInformation.expensesAwarded');
+    let expensesReceivedControl = this.form.get('racafInformation.expensesReceived');
+    if (applyToCourtForMoneyFromOffenderControl.value === CRMMultiBoolean.True) {
+      this.setControlValidators(expensesRequestedControl, [Validators.required]);
+      this.setControlValidators(expensesAwardedControl, [Validators.required]);
+      this.setControlValidators(expensesReceivedControl, [Validators.required]);
+    } else {
+      this.clearControlValidators(expensesRequestedControl);
+      this.clearControlValidators(expensesAwardedControl);
+      this.clearControlValidators(expensesReceivedControl);
+    }
   }
 }

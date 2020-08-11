@@ -22,6 +22,7 @@ import { RepresentativeInfoHelper } from '../shared/representative-information/r
 import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 const moment = _rollupMoment || _moment;
 
@@ -35,6 +36,7 @@ const moment = _rollupMoment || _moment;
     // our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } },
   ],
 })
 
@@ -137,20 +139,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         }
       }
     }
-  }
-
-  submitPartialApplication() {
-    this.justiceDataService.submitApplication(this.harvestForm())
-      .subscribe(
-        data => {
-          console.log("submitting partial form");
-          this.router.navigate(['/application-success']);
-        },
-        err => {
-          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-          console.log('Error submitting application');
-        }
-      );
   }
 
   submitApplication() {
