@@ -15,7 +15,7 @@
 
         <app-field label="Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates." errorMessage="Please make a selection" [showChevrons]="false">
             <label class="inline-label">
-                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
+                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates" (change)="unsureOfCrimeDateChange($event)"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
             </label>
         </app-field>
         <app-field label="Crime occurred over a period of time" errorMessage="Please make a selection" [showChevrons]="false">
@@ -29,28 +29,15 @@
             </label>
         </app-field>
 
-        <section>
-            <app-field label="Date(s) of crime" [required]="true" [valid]="form.get('whenDidCrimeOccur').value === true?isFieldValid('crimePeriodStart') && isFieldValid('crimePeriodEnd'):isFieldValid('crimePeriodStart')" errorMessage="Please enter the crime date">
-                <input type="text" (dateChange)="crimePeriodStartChange($event)" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" [max]="todaysDate" (click)="crimePeriodStartPicker.open()" readonly>
-                <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
-                <span *ngIf="form.get('whenDidCrimeOccur').value === true || form.get('unsureOfCrimeDates').value === true">
-                    <span> - </span>
-                    <input type="text" [min]="crimePeriodStartDate" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" [max]="todaysDate" (click)="crimePeriodEndDatePicker.open()" readonly>
-                    <mat-datepicker #crimePeriodEndDatePicker></mat-datepicker>
-                </span>
-            </app-field>
-        </section>
-
-        <!-- <app-field label="Is this application being filed within one year of the date of the crime?" [valid]="isFieldValid('applicationFiledWithinOneYearFromCrime')" errorMessage="Please make a selection" [required]="true" [showChevrons]="false">
-            <label class="inline-label">
-                <input type="radio" [value]="true" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
-                <span>Yes</span>
-            </label>
-            <label class="inline-label">
-                <input type="radio" [value]="false" name="applicationFiledWithinOneYearFromCrime" formControlName="applicationFiledWithinOneYearFromCrime">
-                <span>No</span>
-            </label>
-        </app-field> -->
+        <app-field label="Date(s) of crime" [required]="true" [valid]="form.get('whenDidCrimeOccur').value === true||form.get('unsureOfCrimeDates').value === true?isMyControlValid(form.get('crimePeriodStart')) && isMyControlValid(form.get('crimePeriodEnd')):isMyControlValid(form.get('crimePeriodStart'))" errorMessage="Please enter the crime date">
+            <input type="text" (dateChange)="crimePeriodStartChange($event)" class="form-control date-picker" formControlName="crimePeriodStart" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodStartPicker" (focus)="crimePeriodStartPicker.open()" [max]="todaysDate" (click)="crimePeriodStartPicker.open()" readonly>
+            <mat-datepicker #crimePeriodStartPicker></mat-datepicker>
+            <span *ngIf="form.get('whenDidCrimeOccur').value === true || form.get('unsureOfCrimeDates').value === true">
+                <span> - </span>
+                <input type="text" [min]="crimePeriodStartDate" class="form-control date-picker" formControlName="crimePeriodEnd" placeholder="yyyy-mm-dd" [matDatepicker]="crimePeriodEndDatePicker" (focus)="crimePeriodEndDatePicker.open()" [max]="todaysDate" (click)="crimePeriodEndDatePicker.open()" readonly>
+                <mat-datepicker #crimePeriodEndDatePicker></mat-datepicker>
+            </span>
+        </app-field>
 
         <section *ngIf="showWhyDidYouNotApplySooner">
             <app-field label="Please briefly explain why you did not apply sooner" [tooltipReference]="fileWithinYearTemplate">
@@ -178,7 +165,7 @@
                             </td>
                             <td>
                                 <span *ngIf="item.controls.policeReportedMultipleTimes.value === true">
-                                    <input type="text" [max]="today" [min]="policeReportMinDates[i]" class="form-control date-picker" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
+                                    <input type="text" [max]="today" [min]="policeReportMinDates[i]" class="form-control date-picker" [class.input-error]="!isMyControlValid(item.get('reportEndDate'))" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
                                     <mat-datepicker #reportEndDatePicker></mat-datepicker>
                                 </span>
                             </td>
@@ -321,18 +308,41 @@
 
                     <app-field label="Did you apply to the court for money from the offender?" [required]="form.get('haveYouSuedOffender').value === CRMBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.applyToCourtForMoneyFromOffender')" errorMessage="Please make a selection">
                         <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.True" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                            <input type="radio" [value]="CRMMultiBoolean.True" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange($event)">
                             <span>Yes</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.False" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                            <input type="radio" [value]="CRMMultiBoolean.False" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange($event)">
                             <span>No</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender">
+                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange($event)">
                             <span>Not Applicable (No trial/conviction)</span>
                         </label>
                     </app-field>
+
+                    <ng-container *ngIf="form.get('racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <app-field label="Requested Expenses" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesRequested'))" errorMessage="Please enter the requested expenses">
+                                    <input class="form-control" type="text" formControlName="expensesRequested" />
+                                </app-field>
+                            </div>
+                            <div class="col-md-6">
+                                <app-field label="Expenses Awarded" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesAwarded'))" errorMessage="Please enter the expenses awarded">
+                                    <input class="form-control" type="text" prefix="$" mask="separator.2" thousandSeparator="," separatorLimit="10000000" formControlName="expensesAwarded" />
+                                </app-field>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <app-field label="Amount Received" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesReceived'))" errorMessage="Please enter the amount received">
+                                    <input class="form-control" type="text" prefix="$" mask="separator.2" thousandSeparator="," separatorLimit="10000000" formControlName="expensesReceived" />
+                                </app-field>
+                            </div>
+                        </div>
+                    </ng-container>
 
                     <h3>Civil Action</h3>
                     <p><strong>Civil action</strong> refers to taking legal action against, or suing, a person or party responsible for the claimant’s injury or loss.</p>
@@ -375,7 +385,7 @@
 
                         <app-address [group]="form.get('racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
                     </section>
-                    <section *ngIf="form.get('racafInformation.willBeTakingLegalAction').value===CRMMultiBoolean.True || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000">
+                    <section *ngIf="form.get('racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True || form.get('racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True">
                         <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
                         <div class="terms" [class.with-error]="!form.get('racafInformation.signName').valid && form.get('racafInformation.signName').touched">
                             <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following: <span class="error-states ng-star-inserted">*</span></p>

@@ -33,6 +33,7 @@ export interface PersonalInformation {
   alias: NameBlock;
   sin: string;
   occupation: string;
+  indigenousStatus: number;
   agreeToCvapCommunicationExchange: string;
   phoneNumber: string;
   leaveVoicemail: boolean;
@@ -117,6 +118,12 @@ export interface ExpenseInformation {
   haveCrimeSceneCleaningExpenses: string;
   otherSpecificExpenses: string;
   otherSpecificBenefits: string;
+  didYouLoseWages?: number;
+  sin?: number;
+  daysWorkMissedStart?: Date;
+  daysWorkMissedEnd?: Date;
+  employers: Employer[];
+  mayContactEmployer?: number;
 }
 export interface EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime?: number;
@@ -182,8 +189,8 @@ interface Policereport {
 interface Racafinformation {
   applyToCourtForMoneyFromOffender: number;
   expensesRequested: string;
-  expensesAwarded?: number;
-  expensesReceived?: number;
+  expensesAwarded?: string;
+  expensesReceived?: string;
   willBeTakingLegalAction: number;
   haveLawyer?: number;
   lawyerOrFirmName: string;
@@ -203,6 +210,7 @@ interface AuthorizedPerson {
   providerTypeText: string;
   authorizedPersonFullName: string;
   authorizedPersonPhoneNumber: string;
+  authorizedPersonEmail: string;
   authorizedPersonAgencyAddress: Address;
   authorizedPersonRelationship: string;
   authorizedPersonAgencyName: string;

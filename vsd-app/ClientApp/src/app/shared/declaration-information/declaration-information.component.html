@@ -6,7 +6,7 @@
     <p>By signing this section you declare that the information you have provided on this application is true and correct. It is an offence to provide false or misleading information on this application and may lead to prosecution. If it is discovered at a later time that false or misleading information has been provided on this application form, you may be required to repay to CVAP any benefits received.</p>
     <section>
         <h2 class="blue-header">Declaration & Signature</h2>
-        <app-field [required]="true" [valid]="isFieldValid('declaredAndSigned')" errorMessage="Please check declaration">
+        <app-field [required]="true" [valid]="isFieldValid('declaredAndSigned')" errorMessage="Please check this box to indicate that you accept Declaration">
             <label>
                 <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
                 I submit this application in support of a claim for benefits available to {{eligible_name}} under the <em>Crime Victim Assistance Act</em>, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>

@@ -47,8 +47,9 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        // console.log("representative info component");
-        // console.log(this.form);
+        setTimeout(() => { this.form.markAsTouched(); }, 0);
+        console.log("representative info component");
+        console.log(this.form);
 
         if (this.formType === ApplicationType.Victim_Application) {
             this.header = "Victim";

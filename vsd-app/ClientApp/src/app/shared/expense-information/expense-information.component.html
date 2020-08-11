@@ -53,19 +53,19 @@
                 <app-field>
                     <label>
                         <input type="checkbox" [value]="true" name="haveProtectiveMeasureExpenses" formControlName="haveProtectiveMeasureExpenses" (change)="changeGroupValidity($event)">
-                        Protective Measures for Security Devices
+                        Protective Measures for Security Devices <app-tool-tip [trigger]="benefitsSecurityDevices"></app-tool-tip>
                     </label>
                 </app-field>
                 <app-field>
                     <label>
                         <input type="checkbox" [value]="true" name="haveProtectiveMovingExpenses" formControlName="haveProtectiveMovingExpenses" (change)="changeGroupValidity($event)">
-                        Protective Measures for Moving Expenses
+                        Protective Measures for Moving Expenses <app-tool-tip [trigger]="benefitsMovingExpenses"></app-tool-tip>
                     </label>
                 </app-field>
                 <app-field>
                     <label>
                         <input type="checkbox" [value]="true" name="haveTransportationToObtainBenefits" formControlName="haveTransportationToObtainBenefits" (change)="changeGroupValidity($event)">
-                        Transportation to Obtain Benefits
+                        Transportation to Obtain Benefits <app-tool-tip [trigger]="benefitsTransportation"></app-tool-tip>
                     </label>
                 </app-field>
                 <app-field>
@@ -337,11 +337,11 @@
 
                     <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
                         <label class="inline-label">
-                            <input type="radio" [value]="true" name="mayContactEmployer" formControlName="mayContactEmployer">
+                            <input type="radio" [value]="CRMBoolean.True" name="mayContactEmployer" formControlName="mayContactEmployer">
                             <span>Yes</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="false" name="mayContactEmployer" formControlName="mayContactEmployer">
+                            <input type="radio" [value]="CRMBoolean.False" name="mayContactEmployer" formControlName="mayContactEmployer">
                             <span>No</span>
                         </label>
                     </app-field>
@@ -451,8 +451,8 @@
 <!-- Tool tips -->
 <ng-template #benefitsCounsellingTransportation>
     <h3>Transportation to obtain counselling</h3>
-    <p>For Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p>
-    <p>Also for Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death.</p>
+    <p *ngIf="formType === ApplicationType.IFM_Application">For Immediate Family Members who need to travel some distance to obtain counselling services</p>
+    <p *ngIf="formType === ApplicationType.Witness_Application">For Witnesses who need to travel some distance to obtain counselling services</p>
     <p><strong>Examples:</strong></p>
     <ul>
         <li>Transportation expenses such as bus fare, air fare, mileage expenses</li>
@@ -465,7 +465,7 @@
     <p>Victims who need healthcare because of their injuries from the crime</p>
     <p><strong>Examples:</strong></p>
     <ul>
-        <li>Ambulence or emergency transportation</li>
+        <li>Ambulance or emergency transportation</li>
         <li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li>
         <li>Health care services at a facility</li>
         <li>Medical equipment and supplies</li>
@@ -473,37 +473,69 @@
 </ng-template>
 <ng-template #benefitsDental>
     <h3>Dental Expenses</h3>
-    <p>Victims who need healthcare because of their injuries from the crime</p>
+    <p>Victims who need dental care because of their injuries from the crime</p>
     <p><strong>Examples:</strong></p>
     <ul>
-        <li>Ambulence or emergency transportation</li>
-        <li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li>
-        <li>Health care services at a facility</li>
+        <li>Diagnosis and treatment by a dentist or dental health professional</li>
+        <li>Bridges, crowns, dentures and other dental appliances or device</li>
     </ul>
 </ng-template>
 <ng-template #benefitsPrescription>
     <h3>Prescription Drug Expenses</h3>
-    <p>Victims who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p>
+    <p *ngIf="formType === ApplicationType.Victim_Application">Victims who need prescription drugs to recover from, or manage the effects of, their injuries from the crime</p>
+    <p *ngIf="formType === ApplicationType.IFM_Application">For Immediate Family Members who need prescription drugs to recover from the psychological injury caused by the crime</p>
+    <p *ngIf="formType === ApplicationType.Witness_Application">For Witnesses who need prescription drugs to recover from the psychological injury caused by the crime</p>
     <p><strong>Examples:</strong></p>
     <ul>
-        <li>Medications prescribed by a doctor, dentist, or podiatrist</li>
+        <li>Medications prescribed by a doctor<span *ngIf="formType === ApplicationType.Victim_Application">, dentist, or podiatrist</span></li>
     </ul>
 </ng-template>
 <ng-template #benefitsCounselling>
     <h3>Counselling</h3>
-    <p>For all victims of crime</p>
+    <p *ngIf="formType === ApplicationType.Victim_Application">For all victims of crime</p>
+    <p *ngIf="formType === ApplicationType.IFM_Application">For Immediate Family Members who need counselling to recover from the psychological injury caused by the crime</p>
+    <p *ngIf="formType === ApplicationType.Witness_Application">For Witnesses who need counselling to recover from the psychological injury caused by the crime</p>
     <p><strong>Examples:</strong></p>
     <ul>
         <li>Counselling Sessions</li>
-        <li>Psycho-educational sessions to others who support the victim</li>
+        <li *ngIf="formType === ApplicationType.Victim_Application">Psycho-educational sessions to others who support the victim</li>
+        <li>Court Support Counselling during legal proceedings related to the crime</li>
     </ul>
 </ng-template>
 <ng-template #benefitsLostEmployment>
     <h3>Lost Employment Income (reimbursed at minimum wage)</h3>
-    <p>Victims whose injuries have a long-term effect on their ability to work and who did not have a job when the crime occurred (special eligibility issues for minors)</p>
+    <p>Victims whose injuries have a short-term or long-term effect on their ability to work and who had a job when the crime occurred (special eligibility for minors)</p>
     <p><strong>Examples:</strong></p>
     <ul>
         <li>Monthly payments to assist in financially supporting the victim</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsSecurityDevices>
+    <h3>Protective Measures for Security Devices</h3>
+    <p>Victims who are at risk of additional harm from the perpetrator or are so traumatized by fear they cannot lead normal lives</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Security or communication equipment and services</li>
+        <li>Courses for personal protection or security</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsMovingExpenses>
+    <h3>Protective Measures for Moving Expenses</h3>
+    <p>Victims who are at risk of additional harm from the perpetrator or are so traumatized by fear they cannot lead normal lives</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Moving truck rental</li>
+        <li>Security deposit on new residence</li>
+    </ul>
+</ng-template>
+<ng-template #benefitsTransportation>
+    <h3>Transportation to Obtain Benefits</h3>
+    <p>Victims who have to travel some distance to obtain medical, dental, counselling, or vocational services provided as crime victim assistance benefits</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li>Transportation expenses such as bus fare, air fare, or mileage expenses</li>
+        <li>Meals and accommodation</li>
+        <li>Childcare while attending appointments</li>
     </ul>
 </ng-template>
 <ng-template #benefitsLostProperty>
@@ -514,7 +546,7 @@
         <li>Eyeglass frames</li>
         <li>Prescription lenses</li>
         <li>Various types of disability aids</li>
-        <li>Clothing</li>
+        <li>Clothing (please estimate the replacement cost in the details of your request box below)</li>
     </ul>
 </ng-template>
 <ng-template #benefitsProtective>
@@ -522,7 +554,7 @@
     <p>Victims who need healthcare because of their injuries from the crime</p>
     <p><strong>Examples:</strong></p>
     <ul>
-        <li>Ambulence or emergency transportation</li>
+        <li>Ambulance or emergency transportation</li>
         <li>Diagnosis and treatment by doctors or health professionals (e.g., physiotherapists, massage therapists)</li>
         <li>Health care services at a facility</li>
     </ul>
@@ -551,8 +583,7 @@
 </ng-template>
 <ng-template #expensesWitnessCrimeSceneCleaning>
     <h3>Crime Scene Cleaning</h3>
-    <h2>NEED FINAL TEXT</h2>
-    <p>Victims who were injured at their home or in their vehicle and need specialized cleaning of the home or vehicle due to the nature of the crime.</p>
+    <p>Witnesses who need specialized cleaning of their home or vehicle because the crime was committed there</p>
     <p><strong>Examples:</strong></p>
     <ul>
         <li>Specialized cleaning and disinfecting of contaminated areas</li>
@@ -592,9 +623,8 @@
     </ul>
 </ng-template>
 <ng-template #expensesLegalTransportation>
-    <h3>Transportation and related expenses, and transportation related childcare</h3>
-    <p>Immediate Family Members who have to travel some distance to obtain counselling or vocational services provided as CVAP benefits.</p>
-    <p>Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death</p>
+    <h3>Transportation to attend legal proceedings</h3>
+    <p *ngIf="formType === ApplicationType.IFM_Application">For Immediate Family Members of deceased victims who have to travel over 100 km to attend legal proceedings regarding the death</p>
     <p><strong>Examples:</strong></p>
     <ul>
         <li>Transportation expenses such as bus fare, air fare, mileage expenses</li>

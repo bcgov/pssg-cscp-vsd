@@ -20,7 +20,7 @@ export class CrimeInfoHelper {
             crimeInjuries: ['', Validators.required],
             documents: fb.array([]),
 
-            wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]], // No: 100000000 Yes: 100000001
+            wasReportMadeToPolice: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
 
             policeReports: fb.array([]),
             noPoliceReportIdentification: [''],
@@ -34,7 +34,7 @@ export class CrimeInfoHelper {
             courtFiles: fb.array([]),
 
             haveYouSuedOffender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]],
-            intendToSueOffender: [null], // Yes: 100000000 No: 100000001 Undecided: 100000002
+            intendToSueOffender: [null],
 
             racafInformation: this.createRACAFInformation(fb),
         };

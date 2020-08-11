@@ -432,7 +432,7 @@
         <h3>Treatment</h3>
         <table class="table table-striped review-table">
             <tbody>
-                <ng-container *ngIf="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application">
+                <ng-container *ngIf="formType === ApplicationType.Victim_Application">
                     <tr>
                         <th>Did you goto a hospital to be treated for injuries resulting from the incident?</th>
                         <td>{{ valueOrEmpty('medicalInformation.wereYouTreatedAtHospital') }} </td>

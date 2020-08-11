@@ -11,7 +11,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
     {
         public static ApplicationDynamicsModel ToVsdVictimsModel(this ApplicationFormModel model)
         {
-            var application = new ApplicationDynamicsModel(); 
+            var application = new ApplicationDynamicsModel();
             application.Application = new Application();
 
             if (model == null)
@@ -44,6 +44,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
                 application.Application.vsd_applicantsoccupation = model.PersonalInformation.occupation;
                 application.Application.vsd_applicantssocialinsurancenumber = model.PersonalInformation.sin;
+                application.Application.vsd_indigenous = model.PersonalInformation.indigenousStatus;
 
                 // what format does dynamics expect in the JSON?
                 // currently the Dynamics UI only allows a 10-digit number and uses some fancy input masking to include the parens and hyphens 
@@ -132,7 +133,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
                 application.Application.vsd_cvap_reasontoapplylate = model.CrimeInformation.whyDidYouNotApplySooner; // TODO: Verify mapping - I think it's right but just different names
 
-                if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember || application.Application.vsd_applicanttype == (int)ApplicationType.Witness) {
+                if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember || application.Application.vsd_applicanttype == (int)ApplicationType.Witness)
+                {
                     application.Application.vsd_cvap_victimdeceased = model.CrimeInformation.victimDeceasedFromCrime;
                     application.Application.vsd_cvap_victimdateofdeath = model.CrimeInformation.dateOfDeath;
                 }
@@ -237,8 +239,15 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     application.Application.vsd_racaf_appliedforrestitution = model.CrimeInformation.racafInformation.applyToCourtForMoneyFromOffender;
                     application.Application.vsd_racaf_requestedexpenses = model.CrimeInformation.racafInformation.expensesRequested;
-                    application.Application.vsd_racaf_expensesawarded = model.CrimeInformation.racafInformation.expensesAwarded;
-                    application.Application.vsd_racaf_amountreceived = model.CrimeInformation.racafInformation.expensesReceived;
+                    if (!string.IsNullOrEmpty(model.CrimeInformation.racafInformation.expensesAwarded))
+                    {
+                        application.Application.vsd_racaf_expensesawarded = float.Parse(model.CrimeInformation.racafInformation.expensesAwarded);
+                    }
+
+                    if (!string.IsNullOrEmpty(model.CrimeInformation.racafInformation.expensesReceived))
+                    {
+                        application.Application.vsd_racaf_amountreceived = float.Parse(model.CrimeInformation.racafInformation.expensesReceived);
+                    }
 
                     application.Application.vsd_racaf_legalactiontaken = model.CrimeInformation.racafInformation.willBeTakingLegalAction;
                     application.Application.vsd_racaf_lawyerorfirmname = model.CrimeInformation.racafInformation.lawyerOrFirmName;
@@ -302,7 +311,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         application.ProviderCollection = model.AuthorizationInformation.authorizedPerson.Select(t => new Providercollection
                         {
                             vsd_firstname = t.authorizedPersonFullName,
+                            vsd_lastname = t.authorizedPersonAgencyName,
                             vsd_phonenumber = t.authorizedPersonPhoneNumber,
+                            vsd_email = t.authorizedPersonEmail,
                             vsd_addressline1 = t.authorizedPersonAgencyAddress.line1,
                             vsd_addressline2 = t.authorizedPersonAgencyAddress.line2,
                             vsd_city = t.authorizedPersonAgencyAddress.city,
@@ -418,7 +429,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         // Add the Representative information to the JSON sent to Dynamics
                         Providercollection[] tempProviderCollection = new Providercollection[1];
                         tempProviderCollection[0] = new Providercollection();
-                        // tempProviderCollection[0].vsd_name = "On Behalf of Victim";
                         tempProviderCollection[0].vsd_phonenumber = model.RepresentativeInformation.representativePhoneNumber;
                         tempProviderCollection[0].vsd_alternatephonenumber = model.RepresentativeInformation.representativeAlternatePhoneNumber;
                         tempProviderCollection[0].vsd_addressline1 = model.RepresentativeInformation.representativeAddress.line1;
@@ -426,12 +436,13 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         tempProviderCollection[0].vsd_country = model.RepresentativeInformation.representativeAddress.country;
                         tempProviderCollection[0].vsd_province = model.RepresentativeInformation.representativeAddress.province;
                         tempProviderCollection[0].vsd_city = model.RepresentativeInformation.representativeAddress.city;
+                        tempProviderCollection[0].vsd_postalcode = model.RepresentativeInformation.representativeAddress.postalCode;
                         tempProviderCollection[0].vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact;
                         tempProviderCollection[0].vsd_email = model.RepresentativeInformation.representativeEmail;
                         tempProviderCollection[0].vsd_firstname = model.RepresentativeInformation.representativeFirstName;
                         tempProviderCollection[0].vsd_middlename = model.RepresentativeInformation.representativeMiddleName;
                         tempProviderCollection[0].vsd_lastname = model.RepresentativeInformation.representativeLastName;
-                        tempProviderCollection[0].vsd_relationship1 = model.RepresentativeInformation.relationshipToPerson;// "Representative";
+                        tempProviderCollection[0].vsd_relationship1 = model.RepresentativeInformation.relationshipToPerson;
 
                         int tempProviderCount = 0;
                         if (application.ProviderCollection == null)
@@ -562,9 +573,73 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_otherbenefitsother = model.ExpenseInformation.otherSpecificBenefits;
             }
 
+            //handling for IFM form - it collects income loss information on the expense information
+            if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember && model.CrimeInformation.victimDeceasedFromCrime == 100000001)
+            {
+                if (model.ExpenseInformation.daysWorkMissedStart.HasValue)
+                {
+                    application.Application.vsd_cvap_ifmmissedworkstart = model.ExpenseInformation.daysWorkMissedStart;
+                }
+                if (model.ExpenseInformation.daysWorkMissedEnd.HasValue)
+                {
+                    application.Application.vsd_cvap_ifmmissedworkend = model.ExpenseInformation.daysWorkMissedEnd;
+                }
+
+                application.Application.vsd_cvap_ifmlostwages = model.ExpenseInformation.didYouLoseWages;
+                application.Application.vsd_cvap_ifmcontactemployer = model.ExpenseInformation.mayContactEmployer;
+
+                if (model.ExpenseInformation.employers.Count() > 0)
+                {
+                    if (!String.IsNullOrEmpty(model.ExpenseInformation.employers[0].employerName))
+                    {
+                        Providercollection[] tempProviderCollection;
+                        tempProviderCollection = model.ExpenseInformation.employers.Select(f => new Providercollection
+                        {
+                            vsd_relationship1other = f.employerName,
+                            vsd_phonenumber = f.employerPhoneNumber,
+                            vsd_addressline1 = f.employerAddress.line1,
+                            vsd_addressline2 = f.employerAddress.line2,
+                            vsd_city = f.employerAddress.city,
+                            vsd_province = f.employerAddress.province,
+                            vsd_postalcode = f.employerAddress.postalCode,
+                            vsd_country = f.employerAddress.country,
+                            vsd_firstname = f.employerFirstName,
+                            vsd_lastname = f.employerLastName,
+                            vsd_relationship1 = "Employer",
+                            vsd_email = f.employerEmail,
+                            vsd_fax = f.employerFax,
+                        }).ToArray();
+
+                        int tempProviderCount = 0;
+                        if (application.ProviderCollection == null)
+                        {
+                            tempProviderCount = 0;
+                        }
+                        else
+                        {
+                            tempProviderCount = application.ProviderCollection.Count();
+                        }
+                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                        if (application.ProviderCollection == null)
+                        {
+                            tempCombinedCollection = tempProviderCollection;
+                        }
+                        else
+                        {
+                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                        }
+                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                        if (tempCombinedCollection.Length > 0)
+                        {
+                            application.ProviderCollection = tempCombinedCollection;
+                        }
+                    }
+                }
+            }
+
+            //handling for VICTIM form - it collects income loss information on the employment income information
             if (model.EmploymentIncomeInformation != null && model.ExpenseInformation.haveLostEmploymentIncomeExpenses)
             {
-                // what is with all the "ifm" stuff?
                 if (model.EmploymentIncomeInformation.wereYouEmployedAtTimeOfCrime.HasValue)
                 {
                     application.Application.vsd_cvap_ifmemployedduringcrime = model.EmploymentIncomeInformation.wereYouEmployedAtTimeOfCrime;
@@ -609,12 +684,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_authorizationsignature = model.AuthorizationInformation.signature;
             }
 
-            application.Application.vsd_applicantssignature = model.AuthorizationInformation.signature; // TODO: where does this come from?
+            application.Application.vsd_applicantssignature = model.AuthorizationInformation.signature;
             application.Application.vsd_cvap_optionalauthorization = model.AuthorizationInformation.allowCvapStaffSharing;
-            //application.Application.vsd_optionalauthorizationsignature = ""; // TODO: where does this come from?
-
-            //application.DocumentCollection = new Documentcollection[1]; // TODO: bind collection
-
+            application.Application.vsd_optionalauthorizationsignature = model.AuthorizationInformation.authorizedPersonSignature;
 
             return application;
         }

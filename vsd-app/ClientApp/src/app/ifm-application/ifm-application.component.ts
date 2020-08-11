@@ -26,6 +26,7 @@ import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { StateService } from '../services/state.service';
 import * as _ from 'lodash';
 import { EmploymentInfoHelper } from '../shared/employment-information/employment-information.helper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 const moment = _rollupMoment || _moment;
 
@@ -39,6 +40,7 @@ const moment = _rollupMoment || _moment;
     // our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } },
   ],
 })
 
@@ -152,20 +154,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         }
       }
     }
-  }
-
-  submitPartialApplication() {
-    this.justiceDataService.submitApplication(this.harvestForm())
-      .subscribe(
-        data => {
-          console.log("submitting partial form");
-          this.router.navigate(['/application-success']);
-        },
-        err => {
-          this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-          console.log('Error submitting application');
-        }
-      );
   }
 
   submitApplication() {
@@ -307,7 +295,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         understoodInformation: [null, Validators.requiredTrue]
       }),
       personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, FORM),
-      // victimInformation: this.victimInfoHelper.setupFormGroup(this.fb, FORM),
       crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, FORM),
       medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, FORM),
       expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, FORM),

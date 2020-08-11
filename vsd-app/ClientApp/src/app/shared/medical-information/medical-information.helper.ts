@@ -25,7 +25,7 @@ export class MedicalInfoHelper {
             otherTreatments: fb.array([]),
         };
 
-        if (form_type === ApplicationType.Victim_Application || form_type === ApplicationType.IFM_Application) {
+        if (form_type === ApplicationType.Victim_Application) {
             group['wereYouTreatedAtHospital'] = ['', Validators.required];
             group['treatedAtHospitalName'] = [''];
             group['treatedOutsideBc'] = [''];

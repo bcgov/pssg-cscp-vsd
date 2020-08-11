@@ -331,7 +331,7 @@
             <app-file-uploader-box [initialValues]="form.value.restitutionInformation.restitutionOrders" (fileBundle)="onFileBundle($event)"></app-file-uploader-box>
 
             <h2 class="blue-header">Declaration & Signature</h2>
-            <app-field [required]="true" [valid]="isFieldValid('restitutionInformation.declaredAndSigned')" errorMessage="Please check declaration">
+            <app-field [required]="true" [valid]="isFieldValid('restitutionInformation.declaredAndSigned')" errorMessage="Please check this box to indicate that you accept Declaration">
               <label>
                 <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
                 By signing this form, I am applying to the Restitution Program for assistance in the facilitation of my restitution order and I confirm that I am the individual named on this form. <span class="error-states">*</span>

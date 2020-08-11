@@ -1,6 +1,7 @@
 <div [formGroup]="form">
     <div class="page-header">
-        <h1>Medical & Dental Information</h1>
+        <h1 *ngIf="formType === ApplicationType.Victim_Application">Medical & Dental Information</h1>
+        <h1 *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">Medical Information</h1>
     </div>
     <p>This section provides information regarding any medical or dental treatment you recieved as a result of the crime.</p>
 
@@ -59,7 +60,7 @@
 
         <h2 class="blue-header">Treatment</h2>
 
-        <div *ngIf="formType != ApplicationType.Witness_Application">
+        <div *ngIf="formType === ApplicationType.Victim_Application">
             <h3>Hospital Information</h3>
             <app-field label="Did you go to a hospital to be treated for injuries resulting from the incident?" [valid]="isFieldValid('wereYouTreatedAtHospital')" [required]="true" errorMessage="Please select an option">
                 <label class="inline-label">
@@ -95,7 +96,7 @@
                 </section>
 
                 <app-field label="Date of Initial treatment">
-                    <input type="text" [max]="today" class="form-control date-picker" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()" readonly>
+                    <input type="text" [max]="today" class="form-control standard" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()">
                     <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
                 </app-field>
             </section>
@@ -189,7 +190,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" *ngIf="formType === ApplicationType.Victim_Application">
                         <div class="col-md-12">
                             <app-field label="Type of provider">
                                 <label class="inline-label">
@@ -198,7 +199,7 @@
                                 </label>
 
                                 <label class="inline-label">
-                                    <input type="radio" [value]="'Counsellor / Psychologist'" formControlName="providerType">
+                                    <input type="radio" [value]="'Counsellor'" formControlName="providerType">
                                     <span>Counsellor / Psychologist</span>
                                 </label>
 

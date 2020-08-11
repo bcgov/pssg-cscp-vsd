@@ -1,6 +1,7 @@
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { ApplicationType } from "../enums-list";
 import { POSTAL_CODE } from "../regex.constants";
+import { EmailValidator } from "../validators/email.validator";
 
 export class AuthInfoHelper {
     postalRegex = POSTAL_CODE;
@@ -25,6 +26,11 @@ export class AuthInfoHelper {
             providerTypeText: [''],
             authorizedPersonFullName: ['', Validators.required],
             authorizedPersonPhoneNumber: [''],
+            authorizedPersonEmail: ['', [Validators.email]],
+            authorizedPersonConfirmEmail: ['', [
+                Validators.email,
+                EmailValidator('authorizedPersonEmail')
+            ]],
             authorizedPersonAgencyAddress: fb.group({
                 line1: [''],
                 line2: [''],
