@@ -114,6 +114,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_racaf_lawyercountry { get; set; }
 
         public string vsd_racaf_signature { get; set; }
+        public string vsd_racaf_fullname { get; set; }
 
         public string vsd_applicantspersonalhealthnumber { get; set; }
         public string vsd_applicantsmspprovince { get; set; }

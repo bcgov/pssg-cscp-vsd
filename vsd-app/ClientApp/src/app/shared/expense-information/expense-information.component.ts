@@ -211,7 +211,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
       ];
       this.ADDITIONAL_BENEFITS = [
         'haveCrimeSceneCleaningExpenses',
-        'noneOfTheAboveExpenses'
+        'haveOtherBenefits'
       ];
     }
   }

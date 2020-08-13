@@ -246,9 +246,14 @@
                 </app-field>
                 <app-field>
                     <label>
-                        <input type="checkbox" [value]="true" name="noneOfTheAboveExpenses" formControlName="noneOfTheAboveExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
-                        None of the above
+                        <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits" (change)="changeOtherBenefitValidity($event)">
+                        Other
                     </label>
+                    <section *ngIf="form.get('haveOtherBenefits').value === true" class="pushed">
+                        <app-field label="Please specify">
+                            <input class="form-control standard" type="text" formControlName="otherSpecificBenefits">
+                        </app-field>
+                    </section>
                 </app-field>
 
                 <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
@@ -399,12 +404,6 @@
                                 </app-field>
                             </section>
                         </app-field>
-                        <app-field>
-                            <label>
-                                <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits" (change)="changeOtherBenefitValidity($event)">
-                                None of the above
-                            </label>
-                        </app-field>
                     </ng-container>
 
                     <app-field [valid]="isFieldValid('minimumOtherBenefitsSelected')" errorMessage="Please select at least one option">
@@ -429,9 +428,14 @@
                 </app-field>
                 <app-field>
                     <label>
-                        <input type="checkbox" [value]="true" name="noneOfTheAboveExpenses" formControlName="noneOfTheAboveExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
-                        None of the above
+                        <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits" (change)="changeAdditionalBenefitGroupValidity($event)">
+                        Other
                     </label>
+                    <section *ngIf="form.get('haveOtherBenefits').value === true" class="pushed">
+                        <app-field label="Please specify">
+                            <input class="form-control standard" type="text" formControlName="otherSpecificBenefits">
+                        </app-field>
+                    </section>
                 </app-field>
 
                 <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->

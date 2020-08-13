@@ -45,7 +45,8 @@ export class ExpenseInfoHelper {
         minimumOtherBenefitsSelected: [''], // Dynamically required
 
         haveCrimeSceneCleaningExpenses: [false],
-        noneOfTheAboveExpenses: [''],
+        haveOtherBenefits: [false],
+        otherSpecificBenefits: [''],
         additionalBenefitsDetails: [''],//, Validators.required], ??
       };
     }
@@ -63,7 +64,8 @@ export class ExpenseInfoHelper {
         haveLostOfParentalGuidanceExpenses: [false],
         haveHomeMakerExpenses: [false],
         haveCrimeSceneCleaningExpenses: [false],
-        noneOfTheAboveExpenses: [''],
+        haveOtherBenefits: [false],
+        otherSpecificBenefits: [''],
         missedWorkDueToDeathOfVictim: [''],//, Validators.required],
         didYouLoseWages: [''], //, Validators.required],
         sin: ['', [Validators.minLength(9), Validators.maxLength(9)]],
@@ -82,9 +84,6 @@ export class ExpenseInfoHelper {
         haveCanadaPensionPlanBenefits: [false],
         haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
         haveCivilActionBenefits: [false],
-        haveOtherBenefits: [false],
-        otherSpecificBenefits: [''],
-        noneOfTheAboveBenefits: [false],
         // Have to turn validation off for now - in case no death date. Though, if death date, then there should be validation
         // TODO: Figure out how to do this.
       }

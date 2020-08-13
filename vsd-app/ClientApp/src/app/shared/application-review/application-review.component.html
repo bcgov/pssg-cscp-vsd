@@ -660,8 +660,8 @@
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span></td>
                             </tr>
                             <tr>
-                                <th>None of the above</th>
-                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.noneOfTheAboveExpenses')"></span></td>
+                                <th>Other</th>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -760,10 +760,6 @@
                                 <th>Other</th>
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
                             </tr>
-                            <tr>
-                                <th>None of the above</th>
-                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.noneOfTheAboveBenefits')"></span></td>
-                            </tr>
                         </tbody>
                     </table>
                 </ng-container>
@@ -777,8 +773,8 @@
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span></td>
                             </tr>
                             <tr>
-                                <th>None of the above</th>
-                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.noneOfTheAboveExpenses')"></span></td>
+                                <th>Other</th>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1032,7 +1028,7 @@
                 <tbody>
                     <tr>
                         <th>Full Name</th>
-                        <td>{{ valueOrEmpty(item.get('authorizedPersonFullName')) }}</td>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonFirstName')) }} {{ valueOrEmpty(item.get('authorizedPersonLastName')) }}</td>
                     </tr>
                     <tr>
                         <th>Phone Number</th>

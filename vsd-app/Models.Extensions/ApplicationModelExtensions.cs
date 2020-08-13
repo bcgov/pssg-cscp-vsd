@@ -259,6 +259,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_racaf_lawyercountry = model.CrimeInformation.racafInformation.lawyerAddress?.country;
 
                     application.Application.vsd_racaf_signature = model.CrimeInformation.racafInformation.signature;
+                    application.Application.vsd_racaf_fullname = model.CrimeInformation.racafInformation.signName;
                 }
             }
 
@@ -310,8 +311,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     {
                         application.ProviderCollection = model.AuthorizationInformation.authorizedPerson.Select(t => new Providercollection
                         {
-                            vsd_firstname = t.authorizedPersonFullName,
-                            vsd_lastname = t.authorizedPersonAgencyName,
+                            vsd_firstname = t.authorizedPersonFirstName,
+                            vsd_lastname = t.authorizedPersonLastName,
+                            //TODO - update with agency name!
+                            // vsd_lastname = t.authorizedPersonAgencyName,
                             vsd_phonenumber = t.authorizedPersonPhoneNumber,
                             vsd_email = t.authorizedPersonEmail,
                             vsd_addressline1 = t.authorizedPersonAgencyAddress.line1,
@@ -337,7 +340,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         Providercollection[] tempProviderCollection;
                         tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
                         {
-                            vsd_relationship1other = f.employerName,
+                            //TODO - update with agency name!
+                            // vsd_relationship1other = f.employerName,
                             vsd_phonenumber = f.employerPhoneNumber,
                             vsd_addressline1 = f.employerAddress.line1,
                             vsd_addressline2 = f.employerAddress.line2,
@@ -386,7 +390,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     Providercollection[] tempProviderCollection = new Providercollection[1];
                     tempProviderCollection[0] = new Providercollection();
-                    tempProviderCollection[0].vsd_firstname = model.MedicalInformation.familyDoctorName;
+                    //TODO - update with agency name!
+                    // tempProviderCollection[0].vsd_firstname = model.MedicalInformation.familyDoctorName;
                     tempProviderCollection[0].vsd_email = model.MedicalInformation.familyDoctorEmail;
                     tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
                     tempProviderCollection[0].vsd_fax = model.MedicalInformation.familyDoctorFax;
@@ -527,6 +532,40 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     tempExpenses = tempExpenses + "100000009,";
                 }
+                //Additional Benefits
+                if (model.ExpenseInformation.haveVocationalServicesExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000011,";
+                }
+                if (model.ExpenseInformation.haveIncomeSupportExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000010,";
+                }
+                if (model.ExpenseInformation.haveChildcareExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000013,";
+                }
+                if (model.ExpenseInformation.haveLegalProceedingExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000012,";
+                }
+                if (model.ExpenseInformation.haveFuneralExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000020,";
+                }
+                if (model.ExpenseInformation.haveBereavementLeaveExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000021,";
+                }
+                if (model.ExpenseInformation.haveLostOfParentalGuidanceExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000022,";
+                }
+                if (model.ExpenseInformation.haveHomeMakerExpenses)
+                {
+                    tempExpenses = tempExpenses + "100000014,";
+                }
+
                 if (tempExpenses.Length > 0)
                 {
                     tempExpenses = tempExpenses.Substring(0, tempExpenses.Length - 1);
@@ -595,7 +634,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         Providercollection[] tempProviderCollection;
                         tempProviderCollection = model.ExpenseInformation.employers.Select(f => new Providercollection
                         {
-                            vsd_relationship1other = f.employerName,
+                            //TODO - update with agency name!
+                            // vsd_relationship1other = f.employerName,
                             vsd_phonenumber = f.employerPhoneNumber,
                             vsd_addressline1 = f.employerAddress.line1,
                             vsd_addressline2 = f.employerAddress.line2,
