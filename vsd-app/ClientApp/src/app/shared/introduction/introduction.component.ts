@@ -49,6 +49,6 @@ export class IntroductionComponent extends FormBase implements OnInit {
     }
 
     showSummaryOfBenefits(): void {
-        const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
+        const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { data: this.formType });
     }
 }

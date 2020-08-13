@@ -37,6 +37,10 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
 
     addressHelper = new AddressHelper();
 
+    pages: any;
+
+
+
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
@@ -54,17 +58,65 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
         this.otherMedicalTreatments = this.form.get('medicalInformation.otherTreatments') as FormArray;
         if (this.formType === ApplicationType.Victim_Application) {
             this.employers = this.form.get('employmentIncomeInformation.employers') as FormArray;
+            this.pages = VictimApplicationPages;
         }
         if (this.formType === ApplicationType.IFM_Application) {
             this.employers = this.form.get('expenseInformation.employers') as FormArray;
+            this.pages = IFMApplicationPages;
+        }
+        if (this.formType === ApplicationType.Witness_Application) {
+            this.pages = WitnessApplicationPages;
         }
         console.log("review component");
         console.log(this.form);
 
+        console.log(this.pages);
+
     }
 
     gotoPageIndex(selectPage: number): void {
+        console.log("goto page");
+        console.log(selectPage);
         window.scroll(0, 0);
         this.parentStepper.selectedIndex = selectPage;
     }
+}
+
+enum VictimApplicationPages {
+    Overview,
+    Personal,
+    Crime,
+    Medical,
+    Expense,
+    Employment,
+    OnBehalfOf,
+    Declaration,
+    Authorization,
+    Review
+}
+
+enum IFMApplicationPages {
+    Overview,
+    Personal,
+    Victim,
+    Crime,
+    Medical,
+    Expense,
+    OnBehalfOf,
+    Declaration,
+    Authorization,
+    Review
+}
+
+enum WitnessApplicationPages {
+    Overview,
+    Personal,
+    Victim,
+    Crime,
+    Medical,
+    Expense,
+    OnBehalfOf,
+    Declaration,
+    Authorization,
+    Review
 }

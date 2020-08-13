@@ -5,7 +5,7 @@
     <p>Please check the accuracy of the information entered in your application before submitting.</p>
 
     <section>
-        <h2 class="blue-header">Overview <button (click)="gotoPageIndex(0);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">Overview <button (click)="gotoPageIndex(pages.Overview);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
         <table class="table table-striped review-table">
             <tbody>
                 <tr>
@@ -26,7 +26,7 @@
 
     <section>
         <h2 class="blue-header">
-            Personal Information & Addresses <button (click)="gotoPageIndex(1);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+            Personal Information & Addresses <button (click)="gotoPageIndex(pages.Personal);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
         </h2>
         <h3>Applicant Name</h3>
         <table class="table table-striped review-table">
@@ -125,7 +125,7 @@
 
     <section *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
         <h2 class="blue-header">
-            Victim Information <button (click)="gotoPageIndex(2);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
+            Victim Information <button (click)="gotoPageIndex(pages.Victim);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button>
         </h2>
         <h3>Victim Name</h3>
         <table class="table table-striped review-table">
@@ -211,7 +211,7 @@
     </section>
 
     <section>
-        <h2 class="blue-header">Crime Information <button (click)="gotoPageIndex(2);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">Crime Information <button (click)="gotoPageIndex(pages.Crime);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
         <h3>Crime Occurence</h3>
         <table class="table table-striped review-table">
             <tbody>
@@ -389,7 +389,7 @@
     </section>
 
     <section>
-        <h2 class="blue-header">Medical & Dental Information <button (click)="gotoPageIndex(3);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">Medical & Dental Information <button (click)="gotoPageIndex(pages.Medical);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
         <h3>Coverage</h3>
         <table class="table table-striped review-table">
             <tbody>
@@ -505,7 +505,7 @@
     </section>
 
     <section>
-        <h2 class="blue-header">Expense and {{formType===ApplicationType.Victim_Application ? 'Loss': 'Benefits'}}<button (click)="gotoPageIndex(4);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">Expense and {{formType===ApplicationType.Victim_Application ? 'Loss': 'Benefits'}}<button (click)="gotoPageIndex(pages.Expense);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
         <h3>Benefits Available Through CVAP</h3>
         <table class="table table-striped review-table">
             <tbody>
@@ -788,7 +788,7 @@
     </section>
 
     <section *ngIf="formType === ApplicationType.Victim_Application">
-        <h2 class="blue-header">Employment Income <button (click)="gotoPageIndex(5);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">Employment Income <button (click)="gotoPageIndex(pages.Employment);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
         <h3>Income Loss Information</h3>
         <table class="table table-striped review-table">
             <tbody>
@@ -882,7 +882,7 @@
     </section>
 
     <section>
-        <h2 class="blue-header">Application on Behalf of the Victim <button (click)="gotoPageIndex(6);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">Application on Behalf of the Victim <button (click)="gotoPageIndex(pages.OnBehalfOf);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
         <table class="table table-striped review-table">
             <tbody>
                 <tr>
@@ -970,7 +970,7 @@
     </section>
 
     <section>
-        <h2 class="blue-header">Declaration <button (click)="gotoPageIndex(7);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">Declaration <button (click)="gotoPageIndex(pages.Declaration);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
         <div *ngIf="form.get('declarationInformation.declaredAndSigned').value === true">
             <p>
                 <label class="inline-label inline-checkbox-label">
@@ -993,7 +993,7 @@
     </section>
 
     <section>
-        <h2 class="blue-header">Authorization <button (click)="gotoPageIndex(8);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">Authorization <button (click)="gotoPageIndex(pages.Authorization);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
         <div *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value === true">
             <p>
                 <label class="inline-label inline-checkbox-label">

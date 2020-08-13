@@ -1,19 +1,21 @@
-<mat-dialog-content>
+<mat-dialog-content class="dialog-content">
   <div class="summary-of-benefits">
     <a (click)="closeMe()" class="float-right close-link">Close Window</a>
-    <div *ngIf="applicationType == 'victim'">
-      <h1>Summary of Benefits for Victims</h1>
+    <div *ngIf="formType == ApplicationType.Victim_Application">
+      <h1>Summary of Benefits Available to Victims</h1>
       <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
     </div>
-    <div *ngIf="applicationType == 'ifm'">
-      <h1>Summary of Benefits for Immediate Family Members</h1>
+    <div *ngIf="formType == ApplicationType.IFM_Application">
+      <h1>Summary of Benefits Available to Immediate Family MembersPSSG08</h1>
       <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
     </div>
-    <div *ngIf="applicationType == 'witness'">
-      <h1>Summary of Benefits for Witnesses</h1>
-      <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
+    <div *ngIf="formType == ApplicationType.Witness_Application">
+      <h1>Summary of Benefits Available to Witnesses</h1>
+      <p>The Crime Victim Assistance Program (CVAP) helps victims, immediate family members of victims, and witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries. <strong>This summary focuses on benefits available to witnesses.</strong></p>
+      <p>In this context, “witness” means a person who is psychologically harmed from witnessing a life-threatening or fatal crime against someone with whom they have a strong emotional attachment.</p>
     </div>
-    <div style="height:350px;width:1200px;overflow:auto;overflow-x:hidden;">
+    <!-- style="height:350px;width:1200px;overflow:auto;overflow-x:hidden;" -->
+    <div class="benefits-container">
       <section *ngFor="let item of benefitList;">
         <div class="row">
           <div class="col-12 benefit-title">

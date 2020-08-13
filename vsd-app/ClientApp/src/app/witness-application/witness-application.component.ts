@@ -100,7 +100,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   showSummaryOfBenefits(): void {
     //const summaryDialogConfig = new MatDialogConfig();
-    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'witness' });
+    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { data: this.FORM_TYPE });
   }
 
   getFormGroupName(groupIndex: any) {

@@ -113,7 +113,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   showSummaryOfBenefits(): void {
-    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'ifm' });
+    const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { data: this.FORM_TYPE });
   }
 
   getFormGroupName(groupIndex: any) {
