@@ -75,7 +75,7 @@
                 </tr>
                 <tr *ngIf="formType === ApplicationType.IFM_Application">
                     <th>Relationship to Victim</th>
-                    <td>{{ enumHelper.RelationshipToVictim[valueOrEmpty('personalInformation.relationshipToVictim')] }}</td>
+                    <td>{{ valueOrEmpty('personalInformation.relationshipToVictim') }}<span *ngIf="form.get('personalInformation.relationshipToVictim').value === 'Other'"> : {{ valueOrEmpty('personalInformation.relationshipToVictimOther') }}</span></td>
                 </tr>
                 <tr>
                     <th>Birth Date</th>

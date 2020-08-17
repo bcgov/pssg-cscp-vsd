@@ -63,6 +63,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   declarationInfoHelper = new DeclarationInfoHelper();
   authInfoHelper = new AuthInfoHelper();
 
+  isIE: boolean = false;
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -76,6 +78,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   ngOnInit() {
+    var ua = window.navigator.userAgent;
+    this.isIE = /MSIE|Trident/.test(ua);
     let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
     if (this.state.cloning) {
       this.form = this.state.data;
@@ -85,9 +89,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       this.form = this.buildApplicationForm();
     }
 
-    this.form.get('representativeInformation').patchValue({
-      completingOnBehalfOf: parseInt(completeOnBehalfOf)
-    });
+    if (completeOnBehalfOf) {
+      this.form.get('representativeInformation').patchValue({
+        completingOnBehalfOf: parseInt(completeOnBehalfOf)
+      });
+    }
   }
 
   buildApplicationForm(FORM: ApplicationType = this.FORM_TYPE): FormGroup {
@@ -318,6 +324,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
               this.submitting = false;
               this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application. ' + data['message']);
+              if (this.isIE) {
+                alert("Encountered an error. Please use another browser as this may resolve the problem.")
+              }
             }
           },
           error => {
@@ -325,6 +334,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
+            if (this.isIE) {
+              alert("Encountered an error. Please use another browser as this may resolve the problem.")
+            }
           }
         );
     } else {
@@ -368,6 +380,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
               this.submitting = false;
               this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application. ' + data['message']);
+              if (this.isIE) {
+                alert("Encountered an error. Please use another browser as this may resolve the problem.")
+              }
             }
           },
           error => {
@@ -375,6 +390,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
+            if (this.isIE) {
+              alert("Encountered an error. Please use another browser as this may resolve the problem.")
+            }
           }
         );
     } else {
@@ -420,6 +438,19 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     let ret = this.buildApplicationForm(ApplicationType.Victim_Application);
 
     ret.get('personalInformation').patchValue(currentForm.get('personalInformation').value);
+    ret.get('personalInformation').get('firstName').patchValue('');
+    ret.get('personalInformation').get('middleName').patchValue('');
+    ret.get('personalInformation').get('lastName').patchValue('');
+    ret.get('personalInformation').get('iHaveOtherNames').patchValue('');
+    ret.get('personalInformation').get('otherFirstName').patchValue('');
+    ret.get('personalInformation').get('otherLastName').patchValue('');
+    ret.get('personalInformation').get('dateOfNameChange').patchValue('');
+    ret.get('personalInformation').get('gender').patchValue(0);
+    ret.get('personalInformation').get('birthDate').patchValue('');
+    ret.get('personalInformation').get('maritalStatus').patchValue(0);
+    ret.get('personalInformation').get('sin').patchValue('');
+    ret.get('personalInformation').get('occupation').patchValue('');
+    ret.get('personalInformation').get('indigenousStatus').patchValue(0);
     ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(false);
     ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
@@ -446,6 +477,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     }
 
     ret.get('crimeInformation').patchValue(currentForm.get('crimeInformation').value);
+    ret.get('crimeInformation').get('unsureOfCrimeDates').patchValue('');
+    ret.get('crimeInformation').get('whenDidCrimeOccur').patchValue('');
+    ret.get('crimeInformation').get('crimePeriodStart').patchValue('');
+    ret.get('crimeInformation').get('crimePeriodEnd').patchValue('');
+    ret.get('crimeInformation').get('applicationFiledWithinOneYearFromCrime').patchValue('');
+    ret.get('crimeInformation').get('whyDidYouNotApplySooner').patchValue('');
+    ret.get('crimeInformation').get('crimeDetails').patchValue('');
+    ret.get('crimeInformation').get('crimeInjuries').patchValue('');
     ret.get('crimeInformation').get('offenderRelationship').patchValue('');
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
@@ -464,6 +503,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('authorizationInformation').get('approvedAuthorityNotification').patchValue('');
     ret.get('authorizationInformation').get('readAndUnderstoodTermsAndConditions').patchValue('');
     ret.get('authorizationInformation').get('signature').patchValue('');
+    ret.get('authorizationInformation').get('authorizedPersonAuthorizesDiscussion').patchValue('');
+    ret.get('authorizationInformation').get('authorizedPersonSignature').patchValue('');
 
     return ret;
   }
@@ -533,6 +574,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('authorizationInformation').get('approvedAuthorityNotification').patchValue('');
     ret.get('authorizationInformation').get('readAndUnderstoodTermsAndConditions').patchValue('');
     ret.get('authorizationInformation').get('signature').patchValue('');
+    ret.get('authorizationInformation').get('authorizedPersonAuthorizesDiscussion').patchValue('');
+    ret.get('authorizationInformation').get('authorizedPersonSignature').patchValue('');
 
     return ret;
   }

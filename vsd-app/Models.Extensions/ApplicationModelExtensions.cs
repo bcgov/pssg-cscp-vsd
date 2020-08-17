@@ -313,8 +313,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         {
                             vsd_firstname = t.authorizedPersonFirstName,
                             vsd_lastname = t.authorizedPersonLastName,
-                            //TODO - update with agency name!
-                            // vsd_lastname = t.authorizedPersonAgencyName,
+                            vsd_companyname = t.authorizedPersonAgencyName,
                             vsd_phonenumber = t.authorizedPersonPhoneNumber,
                             vsd_email = t.authorizedPersonEmail,
                             vsd_addressline1 = t.authorizedPersonAgencyAddress.line1,
@@ -340,8 +339,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         Providercollection[] tempProviderCollection;
                         tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
                         {
-                            //TODO - update with agency name!
-                            // vsd_relationship1other = f.employerName,
+                            vsd_companyname = f.employerName,
                             vsd_phonenumber = f.employerPhoneNumber,
                             vsd_addressline1 = f.employerAddress.line1,
                             vsd_addressline2 = f.employerAddress.line2,
@@ -390,8 +388,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     Providercollection[] tempProviderCollection = new Providercollection[1];
                     tempProviderCollection[0] = new Providercollection();
-                    //TODO - update with agency name!
-                    // tempProviderCollection[0].vsd_firstname = model.MedicalInformation.familyDoctorName;
+                    tempProviderCollection[0].vsd_companyname = model.MedicalInformation.familyDoctorName;
                     tempProviderCollection[0].vsd_email = model.MedicalInformation.familyDoctorEmail;
                     tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
                     tempProviderCollection[0].vsd_fax = model.MedicalInformation.familyDoctorFax;
@@ -634,8 +631,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         Providercollection[] tempProviderCollection;
                         tempProviderCollection = model.ExpenseInformation.employers.Select(f => new Providercollection
                         {
-                            //TODO - update with agency name!
-                            // vsd_relationship1other = f.employerName,
+                            vsd_companyname = f.employerName,
                             vsd_phonenumber = f.employerPhoneNumber,
                             vsd_addressline1 = f.employerAddress.line1,
                             vsd_addressline2 = f.employerAddress.line2,

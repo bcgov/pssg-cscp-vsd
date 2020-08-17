@@ -71,6 +71,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   saveFormData: any;
 
+  isIE: boolean = false;
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -82,6 +84,10 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   ngOnInit() {
+    var ua = window.navigator.userAgent;
+    this.isIE = /MSIE|Trident/.test(ua);
+
+
     this.form = this.buildInvoiceForm();
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
     this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
@@ -128,13 +134,23 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.showPrintView = false;
   }
 
-  invoiceEdit(): void {
-    window.scroll(0, 0);
-
+  invoiceEdit(id: string = ""): void {
     this.showFormPanel = true;
     this.showReviewPanel = false;
     this.showSuccessPanel = false;
     this.showCancelPanel = false;
+
+    setTimeout(() => {
+      console.log(id);
+      if (!id) {
+        window.scroll(0, 0);
+      }
+      else {
+        let el = document.getElementById(id);
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+
   }
 
   invoiceReview(): void {
@@ -271,11 +287,17 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
           else {
             this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting invoice. ' + data['message']);
+            if (this.isIE) {
+              alert("Encountered an error. Please use another browser as this may resolve the problem.")
+            }
           }
         },
         error => {
           this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           console.log('Error submitting invoice');
+          if (this.isIE) {
+            alert("Encountered an error. Please use another browser as this may resolve the problem.")
+          }
         },
         () => { }
       );

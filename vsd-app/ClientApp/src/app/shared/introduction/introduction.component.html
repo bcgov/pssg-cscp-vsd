@@ -3,6 +3,11 @@
         <h1>Overview</h1>
     </div>
 
+    <div *ngIf="isIE" class="alert alert-danger">
+        <p>It looks like you are using an unsupported browser.</p>
+        <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
+    </div>
+
     <h2>Before you apply</h2>
     <h3>Who may use this application?</h3>
 

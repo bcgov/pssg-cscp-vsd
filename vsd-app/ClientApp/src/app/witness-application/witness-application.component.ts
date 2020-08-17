@@ -62,6 +62,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   declarationInfoHelper = new DeclarationInfoHelper();
   authInfoHelper = new AuthInfoHelper();
 
+  isIE: boolean = false;
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -76,12 +78,17 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   }
 
   ngOnInit() {
+    var ua = window.navigator.userAgent;
+    this.isIE = /MSIE|Trident/.test(ua);
+
     let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
     this.form = this.buildApplicationForm();
 
-    this.form.get('representativeInformation').patchValue({
-      completingOnBehalfOf: parseInt(completeOnBehalfOf)
-    });
+    if (completeOnBehalfOf) {
+      this.form.get('representativeInformation').patchValue({
+        completingOnBehalfOf: parseInt(completeOnBehalfOf)
+      });
+    }
   }
 
   verifyCancellation(): void {
@@ -156,6 +163,9 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
               this.submitting = false;
               this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
+              if (this.isIE) {
+                alert("Encountered an error. Please use another browser as this may resolve the problem.")
+              }
             }
           },
           error => {
@@ -163,6 +173,9 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
             this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
+            if (this.isIE) {
+              alert("Encountered an error. Please use another browser as this may resolve the problem.")
+            }
           }
         );
     } else {

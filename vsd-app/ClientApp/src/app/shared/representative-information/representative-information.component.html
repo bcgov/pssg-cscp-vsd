@@ -31,7 +31,7 @@
 
   <div class="row" *ngIf="form.get('completingOnBehalfOf').value === 100000003">
     <div class="col-md-6">
-      <app-field label="Relationship to Person" [required]="true" errorMessage="Please select a relationship">
+      <app-field label="Relationship to Person" [required]="true" errorMessage="Please select a relationship" [valid]="isMyControlValid(form.get('relationshipToPerson'))">
         <select class="form-control" formControlName="relationshipToPerson">
           <option value="">Select...</option>
           <option *ngFor="let item of relationshipList" [value]="item">{{ item }}</option>
@@ -45,8 +45,6 @@
   <section *ngIf="form.get('completingOnBehalfOf').value === 100000001 || form.get('completingOnBehalfOf').value === 100000002 || form.get('completingOnBehalfOf').value === 100000003">
     <p>Complete the following before continuing with the application.</p>
     <h2 class="blue-header">Person Completing the Application</h2>
-
-    <p style="display: none; background-color: yellow; font-size: 16px;">See required fields based on preferred contact methods here</p>
 
     <h3>Name</h3>
     <div class="row">
