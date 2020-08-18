@@ -20,6 +20,7 @@ export class ExpenseInfoHelper {
       haveCrimeSceneCleaningExpenses: [false],
       haveOtherExpenses: [false],
       otherSpecificExpenses: [''],
+      additionalBenefitsDetails: [''],
       minimumExpensesSelected: ['', Validators.required],
       minimumAdditionalBenefitsSelected: [''],
       minimumOtherBenefitsSelected: [''],//, Validators.required],
@@ -45,8 +46,8 @@ export class ExpenseInfoHelper {
         minimumOtherBenefitsSelected: [''], // Dynamically required
 
         haveCrimeSceneCleaningExpenses: [false],
-        haveOtherBenefits: [false],
-        otherSpecificBenefits: [''],
+        haveOtherExpenses: [false],
+        otherSpecificExpenses: [''],
         additionalBenefitsDetails: [''],//, Validators.required], ??
       };
     }
@@ -64,6 +65,9 @@ export class ExpenseInfoHelper {
         haveLostOfParentalGuidanceExpenses: [false],
         haveHomeMakerExpenses: [false],
         haveCrimeSceneCleaningExpenses: [false],
+        haveOtherExpenses: [false],
+        otherSpecificExpenses: [''],
+
         haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
         missedWorkDueToDeathOfVictim: [''],//, Validators.required],

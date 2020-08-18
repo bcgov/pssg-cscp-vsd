@@ -558,6 +558,10 @@
                         <th>Other</th>
                         <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"> </span> <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
                     </tr>
+                    <tr>
+                        <th>Additional Details</th>
+                        <td>{{valueOrEmpty('expenseInformation.additionalBenefitsDetails')}}</td>
+                    </tr>
                 </ng-container>
                 <ng-container *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
                     <tr>
@@ -608,10 +612,6 @@
                         <th>Other</th>
                         <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
                     </tr>
-                    <tr>
-                        <th>None of the above</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.noneOfTheAboveBenefits')"></span></td>
-                    </tr>
                 </tbody>
             </table>
         </ng-container>
@@ -661,7 +661,11 @@
                             </tr>
                             <tr>
                                 <th>Other</th>
-                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"></span> <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Additional Details</th>
+                                <td>{{valueOrEmpty('expenseInformation.additionalBenefitsDetails')}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -774,7 +778,11 @@
                             </tr>
                             <tr>
                                 <th>Other</th>
-                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"></span> <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true"> : {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Additional Details</th>
+                                <td>{{valueOrEmpty('expenseInformation.additionalBenefitsDetails')}}</td>
                             </tr>
                         </tbody>
                     </table>

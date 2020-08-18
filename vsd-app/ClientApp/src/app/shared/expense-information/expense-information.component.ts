@@ -189,7 +189,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveLostOfParentalGuidanceExpenses',
         'haveHomeMakerExpenses',
         'haveCrimeSceneCleaningExpenses',
-        'noneOfTheAboveExpenses'
+        'haveOtherExpenses'
       ];
       this.OTHER_BENEFITS = [
         'haveDisabilityPlanBenefits',
@@ -199,7 +199,6 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits',
         'haveCivilActionBenefits',
         'haveOtherBenefits',
-        'noneOfTheAboveBenefits'
       ];
     }
     if (this.formType === ApplicationType.Witness_Application) {
@@ -211,7 +210,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
       ];
       this.ADDITIONAL_BENEFITS = [
         'haveCrimeSceneCleaningExpenses',
-        'haveOtherBenefits'
+        'haveOtherExpenses'
       ];
     }
   }
