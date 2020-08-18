@@ -55,7 +55,33 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        setTimeout(() => { this.form.markAsTouched(); }, 0);
+
+        //wrapping this in a timeout fixes "Expression Changed after it was checked" errors... not ideal, but whatever
+        setTimeout(() => {
+            this.form.markAsTouched();
+
+            if (this.form.parent.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true) {
+                let emplaoyedAtTimeOfCrimeControl = this.form.get('wereYouEmployedAtTimeOfCrime');
+                let didYouMissWorkDueToCrimeControl = this.form.get('didYouMissWorkDueToCrime');
+                emplaoyedAtTimeOfCrimeControl.setValidators([Validators.required]);
+                emplaoyedAtTimeOfCrimeControl.updateValueAndValidity();
+                didYouMissWorkDueToCrimeControl.setValidators([Validators.required]);
+                didYouMissWorkDueToCrimeControl.updateValueAndValidity();
+            }
+            else {
+                let options = { onlySelf: true, emitEvent: false };
+                let emplaoyedAtTimeOfCrimeControl = this.form.get('wereYouEmployedAtTimeOfCrime');
+                let didYouMissWorkDueToCrimeControl = this.form.get('didYouMissWorkDueToCrime');
+
+                emplaoyedAtTimeOfCrimeControl.clearValidators();
+                emplaoyedAtTimeOfCrimeControl.setErrors(null, options);
+                emplaoyedAtTimeOfCrimeControl.updateValueAndValidity(options);
+                didYouMissWorkDueToCrimeControl.clearValidators();
+                didYouMissWorkDueToCrimeControl.setErrors(null, options);
+                didYouMissWorkDueToCrimeControl.updateValueAndValidity(options);
+            }
+
+        }, 0);
         console.log("employment info");
         console.log(this.form);
 
@@ -64,26 +90,7 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
             this.showCurrentlyOffWork = moment(endDate).isSame(new Date(), "day");
         }
 
-        if (this.form.parent.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true) {
-            let emplaoyedAtTimeOfCrimeControl = this.form.get('wereYouEmployedAtTimeOfCrime');
-            let didYouMissWorkDueToCrimeControl = this.form.get('didYouMissWorkDueToCrime');
-            emplaoyedAtTimeOfCrimeControl.setValidators([Validators.required]);
-            emplaoyedAtTimeOfCrimeControl.updateValueAndValidity();
-            didYouMissWorkDueToCrimeControl.setValidators([Validators.required]);
-            didYouMissWorkDueToCrimeControl.updateValueAndValidity();
-        }
-        else {
-            let options = { onlySelf: true, emitEvent: false };
-            let emplaoyedAtTimeOfCrimeControl = this.form.get('wereYouEmployedAtTimeOfCrime');
-            let didYouMissWorkDueToCrimeControl = this.form.get('didYouMissWorkDueToCrime');
 
-            emplaoyedAtTimeOfCrimeControl.clearValidators();
-            emplaoyedAtTimeOfCrimeControl.setErrors(null, options);
-            emplaoyedAtTimeOfCrimeControl.updateValueAndValidity(options);
-            didYouMissWorkDueToCrimeControl.clearValidators();
-            didYouMissWorkDueToCrimeControl.setErrors(null, options);
-            didYouMissWorkDueToCrimeControl.updateValueAndValidity(options);
-        }
 
 
         this.employedAtTimeOfCrimeSubscription = this.form.get('wereYouEmployedAtTimeOfCrime').valueChanges.subscribe((value) => {

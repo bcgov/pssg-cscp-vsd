@@ -71,6 +71,8 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
+  isIE: boolean = false;
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -114,6 +116,9 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   }
 
   ngOnInit() {
+    var ua = window.navigator.userAgent;
+    this.isIE = /MSIE|Trident/.test(ua);
+
     this.form = this.buildApplicationForm();
 
     this.form.get('restitutionInformation.preferredMethodOfContact')
@@ -326,11 +331,17 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
           } else {
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
+            if (this.isIE) {
+              alert("Encountered an error. Please use another browser as this may resolve the problem.")
+            }
           }
         },
         error => {
           this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           console.log('Error submitting application');
+          if (this.isIE) {
+            alert("Encountered an error. Please use another browser as this may resolve the problem.")
+          }
         }
       );
     } else {
@@ -445,8 +456,8 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     //this.form.get('documentInformation.filename')[0].value = fileBundle.fileName[0];
     //this.form.get('documentInformation.body')[0].value = fileBundle.fileData[0];
 
-//      patchObject
-//    );
+    //      patchObject
+    //    );
   }
 }
 

@@ -24,6 +24,8 @@ export class IntroductionComponent extends FormBase implements OnInit {
     ApplicationType = ApplicationType;
     applicant: string = "";
 
+    isIE: boolean = false;
+
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
@@ -32,6 +34,9 @@ export class IntroductionComponent extends FormBase implements OnInit {
     }
 
     ngOnInit() {
+        var ua = window.navigator.userAgent;
+        this.isIE = /MSIE|Trident/.test(ua);
+
         this.form = <FormGroup>this.controlContainer.control;
         setTimeout(() => { this.form.markAsTouched(); }, 0);
         console.log("intro component");
@@ -49,6 +54,6 @@ export class IntroductionComponent extends FormBase implements OnInit {
     }
 
     showSummaryOfBenefits(): void {
-        const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
+        const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { data: this.formType });
     }
 }
