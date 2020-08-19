@@ -90,6 +90,11 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.policeReportItems = this.form.get('policeReports') as FormArray;
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
 
+    for (let i = 0; i < this.policeReportItems.length; ++i) {
+      let thisReport = this.policeReportItems.at(i) as FormGroup;
+      this.policeReportMinDates.push(thisReport.get('reportStartDate').value);
+    }
+
     let startDate = this.form.get('crimePeriodStart').value;
     this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
 
@@ -398,7 +403,10 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   policeForceSelected(index: number) {
-
+    console.log(index);
+    this.policeReportItems = this.form.get('policeReports') as FormArray;
+    let thisReport = this.policeReportItems.at(index) as FormGroup;
+    console.log(thisReport);
   }
 
   applyToCourtForMoneyFromOffenderChange(event) {

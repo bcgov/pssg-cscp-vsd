@@ -288,8 +288,16 @@
             <table class="table table-striped review-table" *ngFor="let item of policeReports.controls; let i = index">
                 <tbody>
                     <tr>
-                        <th>To which police was the report made?</th>
-                        <td>{{ valueOrEmpty(item.get('policeDetachment')) }} </td>
+                        <th>Police Force</th>
+                        <td>{{ valueOrEmpty(item.get('policeDetachment')) }} <span *ngIf="item.get('policeDetachment').value === 'Other'"> : {{ valueOrEmpty(item.get('policeDetachmentOther')) }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Police File Number</th>
+                        <td>{{ valueOrEmpty(item.get('policeFileNumber')) }} </td>
+                    </tr>
+                    <tr>
+                        <th>Name of Investigating Officer</th>
+                        <td>{{ valueOrEmpty(item.get('investigatingOfficer')) }} </td>
                     </tr>
                     <tr>
                         <th>Date of report</th>
@@ -299,14 +307,6 @@
                         <td *ngIf="!item.get('policeReportedMultipleTimes').value">
                             {{item.get('reportStartDate').value | date}}
                         </td>
-                    </tr>
-                    <tr>
-                        <th>Police File Number</th>
-                        <td>{{ valueOrEmpty(item.get('policeFileNumber')) }} </td>
-                    </tr>
-                    <tr>
-                        <th>Name of Investigating Officer</th>
-                        <td>{{ valueOrEmpty(item.get('investigatingOfficer')) }} </td>
                     </tr>
                 </tbody>
             </table>

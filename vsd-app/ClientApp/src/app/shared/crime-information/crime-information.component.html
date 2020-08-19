@@ -129,8 +129,8 @@
         <section *ngIf="form.get('wasReportMadeToPolice').value === CRMMultiBoolean.True">
             <table class="table table-striped police-file-table">
                 <thead>
+                    <th scope="col" class="police-file-header">Police Force<span class="error-states">*</span></th>
                     <th scope="col" class="police-file-header">Police File Number</th>
-                    <th scope="col" class="police-file-header">Police Force</th>
                     <th scope="col" class="police-file-header">Name of Investigating Officer</th>
                     <th scope="col" class="police-file-header">Police Reporting Start Date <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip>
                     </th>
@@ -142,19 +142,22 @@
                     <tr formArrayName="policeReports" *ngFor="let item of form.get('policeReports')['controls']; let i=index">
                         <ng-container [formGroupName]="i">
                             <td>
-                                <input class="form-control" type="text" formControlName="policeFileNumber">
-                            </td>
-                            <td>
-                                <div>
+                                <div [class.with-error]="!isMyControlValid(item.get('policeDetachment'))">
                                     <!-- <input class="form-control standard" type="text" formControlName="policeDetachment"> -->
-                                    <select class="form-control standard" formControlName="policeDetachment" (change)="policeForceSelected(i)">
+                                    <!-- <app-field [required]="true" [valid]="isMyControlValid(item.get('policeDetachment'))" errorMessage=""> -->
+                                    <select class="form-control standard" formControlName="policeDetachment" (change)="policeForceSelected(i)" [required]="true">
+                                        <option [ngValue]="null">Select</option>
                                         <option *ngFor="let policeForce of policeForceList" [value]="policeForce.name">{{policeForce.name}}</option>
                                     </select>
+                                    <!-- </app-field> -->
                                 </div>
 
                                 <div>
                                     <input class="form-control mt-2" *ngIf="item.get('policeDetachment').value == 'Other'" type="text" formControlName="policeDetachmentOther">
                                 </div>
+                            </td>
+                            <td>
+                                <input class="form-control" type="text" formControlName="policeFileNumber">
                             </td>
                             <td>
                                 <input class="form-control" type="text" formControlName="investigatingOfficer">
