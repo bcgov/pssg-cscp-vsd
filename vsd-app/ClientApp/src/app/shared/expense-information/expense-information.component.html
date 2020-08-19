@@ -91,8 +91,8 @@
                         </app-field>
                     </section>
                     <section class="pushed">
-                        <app-field label="Please provide details of your requests.">
-                            <textarea class="form-control bigger" type="text" formControlName="additionalBenefitsDetails" maxlength="2000"></textarea>
+                        <app-field label="Please provide details of your requests. (Maximum 750 characters)">
+                            <textarea class="form-control bigger" type="text" formControlName="otherSpecificExpenses" maxlength="750"></textarea>
                         </app-field>
                     </section>
                 </app-field>
@@ -256,8 +256,8 @@
                 </app-field>
 
                 <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
-                <app-field label="Please provide details of your requests. (Maximum 250 words)" errorMessage="Please provide details of your requests.">
-                    <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="2000"></textarea>
+                <app-field label="Please provide details of your requests. (Maximum 750 characters)" errorMessage="Please provide details of your requests.">
+                    <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="750"></textarea>
                 </app-field>
 
                 <app-field [valid]="isFieldValid('minimumAdditionalBenefitsSelected')" errorMessage="Please select at least one option">
@@ -438,8 +438,8 @@
                 </app-field>
 
                 <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
-                <app-field label="Please provide details of your requests. (Maximum 250 words)" errorMessage="Please provide details of your requests.">
-                    <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="2000"></textarea>
+                <app-field label="Please provide details of your requests. (Maximum 750 characters)" errorMessage="Please provide details of your requests.">
+                    <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="750"></textarea>
                 </app-field>
 
                 <app-field [valid]="isFieldValid('minimumAdditionalBenefitsSelected')" errorMessage="Please select at least one option">
