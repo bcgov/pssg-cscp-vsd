@@ -9,6 +9,7 @@ import { REPRESENTATIVE_LIST } from "../../constants/representative-list";
 import { FileBundle } from "../../models/file-bundle";
 import { AddressHelper } from "../address/address.helper";
 import { EmailValidator } from "../validators/email.validator";
+import { RepresentativeInfoHelper } from "./representative-information.helper";
 
 @Component({
     selector: 'app-representative-information',
@@ -30,6 +31,8 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     relationshipList: string[];
     header: string;
 
+    representativeInfoHelper = new RepresentativeInfoHelper();
+
     representativePhoneIsRequired: boolean = false;
     representativeEmailIsRequired: boolean = false;
     representativeAddressIsRequired: boolean = false;
@@ -38,6 +41,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
     constructor(
         private controlContainer: ControlContainer,
+        private fb: FormBuilder,
     ) {
         super();
         var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
@@ -77,32 +81,36 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     }
 
     setRequiredFields(completingOnBehalfOf: number) {
-        let options = { onlySelf: true, emitEvent: false };
         let representativeFirstName = this.form.get('representativeFirstName');
         let representativeLastName = this.form.get('representativeLastName');
         let representativePreferredMethodOfContact = this.form.get('representativePreferredMethodOfContact');
 
-        representativeFirstName.clearValidators();
-        representativeFirstName.setErrors(null, options);
-        representativeLastName.clearValidators();
-        representativeLastName.setErrors(null, options);
-        representativePreferredMethodOfContact.clearValidators();
-        representativePreferredMethodOfContact.setErrors(null, options);
+        this.clearControlValidators(representativeFirstName);
+        this.clearControlValidators(representativeLastName);
+        this.clearControlValidators(representativePreferredMethodOfContact);
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'representativeAddress');
+
+        let relationshipToPersonControl = this.form.get('relationshipToPerson');
+        if (completingOnBehalfOf === 100000003) {
+            this.setControlValidators(relationshipToPersonControl, [Validators.required]);
+        }
+        else {
+            relationshipToPersonControl.patchValue('');
+            this.clearControlValidators(relationshipToPersonControl);
+        }
 
         let useValidation = completingOnBehalfOf === 100000002 || completingOnBehalfOf === 100000003;
         if (useValidation) {
             this.setupRepresentativeContactInformation(this.form.get('representativePreferredMethodOfContact').value);  // Have to clear contact validators on contact method change
-            representativeFirstName.setValidators([Validators.required]);
-            representativeLastName.setValidators([Validators.required]);
-            representativePreferredMethodOfContact.setValidators([Validators.required, Validators.min(100000000), Validators.max(100000002)]);
-
-            // representativeFirstName.markAsTouched();
-            representativeFirstName.updateValueAndValidity(options);
-            // representativeLastName.markAsTouched();
-            representativeLastName.updateValueAndValidity(options);
-            // representativePreferredMethodOfContact.markAsTouched(options);
-            representativePreferredMethodOfContact.updateValueAndValidity(options);
+            this.setControlValidators(representativeFirstName, [Validators.required]);
+            this.setControlValidators(representativeLastName, [Validators.required]);
+            this.setControlValidators(representativePreferredMethodOfContact, [Validators.required, Validators.min(100000000), Validators.max(100000002)]);
+        }
+        else {
+            let options = { onlySelf: true, emitEvent: false };
+            let freshForm = this.representativeInfoHelper.setupFormGroup(this.fb, this.formType);
+            freshForm.removeControl('completingOnBehalfOf');
+            this.form.patchValue(freshForm.value, options);
         }
     }
 
@@ -122,16 +130,16 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         emailConfirmControl.setValidators([Validators.email, EmailValidator('representativeEmail')]);
         emailConfirmControl.setErrors(null, options);
 
-        if (contactMethod === 100000000) {
+        if (contactMethod === 100000000) { //Phone Call
             phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
             this.representativePhoneIsRequired = true;
             this.representativeEmailIsRequired = false;
-        } else if (contactMethod === 100000001) {
+        } else if (contactMethod === 100000001) { //Email
             emailControl.setValidators([Validators.required, Validators.email]);
             emailConfirmControl.setValidators([Validators.required, Validators.email, EmailValidator('representativeEmail')]);
             this.representativePhoneIsRequired = false;
             this.representativeEmailIsRequired = true;
-        } else if (contactMethod === 100000002) {
+        } else if (contactMethod === 100000002) { //Mail
             this.representativePhoneIsRequired = false;
             this.representativeEmailIsRequired = false;
         }
@@ -144,22 +152,5 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         emailControl.updateValueAndValidity(options);
         emailConfirmControl.markAsTouched();
         emailConfirmControl.updateValueAndValidity(options);
-    }
-
-    onFileBundle(fileBundle: FileBundle) {
-        try {
-            // save the files submitted from the component for attachment into the submitted form.
-            const patchObject = {};
-            patchObject['documents'] = fileBundle;
-
-            let fileName = fileBundle.fileName[0] || "";
-            this.form.get('documents.filename').patchValue(fileName);
-
-            let body = fileBundle.fileData.length > 0 ? fileBundle.fileData[0].split(',')[1] : "";
-            this.form.get('documents.body').patchValue(body);
-        }
-        catch (e) {
-            console.log(e);
-        }
     }
 }

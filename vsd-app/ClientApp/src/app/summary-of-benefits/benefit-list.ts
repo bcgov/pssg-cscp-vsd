@@ -190,13 +190,6 @@ export class BenefitLists {
       ]
     },
     {
-      title: 'Income support',
-      target: 'Spouses of deceased victim \nChildren of deceased victims \nOther immeditate family members of deceased victims if they were financially dependent on the victim',
-      examples: [
-        'Monthly payments to assist in financially supporting the immediate family member',
-      ]
-    },
-    {
       title: 'Funeral Expenses',
       target: 'Immediate Family Members of deceased victims who have to pay for funeral and related costs',
       examples: [
@@ -208,6 +201,13 @@ export class BenefitLists {
       target: 'Immediate Family Members of deceased victims who lose earnings from taking time off work for the funeral or other matters related to the victim’s death',
       examples: [
         'An amount to help offset the loss of earnings',
+      ]
+    },
+    {
+      title: 'Income support',
+      target: 'Spouses of deceased victims, Children of deceased victims, Other immeditate family members of deceased victims if they were financially dependent on the victim',
+      examples: [
+        'Monthly payments to assist in financially supporting the immediate family member',
       ]
     },
     {
@@ -271,7 +271,7 @@ export class BenefitLists {
       examples: [
         'Transportation expenses such as bus fare, air fare, mileage expenses',
         'Meals and accommodation',
-        'Childcare while attending appointments',       
+        'Childcare while attending appointments',
       ]
     },
     {

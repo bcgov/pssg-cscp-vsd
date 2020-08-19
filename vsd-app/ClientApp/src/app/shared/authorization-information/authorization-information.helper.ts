@@ -24,13 +24,10 @@ export class AuthInfoHelper {
         return fb.group({
             providerType: [''],
             providerTypeText: [''],
-            authorizedPersonFullName: ['', Validators.required],
+            authorizedPersonFirstName: ['', Validators.required],
+            authorizedPersonLastName: ['', Validators.required],
             authorizedPersonPhoneNumber: [''],
             authorizedPersonEmail: ['', [Validators.email]],
-            authorizedPersonConfirmEmail: ['', [
-                Validators.email,
-                EmailValidator('authorizedPersonEmail')
-            ]],
             authorizedPersonAgencyAddress: fb.group({
                 line1: [''],
                 line2: [''],

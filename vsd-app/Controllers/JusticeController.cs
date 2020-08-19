@@ -241,6 +241,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 var invoiceJson = JsonConvert.SerializeObject(invoiceModel, settings);
                 invoiceJson = invoiceJson.Replace("odatatype", "@odata.type");
 
+                Console.WriteLine("Invoice JSON:");
+                Console.WriteLine(invoiceJson);
+
                 var endpointAction = "vsd_SubmitCounselorInvoice";
                 var tuple = await GetDynamicsHttpClientNew(configuration, invoiceJson, endpointAction);
 
@@ -287,6 +290,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 var invoiceJson = JsonConvert.SerializeObject(dynamicsModel, settings);
                 invoiceJson = invoiceJson.Replace("odatatype", "@odata.type");
 
+                Console.WriteLine("Invoice JSON:");
+                Console.WriteLine(invoiceJson);
+
                 var endpointAction = "vsd_CreateRestitutionCase";
                 var tuple = await GetDynamicsHttpClientNew(configuration, invoiceJson, endpointAction);
 
@@ -332,7 +338,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 offenderRestitutionJson = offenderRestitutionJson.Replace("odatatype", "@odata.type");
 
                 var endpointAction = "vsd_CreateRestitutionCase"; // TODO: Is this the same as Victim Restitution???
-                //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+                                                                  //httpClient = GetDynamicsHttpClient(configuration, endpointAction);
+
+                Console.WriteLine("Invoice JSON:");
+                Console.WriteLine(offenderRestitutionJson);
+
                 var tuple = await GetDynamicsHttpClientNew(configuration, offenderRestitutionJson, endpointAction);
 
                 //// THIS SHOULD BECOME A DYNAMICS MODEL

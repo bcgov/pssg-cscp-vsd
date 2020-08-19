@@ -85,6 +85,11 @@
                         <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeGroupValidity($event)">
                         Other
                     </label>
+                    <section *ngIf="form.get('haveOtherExpenses').value === true" class="pushed">
+                        <app-field label="Please specify">
+                            <input class="form-control standard" type="text" formControlName="otherSpecificExpenses">
+                        </app-field>
+                    </section>
                     <section class="pushed">
                         <app-field label="Please provide details of your requests. (Maximum 750 characters)">
                             <textarea class="form-control bigger" type="text" formControlName="otherSpecificExpenses" maxlength="750"></textarea>
@@ -174,12 +179,6 @@
                         </app-field>
                     </section>
                 </app-field>
-                <app-field>
-                    <label>
-                        <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits">
-                        None of the above
-                    </label>
-                </app-field>
             </div>
         </section>
     </ng-container>
@@ -249,6 +248,11 @@
                         <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
                         Other
                     </label>
+                    <section *ngIf="form.get('haveOtherExpenses').value === true" class="pushed">
+                        <app-field label="Please specify">
+                            <input class="form-control standard" type="text" formControlName="otherSpecificExpenses">
+                        </app-field>
+                    </section>
                 </app-field>
 
                 <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
@@ -399,12 +403,6 @@
                                 </app-field>
                             </section>
                         </app-field>
-                        <app-field>
-                            <label>
-                                <input type="checkbox" [value]="true" name="noneOfTheAboveBenefits" formControlName="noneOfTheAboveBenefits" (change)="changeOtherBenefitValidity($event)">
-                                None of the above
-                            </label>
-                        </app-field>
                     </ng-container>
 
                     <app-field [valid]="isFieldValid('minimumOtherBenefitsSelected')" errorMessage="Please select at least one option">
@@ -432,6 +430,11 @@
                         <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
                         Other
                     </label>
+                    <section *ngIf="form.get('haveOtherExpenses').value === true" class="pushed">
+                        <app-field label="Please specify">
+                            <input class="form-control standard" type="text" formControlName="otherSpecificExpenses">
+                        </app-field>
+                    </section>
                 </app-field>
 
                 <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->

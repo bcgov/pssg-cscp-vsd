@@ -177,6 +177,16 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public bool noneOfTheAboveBenefits { get; set; }
         public string additionalBenefitsDetails { get; set; }
 
+        //Additional Benefits
+        public bool haveVocationalServicesExpenses { get; set; }
+        public bool haveIncomeSupportExpenses { get; set; }
+        public bool haveChildcareExpenses { get; set; }
+        public bool haveLegalProceedingExpenses { get; set; }
+        public bool haveFuneralExpenses { get; set; }
+        public bool haveBereavementLeaveExpenses { get; set; }
+        public bool haveLostOfParentalGuidanceExpenses { get; set; }
+        public bool haveHomeMakerExpenses { get; set; }
+
         // public int? wereYouEmployedAtTimeOfCrime { get; set; }
         // public int? wereYouAtWorkAtTimeOfIncident { get; set; }
         // public string haveYouAppliedForWorkersCompensation { get; set; }
@@ -252,7 +262,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class AuthorizedPerson
     {
-        public string authorizedPersonFullName { get; set; }
+        public string authorizedPersonFirstName { get; set; }
+        public string authorizedPersonLastName { get; set; }
         public string authorizedPersonPhoneNumber { get; set; }
         public string authorizedPersonEmail { get; set; }
         public string authorizedPersonRelationship { get; set; }
