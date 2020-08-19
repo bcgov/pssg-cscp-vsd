@@ -48,12 +48,12 @@
 
         <section>
             <h3>Crime Location(s)</h3>
-            <app-field [required]="true" [valid]="isFieldValid('crimeLocations')" errorMessage="Please enter at least one location">
+            <app-field [required]="true">
                 Please provide the <strong>city/town</strong> in BC where the crime took place. If the crime occured over a period of time in more than one location, please enter one location per box <span class="error-states ng-star-inserted">*</span>
                 <div class="crime-location-information">
                     <div class="location-listing" formArrayName="crimeLocations" *ngFor="let item of form.get('crimeLocations')['controls']; let i = index;">
                         <div [formGroupName]="i" class="crime-location">
-                            <app-field [valid]="isArrayFieldValid('crimeLocations', 'location', i)">
+                            <app-field [valid]="isArrayFieldValid('crimeLocations', 'location', i)" errorMessage="Please enter at least one location">
                                 <input class="form-control standard" type="text" formControlName="location">
                                 <a href="javascript:void(0);" (click)="removeCrimeLocation(i)" *ngIf="showRemoveCrimeLocation">
                                     <i class="fas fa-trash-alt"></i> Remove Location
