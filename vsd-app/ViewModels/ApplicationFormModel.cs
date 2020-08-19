@@ -34,6 +34,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public DateTime? dateOfNameChange { get; set; }
         public int gender { get; set; }
         public string relationshipToVictim { get; set; }
+        public string relationshipToVictimOther { get; set; }
         public DateTime? birthDate { get; set; }
         public int? maritalStatus { get; set; }
         public string sin { get; set; }

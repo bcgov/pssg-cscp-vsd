@@ -58,7 +58,7 @@ export class PersonalInfoHelper {
         }
 
         if (form_type === ApplicationType.IFM_Application) {
-            group['relationshipToVictim'] = [0, [Validators.required, Validators.min(100000000), Validators.max(100000004)]];
+            group['relationshipToVictim'] = ['', [Validators.required]];
             group['relationshipToVictimOther'] = [''];
         }
 
