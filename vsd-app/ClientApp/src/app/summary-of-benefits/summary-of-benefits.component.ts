@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BenefitLists } from './benefit-list';
+import { ApplicationType } from '../shared/enums-list';
 @Component({
   selector: 'app-summary-of-benefits-dialog',
   templateUrl: './summary-of-benefits.component.html',
@@ -9,31 +10,32 @@ import { BenefitLists } from './benefit-list';
 export class SummaryOfBenefitsDialog implements OnInit {
 
   benefitList: any;
-  applicationType: string;
+  formType: ApplicationType;
+  ApplicationType = ApplicationType;
 
-  showVictimBenefits : boolean = false;
-  showFamilyBenefits : boolean = false;
-  showWitnessBenefits : boolean = false;
-  
+  showVictimBenefits: boolean = false;
+  showFamilyBenefits: boolean = false;
+  showWitnessBenefits: boolean = false;
+
   constructor(public dialogRef: MatDialogRef<SummaryOfBenefitsDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   closeMe(): void {
     this.dialogRef.close();
   }
-    
-  ngOnInit() {
-    this.applicationType = this.data;
 
-    if (this.applicationType == 'victim') {
+  ngOnInit() {
+    this.formType = this.data;
+
+    if (this.formType == ApplicationType.Victim_Application) {
       this.benefitList = BenefitLists.VictimBenefitList;
     }
 
-    if (this.applicationType == 'ifm') {
+    if (this.formType == ApplicationType.IFM_Application) {
       this.benefitList = BenefitLists.IfmBenefitList;
     }
 
-    if (this.applicationType == 'witness') {
+    if (this.formType == ApplicationType.Witness_Application) {
       this.benefitList = BenefitLists.WitnessBenefitList;
     }
   }

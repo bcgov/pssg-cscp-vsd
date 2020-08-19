@@ -46,6 +46,11 @@
               <h1>Victim Applying to the Restitution Program</h1>
             </div>
 
+            <div *ngIf="isIE" class="alert alert-danger">
+              <p>It looks like you are using an unsupported browser.</p>
+              <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
+            </div>
+
             <h3>Who can apply (or be referred) to the Restitution Program?</h3>
             <ul class="list">
               <li>Are you owed money on a restitution order that has not been paid in full?</li>

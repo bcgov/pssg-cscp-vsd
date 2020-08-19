@@ -16,7 +16,7 @@
           <h3>CVAP Contact Information</h3>
           <p>
             <strong>Office:</strong><br />
-            Toll-free - 1 866 660-3888
+            Toll-free within BC - 1 866 660-3888
           </p>
           <p>
             <strong>Office:</strong><br />
@@ -24,7 +24,7 @@
           </p>
           <p>
             <strong>Mailing:</strong><br />
-            PO Box 5550 Station Terminal,<br />Vancouver, B.C. V6B 1H1
+            PO Box 5550 Station Terminal,<br />Vancouver, BC V6B 1H1
           </p>
           <p>
             <strong>Email:</strong><br />
@@ -41,12 +41,16 @@
               <div class="page-header">
                 <h1>Submit an Invoice</h1>
               </div>
+              <div *ngIf="isIE" class="alert alert-danger">
+                <p>It looks like you are using an unsupported browser.</p>
+                <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
+              </div>
               <p>Welcome to the Crime Victim Assistance Program's (CVAP) invoice submission form for counselling services.</p>
               <p>First time users please click the link to review instructions. <a [routerLink]="" (click)="showInvoiceInstructions()">Link</a></p>
 
-              <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
+              <p *ngIf="!isIE">For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
 
-              <h3>Payee Information</h3>
+              <h3 id="PayeeInformation">Payee Information</h3>
               <div class="row">
                 <div class="col-md-6">
                   <app-field label="Vendor Number" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorNumber')" errorMessage="Please enter the vendor number">
@@ -79,7 +83,7 @@
               <section>
                 <div class="attention">
                   <h3>If you are registered with CVAP, the payment method on file will be used.</h3>
-                  <p>The payment method on file with the Crime Victim Assistance Program will be used for payment of this invoice. Please contact the Crime Victims Assistance Program if you need to set up or make any changes to your method of payment.</p>
+                  <p>The payment method on file with the Crime Victim Assistance Program will be used for payment of this invoice. Please contact the Crime Victim Assistance Program if you need to set up or make any changes to your method of payment.</p>
                   <p><em>Refer to the CVAP Contact Information on the left</em></p>
                 </div>
                 <h3>Claim Information</h3>
@@ -102,7 +106,7 @@
                     </app-field>
                   </div>
                 </div>
-                <h3 class="blue-header">Invoice Details</h3>
+                <h3 class="blue-header" id="InvoiceDetails">Invoice Details</h3>
                 <div class="row">
                   <div class="col-6">
                     <app-field label="Invoice Number" [required]="true" [valid]="isFieldValid('invoiceDetails.invoiceNumber')" errorMessage="Please enter the invoice number">
@@ -247,15 +251,15 @@
                 </div>
 
                 <section>
-                  <h2 class="blue-header">Declaration</h2>
+                  <h2 class="blue-header" id="Declaration">Declaration</h2>
                   <div class="row">
                     <div class="col-6">
-                      <app-field label="Submitters's Full Name" [required]="true" [valid]="isFieldValid('invoiceDetails.submitterFullName')" errorMessage="Please enter the submitters's name">
+                      <app-field label="Submitter's Full Name" [required]="true" [valid]="isFieldValid('invoiceDetails.submitterFullName')" errorMessage="Please enter the submitter's name">
                         <input class="form-control" type="text" formControlName="submitterFullName" maxlength="100">
                       </app-field>
                     </div>
                     <div class="col-6">
-                      <app-field label="Submitters's Email Address" [required]="true" [valid]="isFieldValid('invoiceDetails.submitterEmailAddress')" errorMessage="Please enter the submitters's email">
+                      <app-field label="Submitter's Email Address" [required]="true" [valid]="isFieldValid('invoiceDetails.submitterEmailAddress')" errorMessage="Please enter the submitter's email">
                         <input class="form-control" type="text" formControlName="submitterEmailAddress" maxlength="100">
                       </app-field>
                     </div>
@@ -297,11 +301,11 @@
             <div class="page-header" *ngIf="showPrintView">
               <h1>Review Invoice</h1>
             </div>
-            <p *ngIf="!showPrintView">Please check the accuracy of the information entered in your application before submitting.</p>
+            <p *ngIf="!showPrintView">Please check the accuracy of the information entered in your invoice before submitting.</p>
 
             <section>
 
-              <h2 class="blue-header">Payee Information <button *ngIf="!showPrintView" (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+              <h2 class="blue-header">Payee Information <button *ngIf="!showPrintView" (click)="invoiceEdit('PayeeInformation');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
               <table class="table table-striped review-table">
                 <tbody>
                   <tr>
@@ -375,7 +379,7 @@
                 </tbody>
               </table>
 
-              <h2 class="blue-header">Invoice Details <button *ngIf="!showPrintView" (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+              <h2 class="blue-header">Invoice Details <button *ngIf="!showPrintView" (click)="invoiceEdit('InvoiceDetails');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
               <table class="table table-striped review-table">
                 <tbody>
                   <tr>
@@ -414,14 +418,26 @@
               <table class="table table-striped review-table">
                 <tbody>
                   <tr>
-                    <th>Exempt from GST</th>
+                    <th>GST Applicable</th>
                     <td>{{ valueOrEmpty('invoiceDetails.exemptFromGst') }} </td>
                   </tr>
                 </tbody>
               </table>
             </section>
 
-            <h2 class="blue-header">Declaration <button *ngIf="!showPrintView" (click)="invoiceEdit();" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+            <h2 class="blue-header">Declaration <button *ngIf="!showPrintView" (click)="invoiceEdit('Declaration');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+            <table class="table table-striped review-table">
+              <tbody>
+                <tr>
+                  <th>Submitter's Full Name</th>
+                  <td>{{ valueOrEmpty('invoiceDetails.submitterFullName') }} </td>
+                </tr>
+                <tr>
+                  <th>Submitter's Email</th>
+                  <td>{{ valueOrEmpty('invoiceDetails.submitterEmailAddress') }} </td>
+                </tr>
+              </tbody>
+            </table>
             <p>
               <label class="inline-label">
                 <input *ngIf="form.get('invoiceDetails.declaredAndSigned').value === true" type="checkbox" checked="checked" disabled="disabled" />
@@ -449,6 +465,7 @@
           <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
         </div>
 
+
         <section class="button-container" *ngIf="!showPrintView">
           <a [routerLink]="" (click)="showCancelDialog()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
           <!-- <a href="#" (click)="showCancelDialog($event)"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a> -->
@@ -461,6 +478,9 @@
             </ng-template>
           </span>
         </section>
+        <section class="button-container" *ngIf="!showPrintView">
+          If you would like to print your invoice, please click <a class="print-link" [routerLink]="" (click)="printInvoice()">here</a>.
+        </section>
       </div>
 
       <div *ngIf="showSuccessPanel && !showPrintView">
@@ -469,7 +489,7 @@
             <div class="page-header">
               <h1>Thank you for your invoice submission</h1>
             </div>
-            <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program if you would like to print your invoice then please click <a class="print-link" [routerLink]="" (click)="printInvoice()">here</a>.</h3>
+            <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program. If you would like to print your invoice, please click <a class="print-link" [routerLink]="" (click)="printInvoice()">here</a>.</h3>
             <p>In the event that there is an issue with the information submitted, a staff member from the Crime Victim Assistance Program will contact you.</p>
             <p><a href="/submit-invoice">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
           </div>

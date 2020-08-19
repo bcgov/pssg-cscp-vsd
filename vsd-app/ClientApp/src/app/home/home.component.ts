@@ -20,7 +20,7 @@ export class HomeComponent extends FormBase implements OnInit {
   showValidationMessage: boolean;
 
   isLocalHost: boolean = false;
-
+  isIE: boolean = false;
   constructor(
     private titleService: Title,
     private fb: FormBuilder,
@@ -29,6 +29,9 @@ export class HomeComponent extends FormBase implements OnInit {
   }
 
   ngOnInit() {
+    var ua = window.navigator.userAgent;
+    this.isIE = /MSIE|Trident/.test(ua);
+    
     if (window.location.origin === "http://localhost:5000") {
       this.isLocalHost = true;
     }

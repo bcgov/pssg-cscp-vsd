@@ -69,6 +69,8 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
+  isIE: boolean = false;
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -111,6 +113,9 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
   }
 
   ngOnInit() {
+    var ua = window.navigator.userAgent;
+    this.isIE = /MSIE|Trident/.test(ua);
+
     this.form = this.buildApplicationForm();
 
     this.form.get('restitutionInformation.preferredMethodOfContact')
@@ -308,11 +313,17 @@ export class OffenderRestitutionComponent extends FormBase implements OnInit, Ca
           else {
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
+            if (this.isIE) {
+              alert("Encountered an error. Please use another browser as this may resolve the problem.")
+            }
           }
         },
         error => {
           this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           console.log('Error submitting application');
+          if (this.isIE) {
+            alert("Encountered an error. Please use another browser as this may resolve the problem.")
+          }
         }
       );
     } else {

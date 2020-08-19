@@ -324,12 +324,12 @@
                     <ng-container *ngIf="form.get('racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True">
                         <div class="row">
                             <div class="col-md-6">
-                                <app-field label="Requested Expenses" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesRequested'))" errorMessage="Please enter the requested expenses">
+                                <app-field label="What expenses did you ask to be covered?" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesRequested'))" errorMessage="Please enter the requested expenses">
                                     <input class="form-control" type="text" formControlName="expensesRequested" />
                                 </app-field>
                             </div>
                             <div class="col-md-6">
-                                <app-field label="Expenses Awarded" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesAwarded'))" errorMessage="Please enter the expenses awarded">
+                                <app-field label="Amount awarded by the judge" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesAwarded'))" errorMessage="Please enter the expenses awarded">
                                     <input class="form-control" type="text" prefix="$" mask="separator.2" thousandSeparator="," separatorLimit="10000000" formControlName="expensesAwarded" />
                                 </app-field>
                             </div>

@@ -199,7 +199,6 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits',
         'haveCivilActionBenefits',
         'haveOtherBenefits',
-        'noneOfTheAboveBenefits'
       ];
     }
     if (this.formType === ApplicationType.Witness_Application) {
@@ -331,7 +330,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   }
 
   showSummaryOfBenefits(): void {
-    const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { maxWidth: '800px !important', data: 'victim' });
+    const summaryDialogRef = this.matDialog.open(SummaryOfBenefitsDialog, { data: this.formType });
   }
 
   isMyControlValid(control: AbstractControl) {

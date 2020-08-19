@@ -208,7 +208,8 @@ interface Othertreatment {
 interface AuthorizedPerson {
   providerType: string;
   providerTypeText: string;
-  authorizedPersonFullName: string;
+  authorizedPersonFirstName: string;
+  authorizedPersonLastName: string;
   authorizedPersonPhoneNumber: string;
   authorizedPersonEmail: string;
   authorizedPersonAgencyAddress: Address;
