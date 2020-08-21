@@ -11,14 +11,27 @@
       </app-field>
     </div>
     <div class="col-md-6">
-      <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('province', isDisabled)" errorMessage="Please select your province/state">
-        <select class="form-control" formControlName="province">
-          <option value="">Choose a {{ provinceType }}</option>
-          <option *ngFor="let item of provinceList" [value]="item">
-            {{ item }}
-          </option>
-        </select>
-      </app-field>
+      <!-- they were asking for a free form text field, so here it is in the comments, but some of the requests coming from VS-3506 are out of sync with some of the
+      master data updates we are making for fields like city and stuff anyway, so actually I'm going to bug them more about these things -->
+
+      <!-- default -->
+      <!-- <ng-container *ngIf="group['controls']['country'].value != 'Other Country' && group['controls']['country'].value != ''"> -->
+        <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('province', isDisabled)" errorMessage="Please select your {{provinceType.toLowerCase()}}">
+          <select class="form-control" formControlName="province">
+            <option value="">Choose a {{ provinceType }}</option>
+            <option *ngFor="let item of provinceList" [value]="item">
+              {{ item }}
+            </option>
+          </select>
+        </app-field>
+      <!-- </ng-container> -->
+
+      <!-- else Other Country is selected -->
+      <!-- <ng-container *ngIf="group['controls']['country'].value == 'Other Country' || group['controls']['country'].value == ''">
+        <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('province', isDisabled)" errorMessage="Please enter your province/state">
+          <input class="form-control" type="text" formControlName="province" placeholder="" />
+        </app-field>
+      </ng-container> -->
     </div>
   </div>
 
@@ -42,7 +55,7 @@
       </app-field>
     </div>
     <div class="col-md-6">
-      <app-field label="{{ postalCodeType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('postalCode', isDisabled)" errorMessage="Please enter your postal code">
+      <app-field label="{{ postalCodeType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('postalCode', isDisabled)" errorMessage="Please enter your {{postalCodeType.toLowerCase()}}">
         <input class="form-control" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
       </app-field>
     </div>

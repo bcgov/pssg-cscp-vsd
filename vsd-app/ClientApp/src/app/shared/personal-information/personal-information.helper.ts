@@ -44,8 +44,8 @@ export class PersonalInfoHelper {
                 line2: [''],
                 city: ['', [Validators.required]],
                 postalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
-                province: [{ value: 'British Columbia', disabled: false }],
-                country: [{ value: 'Canada', disabled: false }],
+                province: [{ value: 'British Columbia', disabled: false }, [Validators.required]],
+                country: [{ value: 'Canada', disabled: false }, [Validators.required]],
             }),
             alternateAddress: fb.group({
                 line1: [''],
