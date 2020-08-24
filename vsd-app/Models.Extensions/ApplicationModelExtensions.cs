@@ -33,6 +33,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember)
                 {
                     application.Application.vsd_cvap_relationshiptovictim = model.PersonalInformation.relationshipToVictim;
+                    application.Application.vsd_relationshipother1 = model.PersonalInformation.relationshipToVictimOther;
                 }
 
                 application.Application.vsd_applicantsgendercode = model.PersonalInformation.gender;
@@ -284,7 +285,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     {
                         if (model.MedicalInformation.otherTreatments[0].providerName.Length > 0)
                         {
-                            application.ProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
+                            Providercollection[] tempProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
                             {
                                 vsd_firstname = t.providerName,
                                 vsd_phonenumber = t.providerPhoneNumber,
@@ -299,6 +300,30 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                                 vsd_fax = !String.IsNullOrEmpty(t.providerFax) ? t.providerFax : "",
                                 vsd_relationship1other = t.providerTypeText,
                             }).ToArray();
+
+                            int tempProviderCount = 0;
+                            if (application.ProviderCollection == null)
+                            {
+                                tempProviderCount = 0;
+                            }
+                            else
+                            {
+                                tempProviderCount = application.ProviderCollection.Count();
+                            }
+                            Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                            if (application.ProviderCollection == null)
+                            {
+                                tempCombinedCollection = tempProviderCollection;
+                            }
+                            else
+                            {
+                                Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                            }
+                            Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                            if (tempCombinedCollection.Length > 0)
+                            {
+                                application.ProviderCollection = tempCombinedCollection;
+                            }
                         }
                     }
                 }
@@ -309,7 +334,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_authorizationsignature = model.AuthorizationInformation.signature;
                     if (model.AuthorizationInformation.authorizedPerson != null && model.AuthorizationInformation.authorizedPerson.Length > 0)
                     {
-                        application.ProviderCollection = model.AuthorizationInformation.authorizedPerson.Select(t => new Providercollection
+                        Providercollection[] tempProviderCollection = model.AuthorizationInformation.authorizedPerson.Select(t => new Providercollection
                         {
                             vsd_firstname = t.authorizedPersonFirstName,
                             vsd_lastname = t.authorizedPersonLastName,
@@ -325,6 +350,30 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_relationship1 = "Authorized Person",
                             vsd_relationship1other = t.authorizedPersonRelationship,
                         }).ToArray();
+
+                        int tempProviderCount = 0;
+                        if (application.ProviderCollection == null)
+                        {
+                            tempProviderCount = 0;
+                        }
+                        else
+                        {
+                            tempProviderCount = application.ProviderCollection.Count();
+                        }
+                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                        if (application.ProviderCollection == null)
+                        {
+                            tempCombinedCollection = tempProviderCollection;
+                        }
+                        else
+                        {
+                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                        }
+                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                        if (tempCombinedCollection.Length > 0)
+                        {
+                            application.ProviderCollection = tempCombinedCollection;
+                        }
                     }
                 }
             }
@@ -336,8 +385,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     if (!String.IsNullOrEmpty(model.EmploymentIncomeInformation.employers[0].employerName))
                     {
-                        Providercollection[] tempProviderCollection;
-                        tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
+                        Providercollection[] tempProviderCollection = model.EmploymentIncomeInformation.employers.Select(f => new Providercollection
                         {
                             vsd_companyname = f.employerName,
                             vsd_phonenumber = f.employerPhoneNumber,
@@ -628,8 +676,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     if (!String.IsNullOrEmpty(model.ExpenseInformation.employers[0].employerName))
                     {
-                        Providercollection[] tempProviderCollection;
-                        tempProviderCollection = model.ExpenseInformation.employers.Select(f => new Providercollection
+                        Providercollection[] tempProviderCollection = model.ExpenseInformation.employers.Select(f => new Providercollection
                         {
                             vsd_companyname = f.employerName,
                             vsd_phonenumber = f.employerPhoneNumber,

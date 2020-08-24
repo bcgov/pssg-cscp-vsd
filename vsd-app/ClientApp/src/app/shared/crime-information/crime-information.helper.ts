@@ -76,10 +76,10 @@ export class CrimeInfoHelper {
 
     createPoliceReport(fb: FormBuilder): FormGroup {
         return fb.group({
+            policeDetachment: [null, [Validators.required]],
+            policeDetachmentOther: [''],
             policeFileNumber: [''],
             investigatingOfficer: [''],
-            policeDetachment: 'Surrey RCMP',
-            policeDetachmentOther: [''],
             reportStartDate: [''],
             reportEndDate: [''],
             policeReportedMultipleTimes: ['']

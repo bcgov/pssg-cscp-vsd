@@ -44,8 +44,8 @@ export class PersonalInfoHelper {
                 line2: [''],
                 city: ['', [Validators.required]],
                 postalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
-                province: [{ value: 'British Columbia', disabled: false }],
-                country: [{ value: 'Canada', disabled: false }],
+                province: [{ value: 'British Columbia', disabled: false }, [Validators.required]],
+                country: [{ value: 'Canada', disabled: false }, [Validators.required]],
             }),
             alternateAddress: fb.group({
                 line1: [''],
@@ -58,7 +58,7 @@ export class PersonalInfoHelper {
         }
 
         if (form_type === ApplicationType.IFM_Application) {
-            group['relationshipToVictim'] = [0, [Validators.required, Validators.min(100000000), Validators.max(100000004)]];
+            group['relationshipToVictim'] = ['', [Validators.required]];
             group['relationshipToVictimOther'] = [''];
         }
 

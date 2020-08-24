@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, Validators } from "@angular/forms";
+import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { COUNTRIES_ADDRESS } from './country-list';
+import { POSTAL_CODE, ZIP_CODE } from '../regex.constants';
 
 @Component({
   selector: 'app-address',
@@ -8,6 +9,8 @@ import { COUNTRIES_ADDRESS } from './country-list';
 })
 export class AddressComponent implements OnInit {
   countryList = COUNTRIES_ADDRESS;
+  postalRegex = POSTAL_CODE;
+  zipRegex = ZIP_CODE;
 
   provinceList: string[];
   provinceType: string;
@@ -44,7 +47,24 @@ export class AddressComponent implements OnInit {
       this.provinceType = selectedCountry.areaType;
       this.postalCodeType = selectedCountry.postalCodeName;
       this.postalCodeSample = selectedCountry.postalCodeSample;
+
+      let postalControl = this.group['controls']['postalCode'] as FormControl;
+
+      if (selectedCountry.name === "Other Country") {
+        this.group['controls']['province'].patchValue('');
+        postalControl.clearValidators();
+        postalControl.updateValueAndValidity();
+      }
+      else if (selectedCountry.name === "Canada") {
+        postalControl.setValidators([Validators.required, Validators.pattern(this.postalRegex)]);
+        postalControl.updateValueAndValidity();
+      }
+      else if (selectedCountry.name === "United States of America") {
+        postalControl.setValidators([Validators.required, Validators.pattern(this.zipRegex)]);
+        postalControl.updateValueAndValidity();
+      }
     }
+
   }
 
   ngOnInit() {

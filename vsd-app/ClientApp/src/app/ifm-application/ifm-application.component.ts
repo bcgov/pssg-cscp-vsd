@@ -296,10 +296,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       data.VictimInformation.primaryAddress = data.PersonalInformation.primaryAddress;
     }
 
-    if (data.PersonalInformation.relationshipToVictim === 'Other') {
-      data.PersonalInformation.relationshipToVictim = data.PersonalInformation.relationshipToVictimOther;
-    }
-
     return data;
   }
 
