@@ -22,6 +22,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_otherlastname { get; set; }
         public DateTime? vsd_dateofnamechange { get; set; }
         public string vsd_cvap_relationshiptovictim { get; set; }
+        public string vsd_relationshipother1 { get; set; }
 
         public int vsd_applicantsgendercode { get; set; }
         public DateTime? vsd_applicantsbirthdate { get; set; }
@@ -32,7 +33,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public int? vsd_indigenous { get; set; }
 
         public string vsd_applicantsprimaryphonenumber { get; set; }
-        public bool vsd_leavevoicemail {get; set;}
+        public bool vsd_leavevoicemail { get; set; }
         public string vsd_applicantsalternatephonenumber { get; set; }
         public string vsd_applicantsemail { get; set; }
         public int vsd_applicantspreferredmethodofcontact { get; set; }
@@ -79,8 +80,8 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public DateTime? vsd_cvap_crimeenddate { get; set; }
         public string vsd_cvap_reasontoapplylate { get; set; }
         public string vsd_cvap_crimelocations { get; set; }
-        public int? vsd_cvap_victimdeceased {get; set;}
-        public DateTime? vsd_cvap_victimdateofdeath { get; set;}
+        public int? vsd_cvap_victimdeceased { get; set; }
+        public DateTime? vsd_cvap_victimdateofdeath { get; set; }
         public string vsd_cvap_crimedetails { get; set; }
         public string vsd_cvap_injuries { get; set; }
 

@@ -46,7 +46,7 @@ export class IntroductionComponent extends FormBase implements OnInit {
             this.applicant = "Victims";
         }
         else if (this.formType === ApplicationType.IFM_Application) {
-            this.applicant = "Family Members";
+            this.applicant = "Immediate Family Members";
         }
         else if (this.formType === ApplicationType.Witness_Application) {
             this.applicant = "Witnesses";

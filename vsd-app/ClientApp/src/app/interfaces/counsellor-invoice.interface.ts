@@ -17,6 +17,7 @@ export interface InvoiceDetails {
   submitterFullName: string;
   submitterEmailAddress: string;
   exemptFromGst: boolean;
+  gstApplicable: boolean;
   lineItems: LineItem[];
   declaredAndSigned: boolean;  // Not used in transfer to Dynamics
 }

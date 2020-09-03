@@ -314,6 +314,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       const formData = <CounsellorInvoice>{
         InvoiceDetails: this.form.get('invoiceDetails').value,
       };
+      formData.InvoiceDetails.exemptFromGst = !formData.InvoiceDetails.gstApplicable;
       this.busy = this.justiceDataService.submitCounsellorInvoice(formData).subscribe(
         data => {
           console.log("submit and create new res");
