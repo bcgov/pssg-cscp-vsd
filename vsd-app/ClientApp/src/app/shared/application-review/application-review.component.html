@@ -483,24 +483,32 @@
             </tbody>
         </table>
         <table class="table table-striped review-table" *ngFor="let item of otherMedicalTreatments.controls; let i = index">
-            <tbody>
-                <tr>
-                    <th>Type</th>
-                    <td>{{ item.get('providerType').value }}</td>
-                </tr>
-                <tr>
-                    <th>Name</th>
-                    <td>{{ item.get('providerName').value }}</td>
-                </tr>
-                <tr>
-                    <th>Phone</th>
-                    <td>{{ item.get('providerPhoneNumber').value | phone}}</td>
-                </tr>
-                <tr>
-                    <th>Mailing Address</th>
-                    <td><span *ngIf="addressHelper.hasAddressInfo(item.get('providerAddress').value)" [innerHTML]="addressHelper.displayAddress(item.get('providerAddress').value)"></span></td>
-                </tr>
-            </tbody>
+          <tbody>
+            <tr>
+              <th>Type</th>
+              <td>{{ item.get('providerType').value }}</td>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <td>{{ item.get('providerName').value }}</td>
+            </tr>
+            <tr>
+              <th>Phone</th>
+              <td>{{ item.get('providerPhoneNumber').value | phone}}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{ valueOrEmpty(item.get('providerEmail')) }}</td>
+            </tr>
+            <tr>
+              <th>Mailing Address</th>
+              <td><span *ngIf="addressHelper.hasAddressInfo(item.get('providerAddress').value)" [innerHTML]="addressHelper.displayAddress(item.get('providerAddress').value)"></span></td>
+            </tr>
+            <tr>
+              <th>Fax</th>
+              <td>{{ valueOrEmpty(item.get('providerFax')) | phone}}</td>
+            </tr>
+          </tbody>
         </table>
     </section>
 
