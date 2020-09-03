@@ -203,7 +203,9 @@ interface Othertreatment {
   providerTypeText: string;
   providerName: string;
   providerPhoneNumber: string;
+  providerEmail: string;
   providerAddress: Address;
+  providerFax: string;
 }
 interface AuthorizedPerson {
   providerType: string;
