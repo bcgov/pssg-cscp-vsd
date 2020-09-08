@@ -544,20 +544,20 @@
               <td>{{ item.get('providerName').value }}</td>
             </tr>
             <tr>
-              <th>Phone</th>
-              <td>{{ item.get('providerPhoneNumber').value | phone}}</td>
-            </tr>
-            <tr>
               <th>Email</th>
               <td>{{ valueOrEmpty(item.get('providerEmail')) }}</td>
             </tr>
             <tr>
-              <th>Mailing Address</th>
-              <td><span *ngIf="addressHelper.hasAddressInfo(item.get('providerAddress').value)" [innerHTML]="addressHelper.displayAddress(item.get('providerAddress').value)"></span></td>
+              <th>Phone</th>
+              <td>{{ item.get('providerPhoneNumber').value | phone}}</td>
             </tr>
             <tr>
               <th>Fax</th>
               <td>{{ valueOrEmpty(item.get('providerFax')) | phone}}</td>
+            </tr>
+            <tr>
+              <th>Mailing Address</th>
+              <td><span *ngIf="addressHelper.hasAddressInfo(item.get('providerAddress').value)" [innerHTML]="addressHelper.displayAddress(item.get('providerAddress').value)"></span></td>
             </tr>
           </tbody>
         </table>
@@ -858,7 +858,7 @@
                                     <tr>
                                         <th>If you are requesting benefits for lost wages, may we contact your employer?
                                         </th>
-                                        <td>{{ valueOrEmpty('expenseInformation.mayContactEmployer') }} </td>
+                                        <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.mayContactEmployer')] }} </td>
                                     </tr>
                                 </tbody>
                             </table>

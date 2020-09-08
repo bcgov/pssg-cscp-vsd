@@ -52,8 +52,6 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_applicantsalternatepostalcode { get; set; }
         public string vsd_applicantsalternatecountry { get; set; }
 
-
-        //TODO - missing victim information - these are the fields, need to include them in various other places
         public string vsd_cvap_victimfirstname { get; set; }
         public string vsd_cvap_victimmiddlename { get; set; }
         public string vsd_cvap_victimlastname { get; set; }
