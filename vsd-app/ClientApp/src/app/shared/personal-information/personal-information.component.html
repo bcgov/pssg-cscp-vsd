@@ -33,21 +33,19 @@
     </div>
 
     <div *ngIf="form.get('iHaveOtherNames').value === true">
-        <h3>Other Names Used</h3>
-
         <div class="row">
             <div class="col-md-4">
-                <app-field label="Other First Name" [required]="true" [valid]="isMyControlValid(form.get('otherFirstName'))" errorMessage="Please enter your other first name">
+                <app-field label="Other First Name" [required]="false" [valid]="isMyControlValid(form.get('otherFirstName'))" errorMessage="Please enter your other first name">
                     <input class="form-control" type="text" formControlName="otherFirstName" maxlength="100">
                 </app-field>
             </div>
             <div class="col-md-4">
-                <app-field label="Other Last Name" [required]="true" [valid]="isMyControlValid(form.get('otherLastName'))" errorMessage="Please enter your other last name">
+                <app-field label="Other Last Name" [required]="false" [valid]="isMyControlValid(form.get('otherLastName'))" errorMessage="Please enter your other last name">
                     <input class="form-control" type="text" formControlName="otherLastName" maxlength="100">
                 </app-field>
             </div>
             <div class="col-md-4">
-                <app-field label="Date of Name Change" [required]="true" [valid]="isMyControlValid(form.get('dateOfNameChange'))" errorMessage="Please enter the date of name change">
+                <app-field label="Date of Name Change" [required]="false" [valid]="isMyControlValid(form.get('dateOfNameChange'))" errorMessage="Please enter the date of name change">
                     <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" [max]="todaysDate" [min]="oldestHuman" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
                     <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
                 </app-field>

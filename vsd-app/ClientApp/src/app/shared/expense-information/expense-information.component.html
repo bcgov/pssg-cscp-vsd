@@ -307,16 +307,28 @@
                     </app-field>
 
                     <h3 class="blue-header">Employer Information</h3>
+
+                    <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMBoolean.True" name="mayContactEmployer" formControlName="mayContactEmployer" (change)="mayContactEmployerChange(true)">
+                            <span>Yes</span>
+                        </label>
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMBoolean.False" name="mayContactEmployer" formControlName="mayContactEmployer" (change)="mayContactEmployerChange(false)">
+                            <span>No</span>
+                        </label>
+                    </app-field>
+
                     <div class="employers" formArrayName="employers" *ngFor="let item of form.get('employers')['controls']; let i = index;">
                         <div [formGroupName]="i" class="employer">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <app-field label="Name of Company / Organization" [required]="true" [valid]="isMyControlValid(item.get('employerName'))" errorMessage="Please enter a company name">
+                                    <app-field label="Name of Company / Organization" [required]="form.get('mayContactEmployer').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerName'))" errorMessage="Please enter a company name">
                                         <input type="text" class="form-control" formControlName="employerName">
                                     </app-field>
                                 </div>
                                 <div class="col-md-6">
-                                    <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
+                                    <app-field label="Phone Number of Contact Person" [required]="form.get('mayContactEmployer').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
                                         <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
                                     </app-field>
                                 </div>
@@ -334,21 +346,9 @@
                                 </div>
                             </div>
 
-                            <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="false"></app-address>
+                            <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="form.get('mayContactEmployer').value === CRMBoolean.True"></app-address>
                         </div>
                     </div>
-
-
-                    <app-field label="If you are requesting benefits for lost wages, may we contact your employer?">
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMBoolean.True" name="mayContactEmployer" formControlName="mayContactEmployer">
-                            <span>Yes</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMBoolean.False" name="mayContactEmployer" formControlName="mayContactEmployer">
-                            <span>No</span>
-                        </label>
-                    </app-field>
                 </ng-container>
 
 

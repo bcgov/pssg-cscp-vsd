@@ -80,21 +80,21 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             });
         }
 
-        this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
-            let otherFirstNameControl = this.form.get('otherFirstName');
-            let otherLastNameControl = this.form.get('otherLastName');
-            let dateOfNameChangeControl = this.form.get('dateOfNameChange');
-            if (value === true) {
-                this.setControlValidators(otherFirstNameControl, [Validators.required]);
-                this.setControlValidators(otherLastNameControl, [Validators.required]);
-                this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
-            }
-            else {
-                this.clearControlValidators(otherFirstNameControl);
-                this.clearControlValidators(otherLastNameControl);
-                this.clearControlValidators(dateOfNameChangeControl);
-            }
-        });
+        // this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
+        //     let otherFirstNameControl = this.form.get('otherFirstName');
+        //     let otherLastNameControl = this.form.get('otherLastName');
+        //     let dateOfNameChangeControl = this.form.get('dateOfNameChange');
+        //     if (value === true) {
+        //         this.setControlValidators(otherFirstNameControl, [Validators.required]);
+        //         this.setControlValidators(otherLastNameControl, [Validators.required]);
+        //         this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
+        //     }
+        //     else {
+        //         this.clearControlValidators(otherFirstNameControl);
+        //         this.clearControlValidators(otherLastNameControl);
+        //         this.clearControlValidators(dateOfNameChangeControl);
+        //     }
+        // });
     }
 
     ngOnDestroy() {
