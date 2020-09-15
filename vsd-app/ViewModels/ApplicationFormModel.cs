@@ -192,7 +192,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         // public int? wereYouAtWorkAtTimeOfIncident { get; set; }
         // public string haveYouAppliedForWorkersCompensation { get; set; }
         // public string workersCompensationClaimNumber { get; set; }
-        // public int? didYouMissWorkDueToCrime { get; set; }
+        public int? missedWorkDueToDeathOfVictim { get; set; }
         public DateTime? daysWorkMissedStart { get; set; }
         public DateTime? daysWorkMissedEnd { get; set; }
         // public int? areYouStillOffWork { get; set; }

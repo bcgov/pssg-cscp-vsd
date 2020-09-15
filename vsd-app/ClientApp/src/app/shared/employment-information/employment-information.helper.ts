@@ -28,17 +28,17 @@ export class EmploymentInfoHelper {
 
     createEmployerInfo(fb: FormBuilder): FormGroup {
         return fb.group({
-            employerName: ['', Validators.required],
-            employerPhoneNumber: ['', Validators.required],
+            employerName: [''],
+            employerPhoneNumber: [''],
             employerFax: [''],
-            employerEmail: ['', [Validators.required, Validators.email]],
+            employerEmail: ['', [Validators.email]],
             employerFirstName: [''],
             employerLastName: [''],
             employerAddress: fb.group({
-                line1: ['', Validators.required],
+                line1: ['',],
                 line2: [''],
-                city: ['', Validators.required],
-                postalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
+                city: ['',],
+                postalCode: ['', [Validators.pattern(this.postalRegex)]],
                 province: [{ value: 'British Columbia', disabled: false }],
                 country: [{ value: 'Canada', disabled: false }],
             }),

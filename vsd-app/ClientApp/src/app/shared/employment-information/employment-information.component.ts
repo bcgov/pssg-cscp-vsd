@@ -9,6 +9,7 @@ import { POSTAL_CODE } from "../regex.constants";
 import { COUNTRIES_ADDRESS_2 } from "../address/country-list";
 import { EmploymentInfoHelper } from "./employment-information.helper";
 import { Subscription } from "rxjs";
+import { AddressHelper } from "../address/address.helper";
 
 @Component({
     selector: 'app-employment-information',
@@ -37,6 +38,7 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     employers: FormArray;
 
     employmentInfoHelper = new EmploymentInfoHelper();
+    addressHelper = new AddressHelper();
 
     employedAtTimeOfCrimeSubscription: Subscription;
     atWorkAtTimeOfCrimeSubscription: Subscription;
@@ -176,7 +178,8 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
 
 
             if (value === CRMBoolean.True) {
-                this.addEmployer();
+                // this.removeAllEmployers();
+                this.showEmployers();
                 this.setControlValidators(control, [Validators.required]);
                 this.setControlValidators(sinControl, [Validators.required]);
             }
@@ -208,8 +211,30 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
                 else {
                     this.setControlValidators(control, [Validators.required]);
                 }
+
+
             }
         });
+    }
+
+    contactableChange(val: boolean, index: number) {
+        let currentEmployers = this.form.get('employers') as FormArray;
+        let thisEmployer = currentEmployers.controls[index] as FormGroup;
+
+        if (thisEmployer) {
+            let nameControl = thisEmployer.get('employerName');
+            let emailControl = thisEmployer.get('employerEmail');
+            if (val) {
+                this.setControlValidators(nameControl, [Validators.required]);
+                this.setControlValidators(emailControl, [Validators.required, Validators.email]);
+                this.addressHelper.setAddressAsRequired(thisEmployer, 'employerAddress');
+            }
+            else {
+                this.clearControlValidators(nameControl);
+                this.clearControlValidators(emailControl);
+                this.addressHelper.clearAddressValidatorsAndErrors(thisEmployer, 'employerAddress');
+            }
+        }
     }
 
     ngOnDestroy() {
@@ -228,6 +253,12 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         if (!properyName) properyName = 'areaType';
         // return 'Province' by default.
         return this.countryList[country][properyName];
+    }
+    showEmployers() {
+        this.employers = this.form.get('employers') as FormArray;
+        if (this.employers.length == 0) {
+            this.employers.push(this.employmentInfoHelper.createEmployerInfo(this.fb));
+        }
     }
     addEmployer() {
         this.employers = this.form.get('employers') as FormArray;

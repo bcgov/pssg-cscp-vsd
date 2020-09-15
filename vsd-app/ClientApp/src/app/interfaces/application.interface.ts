@@ -120,6 +120,7 @@ export interface ExpenseInformation {
   otherSpecificBenefits: string;
   didYouLoseWages?: number;
   sin?: number;
+  missedWorkDueToDeathOfVictim?: number;
   daysWorkMissedStart?: Date;
   daysWorkMissedEnd?: Date;
   employers: Employer[];

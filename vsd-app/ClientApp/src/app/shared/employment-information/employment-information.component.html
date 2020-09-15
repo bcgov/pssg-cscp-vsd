@@ -143,11 +143,11 @@
                         <div *ngIf="form.get('areYouSelfEmployed').value !== CRMBoolean.True">
                             <app-field label="If you are requesting benefits for lost wages, may we contact your employer?" [required]="form.get('areYouSelfEmployed').value !== CRMBoolean.True" [valid]="isMyControlValid(item.get('contactable'))" errorMessage="Please select an option">
                                 <label class="inline-label">
-                                    <input type="radio" [value]="CRMBoolean.True" name="contactable" formControlName="contactable">
+                                    <input type="radio" [value]="CRMBoolean.True" formControlName="contactable" (change)="contactableChange(true, i)">
                                     <span>Yes</span>
                                 </label>
                                 <label class="inline-label">
-                                    <input type="radio" [value]="CRMBoolean.False" name="contactable" formControlName="contactable">
+                                    <input type="radio" [value]="CRMBoolean.False" formControlName="contactable" (change)="contactableChange(false, i)">
                                     <span>No</span>
                                 </label>
                             </app-field>
@@ -162,12 +162,12 @@
                         <h3>Name &amp; Phone Number</h3>
                         <div class="row">
                             <div class="col-md-6">
-                                <app-field label="Name of Company / Organization" [required]="true" [valid]="isMyControlValid(item.get('employerName'))" errorMessage="Please enter a company name">
+                                <app-field label="Name of Company / Organization" [required]="item.get('contactable').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerName'))" errorMessage="Please enter a company name">
                                     <input type="text" class="form-control" formControlName="employerName">
                                 </app-field>
                             </div>
                             <div class="col-md-6">
-                                <app-field label="Email Address" [required]="true" [valid]="isMyControlValid(item.get('employerEmail'))" errorMessage="Please enter your employer's email address">
+                                <app-field label="Email Address" [required]="item.get('contactable').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerEmail'))" errorMessage="Please enter your employer's email address">
                                     <input type="text" class="form-control" (blur)="trimEmail(item.get('employerEmail'))" formControlName="employerEmail" maxlength="100">
                                 </app-field>
                             </div>
@@ -186,7 +186,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <app-field label="Phone Number of Contact Person" [required]="true" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
+                                <app-field label="Phone Number of Contact Person" [required]="item.get('contactable').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
                                     <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
                                 </app-field>
                             </div>
@@ -198,7 +198,7 @@
                         </div>
 
                         <h3>Mailing Address</h3>
-                        <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="true"></app-address>
+                        <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="item.get('contactable').value === CRMBoolean.True"></app-address>
                     </div>
                 </div>
                 <button class="btn btn-secondary mb-3" (click)="addEmployer()">Add Additional Employer</button>

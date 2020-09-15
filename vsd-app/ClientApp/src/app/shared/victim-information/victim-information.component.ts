@@ -29,6 +29,8 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
     addressIsRequired: boolean = false;
 
     iHaveOtherNamesSubscription: Subscription;
+    contactInfoSubscription: Subscription;
+    addressInfoSubscription: Subscription;
 
     constructor(
         private controlContainer: ControlContainer,
@@ -44,13 +46,20 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
         console.log("victim info component");
         console.log(this.form);
 
+        if (this.form.get('victimSameContactInfo').value === true) {
+            this.copyPersonalContactInfoToVictim(this.form.parent);
+        }
+
         if (this.form.get('mostRecentMailingAddressSameAsPersonal').value === true) {
             this.copyPersonalAddressToVictimAddress(this.form.parent);
         }
 
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
-            this.form.get('mostRecentMailingAddressSameAsPersonal').valueChanges.subscribe(value => {
+            this.addressInfoSubscription = this.form.get('mostRecentMailingAddressSameAsPersonal').valueChanges.subscribe(value => {
                 this.copyPersonalAddressToVictimAddress(this.form.parent);
+            });
+            this.contactInfoSubscription = this.form.get('victimSameContactInfo').valueChanges.subscribe(value => {
+                this.copyPersonalContactInfoToVictim(this.form.parent);
             });
         }
 
@@ -73,5 +82,9 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
 
     ngOnDestroy() {
         this.iHaveOtherNamesSubscription.unsubscribe();
+        if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
+            this.addressInfoSubscription.unsubscribe();
+            this.contactInfoSubscription.unsubscribe();
+        }
     }
 }

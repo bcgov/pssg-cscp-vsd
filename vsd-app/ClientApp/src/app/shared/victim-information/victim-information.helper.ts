@@ -20,11 +20,9 @@ export class VictimInfoHelper {
             birthDate: ['', [Validators.required]],
             maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
 
+            victimSameContactInfo: [''],
             phoneNumber: [''],
             alternatePhoneNumber: [''],
-
-            // email: [''],
-            // confirmEmail: [''],
             email: [''],
             confirmEmail: ['', [
                 Validators.email,

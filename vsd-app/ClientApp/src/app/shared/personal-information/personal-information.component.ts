@@ -41,7 +41,12 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
     preferredMethodOfContactSubscription: Subscription;
     sinSubscription: Subscription;
-    iHaveOtherNamesSubscription: Subscription;
+    // iHaveOtherNamesSubscription: Subscription;
+    addressSubscription: Subscription;
+    phoneSubscription: Subscription;
+    altPhoneSubscription: Subscription;
+    emailSubscription: Subscription;
+    confirmEmailSubscription: Subscription;
 
     get preferredMethodOfContact() { return this.form.get('preferredMethodOfContact'); }
 
@@ -63,8 +68,21 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         }
 
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
-            this.form.get('primaryAddress').valueChanges.subscribe(value => {
+            this.addressSubscription = this.form.get('primaryAddress').valueChanges.subscribe(value => {
                 this.copyPersonalAddressToVictimAddress(this.form.parent);
+            });
+
+            this.phoneSubscription = this.form.get('phoneNumber').valueChanges.subscribe(value => {
+                this.copyPersonalContactInfoToVictim(this.form.parent);
+            });
+            this.altPhoneSubscription = this.form.get('alternatePhoneNumber').valueChanges.subscribe(value => {
+                this.copyPersonalContactInfoToVictim(this.form.parent);
+            });
+            this.emailSubscription = this.form.get('email').valueChanges.subscribe(value => {
+                this.copyPersonalContactInfoToVictim(this.form.parent);
+            });
+            this.confirmEmailSubscription = this.form.get('confirmEmail').valueChanges.subscribe(value => {
+                this.copyPersonalContactInfoToVictim(this.form.parent);
             });
         }
 
@@ -80,28 +98,36 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             });
         }
 
-        this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
-            let otherFirstNameControl = this.form.get('otherFirstName');
-            let otherLastNameControl = this.form.get('otherLastName');
-            let dateOfNameChangeControl = this.form.get('dateOfNameChange');
-            if (value === true) {
-                this.setControlValidators(otherFirstNameControl, [Validators.required]);
-                this.setControlValidators(otherLastNameControl, [Validators.required]);
-                this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
-            }
-            else {
-                this.clearControlValidators(otherFirstNameControl);
-                this.clearControlValidators(otherLastNameControl);
-                this.clearControlValidators(dateOfNameChangeControl);
-            }
-        });
+        // this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
+        //     let otherFirstNameControl = this.form.get('otherFirstName');
+        //     let otherLastNameControl = this.form.get('otherLastName');
+        //     let dateOfNameChangeControl = this.form.get('dateOfNameChange');
+        //     if (value === true) {
+        //         this.setControlValidators(otherFirstNameControl, [Validators.required]);
+        //         this.setControlValidators(otherLastNameControl, [Validators.required]);
+        //         this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
+        //     }
+        //     else {
+        //         this.clearControlValidators(otherFirstNameControl);
+        //         this.clearControlValidators(otherLastNameControl);
+        //         this.clearControlValidators(dateOfNameChangeControl);
+        //     }
+        // });
     }
 
     ngOnDestroy() {
         this.preferredMethodOfContactSubscription.unsubscribe();
-        this.iHaveOtherNamesSubscription.unsubscribe();
+        // this.iHaveOtherNamesSubscription.unsubscribe();
         if (this.formType === ApplicationType.Victim_Application || this.formType === ApplicationType.IFM_Application) {
             this.sinSubscription.unsubscribe();
+        }
+
+        if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
+            this.addressSubscription.unsubscribe();
+            this.phoneSubscription.unsubscribe();
+            this.altPhoneSubscription.unsubscribe();
+            this.emailSubscription.unsubscribe();
+            this.confirmEmailSubscription.unsubscribe();
         }
     }
 

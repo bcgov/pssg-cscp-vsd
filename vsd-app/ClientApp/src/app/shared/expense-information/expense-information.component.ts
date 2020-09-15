@@ -7,6 +7,7 @@ import { MY_FORMATS, ApplicationType, CRMBoolean } from "../enums-list";
 import { SummaryOfBenefitsDialog } from "../../summary-of-benefits/summary-of-benefits.component";
 import * as moment from 'moment';
 import { Subscription } from "rxjs";
+import { AddressHelper } from "../address/address.helper";
 
 @Component({
   selector: 'app-expense-information',
@@ -34,6 +35,8 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   today = new Date();
   minEndDate: Date;
   CRMBoolean = CRMBoolean;
+
+  addressHelper = new AddressHelper();
 
   sinSubscription: Subscription;
   didMissWorkSubscription: Subscription;
@@ -82,96 +85,103 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
       ];
     }
     if (this.formType === ApplicationType.IFM_Application) {
-      let didMissWorkControl = this.form.get('missedWorkDueToDeathOfVictim');
 
-      if (this.form.parent.get('crimeInformation.victimDeceasedFromCrime').value == CRMBoolean.True) {
-        didMissWorkControl.setValidators([Validators.required]);
-      }
-      else {
-        didMissWorkControl.clearValidators();
-        didMissWorkControl.setErrors(null);
-      }
-      didMissWorkControl.updateValueAndValidity();
+      setTimeout(() => {
+        let didMissWorkControl = this.form.get('missedWorkDueToDeathOfVictim');
+        let mayContactEmployer = this.form.get('mayContactEmployer').value === CRMBoolean.True;
 
-      this.sinSubscription = this.form.get('sin').valueChanges.subscribe((value) => {
-        if (value === null) value = '';
-        this.form.parent.get('personalInformation').get('sin').patchValue(value);
-      });
-
-      this.didMissWorkSubscription = didMissWorkControl.valueChanges.subscribe((value) => {
-        let didYouLoseWagesControl = this.form.get('didYouLoseWages');
-        let minimumOtherBenefitsSelected = this.form.get('minimumOtherBenefitsSelected');
-        if (!didYouLoseWagesControl && !minimumOtherBenefitsSelected) return;
-
-        if (value === CRMBoolean.True) {
-          didYouLoseWagesControl.setValidators([Validators.required]);
-          minimumOtherBenefitsSelected.setValidators([Validators.required]);
+        if (this.form.parent.get('crimeInformation.victimDeceasedFromCrime').value == CRMBoolean.True) {
+          didMissWorkControl.setValidators([Validators.required]);
+          this.mayContactEmployerChange(mayContactEmployer);
         }
         else {
-          didYouLoseWagesControl.clearValidators();
-          didYouLoseWagesControl.setErrors(null);
-          didYouLoseWagesControl.patchValue('');
-
-          minimumOtherBenefitsSelected.clearValidators();
-          minimumOtherBenefitsSelected.setErrors(null);
-          minimumOtherBenefitsSelected.setValue(null);
+          didMissWorkControl.clearValidators();
+          didMissWorkControl.setErrors(null);
+          this.mayContactEmployerChange(false);
         }
-        didYouLoseWagesControl.updateValueAndValidity();
-        minimumOtherBenefitsSelected.updateValueAndValidity();
-      });
+        didMissWorkControl.updateValueAndValidity();
 
-      this.loseWagesSubscription = this.form.get('didYouLoseWages').valueChanges.subscribe((value) => {
-        let sinControl = this.form.get('sin');
-        let daysMissedStartControl = this.form.get('daysWorkMissedStart');
-        let daysMissedEndControl = this.form.get('daysWorkMissedEnd');
-        let employers = this.form.get('employers') as FormArray;
-        if (value === CRMBoolean.True) {
-          this.setControlValidators(daysMissedStartControl, [Validators.required]);
-          this.setControlValidators(daysMissedEndControl, [Validators.required]);
-          this.setControlValidators(sinControl, [Validators.required]);
+        this.sinSubscription = this.form.get('sin').valueChanges.subscribe((value) => {
+          if (value === null) value = '';
+          this.form.parent.get('personalInformation').get('sin').patchValue(value);
+        });
 
-          for (let i = 0; i < employers.length; ++i) {
-            let employerGroup = employers.controls[i] as FormGroup;
-            let employersEmployerName = employerGroup.controls['employerName'] as FormControl;
-            this.setControlValidators(employersEmployerName, [Validators.required]);
-            let employersEmployerPhoneNumber = employerGroup.controls['employerPhoneNumber'] as FormControl;
-            this.setControlValidators(employersEmployerPhoneNumber, [Validators.required]);
+        this.didMissWorkSubscription = didMissWorkControl.valueChanges.subscribe((value) => {
+          let didYouLoseWagesControl = this.form.get('didYouLoseWages');
+          let minimumOtherBenefitsSelected = this.form.get('minimumOtherBenefitsSelected');
+          if (!didYouLoseWagesControl && !minimumOtherBenefitsSelected) return;
+
+          if (value === CRMBoolean.True) {
+            didYouLoseWagesControl.setValidators([Validators.required]);
+            // minimumOtherBenefitsSelected.setValidators([Validators.required]);
           }
-        }
-        else {
-          daysMissedStartControl.patchValue('');
-          this.clearControlValidators(daysMissedStartControl);
-          daysMissedEndControl.patchValue('');
-          this.clearControlValidators(daysMissedEndControl);
-          this.clearControlValidators(sinControl);
-          this.form.get('mayContactEmployer').patchValue('');
+          else {
+            didYouLoseWagesControl.clearValidators();
+            didYouLoseWagesControl.setErrors(null);
+            didYouLoseWagesControl.patchValue('');
 
-          for (let i = 0; i < employers.length; ++i) {
-            let employerGroup = employers.controls[i] as FormGroup;
-            let employersEmployerName = employerGroup.controls['employerName'] as FormControl;
-            this.clearControlValidators(employersEmployerName);
-
-            let employersEmployerPhoneNumber = employerGroup.controls['employerPhoneNumber'] as FormControl;
-            this.clearControlValidators(employersEmployerPhoneNumber);
-
-            employerGroup.controls['employerName'].patchValue('');
-            employerGroup.controls['employerPhoneNumber'].patchValue('');
-            employerGroup.controls['employerFirstName'].patchValue('');
-            employerGroup.controls['employerLastName'].patchValue('');
-            employerGroup.controls['employerFax'].patchValue('');
-            employerGroup.controls['employerEmail'].patchValue('');
-            employerGroup.controls['employerAddress'].get('line1').patchValue('');
-            employerGroup.controls['employerAddress'].get('line2').patchValue('');
-            employerGroup.controls['employerAddress'].get('city').patchValue('');
-            employerGroup.controls['employerAddress'].get('postalCode').patchValue('');
-            employerGroup.controls['employerAddress'].get('province').patchValue('British Columbia');
-            employerGroup.controls['employerAddress'].get('country').patchValue('Canada');
+            // minimumOtherBenefitsSelected.clearValidators();
+            // minimumOtherBenefitsSelected.setErrors(null);
+            // minimumOtherBenefitsSelected.setValue(null);
           }
-        }
-        sinControl.updateValueAndValidity();
-        daysMissedStartControl.updateValueAndValidity();
-        daysMissedEndControl.updateValueAndValidity();
-      });
+          didYouLoseWagesControl.updateValueAndValidity();
+          // minimumOtherBenefitsSelected.updateValueAndValidity();
+        });
+
+        this.loseWagesSubscription = this.form.get('didYouLoseWages').valueChanges.subscribe((value) => {
+          let sinControl = this.form.get('sin');
+          let daysMissedStartControl = this.form.get('daysWorkMissedStart');
+          let daysMissedEndControl = this.form.get('daysWorkMissedEnd');
+          let employers = this.form.get('employers') as FormArray;
+          if (value === CRMBoolean.True) {
+            this.setControlValidators(daysMissedStartControl, [Validators.required]);
+            this.setControlValidators(daysMissedEndControl, [Validators.required]);
+            this.setControlValidators(sinControl, [Validators.required]);
+
+            for (let i = 0; i < employers.length; ++i) {
+              let employerGroup = employers.controls[i] as FormGroup;
+              // let employersEmployerName = employerGroup.controls['employerName'] as FormControl;
+              // this.setControlValidators(employersEmployerName, [Validators.required]);
+              // let employersEmployerPhoneNumber = employerGroup.controls['employerPhoneNumber'] as FormControl;
+              // this.setControlValidators(employersEmployerPhoneNumber, [Validators.required]);
+            }
+          }
+          else {
+            daysMissedStartControl.patchValue('');
+            this.clearControlValidators(daysMissedStartControl);
+            daysMissedEndControl.patchValue('');
+            this.clearControlValidators(daysMissedEndControl);
+            this.clearControlValidators(sinControl);
+            this.form.get('mayContactEmployer').patchValue('');
+
+            for (let i = 0; i < employers.length; ++i) {
+              let employerGroup = employers.controls[i] as FormGroup;
+              // let employersEmployerName = employerGroup.controls['employerName'] as FormControl;
+              // this.clearControlValidators(employersEmployerName);
+
+              // let employersEmployerPhoneNumber = employerGroup.controls['employerPhoneNumber'] as FormControl;
+              // this.clearControlValidators(employersEmployerPhoneNumber);
+
+              employerGroup.controls['employerName'].patchValue('');
+              employerGroup.controls['employerPhoneNumber'].patchValue('');
+              employerGroup.controls['employerFirstName'].patchValue('');
+              employerGroup.controls['employerLastName'].patchValue('');
+              employerGroup.controls['employerFax'].patchValue('');
+              employerGroup.controls['employerEmail'].patchValue('');
+              employerGroup.controls['employerAddress'].get('line1').patchValue('');
+              employerGroup.controls['employerAddress'].get('line2').patchValue('');
+              employerGroup.controls['employerAddress'].get('city').patchValue('');
+              employerGroup.controls['employerAddress'].get('postalCode').patchValue('');
+              employerGroup.controls['employerAddress'].get('province').patchValue('British Columbia');
+              employerGroup.controls['employerAddress'].get('country').patchValue('Canada');
+            }
+          }
+          sinControl.updateValueAndValidity();
+          daysMissedStartControl.updateValueAndValidity();
+          daysMissedEndControl.updateValueAndValidity();
+        });
+
+      }, 0);
 
       this.header = "Benefits";
       this.BENEFITS = [
@@ -327,6 +337,26 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     this.form.patchValue({
       minimumOtherBenefitsSelected: expenseMinimumMet
     });
+  }
+
+  mayContactEmployerChange(val: boolean) {
+    let currentEmployers = this.form.get('employers') as FormArray;
+    let thisEmployer = currentEmployers.controls[0] as FormGroup;
+
+    if (thisEmployer) {
+      let nameControl = thisEmployer.get('employerName');
+      let phoneControl = thisEmployer.get('employerPhoneNumber');
+      if (val) {
+        this.setControlValidators(nameControl, [Validators.required]);
+        this.setControlValidators(phoneControl, [Validators.required]);
+        this.addressHelper.setAddressAsRequired(thisEmployer, 'employerAddress');
+      }
+      else {
+        this.clearControlValidators(nameControl);
+        this.clearControlValidators(phoneControl);
+        this.addressHelper.clearAddressValidatorsAndErrors(thisEmployer, 'employerAddress');
+      }
+    }
   }
 
   showSummaryOfBenefits(): void {

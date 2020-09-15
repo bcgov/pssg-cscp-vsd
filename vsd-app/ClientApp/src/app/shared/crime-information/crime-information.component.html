@@ -12,13 +12,9 @@
         </app-field>
 
         <h3>Crime Date(s)</h3>
-
-        <app-field label="Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates." errorMessage="Please make a selection" [showChevrons]="false">
-            <label class="inline-label">
-                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates" (change)="unsureOfCrimeDateChange($event)"> I am unsure of the specific date the crime occurred. <em>Please provide the approximate dates (e.g., Sept 01, 2001 - Dec 01, 2002).</em>
-            </label>
-        </app-field>
-        <app-field label="Crime occurred over a period of time" errorMessage="Please make a selection" [showChevrons]="false">
+        <p>Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates.</p>
+        
+        <app-field label="Did the crime occur over multiple days?" errorMessage="Please make a selection" [showChevrons]="false">
             <label class="inline-label">
                 <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur" (change)="whenDidCrimeOccurChange($event)">
                 <span>Yes</span>
@@ -26,6 +22,13 @@
             <label class="inline-label">
                 <input type="radio" [value]="false" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur" (change)="whenDidCrimeOccurChange($event)">
                 <span>No</span>
+            </label>
+        </app-field>
+
+        <app-field errorMessage="Please make a selection" [showChevrons]="false">
+            <label class="inline-label">
+                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates" (change)="unsureOfCrimeDateChange($event)">
+                If you are unsure of the exact crime date(s), please check this box and provide the approximate dates (e.g. Jan 1, 2020 -Jan. 5, 2020)
             </label>
         </app-field>
 
@@ -92,7 +95,7 @@
                 <textarea class="form-control bigger" formControlName="crimeDetails" maxlength="750"></textarea>
             </app-field>
 
-            <app-field [required]="true" [valid]="isFieldValid('crimeInjuries')" label="Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 750 characters)" errorMessage="Please provide details of injuries">
+            <app-field [required]="true" [valid]="isFieldValid('crimeInjuries')" [label]="'Please specify any ' + (formType === ApplicationType.IFM_Application ? 'psychological injuries' : 'injuries, physical or psychological,') +     ' you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 750 characters)'" errorMessage="Please provide details of injuries">
                 <textarea class="form-control standard" formControlName="crimeInjuries" maxlength="750"></textarea>
             </app-field>
 

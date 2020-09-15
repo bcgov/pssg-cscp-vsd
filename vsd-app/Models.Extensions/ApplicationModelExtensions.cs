@@ -660,14 +660,15 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             //handling for IFM form - it collects income loss information on the expense information
             if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember && model.CrimeInformation.victimDeceasedFromCrime == 100000001)
             {
-                if (model.ExpenseInformation.daysWorkMissedStart.HasValue)
-                {
-                    application.Application.vsd_cvap_ifmmissedworkstart = model.ExpenseInformation.daysWorkMissedStart;
-                }
-                if (model.ExpenseInformation.daysWorkMissedEnd.HasValue)
-                {
-                    application.Application.vsd_cvap_ifmmissedworkend = model.ExpenseInformation.daysWorkMissedEnd;
-                }
+                application.Application.vsd_cvap_ifmmissedwork = model.ExpenseInformation.missedWorkDueToDeathOfVictim;
+                // if (model.ExpenseInformation.daysWorkMissedStart.HasValue)
+                // {
+                application.Application.vsd_cvap_ifmmissedworkstart = model.ExpenseInformation.daysWorkMissedStart;
+                // }
+                // if (model.ExpenseInformation.daysWorkMissedEnd.HasValue)
+                // {
+                application.Application.vsd_cvap_ifmmissedworkend = model.ExpenseInformation.daysWorkMissedEnd;
+                // }
 
                 application.Application.vsd_cvap_ifmlostwages = model.ExpenseInformation.didYouLoseWages;
                 application.Application.vsd_cvap_ifmcontactemployer = model.ExpenseInformation.mayContactEmployer;

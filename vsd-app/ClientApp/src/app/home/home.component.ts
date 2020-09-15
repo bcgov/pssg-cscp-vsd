@@ -68,7 +68,7 @@ export class HomeComponent extends FormBase implements OnInit {
       case 100000002:
         return 'Victim Application';
       case 100000001:
-        return 'Family Member Application';
+        return 'Immediate Family Member Application';
       case 100000000:
         return 'Witness Application';
     }
