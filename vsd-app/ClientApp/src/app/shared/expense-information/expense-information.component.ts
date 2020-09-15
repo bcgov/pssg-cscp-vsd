@@ -113,19 +113,19 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
 
           if (value === CRMBoolean.True) {
             didYouLoseWagesControl.setValidators([Validators.required]);
-            minimumOtherBenefitsSelected.setValidators([Validators.required]);
+            // minimumOtherBenefitsSelected.setValidators([Validators.required]);
           }
           else {
             didYouLoseWagesControl.clearValidators();
             didYouLoseWagesControl.setErrors(null);
             didYouLoseWagesControl.patchValue('');
 
-            minimumOtherBenefitsSelected.clearValidators();
-            minimumOtherBenefitsSelected.setErrors(null);
-            minimumOtherBenefitsSelected.setValue(null);
+            // minimumOtherBenefitsSelected.clearValidators();
+            // minimumOtherBenefitsSelected.setErrors(null);
+            // minimumOtherBenefitsSelected.setValue(null);
           }
           didYouLoseWagesControl.updateValueAndValidity();
-          minimumOtherBenefitsSelected.updateValueAndValidity();
+          // minimumOtherBenefitsSelected.updateValueAndValidity();
         });
 
         this.loseWagesSubscription = this.form.get('didYouLoseWages').valueChanges.subscribe((value) => {

@@ -497,6 +497,45 @@ export class FormBase {
   //    target.get('signName').patchValue(source.get('firstName').value + ' ' + source.get('middleName').value + ' ' + source.get('lastName').value, options);
   //  }
 
+  copyPersonalContactInfoToVictim(form: FormGroup | FormArray) {
+    let copyInfo = form.get('victimInformation.victimSameContactInfo').value === true;
+    let target = form.get('victimInformation');
+    let source = form.get('personalInformation');
+    let options = { onlySelf: true, emitEvent: true };
+    let phoneControl = this.form.get('phoneNumber');
+    let altPhoneControl = this.form.get('alternatePhoneNumber');
+    let emailControl = this.form.get('email');
+    let confirmEmailControl = this.form.get('confirmEmail');
+
+    if (copyInfo) {
+      target.get('phoneNumber').patchValue(source.get('phoneNumber').value);
+      target.get('alternatePhoneNumber').patchValue(source.get('alternatePhoneNumber').value);
+      target.get('email').patchValue(source.get('email').value);
+      target.get('confirmEmail').patchValue(source.get('confirmEmail').value);
+
+      target.get('phoneNumber').setErrors(null);
+      target.get('alternatePhoneNumber').setErrors(null);
+      target.get('email').setErrors(null);
+      target.get('confirmEmail').setErrors(null);
+
+      target.get('phoneNumber').disable();
+      target.get('alternatePhoneNumber').disable();
+      target.get('email').disable();
+      target.get('confirmEmail').disable();
+    }
+    else {
+      target.get('phoneNumber').enable();
+      target.get('alternatePhoneNumber').enable();
+      target.get('email').enable();
+      target.get('confirmEmail').enable();
+    }
+
+    target.get('phoneNumber').updateValueAndValidity();
+    target.get('alternatePhoneNumber').updateValueAndValidity();
+    target.get('email').updateValueAndValidity();
+    target.get('confirmEmail').updateValueAndValidity();
+  }
+
   copyPersonalAddressToVictimAddress(form: FormGroup | FormArray) {
     let copyAddress = form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value === true;
     let target = form.get('victimInformation.primaryAddress');

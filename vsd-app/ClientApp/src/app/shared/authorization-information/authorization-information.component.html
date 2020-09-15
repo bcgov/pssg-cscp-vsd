@@ -2,7 +2,7 @@
   <div class="page-header">
     <h1>Authorization</h1>
   </div>
-  <p>Information supplied on this form is necessary to determine your eligibility for benefits, and is collected under the authority of Section 6 of the <em>Crime Victim Assistance Act</em>. Any information collected will be used only for the purposes of adjudicating your claim for benefits. This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program at (604) 660-3888 or toll free at 1-866-660-3888.</p>
+  <p>This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program by email at <a href="mailto:cvap@gov.bc.ca">cvap@gov.bc.ca</a> or at (604) 660-3888 or toll free at 1-866-660-3888.</p>
 
   <section>
     <h2>By signing this section you hereby authorize:</h2>
@@ -47,7 +47,7 @@
     <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
 
     <h2 class="blue-header">Optional Authorization</h2>
-    <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as a family member or victim service worker?" [valid]="isFieldValid('allowCvapStaffSharing')" errorMessage="Please select an option">
+    <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as an immediate family member or victim service worker?" [valid]="isFieldValid('allowCvapStaffSharing')" errorMessage="Please select an option">
       <label class="inline-label">
         <input type="radio" [value]="100000001" (click)="addAuthorizationInformation(true)" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
         <span>Yes</span>

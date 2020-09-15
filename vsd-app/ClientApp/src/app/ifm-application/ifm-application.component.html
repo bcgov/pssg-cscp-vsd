@@ -42,6 +42,11 @@
     <div class="col-lg-7 col-sm-12">
       <form [formGroup]="form">
 
+        <div *ngIf="isIE" class="alert alert-danger warning-message">
+          <p>It looks like you are using an unsupported browser.</p>
+          <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
+        </div>
+
         <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == 0"></app-introduction>
 
         <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1"></app-personal-information>

@@ -113,6 +113,21 @@
 
     <h2 class="blue-header">Victim's Contact Information</h2>
     <div class="row">
+        <div class="col-12">
+            <app-field label="Is the applicant's phone number(s) and email address the same or to be used for the victim?">
+                <label class="inline-label">
+                    <input type="radio" [value]="true" formControlName="victimSameContactInfo">
+                    <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                    <input type="radio" [value]="false" formControlName="victimSameContactInfo">
+                    <span>No</span>
+                </label>
+            </app-field>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-6">
             <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number">
                 <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
