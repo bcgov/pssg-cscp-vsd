@@ -62,6 +62,11 @@ export class PersonalInfoHelper {
             group['relationshipToVictimOther'] = [''];
         }
 
+        if (form_type === ApplicationType.Witness_Application) {
+            group['relationshipToVictim'] = ['Other'];
+            group['relationshipToVictimOther'] = ['', [Validators.required]];
+        }
+
         if (form_type === ApplicationType.Victim_Application) {
             group['maritalStatus'] = [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]];
         }

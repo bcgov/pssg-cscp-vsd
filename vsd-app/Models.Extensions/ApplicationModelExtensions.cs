@@ -30,7 +30,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_dateofnamechange = model.PersonalInformation.dateOfNameChange;
                 }
 
-                if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember)
+                if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember || application.Application.vsd_applicanttype == (int)ApplicationType.Witness)
                 {
                     application.Application.vsd_cvap_relationshiptovictim = model.PersonalInformation.relationshipToVictim;
                     application.Application.vsd_relationshipother1 = model.PersonalInformation.relationshipToVictimOther;

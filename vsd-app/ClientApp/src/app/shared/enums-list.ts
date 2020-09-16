@@ -38,6 +38,15 @@ export class EnumHelper {
     100000005: 'Single',
   }
 
+  public IndigenousStatus = {
+    0: "",
+    100000000: "First Nations",
+    100000001: "Métis",
+    100000002: "Inuit",
+    100000003: "Prefer Not to Answer",
+    100000004: "Not Applicable",
+  }
+
   public PreferredMethodOfContact = {
     // There are two drop downs being accessed by this which is why items appear twice
     0: '--',

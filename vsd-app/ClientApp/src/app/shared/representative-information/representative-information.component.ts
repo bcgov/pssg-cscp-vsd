@@ -10,6 +10,7 @@ import { FileBundle } from "../../models/file-bundle";
 import { AddressHelper } from "../address/address.helper";
 import { EmailValidator } from "../validators/email.validator";
 import { RepresentativeInfoHelper } from "./representative-information.helper";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: 'app-representative-information',
@@ -31,6 +32,8 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     relationshipList: string[];
     header: string;
 
+    originalOnBehalfOf: number;
+
     representativeInfoHelper = new RepresentativeInfoHelper();
 
     representativePhoneIsRequired: boolean = false;
@@ -42,6 +45,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     constructor(
         private controlContainer: ControlContainer,
         private fb: FormBuilder,
+        private route: ActivatedRoute,
     ) {
         super();
         var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
@@ -64,6 +68,8 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         if (this.formType === ApplicationType.Witness_Application) {
             this.header = "Witness";
         }
+
+        this.originalOnBehalfOf = parseInt(this.route.snapshot.queryParamMap.get('ob'));
 
         this.setRequiredFields(this.form.get('completingOnBehalfOf').value);
 

@@ -84,6 +84,16 @@
         </app-field>
     </div>
 
+    <div *ngIf="formType === ApplicationType.Witness_Application">
+        <div class="row">
+            <div class="col-md-6">
+                <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictimOther')" errorMessage="Please specify">
+                    <input class="form-control" type="text" formControlName="relationshipToVictimOther">
+                </app-field>
+            </div>
+        </div>
+    </div>
+
     <app-field label="Gender" [required]="true" [valid]="isFieldValid('gender')" errorMessage="Please select your gender">
         <label class="inline-label">
             <input type="radio" [value]="100000000" name="gender" formControlName="gender">

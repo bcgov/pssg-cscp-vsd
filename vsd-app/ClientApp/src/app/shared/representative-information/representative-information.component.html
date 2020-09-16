@@ -4,7 +4,7 @@
   </div>
 
   <p>This section provides information regarding applying on behalf of an applicant. This information is only necessary if you are a guardian or legal representative of the applicant.</p>
-  <div class="attention" *ngIf="form.get('completingOnBehalfOf').value > 0">
+  <div class="attention" *ngIf="form.get('completingOnBehalfOf').value === originalOnBehalfOf">
     <p>You previously selected the option below. Verify that this is correct before continuing with the application.</p>
   </div>
 
