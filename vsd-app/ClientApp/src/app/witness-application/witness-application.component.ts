@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
@@ -46,7 +46,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   form: FormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
-  submitting: boolean = false; // this controls the button state for
+  submitting: boolean = false; 
+  public showPrintView: boolean = false;
 
   public currentFormStep: number;
   saveFormData: any;
@@ -239,5 +240,23 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
     });
+  }
+
+  @HostListener('window:afterprint')
+  onafterprint() {
+    console.log("after print");
+    document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
+    window.scroll(0, 0);
+    this.showPrintView = false;
+  }
+
+  producePDF() {
+    console.log("attempt to print invoice");
+    window.scroll(0, 0);
+    this.showPrintView = true;
+    document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
+    setTimeout(() => {
+      window.print();
+    }, 100);
   }
 }

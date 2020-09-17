@@ -171,12 +171,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   ngOnDestroy() {
-    this.wasReportMadeToPoliceSubscription.unsubscribe();
-    this.applyToCourtForMoneyFromOffenderSubscription.unsubscribe();
-    this.willBeTakingLegalActionSubscription.unsubscribe();
-    this.haveYouSuedOffenderSubscription.unsubscribe();
-    this.intendToSueOffenderSubscription.unsubscribe();
-    this.offenderBeenChargedSubscription.unsubscribe();
+    if (this.wasReportMadeToPoliceSubscription) this.wasReportMadeToPoliceSubscription.unsubscribe();
+    if (this.applyToCourtForMoneyFromOffenderSubscription) this.applyToCourtForMoneyFromOffenderSubscription.unsubscribe();
+    if (this.willBeTakingLegalActionSubscription) this.willBeTakingLegalActionSubscription.unsubscribe();
+    if (this.haveYouSuedOffenderSubscription) this.haveYouSuedOffenderSubscription.unsubscribe();
+    if (this.intendToSueOffenderSubscription) this.intendToSueOffenderSubscription.unsubscribe();
+    if (this.offenderBeenChargedSubscription) this.offenderBeenChargedSubscription.unsubscribe();
   }
 
   addCrimeLocation(): void {

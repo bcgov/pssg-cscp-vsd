@@ -1,7 +1,7 @@
 <div class="form-wrapper" style="position: relative;">
   <!-- <div [ngBusy]="[busy]"></div> -->
   <div class="row" [formGroup]="form">
-    <div class="col-lg-3 col-sm-12 application-gutter">
+    <div class="col-lg-3 col-sm-12 application-gutter" [class.hidden]="showPrintView">
       <h3>Immediate Family Member Application</h3>
       <section class="application-nav sticky-top">
         <div>
@@ -47,35 +47,45 @@
           <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
         </div>
 
-        <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == 0"></app-introduction>
+        <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == 0 || showPrintView"></app-introduction>
 
-        <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1"></app-personal-information>
+        <div class="pagebreak"> </div>
+        <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1 || showPrintView"></app-personal-information>
 
-        <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2"></app-victim-information>
+        <div class="pagebreak"> </div>
+        <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2 || showPrintView"></app-victim-information>
 
-        <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3"></app-crime-information>
+        <div class="pagebreak"> </div>
+        <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3 || showPrintView"></app-crime-information>
 
-        <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4"></app-medical-information>
+        <div class="pagebreak"> </div>
+        <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4 || showPrintView"></app-medical-information>
 
-        <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5"></app-expense-information>
+        <div class="pagebreak"> </div>
+        <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5 || showPrintView"></app-expense-information>
 
-        <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6"></app-representative-information>
+        <div class="pagebreak"> </div>
+        <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6 || showPrintView"></app-representative-information>
 
-        <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7"></app-declaration-information>
+        <div class="pagebreak"> </div>
+        <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7 || showPrintView"></app-declaration-information>
 
-        <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8"></app-authorization-information>
+        <div class="pagebreak"> </div>
+        <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8 || showPrintView"></app-authorization-information>
 
-        <app-application-review [formGroup]="form" [formType]="FORM_TYPE" [parentStepper]="stepper" *ngIf="this.currentFormStep == 9"></app-application-review>
+        <div class="pagebreak"> </div>
+        <app-application-review [formGroup]="form" [formType]="FORM_TYPE" [parentStepper]="stepper" *ngIf="this.currentFormStep == 9 || showPrintView"></app-application-review>
 
         <div *ngIf="showValidationMessage" class="error-summary">
           <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
           <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
         </div>
 
-        <section class="button-container">
+        <section class="button-container" *ngIf="!showPrintView">
           <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
-          <span style="float: right;">
+          <span class="right-buttons">
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
+            <button (click)="markAsTouched(); producePDF();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
             <div class="submit-grid">
               <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT IFM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
               <button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <i class="fas fa-chevron-right"></i></button>

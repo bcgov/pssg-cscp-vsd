@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper, MatVerticalStepper } from '@angular/material/stepper';
@@ -51,7 +51,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   form: FormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
-  submitting: boolean = false; // this controls the button state for
+  submitting: boolean = false;
+  public showPrintView: boolean = false;
 
   public currentFormStep: number;
 
@@ -327,6 +328,24 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     }
 
     return this.fb.group(group);
+  }
+
+  @HostListener('window:afterprint')
+  onafterprint() {
+    console.log("after print");
+    document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
+    window.scroll(0, 0);
+    this.showPrintView = false;
+  }
+
+  producePDF() {
+    console.log("attempt to print invoice");
+    window.scroll(0, 0);
+    this.showPrintView = true;
+    document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
+    setTimeout(() => {
+      window.print();
+    }, 100);
   }
 
   cloneFormToVictim(currentForm) {

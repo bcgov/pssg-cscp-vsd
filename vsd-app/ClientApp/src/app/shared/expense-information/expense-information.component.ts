@@ -227,9 +227,9 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
 
   ngOnDestroy() {
     if (this.formType === ApplicationType.IFM_Application) {
-      this.sinSubscription.unsubscribe();
-      this.didMissWorkSubscription.unsubscribe();
-      this.loseWagesSubscription.unsubscribe();
+      if (this.sinSubscription) this.sinSubscription.unsubscribe();
+      if (this.didMissWorkSubscription) this.didMissWorkSubscription.unsubscribe();
+      if (this.loseWagesSubscription) this.loseWagesSubscription.unsubscribe();
     }
   }
 

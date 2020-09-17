@@ -238,14 +238,14 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     }
 
     ngOnDestroy() {
-        this.employedAtTimeOfCrimeSubscription.unsubscribe();
-        this.atWorkAtTimeOfCrimeSubscription.unsubscribe();
-        this.appliedToWorkSafeBCSubscription.unsubscribe();
-        this.didMissWorkSubscription.unsubscribe();
-        this.areYouStillOffWorkSubscription.unsubscribe();
-        this.loseWagesSubscription.unsubscribe();
-        this.sinSubscription.unsubscribe();
-        this.selfEmployedSubscription.unsubscribe();
+        if (this.employedAtTimeOfCrimeSubscription) this.employedAtTimeOfCrimeSubscription.unsubscribe();
+        if (this.atWorkAtTimeOfCrimeSubscription) this.atWorkAtTimeOfCrimeSubscription.unsubscribe();
+        if (this.appliedToWorkSafeBCSubscription) this.appliedToWorkSafeBCSubscription.unsubscribe();
+        if (this.didMissWorkSubscription) this.didMissWorkSubscription.unsubscribe();
+        if (this.areYouStillOffWorkSubscription) this.areYouStillOffWorkSubscription.unsubscribe();
+        if (this.loseWagesSubscription) this.loseWagesSubscription.unsubscribe();
+        if (this.sinSubscription) this.sinSubscription.unsubscribe();
+        if (this.selfEmployedSubscription) this.selfEmployedSubscription.unsubscribe();
     }
 
     getCountryProperty(country: string, properyName: string): any {

@@ -403,7 +403,7 @@
                             </ol>
                         </div>
 
-                        <app-field label="Applicant's Signature" [required]="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
+                        <app-field label="Signature" [required]="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
                             <div class="signature-trigger" (click)="showSignPad('racafInformation', 'signature')" *ngIf="!hasSignature('racafInformation.signature')">
                             </div>
                             <div *ngIf="hasSignature('racafInformation.signature')" class="signature-preview">

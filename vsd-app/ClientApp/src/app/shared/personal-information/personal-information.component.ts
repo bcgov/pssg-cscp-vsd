@@ -119,15 +119,15 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         this.preferredMethodOfContactSubscription.unsubscribe();
         // this.iHaveOtherNamesSubscription.unsubscribe();
         if (this.formType === ApplicationType.Victim_Application || this.formType === ApplicationType.IFM_Application) {
-            this.sinSubscription.unsubscribe();
+            if (this.sinSubscription) this.sinSubscription.unsubscribe();
         }
 
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
-            this.addressSubscription.unsubscribe();
-            this.phoneSubscription.unsubscribe();
-            this.altPhoneSubscription.unsubscribe();
-            this.emailSubscription.unsubscribe();
-            this.confirmEmailSubscription.unsubscribe();
+            if (this.addressSubscription) this.addressSubscription.unsubscribe();
+            if (this.phoneSubscription) this.phoneSubscription.unsubscribe();
+            if (this.altPhoneSubscription) this.altPhoneSubscription.unsubscribe();
+            if (this.emailSubscription) this.emailSubscription.unsubscribe();
+            if (this.confirmEmailSubscription) this.confirmEmailSubscription.unsubscribe();
         }
     }
 

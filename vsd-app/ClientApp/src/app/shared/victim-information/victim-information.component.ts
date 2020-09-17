@@ -81,10 +81,10 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
     }
 
     ngOnDestroy() {
-        this.iHaveOtherNamesSubscription.unsubscribe();
+        if (this.iHaveOtherNamesSubscription) this.iHaveOtherNamesSubscription.unsubscribe();
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
-            this.addressInfoSubscription.unsubscribe();
-            this.contactInfoSubscription.unsubscribe();
+            if (this.addressInfoSubscription) this.addressInfoSubscription.unsubscribe();
+            if (this.contactInfoSubscription) this.contactInfoSubscription.unsubscribe();
         }
     }
 }
