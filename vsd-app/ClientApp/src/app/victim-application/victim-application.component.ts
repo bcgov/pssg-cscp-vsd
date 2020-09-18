@@ -328,7 +328,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   harvestForm(): Application {
-    return {
+    let data = {
       ApplicationType: this.FORM_TYPE,
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
@@ -340,6 +340,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
       AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
     } as Application;
+
+    //using this as a workaround to collect values from disabled fields
+    if (data.RepresentativeInformation.mostRecentMailingAddressSameAsPersonal == true) {
+      data.RepresentativeInformation.representativeAddress = data.PersonalInformation.primaryAddress;
+    }
+
+    return data;
   }
 
 

@@ -46,7 +46,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   form: FormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
-  submitting: boolean = false; 
+  submitting: boolean = false;
   public showPrintView: boolean = false;
 
   public currentFormStep: number;
@@ -206,7 +206,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   }
 
   harvestForm(): Application {
-    return {
+    let data = {
       ApplicationType: this.FORM_TYPE,
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
@@ -219,6 +219,16 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
       VictimInformation: this.form.get('victimInformation').value as VictimInformation,
     } as Application;
+
+    //using this as a workaround to collect values from disabled fields
+    if (data.VictimInformation.mostRecentMailingAddressSameAsPersonal == true) {
+      data.VictimInformation.primaryAddress = data.PersonalInformation.primaryAddress;
+    }
+    if (data.RepresentativeInformation.mostRecentMailingAddressSameAsPersonal == true) {
+      data.RepresentativeInformation.representativeAddress = data.PersonalInformation.primaryAddress;
+    }
+
+    return data;
   }
 
   // marking the form as touched makes the validation messages show

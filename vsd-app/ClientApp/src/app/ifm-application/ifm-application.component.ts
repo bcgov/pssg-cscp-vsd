@@ -293,8 +293,12 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       VictimInformation: this.form.get('victimInformation').value as VictimInformation,
     } as Application;
 
+    //using this as a workaround to collect values from disabled fields
     if (data.VictimInformation.mostRecentMailingAddressSameAsPersonal == true) {
       data.VictimInformation.primaryAddress = data.PersonalInformation.primaryAddress;
+    }
+    if (data.RepresentativeInformation.mostRecentMailingAddressSameAsPersonal == true) {
+      data.RepresentativeInformation.representativeAddress = data.PersonalInformation.primaryAddress;
     }
 
     return data;
