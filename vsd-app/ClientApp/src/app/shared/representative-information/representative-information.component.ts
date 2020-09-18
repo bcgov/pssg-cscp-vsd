@@ -149,11 +149,11 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         emailConfirmControl.setValidators([Validators.email, EmailValidator('representativeEmail')]);
         emailConfirmControl.setErrors(null, options);
 
-        if (contactMethod === 100000000) { //Phone Call
+        if (contactMethod === 100000001) { //Phone Call
             phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
             this.representativePhoneIsRequired = true;
             this.representativeEmailIsRequired = false;
-        } else if (contactMethod === 100000001) { //Email
+        } else if (contactMethod === 100000000) { //Email
             emailControl.setValidators([Validators.required, Validators.email]);
             emailConfirmControl.setValidators([Validators.required, Validators.email, EmailValidator('representativeEmail')]);
             this.representativePhoneIsRequired = false;
