@@ -151,6 +151,7 @@ export interface RepresentativeInformation {
   representativePhoneNumber: string;
   representativeAlternatePhoneNumber: string;
   representativeEmail: string;
+  mostRecentMailingAddressSameAsPersonal: boolean;
   representativeAddress: Address;
   documents: DocumentCollectioninformation[];
   relationshipToPerson: string;

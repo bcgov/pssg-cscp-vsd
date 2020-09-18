@@ -482,18 +482,22 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         tempProviderCollection[0] = new Providercollection();
                         tempProviderCollection[0].vsd_phonenumber = model.RepresentativeInformation.representativePhoneNumber;
                         tempProviderCollection[0].vsd_alternatephonenumber = model.RepresentativeInformation.representativeAlternatePhoneNumber;
-                        tempProviderCollection[0].vsd_addressline1 = model.RepresentativeInformation.representativeAddress.line1;
-                        tempProviderCollection[0].vsd_addressline2 = model.RepresentativeInformation.representativeAddress.line2;
-                        tempProviderCollection[0].vsd_country = model.RepresentativeInformation.representativeAddress.country;
-                        tempProviderCollection[0].vsd_province = model.RepresentativeInformation.representativeAddress.province;
-                        tempProviderCollection[0].vsd_city = model.RepresentativeInformation.representativeAddress.city;
-                        tempProviderCollection[0].vsd_postalcode = model.RepresentativeInformation.representativeAddress.postalCode;
                         tempProviderCollection[0].vsd_preferredmethodofcontact = model.RepresentativeInformation.representativePreferredMethodOfContact;
                         tempProviderCollection[0].vsd_email = model.RepresentativeInformation.representativeEmail;
                         tempProviderCollection[0].vsd_firstname = model.RepresentativeInformation.representativeFirstName;
                         tempProviderCollection[0].vsd_middlename = model.RepresentativeInformation.representativeMiddleName;
                         tempProviderCollection[0].vsd_lastname = model.RepresentativeInformation.representativeLastName;
                         tempProviderCollection[0].vsd_relationship1 = model.RepresentativeInformation.relationshipToPerson;
+
+                        if (model.RepresentativeInformation.representativeAddress != null)
+                        {
+                            tempProviderCollection[0].vsd_addressline1 = model.RepresentativeInformation.representativeAddress.line1;
+                            tempProviderCollection[0].vsd_addressline2 = model.RepresentativeInformation.representativeAddress.line2;
+                            tempProviderCollection[0].vsd_country = model.RepresentativeInformation.representativeAddress.country;
+                            tempProviderCollection[0].vsd_province = model.RepresentativeInformation.representativeAddress.province;
+                            tempProviderCollection[0].vsd_city = model.RepresentativeInformation.representativeAddress.city;
+                            tempProviderCollection[0].vsd_postalcode = model.RepresentativeInformation.representativeAddress.postalCode;
+                        }
 
                         int tempProviderCount = 0;
                         if (application.ProviderCollection == null)
