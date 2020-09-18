@@ -30,7 +30,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_dateofnamechange = model.PersonalInformation.dateOfNameChange;
                 }
 
-                if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember)
+                if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember || application.Application.vsd_applicanttype == (int)ApplicationType.Witness)
                 {
                     application.Application.vsd_cvap_relationshiptovictim = model.PersonalInformation.relationshipToVictim;
                     application.Application.vsd_relationshipother1 = model.PersonalInformation.relationshipToVictimOther;
@@ -54,7 +54,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // (see https://www.sitepoint.com/working-phone-numbers-javascript/ for inspiration)
                 // but for now we should only support whatever the Dynamics UI supports - no sense adding extra features that can't be used because of the Dynamics side
                 application.Application.vsd_applicantsprimaryphonenumber = model.PersonalInformation.phoneNumber;
-                application.Application.vsd_leavevoicemail = model.PersonalInformation.leaveVoicemail;
+                // application.Application.vsd_leavevoicemail = model.PersonalInformation.leaveVoicemail;
+                application.Application.vsd_voicemailoption = model.PersonalInformation.leaveVoicemail;
                 application.Application.vsd_applicantsalternatephonenumber = model.PersonalInformation.alternatePhoneNumber;
                 application.Application.vsd_applicantsemail = model.PersonalInformation.email;
                 application.Application.vsd_applicantspreferredmethodofcontact = model.PersonalInformation.preferredMethodOfContact;

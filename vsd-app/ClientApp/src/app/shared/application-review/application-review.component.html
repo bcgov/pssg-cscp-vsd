@@ -5,8 +5,9 @@
     <p>Please check the accuracy of the information entered in your application before submitting.</p>
 
     <section>
-        <h2 class="blue-header">Overview <button (click)="gotoPageIndex(pages.Overview);" class="btn review-btn"><i
-                    class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">
+            Overview <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Overview);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
         <table class="table table-striped review-table">
             <tbody>
                 <tr>
@@ -19,8 +20,7 @@
         <div *ngIf="form.get('introduction.understoodInformation').value === true">
             <p>
                 <label class="inline-label inline-checkbox-label">
-                    <input type="checkbox" [checked]="form.get('introduction.understoodInformation').value === true"
-                        disabled="disabled" />
+                    <input type="checkbox" [checked]="form.get('introduction.understoodInformation').value === true" disabled="disabled" />
                     <span>I have read and understood all the above information.</span>
                 </label>
             </p>
@@ -29,8 +29,7 @@
 
     <section>
         <h2 class="blue-header">
-            Personal Information & Addresses <button (click)="gotoPageIndex(pages.Personal);" class="btn review-btn"><i
-                    class="fa fa-pencil"></i> VIEW AND EDIT</button>
+            Personal Information & Addresses <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Personal);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
         </h2>
         <h3>Applicant Name</h3>
         <table class="table table-striped review-table">
@@ -65,6 +64,35 @@
         <h3>Other Details</h3>
         <table class="table table-striped review-table">
             <tbody>
+                <tr *ngIf="formType === ApplicationType.IFM_Application">
+                    <th>Relationship to Victim</th>
+                    <td>{{ valueOrEmpty('personalInformation.relationshipToVictim') }}<span *ngIf="form.get('personalInformation.relationshipToVictim').value === 'Other'"> :
+                            {{ valueOrEmpty('personalInformation.relationshipToVictimOther') }}</span></td>
+                </tr>
+                <tr *ngIf="formType === ApplicationType.Witness_Application">
+                    <th>Relationship to Victim</th>
+                    <td>{{ valueOrEmpty('personalInformation.relationshipToVictimOther') }}</td>
+                </tr>
+                <tr>
+                    <th>Gender</th>
+                    <td>{{ enumHelper.Gender[valueForEnum('personalInformation.gender')] }} </td>
+                </tr>
+                <tr>
+                    <th>Birth Date</th>
+                    <td>{{ datesOrEmpty(['personalInformation.birthDate']) }}</td>
+                </tr>
+                <tr>
+                    <th>Occupation</th>
+                    <td>{{ valueOrEmpty('personalInformation.occupation') }} </td>
+                </tr>
+                <tr>
+                    <th>Social Insurance Number (SIN)</th>
+                    <td>{{ valueOrEmpty('personalInformation.sin') }}</td>
+                </tr>
+                <tr>
+                    <th>Do you identify as an Indigenous person?</th>
+                    <td>{{ enumHelper.IndigenousStatus[valueOrEmpty('personalInformation.indigenousStatus')] }}</td>
+                </tr>
                 <tr>
                     <th>Primary Phone Number</th>
                     <td>{{ valueOrEmpty('personalInformation.phoneNumber') | phone}} </td>
@@ -74,35 +102,18 @@
                     <td>{{ valueOrEmpty('personalInformation.alternatePhoneNumber') | phone}} </td>
                 </tr>
                 <tr>
+                    <th>Leave Voicemail?</th>
+                    <td>{{ enumHelper.VoicemailOptions[valueForEnum('personalInformation.leaveVoicemail')] }} </td>
+                </tr>
+                <tr>
                     <th>Email Address</th>
                     <td>{{ valueOrEmpty('personalInformation.email') }} </td>
-                </tr>
-                <tr *ngIf="formType === ApplicationType.IFM_Application">
-                    <th>Relationship to Victim</th>
-                    <td>{{ valueOrEmpty('personalInformation.relationshipToVictim') }}<span
-                            *ngIf="form.get('personalInformation.relationshipToVictim').value === 'Other'"> :
-                            {{ valueOrEmpty('personalInformation.relationshipToVictimOther') }}</span></td>
-                </tr>
-                <tr>
-                    <th>Birth Date</th>
-                    <td>{{ datesOrEmpty(['personalInformation.birthDate']) }}</td>
-                </tr>
-                <tr>
-                    <th>Social Insurance Number (SIN)</th>
-                    <td>{{ valueOrEmpty('personalInformation.sin') }}</td>
-                </tr>
-                <tr>
-                    <th>Gender</th>
-                    <td>{{ enumHelper.Gender[valueForEnum('personalInformation.gender')] }} </td>
                 </tr>
                 <tr *ngIf="formType === ApplicationType.Victim_Application">
                     <th>Marital Status</th>
                     <td>{{ enumHelper.MaritalStatus[valueForEnum('personalInformation.maritalStatus')] }} </td>
                 </tr>
-                <tr>
-                    <th>Occupation</th>
-                    <td>{{ valueOrEmpty('personalInformation.occupation') }} </td>
-                </tr>
+
             </tbody>
         </table>
 
@@ -111,8 +122,7 @@
             <tbody>
                 <tr>
                     <th>Primary Address</th>
-                    <td><span *ngIf="addressHelper.hasAddressInfo(form.get('personalInformation.primaryAddress').value)"
-                            [innerHTML]="displayMailingSubAddress('personalInformation.primaryAddress')"></span></td>
+                    <td><span *ngIf="addressHelper.hasAddressInfo(form.get('personalInformation.primaryAddress').value)" [innerHTML]="displayMailingSubAddress('personalInformation.primaryAddress')"></span></td>
                 </tr>
             </tbody>
         </table>
@@ -133,8 +143,7 @@
 
     <section *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
         <h2 class="blue-header">
-            Victim Information <button (click)="gotoPageIndex(pages.Victim);" class="btn review-btn"><i
-                    class="fa fa-pencil"></i> VIEW AND EDIT</button>
+            Victim Information <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Victim);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
         </h2>
         <h3>Victim Name</h3>
         <table class="table table-striped review-table">
@@ -208,21 +217,21 @@
         <table class="table table-striped review-table">
             <tbody>
                 <tr>
-                    <th>Is victim's most recent home address same as applicant's primary home address?</th>
+                    <th>Is victim's mailing address the same as the applicant's primary mailing address?</th>
                     <td>{{ valueOrEmpty('victimInformation.mostRecentMailingAddressSameAsPersonal') }} </td>
                 </tr>
                 <tr>
                     <th>Mailing Address</th>
-                    <td><span *ngIf="addressHelper.hasAddressInfo(form.get('victimInformation.primaryAddress').value)"
-                            [innerHTML]="displayMailingSubAddress('victimInformation.primaryAddress')"></span></td>
+                    <td><span *ngIf="addressHelper.hasAddressInfo(form.get('victimInformation.primaryAddress').value)" [innerHTML]="displayMailingSubAddress('victimInformation.primaryAddress')"></span></td>
                 </tr>
             </tbody>
         </table>
     </section>
 
     <section>
-        <h2 class="blue-header">Crime Information <button (click)="gotoPageIndex(pages.Crime);"
-                class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">
+            Crime Information <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Crime);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
         <h3>Crime Occurence</h3>
         <table class="table table-striped review-table">
             <tbody>
@@ -248,8 +257,7 @@
                     <th><span *ngIf="i <= 0">Crime Location(s)</span></th>
                     <td>{{ item.get('location').value }}</td>
                 </tr>
-                <ng-container
-                    *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
+                <ng-container *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
                     <tr>
                         <th>Is the Victim deceased as a result of the crime?</th>
                         <td>{{ enumHelper.boolEnum[valueForEnum('crimeInformation.victimDeceasedFromCrime')] }} </td>
@@ -274,8 +282,7 @@
             </tbody>
         </table>
         <h3>Police Involvement</h3>
-        <table class="table table-striped review-table"
-            *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.False || form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.Undecided">
+        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.False || form.get('crimeInformation.wasReportMadeToPolice').value === CRMMultiBoolean.Undecided">
             <tbody>
                 <tr>
                     <th>Was the report made to the police?</th>
@@ -303,8 +310,7 @@
                 <tbody>
                     <tr>
                         <th>Police Force</th>
-                        <td>{{ valueOrEmpty(item.get('policeDetachment')) }} <span
-                                *ngIf="item.get('policeDetachment').value === 'Other'"> :
+                        <td>{{ valueOrEmpty(item.get('policeDetachment')) }} <span *ngIf="item.get('policeDetachment').value === 'Other'"> :
                                 {{ valueOrEmpty(item.get('policeDetachmentOther')) }}</span></td>
                     </tr>
                     <tr>
@@ -369,27 +375,25 @@
                 </tbody>
             </table>
         </ng-container>
-        <table class="table table-striped review-table"
-            *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === CRMBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.Undecided">
+        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.haveYouSuedOffender').value === CRMBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.intendToSueOffender').value === CRMMultiBoolean.Undecided">
             <tbody>
                 <tr>
                     <th>Did you apply to the court for money from the offender?</th>
                     <td>{{ enumHelper.ApplyToCourtForMoneyFromOffender[valueForEnum('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender')] }}
                     </td>
                 </tr>
-                <ng-container
-                    *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True">
+                <ng-container *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True">
                     <tr>
                         <th>What expenses did you ask to be covered?</th>
                         <td>{{ valueOrEmpty('crimeInformation.racafInformation.expensesRequested') }} </td>
                     </tr>
                     <tr>
                         <th>Amount awarded by the judge</th>
-                        <td>{{ valueOrEmpty('crimeInformation.racafInformation.expensesAwarded') | currency}} </td>
+                        <td>{{ valueOrEmpty('crimeInformation.racafInformation.expensesAwarded', '') | currency}} </td>
                     </tr>
                     <tr>
                         <th>Amount Received</th>
-                        <td>{{ valueOrEmpty('crimeInformation.racafInformation.expensesReceived') | currency}} </td>
+                        <td>{{ valueOrEmpty('crimeInformation.racafInformation.expensesReceived', '') | currency}} </td>
                     </tr>
                 </ng-container>
                 <tr>
@@ -397,29 +401,24 @@
                     <td>{{ enumHelper.WillBeTakingLegalAction[valueForEnum('crimeInformation.racafInformation.willBeTakingLegalAction')] }}
                     </td>
                 </tr>
-                <tr
-                    *ngIf="form.get('crimeInformation.racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
+                <tr *ngIf="form.get('crimeInformation.racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
                     <th>Do you have a lawyer?</th>
                     <td>{{ enumHelper.boolEnum[valueForEnum('crimeInformation.racafInformation.haveLawyer')] }} </td>
                 </tr>
-                <ng-container
-                    *ngIf="form.get('crimeInformation.racafInformation.haveLawyer').value === CRMBoolean.True">
+                <ng-container *ngIf="form.get('crimeInformation.racafInformation.haveLawyer').value === CRMBoolean.True">
                     <tr>
                         <th>Lawyer or Law Firm Name</th>
                         <td>{{ valueOrEmpty('crimeInformation.racafInformation.lawyerOrFirmName') }} </td>
                     </tr>
                     <tr>
                         <th>Lawyer Address</th>
-                        <td><span
-                                *ngIf="addressHelper.hasAddressInfo(form.get('crimeInformation.racafInformation.lawyerAddress').value)"
-                                [innerHTML]="addressHelper.displayAddress(form.get('crimeInformation.racafInformation.lawyerAddress').value)"></span>
+                        <td><span *ngIf="addressHelper.hasAddressInfo(form.get('crimeInformation.racafInformation.lawyerAddress').value)" [innerHTML]="addressHelper.displayAddress(form.get('crimeInformation.racafInformation.lawyerAddress').value)"></span>
                         </td>
                     </tr>
                 </ng-container>
             </tbody>
         </table>
-        <table class="table table-striped review-table"
-            *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
+        <table class="table table-striped review-table" *ngIf="form.get('crimeInformation.racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True || form.get('crimeInformation.racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
             <tbody>
                 <tr>
                     <th>Applicant's Name</th>
@@ -427,17 +426,16 @@
                 </tr>
                 <tr>
                     <th>Applicant's Signature</th>
-                    <td><img class="review-signature"
-                            *ngIf="valueOrEmpty('crimeInformation.racafInformation.signature', '') != ''"
-                            src="{{ valueOrEmpty('crimeInformation.racafInformation.signature', '') }}" /></td>
+                    <td><img class="review-signature" *ngIf="valueOrEmpty('crimeInformation.racafInformation.signature', '') != ''" src="{{ valueOrEmpty('crimeInformation.racafInformation.signature', '') }}" /></td>
                 </tr>
             </tbody>
         </table>
     </section>
 
     <section>
-        <h2 class="blue-header">Medical & Dental Information <button (click)="gotoPageIndex(pages.Medical);"
-                class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">
+            Medical & Dental Information <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Medical);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
         <h3>Coverage</h3>
         <table class="table table-striped review-table">
             <tbody>
@@ -534,40 +532,39 @@
             </tbody>
         </table>
         <table class="table table-striped review-table" *ngFor="let item of otherMedicalTreatments.controls; let i = index">
-          <tbody>
-            <tr>
-              <th>Type</th>
-              <td>{{ item.get('providerType').value }}</td>
-            </tr>
-            <tr>
-              <th>Name</th>
-              <td>{{ item.get('providerName').value }}</td>
-            </tr>
-            <tr>
-              <th>Email</th>
-              <td>{{ valueOrEmpty(item.get('providerEmail')) }}</td>
-            </tr>
-            <tr>
-              <th>Phone</th>
-              <td>{{ item.get('providerPhoneNumber').value | phone}}</td>
-            </tr>
-            <tr>
-              <th>Fax</th>
-              <td>{{ valueOrEmpty(item.get('providerFax')) | phone}}</td>
-            </tr>
-            <tr>
-              <th>Mailing Address</th>
-              <td><span *ngIf="addressHelper.hasAddressInfo(item.get('providerAddress').value)" [innerHTML]="addressHelper.displayAddress(item.get('providerAddress').value)"></span></td>
-            </tr>
-          </tbody>
+            <tbody>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ item.get('providerType').value }}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ item.get('providerName').value }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ valueOrEmpty(item.get('providerEmail')) }}</td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td>{{ item.get('providerPhoneNumber').value | phone}}</td>
+                </tr>
+                <tr>
+                    <th>Fax</th>
+                    <td>{{ valueOrEmpty(item.get('providerFax')) | phone}}</td>
+                </tr>
+                <tr>
+                    <th>Mailing Address</th>
+                    <td><span *ngIf="addressHelper.hasAddressInfo(item.get('providerAddress').value)" [innerHTML]="addressHelper.displayAddress(item.get('providerAddress').value)"></span></td>
+                </tr>
+            </tbody>
         </table>
     </section>
 
     <section>
-        <h2 class="blue-header">Expense and
-            {{formType===ApplicationType.Victim_Application ? 'Loss': 'Benefits'}}<button
-                (click)="gotoPageIndex(pages.Expense);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND
-                EDIT</button></h2>
+        <h2 class="blue-header">
+            Expense and {{formType===ApplicationType.Victim_Application ? 'Loss': 'Benefits'}}<span class="hide-for-print"><button (click)="gotoPageIndex(pages.Expense);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
         <h3>Benefits Available Through CVAP</h3>
         <table class="table table-striped review-table">
             <tbody>
@@ -582,8 +579,7 @@
                     </tr>
                     <tr>
                         <th>Prescription drug expenses</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.havePrescriptionDrugExpenses')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePrescriptionDrugExpenses')"></span>
                         </td>
                     </tr>
                     <tr>
@@ -593,33 +589,28 @@
                     </tr>
                     <tr>
                         <th>Lost employment income (reimbursed at minimum wage)</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLostEmploymentIncomeExpenses')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLostEmploymentIncomeExpenses')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Repair or replacement costs of damaged or destroyed personal property that you were wearing
                             at the time of the incident (e.g. eyeglasses, clothing)</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.havePersonalPropertyLostExpenses')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePersonalPropertyLostExpenses')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Protective Measures for Security Devices</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveProtectiveMeasureExpenses')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveProtectiveMeasureExpenses')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Protective Measures for Moving Expenses</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveProtectiveMovingExpenses')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveProtectiveMovingExpenses')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Transportation to Obtain Benefits</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveTransportationToObtainBenefits')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveTransportationToObtainBenefits')"></span>
                         </td>
                     </tr>
                     <tr>
@@ -629,14 +620,12 @@
                     </tr>
                     <tr>
                         <th>Crime scene cleaning</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Other</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"> </span> <span
-                                *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true"> :
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"> </span> <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true"> :
                                 {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
                     </tr>
                     <tr>
@@ -644,8 +633,7 @@
                         <td>{{valueOrEmpty('expenseInformation.additionalBenefitsDetails')}}</td>
                     </tr>
                 </ng-container>
-                <ng-container
-                    *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
+                <ng-container *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
                     <tr>
                         <th>Counselling</th>
                         <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingExpenses')"></span>
@@ -653,14 +641,12 @@
                     </tr>
                     <tr>
                         <th>Transportation to obtain counselling</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingTransportation')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingTransportation')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Prescription drug expenses</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.havePrescriptionDrugExpenses')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePrescriptionDrugExpenses')"></span>
                         </td>
                     </tr>
                 </ng-container>
@@ -673,32 +659,27 @@
                 <tbody>
                     <tr>
                         <th>Disability Plan benefits</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDisabilityPlanBenefits')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDisabilityPlanBenefits')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Employment Insurance benefits</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveEmploymentInsuranceBenefits')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveEmploymentInsuranceBenefits')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Income Assistance</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveIncomeAssistanceBenefits')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveIncomeAssistanceBenefits')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Canada Pension Plan</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCanadaPensionPlanBenefits')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCanadaPensionPlanBenefits')"></span>
                         </td>
                     </tr>
                     <tr>
                         <th>Aboriginal Affairs and Northern Development Canada</th>
-                        <td><span
-                                [innerHTML]="checkmarkOrEmpty('expenseInformation.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits')"></span>
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits')"></span>
                         </td>
                     </tr>
                     <tr>
@@ -708,16 +689,14 @@
                     </tr>
                     <tr>
                         <th>Other</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span
-                                *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> :
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> :
                                 {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
                     </tr>
                 </tbody>
             </table>
         </ng-container>
 
-        <ng-container
-            *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
+        <ng-container *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
 
             <section *ngIf="form.get('crimeInformation.victimDeceasedFromCrime').value == CRMBoolean.True">
                 <ng-container *ngIf="formType === ApplicationType.IFM_Application">
@@ -726,56 +705,47 @@
                         <tbody>
                             <tr>
                                 <th>Vocational services or training</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveVocationalServicesExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveVocationalServicesExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Income support</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveIncomeSupportExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveIncomeSupportExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Childcare</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveChildcareExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveChildcareExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Transportation to attend legal proceedings</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLegalProceedingExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLegalProceedingExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Funeral expenses</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveFuneralExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveFuneralExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Bereavement leave</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveBereavementLeaveExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveBereavementLeaveExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Loss of parental guidance</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLostOfParentalGuidanceExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLostOfParentalGuidanceExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Homemaker services</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveHomeMakerExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveHomeMakerExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Crime scene cleaning</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
@@ -801,8 +771,7 @@
                                     <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.missedWorkDueToDeathOfVictim')] }}
                                     </td>
                                 </tr>
-                                <ng-container
-                                    *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
+                                <ng-container *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
                                     <tr>
                                         <th>Please provide days of work missed</th>
                                         <td>{{ valueOrEmpty('expenseInformation.daysWorkMissedStart', '') | date}} -
@@ -817,11 +786,9 @@
                             </tbody>
                         </table>
 
-                        <ng-container
-                            *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
+                        <ng-container *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
                             <h3>Income Loss Information</h3>
-                            <table class="table table-striped review-table"
-                                *ngFor="let item of employers.controls; let i = index">
+                            <table class="table table-striped review-table" *ngFor="let item of employers.controls; let i = index">
                                 <tbody>
                                     <tr>
                                         <th>Name of Company/Organization</th>
@@ -837,9 +804,7 @@
                                     </tr>
                                     <tr>
                                         <th>Mailing Address</th>
-                                        <td><span
-                                                *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)"
-                                                [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span>
+                                        <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -870,38 +835,32 @@
                         <tbody>
                             <tr>
                                 <th>Disability Plan benefits</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDisabilityPlanBenefits')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDisabilityPlanBenefits')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Employment Insurance benefits</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveEmploymentInsuranceBenefits')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveEmploymentInsuranceBenefits')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Income Assistance</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveIncomeAssistanceBenefits')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveIncomeAssistanceBenefits')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Canada Pension Plan</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCanadaPensionPlanBenefits')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCanadaPensionPlanBenefits')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Aboriginal Affairs and Northern Development Canada</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits')"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Benefits you have recieved as a result of civil action</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCivilActionBenefits')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCivilActionBenefits')"></span>
                                 </td>
                             </tr>
                             <tr>
@@ -920,8 +879,7 @@
                         <tbody>
                             <tr>
                                 <th>Crime scene cleaning</th>
-                                <td><span
-                                        [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
@@ -942,8 +900,9 @@
     </section>
 
     <section *ngIf="formType === ApplicationType.Victim_Application">
-        <h2 class="blue-header">Employment Income <button (click)="gotoPageIndex(pages.Employment);"
-                class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">
+            Employment Income <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Employment);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
         <h3>Income Loss Information</h3>
         <table class="table table-striped review-table">
             <tbody>
@@ -952,8 +911,7 @@
                     <td>{{ enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')] }}
                     </td>
                 </tr>
-                <ng-container
-                    *ngIf="enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')] === 'Yes'">
+                <ng-container *ngIf="enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.wereYouEmployedAtTimeOfCrime')] === 'Yes'">
                     <tr>
                         <th>Were you at work at the time of the incident?</th>
                         <td>{{ enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.wereYouAtWorkAtTimeOfIncident')] }}
@@ -975,15 +933,12 @@
                     <td>{{ enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.didYouMissWorkDueToCrime')] }}
                     </td>
                 </tr>
-                <ng-container
-                    *ngIf="enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.didYouMissWorkDueToCrime')] === 'Yes'">
+                <ng-container *ngIf="enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.didYouMissWorkDueToCrime')] === 'Yes'">
                     <tr>
                         <th>Please provide days of work missed</th>
                         <td>{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart', '') | date}} -
-                            <span
-                                *ngIf="form.get('employmentIncomeInformation.areYouStillOffWork').value === CRMBoolean.True">Present</span>
-                            <span
-                                *ngIf="form.get('employmentIncomeInformation.areYouStillOffWork').value === CRMBoolean.False">{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd', '') | date}}</span>
+                            <span *ngIf="form.get('employmentIncomeInformation.areYouStillOffWork').value === CRMBoolean.True">Present</span>
+                            <span *ngIf="form.get('employmentIncomeInformation.areYouStillOffWork').value === CRMBoolean.False">{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd', '') | date}}</span>
                         </td>
                     </tr>
                     <tr>
@@ -1031,8 +986,7 @@
                     </tr>
                     <tr>
                         <th>Mailing Address</th>
-                        <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)"
-                                [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
+                        <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
                     </tr>
                     <tr>
                         <th>Contact Name</th>
@@ -1049,8 +1003,9 @@
     </section>
 
     <section>
-        <h2 class="blue-header">Application on Behalf of the Victim <button (click)="gotoPageIndex(pages.OnBehalfOf);"
-                class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">
+            Application on Behalf of the Victim <span class="hide-for-print"><button (click)="gotoPageIndex(pages.OnBehalfOf);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
         <table class="table table-striped review-table">
             <tbody>
                 <tr>
@@ -1058,8 +1013,7 @@
                     <td>{{ enumHelper.CompletingOnBehalfOf[valueForEnum('representativeInformation.completingOnBehalfOf')] }}
                     </td>
                 </tr>
-                <tr
-                    *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === OnBehalfOf.Legal_Guardian">
+                <tr *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === OnBehalfOf.Legal_Guardian">
                     <th>Relationship to Person</th>
                     <td>{{ valueOrEmpty('representativeInformation.relationshipToPerson') }}</td>
                 </tr>
@@ -1113,10 +1067,6 @@
             <table class="table table-striped review-table">
                 <tbody>
                     <tr>
-                        <th>Country</th>
-                        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.country') }}</td>
-                    </tr>
-                    <tr>
                         <th>Mailing Address</th>
                         <td>{{ multiValueOrEmpty(['representativeInformation.representativeAddress.line1']) }}</td>
                     </tr>
@@ -1136,20 +1086,23 @@
                         <th>Postal Code</th>
                         <td>{{ valueOrEmpty('representativeInformation.representativeAddress.postalCode') }}</td>
                     </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.country') }}</td>
+                    </tr>
                 </tbody>
             </table>
         </ng-container>
     </section>
 
     <section>
-        <h2 class="blue-header">Declaration <button (click)="gotoPageIndex(pages.Declaration);"
-                class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">
+            Declaration <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Declaration);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
         <div *ngIf="form.get('declarationInformation.declaredAndSigned').value === true">
             <p>
                 <label class="inline-label inline-checkbox-label">
-                    <input type="checkbox"
-                        [checked]="form.get('declarationInformation.declaredAndSigned').value === true"
-                        disabled="disabled" />
+                    <input type="checkbox" [checked]="form.get('declarationInformation.declaredAndSigned').value === true" disabled="disabled" />
                     <span>I submit this application in support of a claim for benefits available to Victims under the
                         Crime Victim Assistance Act, and declare the information provided in this application for
                         benefits is true and correct.</span>
@@ -1162,8 +1115,7 @@
                 <tr>
                     <th>Applicant's Signature</th>
                     <td>
-                        <img class="review-signature" *ngIf="valueOrEmpty('declarationInformation.signature', '') != ''"
-                            src="{{ valueOrEmpty('declarationInformation.signature', '') }}" />
+                        <img class="review-signature" *ngIf="valueOrEmpty('declarationInformation.signature', '') != ''" src="{{ valueOrEmpty('declarationInformation.signature', '') }}" />
                     </td>
                 </tr>
             </tbody>
@@ -1171,14 +1123,13 @@
     </section>
 
     <section>
-        <h2 class="blue-header">Authorization <button (click)="gotoPageIndex(pages.Authorization);"
-                class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
+        <h2 class="blue-header">
+            Authorization <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Authorization);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
         <div *ngIf="form.get('authorizationInformation.approvedAuthorityNotification').value === true">
             <p>
                 <label class="inline-label inline-checkbox-label">
-                    <input type="checkbox"
-                        [checked]="form.get('authorizationInformation.approvedAuthorityNotification').value === true"
-                        disabled="disabled" />
+                    <input type="checkbox" [checked]="form.get('authorizationInformation.approvedAuthorityNotification').value === true" disabled="disabled" />
                     <span>I understand that the Crime Victim Assistance Program may notify the above authorities that I
                         have submitted an application for benefits pursuant to the Crime Victim Assistance Act.</span>
                 </label>
@@ -1187,9 +1138,7 @@
         <div *ngIf="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value === true">
             <p>
                 <label class="inline-label inline-checkbox-label">
-                    <input type="checkbox"
-                        [checked]="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value === true"
-                        disabled="disabled" />
+                    <input type="checkbox" [checked]="form.get('authorizationInformation.readAndUnderstoodTermsAndConditions').value === true" disabled="disabled" />
                     <span>I have read and understood the above information.</span>
                 </label>
             </p>
@@ -1199,9 +1148,7 @@
             <tbody>
                 <tr>
                     <th>Applicant's Signature</th>
-                    <td><img class="review-signature"
-                            *ngIf="valueOrEmpty('authorizationInformation.signature', '') != ''"
-                            src="{{ valueOrEmpty('authorizationInformation.signature', '') }}" /></td>
+                    <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.signature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.signature', '') }}" /></td>
                 </tr>
                 <!-- <ng-container *ngIf="form.get('authorizationInformationallowCvapStaffSharing').value === true"> -->
                 <tr>
@@ -1214,8 +1161,7 @@
 
         <div *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.boolValues.Yes">
             <h3>Optional Authorization</h3>
-            <table class="table table-striped review-table"
-                *ngFor="let item of form.get('authorizationInformation.authorizedPerson')['controls']; let i = index">
+            <table class="table table-striped review-table" *ngFor="let item of form.get('authorizationInformation.authorizedPerson')['controls']; let i = index">
                 <tbody>
                     <tr>
                         <th>Full Name</th>
@@ -1246,9 +1192,7 @@
             <div *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true">
                 <p>
                     <label class="inline-label inline-checkbox-label">
-                        <input type="checkbox"
-                            [checked]="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true"
-                            disabled="disabled" />
+                        <input type="checkbox" [checked]="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true" disabled="disabled" />
                         <span>I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the
                             above named authorized person.</span>
                     </label>
@@ -1258,9 +1202,7 @@
                 <tbody>
                     <tr>
                         <th>Applicant's Signature</th>
-                        <td><img class="review-signature"
-                                *ngIf="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') != ''"
-                                src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') }}" />
+                        <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') }}" />
                         </td>
                     </tr>
                 </tbody>

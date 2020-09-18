@@ -1,4 +1,4 @@
-import { OnInit, Component, Input } from "@angular/core";
+import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { FormBase } from "../form-base";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material";
 import { FormGroup, Validators, FormBuilder, ControlContainer, FormControl } from "@angular/forms";
@@ -10,6 +10,8 @@ import { FileBundle } from "../../models/file-bundle";
 import { AddressHelper } from "../address/address.helper";
 import { EmailValidator } from "../validators/email.validator";
 import { RepresentativeInfoHelper } from "./representative-information.helper";
+import { ActivatedRoute } from "@angular/router";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'app-representative-information',
@@ -23,13 +25,15 @@ import { RepresentativeInfoHelper } from "./representative-information.helper";
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class RepresentativeInformationComponent extends FormBase implements OnInit {
+export class RepresentativeInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
     public form: FormGroup;
     ApplicationType = ApplicationType;
     provinceList: string[];
     relationshipList: string[];
     header: string;
+
+    originalOnBehalfOf: number;
 
     representativeInfoHelper = new RepresentativeInfoHelper();
 
@@ -38,10 +42,12 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     representativeAddressIsRequired: boolean = false;
 
     addressHelper = new AddressHelper();
+    addressInfoSubscription: Subscription;
 
     constructor(
         private controlContainer: ControlContainer,
         private fb: FormBuilder,
+        private route: ActivatedRoute,
     ) {
         super();
         var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
@@ -65,6 +71,8 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
             this.header = "Witness";
         }
 
+        this.originalOnBehalfOf = parseInt(this.route.snapshot.queryParamMap.get('ob'));
+
         this.setRequiredFields(this.form.get('completingOnBehalfOf').value);
 
         this.form.get('completingOnBehalfOf').valueChanges.subscribe(value => {
@@ -78,15 +86,25 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
                 this.setupRepresentativeContactInformation(contactMethod);
             }
         });
+
+        this.addressInfoSubscription = this.form.get('mostRecentMailingAddressSameAsPersonal').valueChanges.subscribe(value => {
+            this.copyPersonalAddressToRepresentativeAddress(this.form.parent);
+        });
+    }
+
+    ngOnDestroy() {
+        if (this.addressInfoSubscription) this.addressInfoSubscription.unsubscribe();
     }
 
     setRequiredFields(completingOnBehalfOf: number) {
         let representativeFirstName = this.form.get('representativeFirstName');
         let representativeLastName = this.form.get('representativeLastName');
+        let mostRecentMailingAddressSameAsPersonal = this.form.get('mostRecentMailingAddressSameAsPersonal');
         let representativePreferredMethodOfContact = this.form.get('representativePreferredMethodOfContact');
 
         this.clearControlValidators(representativeFirstName);
         this.clearControlValidators(representativeLastName);
+        this.clearControlValidators(mostRecentMailingAddressSameAsPersonal);
         this.clearControlValidators(representativePreferredMethodOfContact);
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'representativeAddress');
 
@@ -104,6 +122,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
             this.setupRepresentativeContactInformation(this.form.get('representativePreferredMethodOfContact').value);  // Have to clear contact validators on contact method change
             this.setControlValidators(representativeFirstName, [Validators.required]);
             this.setControlValidators(representativeLastName, [Validators.required]);
+            this.setControlValidators(mostRecentMailingAddressSameAsPersonal, [Validators.required]);
             this.setControlValidators(representativePreferredMethodOfContact, [Validators.required, Validators.min(100000000), Validators.max(100000002)]);
         }
         else {

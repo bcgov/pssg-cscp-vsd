@@ -36,7 +36,7 @@ export interface PersonalInformation {
   indigenousStatus: number;
   agreeToCvapCommunicationExchange: string;
   phoneNumber: string;
-  leaveVoicemail: boolean;
+  leaveVoicemail: number;
   alternatePhoneNumber: string;
   email: string;
   primaryAddress: Address;

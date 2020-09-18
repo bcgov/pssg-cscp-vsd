@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatStepper, MatVerticalStepper } from '@angular/material/stepper';
@@ -46,6 +46,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   busy: Promise<any>;
   showValidationMessage: boolean;
   submitting: boolean = false;
+  public showPrintView: boolean = false;
 
   public currentFormStep: number = 0;
 
@@ -193,116 +194,39 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     }
   }
 
-  producePDF() {
-    //let formData = {
-    //  Introduction: this.form.get('introduction').value,
-    //  PersonalInformation: this.form.get('personalInformation').value,
-    //  CrimeInformation: this.form.get('crimeInformation').value,
-    //  MedicalInformation: this.form.get('medicalInformation').value,
-    //  ExpenseInformation: this.form.get('expenseInformation').value,
-    //  EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value,
-    //  RepresentativeInformation: this.form.get('representativeInformation').value,
-    //  DeclarationInformation: this.form.get('declarationInformation').value,
-    //  AuthorizationInformation: this.form.get('authorizationInformation').value,
-    //};
-    //var printString = JSON.stringify(formData);
-    //var wnd = window.open("about:blank", "", "_blank");
-    //wnd.document.write(printString);
+  @HostListener('window:afterprint')
+  onafterprint() {
+    console.log("after print");
+    document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
+    window.scroll(0, 0);
+    this.showPrintView = false;
+  }
 
-    //var doc = new jsPDF;
+  producePDF() {
+    console.log("attempt to print invoice");
+    window.scroll(0, 0);
+    this.showPrintView = true;
+    document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
+    setTimeout(() => {
+      window.print();
+    }, 100);
 
 
     //var printContents = document.getElementById('pdfPrintGroup').innerHTML;
-    var printContents = "<html>Hello World</html>";
+    // var printContents = "<html>Hello World</html>";
 
-    //var w = window.open();
-    //var fileOutput =
-    this.justiceDataService.createPDF(printContents).subscribe(response => { // download file
-      var mediaType = 'application/pdf';
-      console.log(response);
-      ////var blob = new Blob([response._body], { type: mediaType });
+    // this.justiceDataService.createPDF(printContents).subscribe(response => { // download file
+    //   var mediaType = 'application/pdf';
+    //   console.log(response);
 
-
-      ////=============
-      ////const byteCharacters = btoa(response);
-      ////const byteNumbers = new Array(byteCharacters.length);
-      //const byteNumbers = new Array(response.length);
-      //for (let i = 0; i < response.length; i++) {
-      //  byteNumbers[i] = response.charCodeAt(i);
-      //}
-      //const byteArray = new Uint8Array(byteNumbers);
-      //const blob = new Blob([byteArray], { type: mediaType });
-      //window.open(URL.createObjectURL(blob));
-      ////=============
-
-
-
-      ////=============
-      //const a = document.createElement("a");
-      ////let pdfWindow = window.open("")
-      ////pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(btoa(response)) + "'></iframe>")
-      //a.href = "data:application/pdf," + response;
-      ////a.href = "data:application/pdf;base64," + response.message;
-      //a.download = "file.pdf";
-      //document.body.appendChild(a);
-      //a.click();
-      ////=============
-
-
-
-      //=============
-      //let newResponse: string = response;
-      var blob = new Blob([response], { type: mediaType });
-      console.log(blob);
-      ////saveAs(blob, "myPDF.pdf");
-      ////var blob = new Blob([JSON.stringify(response)], { type: mediaType });
-      var blobUrl = URL.createObjectURL(blob);
-      window.open(blobUrl);
-      //window.open(URL.createObjectURL(blob));
-      //=============
-
-
-      ////=============
-      //var blob = new Blob([response], { type: mediaType }),
-      //  url = URL.createObjectURL(blob),
-      //  _iFrame = document.createElement('iframe');
-
-      //_iFrame.setAttribute('src', url);
-      ////_iFrame.setAttribute('style', 'visibility:hidden;');
-      //window.open(url);
-      ////$('#someDiv').append(_iFrame);
-      ////=============
-
-
-      //=======
-      //var newFile = new File(response, 'tempOut.pdf');
-      //const blobUrl = URL.createObjectURL(newFile);
-      //window.open(blobUrl);
-      //=======
-
-      //const iframe = document.createElement('iframe');
-      //iframe.style.display = 'none';
-      //iframe.src = blobUrl;
-      //document.body.appendChild(iframe);
-      //iframe.contentWindow.print();
-    });
-    ////var fileOutput = this.justiceDataService.createPDF(printContents);
-    //w.document.write(String(fileOutput));
-    //w.print();
-    //w.close();
-
-
-    //window.print();
-
-    //var w = window.open();
-    //w.document.write(printContents);
-    //w.print();
-
-    //w.close();
+    // var blob = new Blob([response], { type: mediaType });
+    // console.log(blob);
+    // var blobUrl = URL.createObjectURL(blob);
+    // window.open(blobUrl);
+    // });
   }
 
   submitApplication() {
-    //let formIsValid = true;showValidationMessage
     // show the button as submitting and disable it
     this.submitting = true;
     if ((this.form.valid) || (this.form.controls.personalInformation.valid // It's OK if this.form.controls.employmentIncomeInformation.valid is not valid
@@ -453,7 +377,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('indigenousStatus').patchValue(0);
     ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(false);
     ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
-    ret.get('personalInformation').get('leaveVoicemail').patchValue('');
+    ret.get('personalInformation').get('leaveVoicemail').patchValue(0);
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
     let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
@@ -532,7 +456,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('victimInformation').patchValue(currentForm.get('personalInformation').value);
     //clear declaration checkboxes here
     //...
-    
+
     // ret.get('victimInformation').get('mostRecentMailingAddressSameAsPersonal').patchValue(true);
 
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;

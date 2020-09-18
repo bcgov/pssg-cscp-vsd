@@ -34,21 +34,19 @@
     </div>
 
     <div *ngIf="form.get('iHaveOtherNames').value === true">
-        <h3>Other Names Used</h3>
-
         <div class="row">
             <div class="col-md-4">
-                <app-field label="Other First Name" [required]="true" [valid]="isMyControlValid(form.get('otherFirstName'))" errorMessage="Please enter your other first name">
+                <app-field label="Other First Name" [required]="false" [valid]="isMyControlValid(form.get('otherFirstName'))" errorMessage="Please enter your other first name">
                     <input class="form-control" type="text" formControlName="otherFirstName" maxlength="100">
                 </app-field>
             </div>
             <div class="col-md-4">
-                <app-field label="Other Last Name" [required]="true" [valid]="isMyControlValid(form.get('otherLastName'))" errorMessage="Please enter your other last name">
+                <app-field label="Other Last Name" [required]="false" [valid]="isMyControlValid(form.get('otherLastName'))" errorMessage="Please enter your other last name">
                     <input class="form-control" type="text" formControlName="otherLastName" maxlength="100">
                 </app-field>
             </div>
             <div class="col-md-4">
-                <app-field label="Date of Name Change" [required]="true" [valid]="isMyControlValid(form.get('dateOfNameChange'))" errorMessage="Please enter the date of name change">
+                <app-field label="Date of Name Change" [required]="false" [valid]="isMyControlValid(form.get('dateOfNameChange'))" errorMessage="Please enter the date of name change">
                     <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" [max]="todaysDate" [min]="oldestHuman" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
                     <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
                 </app-field>
@@ -129,12 +127,12 @@
 
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number">
+            <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('phoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
                 <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
             </app-field>
         </div>
         <div class="col-md-6">
-            <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('alternatePhoneNumber')" errorMessage="Please enter your phone number">
+            <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('alternatePhoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
                 <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
             </app-field>
         </div>
@@ -142,14 +140,14 @@
 
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
+            <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('email', form.get('victimSameContactInfo').value)" errorMessage="Please enter your email address">
                 <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
             </app-field>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm email address">
+            <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('confirmEmail', form.get('victimSameContactInfo').value)" errorMessage="Please confirm email address">
                 <input class="form-control" type="text" (blur)="trimEmail(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
             </app-field>
         </div>
@@ -158,7 +156,7 @@
     <div class="row">
         <div class="col-12">
             <h3>Most Recent Mailing Address</h3>
-            <app-field label="Is victim's most recent home address same as applicant's primary home address?" [valid]="isFieldValid('mostRecentMailingAddressSameAsPersonal')" [required]="true" errorMessage="Please make a selection" [showChevrons]="false">
+            <app-field label="Is victim's mailing address the same as the applicant's primary mailing address?" [valid]="isFieldValid('mostRecentMailingAddressSameAsPersonal')" [required]="true" errorMessage="Please make a selection" [showChevrons]="false">
                 <label class="inline-label">
                     <input type="radio" [value]="true" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
                     <span>Yes</span>

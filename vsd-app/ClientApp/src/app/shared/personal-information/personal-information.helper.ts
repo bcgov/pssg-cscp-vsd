@@ -28,7 +28,7 @@ export class PersonalInfoHelper {
             agreeToCvapCommunicationExchange: [''],
 
             phoneNumber: [''],
-            leaveVoicemail: [false],
+            leaveVoicemail: [0, [Validators.required, Validators.min(1), Validators.max(100000003)]],
             alternatePhoneNumber: [''],
 
             // email: [''],
@@ -60,6 +60,11 @@ export class PersonalInfoHelper {
         if (form_type === ApplicationType.IFM_Application) {
             group['relationshipToVictim'] = ['', [Validators.required]];
             group['relationshipToVictimOther'] = [''];
+        }
+
+        if (form_type === ApplicationType.Witness_Application) {
+            group['relationshipToVictim'] = ['Other'];
+            group['relationshipToVictimOther'] = ['', [Validators.required]];
         }
 
         if (form_type === ApplicationType.Victim_Application) {

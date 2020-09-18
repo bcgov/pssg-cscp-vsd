@@ -23,6 +23,7 @@ export class RepresentativeInfoHelper {
                 EmailValidator('representativeEmail')
             ]],
 
+            mostRecentMailingAddressSameAsPersonal: [''],
             representativeAddress: fb.group({
                 line1: [''],
                 line2: [''],

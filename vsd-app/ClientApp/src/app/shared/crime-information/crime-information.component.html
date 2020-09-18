@@ -13,7 +13,7 @@
 
         <h3>Crime Date(s)</h3>
         <p>Please provide the date or dates of crime. If the crime occurred over multiple instances please add the additional dates.</p>
-        
+
         <app-field label="Did the crime occur over multiple days?" errorMessage="Please make a selection" [showChevrons]="false">
             <label class="inline-label">
                 <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur" (change)="whenDidCrimeOccurChange($event)">
@@ -95,7 +95,7 @@
                 <textarea class="form-control bigger" formControlName="crimeDetails" maxlength="750"></textarea>
             </app-field>
 
-            <app-field [required]="true" [valid]="isFieldValid('crimeInjuries')" [label]="'Please specify any ' + (formType === ApplicationType.IFM_Application ? 'psychological injuries' : 'injuries, physical or psychological,') +     ' you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 750 characters)'" errorMessage="Please provide details of injuries">
+            <app-field [required]="true" [valid]="isFieldValid('crimeInjuries')" [label]="crimeInjuriesLabel" errorMessage="Please provide details of injuries">
                 <textarea class="form-control standard" formControlName="crimeInjuries" maxlength="750"></textarea>
             </app-field>
 
@@ -132,13 +132,15 @@
         <section *ngIf="form.get('wasReportMadeToPolice').value === CRMMultiBoolean.True">
             <table class="table table-striped police-file-table">
                 <thead>
-                    <th scope="col" class="police-file-header">Police Force<span class="error-states">*</span></th>
+                    <th scope="col" class="police-file-header">Police Force<span class="error-states">*</span>
+                        <app-tool-tip [trigger]="policeForceInfo"></app-tool-tip>
+                    </th>
                     <th scope="col" class="police-file-header">Police File Number</th>
                     <th scope="col" class="police-file-header">Name of Investigating Officer</th>
-                    <th scope="col" class="police-file-header">Police Reporting Start Date <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip>
+                    <th scope="col" class="police-file-header">Unsure of Date Reported</th>
+                    <th scope="col" class="police-file-header">Date Crime Reported <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip>
                     </th>
-                    <th scope="col" class="police-file-header">Police Reporting End Date</th>
-                    <th scope="col" class="police-file-header">Unsure of Date of Report</th>
+                    <th scope="col" class="police-file-header"></th>
                     <th></th>
                 </thead>
                 <tbody>
@@ -146,13 +148,10 @@
                         <ng-container [formGroupName]="i">
                             <td>
                                 <div [class.with-error]="!isMyControlValid(item.get('policeDetachment'))">
-                                    <!-- <input class="form-control standard" type="text" formControlName="policeDetachment"> -->
-                                    <!-- <app-field [required]="true" [valid]="isMyControlValid(item.get('policeDetachment'))" errorMessage=""> -->
                                     <select class="form-control standard" formControlName="policeDetachment" (change)="policeForceSelected(i)" [required]="true">
                                         <option [ngValue]="null">Select</option>
                                         <option *ngFor="let policeForce of policeForceList" [value]="policeForce.name">{{policeForce.name}}</option>
                                     </select>
-                                    <!-- </app-field> -->
                                 </div>
 
                                 <div>
@@ -166,6 +165,9 @@
                                 <input class="form-control" type="text" formControlName="investigatingOfficer">
                             </td>
                             <td>
+                                <input type="checkbox" [value]="true" name="policeReportedMultipleTimes" formControlName="policeReportedMultipleTimes" (click)="clearReportEndDate(i);">
+                            </td>
+                            <td>
                                 <input type="text" [max]="today" (dateChange)="reportStartChange(i, $event)" class="form-control date-picker" formControlName="reportStartDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportStartDatePicker" (focus)="reportStartDatePicker.open()" (click)="reportStartDatePicker.open()" readonly>
                                 <mat-datepicker #reportStartDatePicker></mat-datepicker>
                             </td>
@@ -174,10 +176,6 @@
                                     <input type="text" [max]="today" [min]="policeReportMinDates[i]" class="form-control date-picker" [class.input-error]="!isMyControlValid(item.get('reportEndDate'))" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
                                     <mat-datepicker #reportEndDatePicker></mat-datepicker>
                                 </span>
-                            </td>
-                            <td>
-                                <input type="checkbox" [value]="true" name="policeReportedMultipleTimes" formControlName="policeReportedMultipleTimes" (click)="clearReportEndDate(i);">
-                                <!-- <span>Unsure of date report was made to the Police force?</span> -->
                             </td>
                             <td>
                                 <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport" class="remove-police-report-link">
@@ -403,7 +401,7 @@
                             </ol>
                         </div>
 
-                        <app-field label="Applicant's Signature" [required]="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
+                        <app-field label="Signature" [required]="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
                             <div class="signature-trigger" (click)="showSignPad('racafInformation', 'signature')" *ngIf="!hasSignature('racafInformation.signature')">
                             </div>
                             <div *ngIf="hasSignature('racafInformation.signature')" class="signature-preview">
@@ -421,3 +419,4 @@
 
 <!-- Tool tips -->
 <ng-template #estimateDateRange>Please estimate the time frame the report was made.</ng-template>
+<ng-template #policeForceInfo>If police force not found or out of province, please select the "other" option at the bottom of the list.</ng-template>

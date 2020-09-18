@@ -351,9 +351,9 @@
                     </div>
                 </ng-container>
 
-
+                <!-- IFM Other Benefits -->
                 <h2 class="blue-header">Other Benefits</h2>
-                <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply (at least one is required):</p>
+                <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply:</p>
                 <div class="radio-list">
                     <ng-container>
                         <app-field>
@@ -405,9 +405,9 @@
                         </app-field>
                     </ng-container>
 
-                    <app-field [valid]="isFieldValid('minimumOtherBenefitsSelected')" errorMessage="Please select at least one option">
+                    <!-- <app-field [valid]="isFieldValid('minimumOtherBenefitsSelected')" errorMessage="Please select at least one option">
                         <input type="hidden" name="minimumOtherBenefitsSelected" formControlName="minimumOtherBenefitsSelected">
-                    </app-field>
+                    </app-field> -->
                 </div>
             </section>
         </section>

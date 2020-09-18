@@ -70,6 +70,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   crimeInfoHelper = new CrimeInfoHelper();
 
   policeForceList = [];
+  crimeInjuriesLabel: string = "Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 750 characters)";
 
   constructor(
     private controlContainer: ControlContainer,
@@ -85,10 +86,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
     console.log("crime info component");
     console.log(this.form);
-    // Commented out in case they actually want to return this functionality
-    //this.copyApplicantToRACAFSignature(this.form.parent);
     this.policeReportItems = this.form.get('policeReports') as FormArray;
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
+
+    if (this.formType === ApplicationType.IFM_Application) {
+      this.crimeInjuriesLabel = "Please specify any psychological injuries you sustained as a result of the crime (e.g. anxiety, sleeplessness)";
+    }
 
     for (let i = 0; i < this.policeReportItems.length; ++i) {
       let thisReport = this.policeReportItems.at(i) as FormGroup;
@@ -171,12 +174,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   ngOnDestroy() {
-    this.wasReportMadeToPoliceSubscription.unsubscribe();
-    this.applyToCourtForMoneyFromOffenderSubscription.unsubscribe();
-    this.willBeTakingLegalActionSubscription.unsubscribe();
-    this.haveYouSuedOffenderSubscription.unsubscribe();
-    this.intendToSueOffenderSubscription.unsubscribe();
-    this.offenderBeenChargedSubscription.unsubscribe();
+    if (this.wasReportMadeToPoliceSubscription) this.wasReportMadeToPoliceSubscription.unsubscribe();
+    if (this.applyToCourtForMoneyFromOffenderSubscription) this.applyToCourtForMoneyFromOffenderSubscription.unsubscribe();
+    if (this.willBeTakingLegalActionSubscription) this.willBeTakingLegalActionSubscription.unsubscribe();
+    if (this.haveYouSuedOffenderSubscription) this.haveYouSuedOffenderSubscription.unsubscribe();
+    if (this.intendToSueOffenderSubscription) this.intendToSueOffenderSubscription.unsubscribe();
+    if (this.offenderBeenChargedSubscription) this.offenderBeenChargedSubscription.unsubscribe();
   }
 
   addCrimeLocation(): void {

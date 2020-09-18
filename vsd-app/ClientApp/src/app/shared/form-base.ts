@@ -6,7 +6,8 @@ import { ConsoleLoggerService } from '../services/logger.service';
 export class FormBase {
   form: FormGroup;
 
-  isFieldValid(field: string) {
+  isFieldValid(field: string, disabled: boolean = false) {
+    if (disabled === true) return true;
     let formField = this.form.get(field);
     if (!formField || formField.value === null)
       return true;
@@ -508,20 +509,20 @@ export class FormBase {
     let confirmEmailControl = this.form.get('confirmEmail');
 
     if (copyInfo) {
-      target.get('phoneNumber').patchValue(source.get('phoneNumber').value);
-      target.get('alternatePhoneNumber').patchValue(source.get('alternatePhoneNumber').value);
-      target.get('email').patchValue(source.get('email').value);
-      target.get('confirmEmail').patchValue(source.get('confirmEmail').value);
+      target.get('phoneNumber').patchValue(source.get('phoneNumber').value, options);
+      target.get('alternatePhoneNumber').patchValue(source.get('alternatePhoneNumber').value, options);
+      target.get('email').patchValue(source.get('email').value, options);
+      target.get('confirmEmail').patchValue(source.get('confirmEmail').value, options);
 
-      target.get('phoneNumber').setErrors(null);
-      target.get('alternatePhoneNumber').setErrors(null);
-      target.get('email').setErrors(null);
-      target.get('confirmEmail').setErrors(null);
+      target.get('phoneNumber').setErrors(null, options);
+      target.get('alternatePhoneNumber').setErrors(null, options);
+      target.get('email').setErrors(null, options);
+      target.get('confirmEmail').setErrors(null, options);
 
-      target.get('phoneNumber').disable();
-      target.get('alternatePhoneNumber').disable();
-      target.get('email').disable();
-      target.get('confirmEmail').disable();
+      target.get('phoneNumber').disable(options);
+      target.get('alternatePhoneNumber').disable(options);
+      target.get('email').disable(options);
+      target.get('confirmEmail').disable(options);
     }
     else {
       target.get('phoneNumber').enable();
@@ -530,15 +531,60 @@ export class FormBase {
       target.get('confirmEmail').enable();
     }
 
-    target.get('phoneNumber').updateValueAndValidity();
-    target.get('alternatePhoneNumber').updateValueAndValidity();
-    target.get('email').updateValueAndValidity();
-    target.get('confirmEmail').updateValueAndValidity();
+    target.get('phoneNumber').updateValueAndValidity(options);
+    target.get('alternatePhoneNumber').updateValueAndValidity(options);
+    target.get('email').updateValueAndValidity(options);
+    target.get('confirmEmail').updateValueAndValidity(options);
   }
 
   copyPersonalAddressToVictimAddress(form: FormGroup | FormArray) {
     let copyAddress = form.get('victimInformation.mostRecentMailingAddressSameAsPersonal').value === true;
     let target = form.get('victimInformation.primaryAddress');
+    let source = form.get('personalInformation.primaryAddress');
+    let options = { onlySelf: true, emitEvent: true };
+
+    if (copyAddress) {
+      target.get('line1').patchValue(source.get('line1').value, options);
+      target.get('line2').patchValue(source.get('line2').value, options);
+      target.get('city').patchValue(source.get('city').value, options);
+      target.get('postalCode').patchValue(source.get('postalCode').value, options);
+      target.get('province').patchValue(source.get('province').value, options);
+      target.get('country').patchValue(source.get('country').value, options);
+
+      target.get('line1').setErrors(null, options);
+      target.get('line2').setErrors(null, options);
+      target.get('city').setErrors(null, options);
+      target.get('postalCode').setErrors(null, options);
+      target.get('province').setErrors(null, options);
+      target.get('country').setErrors(null, options);
+
+      target.get('line1').disable(options);
+      target.get('line2').disable(options);
+      target.get('city').disable(options);
+      target.get('postalCode').disable(options);
+      target.get('province').disable(options);
+      target.get('country').disable(options);
+    }
+    else {
+      target.get('line1').enable();
+      target.get('line2').enable();
+      target.get('city').enable();
+      target.get('postalCode').enable();
+      target.get('province').enable();
+      target.get('country').enable();
+    }
+
+    target.get('line1').updateValueAndValidity(options);
+    target.get('line2').updateValueAndValidity(options);
+    target.get('city').updateValueAndValidity(options);
+    target.get('postalCode').updateValueAndValidity(options);
+    target.get('province').updateValueAndValidity(options);
+    target.get('country').updateValueAndValidity(options);
+  }
+
+  copyPersonalAddressToRepresentativeAddress(form: FormGroup | FormArray) {
+    let copyAddress = form.get('representativeInformation.mostRecentMailingAddressSameAsPersonal').value === true;
+    let target = form.get('representativeInformation.representativeAddress');
     let source = form.get('personalInformation.primaryAddress');
     let options = { onlySelf: true, emitEvent: true };
 
