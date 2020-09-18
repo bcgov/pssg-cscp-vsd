@@ -368,7 +368,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('indigenousStatus').patchValue(0);
     ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(false);
     ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
-    ret.get('personalInformation').get('leaveVoicemail').patchValue('');
+    ret.get('personalInformation').get('leaveVoicemail').patchValue(0);
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
     let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
@@ -447,7 +447,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('indigenousStatus').patchValue(0);
     ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(false);
     ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
-    ret.get('personalInformation').get('leaveVoicemail').patchValue('');
+    ret.get('personalInformation').get('leaveVoicemail').patchValue(0);
     
 
     ret.get('victimInformation').patchValue(currentForm.get('victimInformation').value);

@@ -47,6 +47,14 @@ export class EnumHelper {
     100000004: "Not Applicable",
   }
 
+  public VoicemailOptions = {
+    0: "",
+    100000000: "Primary and Alternate",
+    100000001: "Primary only",
+    100000002: "Alternate only",
+    100000003: "No Voicemail",
+  }
+
   public PreferredMethodOfContact = {
     // There are two drop downs being accessed by this which is why items appear twice
     0: '--',

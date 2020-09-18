@@ -64,6 +64,21 @@
         </app-field>
       </div>
     </div>
+    
+    <div class="row">
+      <div class="col-12">
+        <app-field label="Is most recent mailing address the same as the applicant's primary mailing address?" [valid]="isFieldValid('mostRecentMailingAddressSameAsPersonal')" [required]="true" errorMessage="Please make a selection" [showChevrons]="false">
+          <label class="inline-label">
+            <input type="radio" [value]="true" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
+            <span>Yes</span>
+          </label>
+          <label class="inline-label">
+            <input type="radio" [value]="false" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
+            <span>No</span>
+          </label>
+        </app-field>
+      </div>
+    </div>
 
     <h3>Contact Information</h3>
 
@@ -97,7 +112,7 @@
     </div>
 
     <h3>Mailing Address</h3>
-    <app-address [group]="form.get('representativeAddress')" [showChildrenAsRequired]="true"></app-address>
+    <app-address [group]="form.get('representativeAddress')" [showChildrenAsRequired]="true" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
 
     <div class="row">
       <div class="col-md-6">

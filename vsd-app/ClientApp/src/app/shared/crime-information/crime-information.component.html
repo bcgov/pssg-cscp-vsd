@@ -95,7 +95,7 @@
                 <textarea class="form-control bigger" formControlName="crimeDetails" maxlength="750"></textarea>
             </app-field>
 
-            <app-field [required]="true" [valid]="isFieldValid('crimeInjuries')" [label]="'Please specify any ' + (formType === ApplicationType.IFM_Application ? 'psychological injuries' : 'injuries, physical or psychological,') +     ' you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 750 characters)'" errorMessage="Please provide details of injuries">
+            <app-field [required]="true" [valid]="isFieldValid('crimeInjuries')" [label]="crimeInjuriesLabel" errorMessage="Please provide details of injuries">
                 <textarea class="form-control standard" formControlName="crimeInjuries" maxlength="750"></textarea>
             </app-field>
 

@@ -41,7 +41,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
     preferredMethodOfContactSubscription: Subscription;
     sinSubscription: Subscription;
-    // iHaveOtherNamesSubscription: Subscription;
+    leaveVoicemailSubscription: Subscription;
     addressSubscription: Subscription;
     phoneSubscription: Subscription;
     altPhoneSubscription: Subscription;
@@ -49,6 +49,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     confirmEmailSubscription: Subscription;
 
     get preferredMethodOfContact() { return this.form.get('preferredMethodOfContact'); }
+    get leaveVoicemail() { return this.form.get('leaveVoicemail'); }
 
     constructor(
         private controlContainer: ControlContainer,
@@ -67,9 +68,16 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             this.header = "Victim";
         }
 
+        if (this.formType === ApplicationType.Victim_Application) {
+            this.addressSubscription = this.form.get('primaryAddress').valueChanges.subscribe(value => {
+                this.copyPersonalAddressToRepresentativeAddress(this.form.parent);
+            });
+        }
+
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
             this.addressSubscription = this.form.get('primaryAddress').valueChanges.subscribe(value => {
                 this.copyPersonalAddressToVictimAddress(this.form.parent);
+                this.copyPersonalAddressToRepresentativeAddress(this.form.parent);
             });
 
             this.phoneSubscription = this.form.get('phoneNumber').valueChanges.subscribe(value => {
@@ -98,26 +106,35 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             });
         }
 
-        // this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
-        //     let otherFirstNameControl = this.form.get('otherFirstName');
-        //     let otherLastNameControl = this.form.get('otherLastName');
-        //     let dateOfNameChangeControl = this.form.get('dateOfNameChange');
-        //     if (value === true) {
-        //         this.setControlValidators(otherFirstNameControl, [Validators.required]);
-        //         this.setControlValidators(otherLastNameControl, [Validators.required]);
-        //         this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
-        //     }
-        //     else {
-        //         this.clearControlValidators(otherFirstNameControl);
-        //         this.clearControlValidators(otherLastNameControl);
-        //         this.clearControlValidators(dateOfNameChangeControl);
-        //     }
-        // });
+        this.leaveVoicemailSubscription = this.form.get('leaveVoicemail').valueChanges.subscribe(value => {
+            let phoneControl = this.form.get('phoneNumber');
+            let altPhoneControl = this.form.get('alternatePhoneNumber');
+            //setup phone control validators based on preferredMethodOfContact
+            this.setControlValidators(phoneControl, [Validators.minLength(10), Validators.maxLength(10)]);
+            this.setControlValidators(altPhoneControl, [Validators.minLength(10), Validators.maxLength(10)]);
+            let contactMethod = this.form.get('preferredMethodOfContact').value;
+            if (contactMethod === 2) { //phone call
+                this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+            }
+            //then update potentially update it based on voicemail selection
+
+            let voicemailOption = parseInt(value);
+            if (voicemailOption === 100000000) { //Primary and Alternate
+                this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+                this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+            }
+            else if (voicemailOption === 100000001) { //Primary only
+                this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+            }
+            else if (voicemailOption === 100000002) { //Alternate only
+                this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+            }
+        });
     }
 
     ngOnDestroy() {
         this.preferredMethodOfContactSubscription.unsubscribe();
-        // this.iHaveOtherNamesSubscription.unsubscribe();
+        this.leaveVoicemailSubscription.unsubscribe();
         if (this.formType === ApplicationType.Victim_Application || this.formType === ApplicationType.IFM_Application) {
             if (this.sinSubscription) this.sinSubscription.unsubscribe();
         }

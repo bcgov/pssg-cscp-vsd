@@ -28,7 +28,7 @@ export class PersonalInfoHelper {
             agreeToCvapCommunicationExchange: [''],
 
             phoneNumber: [''],
-            leaveVoicemail: [false],
+            leaveVoicemail: [0, [Validators.required, Validators.min(1), Validators.max(100000003)]],
             alternatePhoneNumber: [''],
 
             // email: [''],

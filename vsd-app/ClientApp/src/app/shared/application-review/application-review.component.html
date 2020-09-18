@@ -102,6 +102,10 @@
                     <td>{{ valueOrEmpty('personalInformation.alternatePhoneNumber') | phone}} </td>
                 </tr>
                 <tr>
+                    <th>Leave Voicemail?</th>
+                    <td>{{ enumHelper.VoicemailOptions[valueForEnum('personalInformation.leaveVoicemail')] }} </td>
+                </tr>
+                <tr>
                     <th>Email Address</th>
                     <td>{{ valueOrEmpty('personalInformation.email') }} </td>
                 </tr>
@@ -213,7 +217,7 @@
         <table class="table table-striped review-table">
             <tbody>
                 <tr>
-                    <th>Is victim's most recent home address same as applicant's primary home address?</th>
+                    <th>Is victim's mailing address the same as the applicant's primary mailing address?</th>
                     <td>{{ valueOrEmpty('victimInformation.mostRecentMailingAddressSameAsPersonal') }} </td>
                 </tr>
                 <tr>
@@ -1063,10 +1067,6 @@
             <table class="table table-striped review-table">
                 <tbody>
                     <tr>
-                        <th>Country</th>
-                        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.country') }}</td>
-                    </tr>
-                    <tr>
                         <th>Mailing Address</th>
                         <td>{{ multiValueOrEmpty(['representativeInformation.representativeAddress.line1']) }}</td>
                     </tr>
@@ -1085,6 +1085,10 @@
                     <tr>
                         <th>Postal Code</th>
                         <td>{{ valueOrEmpty('representativeInformation.representativeAddress.postalCode') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>{{ valueOrEmpty('representativeInformation.representativeAddress.country') }}</td>
                     </tr>
                 </tbody>
             </table>

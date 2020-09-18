@@ -28,7 +28,7 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
     emailIsRequired: boolean = false;
     addressIsRequired: boolean = false;
 
-    iHaveOtherNamesSubscription: Subscription;
+    // iHaveOtherNamesSubscription: Subscription;
     contactInfoSubscription: Subscription;
     addressInfoSubscription: Subscription;
 
@@ -63,25 +63,25 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
             });
         }
 
-        this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
-            let otherFirstNameControl = this.form.get('otherFirstName');
-            let otherLastNameControl = this.form.get('otherLastName');
-            let dateOfNameChangeControl = this.form.get('dateOfNameChange');
-            if (value === true) {
-                this.setControlValidators(otherFirstNameControl, [Validators.required]);
-                this.setControlValidators(otherLastNameControl, [Validators.required]);
-                this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
-            }
-            else {
-                this.clearControlValidators(otherFirstNameControl);
-                this.clearControlValidators(otherLastNameControl);
-                this.clearControlValidators(dateOfNameChangeControl);
-            }
-        });
+        // this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
+        //     let otherFirstNameControl = this.form.get('otherFirstName');
+        //     let otherLastNameControl = this.form.get('otherLastName');
+        //     let dateOfNameChangeControl = this.form.get('dateOfNameChange');
+        //     if (value === true) {
+        //         this.setControlValidators(otherFirstNameControl, [Validators.required]);
+        //         this.setControlValidators(otherLastNameControl, [Validators.required]);
+        //         this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
+        //     }
+        //     else {
+        //         this.clearControlValidators(otherFirstNameControl);
+        //         this.clearControlValidators(otherLastNameControl);
+        //         this.clearControlValidators(dateOfNameChangeControl);
+        //     }
+        // });
     }
 
     ngOnDestroy() {
-        if (this.iHaveOtherNamesSubscription) this.iHaveOtherNamesSubscription.unsubscribe();
+        // if (this.iHaveOtherNamesSubscription) this.iHaveOtherNamesSubscription.unsubscribe();
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
             if (this.addressInfoSubscription) this.addressInfoSubscription.unsubscribe();
             if (this.contactInfoSubscription) this.contactInfoSubscription.unsubscribe();
