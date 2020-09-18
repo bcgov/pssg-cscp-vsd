@@ -55,8 +55,7 @@ export class EnumHelper {
     100000003: "No Voicemail",
   }
 
-  public PreferredMethodOfContact = {
-    // There are two drop downs being accessed by this which is why items appear twice
+  public ApplicantPreferredMethodOfContact = {
     0: '--',
     100000000: 'Phone Call',
     100000001: 'Email',
@@ -64,6 +63,14 @@ export class EnumHelper {
     2: 'Phone Call',
     1: 'Email',
     4: 'Mail',
+  }
+
+  public ParticipantPreferredMethodOfContact = {
+    // There are two drop downs being accessed by this which is why items appear twice
+    0: '--',
+    100000000: 'Email',
+    100000001: 'Phone Call',
+    100000002: 'Mail',
   }
 
   public ReportMadeToPolice = {
