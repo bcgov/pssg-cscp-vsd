@@ -57,7 +57,10 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
-        setTimeout(() => { this.form.markAsTouched(); }, 0);
+        setTimeout(() => {
+            this.form.markAsTouched();
+            this.setRequiredFields(this.form.get('completingOnBehalfOf').value);
+        }, 0);
         console.log("representative info component");
         console.log(this.form);
 
@@ -72,8 +75,6 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         }
 
         this.originalOnBehalfOf = parseInt(this.route.snapshot.queryParamMap.get('ob'));
-
-        this.setRequiredFields(this.form.get('completingOnBehalfOf').value);
 
         this.form.get('completingOnBehalfOf').valueChanges.subscribe(value => {
             this.setRequiredFields(value);
@@ -109,13 +110,19 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'representativeAddress');
 
         let relationshipToPersonControl = this.form.get('relationshipToPerson');
-        if (completingOnBehalfOf === 100000003) {
+        if (completingOnBehalfOf === 100000003) { //legal rep, fill in relationshipToPerson
+            relationshipToPersonControl.patchValue('');
             this.setControlValidators(relationshipToPersonControl, [Validators.required]);
+        }
+        else if (completingOnBehalfOf === 100000002) {
+            relationshipToPersonControl.patchValue('Parent');
+            this.clearControlValidators(relationshipToPersonControl);
         }
         else {
             relationshipToPersonControl.patchValue('');
             this.clearControlValidators(relationshipToPersonControl);
         }
+
 
         let useValidation = completingOnBehalfOf === 100000002 || completingOnBehalfOf === 100000003;
         if (useValidation) {
