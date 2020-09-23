@@ -70,55 +70,55 @@
                 </app-field>
             </div>
             <ng-container *ngIf="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True">
-                <div>
-                    <app-field label="Please provide days of work missed" [valid]="form.get('areYouStillOffWork').value === CRMBoolean.True?isFieldValid('daysWorkMissedStart'):isFieldValid('daysWorkMissedStart') && isFieldValid('daysWorkMissedEnd')" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" errorMessage="Please select an option">
-                        <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
-                        <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
-                        <span *ngIf="form.get('areYouStillOffWork').value === CRMBoolean.False">
-                            <span> - </span>
-                            <input type="text" [max]="today" [min]="minEndDate" (dateChange)="daysWorkMissedEndChange($event)" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
-                            <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
-                        </span>
-                    </app-field>
-                </div>
-                <!-- *ngIf="showCurrentlyOffWork" -->
-                <div>
-                    <app-field label="Are you currently off work?" [tooltipReference]="stillOfWorkTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('areYouStillOffWork')" errorMessage="Please select an option">
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMBoolean.True" name="areYouStillOffWork" formControlName="areYouStillOffWork">
-                            <span>Yes</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMBoolean.False" name="areYouStillOffWork" formControlName="areYouStillOffWork">
-                            <span>No</span>
-                        </label>
-                    </app-field>
-                    <ng-template #stillOfWorkTemplate>
-                        <p><strong>Still off work</strong></p>
-                        <p>If you are still off work, select yes. Enter the end of days missed to today's date as well.</p>
-                    </ng-template>
-                </div>
-                <div>
-                    <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('didYouLoseWages')" errorMessage="Please select an option">
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMBoolean.True" name="didYouLoseWages" formControlName="didYouLoseWages">
-                            <span>Yes</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMBoolean.False" name="didYouLoseWages" formControlName="didYouLoseWages">
-                            <span>No</span>
-                        </label>
-                    </app-field>
-                    <ng-template #lostWagesTemplate>
-                        <p><strong>Lost wages or income</strong></p>
-                        <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
-                    </ng-template>
-                </div>
-                <div *ngIf="form.get('didYouLoseWages').value === CRMBoolean.True">
-                    <app-field label="Social Insurance Number (SIN)" [required]="form.get('didYouLoseWages').value === CRMBoolean.True" [valid]="isFieldValid('sin')" errorMessage="Please enter your SIN">
-                        <input class="form-control sin-input" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
-                    </app-field>
-                </div>
+              <div>
+                <app-field label="Are you currently off work?" [tooltipReference]="stillOfWorkTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('areYouStillOffWork')" errorMessage="Please select an option">
+                  <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.True" name="areYouStillOffWork" formControlName="areYouStillOffWork">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.False" name="areYouStillOffWork" formControlName="areYouStillOffWork">
+                    <span>No</span>
+                  </label>
+                </app-field>
+                <ng-template #stillOfWorkTemplate>
+                  <p><strong>Still off work</strong></p>
+                  <p>If not, please select no and enter the start and end dates of the missed work period. If you remain off work, select yes and enter the date of your first work day missed.</p>
+                </ng-template>
+              </div>
+              <div>
+                <app-field label="Please provide date(s) of work missed" [valid]="form.get('areYouStillOffWork').value === CRMBoolean.True?isFieldValid('daysWorkMissedStart'):isFieldValid('daysWorkMissedStart') && isFieldValid('daysWorkMissedEnd')" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" errorMessage="Please select an option">
+                  <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
+                  <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
+                  <span *ngIf="form.get('areYouStillOffWork').value === CRMBoolean.False">
+                    <span> - </span>
+                    <input type="text" [max]="today" [min]="minEndDate" (dateChange)="daysWorkMissedEndChange($event)" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
+                    <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+                  </span>
+                </app-field>
+              </div>
+              <!-- *ngIf="showCurrentlyOffWork" -->
+              <div>
+                <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('didYouLoseWages')" errorMessage="Please select an option">
+                  <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.True" name="didYouLoseWages" formControlName="didYouLoseWages">
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.False" name="didYouLoseWages" formControlName="didYouLoseWages">
+                    <span>No</span>
+                  </label>
+                </app-field>
+                <ng-template #lostWagesTemplate>
+                  <p><strong>Lost wages or income</strong></p>
+                  <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
+                </ng-template>
+              </div>
+              <div *ngIf="form.get('didYouLoseWages').value === CRMBoolean.True">
+                <app-field label="Social Insurance Number (SIN)" [required]="form.get('didYouLoseWages').value === CRMBoolean.True" [valid]="isFieldValid('sin')" errorMessage="Please enter your SIN">
+                  <input class="form-control sin-input" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
+                </app-field>
+              </div>
             </ng-container>
 
             <ng-container *ngIf="form.get('didYouLoseWages').value === CRMBoolean.True">
