@@ -88,7 +88,7 @@
             <button (click)="markAsTouched(); producePDF();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
             <div class="submit-grid">
               <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT IFM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
-              <button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <i class="fas fa-chevron-right"></i></button>
+              <button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='VictimToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
               <button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW IFM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='IFMToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
             </div>
             <!-- <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="!submitting && stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
@@ -100,4 +100,5 @@
   </div>
 </div>
 
-<ng-template #IFMToolTip>Submit Application and start new Immediate Family Member Application</ng-template>
+<ng-template #VictimToolTip>Use when new victim application is regarding the <b><u>same crime</u></b>, is a family member of the current applicant and living in the same home as certain information will be auto-populated from application to application (e.g. address, police information); however, all pre-populated fields are editable if needed.</ng-template>
+<ng-template #IFMToolTip>Use when new IFM application is regarding the <b><u>same crime</u></b>, is a family member of the current applicant and living in the same home as certain information will be auto-populated from application to application (e.g. address, police information); however, all pre-populated fields are editable if needed.</ng-template>
