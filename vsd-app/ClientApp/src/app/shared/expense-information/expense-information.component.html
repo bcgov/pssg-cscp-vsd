@@ -92,7 +92,7 @@
                     </section>
                     <section class="pushed">
                         <app-field label="Please provide details of your requests. (Maximum 750 characters)">
-                            <textarea class="form-control bigger" type="text" formControlName="otherSpecificExpenses" maxlength="750"></textarea>
+                            <textarea class="form-control bigger" type="text" formControlName="additionalBenefitsDetails" maxlength="750"></textarea>
                         </app-field>
                     </section>
                 </app-field>
@@ -328,11 +328,12 @@
                                     </app-field>
                                 </div>
                                 <div class="col-md-6">
-                                    <app-field label="Phone Number of Contact Person" [required]="form.get('mayContactEmployer').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
-                                        <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
+                                    <app-field label="Email Address" [required]="form.get('mayContactEmployer').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerEmail'))" errorMessage="Please enter your employer's email address">
+                                        <input type="text" class="form-control" (blur)="trimEmail(item.get('employerEmail'))" formControlName="employerEmail" maxlength="100">
                                     </app-field>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <app-field label="Employer First Name">
@@ -342,6 +343,20 @@
                                 <div class="col-md-6">
                                     <app-field label="Employer Last name">
                                         <input type="text" class="form-control" formControlName="employerLastName">
+                                    </app-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <app-field label="Phone Number of Contact Person" [required]="form.get('mayContactEmployer').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
+                                        <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
+                                    </app-field>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <app-field label="Fax" [required]="false" [valid]="isMyControlValid(item.get('employerFax'))">
+                                        <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerFax">
                                     </app-field>
                                 </div>
                             </div>
