@@ -137,14 +137,15 @@
                     </app-field>
                 </div>
             </div>
-            <div class="row">
+            <app-address [group]="form.get('familyDoctorAddress')" [showChildrenAsRequired]="false"></app-address>
+            <!-- <div class="row">
                 <div class="col-md-6">
                     <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
                         <input class="form-control" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
                         <input class="form-control" type="text" formControlName="familyDoctorAddressLine2" placeholder="Address Line 2"><br />
                     </app-field>
                 </div>
-            </div>
+            </div> -->
         </section>
 
         <h3>Other Treatment Information</h3>

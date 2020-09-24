@@ -134,8 +134,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string familyDoctorEmail { get; set; }
         public string familyDoctorPhoneNumber { get; set; }
         public string familyDoctorFax { get; set; }
-        public string familyDoctorAddressLine1 { get; set; }
-        public string familyDoctorAddressLine2 { get; set; }
+        public Address familyDoctorAddress { get; set; }
+        // public string familyDoctorAddressLine1 { get; set; }
+        // public string familyDoctorAddressLine2 { get; set; }
         public string hadOtherTreatments { get; set; }
         public Othertreatment[] otherTreatments { get; set; }
     }

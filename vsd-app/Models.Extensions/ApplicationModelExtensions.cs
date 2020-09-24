@@ -441,8 +441,15 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     tempProviderCollection[0].vsd_email = model.MedicalInformation.familyDoctorEmail;
                     tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
                     tempProviderCollection[0].vsd_fax = model.MedicalInformation.familyDoctorFax;
-                    tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddressLine1;
-                    tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddressLine2;
+                    if (model.MedicalInformation.familyDoctorAddress != null)
+                    {
+                        tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddress.line1;
+                        tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddress.line2;
+                        tempProviderCollection[0].vsd_country = model.MedicalInformation.familyDoctorAddress.country;
+                        tempProviderCollection[0].vsd_province = model.MedicalInformation.familyDoctorAddress.province;
+                        tempProviderCollection[0].vsd_city = model.MedicalInformation.familyDoctorAddress.city;
+                        tempProviderCollection[0].vsd_postalcode = model.MedicalInformation.familyDoctorAddress.postalCode;
+                    }
                     tempProviderCollection[0].vsd_relationship1 = "Family Doctor";
 
                     int tempProviderCount = 0;

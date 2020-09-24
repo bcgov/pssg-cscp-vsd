@@ -42,6 +42,13 @@
             </span>
         </app-field>
 
+        <section *ngIf="showCrimeDateWarning">
+            <div class="alert alert-dismissible alert-danger">
+                <span>You have entered a crime date that pre-dates your entered date of birth, please check the date(s) are accurate.</span>
+                <span *ngIf="formType === ApplicationType.IFM_Application"> Note: Immediate Family Members that were not born at the time of the offence are ineligible for benefits.</span>
+            </div>
+        </section>
+
         <section *ngIf="showWhyDidYouNotApplySooner">
             <app-field label="Please briefly explain why you did not apply sooner" [tooltipReference]="fileWithinYearTemplate">
                 <textarea class="form-control standard" formControlName="whyDidYouNotApplySooner"></textarea>
@@ -137,7 +144,8 @@
                     </th>
                     <th scope="col" class="police-file-header">Police File Number</th>
                     <th scope="col" class="police-file-header">Name of Investigating Officer</th>
-                    <th scope="col" class="police-file-header">Unsure of Date Reported <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip></th>
+                    <th scope="col" class="police-file-header">Unsure of Date Reported <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip>
+                    </th>
                     <th scope="col" class="police-file-header">Date Crime Reported</th>
                     <th scope="col" class="police-file-header"></th>
                     <th></th>
@@ -408,7 +416,6 @@
                                 <a class="redo" (click)="showSignPad('racafInformation', 'signature')">Redo Signature</a>
                             </div>
                         </app-field>
-                        <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
                     </section>
                 </div>
             </section>

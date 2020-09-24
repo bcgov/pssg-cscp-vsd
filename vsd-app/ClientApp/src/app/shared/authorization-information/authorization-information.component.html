@@ -44,10 +44,9 @@
         <a class="redo" (click)="showSignPad('signature')">Redo Signature</a>
       </div>
     </app-field>
-    <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
 
     <h2 class="blue-header">Optional Authorization</h2>
-    <app-field label="CVAP staff requires your written permission to discuss information in your file with other persons. Would you like to allow CVAP staff to discuss your file with another person, such as an immediate family member or victim service worker?" [valid]="isFieldValid('allowCvapStaffSharing')" errorMessage="Please select an option">
+    <app-field label="Would you like to allow CVAP staff to discuss your file with a victim services agency or a person?" [valid]="isFieldValid('allowCvapStaffSharing')" errorMessage="Please select an option">
       <label class="inline-label">
         <input type="radio" [value]="100000001" (click)="addAuthorizationInformation(true)" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
         <span>Yes</span>
@@ -104,14 +103,17 @@
 
         </div>
       </div>
+
+      <a href="javascript:void(0);" class="btn btn-secondary add-auth-btn" (click)="addAuthorizationInformation(false)" *ngIf="showAddAuthorizationInformation">Add an Authorization</a>
+
       <app-field [valid]="isFieldValid('authorizedPersonAuthorizesDiscussion')" errorMessage="Please check this box to indicate that you accept Declaration" [required]="true">
         <label>
           <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion" [required]="true">
-          I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person. <span class="error-states ng-star-inserted">*</span>
+          I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person(s). <span class="error-states ng-star-inserted">*</span>
         </label>
       </app-field>
 
-      <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('authorizedPersonSignature')" errorMessage="Please provide your digital signature">
+      <app-field label="Signature" [required]="true" [valid]="isFieldValid('authorizedPersonSignature')" errorMessage="Please provide your digital signature">
         <div class="signature-trigger" (click)="showSignPad('authorizedPersonSignature')" *ngIf="!hasSignature('authorizedPersonSignature')">
           <p>Click this box to sign</p>
         </div>
@@ -120,8 +122,7 @@
           <a class="redo" (click)="showSignPad('authorizedPersonSignature')">Redo Signature</a>
         </div>
       </app-field>
-      <p><em>Electronic Signature Agreement: By inserting my name, I confirm that my electronic signature represents the legal equivalent to my handwritten signature, in compliance with the <a href="#">Electronic Transaction Act of BC, 10(1)</a>.</em></p>
-      <a href="javascript:void(0);" class="btn btn-secondary" (click)="addAuthorizationInformation(false)" *ngIf="showAddAuthorizationInformation">Add an Authorization</a>
+
     </section>
   </section>
 </div>

@@ -220,6 +220,8 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     contactableChange(val: boolean, index: number) {
         let currentEmployers = this.form.get('employers') as FormArray;
         let thisEmployer = currentEmployers.controls[index] as FormGroup;
+        let mayContactEmployer = this.form.get('mayContactEmployer');
+        mayContactEmployer.patchValue(val ? CRMBoolean.True : CRMBoolean.False);
 
         if (thisEmployer) {
             let nameControl = thisEmployer.get('employerName');

@@ -30,6 +30,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   crimeLocationItems: FormArray;
   showAddCrimeLocation: boolean = true;
   showRemoveCrimeLocation: boolean = false;
+  showCrimeDateWarning: boolean = false;
 
   unsureOfCrimeDateSubscription: Subscription;
   wasReportMadeToPoliceSubscription: Subscription;
@@ -100,6 +101,13 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
     let startDate = this.form.get('crimePeriodStart').value;
     this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
+    let birthdate = this.form.parent.get('personalInformation.birthDate').value;
+    if (birthdate && moment(birthdate).isAfter(startDate)) {
+      this.showCrimeDateWarning = true;
+    }
+    else {
+      this.showCrimeDateWarning = false;
+    }
 
     this.courtFileItems = this.form.get('courtFiles') as FormArray;
     this.showRemoveCourtInfo = this.courtFileItems.length > 1;
@@ -351,6 +359,14 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
     this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
     this.form.get('applicationFiledWithinOneYearFromCrime').patchValue(!this.showWhyDidYouNotApplySooner);
+
+    let birthdate = this.form.parent.get('personalInformation.birthDate').value;
+    if (birthdate && moment(birthdate).isAfter(startDate)) {
+      this.showCrimeDateWarning = true;
+    }
+    else {
+      this.showCrimeDateWarning = false;
+    }
   }
 
   whenDidCrimeOccurChange(event) {

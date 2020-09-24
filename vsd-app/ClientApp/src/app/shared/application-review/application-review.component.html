@@ -109,11 +109,19 @@
                     <th>Email Address</th>
                     <td>{{ valueOrEmpty('personalInformation.email') }} </td>
                 </tr>
+                <tr>
+                    <th>Agree to Communication by Email</th>
+                    <td><span [innerHTML]="checkmarkOrEmpty('personalInformation.agreeToCvapCommunicationExchange')"></span></td>
+                </tr>
                 <tr *ngIf="formType === ApplicationType.Victim_Application">
                     <th>Marital Status</th>
                     <td>{{ enumHelper.MaritalStatus[valueForEnum('personalInformation.maritalStatus')] }} </td>
                 </tr>
-
+                <tr>
+                    <th>Preferred Method of Contact</th>
+                    <td>{{ enumHelper.ApplicantPreferredMethodOfContact[valueForEnum('personalInformation.preferredMethodOfContact')]  }}
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -434,7 +442,7 @@
 
     <section>
         <h2 class="blue-header">
-            Medical & Dental Information <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Medical);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+            Medical <span *ngIf="formType === ApplicationType.Victim_Application">& Dental </span>Information <span class="hide-for-print"><button (click)="gotoPageIndex(pages.Medical);" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
         </h2>
         <h3>Coverage</h3>
         <table class="table table-striped review-table">
@@ -514,13 +522,20 @@
                         <td>{{ valueOrEmpty('medicalInformation.familyDoctorName') }} </td>
                     </tr>
                     <tr>
+                        <th>Email Address</th>
+                        <td>{{ valueOrEmpty('medicalInformation.familyDoctorEmail') }} </td>
+                    </tr>
+                    <tr>
                         <th>Family doctor's Phone Number</th>
                         <td>{{ valueOrEmpty('medicalInformation.familyDoctorPhoneNumber') | phone}} </td>
                     </tr>
+                    <tr *ngIf="form.get('medicalInformation.familyDoctorFax').value">
+                        <th>Family doctor's Fax Number</th>
+                        <td>{{ valueOrEmpty('medicalInformation.familyDoctorFax') | phone}} </td>
+                    </tr>
                     <tr>
                         <th>Mailing Address</th>
-                        <td>{{ multiValueOrEmpty(['medicalInformation.familyDoctorAddressLine1', 'medicalInformation.familyDoctorAddressLine2']) }}
-                        </td>
+                        <td><span *ngIf="addressHelper.hasAddressInfo(form.get('medicalInformation.familyDoctorAddress').value)" [innerHTML]="addressHelper.displayAddress(form.get('medicalInformation.familyDoctorAddress').value)"></span></td>
                     </tr>
                 </ng-container>
 
@@ -625,7 +640,7 @@
                     </tr>
                     <tr>
                         <th>Other</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"> </span> <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true"> :
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"> </span> <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true">
                                 {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
                     </tr>
                     <tr>
@@ -689,7 +704,7 @@
                     </tr>
                     <tr>
                         <th>Other</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> :
+                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span> <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true">
                                 {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
                     </tr>
                 </tbody>
@@ -751,7 +766,7 @@
                             <tr>
                                 <th>Other</th>
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"></span>
-                                    <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true"> :
+                                    <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true">
                                         {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
                             </tr>
                             <tr>
@@ -773,39 +788,39 @@
                                 </tr>
                                 <ng-container *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
                                     <tr>
+                                        <th>Did you lose wages during the eligible period?</th>
+                                        <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.didYouLoseWages')] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th>Please provide days of work missed</th>
                                         <td>{{ valueOrEmpty('expenseInformation.daysWorkMissedStart', '') | date}} -
                                             {{ valueOrEmpty('expenseInformation.daysWorkMissedEnd', '') | date}} </td>
                                     </tr>
                                     <tr>
-                                        <th>As a result of any crime-related injuries, did you lose wages?</th>
-                                        <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.didYouLoseWages')] }}
-                                        </td>
+                                        <th>Social Insurance Number (SIN)</th>
+                                        <td>{{ valueOrEmpty('expenseInformation.sin') }} </td>
                                     </tr>
                                 </ng-container>
                             </tbody>
                         </table>
 
                         <ng-container *ngIf="form.get('expenseInformation.missedWorkDueToDeathOfVictim').value === CRMBoolean.True">
-                            <h3>Income Loss Information</h3>
+                            <h3>Employer Information</h3>
                             <table class="table table-striped review-table" *ngFor="let item of employers.controls; let i = index">
                                 <tbody>
+                                    <tr>
+                                        <th>If you are requesting benefits for lost wages, may we contact your employer?
+                                        </th>
+                                        <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.mayContactEmployer')] }} </td>
+                                    </tr>
                                     <tr>
                                         <th>Name of Company/Organization</th>
                                         <td>{{ valueOrEmpty(item.get('employerName')) }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Phone Number of Contact Person</th>
-                                        <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) | phone}}</td>
-                                    </tr>
-                                    <tr>
                                         <th>Employer Email</th>
                                         <td>{{ valueOrEmpty(item.get('employerEmail')) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Mailing Address</th>
-                                        <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span>
-                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Contact Name</th>
@@ -813,12 +828,21 @@
                                             {{ valueOrEmpty(item.get('employerLastName'), '') }}</td>
                                     </tr>
                                     <tr>
+                                        <th>Phone Number of Contact Person</th>
+                                        <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) | phone}}</td>
+                                    </tr>
+                                    <tr>
                                         <th>Fax</th>
                                         <td>{{ valueOrEmpty(item.get('employerFax')) | phone}}</td>
                                     </tr>
+                                    <tr>
+                                        <th>Mailing Address</th>
+                                        <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
-                            <table class="table table-striped review-table">
+                            <!-- <table class="table table-striped review-table">
                                 <tbody>
                                     <tr>
                                         <th>If you are requesting benefits for lost wages, may we contact your employer?
@@ -826,7 +850,7 @@
                                         <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.mayContactEmployer')] }} </td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table> -->
                         </ng-container>
                     </section>
 
@@ -866,7 +890,7 @@
                             <tr>
                                 <th>Other</th>
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span>
-                                    <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true"> :
+                                    <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true">
                                         {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
                             </tr>
                         </tbody>
@@ -885,7 +909,7 @@
                             <tr>
                                 <th>Other</th>
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"></span>
-                                    <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true"> :
+                                    <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true">
                                         {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
                             </tr>
                             <tr>
@@ -918,12 +942,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Have you applied for Workers' Compensation Benefits?</th>
+                        <th>Have you applied to WorkerSafe BC?</th>
                         <td>{{ enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.haveYouAppliedToWorkSafe')] }}
                         </td>
                     </tr>
                     <tr>
-                        <th>What is your Worker's Compensation Benefits claim number?</th>
+                        <th>WorkSafe BC Claim #</th>
                         <td>{{ valueOrEmpty('employmentIncomeInformation.workersCompensationClaimNumber') }} </td>
                     </tr>
                 </ng-container>
@@ -935,20 +959,24 @@
                 </tr>
                 <ng-container *ngIf="enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.didYouMissWorkDueToCrime')] === 'Yes'">
                     <tr>
-                        <th>Please provide days of work missed</th>
+                        <th>Are you currently off work?</th>
+                        <td>{{ enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.areYouStillOffWork')] }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Please provide date(s) of work missed</th>
                         <td>{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedStart', '') | date}} -
                             <span *ngIf="form.get('employmentIncomeInformation.areYouStillOffWork').value === CRMBoolean.True">Present</span>
                             <span *ngIf="form.get('employmentIncomeInformation.areYouStillOffWork').value === CRMBoolean.False">{{ valueOrEmpty('employmentIncomeInformation.daysWorkMissedEnd', '') | date}}</span>
                         </td>
                     </tr>
                     <tr>
-                        <th>Are you currently off work?</th>
-                        <td>{{ enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.areYouStillOffWork')] }}
-                        </td>
-                    </tr>
-                    <tr>
                         <th>As a result of any crime-related injuries, did you lose wages?</th>
                         <td>{{ enumHelper.boolEnum[valueForEnum('employmentIncomeInformation.didYouLoseWages')] }} </td>
+                    </tr>
+                    <tr>
+                        <th>Social Insurance Number (SIN)</th>
+                        <td>{{ valueOrEmpty('employmentIncomeInformation.sin') }} </td>
                     </tr>
                 </ng-container>
             </tbody>
@@ -977,16 +1005,8 @@
                         <td>{{ valueOrEmpty(item.get('employerName')) }}</td>
                     </tr>
                     <tr>
-                        <th>Phone Number of Contact Person</th>
-                        <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) | phone}}</td>
-                    </tr>
-                    <tr>
                         <th>Employer email</th>
                         <td>{{ valueOrEmpty(item.get('employerEmail')) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Mailing Address</th>
-                        <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
                     </tr>
                     <tr>
                         <th>Contact Name</th>
@@ -994,8 +1014,16 @@
                             {{ valueOrEmpty(item.get('employerLastName'), '') }}</td>
                     </tr>
                     <tr>
+                        <th>Phone Number of Contact Person</th>
+                        <td>{{ valueOrEmpty(item.get('employerPhoneNumber')) | phone}}</td>
+                    </tr>
+                    <tr *ngIf="item.get('employerFax').value">
                         <th>Fax</th>
                         <td>{{ valueOrEmpty(item.get('employerFax')) | phone}}</td>
+                    </tr>
+                    <tr>
+                        <th>Mailing Address</th>
+                        <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -1092,6 +1120,17 @@
                     </tr>
                 </tbody>
             </table>
+
+            <ng-container *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === OnBehalfOf.Legal_Guardian">
+                <table class="table table-striped review-table">
+                    <tbody>
+                        <tr *ngFor="let document of form.get('representativeInformation.documents')['controls']; let i = index;">
+                            <th>Proof of Legal Authority</th>
+                            <td>{{ valueOrEmpty(document.get('filename')) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
         </ng-container>
     </section>
 
@@ -1169,16 +1208,20 @@
                             {{ valueOrEmpty(item.get('authorizedPersonLastName')) }}</td>
                     </tr>
                     <tr>
-                        <th>Phone Number</th>
-                        <td>{{ valueOrEmpty(item.get('authorizedPersonPhoneNumber')) | phone}}</td>
-                    </tr>
-                    <tr>
                         <th>Relationship to Applicant</th>
                         <td>{{ valueOrEmpty(item.get('authorizedPersonRelationship')) }}</td>
                     </tr>
                     <tr>
+                        <th>Phone Number</th>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonPhoneNumber')) | phone}}</td>
+                    </tr>
+                    <tr>
                         <th>Agency Name</th>
                         <td>{{ valueOrEmpty(item.get('authorizedPersonAgencyName')) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email Address</th>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonEmail')) }}</td>
                     </tr>
                     <tr *ngIf="addressHelper.hasAddressInfo(item.get('authorizedPersonAgencyAddress').value)">
                         <th>Agency Address</th>
@@ -1187,7 +1230,6 @@
                     </tr>
                 </tbody>
             </table>
-
 
             <div *ngIf="form.get('authorizationInformation.authorizedPersonAuthorizesDiscussion').value === true">
                 <p>

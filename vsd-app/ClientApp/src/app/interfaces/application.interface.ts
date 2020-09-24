@@ -90,8 +90,9 @@ export interface MedicalInformation {
   beingTreatedByFamilyDoctor: string;
   familyDoctorName: string;
   familyDoctorPhoneNumber: string;
-  familyDoctorAddressLine1: string;
-  familyDoctorAddressLine2: string;
+  familyDoctorAddress: Address;
+  // familyDoctorAddressLine1: string;
+  // familyDoctorAddressLine2: string;
   hadOtherTreatments: string;
   otherTreatments: Othertreatment[];
 }

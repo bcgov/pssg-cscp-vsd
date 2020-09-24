@@ -57,12 +57,10 @@ export class EnumHelper {
 
   public ApplicantPreferredMethodOfContact = {
     0: '--',
-    100000000: 'Phone Call',
-    100000001: 'Email',
-    100000002: 'Mail',
     2: 'Phone Call',
     1: 'Email',
-    4: 'Mail',
+    4: 'Primary Mail',
+    100000002: 'Alternate Mail',
   }
 
   public ParticipantPreferredMethodOfContact = {
