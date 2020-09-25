@@ -488,7 +488,7 @@
             <tbody>
                 <ng-container *ngIf="formType === ApplicationType.Victim_Application">
                     <tr>
-                        <th>Did you goto a hospital to be treated for injuries resulting from the incident?</th>
+                        <th>Did you go to a hospital to be treated for injuries resulting from the incident?</th>
                         <td>{{ valueOrEmpty('medicalInformation.wereYouTreatedAtHospital') }} </td>
                     </tr>
                     <ng-container *ngIf="form.get('medicalInformation.wereYouTreatedAtHospital').value === true">
@@ -1224,7 +1224,7 @@
                         <td>{{ valueOrEmpty(item.get('authorizedPersonEmail')) }}</td>
                     </tr>
                     <tr *ngIf="addressHelper.hasAddressInfo(item.get('authorizedPersonAgencyAddress').value)">
-                        <th>Agency Address</th>
+                        <th>Mailing Address</th>
                         <td><span [innerHTML]="displayMailingAddress(item.get('authorizedPersonAgencyAddress'))"></span>
                         </td>
                     </tr>

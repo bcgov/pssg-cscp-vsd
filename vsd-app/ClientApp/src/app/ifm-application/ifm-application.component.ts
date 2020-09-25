@@ -375,8 +375,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('leaveVoicemail').patchValue(0);
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
-    let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
-    let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
+    // let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
+    // let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
     let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
     let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
 
@@ -384,23 +384,23 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
     }
 
-    for (let i = 0; i < crimeDocumentsLength; ++i) {
-      crimeDocuments.push(this.fb.group({
-        filename: [''],
-        body: [''],
-        subject: ['']
-      }));
-    }
+    // for (let i = 0; i < crimeDocumentsLength; ++i) {
+    //   crimeDocuments.push(this.fb.group({
+    //     filename: [''],
+    //     body: [''],
+    //     subject: ['']
+    //   }));
+    // }
 
     for (let i = 0; i < policeReportsLength; ++i) {
       policeReports.push(this.crimeInfoHelper.createPoliceReport(this.fb));
     }
 
     ret.get('crimeInformation').patchValue(currentForm.get('crimeInformation').value);
-    ret.get('crimeInformation').get('unsureOfCrimeDates').patchValue('');
-    ret.get('crimeInformation').get('whenDidCrimeOccur').patchValue('');
-    ret.get('crimeInformation').get('crimePeriodStart').patchValue('');
-    ret.get('crimeInformation').get('crimePeriodEnd').patchValue('');
+    // ret.get('crimeInformation').get('unsureOfCrimeDates').patchValue('');
+    // ret.get('crimeInformation').get('whenDidCrimeOccur').patchValue('');
+    // ret.get('crimeInformation').get('crimePeriodStart').patchValue('');
+    // ret.get('crimeInformation').get('crimePeriodEnd').patchValue('');
     ret.get('crimeInformation').get('applicationFiledWithinOneYearFromCrime').patchValue('');
     ret.get('crimeInformation').get('whyDidYouNotApplySooner').patchValue('');
     ret.get('crimeInformation').get('crimeDetails').patchValue('');
@@ -409,7 +409,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
-    ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
+    // ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
@@ -458,8 +458,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     // ret.get('victimInformation').get('mostRecentMailingAddressSameAsPersonal').patchValue(true);
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
-    let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
-    let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
+    // let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
+    // let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
     let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
     let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
 
@@ -467,13 +467,13 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
     }
 
-    for (let i = 0; i < crimeDocumentsLength; ++i) {
-      crimeDocuments.push(this.fb.group({
-        filename: [''],
-        body: [''],
-        subject: ['']
-      }));
-    }
+    // for (let i = 0; i < crimeDocumentsLength; ++i) {
+    //   crimeDocuments.push(this.fb.group({
+    //     filename: [''],
+    //     body: [''],
+    //     subject: ['']
+    //   }));
+    // }
 
     for (let i = 0; i < policeReportsLength; ++i) {
       policeReports.push(this.crimeInfoHelper.createPoliceReport(this.fb));
@@ -484,7 +484,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
-    ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
+    // ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
