@@ -146,6 +146,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_applicantssignature { get; set; }
         public string vsd_authorizationsignature { get; set; }
         public int? vsd_cvap_optionalauthorization { get; set; }
+        public int? vsd_cvap_agency_person_authorization { get; set; }
         public string vsd_optionalauthorizationsignature { get; set; }
     }
 
@@ -182,6 +183,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_relationship1 { get; set; }
         public string vsd_relationship2 { get; set; }
         public string vsd_relationship1other { get; set; }
+        public string vsd_relationship2other { get; set; }
         public string vsd_country { get; set; }
         public string vsd_firstname { get; set; }
         public string vsd_lastname { get; set; }

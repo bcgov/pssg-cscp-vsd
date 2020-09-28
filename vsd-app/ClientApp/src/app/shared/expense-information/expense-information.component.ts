@@ -248,16 +248,6 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   daysWorkMissedEndChange(event: MatDatepickerInputEvent<Date>) {
     let endDate = moment(event.target.value);
     this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
-    // let control = this.form.get('areYouStillOffWork');
-    // if (!this.showCurrentlyOffWork) {
-    //     control.patchValue('');
-    //     control.clearValidators();
-    //     control.setErrors(null);
-    // }
-    // else {
-    //     control.setValidators([Validators.required]);
-    // }
-    // control.updateValueAndValidity();
   }
 
   changeGroupValidity(values: any): void {
@@ -365,5 +355,17 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
 
   isMyControlValid(control: AbstractControl) {
     return control.valid || !control.touched;
+  }
+
+  haveOtherExpensesChange(val) {
+    if (!val) {
+      this.form.get('otherSpecificExpenses').patchValue('');
+    }
+  }
+
+  haveOtherBenefitsChange(val) {
+    if (!val) {
+      this.form.get('otherSpecificBenefits').patchValue('');
+    }
   }
 }

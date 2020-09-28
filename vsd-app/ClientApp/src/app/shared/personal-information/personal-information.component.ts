@@ -72,6 +72,19 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             this.addressSubscription = this.form.get('primaryAddress').valueChanges.subscribe(value => {
                 this.copyPersonalAddressToRepresentativeAddress(this.form.parent);
             });
+
+            this.phoneSubscription = this.form.get('phoneNumber').valueChanges.subscribe(value => {
+                this.copyPersonalContactInfoToRepresentative(this.form.parent);
+            });
+            this.altPhoneSubscription = this.form.get('alternatePhoneNumber').valueChanges.subscribe(value => {
+                this.copyPersonalContactInfoToRepresentative(this.form.parent);
+            });
+            this.emailSubscription = this.form.get('email').valueChanges.subscribe(value => {
+                this.copyPersonalContactInfoToRepresentative(this.form.parent);
+            });
+            this.confirmEmailSubscription = this.form.get('confirmEmail').valueChanges.subscribe(value => {
+                this.copyPersonalContactInfoToRepresentative(this.form.parent);
+            });
         }
 
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
@@ -82,15 +95,19 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
             this.phoneSubscription = this.form.get('phoneNumber').valueChanges.subscribe(value => {
                 this.copyPersonalContactInfoToVictim(this.form.parent);
+                this.copyPersonalContactInfoToRepresentative(this.form.parent);
             });
             this.altPhoneSubscription = this.form.get('alternatePhoneNumber').valueChanges.subscribe(value => {
                 this.copyPersonalContactInfoToVictim(this.form.parent);
+                this.copyPersonalContactInfoToRepresentative(this.form.parent);
             });
             this.emailSubscription = this.form.get('email').valueChanges.subscribe(value => {
                 this.copyPersonalContactInfoToVictim(this.form.parent);
+                this.copyPersonalContactInfoToRepresentative(this.form.parent);
             });
             this.confirmEmailSubscription = this.form.get('confirmEmail').valueChanges.subscribe(value => {
                 this.copyPersonalContactInfoToVictim(this.form.parent);
+                this.copyPersonalContactInfoToRepresentative(this.form.parent);
             });
         }
 
@@ -135,17 +152,12 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     ngOnDestroy() {
         this.preferredMethodOfContactSubscription.unsubscribe();
         this.leaveVoicemailSubscription.unsubscribe();
-        if (this.formType === ApplicationType.Victim_Application || this.formType === ApplicationType.IFM_Application) {
-            if (this.sinSubscription) this.sinSubscription.unsubscribe();
-        }
-
-        if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
-            if (this.addressSubscription) this.addressSubscription.unsubscribe();
-            if (this.phoneSubscription) this.phoneSubscription.unsubscribe();
-            if (this.altPhoneSubscription) this.altPhoneSubscription.unsubscribe();
-            if (this.emailSubscription) this.emailSubscription.unsubscribe();
-            if (this.confirmEmailSubscription) this.confirmEmailSubscription.unsubscribe();
-        }
+        if (this.sinSubscription) this.sinSubscription.unsubscribe();
+        if (this.addressSubscription) this.addressSubscription.unsubscribe();
+        if (this.phoneSubscription) this.phoneSubscription.unsubscribe();
+        if (this.altPhoneSubscription) this.altPhoneSubscription.unsubscribe();
+        if (this.emailSubscription) this.emailSubscription.unsubscribe();
+        if (this.confirmEmailSubscription) this.confirmEmailSubscription.unsubscribe();
     }
 
     preferredMethodOfContactChange(value) {
@@ -189,6 +201,18 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             this.emailIsRequired = false;
             this.addressIsRequired = false;
             this.alternateAddressIsRequired = true;
+        }
+    }
+
+    iHaveOtherNamesChange(val: boolean) {
+        if (!val) {
+            let otherFirstNameControl = this.form.get('otherFirstName');
+            let otherLastNameControl = this.form.get('otherLastName');
+            let dateOfNameChangeControl = this.form.get('dateOfNameChange');
+
+            otherFirstNameControl.patchValue('');
+            otherLastNameControl.patchValue('');
+            dateOfNameChangeControl.patchValue('');
         }
     }
 }

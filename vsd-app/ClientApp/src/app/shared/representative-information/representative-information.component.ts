@@ -43,6 +43,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
     addressHelper = new AddressHelper();
     addressInfoSubscription: Subscription;
+    contactInfoSubscription: Subscription;
 
     constructor(
         private controlContainer: ControlContainer,
@@ -91,10 +92,15 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         this.addressInfoSubscription = this.form.get('mostRecentMailingAddressSameAsPersonal').valueChanges.subscribe(value => {
             this.copyPersonalAddressToRepresentativeAddress(this.form.parent);
         });
+
+        this.contactInfoSubscription = this.form.get('applicantSameContactInfo').valueChanges.subscribe(value => {
+            this.copyPersonalContactInfoToRepresentative(this.form.parent);
+        });
     }
 
     ngOnDestroy() {
         if (this.addressInfoSubscription) this.addressInfoSubscription.unsubscribe();
+        if (this.contactInfoSubscription) this.contactInfoSubscription.unsubscribe();
     }
 
     setRequiredFields(completingOnBehalfOf: number) {

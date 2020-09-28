@@ -274,6 +274,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_applicantsextendedhealthnumber = model.MedicalInformation.otherHealthCoverageExtendedPlanNumber; // TODO: verify mapping, "other" seems weird here
 
                 application.Application.vsd_cvap_treatmenthospitalname = model.MedicalInformation.treatedAtHospitalName;
+                if (model.MedicalInformation.treatedOutsideBc)
+                {
+                    application.Application.vsd_cvap_treatmenthospitalname = model.MedicalInformation.treatedOutsideBcHospitalName;
+                }
+
                 if (model.MedicalInformation.treatedAtHospitalDate.HasValue)
                 {
                     application.Application.vsd_cvap_treatmentdate = model.MedicalInformation.treatedAtHospitalDate;
@@ -349,7 +354,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_country = t.authorizedPersonAgencyAddress.country,
                             vsd_postalcode = t.authorizedPersonAgencyAddress.postalCode,
                             vsd_relationship1 = "Authorized Person",
-                            vsd_relationship1other = t.authorizedPersonRelationship,
+                            vsd_relationship2 = "Other",
+                            vsd_relationship2other = t.authorizedPersonRelationship,
                         }).ToArray();
 
                         int tempProviderCount = 0;
@@ -553,6 +559,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     tempExpenses = tempExpenses + "100000003,";
                 }
+                if (model.ExpenseInformation.haveCounsellingTransportation)
+                {
+                    tempExpenses = tempExpenses + "100000025,";
+                }
                 if (model.ExpenseInformation.haveLostEmploymentIncomeExpenses)
                 {
                     tempExpenses = tempExpenses + "100000004,";
@@ -604,7 +614,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
                 if (model.ExpenseInformation.haveLegalProceedingExpenses)
                 {
-                    tempExpenses = tempExpenses + "100000012,";
+                    tempExpenses = tempExpenses + "100000026,";
                 }
                 if (model.ExpenseInformation.haveFuneralExpenses)
                 {
@@ -781,7 +791,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             }
 
             application.Application.vsd_applicantssignature = model.AuthorizationInformation.signature;
-            application.Application.vsd_cvap_optionalauthorization = model.AuthorizationInformation.allowCvapStaffSharing;
+            if (model.AuthorizationInformation.allowCvapStaffSharing > 0)
+            {
+                application.Application.vsd_cvap_agency_person_authorization = model.AuthorizationInformation.allowCvapStaffSharing;
+            }
             application.Application.vsd_optionalauthorizationsignature = model.AuthorizationInformation.authorizedPersonSignature;
 
             return application;

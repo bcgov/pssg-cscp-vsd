@@ -64,10 +64,56 @@
         </app-field>
       </div>
     </div>
-    
+
+    <h3>Contact Information</h3>
     <div class="row">
       <div class="col-12">
-        <app-field label="Is most recent mailing address the same as the applicant's primary mailing address?" [valid]="isFieldValid('mostRecentMailingAddressSameAsPersonal')" [required]="true" errorMessage="Please make a selection" [showChevrons]="false">
+        <app-field label="Are the applicant's phone number(s) and email address the same or to be used for you?">
+          <label class="inline-label">
+            <input type="radio" [value]="true" formControlName="applicantSameContactInfo">
+            <span>Yes</span>
+          </label>
+          <label class="inline-label">
+            <input type="radio" [value]="false" formControlName="applicantSameContactInfo">
+            <span>No</span>
+          </label>
+        </app-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <app-field label="Phone Number (incl. area code)" [required]="representativePhoneIsRequired" [valid]="isFieldValid('representativePhoneNumber', form.get('applicantSameContactInfo').value)" errorMessage="Please enter a phone number">
+          <input class="form-control" mask='(000) 000 0000' [validation]="true" type="text" formControlName="representativePhoneNumber">
+        </app-field>
+      </div>
+      <div class="col-md-6">
+        <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeAlternatePhoneNumber', form.get('applicantSameContactInfo').value)" errorMessage="Please enter a phone number">
+          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativeAlternatePhoneNumber">
+        </app-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <app-field label="Email Address" [required]="representativeEmailIsRequired" [valid]="isFieldValid('representativeEmail', form.get('applicantSameContactInfo').value)" errorMessage="Please enter an email address">
+          <input class="form-control" type="text" (blur)="trimEmail(form.get('representativeEmail'))" formControlName="representativeEmail" maxlength="100">
+        </app-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <app-field label="Confirm Email Address" [required]="representativeEmailIsRequired" [valid]="isFieldValid('representativeConfirmEmail', form.get('applicantSameContactInfo').value)" errorMessage="Please confirm your email address">
+          <input class="form-control" type="text" (blur)="trimEmail(form.get('representativeConfirmEmail'))" formControlName="representativeConfirmEmail" maxlength="100">
+        </app-field>
+      </div>
+    </div>
+
+    <h3>Mailing Address</h3>
+    <div class="row">
+      <div class="col-12">
+        <app-field label="Is your mailing address the same as the applicant's primary mailing address?" [valid]="isFieldValid('mostRecentMailingAddressSameAsPersonal')" [required]="true" errorMessage="Please make a selection" [showChevrons]="false">
           <label class="inline-label">
             <input type="radio" [value]="true" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
             <span>Yes</span>
@@ -79,39 +125,6 @@
         </app-field>
       </div>
     </div>
-
-    <h3>Contact Information</h3>
-
-    <div class="row">
-      <div class="col-md-6">
-        <app-field label="Phone Number (incl. area code)" [required]="representativePhoneIsRequired" [valid]="isFieldValid('representativePhoneNumber')" errorMessage="Please enter a phone number">
-          <input class="form-control" mask='(000) 000 0000' [validation]="true" type="text" formControlName="representativePhoneNumber">
-        </app-field>
-      </div>
-      <div class="col-md-6">
-        <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeAlternatePhoneNumber')" errorMessage="Please enter a phone number">
-          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativeAlternatePhoneNumber">
-        </app-field>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <app-field label="Email Address" [required]="representativeEmailIsRequired" [valid]="isFieldValid('representativeEmail')" errorMessage="Please enter an email address">
-          <input class="form-control" type="text" (blur)="trimEmail(form.get('representativeEmail'))" formControlName="representativeEmail" maxlength="100">
-        </app-field>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <app-field label="Confirm Email Address" [required]="representativeEmailIsRequired" [valid]="isFieldValid('representativeConfirmEmail')" errorMessage="Please confirm your email address">
-          <input class="form-control" type="text" (blur)="trimEmail(form.get('representativeConfirmEmail'))" formControlName="representativeConfirmEmail" maxlength="100">
-        </app-field>
-      </div>
-    </div>
-
-    <h3>Mailing Address</h3>
     <app-address [group]="form.get('representativeAddress')" [showChildrenAsRequired]="true" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
 
     <div class="row">

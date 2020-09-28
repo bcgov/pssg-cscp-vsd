@@ -126,7 +126,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string otherHealthCoverageExtendedPlanNumber { get; set; }
         public string wereYouTreatedAtHospital { get; set; }
         public string treatedAtHospitalName { get; set; }
-        public string treatedOutsideBc { get; set; }
+        public bool treatedOutsideBc { get; set; }
         public string treatedOutsideBcHospitalName { get; set; }
         public DateTime? treatedAtHospitalDate { get; set; }
         public string beingTreatedByFamilyDoctor { get; set; }
@@ -158,6 +158,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public bool haveDentalExpenses { get; set; }
         public bool havePrescriptionDrugExpenses { get; set; }
         public bool haveCounsellingExpenses { get; set; }
+        public bool haveCounsellingTransportation { get; set; }
         public bool haveLostEmploymentIncomeExpenses { get; set; }
         public bool havePersonalPropertyLostExpenses { get; set; }
         public bool haveProtectiveMeasureExpenses { get; set; }

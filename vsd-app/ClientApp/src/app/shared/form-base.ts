@@ -503,10 +503,6 @@ export class FormBase {
     let target = form.get('victimInformation');
     let source = form.get('personalInformation');
     let options = { onlySelf: true, emitEvent: true };
-    let phoneControl = this.form.get('phoneNumber');
-    let altPhoneControl = this.form.get('alternatePhoneNumber');
-    let emailControl = this.form.get('email');
-    let confirmEmailControl = this.form.get('confirmEmail');
 
     if (copyInfo) {
       target.get('phoneNumber').patchValue(source.get('phoneNumber').value, options);
@@ -625,6 +621,41 @@ export class FormBase {
     target.get('postalCode').updateValueAndValidity(options);
     target.get('province').updateValueAndValidity(options);
     target.get('country').updateValueAndValidity(options);
+  }
+
+  copyPersonalContactInfoToRepresentative(form: FormGroup | FormArray) {
+    let copyInfo = form.get('representativeInformation.applicantSameContactInfo').value === true;
+    let target = form.get('representativeInformation');
+    let source = form.get('personalInformation');
+    let options = { onlySelf: true, emitEvent: true };
+
+    if (copyInfo) {
+      target.get('representativePhoneNumber').patchValue(source.get('phoneNumber').value, options);
+      target.get('representativeAlternatePhoneNumber').patchValue(source.get('alternatePhoneNumber').value, options);
+      target.get('representativeEmail').patchValue(source.get('email').value, options);
+      target.get('representativeConfirmEmail').patchValue(source.get('confirmEmail').value, options);
+
+      target.get('representativePhoneNumber').setErrors(null, options);
+      target.get('representativeAlternatePhoneNumber').setErrors(null, options);
+      target.get('representativeEmail').setErrors(null, options);
+      target.get('representativeConfirmEmail').setErrors(null, options);
+
+      target.get('representativePhoneNumber').disable(options);
+      target.get('representativeAlternatePhoneNumber').disable(options);
+      target.get('representativeEmail').disable(options);
+      target.get('representativeConfirmEmail').disable(options);
+    }
+    else {
+      target.get('representativePhoneNumber').enable();
+      target.get('representativeAlternatePhoneNumber').enable();
+      target.get('representativeEmail').enable();
+      target.get('representativeConfirmEmail').enable();
+    }
+
+    target.get('representativePhoneNumber').updateValueAndValidity(options);
+    target.get('representativeAlternatePhoneNumber').updateValueAndValidity(options);
+    target.get('representativeEmail').updateValueAndValidity(options);
+    target.get('representativeConfirmEmail').updateValueAndValidity(options);
   }
 
   setControlValidators(control: AbstractControl | FormControl, newValidator: ValidatorFn | ValidatorFn[]) {

@@ -84,7 +84,7 @@ export interface MedicalInformation {
   otherHealthCoverageExtendedPlanNumber: string;
   wereYouTreatedAtHospital: string;
   treatedAtHospitalName: string;
-  treatedOutsideBc: string;
+  treatedOutsideBc: boolean;
   treatedOutsideBcHospitalName: string;
   treatedAtHospitalDate?: Date;
   beingTreatedByFamilyDoctor: string;
@@ -101,7 +101,9 @@ export interface ExpenseInformation {
   haveDentalExpenses: boolean;
   havePrescriptionDrugExpenses: boolean;
   haveCounsellingExpenses: boolean;
+  haveCounsellingTransportation: boolean;
   haveLostEmploymentIncomeExpenses: boolean;
+  haveLegalProceedingExpenses: boolean;
   havePersonalPropertyLostExpenses: boolean;
   haveProtectiveMeasureExpenses: boolean;
   haveMovingExpenses: boolean;
