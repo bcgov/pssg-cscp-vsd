@@ -33,7 +33,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public int? vsd_indigenous { get; set; }
 
         public string vsd_applicantsprimaryphonenumber { get; set; }
-        public bool vsd_leavevoicemail { get; set; }
+        // public bool vsd_leavevoicemail { get; set; }
         public int? vsd_voicemailoption { get; set; }
         public string vsd_applicantsalternatephonenumber { get; set; }
         public string vsd_applicantsemail { get; set; }
