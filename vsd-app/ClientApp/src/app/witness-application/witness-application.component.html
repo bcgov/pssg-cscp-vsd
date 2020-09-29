@@ -49,28 +49,28 @@
         <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == 0 || showPrintView"></app-introduction>
 
         <div class="pagebreak"> </div>
-        <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1 || showPrintView"></app-personal-information>
+        <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 1 || showPrintView"></app-personal-information>
 
         <div class="pagebreak"> </div>
-        <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2 || showPrintView"></app-victim-information>
+        <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 2 || showPrintView"></app-victim-information>
 
         <div class="pagebreak"> </div>
-        <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3 || showPrintView"></app-crime-information>
+        <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 3 || showPrintView"></app-crime-information>
 
         <div class="pagebreak"> </div>
-        <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4 || showPrintView"></app-medical-information>
+        <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 4 || showPrintView"></app-medical-information>
 
         <div class="pagebreak"> </div>
-        <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5 || showPrintView"></app-expense-information>
+        <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 5 || showPrintView"></app-expense-information>
 
         <div class="pagebreak"> </div>
-        <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6 || showPrintView"></app-representative-information>
+        <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 6 || showPrintView"></app-representative-information>
 
         <div class="pagebreak"> </div>
-        <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7 || showPrintView"></app-declaration-information>
+        <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 7 || showPrintView"></app-declaration-information>
 
         <div class="pagebreak"> </div>
-        <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8 || showPrintView"></app-authorization-information>
+        <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 8 || showPrintView"></app-authorization-information>
 
         <div class="pagebreak"> </div>
         <app-application-review [formGroup]="form" [formType]="FORM_TYPE" [parentStepper]="stepper" *ngIf="this.currentFormStep == 9 || showPrintView"></app-application-review>

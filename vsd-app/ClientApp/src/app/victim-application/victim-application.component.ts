@@ -25,6 +25,8 @@ import * as _ from 'lodash';
 import { StateService } from '../services/state.service';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { LookupService } from '../services/lookup.service';
+import { iLookupData } from '../models/lookup-data.model';
 
 @Component({
   selector: 'app-victim-application',
@@ -66,6 +68,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   isIE: boolean = false;
 
+  lookupData: iLookupData = {};
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
@@ -74,6 +78,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     public snackBar: MatSnackBar,
     private matDialog: MatDialog,
     public state: StateService,
+    public lookupService: LookupService
   ) {
     super();
   }
@@ -89,6 +94,71 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     else {
       this.form = this.buildApplicationForm();
     }
+
+    let promise_array = [];
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getCountries().subscribe((res) => {
+        this.lookupData.countries = res.value;
+        this.lookupData.countries.sort(function (a,b) {
+          return a.vsd_name.localeCompare(a.vsd_name);
+        });
+        resolve();
+      });
+    }));
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getProvinces().subscribe((res) => {
+        this.lookupData.provinces = res.value;
+        this.lookupData.provinces.sort(function (a,b) {
+          return a.vsd_name.localeCompare(a.vsd_name);
+        });
+        resolve();
+      });
+    }));
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getCities().subscribe((res) => {
+        this.lookupData.cities = res.value;
+        this.lookupData.cities.sort(function (a,b) {
+          return a.vsd_name.localeCompare(a.vsd_name);
+        });
+        resolve();
+      });
+    }));
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getRelationships().subscribe((res) => {
+        this.lookupData.relationships = res.value;
+        this.lookupData.relationships.sort(function (a,b) {
+          return a.vsd_name.localeCompare(a.vsd_name);
+        });
+        resolve();
+      });
+    }));
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getCourts().subscribe((res) => {
+        this.lookupData.courts = res.value;
+        this.lookupData.courts.sort(function (a,b) {
+          return a.vsd_name.localeCompare(a.vsd_name);
+        });
+        resolve();
+      });
+    }));
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getPoliceDetachments().subscribe((res) => {
+        this.lookupData.police_detachments = res.value;
+        resolve();
+      });
+    }));
+
+    Promise.all(promise_array).then((res) => {
+      console.log("Lookup data");
+      console.log(this.lookupData);
+    });
+
 
     if (completeOnBehalfOf) {
       this.form.get('representativeInformation').patchValue({

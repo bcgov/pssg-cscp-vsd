@@ -10,6 +10,7 @@ import { CrimeInfoHelper } from "./crime-information.helper";
 import { config } from '../../../config';
 import { Subscription } from "rxjs";
 import { AddressHelper } from "../address/address.helper";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
   selector: 'app-crime-information',
@@ -25,6 +26,7 @@ import { AddressHelper } from "../address/address.helper";
 })
 export class CrimeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
+  @Input() lookupData: iLookupData;
   public form: FormGroup;
   CRMBoolean = CRMBoolean;
   CRMMultiBoolean = CRMMultiBoolean;

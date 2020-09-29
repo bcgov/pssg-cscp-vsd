@@ -198,7 +198,7 @@
                         </div>
 
                         <h3>Mailing Address</h3>
-                        <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="item.get('contactable').value === CRMBoolean.True"></app-address>
+                        <app-address [group]="item.get('employerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="item.get('contactable').value === CRMBoolean.True"></app-address>
                     </div>
                 </div>
                 <button class="btn btn-secondary mb-3" (click)="addEmployer()">Add Additional Employer</button>

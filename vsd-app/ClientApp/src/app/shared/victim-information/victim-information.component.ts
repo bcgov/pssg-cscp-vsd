@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, ControlContainer, AbstractControl, Validators }
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { Subscription } from "rxjs";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
     selector: 'app-victim-information',
@@ -17,6 +18,7 @@ import { Subscription } from "rxjs";
 })
 export class VictimInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
     todaysDate = new Date(); // for the birthdate validation

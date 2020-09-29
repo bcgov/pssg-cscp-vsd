@@ -226,7 +226,7 @@
             <h3>Primary Mailing Address <app-tool-tip [trigger]="primaryAddressTemplate"></app-tool-tip>
             </h3>
             <ng-template #primaryAddressTemplate>Once your claim is processed you will receive a written decision, please provide a mailing address for written correspondences. If your mailing address changes please contact CVAP to update.</ng-template>
-            <app-address [group]="form.get('primaryAddress')" [showChildrenAsRequired]="true"></app-address>
+            <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true"></app-address>
         </div>
     </div>
     <div class="row">
@@ -235,7 +235,7 @@
                 Alternate Mailing Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
             </h3>
             <ng-template #altAddressTemplate>Please provide an alternate address that we may forward correspondences to when mail is returned from the primary address. e.g. an address of a family member or trusted person.</ng-template>
-            <app-address [group]="form.get('alternateAddress')" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
+            <app-address [group]="form.get('alternateAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
         </div>
     </div>
     <div class="row">

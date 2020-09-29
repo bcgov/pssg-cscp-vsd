@@ -1192,16 +1192,24 @@
                 <!-- <ng-container *ngIf="form.get('authorizationInformationallowCvapStaffSharing').value === true"> -->
                 <tr>
                     <th>Optional authorization given?</th>
-                    <td>{{ enumHelper.boolEnum[valueOrEmpty('authorizationInformation.allowCvapStaffSharing')] }}</td>
+                    <td>{{ enumHelper.AllowCvapStaffSharing[valueOrEmpty('authorizationInformation.allowCvapStaffSharing')] }}</td>
                 </tr>
                 <!-- </ng-container> -->
             </tbody>
         </table>
 
-        <div *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.boolValues.Yes">
+        <div *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.AllowCvapStaffSharingValues.Yes_Agency || form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.AllowCvapStaffSharingValues.Yes_Person">
             <h3>Optional Authorization</h3>
             <table class="table table-striped review-table" *ngFor="let item of form.get('authorizationInformation.authorizedPerson')['controls']; let i = index">
                 <tbody>
+                    <tr *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.AllowCvapStaffSharingValues.Yes_Agency">
+                        <th>Agency Name</th>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonAgencyName')) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email Address</th>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonEmail')) }}</td>
+                    </tr>
                     <tr>
                         <th>Full Name</th>
                         <td>{{ valueOrEmpty(item.get('authorizedPersonFirstName')) }}
@@ -1214,14 +1222,6 @@
                     <tr>
                         <th>Phone Number</th>
                         <td>{{ valueOrEmpty(item.get('authorizedPersonPhoneNumber')) | phone}}</td>
-                    </tr>
-                    <tr>
-                        <th>Agency Name</th>
-                        <td>{{ valueOrEmpty(item.get('authorizedPersonAgencyName')) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Email Address</th>
-                        <td>{{ valueOrEmpty(item.get('authorizedPersonEmail')) }}</td>
                     </tr>
                     <tr *ngIf="addressHelper.hasAddressInfo(item.get('authorizedPersonAgencyAddress').value)">
                         <th>Mailing Address</th>

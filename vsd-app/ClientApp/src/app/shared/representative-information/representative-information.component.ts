@@ -12,6 +12,7 @@ import { EmailValidator } from "../validators/email.validator";
 import { RepresentativeInfoHelper } from "./representative-information.helper";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
     selector: 'app-representative-information',
@@ -27,6 +28,7 @@ import { Subscription } from "rxjs";
 })
 export class RepresentativeInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
     provinceList: string[];

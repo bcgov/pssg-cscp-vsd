@@ -169,5 +169,5 @@
         </div>
     </div>
 
-    <app-address [group]="form.get('primaryAddress')" [showChildrenAsRequired]="addressIsRequired" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
+    <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="addressIsRequired" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
 </div>

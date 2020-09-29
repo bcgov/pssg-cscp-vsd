@@ -98,6 +98,7 @@ import { EmploymentInformationComponent } from './shared/employment-information/
 import { CancelDialog } from './shared/dialogs/cancel/cancel.dialog';
 import { InvoiceInstructionsDialog } from './shared/dialogs/invoice-instructions/invoice-instructions.dialog';
 import { StateService } from './services/state.service';
+import { LookupService } from './services/lookup.service';
 
 @NgModule({
   declarations: [
@@ -244,14 +245,15 @@ import { StateService } from './services/state.service';
     MatTooltipModule
   ],
   providers: [
-    CrimeInformationComponent,
-    CookieService,
-    CanDeactivateGuard,
     AliasDataService,
+    CanDeactivateGuard,
+    CookieService,
+    CrimeInformationComponent,
     JusticeApplicationDataService,
+    LookupService,
+    StateService,
     Title,
     VersionInfoDataService,
-    StateService,
   ],
   entryComponents: [
     VersionInfoDialog,

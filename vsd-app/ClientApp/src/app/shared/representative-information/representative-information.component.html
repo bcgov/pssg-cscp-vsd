@@ -125,7 +125,7 @@
         </app-field>
       </div>
     </div>
-    <app-address [group]="form.get('representativeAddress')" [showChildrenAsRequired]="true" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
+    <app-address [group]="form.get('representativeAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
 
     <div class="row">
       <div class="col-md-6">

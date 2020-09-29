@@ -8,6 +8,7 @@ import { COUNTRIES_ADDRESS } from "../address/country-list";
 import { HOSPITALS } from "../hospital-list";
 import { POSTAL_CODE } from "../regex.constants";
 import { AddressHelper } from "../address/address.helper";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
     selector: 'app-medical-information',
@@ -23,6 +24,7 @@ import { AddressHelper } from "../address/address.helper";
 })
 export class MedicalInformationComponent extends FormBase implements OnInit {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
 

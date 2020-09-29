@@ -10,6 +10,7 @@ import { COUNTRIES_ADDRESS_2 } from "../address/country-list";
 import { EmploymentInfoHelper } from "./employment-information.helper";
 import { Subscription } from "rxjs";
 import { AddressHelper } from "../address/address.helper";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
     selector: 'app-employment-information',
@@ -25,6 +26,7 @@ import { AddressHelper } from "../address/address.helper";
 })
 export class EmploymentInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
 
     postalRegex = POSTAL_CODE;

@@ -7,6 +7,7 @@ import { FormGroup, ControlContainer, FormBuilder, FormArray, Validators } from 
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { POSTAL_CODE } from "../regex.constants";
 import { AuthInfoHelper } from "./authorization-information.helper";
+import { iLookupData } from "../../models/lookup-data.model";
 
 
 @Component({
@@ -23,6 +24,7 @@ import { AuthInfoHelper } from "./authorization-information.helper";
 })
 export class AuthorizationInformationComponent extends FormBase implements OnInit {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
     enumHelper = new EnumHelper();

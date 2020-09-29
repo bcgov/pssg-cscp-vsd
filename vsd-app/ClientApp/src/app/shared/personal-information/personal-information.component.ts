@@ -8,6 +8,7 @@ import { POSTAL_CODE } from "../regex.constants";
 import { AddressHelper } from "../address/address.helper";
 import { EmailValidator } from "../validators/email.validator";
 import { Subscription } from "rxjs";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
     selector: 'app-personal-information',
@@ -23,6 +24,7 @@ import { Subscription } from "rxjs";
 })
 export class PersonalInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
     postalRegex = POSTAL_CODE;

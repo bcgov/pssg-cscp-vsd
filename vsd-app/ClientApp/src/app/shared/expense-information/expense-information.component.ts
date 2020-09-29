@@ -8,6 +8,7 @@ import { SummaryOfBenefitsDialog } from "../../summary-of-benefits/summary-of-be
 import * as moment from 'moment';
 import { Subscription } from "rxjs";
 import { AddressHelper } from "../address/address.helper";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
   selector: 'app-expense-information',
@@ -23,6 +24,7 @@ import { AddressHelper } from "../address/address.helper";
 })
 export class ExpenseInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
+  @Input() lookupData: iLookupData;
   public form: FormGroup;
   ApplicationType = ApplicationType;
 

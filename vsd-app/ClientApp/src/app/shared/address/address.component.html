@@ -4,8 +4,8 @@
       <app-field label="Country" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('country', isDisabled)" errorMessage="Please select your country">
         <select class="form-control" formControlName="country" (change)="updateLocation($event)">
           <option value="">Choose a country</option>
-          <option *ngFor="let item of countryList" [value]="item.name">
-            {{ item.name }}
+          <option *ngFor="let item of countryList" [value]="item.vsd_name">
+            {{ item.vsd_name }}
           </option>
         </select>
       </app-field>
@@ -16,14 +16,14 @@
 
       <!-- default -->
       <!-- <ng-container *ngIf="group['controls']['country'].value != 'Other Country' && group['controls']['country'].value != ''"> -->
-        <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('province', isDisabled)" errorMessage="Please select your {{provinceType.toLowerCase()}}">
-          <select class="form-control" formControlName="province">
-            <option value="">Choose a {{ provinceType }}</option>
-            <option *ngFor="let item of provinceList" [value]="item">
-              {{ item }}
-            </option>
-          </select>
-        </app-field>
+      <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('province', isDisabled)" errorMessage="Please select your {{provinceType.toLowerCase()}}">
+        <select class="form-control" formControlName="province">
+          <option value="">Choose a {{ provinceType }}</option>
+          <option *ngFor="let item of provinceList" [value]="item.vsd_name">
+            {{ item.vsd_name }}
+          </option>
+        </select>
+      </app-field>
       <!-- </ng-container> -->
 
       <!-- else Other Country is selected -->
