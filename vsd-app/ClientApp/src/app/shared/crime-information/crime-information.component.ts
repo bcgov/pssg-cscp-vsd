@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { CrimeInfoHelper } from "./crime-information.helper";
 import { config } from '../../../config';
 import { Subscription } from "rxjs";
+import { AddressHelper } from "../address/address.helper";
 
 @Component({
   selector: 'app-crime-information',
@@ -72,6 +73,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   policeForceList = [];
   crimeInjuriesLabel: string = "Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 750 characters)";
+  addressHelper = new AddressHelper();
 
   constructor(
     private controlContainer: ControlContainer,
@@ -143,6 +145,9 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
         this.applyToCourtOrLegalYes();
       }
       else {
+        let doYouHaveALawyerControl = this.form.get('racafInformation.haveLawyer');
+        doYouHaveALawyerControl.patchValue('');
+        this.haveLawyerChange(false);
         this.legalChangesNo();
       }
     });
@@ -162,6 +167,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       if (value === CRMBoolean.True) {
         let intendToSue = this.form.get('intendToSueOffender');
         this.clearControlValidators(intendToSue);
+        intendToSue.patchValue('');
         this.suedOrIntendToSueYes();
       }
       else if (value === CRMBoolean.False) {
@@ -244,11 +250,17 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   offenderBeenChargedNo(): void {
     this.courtLocationItems = this.form.get('courtFiles') as FormArray;
-    for (let i = 0; i < this.courtLocationItems.length; ++i) {
-      this.CourtFileGroup = this.courtLocationItems.controls[i] as FormGroup;
-      this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as FormControl;
-      this.clearControlValidators(this.thisCourtFileLocation);
+    while (this.courtLocationItems.length !== 0) {
+      this.courtLocationItems.removeAt(0);
     }
+    // for (let i = 0; i < this.courtLocationItems.length; ++i) {
+
+    //   this.CourtFileGroup = this.courtLocationItems.controls[i] as FormGroup;
+    //   this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as FormControl;
+    //   this.clearControlValidators(this.thisCourtFileLocation);
+    // }
+
+    // this.courtLocationItems.patchValue([]);
   }
 
   applyToCourtOrLegalYes(): void {
@@ -267,6 +279,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       this.setControlValidators(this.signature, [Validators.required]);
     }
     else {
+      this.signName.patchValue('');
+      this.signature.patchValue('');
       this.clearControlValidators(this.signName);
       this.clearControlValidators(this.signature);
     }
@@ -281,8 +295,17 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       this.setControlValidators(this.signature, [Validators.required]);
     }
     else {
+      this.signName.patchValue('');
+      this.signature.patchValue('');
       this.clearControlValidators(this.signName);
       this.clearControlValidators(this.signature);
+    }
+  }
+
+  haveLawyerChange(val: boolean) {
+    if (!val) {
+      this.form.get('racafInformation.lawyerOrFirmName').patchValue('');
+      this.addressHelper.clearAddress(this.form, 'racafInformation.lawyerAddress')
     }
   }
 
@@ -305,6 +328,16 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     else {
       this.clearControlValidators(this.willBeTakingLegalAction);
       this.clearControlValidators(this.applyToCourtForMoneyFromOffender);
+      this.willBeTakingLegalAction.patchValue('');
+      this.applyToCourtForMoneyFromOffender.patchValue('');
+
+      this.applyToCourtNo();
+      this.applyToCourtForMoneyFromOffenderChange();
+      let doYouHaveALawyerControl = this.form.get('racafInformation.haveLawyer');
+      doYouHaveALawyerControl.patchValue('');
+      this.haveLawyerChange(false);
+      //clear expenses inf
+      //clear do you have a lawyer
     }
   }
 
@@ -313,6 +346,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
     this.clearControlValidators(this.willBeTakingLegalAction);
     this.clearControlValidators(this.applyToCourtForMoneyFromOffender);
+    this.willBeTakingLegalAction.patchValue('');
+    this.applyToCourtForMoneyFromOffender.patchValue('');
   }
 
   addCourtInfo(): void {
@@ -428,7 +463,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     console.log(thisReport);
   }
 
-  applyToCourtForMoneyFromOffenderChange(event) {
+  applyToCourtForMoneyFromOffenderChange() {
     let applyToCourtForMoneyFromOffenderControl = this.form.get('racafInformation.applyToCourtForMoneyFromOffender');
     let expensesRequestedControl = this.form.get('racafInformation.expensesRequested');
     let expensesAwardedControl = this.form.get('racafInformation.expensesAwarded');
@@ -438,6 +473,9 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       this.setControlValidators(expensesAwardedControl, [Validators.required]);
       this.setControlValidators(expensesReceivedControl, [Validators.required]);
     } else {
+      expensesRequestedControl.patchValue('');
+      expensesAwardedControl.patchValue('');
+      expensesReceivedControl.patchValue('');
       this.clearControlValidators(expensesRequestedControl);
       this.clearControlValidators(expensesAwardedControl);
       this.clearControlValidators(expensesReceivedControl);

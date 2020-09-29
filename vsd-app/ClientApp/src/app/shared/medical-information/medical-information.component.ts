@@ -7,6 +7,7 @@ import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { COUNTRIES_ADDRESS } from "../address/country-list";
 import { HOSPITALS } from "../hospital-list";
 import { POSTAL_CODE } from "../regex.constants";
+import { AddressHelper } from "../address/address.helper";
 
 @Component({
     selector: 'app-medical-information',
@@ -39,6 +40,8 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
     otherTreatmentLabel: string = "";
 
+    addressHelper = new AddressHelper();
+
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
@@ -65,28 +68,54 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
         if (this.formType === ApplicationType.Victim_Application) {
             this.form.get('wereYouTreatedAtHospital').valueChanges.subscribe(value => {
                 let hospitalControl = this.form.get('treatedAtHospitalName');
+                let options = { onlySelf: true, emitEvent: false };
 
-                hospitalControl.clearValidators();
-                hospitalControl.setErrors(null);
+                // hospitalControl.clearValidators();
+                // hospitalControl.setErrors(null);
 
                 let useValidation = value === true;
                 if (useValidation) {
-                    hospitalControl.setValidators([Validators.required]);
+                    this.setControlValidators(hospitalControl, [Validators.required]);
+                    // hospitalControl.setValidators();
+                }
+                else {
+                    this.clearControlValidators(hospitalControl);
+                    hospitalControl.patchValue('');
+
+                    let treatedOutsideBCControl = this.form.get('treatedOutsideBc');
+                    treatedOutsideBCControl.patchValue(false, options);
+
+                    let outsideBCHospitalControl = this.form.get('treatedOutsideBcHospitalName');
+                    outsideBCHospitalControl.clearValidators();
+                    outsideBCHospitalControl.setErrors(null);
+                    outsideBCHospitalControl.patchValue('');
+
+                    let treatedAtHospitalDateControl = this.form.get('treatedAtHospitalDate');
+                    treatedAtHospitalDateControl.patchValue('');
                 }
 
-                hospitalControl.updateValueAndValidity();
+                // hospitalControl.updateValueAndValidity();
             });
 
             this.form.get('treatedOutsideBc').valueChanges.subscribe(value => {
                 let hospitalControl = this.form.get('treatedAtHospitalName');
+                let outsideBCHospitalControl = this.form.get('treatedOutsideBcHospitalName');
+
                 if (value === true) {
-                    hospitalControl.clearValidators();
+                    this.clearControlValidators(hospitalControl);
+                    outsideBCHospitalControl.setValidators([Validators.required]);
+                    // hospitalControl.clearValidators();
                     hospitalControl.setErrors(null);
+                    hospitalControl.patchValue('');
                 }
                 else {
-                    hospitalControl.setValidators([Validators.required]);
+                    this.setControlValidators(hospitalControl, [Validators.required]);
+                    // hospitalControl.setValidators([Validators.required]);
+                    outsideBCHospitalControl.clearValidators();
+                    outsideBCHospitalControl.setErrors(null);
                 }
                 hospitalControl.updateValueAndValidity();
+                outsideBCHospitalControl.updateValueAndValidity();
 
             });
         }
@@ -155,5 +184,43 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
         this.familyDoctorNameItem = this.form.get('familyDoctorName') as FormControl;
         this.familyDoctorNameItem.clearValidators();
         this.familyDoctorNameItem.updateValueAndValidity();
+
+        this.familyDoctorNameItem.patchValue('');
+        let doctorEmailControl = this.form.get('familyDoctorEmail');
+        doctorEmailControl.patchValue('');
+
+        let doctorPhoneControl = this.form.get('familyDoctorPhoneNumber');
+        doctorPhoneControl.patchValue('');
+
+        let doctorFaxControl = this.form.get('familyDoctorFax');
+        doctorFaxControl.patchValue('');
+
+        this.addressHelper.clearAddress(this.form, 'familyDoctorAddress');
+    }
+
+    doYouHaveMedicalServicesCoverageChange(val) {
+        let haveMedicalCoverageProvinceControl = this.form.get('haveMedicalCoverageProvince');
+        let haveMedicalCoverageProvinceOtherControl = this.form.get('haveMedicalCoverageProvinceOther');
+        let personalHealthNumberControl = this.form.get('personalHealthNumber');
+
+        if (val) {
+            haveMedicalCoverageProvinceControl.patchValue('British Columbia');
+            this.setControlValidators(haveMedicalCoverageProvinceControl, [Validators.required]);
+        }
+        else {
+            haveMedicalCoverageProvinceControl.patchValue('');
+            haveMedicalCoverageProvinceOtherControl.patchValue('');
+            personalHealthNumberControl.patchValue('');
+        }
+    }
+
+    doYouHaveOtherHealthCoverageChange(val: boolean) {
+        let otherHealthCoverageProviderNameControl = this.form.get('otherHealthCoverageProviderName');
+        let otherHealthCoverageExtendedPlanNumberControl = this.form.get('otherHealthCoverageExtendedPlanNumber');
+
+        if (!val) {
+            otherHealthCoverageProviderNameControl.patchValue('');
+            otherHealthCoverageExtendedPlanNumberControl.patchValue('');
+        }
     }
 }

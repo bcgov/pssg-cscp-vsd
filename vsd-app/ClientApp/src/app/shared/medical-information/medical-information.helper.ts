@@ -38,7 +38,7 @@ export class MedicalInfoHelper {
         if (form_type === ApplicationType.Victim_Application) {
             group['wereYouTreatedAtHospital'] = ['', Validators.required];
             group['treatedAtHospitalName'] = [''];
-            group['treatedOutsideBc'] = [''];
+            group['treatedOutsideBc'] = [false];
             group['treatedOutsideBcHospitalName'] = [''];
             group['treatedAtHospitalDate'] = [''];
         }

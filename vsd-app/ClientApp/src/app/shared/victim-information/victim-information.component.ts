@@ -11,9 +11,6 @@ import { Subscription } from "rxjs";
     templateUrl: './victim-information.component.html',
     styleUrls: ['./victim-information.component.scss'],
     providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
         { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
@@ -28,7 +25,6 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
     emailIsRequired: boolean = false;
     addressIsRequired: boolean = false;
 
-    // iHaveOtherNamesSubscription: Subscription;
     contactInfoSubscription: Subscription;
     addressInfoSubscription: Subscription;
 
@@ -62,29 +58,24 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
                 this.copyPersonalContactInfoToVictim(this.form.parent);
             });
         }
-
-        // this.iHaveOtherNamesSubscription = this.form.get('iHaveOtherNames').valueChanges.subscribe(value => {
-        //     let otherFirstNameControl = this.form.get('otherFirstName');
-        //     let otherLastNameControl = this.form.get('otherLastName');
-        //     let dateOfNameChangeControl = this.form.get('dateOfNameChange');
-        //     if (value === true) {
-        //         this.setControlValidators(otherFirstNameControl, [Validators.required]);
-        //         this.setControlValidators(otherLastNameControl, [Validators.required]);
-        //         this.setControlValidators(dateOfNameChangeControl, [Validators.required]);
-        //     }
-        //     else {
-        //         this.clearControlValidators(otherFirstNameControl);
-        //         this.clearControlValidators(otherLastNameControl);
-        //         this.clearControlValidators(dateOfNameChangeControl);
-        //     }
-        // });
     }
 
     ngOnDestroy() {
-        // if (this.iHaveOtherNamesSubscription) this.iHaveOtherNamesSubscription.unsubscribe();
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
             if (this.addressInfoSubscription) this.addressInfoSubscription.unsubscribe();
             if (this.contactInfoSubscription) this.contactInfoSubscription.unsubscribe();
+        }
+    }
+
+    iHaveOtherNamesChange(val: boolean) {
+        if (!val) {
+            let otherFirstNameControl = this.form.get('otherFirstName');
+            let otherLastNameControl = this.form.get('otherLastName');
+            let dateOfNameChangeControl = this.form.get('dateOfNameChange');
+
+            otherFirstNameControl.patchValue('');
+            otherLastNameControl.patchValue('');
+            dateOfNameChangeControl.patchValue('');
         }
     }
 }

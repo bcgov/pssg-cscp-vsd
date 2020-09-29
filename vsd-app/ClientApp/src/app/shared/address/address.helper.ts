@@ -72,6 +72,21 @@ export class AddressHelper {
         return false;
     }
 
+    public clearAddress(form: FormGroup, field: string) {
+        let addressControls = [
+            form.get(field + '.city'),
+            form.get(field + '.line1'),
+            form.get(field + '.line2'),
+            form.get(field + '.postalCode'),
+        ];
+        form.get(field + '.country').patchValue('Canada');
+        form.get(field + '.province').patchValue('British Columbia');
+
+        for (let control of addressControls) {
+            control.patchValue('');
+        }
+    }
+
     public displayAddress(address: Address) {
         let display = address.line1 + '<br />';
         if (address.line2 != '')

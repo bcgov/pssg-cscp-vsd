@@ -82,7 +82,7 @@
                 </app-field>
                 <app-field>
                     <label>
-                        <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeGroupValidity($event)">
+                        <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeGroupValidity($event); haveOtherExpensesChange($event.target.checked)">
                         Other
                     </label>
                     <section *ngIf="form.get('haveOtherExpenses').value === true" class="pushed">
@@ -170,7 +170,7 @@
                 </app-field>
                 <app-field>
                     <label>
-                        <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits">
+                        <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits" (change)="haveOtherBenefitsChange($event.target.checked)">
                         Other
                     </label>
                     <section *ngIf="form.get('haveOtherBenefits').value === true" class="pushed">
@@ -245,7 +245,7 @@
                 </app-field>
                 <app-field>
                     <label>
-                        <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                        <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeAdditionalBenefitGroupValidity($event); haveOtherExpensesChange($event.target.checked)">
                         Other
                     </label>
                     <section *ngIf="form.get('haveOtherExpenses').value === true" class="pushed">
@@ -336,12 +336,12 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <app-field label="Employer First Name">
+                                    <app-field label="Contact First Name">
                                         <input type="text" class="form-control" formControlName="employerFirstName">
                                     </app-field>
                                 </div>
                                 <div class="col-md-6">
-                                    <app-field label="Employer Last name">
+                                    <app-field label="Contact Last name">
                                         <input type="text" class="form-control" formControlName="employerLastName">
                                     </app-field>
                                 </div>
@@ -409,7 +409,7 @@
                         </app-field>
                         <app-field>
                             <label>
-                                <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits" (change)="changeOtherBenefitValidity($event)">
+                                <input type="checkbox" [value]="true" name="haveOtherBenefits" formControlName="haveOtherBenefits" (change)="changeOtherBenefitValidity($event); haveOtherBenefitsChange($event.target.checked)">
                                 Other
                             </label>
                             <section *ngIf="form.get('haveOtherBenefits').value === true" class="pushed">
@@ -442,7 +442,7 @@
                 </app-field>
                 <app-field>
                     <label>
-                        <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeAdditionalBenefitGroupValidity($event)">
+                        <input type="checkbox" [value]="true" name="haveOtherExpenses" formControlName="haveOtherExpenses" (change)="changeAdditionalBenefitGroupValidity($event); haveOtherExpensesChange($event.target.checked)">
                         Other
                     </label>
                     <section *ngIf="form.get('haveOtherExpenses').value === true" class="pushed">

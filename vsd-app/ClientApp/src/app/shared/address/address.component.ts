@@ -71,7 +71,8 @@ export class AddressComponent implements OnInit {
     if (this.showChildrenAsRequired === undefined)
       this.showChildrenAsRequired = true;
 
-    let selectedCountry = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == this.group['controls']['country'].value.toLowerCase())[0];
+    let countryVal = this.group['controls']['country'].value.toString();
+    let selectedCountry = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == countryVal.toLowerCase())[0];
     if (selectedCountry !== undefined) {
       this.provinceList = selectedCountry.areas;
       this.provinceType = selectedCountry.areaType;

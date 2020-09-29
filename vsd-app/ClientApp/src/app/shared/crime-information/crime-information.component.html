@@ -229,7 +229,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <app-field label="Has this person been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
+                    <app-field label="Has the Person(s) Responsible been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
                         <label class="inline-label">
                             <input type="radio" [value]="CRMMultiBoolean.True" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                             <span>Yes</span>
@@ -319,15 +319,15 @@
 
                     <app-field label="Did you apply to the court for money from the offender?" [required]="form.get('haveYouSuedOffender').value === CRMBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.applyToCourtForMoneyFromOffender')" errorMessage="Please make a selection">
                         <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.True" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange($event)">
+                            <input type="radio" [value]="CRMMultiBoolean.True" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange()">
                             <span>Yes</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.False" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange($event)">
+                            <input type="radio" [value]="CRMMultiBoolean.False" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange()">
                             <span>No</span>
                         </label>
                         <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange($event)">
+                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange()">
                             <span>Not Applicable (No trial/conviction)</span>
                         </label>
                     </app-field>
@@ -376,11 +376,11 @@
                     <span *ngIf="form.get('racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
                         <app-field label="Do you have a lawyer?">
                             <label class="inline-label">
-                                <input type="radio" [value]="CRMBoolean.True" name="haveLawyer" formControlName="haveLawyer">
+                                <input type="radio" [value]="CRMBoolean.True" name="haveLawyer" formControlName="haveLawyer" (change)="haveLawyerChange(true)">
                                 <span>Yes</span>
                             </label>
                             <label class="inline-label">
-                                <input type="radio" [value]="CRMBoolean.False" name="haveLawyer" formControlName="haveLawyer">
+                                <input type="radio" [value]="CRMBoolean.False" name="haveLawyer" formControlName="haveLawyer" (change)="haveLawyerChange(false)">
                                 <span>No</span>
                             </label>
                         </app-field>

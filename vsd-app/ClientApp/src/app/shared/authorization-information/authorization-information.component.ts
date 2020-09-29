@@ -57,10 +57,49 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
             authorizedPersonSignature.clearValidators();
             authorizedPersonSignature.setErrors(null), options;
 
-            let useValidation = value === this.enumHelper.boolValues.Yes;
+            let useValidation = value > 100000000;
             if (useValidation) {
                 authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
                 authorizedPersonSignature.setValidators([Validators.required]);
+                this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
+                if (this.authorizedPersons.length === 0) {
+                    this.addAuthorizationInformation(true);
+                }
+
+                //set authorized persons required field
+                if (value === 100000001) {
+                    console.log("name and rel required");
+                    for (let i = 0; i < this.authorizedPersons.length; ++i) {
+                        let agencyControl = this.authorizedPersons.controls[i].get('authorizedPersonAgencyName');
+                        let authorizedPersonFirstNameControl = this.authorizedPersons.controls[i].get('authorizedPersonFirstName');
+                        let authorizedPersonLastNameControl = this.authorizedPersons.controls[i].get('authorizedPersonLastName');
+                        let authorizedPersonRelationshipControl = this.authorizedPersons.controls[i].get('authorizedPersonRelationship');
+
+                        this.setControlValidators(authorizedPersonFirstNameControl, [Validators.required]);
+                        this.setControlValidators(authorizedPersonLastNameControl, [Validators.required]);
+                        this.setControlValidators(authorizedPersonRelationshipControl, [Validators.required]);
+
+                        this.clearControlValidators(agencyControl);
+                    }
+                }
+                else if (value === 100000002) {
+                    console.log("name and rel NOT required");
+                    for (let i = 0; i < this.authorizedPersons.length; ++i) {
+                        let agencyControl = this.authorizedPersons.controls[i].get('authorizedPersonAgencyName');
+                        let authorizedPersonFirstNameControl = this.authorizedPersons.controls[i].get('authorizedPersonFirstName');
+                        let authorizedPersonLastNameControl = this.authorizedPersons.controls[i].get('authorizedPersonLastName');
+                        let authorizedPersonRelationshipControl = this.authorizedPersons.controls[i].get('authorizedPersonRelationship');
+
+                        this.setControlValidators(agencyControl, [Validators.required]);
+
+                        this.clearControlValidators(authorizedPersonFirstNameControl);
+                        this.clearControlValidators(authorizedPersonLastNameControl);
+                        this.clearControlValidators(authorizedPersonRelationshipControl);
+                    }
+                }
+            }
+            else {
+                this.clearAuthorizationInformation();
             }
 
             authorizedPersonAuthorizesDiscussion.updateValueAndValidity(options);
@@ -69,9 +108,30 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
     }
 
     addAuthorizationInformation(makeAuthorizedSignatureRequired: boolean = false): void {
+        let validationType = this.form.get('allowCvapStaffSharing').value;
         let options = { onlySelf: true, emitEvent: false };
         this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
-        this.authorizedPersons.push(this.authInfoHelper.createAuthorizedPerson(this.fb));
+        let authPerson: FormGroup = this.authInfoHelper.createAuthorizedPerson(this.fb);
+
+        if (validationType === 100000001) { //Yes-Person
+            let agencyControl = authPerson.get('authorizedPersonAgencyName');
+
+            this.clearControlValidators(agencyControl);
+
+        }
+        else if (validationType === 100000002) {//Yes-Agency
+            let agencyControl = authPerson.get('authorizedPersonAgencyName');
+            let authorizedPersonFirstNameControl = authPerson.get('authorizedPersonFirstName');
+            let authorizedPersonLastNameControl = authPerson.get('authorizedPersonLastName');
+            let authorizedPersonRelationshipControl = authPerson.get('authorizedPersonRelationship');
+
+            this.setControlValidators(agencyControl, [Validators.required]);
+
+            this.clearControlValidators(authorizedPersonFirstNameControl);
+            this.clearControlValidators(authorizedPersonLastNameControl);
+            this.clearControlValidators(authorizedPersonRelationshipControl);
+        }
+        this.authorizedPersons.push(authPerson);
         this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
         this.showRemoveAuthorization = this.authorizedPersons.length > 1;
 

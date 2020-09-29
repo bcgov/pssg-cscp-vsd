@@ -36,6 +36,9 @@ h3 {
         td {
             font-weight: bold;
             width: 70%;
+            max-width: 440px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 

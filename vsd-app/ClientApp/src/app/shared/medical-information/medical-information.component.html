@@ -15,21 +15,21 @@
 
         <app-field label="Do you have provincial medical services coverage? (e.g. BC Care Card or other provincial coverage)" [valid]="isFieldValid('doYouHaveMedicalServicesCoverage')" [required]="true" errorMessage="Please select an option">
             <label class="inline-label">
-                <input type="radio" [value]="true" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage">
+                <input type="radio" [value]="true" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage" (change)="doYouHaveMedicalServicesCoverageChange(true)">
                 <span>Yes</span>
             </label>
             <label class="inline-label">
-                <input type="radio" [value]="false" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage">
+                <input type="radio" [value]="false" name="doYouHaveMedicalServicesCoverage" formControlName="doYouHaveMedicalServicesCoverage" (change)="doYouHaveMedicalServicesCoverageChange(false)">
                 <span>No</span>
             </label>
         </app-field>
         <section *ngIf="form.get('doYouHaveMedicalServicesCoverage').value === true">
-            <app-field label="Province" [required]="true" errorMessage="Please select a province">
+            <app-field label="Province" [required]="true" errorMessage="Please select a province" [valid]="isMyControlValid(form.get('haveMedicalCoverageProvince'))">
                 <select class="form-control standard" formControlName="haveMedicalCoverageProvince" #haveMedicalCoverageProv>
                     <option *ngFor="let item of provinceList" [ngValue]="item">{{ item }}</option>
                     <option value="Other">Other</option>
                 </select>
-                <app-field label=""></app-field>
+                <app-field label="" [valid]="isMyControlValid(form.get('haveMedicalCoverageProvinceOther'))" errorMessage="Please enter province"></app-field>
                 <input *ngIf="form.get('haveMedicalCoverageProvince').value==='Other'" class="form-control standard" type="text" formControlName="haveMedicalCoverageProvinceOther" value="haveMedicalCoverageProv.value">
             </app-field>
             &nbsp;
@@ -41,11 +41,11 @@
         <h3>Other Health Coverage</h3>
         <app-field label="Do you have other health coverage? (e.g. Blue Cross)" [valid]="isFieldValid('doYouHaveOtherHealthCoverage')" [required]="true" errorMessage="Please select an option">
             <label class="inline-label">
-                <input type="radio" [value]="true" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage">
+                <input type="radio" [value]="true" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage" (change)="doYouHaveOtherHealthCoverageChange(true)">
                 <span>Yes</span>
             </label>
             <label class="inline-label">
-                <input type="radio" [value]="false" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage">
+                <input type="radio" [value]="false" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage" (change)="doYouHaveOtherHealthCoverageChange(false)">
                 <span>No</span>
             </label>
         </app-field>
@@ -90,7 +90,7 @@
                 </section>
 
                 <section *ngIf="form.get('treatedOutsideBc').value === true">
-                    <app-field label="Please enter the name, city and Province/State of the hospital below">
+                    <app-field label="Please enter the name, city and Province/State of the hospital below" [required]="form.get('treatedOutsideBc').value === true" [valid]="isMyControlValid(form.get('treatedOutsideBcHospitalName'))" errorMessage="Please enter hospital information">
                         <input class="form-control standard" type="text" formControlName="treatedOutsideBcHospitalName">
                     </app-field>
                 </section>
@@ -138,14 +138,6 @@
                 </div>
             </div>
             <app-address [group]="form.get('familyDoctorAddress')" [showChildrenAsRequired]="false"></app-address>
-            <!-- <div class="row">
-                <div class="col-md-6">
-                    <app-field label="Mailing Address (Apt. No., Street Number, Street Address, PO Box)">
-                        <input class="form-control" type="text" formControlName="familyDoctorAddressLine1" placeholder="Address Line 1"><br /><br />
-                        <input class="form-control" type="text" formControlName="familyDoctorAddressLine2" placeholder="Address Line 2"><br />
-                    </app-field>
-                </div>
-            </div> -->
         </section>
 
         <h3>Other Treatment Information</h3>
@@ -173,19 +165,19 @@
                             </app-field>
                         </div>
                         <div class="col-md-6">
-                            <app-field label="Email Address">
+                            <app-field label="Email Address" [valid]="isMyControlValid(item.get('providerEmail'))" errorMessage="Please enter a valid email address">
                                 <input type="text" class="form-control" formControlName="providerEmail" maxlength="100">
                             </app-field>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <app-field label="Phone number (incl. area code)">
+                            <app-field label="Phone number (incl. area code)" [valid]="isMyControlValid(item.get('providerPhoneNumber'))" errorMessage="Please enter a valid phone number">
                                 <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerPhoneNumber">
                             </app-field>
                         </div>
                         <div class="col-md-6">
-                            <app-field label="Fax">
+                            <app-field label="Fax" [valid]="isMyControlValid(item.get('providerFax'))" errorMessage="Please enter a valid fax number">
                                 <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerFax">
                             </app-field>
                         </div>
