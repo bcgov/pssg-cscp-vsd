@@ -1,8 +1,8 @@
 <div [formGroup]="group" class="address-info">
   <div class="row">
     <div class="col-md-6">
-      <app-field label="Country" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('country', isDisabled)" errorMessage="Please select your country">
-        <select class="form-control" formControlName="country" (change)="updateLocation($event)">
+      <app-field label="Country" [required]="showChildrenAsRequired && countryList.length > 0" [valid]="isSubFieldValid('country', isDisabled)" errorMessage="Please select your country">
+        <select class="form-control" formControlName="country" (change)="onCountryChange($event)">
           <option value="">Choose a country</option>
           <option *ngFor="let item of countryList" [value]="item.vsd_name">
             {{ item.vsd_name }}
@@ -11,13 +11,8 @@
       </app-field>
     </div>
     <div class="col-md-6">
-      <!-- they were asking for a free form text field, so here it is in the comments, but some of the requests coming from VS-3506 are out of sync with some of the
-      master data updates we are making for fields like city and stuff anyway, so actually I'm going to bug them more about these things -->
-
-      <!-- default -->
-      <!-- <ng-container *ngIf="group['controls']['country'].value != 'Other Country' && group['controls']['country'].value != ''"> -->
-      <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('province', isDisabled)" errorMessage="Please select your {{provinceType.toLowerCase()}}">
-        <select class="form-control" formControlName="province">
+      <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired && provinceList.length > 0" [valid]="isSubFieldValid('province', isDisabled)" errorMessage="Please select your {{provinceType.toLowerCase()}}">
+        <select class="form-control" formControlName="province" (change)="onProvinceChange($event)">
           <option value="">Choose a {{ provinceType }}</option>
           <option *ngFor="let item of provinceList" [value]="item.vsd_name">
             {{ item.vsd_name }}
@@ -51,7 +46,7 @@
   <div class="row">
     <div class="col-md-6">
       <app-field label="City" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('city', isDisabled)" errorMessage="Please enter your city">
-        <input class="form-control" type="text" formControlName="city">
+        <input class="form-control" type="text" formControlName="city" [typeahead]="cityList">
       </app-field>
     </div>
     <div class="col-md-6">

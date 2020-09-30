@@ -66,6 +66,7 @@ import { OffenderRestitutionComponent } from './offender-restitution/offender-re
 import { OffenderRestitutionReviewComponent } from './offender-restitution/offender-restitution-review.component';
 import { FileDropModule } from 'ngx-file-drop';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
 import { NgBusyModule } from 'ng-busy';
 import { BsDatepickerModule, AlertModule, BsDropdownModule } from 'ngx-bootstrap';
@@ -195,6 +196,7 @@ import { LookupService } from './services/lookup.service';
     //IntlTelInputNgModule.forRoot(),
     //NgxIntlTelInputModule,
     TooltipModule.forRoot(),
+    TypeaheadModule.forRoot(),
     //    BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
     AlertModule.forRoot(),
