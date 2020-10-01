@@ -3,7 +3,7 @@ import { Input, Component, OnInit } from "@angular/core";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDialogConfig } from "@angular/material";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType, EnumHelper } from "../enums-list";
-import { FormGroup, ControlContainer, FormBuilder, FormArray, Validators } from "@angular/forms";
+import { FormGroup, ControlContainer, FormBuilder, FormArray, Validators, AbstractControl } from "@angular/forms";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { POSTAL_CODE } from "../regex.constants";
 import { AuthInfoHelper } from "./authorization-information.helper";
@@ -34,6 +34,8 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
     showRemoveAuthorization: boolean = true;
     postalRegex = POSTAL_CODE;
     authInfoHelper = new AuthInfoHelper();
+
+    relationshipList: string[] = [];
 
     constructor(
         private controlContainer: ControlContainer,
@@ -107,6 +109,8 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
             authorizedPersonAuthorizesDiscussion.updateValueAndValidity(options);
             authorizedPersonSignature.updateValueAndValidity(options);
         });
+
+        this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
     }
 
     addAuthorizationInformation(makeAuthorizedSignatureRequired: boolean = false): void {
@@ -165,8 +169,6 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         this.showRemoveAuthorization = this.authorizedPersons.length > 1;
     }
 
-
-
     showSignPad(control): void {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = true;
@@ -183,5 +185,20 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
             },
             err => console.log(err)
         );
+    }
+
+    setAuthPersonPhoneValidators(authPerson: AbstractControl) {
+        let phoneMinLength = 10;
+        let phoneMaxLength = 15;
+        if (authPerson.get('authorizedPersonAgencyAddress.country').value === 'Canada' || authPerson.get('authorizedPersonAgencyAddress.country').value === 'United States of America') {
+            phoneMinLength = 10;
+        }
+        else {
+            phoneMinLength = 8;
+        }
+
+        let phoneControl = authPerson.get('authorizedPersonPhoneNumber');
+        this.setControlValidators(phoneControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+        phoneControl.patchValue(phoneControl.value);
     }
 }

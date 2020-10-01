@@ -27,12 +27,11 @@
             <app-field label="Province" [required]="true" errorMessage="Please select a province" [valid]="isMyControlValid(form.get('haveMedicalCoverageProvince'))">
                 <select class="form-control standard" formControlName="haveMedicalCoverageProvince" #haveMedicalCoverageProv>
                     <option *ngFor="let item of provinceList" [ngValue]="item">{{ item }}</option>
-                    <option value="Other">Other</option>
+                    <!-- <option value="Other">Other</option> -->
                 </select>
                 <app-field label="" [valid]="isMyControlValid(form.get('haveMedicalCoverageProvinceOther'))" errorMessage="Please enter province"></app-field>
                 <input *ngIf="form.get('haveMedicalCoverageProvince').value==='Other'" class="form-control standard" type="text" formControlName="haveMedicalCoverageProvinceOther" value="haveMedicalCoverageProv.value">
             </app-field>
-            &nbsp;
             <app-field label="Personal Health Number">
                 <input class="form-control standard" type="text" formControlName="personalHealthNumber">
             </app-field>
@@ -128,7 +127,10 @@
             <div class="row">
                 <div class="col-md-6">
                     <app-field label="Phone Number (incl. area code)" [valid]="isMyControlValid(form.get('familyDoctorPhoneNumber'))" errorMessage="Please enter a valid phone number">
-                        <input mask='(000) 000 0000' class="form-control" type="text" formControlName="familyDoctorPhoneNumber">
+                        <input class="form-control" mask='(000) 000 0000' type="text" formControlName="familyDoctorPhoneNumber" *ngIf="form.get('familyDoctorAddress.country').value === 'Canada' || form.get('familyDoctorAddress.country').value === 'United States of America'; else phone_no_mask">
+                        <ng-template #phone_no_mask>
+                            <input class="form-control" type="text" formControlName="familyDoctorPhoneNumber" digitOnly>
+                        </ng-template>
                     </app-field>
                 </div>
                 <div class="col-md-6">
@@ -172,13 +174,19 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <app-field label="Phone number (incl. area code)" [valid]="isMyControlValid(item.get('providerPhoneNumber'))" errorMessage="Please enter a valid phone number">
-                                <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerPhoneNumber">
+                            <app-field label="Phone Number (incl. area code)" [valid]="isMyControlValid(item.get('providerPhoneNumber'))" errorMessage="Please enter a valid phone number">
+                                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="providerPhoneNumber" *ngIf="item.get('providerAddress.country').value === 'Canada' || item.get('providerAddress.country').value === 'United States of America'; else phone_no_mask">
+                                <ng-template #phone_no_mask>
+                                    <input class="form-control" type="text" formControlName="providerPhoneNumber" digitOnly>
+                                </ng-template>
                             </app-field>
                         </div>
                         <div class="col-md-6">
-                            <app-field label="Fax" [valid]="isMyControlValid(item.get('providerFax'))" errorMessage="Please enter a valid fax number">
-                                <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerFax">
+                            <app-field label="Fax" [valid]="isMyControlValid(item.get('providerFax'))" errorMessage="Please enter a valid phone number">
+                                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="providerFax" *ngIf="item.get('providerAddress.country').value === 'Canada' || item.get('providerAddress.country').value === 'United States of America'; else fax_no_mask">
+                                <ng-template #fax_no_mask>
+                                    <input class="form-control" type="text" formControlName="providerFax" digitOnly>
+                                </ng-template>
                             </app-field>
                         </div>
                     </div>
@@ -214,7 +222,7 @@
                             </app-field>
                         </div>
                     </div>
-                    <app-address [group]="item.get('providerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
+                    <app-address (change)="setProviderPhoneValidators(item)" [group]="item.get('providerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
                 </ng-container>
             </div>
             <a href="javascript:void(0);" class="btn btn-secondary" (click)="addProvider()" *ngIf="showAddProvider">Add a Provider</a>

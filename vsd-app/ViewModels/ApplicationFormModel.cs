@@ -270,6 +270,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string authorizedPersonPhoneNumber { get; set; }
         public string authorizedPersonEmail { get; set; }
         public string authorizedPersonRelationship { get; set; }
+        public string authorizedPersonRelationshipOther { get; set; }
         public string authorizedPersonAgencyName { get; set; }
         public Address authorizedPersonAgencyAddress { get; set; }
     }

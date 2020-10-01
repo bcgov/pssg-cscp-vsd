@@ -50,6 +50,9 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     emailSubscription: Subscription;
     confirmEmailSubscription: Subscription;
 
+    phoneMinLength: number = 10;
+    phoneMaxLength: number = 15;
+
     get preferredMethodOfContact() { return this.form.get('preferredMethodOfContact'); }
     get leaveVoicemail() { return this.form.get('leaveVoicemail'); }
 
@@ -63,7 +66,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         this.form = <FormGroup>this.controlContainer.control;
         setTimeout(() => { this.form.markAsTouched(); }, 0);
         console.log("personal info component");
-        console.log(this.form);
+        console.log(this.form.parent);
 
         this.header = "Personal";
         if (this.formType === ApplicationType.Victim_Application) {
@@ -73,6 +76,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         if (this.formType === ApplicationType.Victim_Application) {
             this.addressSubscription = this.form.get('primaryAddress').valueChanges.subscribe(value => {
                 this.copyPersonalAddressToRepresentativeAddress(this.form.parent);
+                this.setPhoneValidators();
             });
 
             this.phoneSubscription = this.form.get('phoneNumber').valueChanges.subscribe(value => {
@@ -93,6 +97,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             this.addressSubscription = this.form.get('primaryAddress').valueChanges.subscribe(value => {
                 this.copyPersonalAddressToVictimAddress(this.form.parent);
                 this.copyPersonalAddressToRepresentativeAddress(this.form.parent);
+                this.setPhoneValidators();
             });
 
             this.phoneSubscription = this.form.get('phoneNumber').valueChanges.subscribe(value => {
@@ -129,31 +134,31 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             let phoneControl = this.form.get('phoneNumber');
             let altPhoneControl = this.form.get('alternatePhoneNumber');
             //setup phone control validators based on preferredMethodOfContact
-            this.setControlValidators(phoneControl, [Validators.minLength(10), Validators.maxLength(10)]);
-            this.setControlValidators(altPhoneControl, [Validators.minLength(10), Validators.maxLength(10)]);
+            this.setControlValidators(phoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+            this.setControlValidators(altPhoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
             let contactMethod = this.form.get('preferredMethodOfContact').value;
             if (contactMethod === 2) { //phone call
-                this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+                this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
             }
             //then update potentially update it based on voicemail selection
 
             let voicemailOption = parseInt(value);
             if (voicemailOption === 100000000) { //Primary and Alternate
-                this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
-                this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+                this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+                this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
             }
             else if (voicemailOption === 100000001) { //Primary only
-                this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+                this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
             }
             else if (voicemailOption === 100000002) { //Alternate only
-                this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+                this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
             }
         });
     }
 
     ngOnDestroy() {
-        this.preferredMethodOfContactSubscription.unsubscribe();
-        this.leaveVoicemailSubscription.unsubscribe();
+        if (this.preferredMethodOfContactSubscription) this.preferredMethodOfContactSubscription.unsubscribe();
+        if (this.leaveVoicemailSubscription) this.leaveVoicemailSubscription.unsubscribe();
         if (this.sinSubscription) this.sinSubscription.unsubscribe();
         if (this.addressSubscription) this.addressSubscription.unsubscribe();
         if (this.phoneSubscription) this.phoneSubscription.unsubscribe();
@@ -164,6 +169,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
     preferredMethodOfContactChange(value) {
         let phoneControl = this.form.get('phoneNumber');
+        let altPhoneControl = this.form.get('alternatePhoneNumber');
         let emailControl = this.form.get('email');
         let emailConfirmControl = this.form.get('confirmEmail');
         let agreeToCVAPControl = this.form.get('agreeToCvapCommunicationExchange');
@@ -173,14 +179,14 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         this.addressHelper.setAddressAsRequired(this.form, 'primaryAddress');
         this.addressHelper.markAsTouched(this.form, 'primaryAddress');
 
-        this.setControlValidators(phoneControl, [Validators.minLength(10), Validators.maxLength(10)]);
+        this.setControlValidators(phoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
         this.setControlValidators(emailControl, [Validators.email]);
         this.setControlValidators(emailConfirmControl, [Validators.email, EmailValidator('email')]);
         this.clearControlValidators(agreeToCVAPControl);
 
         let contactMethod = parseInt(value);
         if (contactMethod === 2) { //phone call
-            this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+            this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
             this.phoneIsRequired = true;
             this.emailIsRequired = false;
             this.addressIsRequired = false;
@@ -204,6 +210,18 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             this.addressIsRequired = false;
             this.alternateAddressIsRequired = true;
         }
+
+        let voicemailOption = parseInt(this.form.get('leaveVoicemail').value);
+        if (voicemailOption === 100000000) { //Primary and Alternate
+            this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+            this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        }
+        else if (voicemailOption === 100000001) { //Primary only
+            this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        }
+        else if (voicemailOption === 100000002) { //Alternate only
+            this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        }
     }
 
     iHaveOtherNamesChange(val: boolean) {
@@ -216,5 +234,41 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             otherLastNameControl.patchValue('');
             dateOfNameChangeControl.patchValue('');
         }
+    }
+
+    setPhoneValidators() {
+        if (this.form.get('primaryAddress.country').value === 'Canada' || this.form.get('primaryAddress.country').value === 'United States of America') {
+            this.phoneMinLength = 10;
+        }
+        else {
+            this.phoneMinLength = 8;
+        }
+
+        // let contactMethod = this.form.get('preferredMethodOfContact').value;
+        let phoneControl = this.form.get('phoneNumber');
+        let altPhoneControl = this.form.get('alternatePhoneNumber');
+        //setup phone control validators based on preferredMethodOfContact
+        this.setControlValidators(phoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        this.setControlValidators(altPhoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        let contactMethod = this.form.get('preferredMethodOfContact').value;
+        if (contactMethod === 2) { //phone call
+            this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        }
+        //then update potentially update it based on voicemail selection
+        let voicemailVal = this.form.get('leaveVoicemail').value;
+        let voicemailOption = parseInt(voicemailVal);
+        if (voicemailOption === 100000000) { //Primary and Alternate
+            this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+            this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        }
+        else if (voicemailOption === 100000001) { //Primary only
+            this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        }
+        else if (voicemailOption === 100000002) { //Alternate only
+            this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        }
+
+        phoneControl.patchValue(phoneControl.value);
+        altPhoneControl.patchValue(altPhoneControl.value);
     }
 }

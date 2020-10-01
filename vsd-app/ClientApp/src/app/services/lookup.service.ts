@@ -36,6 +36,20 @@ export class LookupService {
     );
   }
 
+  getCitiesByCountry(country: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/country/${country}/cities`, { headers: this.headers }).pipe(
+      retry(3),
+      catchError(this.handleError)
+    );
+  }
+
+  getCitiesByProvince(country: string, province: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/country/${country}/province/${province}/cities`, { headers: this.headers }).pipe(
+      retry(3),
+      catchError(this.handleError)
+    );
+  }
+
   getRelationships(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/relationships`, { headers: this.headers }).pipe(
       retry(3),

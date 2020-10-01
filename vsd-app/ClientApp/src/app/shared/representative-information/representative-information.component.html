@@ -84,12 +84,18 @@
     <div class="row">
       <div class="col-md-6">
         <app-field label="Phone Number (incl. area code)" [required]="representativePhoneIsRequired" [valid]="isFieldValid('representativePhoneNumber', form.get('applicantSameContactInfo').value)" errorMessage="Please enter a phone number">
-          <input class="form-control" mask='(000) 000 0000' [validation]="true" type="text" formControlName="representativePhoneNumber">
+          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativePhoneNumber" *ngIf="form.get('representativeAddress.country').value === 'Canada' || form.get('representativeAddress.country').value === 'United States of America'; else phone_no_mask">
+          <ng-template #phone_no_mask>
+            <input class="form-control" type="text" formControlName="representativePhoneNumber" digitOnly>
+          </ng-template>
         </app-field>
       </div>
       <div class="col-md-6">
         <app-field label="Alternate Phone Number" [required]="false" [valid]="isFieldValid('representativeAlternatePhoneNumber', form.get('applicantSameContactInfo').value)" errorMessage="Please enter a phone number">
-          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativeAlternatePhoneNumber">
+          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="representativeAlternatePhoneNumber" *ngIf="form.get('representativeAddress.country').value === 'Canada' || form.get('representativeAddress.country').value === 'United States of America'; else alt_phone_no_mask">
+          <ng-template #alt_phone_no_mask>
+            <input class="form-control" type="text" formControlName="representativeAlternatePhoneNumber" digitOnly>
+          </ng-template>
         </app-field>
       </div>
     </div>
@@ -125,7 +131,7 @@
         </app-field>
       </div>
     </div>
-    <app-address [group]="form.get('representativeAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
+    <app-address (change)="setRepresentativePhoneValidators()" [group]="form.get('representativeAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
 
     <div class="row">
       <div class="col-md-6">

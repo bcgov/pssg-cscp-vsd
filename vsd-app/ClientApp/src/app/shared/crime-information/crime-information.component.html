@@ -64,8 +64,8 @@
                     <div class="location-listing" formArrayName="crimeLocations" *ngFor="let item of form.get('crimeLocations')['controls']; let i = index;">
                         <div [formGroupName]="i" class="crime-location">
                             <app-field [valid]="isArrayFieldValid('crimeLocations', 'location', i)" errorMessage="Please enter at least one location">
-                                <input class="form-control standard" type="text" formControlName="location">
-                                <a href="javascript:void(0);" (click)="removeCrimeLocation(i)" *ngIf="showRemoveCrimeLocation">
+                                <input class="form-control standard" type="text" formControlName="location" [typeahead]="cityList">
+                                <a href="javascript:void(0);" (click)="removeCrimeLocation(i)" *ngIf="showRemoveCrimeLocation" class="remove-location-button">
                                     <i class="fas fa-trash-alt"></i> Remove Location
                                 </a>
                             </app-field>
@@ -157,7 +157,8 @@
                                 <div [class.with-error]="!isMyControlValid(item.get('policeDetachment'))">
                                     <select class="form-control standard" formControlName="policeDetachment" (change)="policeForceSelected(i)" [required]="true">
                                         <option [ngValue]="null">Select</option>
-                                        <option *ngFor="let policeForce of policeForceList" [value]="policeForce.name">{{policeForce.name}}</option>
+                                        <option *ngFor="let policeForce of policeForceList" [value]="policeForce">{{policeForce}}</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
 
@@ -253,17 +254,17 @@
                 <div class="court-information">
                     <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('courtFiles')['controls']; let i = index;">
                         <div [formGroupName]="i" class="row court-files">
-                            <div class="col-5">
+                            <div class="col">
                                 <app-field label="Court File Number (if known)" [tooltipReference]="courtFileNumber">
                                     <input class="form-control" type="text" formControlName="courtFileNumber">
                                 </app-field>
                             </div>
-                            <div class="col-5">
+                            <div class="col">
                                 <app-field label="Court Location" [required]="true" [valid]="isMyControlValid(item.get('courtLocation'))" errorMessage="Please enter a court location">
-                                    <input class="form-control" type="text" formControlName="courtLocation">
+                                    <input class="form-control" type="text" formControlName="courtLocation" [typeahead]="courtList">
                                 </app-field>
                             </div>
-                            <div class="col-2">
+                            <div class="col-2" *ngIf="showRemoveCourtInfo">
                                 <br />
                                 <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo" required>
                                     <i class="fas fa-trash-alt"></i> Remove

@@ -27,6 +27,7 @@ import { VictimInfoHelper } from '../shared/victim-information/victim-informatio
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { LookupService } from '../services/lookup.service';
 import { iLookupData } from '../models/lookup-data.model';
+import { config } from '../../config';
 
 @Component({
   selector: 'app-victim-application',
@@ -68,7 +69,14 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   isIE: boolean = false;
 
-  lookupData: iLookupData = {};
+  lookupData: iLookupData = {
+    countries: [],
+    provinces: [],
+    cities: [],
+    relationships: [],
+    courts: [],
+    police_detachments: [],
+  };
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -100,8 +108,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     promise_array.push(new Promise((resolve, reject) => {
       this.lookupService.getCountries().subscribe((res) => {
         this.lookupData.countries = res.value;
-        this.lookupData.countries.sort(function (a,b) {
-          return a.vsd_name.localeCompare(a.vsd_name);
+        this.lookupData.countries.sort(function (a, b) {
+          return a.vsd_name.localeCompare(b.vsd_name);
         });
         resolve();
       });
@@ -110,18 +118,18 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     promise_array.push(new Promise((resolve, reject) => {
       this.lookupService.getProvinces().subscribe((res) => {
         this.lookupData.provinces = res.value;
-        this.lookupData.provinces.sort(function (a,b) {
-          return a.vsd_name.localeCompare(a.vsd_name);
+        this.lookupData.provinces.sort(function (a, b) {
+          return a.vsd_name.localeCompare(b.vsd_name);
         });
         resolve();
       });
     }));
 
     promise_array.push(new Promise((resolve, reject) => {
-      this.lookupService.getCities().subscribe((res) => {
+      this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
         this.lookupData.cities = res.value;
-        this.lookupData.cities.sort(function (a,b) {
-          return a.vsd_name.localeCompare(a.vsd_name);
+        this.lookupData.cities.sort(function (a, b) {
+          return a.vsd_name.localeCompare(b.vsd_name);
         });
         resolve();
       });
@@ -130,8 +138,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     promise_array.push(new Promise((resolve, reject) => {
       this.lookupService.getRelationships().subscribe((res) => {
         this.lookupData.relationships = res.value;
-        this.lookupData.relationships.sort(function (a,b) {
-          return a.vsd_name.localeCompare(a.vsd_name);
+        this.lookupData.relationships.sort(function (a, b) {
+          return a.vsd_name.localeCompare(b.vsd_name);
         });
         resolve();
       });
@@ -140,8 +148,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     promise_array.push(new Promise((resolve, reject) => {
       this.lookupService.getCourts().subscribe((res) => {
         this.lookupData.courts = res.value;
-        this.lookupData.courts.sort(function (a,b) {
-          return a.vsd_name.localeCompare(a.vsd_name);
+        this.lookupData.courts.sort(function (a, b) {
+          return a.vsd_name.localeCompare(b.vsd_name);
         });
         resolve();
       });
@@ -150,6 +158,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     promise_array.push(new Promise((resolve, reject) => {
       this.lookupService.getPoliceDetachments().subscribe((res) => {
         this.lookupData.police_detachments = res.value;
+        this.lookupData.police_detachments.sort(function (a, b) {
+          return a.vsd_name.localeCompare(b.vsd_name);
+        });
         resolve();
       });
     }));

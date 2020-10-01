@@ -73,7 +73,9 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   showWhyDidYouNotApplySooner: boolean = false;
   crimeInfoHelper = new CrimeInfoHelper();
 
-  policeForceList = [];
+  cityList: string[] = [];
+  policeForceList: string[] = [];
+  courtList: string[] = [];
   crimeInjuriesLabel: string = "Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 750 characters)";
   addressHelper = new AddressHelper();
 
@@ -186,7 +188,20 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       }
     });
 
-    this.policeForceList = config.police_detachments;
+    let preferred_police_detachments = this.lookupData.police_detachments.filter(pd => config.preferred_police_detachments.findIndex(ppd => ppd.vsd_policedetachmentid == pd.vsd_policedetachmentid) >= 0);
+    let remaining_police_detachments = this.lookupData.police_detachments.filter(pd => config.preferred_police_detachments.findIndex(ppd => ppd.vsd_policedetachmentid == pd.vsd_policedetachmentid) < 0);
+
+    preferred_police_detachments.sort(function (a, b) {
+      return config.preferred_police_detachments.findIndex(c => c.vsd_policedetachmentid == a.vsd_policedetachmentid) - config.preferred_police_detachments.findIndex(c => c.vsd_policedetachmentid == b.vsd_policedetachmentid);
+    });
+
+    remaining_police_detachments.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+
+    this.policeForceList = preferred_police_detachments.concat(remaining_police_detachments).map(pd => pd.vsd_name);
+
+    this.cityList = this.lookupData.cities.map(c => c.vsd_name);
+    this.courtList = this.lookupData.courts.map(c => c.vsd_name);
+    // console.log(this.policeForceList);
   }
 
   ngOnDestroy() {
@@ -459,10 +474,10 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   policeForceSelected(index: number) {
-    console.log(index);
-    this.policeReportItems = this.form.get('policeReports') as FormArray;
-    let thisReport = this.policeReportItems.at(index) as FormGroup;
-    console.log(thisReport);
+    // console.log(index);
+    // this.policeReportItems = this.form.get('policeReports') as FormArray;
+    // let thisReport = this.policeReportItems.at(index) as FormGroup;
+    // console.log(thisReport);
   }
 
   applyToCourtForMoneyFromOffenderChange() {

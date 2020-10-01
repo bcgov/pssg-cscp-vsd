@@ -1,7 +1,7 @@
 import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { FormBase } from "../form-base";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepickerInputEvent } from "@angular/material";
-import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer } from "@angular/forms";
+import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, AbstractControl } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType, CRMBoolean } from "../enums-list";
 import * as moment from 'moment';
@@ -295,5 +295,23 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         let endDate = moment(event.target.value);
         this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
 
+    }
+
+    setEmployerPhoneValidators(employer: AbstractControl) {
+        let phoneMinLength = 10;
+        let phoneMaxLength = 15;
+        if (employer.get('employerAddress.country').value === 'Canada' || employer.get('employerAddress.country').value === 'United States of America') {
+            phoneMinLength = 10;
+        }
+        else {
+            phoneMinLength = 8;
+        }
+
+        let phoneControl = employer.get('employerPhoneNumber');
+        let faxControl = employer.get('employerFax');
+        this.setControlValidators(phoneControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+        this.setControlValidators(faxControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+        phoneControl.patchValue(phoneControl.value);
+        faxControl.patchValue(faxControl.value);
     }
 }

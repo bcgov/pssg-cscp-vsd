@@ -1217,7 +1217,9 @@
                     </tr>
                     <tr>
                         <th>Relationship to Applicant</th>
-                        <td>{{ valueOrEmpty(item.get('authorizedPersonRelationship')) }}</td>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonRelationship')) }} <span *ngIf="item.get('authorizedPersonRelationship').value === 'Other'"> :
+                                {{ valueOrEmpty(item.get('authorizedPersonRelationshipOther')) }}</span></td>
+
                     </tr>
                     <tr>
                         <th>Phone Number</th>

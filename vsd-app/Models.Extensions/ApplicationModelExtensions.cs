@@ -354,8 +354,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_country = t.authorizedPersonAgencyAddress.country,
                             vsd_postalcode = t.authorizedPersonAgencyAddress.postalCode,
                             vsd_relationship1 = "Authorized Person",
-                            vsd_relationship2 = "Other",
-                            vsd_relationship2other = t.authorizedPersonRelationship,
+                            vsd_relationship2 = t.authorizedPersonRelationship,
+                            vsd_relationship2other = t.authorizedPersonRelationship.Equals("Other") ? t.authorizedPersonRelationshipOther : "",
                         }).ToArray();
 
                         int tempProviderCount = 0;

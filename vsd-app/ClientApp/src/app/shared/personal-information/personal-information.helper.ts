@@ -27,7 +27,7 @@ export class PersonalInfoHelper {
             permissionToContactViaMethod: [false],
             agreeToCvapCommunicationExchange: [''],
 
-            phoneNumber: [''],
+            phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
             leaveVoicemail: [0, [Validators.required, Validators.min(1), Validators.max(100000003)]],
             alternatePhoneNumber: [''],
 

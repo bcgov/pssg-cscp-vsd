@@ -370,4 +370,22 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
       this.form.get('otherSpecificBenefits').patchValue('');
     }
   }
+
+  setEmployerPhoneValidators(employer: AbstractControl) {
+    let phoneMinLength = 10;
+    let phoneMaxLength = 15;
+    if (employer.get('employerAddress.country').value === 'Canada' || employer.get('employerAddress.country').value === 'United States of America') {
+      phoneMinLength = 10;
+    }
+    else {
+      phoneMinLength = 8;
+    }
+
+    let phoneControl = employer.get('employerPhoneNumber');
+    let faxControl = employer.get('employerFax');
+    this.setControlValidators(phoneControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+    this.setControlValidators(faxControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+    phoneControl.patchValue(phoneControl.value);
+    faxControl.patchValue(faxControl.value);
+  }
 }

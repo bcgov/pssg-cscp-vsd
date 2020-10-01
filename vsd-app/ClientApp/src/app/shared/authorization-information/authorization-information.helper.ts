@@ -37,6 +37,7 @@ export class AuthInfoHelper {
                 country: [{ value: 'Canada', disabled: false }],
             }),
             authorizedPersonRelationship: ['', Validators.required],
+            authorizedPersonRelationshipOther: [''],
             authorizedPersonAgencyName: [''],
         });
     }

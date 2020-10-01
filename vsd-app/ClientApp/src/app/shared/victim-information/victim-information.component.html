@@ -128,12 +128,18 @@
     <div class="row">
         <div class="col-md-6">
             <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('phoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
-                <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else phone_no_mask">
+                <ng-template #phone_no_mask>
+                    <input class="form-control" type="text" formControlName="phoneNumber" digitOnly>
+                </ng-template>
             </app-field>
         </div>
         <div class="col-md-6">
             <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('alternatePhoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
-                <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else alt_phone_no_mask">
+                <ng-template #alt_phone_no_mask>
+                    <input class="form-control" type="text" formControlName="alternatePhoneNumber" digitOnly>
+                </ng-template>
             </app-field>
         </div>
     </div>

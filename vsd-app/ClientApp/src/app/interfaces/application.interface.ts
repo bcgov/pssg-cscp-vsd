@@ -221,6 +221,7 @@ interface AuthorizedPerson {
   authorizedPersonEmail: string;
   authorizedPersonAgencyAddress: Address;
   authorizedPersonRelationship: string;
+  authorizedPersonRelationshipOther: string;
   authorizedPersonAgencyName: string;
 }
 export interface Employer {

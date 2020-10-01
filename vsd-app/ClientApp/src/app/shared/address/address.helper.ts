@@ -1,9 +1,10 @@
-import { POSTAL_CODE } from "../regex.constants";
+import { POSTAL_CODE, ZIP_CODE } from "../regex.constants";
 import { FormGroup, Validators } from "@angular/forms";
 import { Address } from "../../interfaces/address.interface";
 
 export class AddressHelper {
     postalRegex = POSTAL_CODE;
+    zipRegex = ZIP_CODE;
 
     public clearAddressValidatorsAndErrors(form: FormGroup, field: string) {
         let options = { onlySelf: true, emitEvent: false };
@@ -46,6 +47,7 @@ export class AddressHelper {
     }
 
     public setAddressAsRequired(form: FormGroup, field: string) {
+        let options = { onlySelf: true, emitEvent: false };
         let addressControls = [
             form.get(field + '.country'),
             form.get(field + '.province'),
@@ -58,11 +60,19 @@ export class AddressHelper {
         for (let control of addressControls) {
             control.setValidators([Validators.required]);
             // control.markAsTouched();
-            control.updateValueAndValidity();
+            control.updateValueAndValidity(options);
         }
-        postalControl.setValidators([Validators.required, Validators.pattern(this.postalRegex)]);
+        if (form.get(field + '.country').value === "Canada") {
+            postalControl.setValidators([Validators.required, Validators.pattern(this.postalRegex)]);
+        }
+        else if (form.get(field + '.country').value === "United States of America") {
+            postalControl.setValidators([Validators.required, Validators.pattern(this.zipRegex)]);
+        }
+        else {
+            postalControl.setValidators([Validators.required]);
+        }
         // postalControl.markAsTouched();
-        postalControl.updateValueAndValidity();
+        postalControl.updateValueAndValidity(options);
     }
 
     public hasAddressInfo(address: Address) {

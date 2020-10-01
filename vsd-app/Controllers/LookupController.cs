@@ -72,6 +72,38 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             finally { }
         }
 
+        [HttpGet("country/{countryId}/cities")]
+        public async Task<IActionResult> GetCitiesByCountry(string countryId)
+        {
+            try
+            {
+                // set the endpoint action
+                string endpointUrl = $"vsd_cities?$select=_vsd_countryid_value,vsd_name,_vsd_stateid_value&$filter=statecode eq 0 and _vsd_countryid_value eq {countryId}";
+
+                // get the response
+                DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
+
+                return StatusCode(200, result.result.ToString());
+            }
+            finally { }
+        }
+
+        [HttpGet("country/{countryId}/province/{provinceId}/cities")]
+        public async Task<IActionResult> GetCitiesByProvince(string countryId, string provinceId)
+        {
+            try
+            {
+                // set the endpoint action
+                string endpointUrl = $"vsd_cities?$select=_vsd_countryid_value,vsd_name,_vsd_stateid_value&$filter=statecode eq 0 and _vsd_countryid_value eq {countryId} and _vsd_stateid_value eq {provinceId}";
+
+                // get the response
+                DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
+
+                return StatusCode(200, result.result.ToString());
+            }
+            finally { }
+        }
+
         [HttpGet("relationships")]
         public async Task<IActionResult> GetRelationships()
         {
