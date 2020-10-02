@@ -8,6 +8,7 @@ import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { POSTAL_CODE } from "../regex.constants";
 import { AuthInfoHelper } from "./authorization-information.helper";
 import { iLookupData } from "../../models/lookup-data.model";
+import { LookupService } from "../../services/lookup.service";
 
 
 @Component({
@@ -41,6 +42,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
         private fb: FormBuilder,
+        public lookupService: LookupService,
     ) {
         super();
     }
@@ -110,7 +112,20 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
             authorizedPersonSignature.updateValueAndValidity(options);
         });
 
-        this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
+        if (this.lookupData.relationships && this.lookupData.relationships.length > 0) {
+            this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
+        }
+        else {
+            this.lookupService.getRelationships().subscribe((res) => {
+                this.lookupData.relationships = res.value;
+                if (this.lookupData.relationships) {
+                    this.lookupData.relationships.sort(function (a, b) {
+                        return a.vsd_name.localeCompare(b.vsd_name);
+                    });
+                }
+                this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
+            });
+        }
     }
 
     addAuthorizationInformation(makeAuthorizedSignatureRequired: boolean = false): void {

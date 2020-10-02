@@ -36,6 +36,13 @@ export class LookupService {
     );
   }
 
+  getCitiesByLink(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/cities_by_link`, data, { headers: this.headers }).pipe(
+      retry(3),
+      catchError(this.handleError)
+    );
+  }
+
   getCitiesByCountry(country: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/country/${country}/cities`, { headers: this.headers }).pipe(
       retry(3),
@@ -70,7 +77,7 @@ export class LookupService {
       catchError(this.handleError)
     );
   }
-  
+
 
   get headers(): HttpHeaders {
     return new HttpHeaders({ 'Content-Type': 'application/json' });

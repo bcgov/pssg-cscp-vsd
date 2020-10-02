@@ -83,6 +83,7 @@
         <section class="button-container" *ngIf="!showPrintView">
           <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span class="right-buttons">
+            <!-- [class.disabled]="!didLoad" -->
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
             <button (click)="markAsTouched(); producePDF();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
             <div class="submit-grid">

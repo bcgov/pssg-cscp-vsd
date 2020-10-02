@@ -72,6 +72,28 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             finally { }
         }
 
+        public class LinkModek
+        {
+            public string link { get; set; }
+        }
+
+
+        [HttpPost("cities_by_link")]
+        public async Task<IActionResult> GetCitiesByLink([FromBody] LinkModek data)
+        {
+            try
+            {
+                // set the endpoint action
+                string endpointUrl = $"vsd_cities{data.link}";
+
+                // get the response
+                DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
+
+                return StatusCode(200, result.result.ToString());
+            }
+            finally { }
+        }
+
         [HttpGet("country/{countryId}/cities")]
         public async Task<IActionResult> GetCitiesByCountry(string countryId)
         {
