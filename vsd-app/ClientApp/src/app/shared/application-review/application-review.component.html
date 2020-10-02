@@ -283,10 +283,17 @@
                     <th>Associated Injuries</th>
                     <td>{{ valueOrEmpty('crimeInformation.crimeInjuries') }} </td>
                 </tr>
-                <tr *ngFor="let document of form.get('crimeInformation.documents')['controls']; let i = index;">
-                    <th>Additional Information</th>
-                    <td>{{ valueOrEmpty(document.get('filename')) }}</td>
-                </tr>
+
+                <ng-container *ngFor="let document of form.get('crimeInformation.documents')['controls']; let i = index;">
+                    <tr>
+                        <th>Additional Information</th>
+                        <td>{{ valueOrEmpty(document.get('filename')) }}</td>
+                    </tr>
+                    <tr *ngIf="document.get('subject').value">
+                        <th>File Description</th>
+                        <td>{{ valueOrEmpty(document.get('subject')) }}</td>
+                    </tr>
+                </ng-container>
             </tbody>
         </table>
         <h3>Police Involvement</h3>
@@ -1115,10 +1122,16 @@
             <ng-container *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === OnBehalfOf.Legal_Guardian">
                 <table class="table table-striped review-table">
                     <tbody>
-                        <tr *ngFor="let document of form.get('representativeInformation.documents')['controls']; let i = index;">
-                            <th>Proof of Legal Authority</th>
-                            <td>{{ valueOrEmpty(document.get('filename')) }}</td>
-                        </tr>
+                        <ng-container *ngFor="let document of form.get('representativeInformation.documents')['controls']; let i = index;">
+                            <tr>
+                                <th>Proof of Legal Authority</th>
+                                <td>{{ valueOrEmpty(document.get('filename')) }}</td>
+                            </tr>
+                            <tr *ngIf="document.get('subject').value">
+                                <th>File Description</th>
+                                <td>{{ valueOrEmpty(document.get('subject')) }}</td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </table>
             </ng-container>
