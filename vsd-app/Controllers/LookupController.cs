@@ -72,14 +72,13 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             finally { }
         }
 
-        public class LinkModek
+        public class LinkModel
         {
             public string link { get; set; }
         }
 
-
         [HttpPost("cities_by_link")]
-        public async Task<IActionResult> GetCitiesByLink([FromBody] LinkModek data)
+        public async Task<IActionResult> GetCitiesByLink([FromBody] LinkModel data)
         {
             try
             {
