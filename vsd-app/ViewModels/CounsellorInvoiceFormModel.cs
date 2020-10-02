@@ -34,5 +34,6 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public DateTime sessionDate { get; set; }
         public float sessionHours { get; set; }
         public int sessionAmount { get; set; }  // Not used in transfer to Dynamics
+        public bool missedSession { get; set; }
     }
 }

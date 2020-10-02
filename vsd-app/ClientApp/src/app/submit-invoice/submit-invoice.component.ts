@@ -446,7 +446,5 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         break;
       }
     }
-
-    // this.justiceDataService.submitCounsellorInvoice(formData)
   }
 }

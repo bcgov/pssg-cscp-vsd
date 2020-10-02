@@ -215,6 +215,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
         doctorFaxControl.patchValue('');
 
         this.addressHelper.clearAddress(this.form, 'familyDoctorAddress');
+        this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'familyDoctorAddress');
     }
 
     doYouHaveMedicalServicesCoverageChange(val) {
@@ -227,6 +228,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
             this.setControlValidators(haveMedicalCoverageProvinceControl, [Validators.required]);
         }
         else {
+            this.clearControlValidators(haveMedicalCoverageProvinceControl);
             haveMedicalCoverageProvinceControl.patchValue('');
             haveMedicalCoverageProvinceOtherControl.patchValue('');
             personalHealthNumberControl.patchValue('');

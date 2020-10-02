@@ -10,8 +10,6 @@
 
     </span>
     <span *ngIf="form.parent.get('expenseInformation.haveLostEmploymentIncomeExpenses').value === true">
-        <!-- <app-employment-income [value]="form.get('employmentIncomeInformation').value" (valueChange)="setEmploymentInformation($event)" (employerAdded)="addEmployer()" #employmentIncomeInfo></app-employment-income> -->
-        <!-- form goes here -->
         <p>This section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
 
         <section>
@@ -97,7 +95,6 @@
                         </span>
                     </app-field>
                 </div>
-                <!-- *ngIf="showCurrentlyOffWork" -->
                 <div>
                     <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('didYouLoseWages')" errorMessage="Please select an option">
                         <label class="inline-label">

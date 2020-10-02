@@ -27,7 +27,6 @@
             <app-field label="Province" [required]="true" errorMessage="Please select a province" [valid]="isMyControlValid(form.get('haveMedicalCoverageProvince'))">
                 <select class="form-control standard" formControlName="haveMedicalCoverageProvince" #haveMedicalCoverageProv>
                     <option *ngFor="let item of provinceList" [ngValue]="item">{{ item }}</option>
-                    <!-- <option value="Other">Other</option> -->
                 </select>
                 <app-field label="" [valid]="isMyControlValid(form.get('haveMedicalCoverageProvinceOther'))" errorMessage="Please enter province"></app-field>
                 <input *ngIf="form.get('haveMedicalCoverageProvince').value==='Other'" class="form-control standard" type="text" formControlName="haveMedicalCoverageProvinceOther" value="haveMedicalCoverageProv.value">

@@ -26,5 +26,6 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public int vsd_cvap_counsellingtype { get; set; }
         public DateTime vsd_cvap_sessiondate { get; set; }
         public float vsd_cvap_sessionduration { get; set; }
+        public bool vsd_missedsession { get; set; }
     }
 }

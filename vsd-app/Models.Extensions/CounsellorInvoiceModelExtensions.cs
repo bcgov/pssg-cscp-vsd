@@ -38,7 +38,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     vsd_cvap_counsellingtype = lineItem.counsellingType,
                     vsd_cvap_sessiondate = lineItem.sessionDate,
-                    vsd_cvap_sessionduration = lineItem.sessionHours
+                    vsd_cvap_sessionduration = lineItem.sessionHours,
+                    vsd_missedsession = lineItem.missedSession,
                 });
             }
             outputModel.InvoiceLineItems = lineItems.ToArray();

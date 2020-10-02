@@ -8,6 +8,8 @@ import { FilenameBlockComponent } from '../filename-block/filename-block.compone
   styleUrls: ['./file-uploader-box.component.css']
 })
 
+// This component only seems to be used on the restitution pages. There's a second one used on the CVAP Applications??? The other one works, so probably get rid of this one
+
 export class FileUploaderBoxComponent implements OnInit {
   // collect the element reference frin the child so that we can access native parts of the files element
   @ViewChild('files') myInputVariable: ElementRef;

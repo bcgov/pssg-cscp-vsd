@@ -1,5 +1,4 @@
 <div class="form-wrapper" style="position: relative;">
-  <!-- <div [ngBusy]="[busy, busy2]"></div> -->
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter" [class.hidden]="showPrintView">
       <h3>Witness Application</h3>
@@ -81,7 +80,6 @@
         </div>
 
         <section class="button-container" *ngIf="!showPrintView">
-          <!-- <div [ngBusy]="[busy3]"></div> -->
           <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span class="right-buttons">
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>

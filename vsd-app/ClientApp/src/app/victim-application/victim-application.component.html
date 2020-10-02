@@ -15,8 +15,6 @@
             <ng-template matStepperIcon="number">
             </ng-template>
 
-            <!-- can use stepControl if we want to enforce linear and not allow any progression when a form is invalid -->
-            <!-- [stepControl]="form.get('introduction')" -->
             <mat-step label="Overview" [hasError]="!isMyControlValid(form.get('introduction'))"></mat-step>
             <mat-step label="Victim Information & Addresses" [hasError]="!isMyControlValid(form.get('personalInformation'))"></mat-step>
             <mat-step label="Crime Information" [hasError]="!isMyControlValid(form.get('crimeInformation'))"></mat-step>
@@ -49,8 +47,6 @@
           <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
         </div>
 
-
-        <!-- <div class="pagebreak"> </div> -->
         <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == 0 || showPrintView"></app-introduction>
 
         <div class="pagebreak"> </div>
@@ -86,7 +82,6 @@
         </div>
 
         <section class="button-container" *ngIf="!showPrintView">
-          <!-- <div [ngBusy]="[busy3]"></div> -->
           <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span class="right-buttons">
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary continue-btn" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
@@ -96,7 +91,6 @@
               <button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='VictimToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
               <button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW IFM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='IFMToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
             </div>
-            <!-- <button class="btn btn-primary disabled" *ngIf="submitting && stepper.selectedIndex == 9">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button> -->
           </span>
         </section>
       </form>

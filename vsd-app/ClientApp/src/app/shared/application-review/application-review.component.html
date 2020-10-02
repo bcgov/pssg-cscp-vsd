@@ -842,15 +842,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <!-- <table class="table table-striped review-table">
-                                <tbody>
-                                    <tr>
-                                        <th>If you are requesting benefits for lost wages, may we contact your employer?
-                                        </th>
-                                        <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.mayContactEmployer')] }} </td>
-                                    </tr>
-                                </tbody>
-                            </table> -->
                         </ng-container>
                     </section>
 
@@ -1189,12 +1180,10 @@
                     <th>Applicant's Signature</th>
                     <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.signature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.signature', '') }}" /></td>
                 </tr>
-                <!-- <ng-container *ngIf="form.get('authorizationInformationallowCvapStaffSharing').value === true"> -->
                 <tr>
                     <th>Optional authorization given?</th>
                     <td>{{ enumHelper.AllowCvapStaffSharing[valueOrEmpty('authorizationInformation.allowCvapStaffSharing')] }}</td>
                 </tr>
-                <!-- </ng-container> -->
             </tbody>
         </table>
 
