@@ -61,47 +61,63 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
+                string requestJson = "";
                 // set the endpoint action
                 string endpointUrl = "vsd_cities?$select=_vsd_countryid_value,vsd_name,_vsd_stateid_value&$filter=statecode eq 0";
+                // string endpointUrl = "vsd_GetCities";
 
                 // get the response
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
+                // DynamicsResult result = await _dynamicsResultService.GetResultAsync(endpointUrl, requestJson);
 
                 return StatusCode(200, result.result.ToString());
             }
             finally { }
         }
 
-        public class LinkModel
-        {
-            public string link { get; set; }
-        }
-
-        [HttpPost("cities_by_link")]
-        public async Task<IActionResult> GetCitiesByLink([FromBody] LinkModel data)
+        [HttpGet("cities/search")]
+        public async Task<IActionResult> SearchCities(string country, string province, string searchVal, int limit)
         {
             try
             {
-                // set the endpoint action
-                string endpointUrl = $"vsd_cities{data.link}";
+                string requestBody = "";
+                if (!string.IsNullOrEmpty(country))
+                {
+                    requestBody += "\"Country\":\"" + country + "\",";
+                }
+                if (!string.IsNullOrEmpty(province))
+                {
+                    requestBody += "\"Province\":\"" + province + "\",";
+                }
+                if (!string.IsNullOrEmpty(searchVal))
+                {
+                    requestBody += "\"City\":\"" + searchVal + "\",";
+                }
+                requestBody += "\"TopCount\":" + limit + "";
+
+                string requestJson = "{" + requestBody + "}";
+                string endpointUrl = "vsd_GetCities";
 
                 // get the response
-                DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
+                DynamicsResult result = await _dynamicsResultService.GetResultAsync(endpointUrl, requestJson);
 
                 return StatusCode(200, result.result.ToString());
             }
             finally { }
         }
 
-        [HttpGet("country/{countryId}/cities")]
-        public async Task<IActionResult> GetCitiesByCountry(string countryId)
+        [HttpGet("country/{country}/cities")]
+        public async Task<IActionResult> GetCitiesByCountry(string country)
         {
             try
             {
+                string requestJson = "{\"Country\":\"" + country + "\"}";
                 // set the endpoint action
-                string endpointUrl = $"vsd_cities?$select=_vsd_countryid_value,vsd_name,_vsd_stateid_value&$filter=statecode eq 0 and _vsd_countryid_value eq {countryId}";
+                string endpointUrl = $"vsd_cities?$select=_vsd_countryid_value,vsd_name,_vsd_stateid_value&$filter=statecode eq 0 and _vsd_countryid_value eq {country}";
+                // string endpointUrl = "vsd_GetCities";
 
                 // get the response
+                // DynamicsResult result = await _dynamicsResultService.GetResultAsync(endpointUrl, requestJson);
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
 
                 return StatusCode(200, result.result.ToString());

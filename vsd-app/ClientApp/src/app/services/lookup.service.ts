@@ -36,12 +36,14 @@ export class LookupService {
     );
   }
 
-  getCitiesByLink(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cities_by_link`, data, { headers: this.headers }).pipe(
+  searchCities(country: string, province: string, searchVal: string): Observable<any> {
+    let limit = 20;
+    return this.http.get<any>(`${this.apiUrl}/cities/search?country=${country}&province=${province}&searchVal=${searchVal}&limit=${limit}`, { headers: this.headers }).pipe(
       retry(3),
       catchError(this.handleError)
     );
   }
+
 
   getCitiesByCountry(country: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/country/${country}/cities`, { headers: this.headers }).pipe(

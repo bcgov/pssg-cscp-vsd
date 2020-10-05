@@ -38,7 +38,7 @@
   <div class="row">
     <div class="col-md-6">
       <app-field label="City" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('city', isDisabled)" errorMessage="Please enter your city">
-        <input class="form-control" type="text" formControlName="city" [typeahead]="cityList">
+        <input formControlName="city" typeaheadOptionField="vsd_name" [typeahead]="suggestions$" [typeaheadAsync]="true" class="form-control">
       </app-field>
     </div>
     <div class="col-md-6">

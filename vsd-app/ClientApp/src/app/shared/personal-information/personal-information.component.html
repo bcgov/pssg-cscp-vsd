@@ -105,9 +105,11 @@
         </label>
         <label class="inline-label">
             <input type="radio" [value]="100000002" name="gender" formControlName="gender">
-            <span>X</span>
+            <span>X <app-tool-tip [trigger]="genderXToolTip"></app-tool-tip></span>
         </label>
     </app-field>
+
+    <ng-template #genderXToolTip>This category includes persons whose current gender was not reported exclusively as male or female. It includes persons who were reported as being unsure of their gender, persons who were reported as both male and female, or neither male nor female.</ng-template>
 
     <div class="row">
         <div class="col-md-6">

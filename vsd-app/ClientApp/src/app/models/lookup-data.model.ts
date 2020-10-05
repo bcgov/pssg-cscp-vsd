@@ -19,6 +19,14 @@ export interface iProvince {
     vsd_provinceid: string;
 }
 
+export interface CitiesSearchResponse {
+    Result: string;
+    CityCollection: iCity[];
+    CountryCollection: iCountry[];
+    ProvinceCollection: iProvince[];
+}
+
+
 export interface iCity {
     _vsd_countryid_value: string;
     vsd_name: string;
