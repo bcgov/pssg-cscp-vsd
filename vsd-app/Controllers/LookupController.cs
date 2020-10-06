@@ -61,10 +61,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
-                string requestJson = "";
                 // set the endpoint action
                 string endpointUrl = "vsd_cities?$select=_vsd_countryid_value,vsd_name,_vsd_stateid_value&$filter=statecode eq 0";
-                // string endpointUrl = "vsd_GetCities";
 
                 // get the response
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);

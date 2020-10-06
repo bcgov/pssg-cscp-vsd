@@ -96,7 +96,7 @@ export class AddressComponent implements OnInit {
     this.provinceList = [];
 
     let promise_array = [];
-    if (!this.lookupData.countries) {
+    if (!this.lookupData.countries || this.lookupData.countries.length == 0) {
       promise_array.push(new Promise((resolve, reject) => {
         this.lookupService.getCountries().subscribe((res) => {
           this.lookupData.countries = res.value;
@@ -111,7 +111,7 @@ export class AddressComponent implements OnInit {
     }
 
     console.log(this.lookupData);
-    if (!this.lookupData.provinces) {
+    if (!this.lookupData.provinces || this.lookupData.provinces.length == 0) {
       promise_array.push(new Promise((resolve, reject) => {
         this.lookupService.getProvinces().subscribe((res) => {
           this.lookupData.provinces = res.value;
@@ -204,27 +204,42 @@ export class AddressComponent implements OnInit {
   }
 
   onProvinceChange(event) {
-    
+
   }
 
   setProvinceAndPostalType(country: string) {
     let postalControl = this.group['controls']['postalCode'] as FormControl;
     if (country.toLowerCase() === 'canada') {
-      postalControl.setValidators([Validators.required, Validators.pattern(this.postalRegex)]);
+      if (this.showChildrenAsRequired) {
+        postalControl.setValidators([Validators.required, Validators.pattern(this.postalRegex)]);
+      }
+      else {
+        postalControl.setValidators([Validators.pattern(this.postalRegex)]);
+      }
       let canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
       this.provinceType = canada.areaType;
       this.postalCodeType = canada.postalCodeName;
       this.postalCodeSample = canada.postalCodeSample;
     }
     else if (country.toLowerCase() === 'united states of america') {
-      postalControl.setValidators([Validators.required, Validators.pattern(this.zipRegex)]);
+      if (this.showChildrenAsRequired) {
+        postalControl.setValidators([Validators.required, Validators.pattern(this.zipRegex)]);
+      }
+      else {
+        postalControl.setValidators([Validators.pattern(this.zipRegex)]);
+      }
       let usa = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'united states of america')[0];
       this.provinceType = usa.areaType;
       this.postalCodeType = usa.postalCodeName;
       this.postalCodeSample = usa.postalCodeSample;
     }
     else {
-      postalControl.setValidators([Validators.required]);
+      if (this.showChildrenAsRequired) {
+        postalControl.setValidators([Validators.required]);
+      }
+      else {
+        postalControl.clearValidators();
+      }
       this.provinceType = "Province/State";
       this.postalCodeType = "Postal/ZIP Code";
       this.postalCodeSample = "";
@@ -235,7 +250,7 @@ export class AddressComponent implements OnInit {
   setProvinceValidators() {
     let provinceControl = this.group['controls']['province'] as FormControl;
 
-    if (this.provinceList.length > 0) {
+    if (this.provinceList.length > 0 && this.showChildrenAsRequired) {
       provinceControl.setValidators([Validators.required]);
       provinceControl.updateValueAndValidity();
     }

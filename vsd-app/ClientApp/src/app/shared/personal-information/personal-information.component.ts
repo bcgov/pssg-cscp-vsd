@@ -35,6 +35,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
     phoneIsRequired: boolean = false;
+    isVoiceMailRequired: boolean = false;
     emailIsRequired: boolean = false;
     addressIsRequired: boolean = false;
     alternateAddressIsRequired: boolean = false;
@@ -270,5 +271,19 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
         phoneControl.patchValue(phoneControl.value);
         altPhoneControl.patchValue(altPhoneControl.value);
+    }
+
+    setVoicemailValidators() {
+        let phoneVal = this.form.get('phoneNumber').value;
+        let altPhoneVal = this.form.get('alternatePhoneNumber').value;
+        let voicemailControl = this.form.get('leaveVoicemail');
+        if (phoneVal || altPhoneVal) {
+            this.isVoiceMailRequired = true;
+            this.setControlValidators(voicemailControl, [Validators.required, Validators.min(1), Validators.max(100000003)]);
+        }
+        else {
+            this.isVoiceMailRequired = false;
+            this.clearControlValidators(voicemailControl);
+        }
     }
 }
