@@ -1,5 +1,4 @@
 <div class="form-wrapper" style="position: relative;">
-  <!-- <div [ngBusy]="[busy]"></div> -->
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter" [class.hidden]="showPrintView">
       <h3>Immediate Family Member Application</h3>
@@ -50,28 +49,28 @@
         <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == 0 || showPrintView"></app-introduction>
 
         <div class="pagebreak"> </div>
-        <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" *ngIf="this.currentFormStep == 1 || showPrintView"></app-personal-information>
+        <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 1 || showPrintView"></app-personal-information>
 
         <div class="pagebreak"> </div>
-        <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" *ngIf="this.currentFormStep == 2 || showPrintView"></app-victim-information>
+        <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 2 || showPrintView"></app-victim-information>
 
         <div class="pagebreak"> </div>
-        <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" *ngIf="this.currentFormStep == 3 || showPrintView"></app-crime-information>
+        <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 3 || showPrintView"></app-crime-information>
 
         <div class="pagebreak"> </div>
-        <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" *ngIf="this.currentFormStep == 4 || showPrintView"></app-medical-information>
+        <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 4 || showPrintView"></app-medical-information>
 
         <div class="pagebreak"> </div>
-        <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" *ngIf="this.currentFormStep == 5 || showPrintView"></app-expense-information>
+        <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 5 || showPrintView"></app-expense-information>
 
         <div class="pagebreak"> </div>
-        <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" *ngIf="this.currentFormStep == 6 || showPrintView"></app-representative-information>
+        <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 6 || showPrintView"></app-representative-information>
 
         <div class="pagebreak"> </div>
-        <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" *ngIf="this.currentFormStep == 7 || showPrintView"></app-declaration-information>
+        <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 7 || showPrintView"></app-declaration-information>
 
         <div class="pagebreak"> </div>
-        <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" *ngIf="this.currentFormStep == 8 || showPrintView"></app-authorization-information>
+        <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 8 || showPrintView"></app-authorization-information>
 
         <div class="pagebreak"> </div>
         <app-application-review [formGroup]="form" [formType]="FORM_TYPE" [parentStepper]="stepper" *ngIf="this.currentFormStep == 9 || showPrintView"></app-application-review>
@@ -84,6 +83,7 @@
         <section class="button-container" *ngIf="!showPrintView">
           <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span class="right-buttons">
+            <!-- [class.disabled]="!didLoad" -->
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
             <button (click)="markAsTouched(); producePDF();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
             <div class="submit-grid">
@@ -91,8 +91,6 @@
               <button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='VictimToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
               <button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW IFM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='IFMToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
             </div>
-            <!-- <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="!submitting && stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
-            <button class="btn btn-primary disabled" *ngIf="submitting && stepper.selectedIndex == 9">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button> -->
           </span>
         </section>
       </form>
@@ -100,5 +98,5 @@
   </div>
 </div>
 
-<ng-template #VictimToolTip>Use when new victim application is regarding the <b><u>same crime</u></b>, is a family member of the current applicant and living in the same home as certain information will be auto-populated from application to application (e.g. address, police information); however, all pre-populated fields are editable if needed.</ng-template>
-<ng-template #IFMToolTip>Use when new IFM application is regarding the <b><u>same crime</u></b>, is a family member of the current applicant and living in the same home as certain information will be auto-populated from application to application (e.g. address, police information); however, all pre-populated fields are editable if needed.</ng-template>
+<ng-template #VictimToolTip>Use when new victim application is regarding the <b><u>same crime</u></b>, is an immediate family member of the current applicant and living in the same home as certain information will be auto-populated from application to application (e.g. address, police information); however, all pre-populated fields are editable if needed.</ng-template>
+<ng-template #IFMToolTip>Use when new IFM application is regarding the <b><u>same crime</u></b>, is an immediate family member of the current applicant and living in the same home as certain information will be auto-populated from application to application (e.g. address, police information); however, all pre-populated fields are editable if needed.</ng-template>

@@ -118,6 +118,19 @@ export class EnumHelper {
     100000001: 'Yes',
   }
 
+  public AllowCvapStaffSharing = {
+    0: '--',
+    100000000: 'No',
+    100000001: 'Yes-Person',
+    100000002: 'Yes-Agency',
+  }
+
+  public AllowCvapStaffSharingValues = {
+    'No': 100000000,
+    'Yes_Person': 100000001,
+    'Yes_Agency': 100000002,
+  }
+
   public boolEnum = {
     0: '--',
     100000000: 'No',

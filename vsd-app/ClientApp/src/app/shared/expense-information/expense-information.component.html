@@ -255,7 +255,6 @@
                     </section>
                 </app-field>
 
-                <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
                 <app-field label="Please provide details of your requests. (Maximum 750 characters)" errorMessage="Please provide details of your requests.">
                     <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="750"></textarea>
                 </app-field>
@@ -350,18 +349,24 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <app-field label="Phone Number of Contact Person" [required]="form.get('mayContactEmployer').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
-                                        <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber">
+                                        <input class="form-control" mask='(000) 000 0000' type="text" formControlName="employerPhoneNumber" *ngIf="item.get('employerAddress.country').value === 'Canada' || item.get('employerAddress.country').value === 'United States of America'; else phone_no_mask">
+                                        <ng-template #phone_no_mask>
+                                            <input class="form-control" type="text" formControlName="employerPhoneNumber" digitOnly>
+                                        </ng-template>
                                     </app-field>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <app-field label="Fax" [required]="false" [valid]="isMyControlValid(item.get('employerFax'))">
-                                        <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerFax">
+                                    <app-field label="Fax" [required]="false" [valid]="isMyControlValid(item.get('employerFax'))" errorMessage="Please enter a valid fax number">
+                                        <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerFax" *ngIf="item.get('employerAddress.country').value === 'Canada' || item.get('employerAddress.country').value === 'United States of America'; else fax_no_mask">
+                                        <ng-template #fax_no_mask>
+                                            <input class="form-control" type="text" formControlName="employerFax" digitOnly>
+                                        </ng-template>
                                     </app-field>
                                 </div>
                             </div>
 
-                            <app-address [group]="item.get('employerAddress')" [showChildrenAsRequired]="form.get('mayContactEmployer').value === CRMBoolean.True"></app-address>
+                            <app-address (change)="setEmployerPhoneValidators(item)" [group]="item.get('employerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="form.get('mayContactEmployer').value === CRMBoolean.True"></app-address>
                         </div>
                     </div>
                 </ng-container>
@@ -420,9 +425,7 @@
                         </app-field>
                     </ng-container>
 
-                    <!-- <app-field [valid]="isFieldValid('minimumOtherBenefitsSelected')" errorMessage="Please select at least one option">
-                        <input type="hidden" name="minimumOtherBenefitsSelected" formControlName="minimumOtherBenefitsSelected">
-                    </app-field> -->
+                   
                 </div>
             </section>
         </section>
@@ -452,7 +455,6 @@
                     </section>
                 </app-field>
 
-                <!-- [required]="true" [valid]="isFieldValid('additionalBenefitsDetails')" -->
                 <app-field label="Please provide details of your requests. (Maximum 750 characters)" errorMessage="Please provide details of your requests.">
                     <textarea class="form-control bigger" formControlName="additionalBenefitsDetails" maxlength="750"></textarea>
                 </app-field>

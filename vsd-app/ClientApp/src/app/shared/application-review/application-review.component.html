@@ -283,10 +283,17 @@
                     <th>Associated Injuries</th>
                     <td>{{ valueOrEmpty('crimeInformation.crimeInjuries') }} </td>
                 </tr>
-                <tr *ngFor="let document of form.get('crimeInformation.documents')['controls']; let i = index;">
-                    <th>Additional Information</th>
-                    <td>{{ valueOrEmpty(document.get('filename')) }}</td>
-                </tr>
+
+                <ng-container *ngFor="let document of form.get('crimeInformation.documents')['controls']; let i = index;">
+                    <tr>
+                        <th>Additional Information</th>
+                        <td>{{ valueOrEmpty(document.get('filename')) }}</td>
+                    </tr>
+                    <tr *ngIf="document.get('subject').value">
+                        <th>File Description</th>
+                        <td>{{ valueOrEmpty(document.get('subject')) }}</td>
+                    </tr>
+                </ng-container>
             </tbody>
         </table>
         <h3>Police Involvement</h3>
@@ -518,8 +525,18 @@
                 </tr>
                 <ng-container *ngIf="form.get('medicalInformation.beingTreatedByFamilyDoctor').value === true">
                     <tr>
-                        <th>Name of Medical Doctor/Clinic</th>
-                        <td>{{ valueOrEmpty('medicalInformation.familyDoctorName') }} </td>
+                        <th>Name of Clinic</th>
+                        <td>{{ valueOrEmpty('medicalInformation.familyDoctorClinic') }} </td>
+                    </tr>
+                    <tr>
+                        <th>Email Address</th>
+                        <td>{{ valueOrEmpty('medicalInformation.familyDoctorEmail') }} </td>
+                    </tr>
+                    <tr>
+                        <th>Doctor Name</th>
+                        <td>{{ valueOrEmpty('medicalInformation.familyDoctorFirstName') }}
+                            {{ valueOrEmpty('medicalInformation.familyDoctorLastName', '') }}
+                        </td>
                     </tr>
                     <tr>
                         <th>Email Address</th>
@@ -553,12 +570,17 @@
                     <td>{{ item.get('providerType').value }}</td>
                 </tr>
                 <tr>
-                    <th>Name</th>
-                    <td>{{ item.get('providerName').value }}</td>
+                    <th>Name of Company/Organization</th>
+                    <td>{{ item.get('providerCompany').value }}</td>
                 </tr>
                 <tr>
                     <th>Email</th>
                     <td>{{ valueOrEmpty(item.get('providerEmail')) }}</td>
+                </tr>
+                <tr>
+                    <th>Provider Name</th>
+                    <td>{{ valueOrEmpty(item.get('providerFirstName')) }}
+                        {{ valueOrEmpty(item.get('providerLastName'), '') }}</td>
                 </tr>
                 <tr>
                     <th>Phone</th>
@@ -842,15 +864,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <!-- <table class="table table-striped review-table">
-                                <tbody>
-                                    <tr>
-                                        <th>If you are requesting benefits for lost wages, may we contact your employer?
-                                        </th>
-                                        <td>{{ enumHelper.boolEnum[valueForEnum('expenseInformation.mayContactEmployer')] }} </td>
-                                    </tr>
-                                </tbody>
-                            </table> -->
                         </ng-container>
                     </section>
 
@@ -1124,10 +1137,16 @@
             <ng-container *ngIf="form.get('representativeInformation.completingOnBehalfOf').value === OnBehalfOf.Legal_Guardian">
                 <table class="table table-striped review-table">
                     <tbody>
-                        <tr *ngFor="let document of form.get('representativeInformation.documents')['controls']; let i = index;">
-                            <th>Proof of Legal Authority</th>
-                            <td>{{ valueOrEmpty(document.get('filename')) }}</td>
-                        </tr>
+                        <ng-container *ngFor="let document of form.get('representativeInformation.documents')['controls']; let i = index;">
+                            <tr>
+                                <th>Proof of Legal Authority</th>
+                                <td>{{ valueOrEmpty(document.get('filename')) }}</td>
+                            </tr>
+                            <tr *ngIf="document.get('subject').value">
+                                <th>File Description</th>
+                                <td>{{ valueOrEmpty(document.get('subject')) }}</td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </table>
             </ng-container>
@@ -1189,19 +1208,25 @@
                     <th>Applicant's Signature</th>
                     <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.signature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.signature', '') }}" /></td>
                 </tr>
-                <!-- <ng-container *ngIf="form.get('authorizationInformationallowCvapStaffSharing').value === true"> -->
                 <tr>
                     <th>Optional authorization given?</th>
-                    <td>{{ enumHelper.boolEnum[valueOrEmpty('authorizationInformation.allowCvapStaffSharing')] }}</td>
+                    <td>{{ enumHelper.AllowCvapStaffSharing[valueOrEmpty('authorizationInformation.allowCvapStaffSharing')] }}</td>
                 </tr>
-                <!-- </ng-container> -->
             </tbody>
         </table>
 
-        <div *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.boolValues.Yes">
+        <div *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.AllowCvapStaffSharingValues.Yes_Agency || form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.AllowCvapStaffSharingValues.Yes_Person">
             <h3>Optional Authorization</h3>
             <table class="table table-striped review-table" *ngFor="let item of form.get('authorizationInformation.authorizedPerson')['controls']; let i = index">
                 <tbody>
+                    <tr *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.AllowCvapStaffSharingValues.Yes_Agency">
+                        <th>Agency Name</th>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonAgencyName')) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email Address</th>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonEmail')) }}</td>
+                    </tr>
                     <tr>
                         <th>Full Name</th>
                         <td>{{ valueOrEmpty(item.get('authorizedPersonFirstName')) }}
@@ -1209,19 +1234,13 @@
                     </tr>
                     <tr>
                         <th>Relationship to Applicant</th>
-                        <td>{{ valueOrEmpty(item.get('authorizedPersonRelationship')) }}</td>
+                        <td>{{ valueOrEmpty(item.get('authorizedPersonRelationship')) }} <span *ngIf="item.get('authorizedPersonRelationship').value === 'Other'"> :
+                                {{ valueOrEmpty(item.get('authorizedPersonRelationshipOther')) }}</span></td>
+
                     </tr>
                     <tr>
                         <th>Phone Number</th>
                         <td>{{ valueOrEmpty(item.get('authorizedPersonPhoneNumber')) | phone}}</td>
-                    </tr>
-                    <tr>
-                        <th>Agency Name</th>
-                        <td>{{ valueOrEmpty(item.get('authorizedPersonAgencyName')) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Email Address</th>
-                        <td>{{ valueOrEmpty(item.get('authorizedPersonEmail')) }}</td>
                     </tr>
                     <tr *ngIf="addressHelper.hasAddressInfo(item.get('authorizedPersonAgencyAddress').value)">
                         <th>Mailing Address</th>

@@ -23,6 +23,9 @@ import { ExpenseInfoHelper } from '../shared/expense-information/expense-informa
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { LookupService } from '../services/lookup.service';
+import { iLookupData } from '../models/lookup-data.model';
+import { config } from '../../config';
 
 const moment = _rollupMoment || _moment;
 
@@ -64,6 +67,16 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   authInfoHelper = new AuthInfoHelper();
 
   isIE: boolean = false;
+  didLoad: boolean = false;
+
+  lookupData: iLookupData = {
+    countries: [],
+    provinces: [],
+    cities: [],
+    relationships: [],
+    courts: [],
+    police_detachments: [],
+  };
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
@@ -72,6 +85,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
     private dialog: MatDialog,
+    public lookupService: LookupService,
   ) {
     super();
     this.formFullyValidated = false;
@@ -84,6 +98,86 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
     let completeOnBehalfOf = this.route.snapshot.queryParamMap.get('ob');
     this.form = this.buildApplicationForm();
+
+    let promise_array = [];
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getCountries().subscribe((res) => {
+        this.lookupData.countries = res.value;
+        if (this.lookupData.countries) {
+          this.lookupData.countries.sort(function (a, b) {
+            return a.vsd_name.localeCompare(b.vsd_name);
+          });
+        }
+        resolve();
+      });
+    }));
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getProvinces().subscribe((res) => {
+        this.lookupData.provinces = res.value;
+        if (this.lookupData.provinces) {
+          this.lookupData.provinces.sort(function (a, b) {
+            return a.vsd_name.localeCompare(b.vsd_name);
+          });
+        }
+        resolve();
+      });
+    }));
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
+        this.lookupData.cities = res.value;
+        if (this.lookupData.cities) {
+          this.lookupData.cities.sort(function (a, b) {
+            return a.vsd_name.localeCompare(b.vsd_name);
+          });
+        }
+        resolve();
+      });
+    }));
+
+    // promise_array.push(new Promise((resolve, reject) => {
+    //   this.lookupService.getRelationships().subscribe((res) => {
+    //     this.lookupData.relationships = res.value;
+    //     if (this.lookupData.relationships) {
+    //       this.lookupData.relationships.sort(function (a, b) {
+    //         return a.vsd_name.localeCompare(b.vsd_name);
+    //       });
+    //     }
+    //     resolve();
+    //   });
+    // }));
+
+    // promise_array.push(new Promise((resolve, reject) => {
+    //   this.lookupService.getCourts().subscribe((res) => {
+    //     this.lookupData.courts = res.value;
+    //     if (this.lookupData.courts) {
+    //       this.lookupData.courts.sort(function (a, b) {
+    //         return a.vsd_name.localeCompare(b.vsd_name);
+    //       });
+    //     }
+    //     resolve();
+    //   });
+    // }));
+
+    // promise_array.push(new Promise((resolve, reject) => {
+    //   this.lookupService.getPoliceDetachments().subscribe((res) => {
+    //     this.lookupData.police_detachments = res.value;
+    //     if (this.lookupData.police_detachments) {
+    //       this.lookupData.police_detachments.sort(function (a, b) {
+    //         return a.vsd_name.localeCompare(b.vsd_name);
+    //       });
+    //     }
+    //     resolve();
+    //   });
+    // }));
+
+    Promise.all(promise_array).then((res) => {
+      this.didLoad = true;
+      console.log("Lookup data");
+      console.log(this.lookupData);
+    });
 
     if (completeOnBehalfOf) {
       this.form.get('representativeInformation').patchValue({

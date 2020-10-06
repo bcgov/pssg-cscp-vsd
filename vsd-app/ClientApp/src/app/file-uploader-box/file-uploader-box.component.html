@@ -1,3 +1,4 @@
+<!-- This component only seems to be used on the restitution pages. There's a second one used on the CVAP Applications??? The other one works, so probably get rid of this one -->
 <div class="row">
   <div class="col">
     File upload<br>
@@ -9,8 +10,7 @@
 <div class="row mt-2">
   <div class="col">
     <mat-chip-list>
-      <mat-chip *ngFor="let fileName of fileCollection.fileName; let i=index" [selectable]="true"
-                [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
+      <mat-chip *ngFor="let fileName of fileCollection.fileName; let i=index" [selectable]="true" [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
         {{fileName}}
         <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
@@ -20,8 +20,3 @@
     </mat-chip-list>
   </div>
 </div>
-<!-- TODO: Remove this debugging. -->
-<!-- <pre>
-  This many files attached: {{fileCollection.fileData.length}}
-  {{fileCollection.fileName|json}}
-</pre> -->

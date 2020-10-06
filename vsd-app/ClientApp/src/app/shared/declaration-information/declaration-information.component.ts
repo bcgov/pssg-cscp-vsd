@@ -5,6 +5,7 @@ import { FormGroup, ControlContainer } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
     selector: 'app-declaration-information',
@@ -20,6 +21,7 @@ import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 })
 export class DeclarationInformationComponent extends FormBase implements OnInit {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
     eligible_name: string;

@@ -54,15 +54,6 @@
         <option [ngValue]="100000001">Yes-Person</option>
         <option [ngValue]="100000002">Yes-Agency</option>
       </select>
-
-      <!-- <label class="inline-label">
-        <input type="radio" [value]="100000001" (click)="addAuthorizationInformation(true)" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
-        <span>Yes</span>
-      </label>
-      <label class="inline-label">
-        <input type="radio" [value]="100000000" (click)="clearAuthorizationInformation()" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
-        <span>No</span>
-      </label> -->
     </app-field>
 
     <section *ngIf="form.get('allowCvapStaffSharing').value > 100000000">
@@ -96,18 +87,28 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <app-field label="Relationship to Applicant" [required]="form.get('allowCvapStaffSharing').value === 100000001" [valid]="isMyControlValid(item.get('authorizedPersonRelationship'))" errorMessage="Please enter Relationship to Applicant">
-                <input class="form-control" type="text" formControlName="authorizedPersonRelationship">
+              <app-field label="Relationship to Applicant" [required]="form.get('allowCvapStaffSharing').value === 100000001" errorMessage="Please select a relationship" [valid]="isMyControlValid(item.get('authorizedPersonRelationship'))">
+                <select class="form-control" formControlName="authorizedPersonRelationship">
+                  <option value="">Select...</option>
+                  <option *ngFor="let item of relationshipList" [value]="item">{{ item }}</option>
+                </select>
               </app-field>
+
+              <div>
+                <input class="form-control mt-2 mb-3" *ngIf="item.get('authorizedPersonRelationship').value == 'Other'" type="text" formControlName="authorizedPersonRelationshipOther">
+              </div>
             </div>
             <div class="col-md-6">
               <app-field label="Phone Number (incl. area code)" [valid]="isMyControlValid(item.get('authorizedPersonPhoneNumber'))" errorMessage="Please enter a valid phone number">
-                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="authorizedPersonPhoneNumber">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="authorizedPersonPhoneNumber" *ngIf="item.get('authorizedPersonAgencyAddress.country').value === 'Canada' || item.get('authorizedPersonAgencyAddress.country').value === 'United States of America'; else phone_no_mask">
+                <ng-template #phone_no_mask>
+                  <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber" digitOnly>
+                </ng-template>
               </app-field>
             </div>
           </div>
 
-          <app-address [group]="item.get('authorizedPersonAgencyAddress')" [showChildrenAsRequired]="false"></app-address>
+          <app-address (change)="setAuthPersonPhoneValidators(item)" [group]="item.get('authorizedPersonAgencyAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
 
         </div>
       </div>

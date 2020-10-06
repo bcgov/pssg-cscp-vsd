@@ -16,7 +16,9 @@ export class MedicalInfoHelper {
             otherHealthCoverageExtendedPlanNumber: [''],
 
             beingTreatedByFamilyDoctor: ['', Validators.required],
-            familyDoctorName: [''],
+            familyDoctorClinic: [''],
+            familyDoctorFirstName: [''],
+            familyDoctorLastName: [''],
             familyDoctorEmail: ['', [Validators.email]],
             familyDoctorPhoneNumber: [''],
             familyDoctorFax: [''],

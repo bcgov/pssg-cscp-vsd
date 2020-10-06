@@ -8,6 +8,7 @@ import { SummaryOfBenefitsDialog } from "../../summary-of-benefits/summary-of-be
 import * as moment from 'moment';
 import { Subscription } from "rxjs";
 import { AddressHelper } from "../address/address.helper";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
   selector: 'app-expense-information',
@@ -23,6 +24,7 @@ import { AddressHelper } from "../address/address.helper";
 })
 export class ExpenseInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
+  @Input() lookupData: iLookupData;
   public form: FormGroup;
   ApplicationType = ApplicationType;
 
@@ -367,5 +369,23 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     if (!val) {
       this.form.get('otherSpecificBenefits').patchValue('');
     }
+  }
+
+  setEmployerPhoneValidators(employer: AbstractControl) {
+    let phoneMinLength = 10;
+    let phoneMaxLength = 15;
+    if (employer.get('employerAddress.country').value === 'Canada' || employer.get('employerAddress.country').value === 'United States of America') {
+      phoneMinLength = 10;
+    }
+    else {
+      phoneMinLength = 8;
+    }
+
+    let phoneControl = employer.get('employerPhoneNumber');
+    let faxControl = employer.get('employerFax');
+    this.setControlValidators(phoneControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+    this.setControlValidators(faxControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+    phoneControl.patchValue(phoneControl.value);
+    faxControl.patchValue(faxControl.value);
   }
 }

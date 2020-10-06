@@ -55,7 +55,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // but for now we should only support whatever the Dynamics UI supports - no sense adding extra features that can't be used because of the Dynamics side
                 application.Application.vsd_applicantsprimaryphonenumber = model.PersonalInformation.phoneNumber;
                 // application.Application.vsd_leavevoicemail = model.PersonalInformation.leaveVoicemail;
-                application.Application.vsd_voicemailoption = model.PersonalInformation.leaveVoicemail;
+                if (model.PersonalInformation.leaveVoicemail > 0)
+                {
+                    application.Application.vsd_voicemailoption = model.PersonalInformation.leaveVoicemail;
+                }
                 application.Application.vsd_applicantsalternatephonenumber = model.PersonalInformation.alternatePhoneNumber;
                 application.Application.vsd_applicantsemail = model.PersonalInformation.email;
                 application.Application.vsd_applicantspreferredmethodofcontact = model.PersonalInformation.preferredMethodOfContact;
@@ -125,6 +128,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             if (model.CrimeInformation != null)
             {
                 application.Application.vsd_cvap_typeofcrime = model.CrimeInformation.typeOfCrime;
+                application.Application.vsd_cvap_unsureofspecificcrimedates = model.CrimeInformation.unsureOfCrimeDates;
                 if (model.CrimeInformation.crimePeriodStart.HasValue)
                 {
                     application.Application.vsd_cvap_crimestartdate = model.CrimeInformation.crimePeriodStart;
@@ -289,11 +293,13 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     if (model.MedicalInformation.otherTreatments.Count() > 0)
                     {
-                        if (model.MedicalInformation.otherTreatments[0].providerName.Length > 0)
+                        if (model.MedicalInformation.otherTreatments[0].providerCompany.Length > 0)
                         {
                             Providercollection[] tempProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
                             {
-                                vsd_firstname = t.providerName,
+                                vsd_companyname = t.providerCompany,
+                                vsd_firstname = t.providerFirstName,
+                                vsd_lastname = t.providerLastName,
                                 vsd_phonenumber = t.providerPhoneNumber,
                                 vsd_addressline1 = t.providerAddress != null ? t.providerAddress.line1 : "",
                                 vsd_addressline2 = t.providerAddress != null ? t.providerAddress.line2 : "",
@@ -354,8 +360,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_country = t.authorizedPersonAgencyAddress.country,
                             vsd_postalcode = t.authorizedPersonAgencyAddress.postalCode,
                             vsd_relationship1 = "Authorized Person",
-                            vsd_relationship2 = "Other",
-                            vsd_relationship2other = t.authorizedPersonRelationship,
+                            vsd_relationship2 = t.authorizedPersonRelationship,
+                            vsd_relationship2other = t.authorizedPersonRelationship.Equals("Other") ? t.authorizedPersonRelationshipOther : "",
                         }).ToArray();
 
                         int tempProviderCount = 0;
@@ -437,50 +443,49 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             }
 
             // Add medical doctor information
-            if (model.MedicalInformation.familyDoctorName != null)
+            if (!string.IsNullOrEmpty(model.MedicalInformation.familyDoctorClinic) || !string.IsNullOrEmpty(model.MedicalInformation.familyDoctorFirstName) || !string.IsNullOrEmpty(model.MedicalInformation.familyDoctorLastName))
             {
-                if (model.MedicalInformation.familyDoctorName.Length > 0) // Only do this if there is something in this field
+                Providercollection[] tempProviderCollection = new Providercollection[1];
+                tempProviderCollection[0] = new Providercollection();
+                tempProviderCollection[0].vsd_companyname = model.MedicalInformation.familyDoctorClinic;
+                tempProviderCollection[0].vsd_firstname = model.MedicalInformation.familyDoctorFirstName;
+                tempProviderCollection[0].vsd_lastname = model.MedicalInformation.familyDoctorLastName;
+                tempProviderCollection[0].vsd_email = model.MedicalInformation.familyDoctorEmail;
+                tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
+                tempProviderCollection[0].vsd_fax = model.MedicalInformation.familyDoctorFax;
+                if (model.MedicalInformation.familyDoctorAddress != null)
                 {
-                    Providercollection[] tempProviderCollection = new Providercollection[1];
-                    tempProviderCollection[0] = new Providercollection();
-                    tempProviderCollection[0].vsd_companyname = model.MedicalInformation.familyDoctorName;
-                    tempProviderCollection[0].vsd_email = model.MedicalInformation.familyDoctorEmail;
-                    tempProviderCollection[0].vsd_phonenumber = model.MedicalInformation.familyDoctorPhoneNumber;
-                    tempProviderCollection[0].vsd_fax = model.MedicalInformation.familyDoctorFax;
-                    if (model.MedicalInformation.familyDoctorAddress != null)
-                    {
-                        tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddress.line1;
-                        tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddress.line2;
-                        tempProviderCollection[0].vsd_country = model.MedicalInformation.familyDoctorAddress.country;
-                        tempProviderCollection[0].vsd_province = model.MedicalInformation.familyDoctorAddress.province;
-                        tempProviderCollection[0].vsd_city = model.MedicalInformation.familyDoctorAddress.city;
-                        tempProviderCollection[0].vsd_postalcode = model.MedicalInformation.familyDoctorAddress.postalCode;
-                    }
-                    tempProviderCollection[0].vsd_relationship1 = "Family Doctor";
+                    tempProviderCollection[0].vsd_addressline1 = model.MedicalInformation.familyDoctorAddress.line1;
+                    tempProviderCollection[0].vsd_addressline2 = model.MedicalInformation.familyDoctorAddress.line2;
+                    tempProviderCollection[0].vsd_country = model.MedicalInformation.familyDoctorAddress.country;
+                    tempProviderCollection[0].vsd_province = model.MedicalInformation.familyDoctorAddress.province;
+                    tempProviderCollection[0].vsd_city = model.MedicalInformation.familyDoctorAddress.city;
+                    tempProviderCollection[0].vsd_postalcode = model.MedicalInformation.familyDoctorAddress.postalCode;
+                }
+                tempProviderCollection[0].vsd_relationship1 = "Family Doctor";
 
-                    int tempProviderCount = 0;
-                    if (application.ProviderCollection == null)
-                    {
-                        tempProviderCount = 0;
-                    }
-                    else
-                    {
-                        tempProviderCount = application.ProviderCollection.Count();
-                    }
-                    Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                    if (application.ProviderCollection == null)
-                    {
-                        tempCombinedCollection = tempProviderCollection;
-                    }
-                    else
-                    {
-                        Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                    }
-                    Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                    if (tempCombinedCollection.Length > 0)
-                    {
-                        application.ProviderCollection = tempCombinedCollection;
-                    }
+                int tempProviderCount = 0;
+                if (application.ProviderCollection == null)
+                {
+                    tempProviderCount = 0;
+                }
+                else
+                {
+                    tempProviderCount = application.ProviderCollection.Count();
+                }
+                Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                if (application.ProviderCollection == null)
+                {
+                    tempCombinedCollection = tempProviderCollection;
+                }
+                else
+                {
+                    Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                }
+                Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                if (tempCombinedCollection.Length > 0)
+                {
+                    application.ProviderCollection = tempCombinedCollection;
                 }
             }
 

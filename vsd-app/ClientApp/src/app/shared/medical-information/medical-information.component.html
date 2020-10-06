@@ -27,12 +27,10 @@
             <app-field label="Province" [required]="true" errorMessage="Please select a province" [valid]="isMyControlValid(form.get('haveMedicalCoverageProvince'))">
                 <select class="form-control standard" formControlName="haveMedicalCoverageProvince" #haveMedicalCoverageProv>
                     <option *ngFor="let item of provinceList" [ngValue]="item">{{ item }}</option>
-                    <option value="Other">Other</option>
                 </select>
                 <app-field label="" [valid]="isMyControlValid(form.get('haveMedicalCoverageProvinceOther'))" errorMessage="Please enter province"></app-field>
                 <input *ngIf="form.get('haveMedicalCoverageProvince').value==='Other'" class="form-control standard" type="text" formControlName="haveMedicalCoverageProvinceOther" value="haveMedicalCoverageProv.value">
             </app-field>
-            &nbsp;
             <app-field label="Personal Health Number">
                 <input class="form-control standard" type="text" formControlName="personalHealthNumber">
             </app-field>
@@ -115,8 +113,8 @@
         <section *ngIf="form.get('beingTreatedByFamilyDoctor').value === true">
             <div class="row">
                 <div class="col-md-6">
-                    <app-field label="Name of Medical Doctor/Clinic" [required]="true" [valid]="isFieldValid('familyDoctorName')" [errorMessage]="'Please enter the Medical Doctor/Clinic name'">
-                        <input class="form-control" type="text" formControlName="familyDoctorName">
+                    <app-field label="Name of Clinic" [required]="true" [valid]="isFieldValid('familyDoctorClinic')" [errorMessage]="'Please enter the Clinic name'">
+                        <input class="form-control" type="text" formControlName="familyDoctorClinic">
                     </app-field>
                 </div>
                 <div class="col-md-6">
@@ -127,8 +125,23 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
+                    <app-field label="Doctor First Name" [required]="false" [valid]="isFieldValid('familyDoctorFirstName')" [errorMessage]="'Please enter the Doctor name'">
+                        <input class="form-control" type="text" formControlName="familyDoctorFirstName">
+                    </app-field>
+                </div>
+                <div class="col-md-6">
+                    <app-field label="Doctor Last Name" [required]="false" [valid]="isFieldValid('familyDoctorLastName')" [errorMessage]="'Please enter the Doctor name'">
+                        <input class="form-control" type="text" formControlName="familyDoctorLastName">
+                    </app-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <app-field label="Phone Number (incl. area code)" [valid]="isMyControlValid(form.get('familyDoctorPhoneNumber'))" errorMessage="Please enter a valid phone number">
-                        <input mask='(000) 000 0000' class="form-control" type="text" formControlName="familyDoctorPhoneNumber">
+                        <input class="form-control" mask='(000) 000 0000' type="text" formControlName="familyDoctorPhoneNumber" *ngIf="form.get('familyDoctorAddress.country').value === 'Canada' || form.get('familyDoctorAddress.country').value === 'United States of America'; else phone_no_mask">
+                        <ng-template #phone_no_mask>
+                            <input class="form-control" type="text" formControlName="familyDoctorPhoneNumber" digitOnly>
+                        </ng-template>
                     </app-field>
                 </div>
                 <div class="col-md-6">
@@ -137,7 +150,7 @@
                     </app-field>
                 </div>
             </div>
-            <app-address [group]="form.get('familyDoctorAddress')" [showChildrenAsRequired]="false"></app-address>
+            <app-address [group]="form.get('familyDoctorAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
         </section>
 
         <h3>Other Treatment Information</h3>
@@ -160,8 +173,8 @@
                     <h3>Provider {{ i + 1 }}</h3>
                     <div class="row">
                         <div class="col-md-6">
-                            <app-field label="Provider name" [required]="true" [valid]="isMyControlValid(item.get('providerName'))" errorMessage="Please enter provider's name">
-                                <input type="text" class="form-control" formControlName="providerName">
+                            <app-field label="Name of Company/Organization" [required]="true" [valid]="isMyControlValid(item.get('providerCompany'))" errorMessage="Please enter company name">
+                                <input type="text" class="form-control" formControlName="providerCompany">
                             </app-field>
                         </div>
                         <div class="col-md-6">
@@ -172,20 +185,38 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <app-field label="Phone number (incl. area code)" [valid]="isMyControlValid(item.get('providerPhoneNumber'))" errorMessage="Please enter a valid phone number">
-                                <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerPhoneNumber">
+                            <app-field label="Provider First Name" [valid]="isMyControlValid(item.get('providerFirstName'))" errorMessage="Please enter provider name">
+                                <input type="text" class="form-control" formControlName="providerFirstName">
                             </app-field>
                         </div>
                         <div class="col-md-6">
-                            <app-field label="Fax" [valid]="isMyControlValid(item.get('providerFax'))" errorMessage="Please enter a valid fax number">
-                                <input type="text" mask='(000) 000 0000' class="form-control" formControlName="providerFax">
+                            <app-field label="Provider Last Name" [valid]="isMyControlValid(item.get('providerLastName'))" errorMessage="Please enter provider name">
+                                <input type="text" class="form-control" formControlName="providerLastName">
+                            </app-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <app-field label="Phone Number (incl. area code)" [valid]="isMyControlValid(item.get('providerPhoneNumber'))" errorMessage="Please enter a valid phone number">
+                                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="providerPhoneNumber" *ngIf="item.get('providerAddress.country').value === 'Canada' || item.get('providerAddress.country').value === 'United States of America'; else phone_no_mask">
+                                <ng-template #phone_no_mask>
+                                    <input class="form-control" type="text" formControlName="providerPhoneNumber" digitOnly>
+                                </ng-template>
+                            </app-field>
+                        </div>
+                        <div class="col-md-6">
+                            <app-field label="Fax" [valid]="isMyControlValid(item.get('providerFax'))" errorMessage="Please enter a valid phone number">
+                                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="providerFax" *ngIf="item.get('providerAddress.country').value === 'Canada' || item.get('providerAddress.country').value === 'United States of America'; else fax_no_mask">
+                                <ng-template #fax_no_mask>
+                                    <input class="form-control" type="text" formControlName="providerFax" digitOnly>
+                                </ng-template>
                             </app-field>
                         </div>
                     </div>
 
                     <div class="row" *ngIf="formType === ApplicationType.Victim_Application">
                         <div class="col-md-12">
-                            <app-field label="Type of provider">
+                            <app-field label="Type of provider" [required]="true" [valid]="isMyControlValid(item.get('providerType'))" errorMessage="Please select one">
                                 <label class="inline-label">
                                     <input type="radio" [value]="'Specialist'" formControlName="providerType">
                                     <span>Specialist</span>
@@ -214,7 +245,7 @@
                             </app-field>
                         </div>
                     </div>
-                    <app-address [group]="item.get('providerAddress')" [showChildrenAsRequired]="false"></app-address>
+                    <app-address (change)="setProviderPhoneValidators(item)" [group]="item.get('providerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
                 </ng-container>
             </div>
             <a href="javascript:void(0);" class="btn btn-secondary" (click)="addProvider()" *ngIf="showAddProvider">Add a Provider</a>

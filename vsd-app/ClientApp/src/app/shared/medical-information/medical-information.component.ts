@@ -1,13 +1,15 @@
-import { OnInit, Component, Input } from "@angular/core";
+import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { FormBase } from "../form-base";
 import { MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material";
-import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormControl } from "@angular/forms";
+import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormControl, AbstractControl } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { COUNTRIES_ADDRESS } from "../address/country-list";
 import { HOSPITALS } from "../hospital-list";
 import { POSTAL_CODE } from "../regex.constants";
 import { AddressHelper } from "../address/address.helper";
+import { iLookupData } from "../../models/lookup-data.model";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'app-medical-information',
@@ -21,18 +23,19 @@ import { AddressHelper } from "../address/address.helper";
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class MedicalInformationComponent extends FormBase implements OnInit {
+export class MedicalInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
 
-    familyDoctorNameItem: FormControl;
+    familyDoctorClinicItem: FormControl;
 
     otherTreatmentItems: FormArray;
     showAddProvider: boolean = true;
     showRemoveProvider: boolean = false;
 
-    provinceList: string[];
+    provinceList: string[] = [];
     hospitalList = HOSPITALS;
     postalRegex = POSTAL_CODE;
 
@@ -42,14 +45,19 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
     addressHelper = new AddressHelper();
 
+    phoneMinLength: number = 10;
+    phoneMaxLength: number = 15;
+
+    doctorAddressSubscription: Subscription;
+    wereYouTreatedAtHospitalSubscription: Subscription;
+    treatedOutsideBcSubscription: Subscription;
+
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
         private fb: FormBuilder,
     ) {
         super();
-        var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
-        this.provinceList = canada.areas;
     }
 
     ngOnInit() {
@@ -119,16 +127,27 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
             });
         }
+
+        this.doctorAddressSubscription = this.form.get('familyDoctorAddress').valueChanges.subscribe(value => {
+            this.setDoctorPhoneValidators();
+        });
+
+        this.provinceList = this.lookupData.provinces.map(p => p.vsd_name);
+    }
+
+    ngOnDestroy() {
+        if (this.doctorAddressSubscription) this.doctorAddressSubscription.unsubscribe();
+        if (this.wereYouTreatedAtHospitalSubscription) this.wereYouTreatedAtHospitalSubscription.unsubscribe();
+        if (this.treatedOutsideBcSubscription) this.treatedOutsideBcSubscription.unsubscribe();
     }
 
     addProvider(): void {
         // add a medical treatment provider to the list
         this.otherTreatmentItems = this.form.get('otherTreatments') as FormArray;
-        this.otherTreatmentItems.push(this.createTreatmentItem());
+        let thisTreatment = this.createTreatmentItem();
+        this.otherTreatmentItems.push(thisTreatment);
         this.showAddProvider = this.otherTreatmentItems.length < 5;
         this.showRemoveProvider = this.otherTreatmentItems.length > 1;
-
-
     }
     clearProviders(): void {
         // remove all providers
@@ -148,8 +167,10 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
 
     createTreatmentItem(): FormGroup {
         let group = {
-            providerName: ['', Validators.required],
+            providerCompany: ['', Validators.required],
             providerEmail: ['', [Validators.email]],
+            providerFirstName: [''],
+            providerLastName: [''],
             providerPhoneNumber: [''],
             providerFax: [''],
             // providerAddress: [''],
@@ -164,7 +185,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
         };
 
         if (this.formType === ApplicationType.Victim_Application) {
-            group['providerType'] = [''];
+            group['providerType'] = ['', Validators.required];
             group['providerTypeText'] = [''];
         }
         else {
@@ -175,17 +196,23 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
     }
 
     addDoctor(): void {
-        this.familyDoctorNameItem = this.form.get('familyDoctorName') as FormControl;
-        this.familyDoctorNameItem.setValidators([Validators.required]);// .validator = Validators.required;
-        this.familyDoctorNameItem.updateValueAndValidity();
+        this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as FormControl;
+        this.familyDoctorClinicItem.setValidators([Validators.required]);// .validator = Validators.required;
+        this.familyDoctorClinicItem.updateValueAndValidity();
     }
 
     clearDoctor(): void {
-        this.familyDoctorNameItem = this.form.get('familyDoctorName') as FormControl;
-        this.familyDoctorNameItem.clearValidators();
-        this.familyDoctorNameItem.updateValueAndValidity();
+        this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as FormControl;
+        this.familyDoctorClinicItem.clearValidators();
+        this.familyDoctorClinicItem.updateValueAndValidity();
 
-        this.familyDoctorNameItem.patchValue('');
+        this.familyDoctorClinicItem.patchValue('');
+        let doctorFirstNameControl = this.form.get('familyDoctorFirstName');
+        doctorFirstNameControl.patchValue('');
+
+        let doctorLastNameControl = this.form.get('familyDoctorLastName');
+        doctorLastNameControl.patchValue('');
+
         let doctorEmailControl = this.form.get('familyDoctorEmail');
         doctorEmailControl.patchValue('');
 
@@ -196,6 +223,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
         doctorFaxControl.patchValue('');
 
         this.addressHelper.clearAddress(this.form, 'familyDoctorAddress');
+        this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'familyDoctorAddress');
     }
 
     doYouHaveMedicalServicesCoverageChange(val) {
@@ -208,6 +236,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
             this.setControlValidators(haveMedicalCoverageProvinceControl, [Validators.required]);
         }
         else {
+            this.clearControlValidators(haveMedicalCoverageProvinceControl);
             haveMedicalCoverageProvinceControl.patchValue('');
             haveMedicalCoverageProvinceOtherControl.patchValue('');
             personalHealthNumberControl.patchValue('');
@@ -222,5 +251,34 @@ export class MedicalInformationComponent extends FormBase implements OnInit {
             otherHealthCoverageProviderNameControl.patchValue('');
             otherHealthCoverageExtendedPlanNumberControl.patchValue('');
         }
+    }
+
+    setDoctorPhoneValidators() {
+        if (this.form.get('familyDoctorAddress.country').value === 'Canada' || this.form.get('familyDoctorAddress.country').value === 'United States of America') {
+            this.phoneMinLength = 10;
+        }
+        else {
+            this.phoneMinLength = 8;
+        }
+
+        let phoneControl = this.form.get('familyDoctorPhoneNumber');
+        this.setControlValidators(phoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        phoneControl.patchValue(phoneControl.value);
+    }
+
+    setProviderPhoneValidators(provider: AbstractControl) {
+        if (provider.get('providerAddress.country').value === 'Canada' || provider.get('providerAddress.country').value === 'United States of America') {
+            this.phoneMinLength = 10;
+        }
+        else {
+            this.phoneMinLength = 8;
+        }
+
+        let phoneControl = provider.get('providerPhoneNumber');
+        let faxControl = provider.get('providerFax');
+        this.setControlValidators(phoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        this.setControlValidators(faxControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        phoneControl.patchValue(phoneControl.value);
+        faxControl.patchValue(faxControl.value);
     }
 }

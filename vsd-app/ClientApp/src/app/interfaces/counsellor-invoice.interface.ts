@@ -26,4 +26,5 @@ export interface LineItem {
   sessionDate: Date;
   sessionHours: number;
   sessionAmount: number;  // Not used in transfer to Dynamics
+  missedSession: boolean;
 }

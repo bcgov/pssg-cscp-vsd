@@ -521,10 +521,10 @@ export class FormBase {
       target.get('confirmEmail').disable(options);
     }
     else {
-      target.get('phoneNumber').enable();
-      target.get('alternatePhoneNumber').enable();
-      target.get('email').enable();
-      target.get('confirmEmail').enable();
+      target.get('phoneNumber').enable(options);
+      target.get('alternatePhoneNumber').enable(options);
+      target.get('email').enable(options);
+      target.get('confirmEmail').enable(options);
     }
 
     target.get('phoneNumber').updateValueAndValidity(options);
@@ -562,12 +562,12 @@ export class FormBase {
       target.get('country').disable(options);
     }
     else {
-      target.get('line1').enable();
-      target.get('line2').enable();
-      target.get('city').enable();
-      target.get('postalCode').enable();
-      target.get('province').enable();
-      target.get('country').enable();
+      target.get('line1').enable(options);
+      target.get('line2').enable(options);
+      target.get('city').enable(options);
+      target.get('postalCode').enable(options);
+      target.get('province').enable(options);
+      target.get('country').enable(options);
     }
 
     target.get('line1').updateValueAndValidity(options);

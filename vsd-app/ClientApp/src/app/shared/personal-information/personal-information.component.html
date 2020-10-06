@@ -105,9 +105,11 @@
         </label>
         <label class="inline-label">
             <input type="radio" [value]="100000002" name="gender" formControlName="gender">
-            <span>X</span>
+            <span>X <app-tool-tip [trigger]="genderXToolTip"></app-tool-tip></span>
         </label>
     </app-field>
+
+    <ng-template #genderXToolTip>This category includes persons whose current gender was not reported exclusively as male or female. It includes persons who were reported as being unsure of their gender, persons who were reported as both male and female, or neither male nor female.</ng-template>
 
     <div class="row">
         <div class="col-md-6">
@@ -166,19 +168,25 @@
     <div class="row">
         <div class="col-md-6">
             <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2' || leaveVoicemail.value === '100000000' || leaveVoicemail.value === '100000001'" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number">
-                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else phone_no_mask" (input)="setVoicemailValidators()">
+                <ng-template #phone_no_mask>
+                    <input class="form-control" type="text" formControlName="phoneNumber" digitOnly (input)="setVoicemailValidators()">
+                </ng-template>
             </app-field>
         </div>
         <div class="col-md-6">
             <app-field label="Alternate Phone Number (inc. area code)" [required]="leaveVoicemail.value === '100000000' || leaveVoicemail.value === '100000002'" [valid]="isFieldValid('alternatePhoneNumber')" errorMessage="Please enter your phone number">
-                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else alt_phone_no_mask" (input)="setVoicemailValidators()">
+                <ng-template #alt_phone_no_mask>
+                    <input class="form-control" type="text" formControlName="alternatePhoneNumber" digitOnly (input)="setVoicemailValidators()">
+                </ng-template>
             </app-field>
         </div>
     </div>
 
     <div class="row">
         <div class="col-6">
-            <app-field label="I authorize CVAP to leave a voicemail on this phone #" [required]="true" [valid]="isMyControlValid(form.get('leaveVoicemail'))" errorMessage="Please select an option">
+            <app-field label="I authorize CVAP to leave a voicemail on this phone #" [required]="isVoiceMailRequired" [valid]="isMyControlValid(form.get('leaveVoicemail'))" errorMessage="Please select an option">
                 <select class="form-control" formControlName="leaveVoicemail">
                     <option value="0">Select...</option>
                     <option value="100000000">Primary and Alternate</option>
@@ -187,11 +195,6 @@
                     <option value="100000003">No Voicemail</option>
                 </select>
             </app-field>
-
-            <!-- <label class="inline-label inline-checkbox-label">
-                <input type="checkbox" style="margin-right: 10px;" formControlName="leaveVoicemail" [value]="true">
-                <span class="italic">I authorize CVAP to leave a voicemail on this phone #</span>
-            </label> -->
         </div>
     </div>
 
@@ -226,7 +229,7 @@
             <h3>Primary Mailing Address <app-tool-tip [trigger]="primaryAddressTemplate"></app-tool-tip>
             </h3>
             <ng-template #primaryAddressTemplate>Once your claim is processed you will receive a written decision, please provide a mailing address for written correspondences. If your mailing address changes please contact CVAP to update.</ng-template>
-            <app-address [group]="form.get('primaryAddress')" [showChildrenAsRequired]="true"></app-address>
+            <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true"></app-address>
         </div>
     </div>
     <div class="row">
@@ -234,8 +237,8 @@
             <h3>
                 Alternate Mailing Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
             </h3>
-            <ng-template #altAddressTemplate>Please provide an alternate address that we may forward correspondences to when mail is returned from the primary address. e.g. an address of a family member or trusted person.</ng-template>
-            <app-address [group]="form.get('alternateAddress')" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
+            <ng-template #altAddressTemplate>Please provide an alternate address that we may forward correspondences to when mail is returned from the primary address. e.g. an address of an immediate family member or trusted person.</ng-template>
+            <app-address [group]="form.get('alternateAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
         </div>
     </div>
     <div class="row">

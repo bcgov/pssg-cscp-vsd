@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, ControlContainer, AbstractControl, Validators }
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { Subscription } from "rxjs";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
     selector: 'app-victim-information',
@@ -17,6 +18,7 @@ import { Subscription } from "rxjs";
 })
 export class VictimInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
     todaysDate = new Date(); // for the birthdate validation
@@ -25,8 +27,12 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
     emailIsRequired: boolean = false;
     addressIsRequired: boolean = false;
 
-    contactInfoSubscription: Subscription;
+    phoneMinLength: number = 10;
+    phoneMaxLength: number = 15;
+
     addressInfoSubscription: Subscription;
+    addressSubscription: Subscription;
+    contactInfoSubscription: Subscription;
 
     constructor(
         private controlContainer: ControlContainer,
@@ -48,23 +54,28 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
 
         if (this.form.get('mostRecentMailingAddressSameAsPersonal').value === true) {
             this.copyPersonalAddressToVictimAddress(this.form.parent);
+            this.setPhoneValidators();
         }
 
         if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
             this.addressInfoSubscription = this.form.get('mostRecentMailingAddressSameAsPersonal').valueChanges.subscribe(value => {
                 this.copyPersonalAddressToVictimAddress(this.form.parent);
+                this.setPhoneValidators();
             });
             this.contactInfoSubscription = this.form.get('victimSameContactInfo').valueChanges.subscribe(value => {
                 this.copyPersonalContactInfoToVictim(this.form.parent);
             });
         }
+
+        this.addressSubscription = this.form.get('primaryAddress').valueChanges.subscribe(value => {
+            this.setPhoneValidators();
+        });
     }
 
     ngOnDestroy() {
-        if (this.formType === ApplicationType.IFM_Application || this.formType === ApplicationType.Witness_Application) {
-            if (this.addressInfoSubscription) this.addressInfoSubscription.unsubscribe();
-            if (this.contactInfoSubscription) this.contactInfoSubscription.unsubscribe();
-        }
+        if (this.addressInfoSubscription) this.addressInfoSubscription.unsubscribe();
+        if (this.addressSubscription) this.addressSubscription.unsubscribe();
+        if (this.contactInfoSubscription) this.contactInfoSubscription.unsubscribe();
     }
 
     iHaveOtherNamesChange(val: boolean) {
@@ -77,5 +88,21 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
             otherLastNameControl.patchValue('');
             dateOfNameChangeControl.patchValue('');
         }
+    }
+
+    setPhoneValidators() {
+        if (this.form.get('primaryAddress.country').value === 'Canada' || this.form.get('primaryAddress.country').value === 'United States of America') {
+            this.phoneMinLength = 10;
+        }
+        else {
+            this.phoneMinLength = 8;
+        }
+
+        let phoneControl = this.form.get('phoneNumber');
+        let altPhoneControl = this.form.get('alternatePhoneNumber');
+        this.setControlValidators(phoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        this.setControlValidators(altPhoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        phoneControl.patchValue(phoneControl.value);
+        altPhoneControl.patchValue(altPhoneControl.value);
     }
 }

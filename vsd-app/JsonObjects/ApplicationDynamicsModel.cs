@@ -75,6 +75,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_victimcountry { get; set; }
 
         public string vsd_cvap_typeofcrime { get; set; }
+        public bool vsd_cvap_unsureofspecificcrimedates { get; set; }
         public DateTime? vsd_cvap_crimestartdate { get; set; }
         public DateTime? vsd_cvap_crimeenddate { get; set; }
         public string vsd_cvap_reasontoapplylate { get; set; }

@@ -12,6 +12,7 @@ import { EmailValidator } from "../validators/email.validator";
 import { RepresentativeInfoHelper } from "./representative-information.helper";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
+import { iLookupData } from "../../models/lookup-data.model";
 
 @Component({
     selector: 'app-representative-information',
@@ -27,6 +28,7 @@ import { Subscription } from "rxjs";
 })
 export class RepresentativeInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
+    @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
     provinceList: string[];
@@ -155,7 +157,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'representativeAddress');
         this.addressHelper.setAddressAsRequired(this.form, 'representativeAddress');
 
-        phoneControl.setValidators([Validators.minLength(10), Validators.maxLength(10)]);
+        phoneControl.setValidators([Validators.minLength(8), Validators.maxLength(15)]);
         phoneControl.setErrors(null, options);
         emailControl.setValidators([Validators.email]);
         emailControl.setErrors(null, options);
@@ -163,7 +165,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         emailConfirmControl.setErrors(null, options);
 
         if (contactMethod === 100000001) { //Phone Call
-            phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+            phoneControl.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(15)]);
             this.representativePhoneIsRequired = true;
             this.representativeEmailIsRequired = false;
         } else if (contactMethod === 100000000) { //Email
@@ -184,5 +186,23 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         emailControl.updateValueAndValidity(options);
         emailConfirmControl.markAsTouched();
         emailConfirmControl.updateValueAndValidity(options);
+    }
+
+    setRepresentativePhoneValidators() {
+        let phoneMinLength = 10;
+        let phoneMaxLength = 15;
+        if (this.form.get('representativeAddress.country').value === 'Canada' || this.form.get('representativeAddress.country').value === 'United States of America') {
+            phoneMinLength = 10;
+        }
+        else {
+            phoneMinLength = 8;
+        }
+
+        let phoneControl = this.form.get('representativePhoneNumber');
+        let altPhoneControl = this.form.get('representativeAlternatePhoneNumber');
+        this.setControlValidators(phoneControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+        this.setControlValidators(altPhoneControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+        phoneControl.patchValue(phoneControl.value);
+        altPhoneControl.patchValue(altPhoneControl.value);
     }
 }

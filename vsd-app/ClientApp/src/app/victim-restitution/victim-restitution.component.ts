@@ -148,7 +148,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
         const contactMethod = parseInt(value);
         if (contactMethod === 2) {
-          phoneControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+          phoneControl.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(15)]);
           this.phoneIsRequired = true;
           this.emailIsRequired = false;
           this.addressIsRequired = true; // Always true

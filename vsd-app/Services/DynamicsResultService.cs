@@ -27,6 +27,12 @@ namespace Gov.Cscp.VictimServices.Public.Services
             this._accessTokenExpiration = DateTime.Now;
         }
 
+        public async Task<DynamicsResult> Get(string endpointUrl)
+        {
+            DynamicsResult blob = await DynamicsGetAsync(endpointUrl);
+            return blob;
+        }
+
         public async Task<DynamicsResult> GetResultAsync(string endpointUrl, string requestJson)
         {
             //Note:  get and set are the same for now but we want to make it easy to know which action to take
@@ -84,6 +90,64 @@ namespace Gov.Cscp.VictimServices.Public.Services
 
             HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
             _httpRequest.Content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
+
+            var _httpResponse2 = await _client.SendAsync(_httpRequest);
+            HttpStatusCode _statusCode = _httpResponse2.StatusCode;
+
+            var _responseString = _httpResponse2.ToString();
+            var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
+            // replace the odata with a string that can be converted to a dotnet core property
+
+            // save the result to a returnable object
+            var result = new DynamicsResult();
+            result.statusCode = _statusCode;
+            result.responseMessage = _httpResponse2;
+            var clean = _responseContent2.Replace("@odata.", "fortunecookie");
+            result.result = Newtonsoft.Json.Linq.JObject.Parse(clean);
+            // send the result back
+            return result;
+        }
+
+        private async Task<DynamicsResult> DynamicsGetAsync(string endpointUrl)
+        {
+            // if the value of the return is greater than zero we know that "now" is after expiry of the token
+            // if there is no access token expiration then this must be a new instance that has never handled a connection yet.
+            if (DateTime.Now.CompareTo(_accessTokenExpiration) > 0)
+            {
+                // we need a new connection and perform action
+                bool success = await MakeConnection();
+                if (success)
+                {
+                    // perform action is the thing that we want to wait on the return for
+                    return await PerformGet(_client, endpointUrl);
+                }
+                else
+                {
+                    // there is a problem. Return it to the user.
+                    DynamicsResult r = new DynamicsResult();
+                    r.statusCode = System.Net.HttpStatusCode.BadGateway;
+                    r.result = JObject.Parse("{\"message\":\"A connection to Dynamics couldn't be established for some reason.\"}");
+                    return r;
+                }
+            }
+            else
+            {
+                // perform action is the thing that we want to wait on the return for
+                // this else will happen when there is a fresh connection
+                return await PerformGet(_client, endpointUrl);
+            }
+        }
+
+        private async Task<DynamicsResult> PerformGet(HttpClient client, string endpointUrl)
+        {
+
+            // this is a generic action for dynamics. It could be set or get.
+            // add the dynamics url
+            endpointUrl = _configuration["DYNAMICS_ODATA_URI"] + endpointUrl;
+            // replace all the fortune cookies with @odata.
+
+
+            HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Get, endpointUrl);
 
             var _httpResponse2 = await _client.SendAsync(_httpRequest);
             HttpStatusCode _statusCode = _httpResponse2.StatusCode;

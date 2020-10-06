@@ -8,7 +8,7 @@ export class CrimeInfoHelper {
         let group = {
             typeOfCrime: ['', Validators.required],
 
-            unsureOfCrimeDates: [''],
+            unsureOfCrimeDates: [false],
             whenDidCrimeOccur: [''],
             crimePeriodStart: ['', Validators.required],
             crimePeriodEnd: [''],

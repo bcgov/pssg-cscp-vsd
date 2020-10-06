@@ -67,9 +67,11 @@
         </label>
         <label class="inline-label">
             <input type="radio" [value]="100000002" name="gender" formControlName="gender">
-            <span>X</span>
+            <span>X <app-tool-tip [trigger]="genderXToolTip"></app-tool-tip></span>
         </label>
     </app-field>
+
+    <ng-template #genderXToolTip>This category includes persons whose current gender was not reported exclusively as male or female. It includes persons who were reported as being unsure of their gender, persons who were reported as both male and female, or neither male nor female.</ng-template>
 
     <div class="row">
         <div class="col-md-6">
@@ -101,7 +103,6 @@
             </app-field>
         </div>
         <div class="col-md-6">
-            <!-- [tooltipReference]="victimSinTemplate" -->
             <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter your SIN">
                 <input class="form-control sin-input" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
                 <ng-template #victimSinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
@@ -128,12 +129,18 @@
     <div class="row">
         <div class="col-md-6">
             <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('phoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
-                <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="phoneNumber">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else phone_no_mask">
+                <ng-template #phone_no_mask>
+                    <input class="form-control" type="text" formControlName="phoneNumber" digitOnly>
+                </ng-template>
             </app-field>
         </div>
         <div class="col-md-6">
             <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('alternatePhoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
-                <input class="form-control" mask='(000) 000 0000' (keydown)="rejectIfNotDigitOrBackSpace($event)" type="text" formControlName="alternatePhoneNumber">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else alt_phone_no_mask">
+                <ng-template #alt_phone_no_mask>
+                    <input class="form-control" type="text" formControlName="alternatePhoneNumber" digitOnly>
+                </ng-template>
             </app-field>
         </div>
     </div>
@@ -169,5 +176,5 @@
         </div>
     </div>
 
-    <app-address [group]="form.get('primaryAddress')" [showChildrenAsRequired]="addressIsRequired" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
+    <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="addressIsRequired" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
 </div>

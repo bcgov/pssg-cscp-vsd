@@ -1,3 +1,4 @@
+//get rid of this file...
 export interface iCountry {
   name: string;
   postalCodeName: string;
@@ -44,7 +45,6 @@ export const COUNTRIES_ADDRESS: iCountry[] = [
     areas: []
   }
 ];
-
 
 // the one above is basically useless for addressing. I left it because I don't want broken forms. You must iterate and check the name to get a value. So wasteful on resources.
 export const COUNTRIES_ADDRESS_2 = {
