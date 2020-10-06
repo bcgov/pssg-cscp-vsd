@@ -79,7 +79,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string offenderRelationship { get; set; }
         public string policeReportedMultipleTimes { get; set; }
         public string typeOfCrime { get; set; }
-        public string unsureOfCrimeDates { get; set; }
+        public bool unsureOfCrimeDates { get; set; }
         public int? victimDeceasedFromCrime { get; set; }
         public string whenDidCrimeOccur { get; set; }
         public string whyDidYouNotApplySooner { get; set; }
@@ -130,7 +130,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string treatedOutsideBcHospitalName { get; set; }
         public DateTime? treatedAtHospitalDate { get; set; }
         public string beingTreatedByFamilyDoctor { get; set; }
-        public string familyDoctorName { get; set; }
+        public string familyDoctorClinic { get; set; }
+        public string familyDoctorFirstName { get; set; }
+        public string familyDoctorLastName { get; set; }
         public string familyDoctorEmail { get; set; }
         public string familyDoctorPhoneNumber { get; set; }
         public string familyDoctorFax { get; set; }
@@ -145,7 +147,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     {
         public string providerType { get; set; }
         public string providerTypeText { get; set; } // Extra text for "Other" provider type
-        public string providerName { get; set; }
+        public string providerCompany { get; set; }
+        public string providerFirstName { get; set; }
+        public string providerLastName { get; set; }
         public string providerEmail { get; set; }
         public string providerPhoneNumber { get; set; }
         public string providerFax { get; set; }

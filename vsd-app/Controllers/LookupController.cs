@@ -13,14 +13,10 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
     [Route("api/[controller]")]
     public class LookupController : Controller
     {
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IDynamicsResultService _dynamicsResultService;
 
-        public LookupController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDynamicsResultService dynamicsResultService)
+        public LookupController(IDynamicsResultService dynamicsResultService)
         {
-            _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
             this._dynamicsResultService = dynamicsResultService;
         }
 

@@ -29,7 +29,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
     public form: FormGroup;
     ApplicationType = ApplicationType;
 
-    familyDoctorNameItem: FormControl;
+    familyDoctorClinicItem: FormControl;
 
     otherTreatmentItems: FormArray;
     showAddProvider: boolean = true;
@@ -167,8 +167,10 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
 
     createTreatmentItem(): FormGroup {
         let group = {
-            providerName: ['', Validators.required],
+            providerCompany: ['', Validators.required],
             providerEmail: ['', [Validators.email]],
+            providerFirstName: [''],
+            providerLastName: [''],
             providerPhoneNumber: [''],
             providerFax: [''],
             // providerAddress: [''],
@@ -183,7 +185,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
         };
 
         if (this.formType === ApplicationType.Victim_Application) {
-            group['providerType'] = [''];
+            group['providerType'] = ['', Validators.required];
             group['providerTypeText'] = [''];
         }
         else {
@@ -194,17 +196,23 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
     }
 
     addDoctor(): void {
-        this.familyDoctorNameItem = this.form.get('familyDoctorName') as FormControl;
-        this.familyDoctorNameItem.setValidators([Validators.required]);// .validator = Validators.required;
-        this.familyDoctorNameItem.updateValueAndValidity();
+        this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as FormControl;
+        this.familyDoctorClinicItem.setValidators([Validators.required]);// .validator = Validators.required;
+        this.familyDoctorClinicItem.updateValueAndValidity();
     }
 
     clearDoctor(): void {
-        this.familyDoctorNameItem = this.form.get('familyDoctorName') as FormControl;
-        this.familyDoctorNameItem.clearValidators();
-        this.familyDoctorNameItem.updateValueAndValidity();
+        this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as FormControl;
+        this.familyDoctorClinicItem.clearValidators();
+        this.familyDoctorClinicItem.updateValueAndValidity();
 
-        this.familyDoctorNameItem.patchValue('');
+        this.familyDoctorClinicItem.patchValue('');
+        let doctorFirstNameControl = this.form.get('familyDoctorFirstName');
+        doctorFirstNameControl.patchValue('');
+
+        let doctorLastNameControl = this.form.get('familyDoctorLastName');
+        doctorLastNameControl.patchValue('');
+
         let doctorEmailControl = this.form.get('familyDoctorEmail');
         doctorEmailControl.patchValue('');
 

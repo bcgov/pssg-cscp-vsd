@@ -68,7 +68,7 @@ export interface CrimeInformation {
   policeReports: Policereport[];
   racafInformation: Racafinformation;
   typeOfCrime: string;
-  unsureOfCrimeDates: string;
+  unsureOfCrimeDates: boolean;
   victimDeceasedFromCrime?: boolean;
   wasReportMadeToPolice: number;
   whenDidCrimeOccur: string;
@@ -88,7 +88,9 @@ export interface MedicalInformation {
   treatedOutsideBcHospitalName: string;
   treatedAtHospitalDate?: Date;
   beingTreatedByFamilyDoctor: string;
-  familyDoctorName: string;
+  familyDoctorClinic: string;
+  familyDoctorFirstName: string;
+  familyDoctorLastName: string;
   familyDoctorPhoneNumber: string;
   familyDoctorAddress: Address;
   // familyDoctorAddressLine1: string;
@@ -206,7 +208,9 @@ interface Racafinformation {
 interface Othertreatment {
   providerType: string;
   providerTypeText: string;
-  providerName: string;
+  providerCompany: string;
+  providerFirstName: string;
+  providerLastName: string;
   providerPhoneNumber: string;
   providerEmail: string;
   providerAddress: Address;

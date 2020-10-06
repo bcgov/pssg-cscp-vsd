@@ -113,13 +113,25 @@
         <section *ngIf="form.get('beingTreatedByFamilyDoctor').value === true">
             <div class="row">
                 <div class="col-md-6">
-                    <app-field label="Name of Medical Doctor/Clinic" [required]="true" [valid]="isFieldValid('familyDoctorName')" [errorMessage]="'Please enter the Medical Doctor/Clinic name'">
-                        <input class="form-control" type="text" formControlName="familyDoctorName">
+                    <app-field label="Name of Clinic" [required]="true" [valid]="isFieldValid('familyDoctorClinic')" [errorMessage]="'Please enter the Clinic name'">
+                        <input class="form-control" type="text" formControlName="familyDoctorClinic">
                     </app-field>
                 </div>
                 <div class="col-md-6">
                     <app-field label="Email Address" [valid]="isMyControlValid(form.get('familyDoctorEmail'))" errorMessage="Please enter a valid email address">
                         <input class="form-control" type="text" formControlName="familyDoctorEmail" maxlength="100">
+                    </app-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <app-field label="Doctor First Name" [required]="false" [valid]="isFieldValid('familyDoctorFirstName')" [errorMessage]="'Please enter the Doctor name'">
+                        <input class="form-control" type="text" formControlName="familyDoctorFirstName">
+                    </app-field>
+                </div>
+                <div class="col-md-6">
+                    <app-field label="Doctor Last Name" [required]="false" [valid]="isFieldValid('familyDoctorLastName')" [errorMessage]="'Please enter the Doctor name'">
+                        <input class="form-control" type="text" formControlName="familyDoctorLastName">
                     </app-field>
                 </div>
             </div>
@@ -161,13 +173,25 @@
                     <h3>Provider {{ i + 1 }}</h3>
                     <div class="row">
                         <div class="col-md-6">
-                            <app-field label="Provider name" [required]="true" [valid]="isMyControlValid(item.get('providerName'))" errorMessage="Please enter provider's name">
-                                <input type="text" class="form-control" formControlName="providerName">
+                            <app-field label="Name of Company/Organization" [required]="true" [valid]="isMyControlValid(item.get('providerCompany'))" errorMessage="Please enter company name">
+                                <input type="text" class="form-control" formControlName="providerCompany">
                             </app-field>
                         </div>
                         <div class="col-md-6">
                             <app-field label="Email Address" [valid]="isMyControlValid(item.get('providerEmail'))" errorMessage="Please enter a valid email address">
                                 <input type="text" class="form-control" formControlName="providerEmail" maxlength="100">
+                            </app-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <app-field label="Provider First Name" [valid]="isMyControlValid(item.get('providerFirstName'))" errorMessage="Please enter provider name">
+                                <input type="text" class="form-control" formControlName="providerFirstName">
+                            </app-field>
+                        </div>
+                        <div class="col-md-6">
+                            <app-field label="Provider Last Name" [valid]="isMyControlValid(item.get('providerLastName'))" errorMessage="Please enter provider name">
+                                <input type="text" class="form-control" formControlName="providerLastName">
                             </app-field>
                         </div>
                     </div>
@@ -192,7 +216,7 @@
 
                     <div class="row" *ngIf="formType === ApplicationType.Victim_Application">
                         <div class="col-md-12">
-                            <app-field label="Type of provider">
+                            <app-field label="Type of provider" [required]="true" [valid]="isMyControlValid(item.get('providerType'))" errorMessage="Please select one">
                                 <label class="inline-label">
                                     <input type="radio" [value]="'Specialist'" formControlName="providerType">
                                     <span>Specialist</span>
