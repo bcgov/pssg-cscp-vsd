@@ -121,7 +121,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string personalHealthNumber { get; set; }
         public string haveMedicalCoverageProvince { get; set; }
         public string haveMedicalCoverageProvinceOther { get; set; }
-        public string doYouHaveOtherHealthCoverage { get; set; }
+        public int? doYouHaveOtherHealthCoverage { get; set; }
         public string otherHealthCoverageProviderName { get; set; }
         public string otherHealthCoverageExtendedPlanNumber { get; set; }
         public string wereYouTreatedAtHospital { get; set; }

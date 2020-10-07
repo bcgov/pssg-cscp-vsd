@@ -475,9 +475,9 @@
 
                 <tr>
                     <th>Do you have other health coverage?</th>
-                    <td>{{ valueOrEmpty('medicalInformation.doYouHaveOtherHealthCoverage') }} </td>
+                    <td>{{ enumHelper.boolEnum[valueForEnum('medicalInformation.doYouHaveOtherHealthCoverage')] }} </td>
                 </tr>
-                <ng-container *ngIf="form.get('medicalInformation.doYouHaveOtherHealthCoverage').value === true">
+                <ng-container *ngIf="form.get('medicalInformation.doYouHaveOtherHealthCoverage').value === CRMBoolean.True">
                     <tr>
                         <th>Name of provider</th>
                         <td>{{ valueOrEmpty('medicalInformation.otherHealthCoverageProviderName') }} </td>

@@ -79,7 +79,7 @@ export interface MedicalInformation {
   personalHealthNumber: string;
   haveMedicalCoverageProvince: string;
   haveMedicalCoverageProvinceOther: string;
-  doYouHaveOtherHealthCoverage: string;
+  doYouHaveOtherHealthCoverage: number;
   otherHealthCoverageProviderName: string;
   otherHealthCoverageExtendedPlanNumber: string;
   wereYouTreatedAtHospital: string;

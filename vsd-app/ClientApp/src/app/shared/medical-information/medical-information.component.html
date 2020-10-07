@@ -39,15 +39,15 @@
         <h3>Other Health Coverage</h3>
         <app-field label="Do you have other health coverage? (e.g. Blue Cross)" [valid]="isFieldValid('doYouHaveOtherHealthCoverage')" [required]="true" errorMessage="Please select an option">
             <label class="inline-label">
-                <input type="radio" [value]="true" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage" (change)="doYouHaveOtherHealthCoverageChange(true)">
+                <input type="radio" [value]="CRMBoolean.True" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage" (change)="doYouHaveOtherHealthCoverageChange(true)">
                 <span>Yes</span>
             </label>
             <label class="inline-label">
-                <input type="radio" [value]="false" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage" (change)="doYouHaveOtherHealthCoverageChange(false)">
+                <input type="radio" [value]="CRMBoolean.False" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage" (change)="doYouHaveOtherHealthCoverageChange(false)">
                 <span>No</span>
             </label>
         </app-field>
-        <section *ngIf="form.get('doYouHaveOtherHealthCoverage').value === true">
+        <section *ngIf="form.get('doYouHaveOtherHealthCoverage').value === CRMBoolean.True">
             <app-field label="Name of provider">
                 <input class="form-control standard" type="text" formControlName="otherHealthCoverageProviderName">
             </app-field>

@@ -3,7 +3,7 @@ import { FormBase } from "../form-base";
 import { MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material";
 import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormControl, AbstractControl } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, ApplicationType } from "../enums-list";
+import { MY_FORMATS, ApplicationType, CRMBoolean } from "../enums-list";
 import { COUNTRIES_ADDRESS } from "../address/country-list";
 import { HOSPITALS } from "../hospital-list";
 import { POSTAL_CODE } from "../regex.constants";
@@ -28,6 +28,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
     @Input() lookupData: iLookupData;
     public form: FormGroup;
     ApplicationType = ApplicationType;
+    CRMBoolean = CRMBoolean;
 
     familyDoctorClinicItem: FormControl;
 
