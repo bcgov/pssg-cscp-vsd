@@ -113,9 +113,8 @@
 
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Birthdate" [required]="true" [valid]="isFieldValid('birthDate')" errorMessage="Please enter your birth date">
-                <input type="text" class="form-control date-picker" formControlName="birthDate" placeholder="yyyy-mm-dd" [matDatepicker]="birthDatePicker" (focus)="birthDatePicker.open()" (click)="birthDatePicker.open()" [max]="todaysDate" [min]="oldestHuman" readonly>
-                <mat-datepicker #birthDatePicker></mat-datepicker>
+            <app-field label="Birthdate" [required]="true" [valid]="isMyControlValid(form.get('birthDate'))" errorMessage="Please enter your birth date">
+                <app-date-field [control]="form.get('birthDate')" [max]="todaysDate"></app-date-field>
             </app-field>
         </div>
         <div class="col-md-6" *ngIf="formType === ApplicationType.Victim_Application">

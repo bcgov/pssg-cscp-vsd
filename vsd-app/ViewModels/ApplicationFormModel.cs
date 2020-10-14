@@ -173,6 +173,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public bool haveCrimeSceneCleaningExpenses { get; set; }
         public bool haveOtherExpenses { get; set; }
         public string otherSpecificExpenses { get; set; }
+        public bool haveLifeInsuranceBenefits { get; set; }
         public bool haveDisabilityPlanBenefits { get; set; }
         public bool haveEmploymentInsuranceBenefits { get; set; }
         public bool haveIncomeAssistanceBenefits { get; set; }

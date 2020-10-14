@@ -279,10 +279,10 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         }
     }
 
-    daysWorkMissedStartChange(event: MatDatepickerInputEvent<Date>) {
-        this.minEndDate = event.target.value;
+    daysWorkMissedStartChange() {
+        this.minEndDate = this.form.get('daysWorkMissedStart').value;
         //validate that a selected end date is not before the start date
-        let startDate = moment(event.target.value);
+        let startDate = moment(this.form.get('daysWorkMissedStart').value);
 
         let endDate = this.form.get('daysWorkMissedEnd').value;
         if (endDate && moment(endDate).isBefore(startDate)) {
@@ -291,10 +291,9 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
         }
     }
 
-    daysWorkMissedEndChange(event: MatDatepickerInputEvent<Date>) {
-        let endDate = moment(event.target.value);
+    daysWorkMissedEndChange() {
+        let endDate = moment(this.form.get('daysWorkMissedEnd').value);
         this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
-
     }
 
     setEmployerPhoneValidators(employer: AbstractControl) {

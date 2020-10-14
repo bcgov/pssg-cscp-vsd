@@ -18,6 +18,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
         private IHttpContextAccessor _httpContextAccessor;
         private HttpClient _client;
         private DateTime _accessTokenExpiration;
+        private Boolean _didInit;
 
         public DynamicsResultService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
@@ -25,6 +26,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
             this._httpContextAccessor = httpContextAccessor;
             // we set the datetime to now because when the first request happens it will trigger the authentication to Dynamics
             this._accessTokenExpiration = DateTime.Now;
+            this._didInit = true;
         }
 
         public async Task<DynamicsResult> Get(string endpointUrl)
@@ -51,8 +53,9 @@ namespace Gov.Cscp.VictimServices.Public.Services
         {
             // if the value of the return is greater than zero we know that "now" is after expiry of the token
             // if there is no access token expiration then this must be a new instance that has never handled a connection yet.
-            if (DateTime.Now.CompareTo(_accessTokenExpiration) > 0)
+            if (DateTime.Now.CompareTo(_accessTokenExpiration) > 0 || !(this._didInit == true))
             {
+                this._didInit = true;
                 // we need a new connection and perform action
                 bool success = await MakeConnection();
                 if (success)

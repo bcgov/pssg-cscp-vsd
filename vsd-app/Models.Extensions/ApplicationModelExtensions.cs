@@ -651,6 +651,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
                 // Build Benefits CSV String
                 string tempBenefits = "";
+                if (model.ExpenseInformation.haveLifeInsuranceBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000007,";
+                }
                 if (model.ExpenseInformation.haveDisabilityPlanBenefits)
                 {
                     tempBenefits = tempBenefits + "100000000,";
