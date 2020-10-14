@@ -123,6 +123,8 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_applicantsextendedhealthprovidername { get; set; }
         public string vsd_applicantsextendedhealthnumber { get; set; }
 
+        public int? vsd_cvap_otherhealthcoverage { get; set; }
+
         public string vsd_cvap_treatmenthospitalname { get; set; }
         public DateTime? vsd_cvap_treatmentdate { get; set; }
 
