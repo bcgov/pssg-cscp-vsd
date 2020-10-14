@@ -22,10 +22,9 @@ export class AuthInfoHelper {
 
     createAuthorizedPerson(fb: FormBuilder): FormGroup {
         return fb.group({
-            providerType: [''],
-            providerTypeText: [''],
-            authorizedPersonFirstName: ['', Validators.required],
-            authorizedPersonLastName: ['', Validators.required],
+            providerType: ['', Validators.required],
+            authorizedPersonFirstName: [''],
+            authorizedPersonLastName: [''],
             authorizedPersonPhoneNumber: [''],
             authorizedPersonEmail: ['', [Validators.email]],
             authorizedPersonAgencyAddress: fb.group({
@@ -36,7 +35,7 @@ export class AuthInfoHelper {
                 province: [{ value: 'British Columbia', disabled: false }],
                 country: [{ value: 'Canada', disabled: false }],
             }),
-            authorizedPersonRelationship: ['', Validators.required],
+            authorizedPersonRelationship: [''],
             authorizedPersonRelationshipOther: [''],
             authorizedPersonAgencyName: [''],
         });

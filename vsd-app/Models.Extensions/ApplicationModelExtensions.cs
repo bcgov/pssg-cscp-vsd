@@ -801,7 +801,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             application.Application.vsd_applicantssignature = model.AuthorizationInformation.signature;
             if (model.AuthorizationInformation.allowCvapStaffSharing > 0)
             {
-                application.Application.vsd_cvap_agency_person_authorization = model.AuthorizationInformation.allowCvapStaffSharing;
+                application.Application.vsd_cvap_optionalauthorization = model.AuthorizationInformation.allowCvapStaffSharing;
+                // application.Application.vsd_cvap_agency_person_authorization = model.AuthorizationInformation.allowCvapStaffSharing;
             }
             application.Application.vsd_optionalauthorizationsignature = model.AuthorizationInformation.authorizedPersonSignature;
 

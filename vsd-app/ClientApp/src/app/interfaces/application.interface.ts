@@ -218,7 +218,6 @@ interface Othertreatment {
 }
 interface AuthorizedPerson {
   providerType: string;
-  providerTypeText: string;
   authorizedPersonFirstName: string;
   authorizedPersonLastName: string;
   authorizedPersonPhoneNumber: string;
