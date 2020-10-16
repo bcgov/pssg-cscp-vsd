@@ -167,7 +167,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             DynamicsResult result = await _dynamicsResultService.Post(endpointUrl, requestJson);
 
-            return StatusCode(200, result.result.ToString());
+            return StatusCode((int)result.statusCode, result.result.ToString());
         }
 
         [HttpGet("validate_vendor_and_counsellor/{VendorNumber}/{VendorPostalCode}/{CounsellorNumber}/{CounsellorLastName}")]
@@ -178,7 +178,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             DynamicsResult result = await _dynamicsResultService.Post(endpointUrl, requestJson);
 
-            return StatusCode(200, result.result.ToString());
+            return StatusCode((int)result.statusCode, result.result.ToString());
         }
 
         private static async Task<string> CreateCaseAction(IConfiguration configuration, ApplicationFormModel model)
