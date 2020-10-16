@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Gov.Cscp.VictimServices.Public.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Rest;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -8,7 +8,6 @@ using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
 using System;
-using Gov.Cscp.VictimServices.Public.Models;
 
 namespace Gov.Cscp.VictimServices.Public.Services
 {
@@ -19,7 +18,6 @@ namespace Gov.Cscp.VictimServices.Public.Services
         private HttpClient _client;
         private DateTime _accessTokenExpiration;
         private Boolean _didInit;
-
         public DynamicsResultService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             this._configuration = configuration;
@@ -29,27 +27,19 @@ namespace Gov.Cscp.VictimServices.Public.Services
             this._didInit = true;
         }
 
-        public async Task<DynamicsResult> GetResultAsync(string endpointUrl)
+        public async Task<DynamicsResult> Get(string endpointUrl)
         {
-            DynamicsResult blob = await DynamicsResultAsync(endpointUrl, "");
+            DynamicsResult blob = await DynamicsResultAsync(HttpMethod.Get, endpointUrl, "");
             return blob;
         }
 
-        public async Task<DynamicsResult> GetResultAsync(string endpointUrl, string requestJson)
+        public async Task<DynamicsResult> Post(string endpointUrl, string modelJson)
         {
-            //Note:  get and set are the same for now but we want to make it easy to know which action to take
-            DynamicsResult blob = await DynamicsResultAsync(endpointUrl, requestJson);
+            DynamicsResult blob = await DynamicsResultAsync(HttpMethod.Post, endpointUrl, modelJson);
             return blob;
         }
 
-        public async Task<DynamicsResult> SetDataAsync(string endpointUrl, string modelJson)
-        {
-            //Note:  get and set are the same for now but we want to make it easy to know which action to take
-            DynamicsResult blob = await DynamicsResultAsync(endpointUrl, modelJson);
-            return blob;
-        }
-
-        private async Task<DynamicsResult> DynamicsResultAsync(string endpointUrl, string requestJson)
+        private async Task<DynamicsResult> DynamicsResultAsync(HttpMethod method, string endpointUrl, string requestJson)
         {
             // if the value of the return is greater than zero we know that "now" is after expiry of the token
             // if there is no access token expiration then this must be a new instance that has never handled a connection yet.
@@ -60,8 +50,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
                 bool success = await MakeConnection();
                 if (success)
                 {
-                    // perform action is the thing that we want to wait on the return for
-                    return await PerformAction(_client, endpointUrl, requestJson);
+                    return await PerformAction(_client, method, endpointUrl, requestJson);
                 }
                 else
                 {
@@ -74,44 +63,33 @@ namespace Gov.Cscp.VictimServices.Public.Services
             }
             else
             {
-                // perform action is the thing that we want to wait on the return for
-                // this else will happen when there is a fresh connection
-                return await PerformAction(_client, endpointUrl, requestJson);
+                return await PerformAction(_client, method, endpointUrl, requestJson);
             }
         }
-        private async Task<DynamicsResult> PerformAction(HttpClient client, string endpointUrl, string requestJson)
+        private async Task<DynamicsResult> PerformAction(HttpClient client, HttpMethod method, string endpointUrl, string requestJson)
         {
-            // this is a generic action for dynamics. It could be set or get.
+
             // add the dynamics url
             endpointUrl = _configuration["DYNAMICS_ODATA_URI"] + endpointUrl;
+            requestJson = requestJson.Replace("fortunecookie", "@odata.");
 
-            HttpRequestMessage _httpRequest;
-            if (string.IsNullOrEmpty(requestJson))
-            {
-                _httpRequest = new HttpRequestMessage(HttpMethod.Get, endpointUrl);
-            }
-            else
-            {
-                // replace all the fortune cookies with @odata.
-                requestJson = requestJson.Replace("fortunecookie", "@odata.");
-                _httpRequest = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
-                _httpRequest.Content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
-                Console.WriteLine(requestJson);
-                //easily view sent json to dynamics
-            }
+            Console.WriteLine(endpointUrl);
+            Console.WriteLine(requestJson);
+
+            HttpRequestMessage _httpRequest = new HttpRequestMessage(method, endpointUrl);
+            _httpRequest.Content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
 
             var _httpResponse2 = await _client.SendAsync(_httpRequest);
             HttpStatusCode _statusCode = _httpResponse2.StatusCode;
 
-            var _responseString = _httpResponse2.ToString();
-            var _responseContent2 = await _httpResponse2.Content.ReadAsStringAsync();
-            // replace the odata with a string that can be converted to a dotnet core property
+            var _responseContent = await _httpResponse2.Content.ReadAsStringAsync();
 
             // save the result to a returnable object
             var result = new DynamicsResult();
             result.statusCode = _statusCode;
             result.responseMessage = _httpResponse2;
-            var clean = _responseContent2.Replace("@odata.", "fortunecookie");
+            // replace the odata with a string that can be converted to a dotnet core property
+            var clean = _responseContent.Replace("@odata.", "fortunecookie");
             result.result = Newtonsoft.Json.Linq.JObject.Parse(clean);
 
             //easily view CRM response
@@ -199,7 +177,6 @@ namespace Gov.Cscp.VictimServices.Public.Services
 
                         // set the bearer token.
                         serviceClientCredentials = new TokenCredentials(token);
-
 
                         // Collect the client in the global client and save an expiration time in the global expiration
                         _client = new HttpClient();

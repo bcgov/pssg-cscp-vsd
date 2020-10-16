@@ -165,7 +165,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             string requestJson = "{\"VendorNumber\":\"" + VendorNumber + "\",\"VendorPostalCode\":\"" + VendorPostalCode + "\"}";
             string endpointUrl = "vsd_CheckVendorStatus";
 
-            DynamicsResult result = await _dynamicsResultService.GetResultAsync(endpointUrl, requestJson);
+            DynamicsResult result = await _dynamicsResultService.Post(endpointUrl, requestJson);
 
             return StatusCode(200, result.result.ToString());
         }
@@ -176,7 +176,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             string requestJson = "{\"VendorNumber\":\"" + VendorNumber + "\",\"VendorPostalCode\":\"" + VendorPostalCode + "\",\"CounselorNumber\":\"" + CounsellorNumber + "\",\"CounselorLastName\":\"" + CounsellorLastName + "\"}";
             string endpointUrl = "vsd_CheckVendorStatus";
 
-            DynamicsResult result = await _dynamicsResultService.GetResultAsync(endpointUrl, requestJson);
+            DynamicsResult result = await _dynamicsResultService.Post(endpointUrl, requestJson);
 
             return StatusCode(200, result.result.ToString());
         }
