@@ -871,6 +871,11 @@
                     <table class="table table-striped review-table">
                         <tbody>
                             <tr>
+                                <th>Life insurance/death benefits</th>
+                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLifeInsuranceBenefits')"></span>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th>Disability Plan benefits</th>
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDisabilityPlanBenefits')"></span>
                                 </td>

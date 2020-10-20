@@ -202,17 +202,14 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // Setup policeFiles, don't show if there isn't any
                 if (model.CrimeInformation.policeReports != null && model.CrimeInformation.policeReports.Length > 0)
                 {
-                    if (model.CrimeInformation.policeReports[0].policeFileNumber.Length > 0)
+                    application.PoliceFileNumberCollection = model.CrimeInformation.policeReports.Select(r => new Policefilenumbercollection
                     {
-                        application.PoliceFileNumberCollection = model.CrimeInformation.policeReports.Select(r => new Policefilenumbercollection
-                        {
-                            vsd_investigatingpoliceofficername = r.investigatingOfficer,
-                            vsd_policefilenumber = r.policeFileNumber,
-                            vsd_policedetachment = r.policeDetachment.Equals("Other") ? r.policeDetachmentOther : r.policeDetachment,
-                            vsd_policereportingstartdate = r.reportStartDate,
-                            vsd_policereportingenddate = r.reportEndDate
-                        }).ToArray();
-                    }
+                        vsd_investigatingpoliceofficername = r.investigatingOfficer,
+                        vsd_policefilenumber = r.policeFileNumber,
+                        vsd_policedetachment = r.policeDetachment.Equals("Other") ? r.policeDetachmentOther : r.policeDetachment,
+                        vsd_policereportingstartdate = r.reportStartDate,
+                        vsd_policereportingenddate = r.reportEndDate
+                    }).ToArray();
                 }
 
                 application.Application.vsd_cvap_offenderfirstname = model.CrimeInformation.offenderFirstName;
@@ -274,7 +271,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_applicantspersonalhealthnumber = model.MedicalInformation.personalHealthNumber;
                 application.Application.vsd_applicantsmspprovince = model.MedicalInformation.haveMedicalCoverageProvince;
                 application.Application.vsd_applicantsmspprovinceother = model.MedicalInformation.haveMedicalCoverageProvinceOther;
-                
+
                 application.Application.vsd_cvap_otherhealthcoverage = model.MedicalInformation.doYouHaveOtherHealthCoverage;
 
                 application.Application.vsd_applicantsextendedhealthprovidername = model.MedicalInformation.otherHealthCoverageProviderName; // TODO: verify mapping, "other" seems weird here
@@ -651,6 +648,10 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
                 // Build Benefits CSV String
                 string tempBenefits = "";
+                if (model.ExpenseInformation.haveLifeInsuranceBenefits)
+                {
+                    tempBenefits = tempBenefits + "100000007,";
+                }
                 if (model.ExpenseInformation.haveDisabilityPlanBenefits)
                 {
                     tempBenefits = tempBenefits + "100000000,";
@@ -801,7 +802,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             application.Application.vsd_applicantssignature = model.AuthorizationInformation.signature;
             if (model.AuthorizationInformation.allowCvapStaffSharing > 0)
             {
-                application.Application.vsd_cvap_agency_person_authorization = model.AuthorizationInformation.allowCvapStaffSharing;
+                application.Application.vsd_cvap_optionalauthorization = model.AuthorizationInformation.allowCvapStaffSharing;
+                // application.Application.vsd_cvap_agency_person_authorization = model.AuthorizationInformation.allowCvapStaffSharing;
             }
             application.Application.vsd_optionalauthorizationsignature = model.AuthorizationInformation.authorizedPersonSignature;
 

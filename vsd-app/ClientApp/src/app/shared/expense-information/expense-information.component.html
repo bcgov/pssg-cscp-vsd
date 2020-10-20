@@ -293,12 +293,25 @@
                 </app-field>
                 <ng-container *ngIf="form.get('didYouLoseWages').value === CRMBoolean.True">
 
-                    <app-field label=" Please provide days of work missed" [valid]="isFieldValid('daysWorkMissedStart') && isFieldValid('daysWorkMissedEnd')" [required]="true" errorMessage="Please select an option">
-                        <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
+                    <app-field label=" Please provide days of work missed" [valid]="isFieldValid('daysWorkMissedStart') && isFieldValid('daysWorkMissedEnd')" [required]="true" errorMessage="Please enter a valid date range">
+                        <div class="date-container">
+                            <div class="start-date-container">
+                                <app-date-field [control]="form.get('daysWorkMissedStart')" [max]="today" (change)="daysWorkMissedStartChange()"></app-date-field>
+                            </div>
+                            <div class="end-date-container">
+                                <span class="end-date-span">
+                                    <span class="tick-span"> - </span>
+                                    <app-date-field [control]="form.get('daysWorkMissedEnd')" class="full-width" [min]="minEndDate" [max]="today" (change)="daysWorkMissedEndChange()"></app-date-field>
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <!-- <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
                         <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
                         <span> - </span>
                         <input type="text" [max]="today" [min]="minEndDate" (dateChange)="daysWorkMissedEndChange($event)" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
-                        <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker>
+                        <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker> -->
                     </app-field>
 
                     <app-field label="Social Insurance Number (SIN)" [required]="form.get('didYouLoseWages').value === CRMBoolean.True" [valid]="isFieldValid('sin')" errorMessage="Please enter your SIN">
@@ -378,6 +391,12 @@
                     <ng-container>
                         <app-field>
                             <label>
+                                <input type="checkbox" [value]="true" name="haveLifeInsuranceBenefits" formControlName="haveLifeInsuranceBenefits" (change)="changeOtherBenefitValidity($event)">
+                                Life insurance/death benefits
+                            </label>
+                        </app-field>
+                        <app-field>
+                            <label>
                                 <input type="checkbox" [value]="true" name="haveDisabilityPlanBenefits" formControlName="haveDisabilityPlanBenefits" (change)="changeOtherBenefitValidity($event)">
                                 Disability Plan benefits
                             </label>
@@ -425,7 +444,7 @@
                         </app-field>
                     </ng-container>
 
-                   
+
                 </div>
             </section>
         </section>

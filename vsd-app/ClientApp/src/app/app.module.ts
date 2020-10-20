@@ -101,6 +101,7 @@ import { InvoiceInstructionsDialog } from './shared/dialogs/invoice-instructions
 import { StateService } from './services/state.service';
 import { LookupService } from './services/lookup.service';
 import { DigitOnlyDirective } from './directive/number-only.directive';
+import { DateFieldComponent } from './shared/date-field/date-field.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { DigitOnlyDirective } from './directive/number-only.directive';
     CancelApplicationDialog,
     CancelDialog,
     CrimeInformationComponent,
+    DateFieldComponent,
     DatePickerComponent,
     DeactivateGuardDialog,
     DeclarationInformationComponent,

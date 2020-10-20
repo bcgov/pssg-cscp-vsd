@@ -82,6 +82,7 @@ export class ExpenseInfoHelper {
         minimumOtherBenefitsSelected: [''],//, Validators.required],
 
         additionalBenefitsDetails: [''],//, Validators.required], ??
+        haveLifeInsuranceBenefits: [false],
         haveDisabilityPlanBenefits: [false],
         haveEmploymentInsuranceBenefits: [false],
         haveIncomeAssistanceBenefits: [false],

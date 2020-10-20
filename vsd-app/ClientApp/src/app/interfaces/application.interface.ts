@@ -112,6 +112,7 @@ export interface ExpenseInformation {
   haveProtectiveMovingExpenses: boolean;
   haveDisabilityExpenses: boolean;
   haveOtherExpenses: boolean;
+  haveLifeInsuranceBenefits: boolean;
   haveDisabilityPlanBenefits: boolean;
   haveEmploymentInsuranceBenefits: boolean;
   haveIncomeAssistanceBenefits: boolean;
@@ -218,7 +219,6 @@ interface Othertreatment {
 }
 interface AuthorizedPerson {
   providerType: string;
-  providerTypeText: string;
   authorizedPersonFirstName: string;
   authorizedPersonLastName: string;
   authorizedPersonPhoneNumber: string;

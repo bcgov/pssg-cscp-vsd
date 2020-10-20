@@ -450,10 +450,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     );
   }
 
-  crimePeriodStartChange(event: MatDatepickerInputEvent<Date>) {
-    this.crimePeriodStartDate = event.target.value;
+  crimePeriodStartChange() {
+    console.log("crimePeriodStartChange");
+    this.crimePeriodStartDate = moment(this.form.get('crimePeriodStart').value).toDate();
+    console.log(this.crimePeriodStartDate);
     //validate that a selected end date is not before the start date
-    let startDate = moment(event.target.value);
+    let startDate = moment(this.form.get('crimePeriodStart').value);
 
     let endDate = this.form.get('crimePeriodEnd').value;
     if (endDate && moment(endDate).isBefore(startDate)) {
@@ -498,13 +500,15 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     }
   }
 
-  reportStartChange(index: number, event: MatDatepickerInputEvent<Date>) {
-    this.policeReportMinDates[index] = event.target.value;
-    //validate that a selected end date is not before the start date
-    let startDate = moment(event.target.value);
+  reportStartChange(index: number) {
     this.policeReportItems = this.form.get('policeReports') as FormArray;
     let thisReport = this.policeReportItems.at(index) as FormGroup;
     let endDate = moment(thisReport.get('reportEndDate').value);
+
+    this.policeReportMinDates[index] = thisReport.get('reportStartDate').value;
+    //validate that a selected end date is not before the start date
+    let startDate = moment(thisReport.get('reportStartDate').value);
+
     if (endDate.isBefore(startDate)) {
       thisReport.get('reportEndDate').patchValue('');
     }

@@ -1,0 +1,20 @@
+.date-container {
+  display: flex;
+}
+
+.month-container,
+.day-container {
+  margin-right: 7px;
+}
+
+.year-container {
+  flex: 4 1 0;
+}
+
+.month-container {
+  flex: 5 1 0;
+}
+
+.day-container {
+  flex: 3 1 0;
+}

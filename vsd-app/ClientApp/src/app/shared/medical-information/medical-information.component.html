@@ -94,8 +94,11 @@
                 </section>
 
                 <app-field label="Date of Initial treatment">
-                    <input type="text" [max]="today" class="form-control standard" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()">
-                    <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker>
+                    <div class="hospital-date-container">
+                        <app-date-field [control]="form.get('treatedAtHospitalDate')" [max]="today"></app-date-field>
+                    </div>
+                    <!-- <input type="text" [max]="today" class="form-control standard" formControlName="treatedAtHospitalDate" placeholder="yyyy-mm-dd" [matDatepicker]="treatedAtHospitalDatePicker" (focus)="treatedAtHospitalDatePicker.open()" (click)="treatedAtHospitalDatePicker.open()">
+                    <mat-datepicker #treatedAtHospitalDatePicker></mat-datepicker> -->
                 </app-field>
             </section>
         </div>
