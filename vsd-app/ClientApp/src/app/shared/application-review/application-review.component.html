@@ -538,10 +538,10 @@
                             {{ valueOrEmpty('medicalInformation.familyDoctorLastName', '') }}
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <th>Email Address</th>
                         <td>{{ valueOrEmpty('medicalInformation.familyDoctorEmail') }} </td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <th>Family doctor's Phone Number</th>
                         <td>{{ valueOrEmpty('medicalInformation.familyDoctorPhoneNumber') | phone}} </td>
@@ -589,6 +589,10 @@
                 <tr>
                     <th>Fax</th>
                     <td>{{ valueOrEmpty(item.get('providerFax')) | phone}}</td>
+                </tr>
+                <tr *ngIf="formType === ApplicationType.Victim_Application">
+                    <th>Type of provider</th>
+                    <td>{{ item.get('providerType').value }}</td>
                 </tr>
                 <tr>
                     <th>Mailing Address</th>
