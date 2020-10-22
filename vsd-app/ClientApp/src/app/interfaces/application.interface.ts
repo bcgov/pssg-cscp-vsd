@@ -7,50 +7,45 @@ export interface Application {
   ApplicationType: number;
   Introduction: Introduction;
   PersonalInformation: PersonalInformation;
+  VictimInformation?: VictimInformation;
   CrimeInformation: CrimeInformation;
   MedicalInformation: MedicalInformation;
   ExpenseInformation: ExpenseInformation;
-  EmploymentIncomeInformation?: EmploymentIncomeInformation;// optional: not in ifm-application but found in victim application
+  EmploymentIncomeInformation?: EmploymentIncomeInformation;
   RepresentativeInformation: RepresentativeInformation;
   DeclarationInformation: DeclarationInformation;
   AuthorizationInformation: AuthorizationInformation;
-  VictimInformation?: VictimInformation;// optional: not in ifm-application but found in victim application
 }
 export interface Introduction {
   understoodInformation: string;
 }
 export interface PersonalInformation {
+  agreeToCvapCommunicationExchange: string;
+  alias: NameBlock;
+  alternateAddress: Address;
+  alternatePhoneNumber: string;
+  birthDate?: Date;
+  dateOfNameChange?: Date;
+  email: string;
+  gender: number;
+  iHaveOtherNames: string;
+  indigenousStatus: number;
+  leaveVoicemail: number;
+  maritalStatus: number;
+  name: NameBlock;
+  occupation: string;
   permissionToContactViaMethod: boolean;
+  phoneNumber: string;
+  preferredMethodOfContact: number;
+  primaryAddress: Address;
   relationshipToVictim: string;
   relationshipToVictimOther: string;
-  gender: number;
-  maritalStatus: number;
-  preferredMethodOfContact: number;
-  dateOfNameChange?: Date;
-  birthDate?: Date;
-  name: NameBlock;
-  iHaveOtherNames: string;
-  alias: NameBlock;
   sin: string;
-  occupation: string;
-  indigenousStatus: number;
-  agreeToCvapCommunicationExchange: string;
-  phoneNumber: string;
-  leaveVoicemail: number;
-  alternatePhoneNumber: string;
-  email: string;
-  primaryAddress: Address;
-  alternateAddress: Address;
 }
 export interface CrimeInformation {
-  // policeReportedDate?: Date;
-  // policeReportedEndDate?: Date;
-  // policeReportedWhichPoliceForce: string;
-  overOneYearFromCrime: number;
   courtFiles: Courtfile[];
   crimeDetails: string;
   crimeInjuries: string;
-  crimeLocation: string;
   crimeLocations: Crimelocation[];
   crimePeriodEnd?: Date;
   crimePeriodStart?: Date;
@@ -64,6 +59,7 @@ export interface CrimeInformation {
   offenderLastName: string;
   offenderMiddleName: string;
   offenderRelationship: string;
+  overOneYearFromCrime: number;
   policeReportedMultipleTimes: string;
   policeReports: Policereport[];
   racafInformation: Racafinformation;
@@ -75,185 +71,179 @@ export interface CrimeInformation {
   whyDidYouNotApplySooner: string;
 }
 export interface MedicalInformation {
-  doYouHaveMedicalServicesCoverage: string;
-  personalHealthNumber: string;
-  haveMedicalCoverageProvince: string;
-  haveMedicalCoverageProvinceOther: string;
-  doYouHaveOtherHealthCoverage: number;
-  otherHealthCoverageProviderName: string;
-  otherHealthCoverageExtendedPlanNumber: string;
-  wereYouTreatedAtHospital: string;
-  treatedAtHospitalName: string;
-  treatedOutsideBc: boolean;
-  treatedOutsideBcHospitalName: string;
-  treatedAtHospitalDate?: Date;
   beingTreatedByFamilyDoctor: string;
+  doYouHaveMedicalServicesCoverage: string;
+  doYouHaveOtherHealthCoverage: number;
+  familyDoctorAddress: Address;
   familyDoctorClinic: string;
+  familyDoctorEmail: string;
+  familyDoctorFax: string;
   familyDoctorFirstName: string;
   familyDoctorLastName: string;
   familyDoctorPhoneNumber: string;
-  familyDoctorAddress: Address;
-  // familyDoctorAddressLine1: string;
-  // familyDoctorAddressLine2: string;
   hadOtherTreatments: string;
+  haveMedicalCoverageProvince: string;
+  haveMedicalCoverageProvinceOther: string;
+  otherHealthCoverageExtendedPlanNumber: string;
+  otherHealthCoverageProviderName: string;
   otherTreatments: Othertreatment[];
+  personalHealthNumber: string;
+  treatedAtHospitalDate?: Date;
+  treatedAtHospitalName: string;
+  treatedOutsideBc: boolean;
+  treatedOutsideBcHospitalName: string;
+  wereYouTreatedAtHospital: string;
 }
 export interface ExpenseInformation {
-  haveMedicalExpenses: boolean;
-  haveDentalExpenses: boolean;
-  havePrescriptionDrugExpenses: boolean;
+  daysWorkMissedEnd?: Date;
+  daysWorkMissedStart?: Date;
+  didYouLoseWages?: number;
+  employers: Employer[];
+  haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: boolean;
+  haveCanadaPensionPlanBenefits: boolean;
+  haveCivilActionBenefits: boolean;
   haveCounsellingExpenses: boolean;
   haveCounsellingTransportation: boolean;
-  haveLostEmploymentIncomeExpenses: boolean;
-  haveLegalProceedingExpenses: boolean;
-  havePersonalPropertyLostExpenses: boolean;
-  haveProtectiveMeasureExpenses: boolean;
-  haveMovingExpenses: boolean;
-  haveProtectiveMovingExpenses: boolean;
+  haveCrimeSceneCleaningExpenses: string;
+  haveDentalExpenses: boolean;
   haveDisabilityExpenses: boolean;
-  haveOtherExpenses: boolean;
-  haveLifeInsuranceBenefits: boolean;
   haveDisabilityPlanBenefits: boolean;
   haveEmploymentInsuranceBenefits: boolean;
   haveIncomeAssistanceBenefits: boolean;
-  haveCanadaPensionPlanBenefits: boolean;
-  haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: boolean;
-  haveCivilActionBenefits: boolean;
+  haveLegalProceedingExpenses: boolean;
+  haveLifeInsuranceBenefits: boolean;
+  haveLostEmploymentIncomeExpenses: boolean;
+  haveMedicalExpenses: boolean;
+  haveMovingExpenses: boolean;
   haveOtherBenefits: boolean;
-  noneOfTheAboveBenefits: boolean;
-  haveCrimeSceneCleaningExpenses: string;
-  otherSpecificExpenses: string;
-  otherSpecificBenefits: string;
-  didYouLoseWages?: number;
-  sin?: number;
-  missedWorkDueToDeathOfVictim?: number;
-  daysWorkMissedStart?: Date;
-  daysWorkMissedEnd?: Date;
-  employers: Employer[];
+  haveOtherExpenses: boolean;
+  havePersonalPropertyLostExpenses: boolean;
+  havePrescriptionDrugExpenses: boolean;
+  haveProtectiveMeasureExpenses: boolean;
+  haveProtectiveMovingExpenses: boolean;
   mayContactEmployer?: number;
+  missedWorkDueToDeathOfVictim?: number;
+  noneOfTheAboveBenefits: boolean;
+  otherSpecificBenefits: string;
+  otherSpecificExpenses: string;
+  sin?: number;
 }
 export interface EmploymentIncomeInformation {
-  wereYouEmployedAtTimeOfCrime?: number;
-  wereYouAtWorkAtTimeOfIncident?: number;
-  haveYouAppliedToWorkSafe?: number;
-  wsbcClaimNumber?: string;
-  didYouMissWorkDueToCrime: number;
-  didYouLoseWages?: number;
   areYouSelfEmployed?: number;
-  mayContactEmployer?: number;
-  haveYouAppliedForWorkersCompensation: number;
   areYouStillOffWork?: number;
-  daysWorkMissedStart?: Date;
   daysWorkMissedEnd?: Date;
-  workersCompensationClaimNumber: string;
+  daysWorkMissedStart?: Date;
+  didYouLoseWages?: number;
+  didYouMissWorkDueToCrime: number;
   employers: Employer[];
+  haveYouAppliedForWorkersCompensation: number;
+  haveYouAppliedToWorkSafe?: number;
+  mayContactEmployer?: number;
+  sin?: number;
+  wereYouAtWorkAtTimeOfIncident?: number;
+  wereYouEmployedAtTimeOfCrime?: number;
+  workersCompensationClaimNumber: string;
+  wsbcClaimNumber?: string;
 }
 export interface RepresentativeInformation {
   completingOnBehalfOf?: number;
-  representativePreferredMethodOfContact?: number;
-  representativeFirstName: string;
-  representativeMiddleName: string;
-  representativeLastName: string;
-  representativePhoneNumber: string;
+  documents: DocumentCollectioninformation[];
+  mostRecentMailingAddressSameAsPersonal: boolean;
+  relationshipToPerson: string;
+  representativeAddress: Address;
   representativeAlternatePhoneNumber: string;
   representativeEmail: string;
-  mostRecentMailingAddressSameAsPersonal: boolean;
-  representativeAddress: Address;
-  documents: DocumentCollectioninformation[];
-  relationshipToPerson: string;
+  representativeFirstName: string;
+  representativeLastName: string;
+  representativeMiddleName: string;
+  representativePhoneNumber: string;
+  representativePreferredMethodOfContact?: number;
 }
 export interface DeclarationInformation {
   declaredAndSigned: string;
   signature: string;
 }
 export interface AuthorizationInformation {
+  allowCvapStaffSharing: number;
   approvedAuthorityNotification: string;
+  authorizedPerson: AuthorizedPerson[];
+  authorizedPersonAuthorizesDiscussion: string;
+  authorizedPersonSignature: string;
   readAndUnderstoodTermsAndConditions: string;
   signature: string;
-  allowCvapStaffSharing: number;
-  authorizedPerson: AuthorizedPerson[];
-  //authorizedPersonFullName: string;
-  //authorizedPersonPhoneNumber: string;
-  //authorizedPersonRelationship: string;
-  //authorizedPersonAgencyName: string;
-  //authorizedPersonAuthorizesDiscussion: string;
-  //authorizedPersonSignature: string;
-  //authorizedPersonAgencyAddress: Address;
 }
 
 interface Crimelocation {
   location: string;
 }
 interface Policereport {
-  policeFileNumber: string;
   investigatingOfficer: string;
-  // policeForce: string;
-  // reportDate: Date;
   policeDetachment: string;
-  reportStartDate: Date;
+  policeFileNumber: string;
   reportEndDate: Date;
+  reportStartDate: Date;
 }
 
 interface Racafinformation {
   applyToCourtForMoneyFromOffender: number;
-  expensesRequested: string;
   expensesAwarded?: string;
   expensesReceived?: string;
-  willBeTakingLegalAction: number;
+  expensesRequested: string;
   haveLawyer?: number;
-  lawyerOrFirmName: string;
   lawyerAddress: Address;
+  lawyerOrFirmName: string;
   signName?: string;
   signature?: string;
+  willBeTakingLegalAction: number;
 }
 interface Othertreatment {
-  providerType: string;
-  providerTypeText: string;
+  providerAddress: Address;
   providerCompany: string;
+  providerEmail: string;
+  providerFax: string;
   providerFirstName: string;
   providerLastName: string;
   providerPhoneNumber: string;
-  providerEmail: string;
-  providerAddress: Address;
-  providerFax: string;
+  providerType: string;
+  providerTypeText: string;
 }
 interface AuthorizedPerson {
-  providerType: string;
+  authorizedPersonAgencyAddress: Address;
+  authorizedPersonAgencyName: string;
+  authorizedPersonEmail: string;
   authorizedPersonFirstName: string;
   authorizedPersonLastName: string;
   authorizedPersonPhoneNumber: string;
-  authorizedPersonEmail: string;
-  authorizedPersonAgencyAddress: Address;
   authorizedPersonRelationship: string;
   authorizedPersonRelationshipOther: string;
-  authorizedPersonAgencyName: string;
+  providerType: string;
 }
 export interface Employer {
-  employerName: string;
-  employerPhoneNumber: string;
-  employerFax: string;
+  contactable: boolean;
+  employerAddress: Address;
   employerEmail: string;
+  employerFax: string;
   employerFirstName: string;
   employerLastName: string;
-  employerAddress: Address;
-  contactable: boolean;
+  employerName: string;
+  employerPhoneNumber: string;
 }
 export interface VictimInformation {
+  alternatePhoneNumber?: string;
+  birthDate: string;
+  confirmEmail?: string;
+  dateOfNameChange?: string;
+  email?: string;
   firstName: string;
-  middleName?: string;
-  lastName: string;
+  gender: number;
   iHaveOtherNames?: string;
+  lastName: string;
+  middleName?: string;
+  mostRecentMailingAddressSameAsPersonal: boolean;
+  occupation?: string;
   otherFirstName?: string;
   otherLastName?: string;
-  dateOfNameChange?: string;
-  gender: number;
-  birthDate: string;
-  sin: string;
-  occupation?: string;
   phoneNumber?: string;
-  alternatePhoneNumber?: string;
-  email?: string;
-  confirmEmail?: string;
-  mostRecentMailingAddressSameAsPersonal: boolean;
   primaryAddress: Address;
+  sin: string;
 }

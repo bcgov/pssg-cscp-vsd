@@ -383,10 +383,12 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   checkVendorStatus(source: string) {
+    let vendorNumber = this.form.get('invoiceDetails.vendorNumber').value;
+    let vendorPostalCode = this.form.get('invoiceDetails.vendorPostalCode').value;
+    let counsellorNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber').value;
+    let counsellorLastName = this.form.get('invoiceDetails.counsellorLastName').value;
     switch (source) {
       case 'vendor': {
-        let vendorNumber = this.form.get('invoiceDetails.vendorNumber').value;
-        let vendorPostalCode = this.form.get('invoiceDetails.vendorPostalCode').value;
         if (vendorNumber && vendorPostalCode) {
           this.justiceDataService.validateVendor(vendorNumber, vendorPostalCode).subscribe((res: any) => {
             this.didValidateVendor = true;
@@ -396,13 +398,17 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         else {
           this.isVendorValid = false;
         }
+
+        if (vendorNumber && vendorPostalCode && counsellorNumber && counsellorLastName && !this.didValidateCounsellor) {
+          this.justiceDataService.validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName).subscribe((res: any) => {
+            this.didValidateCounsellor = true;
+            this.isCounsellorValid = res.IsSuccess;
+          });
+        }
         break;
       }
       case 'counsellor': {
-        let vendorNumber = this.form.get('invoiceDetails.vendorNumber').value;
-        let vendorPostalCode = this.form.get('invoiceDetails.vendorPostalCode').value;
-        let counsellorNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber').value;
-        let counsellorLastName = this.form.get('invoiceDetails.counsellorLastName').value;
+
         if (vendorNumber && vendorPostalCode && counsellorNumber && counsellorLastName) {
           this.justiceDataService.validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName).subscribe((res: any) => {
             this.didValidateCounsellor = true;
