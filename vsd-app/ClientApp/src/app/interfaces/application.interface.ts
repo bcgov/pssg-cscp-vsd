@@ -46,7 +46,7 @@ export interface CrimeInformation {
   // policeReportedDate?: Date;
   // policeReportedEndDate?: Date;
   // policeReportedWhichPoliceForce: string;
-  applicationFiledWithinOneYearFromCrime: string;
+  overOneYearFromCrime: number;
   courtFiles: Courtfile[];
   crimeDetails: string;
   crimeInjuries: string;

@@ -46,8 +46,6 @@ export class DateFieldComponent implements OnInit {
     }
 
     output() {
-        console.log(this.min);
-        console.log(this.max);
         if (this.day == 0 || this.month == -1 || this.year == 0) {
             this.control.patchValue('');
             return;
@@ -61,9 +59,6 @@ export class DateFieldComponent implements OnInit {
         let date = moment(new Date(this.year, this.month, this.day));
         if (this.min) {
             if (date.isBefore(moment(this.min))) {
-                console.log("min error");
-                console.log(date);
-                console.log(moment(this.min));
                 hasMinError = true;
                 setTimeout(() => { this.control.setErrors({ 'incorrect': true }); }, 0);
             }
@@ -71,9 +66,6 @@ export class DateFieldComponent implements OnInit {
 
         if (this.max) {
             if (date.isAfter(moment(this.max))) {
-                console.log("max error");
-                console.log(date);
-                console.log(moment(this.max));
                 hasMaxError = true;
                 setTimeout(() => { this.control.setErrors({ 'incorrect': true }); }, 0);
             }

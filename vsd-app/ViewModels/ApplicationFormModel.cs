@@ -68,7 +68,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int offenderBeenCharged { get; set; }
         public int wasReportMadeToPolice { get; set; }
         public int? intendToSueOffender { get; set; }
-        public string applicationFiledWithinOneYearFromCrime { get; set; }
+        public int? overOneYearFromCrime { get; set; }
         public string crimeDetails { get; set; }
         public string crimeInjuries { get; set; }
         public string crimeLocation { get; set; }

@@ -1,7 +1,5 @@
-import { formatDate } from '@angular/common';
 import { ValidatorFn, ValidationErrors, AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import * as _moment from 'moment';
-import { ConsoleLoggerService } from '../services/logger.service';
 
 export class FormBase {
   form: FormGroup;
@@ -111,39 +109,11 @@ export class FormBase {
   }
 
   public requireCheckboxesToBeCheckedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
-    // This is causing a failure of validation if both Medical and Dental are selected. So commenting out. But why was this here in the first place??? (JT)
-    // Removed from victim-application.component.ts(Line 300)
     const name = control.get('haveMedicalExpenses');
     const alterEgo = control.get('haveDentalExpenses');
 
     return name.value != false && alterEgo.value != false ? { 'identityRevealed': true } : null;
   };
-
-  //public requireCheckboxesToBeCheckedValidator(minRequired = 1): ValidatorFn {
-  //  console.log("hit validation");
-  //  return function validate(formGroup: FormGroup) {
-  //    let checked = 0;
-  //    console.log(formGroup.toString());
-
-  //    Object.keys(formGroup.controls).forEach(key => {
-  //      const control = formGroup.controls[key];
-
-  //      console.log("key: " + key + " value: " + control.value);
-
-  //      if (control.value === true) {
-  //        checked++;
-  //      }
-  //    });
-
-  //    if (checked < minRequired) {
-  //      return {
-  //        requireCheckboxesToBeChecked: true,
-  //      };
-  //    }
-
-  //    return null;
-  //  };
-  //}
 
   public requiredCheckboxGroupValidator(checkboxFields: string[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
@@ -490,14 +460,6 @@ export class FormBase {
     control.setValue(value.trim());
   }
 
-  //  copyApplicantToRACAFSignature(form: FormGroup | FormArray) {
-  // Temporarily taken out. Return if they decide to populate the applicant value to the RACAF signature
-  //    let source = form.get('personalInformation');
-  //    let target = form.get('crimeInformation.racafInformation');
-  //    let options = { onlySelf: true, emitEvent: true };
-  //    target.get('signName').patchValue(source.get('firstName').value + ' ' + source.get('middleName').value + ' ' + source.get('lastName').value, options);
-  //  }
-
   copyPersonalContactInfoToVictim(form: FormGroup | FormArray) {
     let copyInfo = form.get('victimInformation.victimSameContactInfo').value === true;
     let target = form.get('victimInformation');
@@ -669,5 +631,3 @@ export class FormBase {
     control.updateValueAndValidity();
   }
 }
-// More custom validation
-// https://stackoverflow.com/questions/38204812/angular2-forms-validator-with-interrelated-fields/40416197#40416197

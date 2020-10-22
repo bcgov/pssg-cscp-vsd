@@ -110,7 +110,6 @@ export class AddressComponent implements OnInit {
       }));
     }
 
-    // console.log(this.lookupData);
     if (!this.lookupData.provinces || this.lookupData.provinces.length == 0) {
       promise_array.push(new Promise((resolve, reject) => {
         this.lookupService.getProvinces().subscribe((res) => {

@@ -19,6 +19,6 @@ export class TestComponent implements OnInit {
   }
 
   submit() {
-    console.log(`Value: ${this.applicationForm.controls.mySwitch.value}`);
+    // console.log(`Value: ${this.applicationForm.controls.mySwitch.value}`);
   }
 }

@@ -100,16 +100,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     });
   }
 
-  debugFormData(): void {
-    let formData = {
-      InvoiceDetails: this.form.get('invoiceDetails').value
-    };
-
-    console.log(JSON.stringify(formData));
-  }
-
   printInvoice() {
-    console.log("attempt to print invoice");
     window.scroll(0, 0);
 
     this.showPrintView = true;
@@ -123,7 +114,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   @HostListener('window:afterprint')
   onafterprint() {
-    console.log("after print");
     document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
     window.scroll(0, 0);
     // this.showFormPanel = false;
@@ -141,7 +131,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.showCancelPanel = false;
 
     setTimeout(() => {
-      console.log(id);
       if (!id) {
         window.scroll(0, 0);
       }
@@ -171,8 +160,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   showCancelDialog() {
-    console.log("show cancel dialog");
-    // $event.preventDefault();
     let self = this;
     let dialogRef = this.dialog.open(CancelDialog, {
       autoFocus: false,
@@ -278,10 +265,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       this.formFullyValidated = true;
       this.save().subscribe(
         data => {
-          console.log(data);
           if (data['IsSuccess'] == true) {
-            console.log(data['IsSuccess']);
-            console.log("submitting");
             this.invoiceSuccess();
           }
           else {
@@ -317,11 +301,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       formData.InvoiceDetails.exemptFromGst = !formData.InvoiceDetails.gstApplicable;
       this.busy = this.justiceDataService.submitCounsellorInvoice(formData).subscribe(
         data => {
-          console.log("submit and create new res");
-          console.log(data);
           if (data['IsSuccess'] == true) {
-            console.log(data['IsSuccess']);
-            // this.snackBar.open('Successfully submitted invoice. ' + data['message'], 'Success', { duration: 3500, panelClass: ['green-snackbar'] });
             this.invoiceEdit();
             this.cloneInvoice(_.cloneDeep(this.form));
           }
@@ -351,8 +331,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     };
     this.busy = this.justiceDataService.submitCounsellorInvoice(formData)
       .subscribe(res => {
-        console.log("save() res");
-        console.log(res);
         subResult.next(res);
       }, err => subResult.next(false));
     this.busy2 = Promise.resolve(this.busy);
@@ -410,11 +388,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         let vendorNumber = this.form.get('invoiceDetails.vendorNumber').value;
         let vendorPostalCode = this.form.get('invoiceDetails.vendorPostalCode').value;
         if (vendorNumber && vendorPostalCode) {
-          console.log("validating vendor");
-          console.log(vendorNumber, vendorPostalCode);
           this.justiceDataService.validateVendor(vendorNumber, vendorPostalCode).subscribe((res: any) => {
             this.didValidateVendor = true;
-            console.log(res);
             this.isVendorValid = res.IsSuccess;
           });
         }
@@ -429,11 +404,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         let counsellorNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber').value;
         let counsellorLastName = this.form.get('invoiceDetails.counsellorLastName').value;
         if (vendorNumber && vendorPostalCode && counsellorNumber && counsellorLastName) {
-          console.log("validating vendor and counsellor");
-          console.log(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName);
           this.justiceDataService.validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName).subscribe((res: any) => {
             this.didValidateCounsellor = true;
-            console.log(res);
             this.isCounsellorValid = res.IsSuccess;
           });
         }

@@ -27,16 +27,12 @@ import { VictimInfoHelper } from '../shared/victim-information/victim-informatio
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { LookupService } from '../services/lookup.service';
 import { iLookupData } from '../models/lookup-data.model';
-import { config } from '../../config';
 
 @Component({
   selector: 'app-victim-application',
   templateUrl: './victim-application.component.html',
   styleUrls: ['./victim-application.component.scss'],
   providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } },
@@ -129,54 +125,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         resolve();
       });
     }));
-
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
-    //     this.lookupData.cities = res.value;
-    //     if (this.lookupData.cities) {
-    //       this.lookupData.cities.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
-
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getRelationships().subscribe((res) => {
-    //     this.lookupData.relationships = res.value;
-    //     if (this.lookupData.relationships) {
-    //       this.lookupData.relationships.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
-
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getCourts().subscribe((res) => {
-    //     this.lookupData.courts = res.value;
-    //     if (this.lookupData.courts) {
-    //       this.lookupData.courts.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
-
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getPoliceDetachments().subscribe((res) => {
-    //     this.lookupData.police_detachments = res.value;
-    //     if (this.lookupData.police_detachments) {
-    //       this.lookupData.police_detachments.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
 
     Promise.all(promise_array).then((res) => {
       this.didLoad = true;
@@ -291,38 +239,21 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   @HostListener('window:afterprint')
   onafterprint() {
-    console.log("after print");
     document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
     window.scroll(0, 0);
     this.showPrintView = false;
   }
 
   producePDF() {
-    console.log("attempt to print invoice");
     window.scroll(0, 0);
     this.showPrintView = true;
     document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
     setTimeout(() => {
       window.print();
     }, 100);
-
-
-    //var printContents = document.getElementById('pdfPrintGroup').innerHTML;
-    // var printContents = "<html>Hello World</html>";
-
-    // this.justiceDataService.createPDF(printContents).subscribe(response => { // download file
-    //   var mediaType = 'application/pdf';
-    //   console.log(response);
-
-    // var blob = new Blob([response], { type: mediaType });
-    // console.log(blob);
-    // var blobUrl = URL.createObjectURL(blob);
-    // window.open(blobUrl);
-    // });
   }
 
   submitApplication() {
-    // show the button as submitting and disable it
     this.submitting = true;
     if ((this.form.valid) || (this.form.controls.personalInformation.valid // It's OK if this.form.controls.employmentIncomeInformation.valid is not valid
       && this.form.controls.crimeInformation.valid
@@ -339,7 +270,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
               this.router.navigate(['/application-success']);
             }
             else {
-              // re-enable the button
               this.submitting = false;
               this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application. ' + data['message']);
@@ -349,7 +279,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             }
           },
           error => {
-            // re-enable the button
             this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
@@ -359,7 +288,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           }
         );
     } else {
-      // re-enable the button
       this.submitting = false;
       console.log("form not validated");
       this.markAsTouched();
@@ -395,7 +323,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
               }
             }
             else {
-              // re-enable the button
               this.submitting = false;
               this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application. ' + data['message']);
@@ -405,7 +332,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             }
           },
           error => {
-            // re-enable the button
             this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
@@ -415,7 +341,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           }
         );
     } else {
-      // re-enable the button
       this.submitting = false;
       console.log("form not validated");
       this.markAsTouched();
@@ -453,7 +378,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       );
   }
 
-  // marking the form as touched makes the validation messages show
   markAsTouched() {
     this.form.markAsTouched();
   }
@@ -482,8 +406,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('leaveVoicemail').patchValue(0);
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
-    // let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
-    // let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
     let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
     let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
 
@@ -491,24 +413,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
     }
 
-    // for (let i = 0; i < crimeDocumentsLength; ++i) {
-    //   crimeDocuments.push(this.fb.group({
-    //     filename: [''],
-    //     body: [''],
-    //     subject: ['']
-    //   }));
-    // }
-
     for (let i = 0; i < policeReportsLength; ++i) {
       policeReports.push(this.crimeInfoHelper.createPoliceReport(this.fb));
     }
 
     ret.get('crimeInformation').patchValue(currentForm.get('crimeInformation').value);
-    // ret.get('crimeInformation').get('unsureOfCrimeDates').patchValue('');
-    // ret.get('crimeInformation').get('whenDidCrimeOccur').patchValue('');
-    // ret.get('crimeInformation').get('crimePeriodStart').patchValue('');
-    // ret.get('crimeInformation').get('crimePeriodEnd').patchValue('');
-    ret.get('crimeInformation').get('applicationFiledWithinOneYearFromCrime').patchValue('');
+    ret.get('crimeInformation').get('overOneYearFromCrime').patchValue('');
     ret.get('crimeInformation').get('whyDidYouNotApplySooner').patchValue('');
     ret.get('crimeInformation').get('crimeDetails').patchValue('');
     ret.get('crimeInformation').get('crimeInjuries').patchValue('');
@@ -516,8 +426,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
-
-    // ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
@@ -541,44 +449,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     console.log(currentForm);
     let ret = this.buildApplicationForm(ApplicationType.IFM_Application);
 
-    // ret.get('personalInformation').patchValue(currentForm.get('personalInformation').value);
-    // ret.get('personalInformation').get('firstName').patchValue('');
-    // ret.get('personalInformation').get('middleName').patchValue('');
-    // ret.get('personalInformation').get('lastName').patchValue('');
-    // ret.get('personalInformation').get('iHaveOtherNames').patchValue('');
-    // ret.get('personalInformation').get('otherFirstName').patchValue('');
-    // ret.get('personalInformation').get('otherLastName').patchValue('');
-    // ret.get('personalInformation').get('dateOfNameChange').patchValue('');
-    // ret.get('personalInformation').get('gender').patchValue(0);
-    // ret.get('personalInformation').get('birthDate').patchValue('');
-    // ret.get('personalInformation').get('sin').patchValue('');
-    // ret.get('personalInformation').get('occupation').patchValue('');
-    // ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
-
     ret.get('victimInformation').patchValue(currentForm.get('personalInformation').value);
-    //clear declaration checkboxes here
-    //...
-
-    // ret.get('victimInformation').get('mostRecentMailingAddressSameAsPersonal').patchValue(true);
 
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
-    // let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
-    // let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
     let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
     let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
 
     for (let i = 0; i < crimeLocationsLength - 1; ++i) {
       crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
     }
-
-    // for (let i = 0; i < crimeDocumentsLength; ++i) {
-    //   crimeDocuments.push(this.fb.group({
-    //     filename: [''],
-    //     body: [''],
-    //     subject: ['']
-    //   }));
-    // }
 
     for (let i = 0; i < policeReportsLength; ++i) {
       policeReports.push(this.crimeInfoHelper.createPoliceReport(this.fb));
@@ -590,8 +470,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
-
-    // ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;

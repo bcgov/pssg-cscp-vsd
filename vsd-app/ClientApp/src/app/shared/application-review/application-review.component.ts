@@ -5,7 +5,6 @@ import { FormGroup, ControlContainer, FormArray } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType, EnumHelper, OnBehalfOf, CRMBoolean, CRMMultiBoolean } from "../enums-list";
 import { AddressHelper } from "../address/address.helper";
-import { ConsoleLoggerService } from "../../services/logger.service";
 
 @Component({
     selector: 'app-application-review',
@@ -43,8 +42,6 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
 
     constructor(
         private controlContainer: ControlContainer,
-        private matDialog: MatDialog,
-        private logger: ConsoleLoggerService
     ) {
         super();
     }
@@ -71,12 +68,9 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
         console.log(this.form);
 
         console.log(this.pages);
-
     }
 
     gotoPageIndex(selectPage: number): void {
-        console.log("goto page");
-        console.log(selectPage);
         window.scroll(0, 0);
         this.parentStepper.selectedIndex = selectPage;
     }

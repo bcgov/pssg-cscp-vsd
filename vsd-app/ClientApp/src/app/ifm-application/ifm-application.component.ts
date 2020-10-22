@@ -38,9 +38,6 @@ const moment = _rollupMoment || _moment;
   templateUrl: './ifm-application.component.html',
   styleUrls: ['./ifm-application.component.scss'],
   providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } },
@@ -151,42 +148,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       });
     }));
 
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getRelationships().subscribe((res) => {
-    //     this.lookupData.relationships = res.value;
-    //     if (this.lookupData.relationships) {
-    //       this.lookupData.relationships.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
-
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getCourts().subscribe((res) => {
-    //     this.lookupData.courts = res.value;
-    //     if (this.lookupData.courts) {
-    //       this.lookupData.courts.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
-
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getPoliceDetachments().subscribe((res) => {
-    //     this.lookupData.police_detachments = res.value;
-    //     if (this.lookupData.police_detachments) {
-    //       this.lookupData.police_detachments.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
-
     Promise.all(promise_array).then((res) => {
       this.didLoad = true;
       console.log("Lookup data");
@@ -259,8 +220,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   submitApplication() {
-    //let formIsValid = true;showValidationMessage
-    // show the button as submitting and disable it
     this.submitting = true;
     if (this.form.valid) {
       this.busy = this.justiceDataService.submitApplication(this.harvestForm())
@@ -270,7 +229,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
               this.router.navigate(['/application-success']);
             }
             else {
-              // re-enable the button
               this.submitting = false;
               this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
@@ -280,7 +238,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
             }
           },
           error => {
-            // re-enable the button
             this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
@@ -290,7 +247,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
           }
         );
     } else {
-      // re-enable the button
       this.submitting = false;
       console.log("form not validated");
       this.markAsTouched();
@@ -327,7 +283,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
               }
             }
             else {
-              // re-enable the button
               this.submitting = false;
               this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
@@ -337,7 +292,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
             }
           },
           error => {
-            // re-enable the button
             this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
@@ -347,29 +301,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
           }
         );
     } else {
-      // re-enable the button
       this.submitting = false;
       console.log("form not validated");
       this.markAsTouched();
     }
-  }
-
-  debugFormData(): void {
-    let formData: Application = {
-      ApplicationType: this.FORM_TYPE,
-      Introduction: this.form.get('introduction').value,
-      PersonalInformation: this.form.get('personalInformation').value,
-      VictimInformation: this.form.get('victimInformation').value,
-      CrimeInformation: this.form.get('crimeInformation').value,
-      MedicalInformation: this.form.get('medicalInformation').value,
-      ExpenseInformation: this.form.get('expenseInformation').value,
-      EmploymentIncomeInformation: null,
-      RepresentativeInformation: this.form.get('representativeInformation').value,
-      DeclarationInformation: this.form.get('declarationInformation').value,
-      AuthorizationInformation: this.form.get('authorizationInformation').value,
-    };
-    //console.log(formData);
-    console.log(JSON.stringify(formData));
   }
 
   harvestForm(): Application {
@@ -398,7 +333,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     return data;
   }
 
-  // marking the form as touched makes the validation messages show
   markAsTouched() {
     this.form.markAsTouched();
   }
@@ -469,8 +403,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('leaveVoicemail').patchValue(0);
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
-    // let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
-    // let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
     let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
     let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
 
@@ -478,24 +410,12 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
     }
 
-    // for (let i = 0; i < crimeDocumentsLength; ++i) {
-    //   crimeDocuments.push(this.fb.group({
-    //     filename: [''],
-    //     body: [''],
-    //     subject: ['']
-    //   }));
-    // }
-
     for (let i = 0; i < policeReportsLength; ++i) {
       policeReports.push(this.crimeInfoHelper.createPoliceReport(this.fb));
     }
 
     ret.get('crimeInformation').patchValue(currentForm.get('crimeInformation').value);
-    // ret.get('crimeInformation').get('unsureOfCrimeDates').patchValue('');
-    // ret.get('crimeInformation').get('whenDidCrimeOccur').patchValue('');
-    // ret.get('crimeInformation').get('crimePeriodStart').patchValue('');
-    // ret.get('crimeInformation').get('crimePeriodEnd').patchValue('');
-    ret.get('crimeInformation').get('applicationFiledWithinOneYearFromCrime').patchValue('');
+    ret.get('crimeInformation').get('overOneYearFromCrime').patchValue('');
     ret.get('crimeInformation').get('whyDidYouNotApplySooner').patchValue('');
     ret.get('crimeInformation').get('crimeDetails').patchValue('');
     ret.get('crimeInformation').get('crimeInjuries').patchValue('');
@@ -503,7 +423,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
-    // ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
@@ -549,25 +468,14 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
 
     ret.get('victimInformation').patchValue(currentForm.get('victimInformation').value);
-    // ret.get('victimInformation').get('mostRecentMailingAddressSameAsPersonal').patchValue(true);
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
-    // let crimeDocumentsLength = currentForm.get('crimeInformation').get('documents').value.length;
-    // let crimeDocuments = ret.get('crimeInformation').get('documents') as FormArray;
     let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
     let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
 
     for (let i = 0; i < crimeLocationsLength - 1; ++i) {
       crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
     }
-
-    // for (let i = 0; i < crimeDocumentsLength; ++i) {
-    //   crimeDocuments.push(this.fb.group({
-    //     filename: [''],
-    //     body: [''],
-    //     subject: ['']
-    //   }));
-    // }
 
     for (let i = 0; i < policeReportsLength; ++i) {
       policeReports.push(this.crimeInfoHelper.createPoliceReport(this.fb));
@@ -578,7 +486,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
     ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
-    // ret.get('representativeInformation').patchValue(currentForm.get('representativeInformation').value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;

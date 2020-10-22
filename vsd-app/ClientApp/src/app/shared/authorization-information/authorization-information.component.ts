@@ -134,8 +134,6 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         }
     }
     clearAuthorizationInformation(): void {
-        console.log("clearAuthorizationInformation");
-        // remove all AuthorizedInformation items
         this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
         while (this.authorizedPersons.length > 0) {
             this.authorizedPersons.removeAt(this.authorizedPersons.length - 1);
@@ -147,7 +145,6 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         authorizedPersonSignature.updateValueAndValidity();
     }
     removeAuthorizationInformation(index: number): void {
-        console.log("removeAuthorizationInformation");
         this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
         this.authorizedPersons.removeAt(index);
         this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
@@ -193,16 +190,14 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         let authorizedPersonLastNameControl = authPerson.get('authorizedPersonLastName');
         let authorizedPersonRelationshipControl = authPerson.get('authorizedPersonRelationship');
         if (authPerson.get('providerType').value === 'Person') {
-            console.log("name and rel required");
             this.setControlValidators(authorizedPersonFirstNameControl, [Validators.required]);
             this.setControlValidators(authorizedPersonLastNameControl, [Validators.required]);
             this.setControlValidators(authorizedPersonRelationshipControl, [Validators.required]);
-
+            
             agencyControl.patchValue('');
             this.clearControlValidators(agencyControl);
         }
         else if (authPerson.get('providerType').value === 'Agency') {
-            console.log("name and rel NOT required");
             this.setControlValidators(agencyControl, [Validators.required]);
 
             this.clearControlValidators(authorizedPersonFirstNameControl);

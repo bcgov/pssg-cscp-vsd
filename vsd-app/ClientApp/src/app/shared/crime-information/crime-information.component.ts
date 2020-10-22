@@ -252,7 +252,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
         this.cityList = this.lookupData.cities.map(c => c.vsd_name);
       });
     }
-    // console.log(this.policeForceList);
   }
 
   ngOnDestroy() {
@@ -451,9 +450,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   crimePeriodStartChange() {
-    console.log("crimePeriodStartChange");
     this.crimePeriodStartDate = moment(this.form.get('crimePeriodStart').value).toDate();
-    console.log(this.crimePeriodStartDate);
+
     //validate that a selected end date is not before the start date
     let startDate = moment(this.form.get('crimePeriodStart').value);
 
@@ -463,7 +461,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     }
 
     this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
-    this.form.get('applicationFiledWithinOneYearFromCrime').patchValue(!this.showWhyDidYouNotApplySooner);
+    this.form.get('overOneYearFromCrime').patchValue(this.showWhyDidYouNotApplySooner ? CRMBoolean.True : CRMBoolean.False);
 
     let birthdate = this.form.parent.get('personalInformation.birthDate').value;
     if (birthdate && moment(birthdate).isAfter(startDate)) {
@@ -529,10 +527,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   policeForceSelected(index: number) {
-    // console.log(index);
-    // this.policeReportItems = this.form.get('policeReports') as FormArray;
-    // let thisReport = this.policeReportItems.at(index) as FormGroup;
-    // console.log(thisReport);
+    
   }
 
   applyToCourtForMoneyFromOffenderChange() {
