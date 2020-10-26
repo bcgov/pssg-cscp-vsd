@@ -105,9 +105,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       this.lookupService.getCountries().subscribe((res) => {
         this.lookupData.countries = res.value;
         if (this.lookupData.countries) {
-          this.lookupData.countries.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
-          });
+          this.lookupData.countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
         }
         resolve();
       });
@@ -117,9 +115,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       this.lookupService.getProvinces().subscribe((res) => {
         this.lookupData.provinces = res.value;
         if (this.lookupData.provinces) {
-          this.lookupData.provinces.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
-          });
+          this.lookupData.provinces.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
         }
         resolve();
       });
@@ -129,9 +125,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
         this.lookupData.cities = res.value;
         if (this.lookupData.cities) {
-          this.lookupData.cities.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
-          });
+          this.lookupData.cities.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
         }
         resolve();
       });

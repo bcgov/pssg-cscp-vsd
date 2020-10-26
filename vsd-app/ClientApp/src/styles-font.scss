@@ -367,3 +367,10 @@ input.form-control {
         page-break-inside: avoid;
     }
 }
+
+.is-disabled {
+    cursor: default;
+    opacity: 0.5;
+    text-decoration: none;
+    pointer-events: none;
+}
