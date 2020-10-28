@@ -28,6 +28,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { LookupService } from '../services/lookup.service';
 import { iLookupData } from '../models/lookup-data.model';
 import { config } from '../../config';
+import { AEMService } from '../services/aem.service';
 
 @Component({
   selector: 'app-victim-application',
@@ -84,7 +85,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     public snackBar: MatSnackBar,
     private matDialog: MatDialog,
     public state: StateService,
-    public lookupService: LookupService
+    public lookupService: LookupService,
+    private aemService: AEMService,
   ) {
     super();
   }
@@ -252,12 +254,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   producePDF() {
-    window.scroll(0, 0);
-    this.showPrintView = true;
-    document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
-    setTimeout(() => {
-      window.print();
-    }, 100);
+    console.log("get pdf from aem service");
+    this.aemService.getPDF(this.harvestForm()).subscribe((res) => {
+      console.log("got something:");
+      console.log(res);
+    });
+    // window.scroll(0, 0);
+    // this.showPrintView = true;
+    // document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
+    // setTimeout(() => {
+    //   window.print();
+    // }, 100);
   }
 
   submitApplication() {
@@ -357,6 +364,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   harvestForm(): Application {
     let data = {
       ApplicationType: this.FORM_TYPE,
+      ApplicationDate: new Date(),
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,

@@ -5,6 +5,7 @@ import { DocumentCollectioninformation } from "./victim-restitution.interface";
 
 export interface Application {
   ApplicationType: number;
+  ApplicationDate: Date;
   Introduction: Introduction;
   PersonalInformation: PersonalInformation;
   VictimInformation?: VictimInformation;

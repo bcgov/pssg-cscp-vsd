@@ -304,6 +304,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   harvestForm(): Application {
     let data = {
       ApplicationType: this.FORM_TYPE,
+      ApplicationDate: new Date(),
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
