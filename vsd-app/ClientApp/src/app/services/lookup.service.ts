@@ -45,15 +45,15 @@ export class LookupService {
   }
 
 
-  getCitiesByCountry(country: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/country/${country}/cities`, { headers: this.headers }).pipe(
+  getCitiesByCountry(country_id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/country/${country_id}/cities`, { headers: this.headers }).pipe(
       retry(3),
       catchError(this.handleError)
     );
   }
 
-  getCitiesByProvince(country: string, province: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/country/${country}/province/${province}/cities`, { headers: this.headers }).pipe(
+  getCitiesByProvince(country_id: string, province_id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/country/${country_id}/province/${province_id}/cities`, { headers: this.headers }).pipe(
       retry(3),
       catchError(this.handleError)
     );

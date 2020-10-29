@@ -1,10 +1,14 @@
 ﻿using System;
+using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace Gov.Cscp.VictimServices.Public.ViewModels
 {
+    [XmlRootAttribute("root")]
     public class ApplicationFormModel
     {
         public int ApplicationType { get; set; }
+        public DateTime ApplicationDate { get; set; }
         public Introduction Introduction { get; set; }
         public Personalinformation PersonalInformation { get; set; }
         public Crimeinformation CrimeInformation { get; set; }
@@ -15,7 +19,6 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Declarationinformation DeclarationInformation { get; set; }
         public Authorizationinformation AuthorizationInformation { get; set; }
         public VictimInformation VictimInformation { get; set; }
-        //public DocumentCollectioninformation[] DocumentCollectionInformation { get; set; }
     }
 
     public class Introduction
@@ -56,19 +59,28 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         // public DateTime? policeReportedDate { get; set; }
         // public DateTime? policeReportedEndDate { get; set; }
         // public string policeReportedWhichPoliceForce { get; set; }
+        [XmlArrayItem("element")]
         public Courtfile[] courtFiles { get; set; }
+
+        [XmlArrayItem("element")]
         public Crimelocation[] crimeLocations { get; set; }
+
         public DateTime? crimePeriodEnd { get; set; }
         public DateTime? crimePeriodStart { get; set; }
         public DateTime? dateOfDeath { get; set; }
+
+        [XmlArrayItem("element")]
         public DocumentCollectioninformation[] documents { get; set; }
+
+        [XmlArrayItem("element")]
         public Policereport[] policeReports { get; set; }
+
         public Racafinformation racafInformation { get; set; }
         public int haveYouSuedOffender { get; set; }
         public int offenderBeenCharged { get; set; }
         public int wasReportMadeToPolice { get; set; }
         public int? intendToSueOffender { get; set; }
-        public string applicationFiledWithinOneYearFromCrime { get; set; }
+        public int? overOneYearFromCrime { get; set; }
         public string crimeDetails { get; set; }
         public string crimeInjuries { get; set; }
         public string crimeLocation { get; set; }
@@ -140,6 +152,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         // public string familyDoctorAddressLine1 { get; set; }
         // public string familyDoctorAddressLine2 { get; set; }
         public string hadOtherTreatments { get; set; }
+
+        [XmlArrayItem("element")]
         public Othertreatment[] otherTreatments { get; set; }
     }
 
@@ -195,17 +209,14 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public bool haveLostOfParentalGuidanceExpenses { get; set; }
         public bool haveHomeMakerExpenses { get; set; }
 
-        // public int? wereYouEmployedAtTimeOfCrime { get; set; }
-        // public int? wereYouAtWorkAtTimeOfIncident { get; set; }
-        // public string haveYouAppliedForWorkersCompensation { get; set; }
-        // public string workersCompensationClaimNumber { get; set; }
         public int? missedWorkDueToDeathOfVictim { get; set; }
         public DateTime? daysWorkMissedStart { get; set; }
         public DateTime? daysWorkMissedEnd { get; set; }
-        // public int? areYouStillOffWork { get; set; }
         public int? didYouLoseWages { get; set; }
-        // public int? areYouSelfEmployed { get; set; }
+
+        [XmlArrayItem("element")]
         public Employer[] employers { get; set; }
+
         public int? mayContactEmployer { get; set; }
     }
 
@@ -221,7 +232,10 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int? areYouStillOffWork { get; set; }
         public int? didYouLoseWages { get; set; }
         public int? areYouSelfEmployed { get; set; }
+
+        [XmlArrayItem("element")]
         public Employer[] employers { get; set; }
+
         public int? mayContactEmployer { get; set; }
     }
 
@@ -247,7 +261,10 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string representativeAlternatePhoneNumber { get; set; }
         public string representativeEmail { get; set; }
         public Address representativeAddress { get; set; }
+
+        [XmlArrayItem("element")]
         public DocumentCollectioninformation[] documents { get; set; }
+
         public string relationshipToPerson { get; set; }
     }
 
@@ -263,7 +280,10 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string readAndUnderstoodTermsAndConditions { get; set; }
         public string signature { get; set; }
         public int? allowCvapStaffSharing { get; set; }
+
+        [XmlArrayItem("element")]
         public AuthorizedPerson[] authorizedPerson { get; set; }
+
         public string authorizedPersonAuthorizesDiscussion { get; set; }
         public string authorizedPersonSignature { get; set; }
     }

@@ -24,10 +24,16 @@ export class AddressComponent implements OnInit {
   postalCodeType: string;
   postalCodeSample: string;
 
-  cityList: string[] = [];
+  cityList: iCity[] = [];
   search: string;
   suggestions$: Observable<iCity[]>;
   errorMessage: string;
+
+  selectedCountry: iCountry;
+  selectedProvince: iProvince;
+
+  isProvinceDisabled: boolean = false;
+  isCityDisabled: boolean = false;
 
   apiUrl = 'api/Lookup';
 
@@ -110,7 +116,6 @@ export class AddressComponent implements OnInit {
       }));
     }
 
-    // console.log(this.lookupData);
     if (!this.lookupData.provinces || this.lookupData.provinces.length == 0) {
       promise_array.push(new Promise((resolve, reject) => {
         this.lookupService.getProvinces().subscribe((res) => {
@@ -145,7 +150,8 @@ export class AddressComponent implements OnInit {
     remaining_countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
 
     this.countryList = pref_countries.concat(remaining_countries);
-    this.cityList = this.lookupData.cities.map(c => c.vsd_name);
+    this.cityList = this.lookupData.cities;
+    this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
 
     let canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
     this.provinceType = canada.areaType;
@@ -153,20 +159,21 @@ export class AddressComponent implements OnInit {
     this.postalCodeSample = canada.postalCodeSample;
 
     let countryVal = this.group['controls']['country'].value.toString();
-    let selectedCountry = this.lookupData.countries.filter(c => c.vsd_name.toLowerCase() == countryVal.toLowerCase())[0];
-    if (!selectedCountry) {
-      selectedCountry = this.lookupData.countries.filter(p => p.vsd_name.toLowerCase() === 'canada')[0];
+    this.selectedCountry = this.lookupData.countries.filter(c => c.vsd_name.toLowerCase() == countryVal.toLowerCase())[0];
+    if (!this.selectedCountry) {
+      this.selectedCountry = this.lookupData.countries.filter(p => p.vsd_name.toLowerCase() === 'canada')[0];
     }
 
-    if (selectedCountry) {
-      this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value === selectedCountry.vsd_countryid);
+    if (this.selectedCountry) {
+      this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value === this.selectedCountry.vsd_countryid);
       this.provinceList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
     }
 
-    if (selectedCountry) {
-      this.setProvinceAndPostalType(selectedCountry.vsd_name);
+    if (this.selectedCountry) {
+      this.setProvinceAndPostalType(this.selectedCountry.vsd_name);
     }
     this.setProvinceValidators();
+    this.setCityValidators();
   }
 
   isSubFieldValid(field: string, disabled: boolean) {
@@ -179,32 +186,75 @@ export class AddressComponent implements OnInit {
   }
 
   onCountryChange(event) {
+    let provinceControl = this.group['controls']['province'] as FormControl;
+    provinceControl.patchValue('');
+    let cityControl = this.group['controls']['city'] as FormControl;
+    cityControl.patchValue('');
+
     let selection = event.target.value.toLowerCase();
-    let selectedCountry = this.lookupData.countries.filter(c => c.vsd_name.toLowerCase() == selection)[0];
-    if (selectedCountry) {
-      this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value === selectedCountry.vsd_countryid);
+    this.selectedCountry = this.lookupData.countries.filter(c => c.vsd_name.toLowerCase() == selection)[0];
+    if (this.selectedCountry) {
+      this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value === this.selectedCountry.vsd_countryid);
       if (this.provinceList) {
         this.provinceList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
       }
 
-      let provinceControl = this.group['controls']['province'] as FormControl;
       provinceControl.patchValue('');
       this.setProvinceValidators();
 
       let postalControl = this.group['controls']['postalCode'] as FormControl;
       postalControl.patchValue('');
 
-      this.setProvinceAndPostalType(selectedCountry.vsd_name);
+      this.setProvinceAndPostalType(this.selectedCountry.vsd_name);
+
+      if (this.provinceList.length == 0) {
+        this.lookupService.getCitiesByCountry(this.selectedCountry.vsd_countryid).subscribe((city_res) => {
+          console.log(city_res);
+          if (city_res.value) {
+            this.cityList = city_res.value;
+            this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+          }
+          else {
+            this.cityList = [];
+          }
+          this.setCityValidators();
+        });
+      }
+      else {
+        this.cityList = [];
+        this.setCityValidators();
+      }
     }
     else {
       this.provinceList = [];
-      this.cityList = this.lookupData.cities.map(c => c.vsd_name);
       this.setProvinceAndPostalType("");
+      this.cityList = [];
+      this.setCityValidators();
     }
   }
 
   onProvinceChange(event) {
-
+    let cityControl = this.group['controls']['city'] as FormControl;
+    cityControl.patchValue('');
+    let selection = event.target.value.toLowerCase();
+    this.selectedProvince = this.lookupData.provinces.filter(c => c.vsd_name.toLowerCase() == selection)[0];
+    if (this.selectedProvince) {
+      this.lookupService.getCitiesByProvince(this.selectedCountry.vsd_countryid, this.selectedProvince.vsd_provinceid).subscribe((city_res) => {
+        console.log(city_res);
+        if (city_res.value) {
+          this.cityList = city_res.value;
+          this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+        }
+        else {
+          this.cityList = [];
+        }
+        this.setCityValidators();
+      });
+    }
+    else {
+      this.cityList = [];
+      this.setCityValidators();
+    }
   }
 
   setProvinceAndPostalType(country: string) {
@@ -249,14 +299,29 @@ export class AddressComponent implements OnInit {
 
   setProvinceValidators() {
     let provinceControl = this.group['controls']['province'] as FormControl;
-
-    if (this.provinceList.length > 0 && this.showChildrenAsRequired) {
-      provinceControl.setValidators([Validators.required]);
-      provinceControl.updateValueAndValidity();
+    if (this.provinceList.length == 0) {
+      provinceControl.setErrors(null);
+      provinceControl.disable();
+      this.isProvinceDisabled = true;
     }
     else {
-      provinceControl.clearValidators();
-      provinceControl.updateValueAndValidity();
+      provinceControl.enable();
+      this.isProvinceDisabled = false;
+    }
+  }
+
+  setCityValidators() {
+    let provinceControl = this.group['controls']['province'] as FormControl;
+    let cityControl = this.group['controls']['city'] as FormControl;
+
+    if ((provinceControl.valid && this.cityList.length == 0) || provinceControl.disabled) {
+      cityControl.setErrors(null);
+      cityControl.disable();
+      this.isCityDisabled = true;
+    }
+    else {
+      cityControl.enable();
+      this.isCityDisabled = false;
     }
   }
 }

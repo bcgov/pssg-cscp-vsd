@@ -105,9 +105,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       this.lookupService.getCountries().subscribe((res) => {
         this.lookupData.countries = res.value;
         if (this.lookupData.countries) {
-          this.lookupData.countries.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
-          });
+          this.lookupData.countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
         }
         resolve();
       });
@@ -117,9 +115,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       this.lookupService.getProvinces().subscribe((res) => {
         this.lookupData.provinces = res.value;
         if (this.lookupData.provinces) {
-          this.lookupData.provinces.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
-          });
+          this.lookupData.provinces.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
         }
         resolve();
       });
@@ -129,49 +125,11 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
         this.lookupData.cities = res.value;
         if (this.lookupData.cities) {
-          this.lookupData.cities.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
-          });
+          this.lookupData.cities.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
         }
         resolve();
       });
     }));
-
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getRelationships().subscribe((res) => {
-    //     this.lookupData.relationships = res.value;
-    //     if (this.lookupData.relationships) {
-    //       this.lookupData.relationships.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
-
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getCourts().subscribe((res) => {
-    //     this.lookupData.courts = res.value;
-    //     if (this.lookupData.courts) {
-    //       this.lookupData.courts.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
-
-    // promise_array.push(new Promise((resolve, reject) => {
-    //   this.lookupService.getPoliceDetachments().subscribe((res) => {
-    //     this.lookupData.police_detachments = res.value;
-    //     if (this.lookupData.police_detachments) {
-    //       this.lookupData.police_detachments.sort(function (a, b) {
-    //         return a.vsd_name.localeCompare(b.vsd_name);
-    //       });
-    //     }
-    //     resolve();
-    //   });
-    // }));
 
     Promise.all(promise_array).then((res) => {
       this.didLoad = true;
@@ -201,7 +159,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   }
 
   showSummaryOfBenefits(): void {
-    //const summaryDialogConfig = new MatDialogConfig();
     const summaryDialogRef = this.dialog.open(SummaryOfBenefitsDialog, { data: this.FORM_TYPE });
   }
 
@@ -244,7 +201,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   }
 
   submitApplication() {
-    // show the button as submitting and disable it
     this.submitting = true;
     if (this.form.valid) {
       this.justiceDataService.submitApplication(this.harvestForm())
@@ -254,7 +210,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
               this.router.navigate(['/application-success']);
             }
             else {
-              // re-enable the button
               this.submitting = false;
               this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
@@ -264,7 +219,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
             }
           },
           error => {
-            // re-enable the button
             this.submitting = false;
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting application');
@@ -274,40 +228,22 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
           }
         );
     } else {
-      // re-enable the button
       this.submitting = false;
       console.log("form not validated");
       this.markAsTouched();
     }
   }
 
-  debugFormData(): void {
-    let formData: Application = {
-      ApplicationType: this.FORM_TYPE,
-      Introduction: this.form.get('introduction').value,
-      PersonalInformation: this.form.get('personalInformation').value,
-      VictimInformation: this.form.get('victimInformation').value,
-      CrimeInformation: this.form.get('crimeInformation').value,
-      MedicalInformation: this.form.get('medicalInformation').value,
-      ExpenseInformation: null,//this.form.get('expenseInformation').value,
-      EmploymentIncomeInformation: null,
-      RepresentativeInformation: this.form.get('representativeInformation').value,
-      DeclarationInformation: this.form.get('declarationInformation').value,
-      AuthorizationInformation: this.form.get('authorizationInformation').value,
-    };
-    //console.log(formData);
-    console.log(JSON.stringify(formData));
-  }
-
   harvestForm(): Application {
     let data = {
       ApplicationType: this.FORM_TYPE,
+      ApplicationDate: new Date(),
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
       MedicalInformation: this.form.get('medicalInformation').value as MedicalInformation,
       ExpenseInformation: this.form.get('expenseInformation').value as ExpenseInformation,
-      EmploymentIncomeInformation: null as EmploymentIncomeInformation,// this.form.get('employmentIncomeInformation').value as EmploymentIncomeInformation, // No employement information in Witness applications
+      EmploymentIncomeInformation: null as EmploymentIncomeInformation,
       RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
       DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
       AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
@@ -325,7 +261,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     return data;
   }
 
-  // marking the form as touched makes the validation messages show
   markAsTouched() {
     this.form.markAsTouched();
   }
@@ -348,14 +283,12 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   @HostListener('window:afterprint')
   onafterprint() {
-    console.log("after print");
     document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
     window.scroll(0, 0);
     this.showPrintView = false;
   }
 
   producePDF() {
-    console.log("attempt to print invoice");
     window.scroll(0, 0);
     this.showPrintView = true;
     document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");

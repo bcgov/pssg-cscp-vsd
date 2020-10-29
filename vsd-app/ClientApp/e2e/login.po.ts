@@ -1,5 +1,5 @@
 import { browser, by, element, protractor } from 'protractor';
-import { AccountDataService } from '../src/app/services/account-data.service'
+// import { AccountDataService } from '../src/app/services/account-data.service'
 import { HttpClient, HttpXhrBackend, XhrFactory } from '@angular/common/http'
 import { XMLHttpRequest } from 'xmlhttprequest'
 
@@ -10,11 +10,11 @@ export class BrowserXhr implements XhrFactory {
 
 export class LoginPage {
     apiPath = 'api/account/';
-    accountDataService: AccountDataService;
+    // accountDataService: AccountDataService;
 
     constructor() {
         const http: HttpClient = new HttpClient(new HttpXhrBackend(new BrowserXhr()));
-        this.accountDataService = new AccountDataService(http);
+        // this.accountDataService = new AccountDataService(http);
     }
 
     build(): any { return <any>(new XMLHttpRequest()); }
@@ -28,20 +28,20 @@ export class LoginPage {
     }
 
     logoutAndDelete() {
-        this.accountDataService.getCurrentAccount().subscribe(
-            res => {
-                let account = res;
-                this.accountDataService.deleteAccount(account).subscribe(
-                    null,
-                    err => {
-                        console.log('Error occured while deleting:' + err);
-                    }
-                );
-            },
-            err => {
-                console.log('Error occured while getting account:' + err);
-            }
-        );
+        // this.accountDataService.getCurrentAccount().subscribe(
+        //     res => {
+        //         let account = res;
+        //         this.accountDataService.deleteAccount(account).subscribe(
+        //             null,
+        //             err => {
+        //                 console.log('Error occured while deleting:' + err);
+        //             }
+        //         );
+        //     },
+        //     err => {
+        //         console.log('Error occured while getting account:' + err);
+        //     }
+        // );
     }
 
     getHeading(header: string) {

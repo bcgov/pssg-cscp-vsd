@@ -108,11 +108,13 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     setRequiredFields(completingOnBehalfOf: number) {
         let representativeFirstName = this.form.get('representativeFirstName');
         let representativeLastName = this.form.get('representativeLastName');
+        let applicantSameContactInfo = this.form.get('applicantSameContactInfo');
         let mostRecentMailingAddressSameAsPersonal = this.form.get('mostRecentMailingAddressSameAsPersonal');
         let representativePreferredMethodOfContact = this.form.get('representativePreferredMethodOfContact');
 
         this.clearControlValidators(representativeFirstName);
         this.clearControlValidators(representativeLastName);
+        this.clearControlValidators(applicantSameContactInfo);
         this.clearControlValidators(mostRecentMailingAddressSameAsPersonal);
         this.clearControlValidators(representativePreferredMethodOfContact);
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'representativeAddress');
@@ -137,6 +139,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
             this.setupRepresentativeContactInformation(this.form.get('representativePreferredMethodOfContact').value);  // Have to clear contact validators on contact method change
             this.setControlValidators(representativeFirstName, [Validators.required]);
             this.setControlValidators(representativeLastName, [Validators.required]);
+            this.setControlValidators(applicantSameContactInfo, [Validators.required]);
             this.setControlValidators(mostRecentMailingAddressSameAsPersonal, [Validators.required]);
             this.setControlValidators(representativePreferredMethodOfContact, [Validators.required, Validators.min(100000000), Validators.max(100000002)]);
         }

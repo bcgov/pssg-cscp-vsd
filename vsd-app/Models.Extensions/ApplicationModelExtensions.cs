@@ -137,6 +137,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     application.Application.vsd_cvap_crimeenddate = model.CrimeInformation.crimePeriodEnd;
                 }
+
+                application.Application.vsd_cvap_overoneyear = model.CrimeInformation.overOneYearFromCrime; // TODO: Verify mapping - I think it's right but just different names
                 application.Application.vsd_cvap_reasontoapplylate = model.CrimeInformation.whyDidYouNotApplySooner; // TODO: Verify mapping - I think it's right but just different names
 
                 if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember || application.Application.vsd_applicanttype == (int)ApplicationType.Witness)

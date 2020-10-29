@@ -67,7 +67,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         this.form = <FormGroup>this.controlContainer.control;
         setTimeout(() => { this.form.markAsTouched(); }, 0);
         console.log("personal info component");
-        console.log(this.form.parent);
+        console.log(this.form);
 
         this.header = "Personal";
         if (this.formType === ApplicationType.Victim_Application) {

@@ -70,7 +70,13 @@
                     <div class="location-listing" formArrayName="crimeLocations" *ngFor="let item of form.get('crimeLocations')['controls']; let i = index;">
                         <div [formGroupName]="i" class="crime-location">
                             <app-field [valid]="isArrayFieldValid('crimeLocations', 'location', i)" errorMessage="Please enter at least one location">
-                                <input class="form-control standard" type="text" formControlName="location" [typeahead]="cityList">
+                                <select class="form-control standard" formControlName="location">
+                                    <option value="">Choose a location</option>
+                                    <option *ngFor="let item of cityList" [value]="item">
+                                        {{ item }}
+                                    </option>
+                                </select>
+                                <!-- <input class="form-control standard" type="text" formControlName="location" [typeahead]="cityList"> -->
                                 <a href="javascript:void(0);" (click)="removeCrimeLocation(i)" *ngIf="showRemoveCrimeLocation" class="remove-location-button">
                                     <i class="fas fa-trash-alt"></i> Remove Location
                                 </a>
@@ -274,7 +280,13 @@
                             </div>
                             <div class="col">
                                 <app-field label="Court Location" [required]="true" [valid]="isMyControlValid(item.get('courtLocation'))" errorMessage="Please enter a court location">
-                                    <input class="form-control" type="text" formControlName="courtLocation" [typeahead]="courtList">
+                                    <select class="form-control" formControlName="courtLocation">
+                                        <option value="">Choose a court</option>
+                                        <option *ngFor="let item of courtList" [value]="item">
+                                            {{ item }}
+                                        </option>
+                                    </select>
+                                    <!-- <input class="form-control" type="text" formControlName="courtLocation" [typeahead]="courtList"> -->
                                 </app-field>
                             </div>
                             <div class="col-2" *ngIf="showRemoveCourtInfo">

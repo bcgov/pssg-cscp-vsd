@@ -39,6 +39,7 @@ namespace Gov.Cscp.VictimServices.Public
             services.AddTransient<TokenHandler>();
 
             services.AddHttpClient<IDynamicsResultService, DynamicsResultService>().AddHttpMessageHandler<TokenHandler>();
+            services.AddHttpClient<IAEMResultService, AEMResultService>();
 
             // Add a memory cache
             services.AddMemoryCache();
@@ -76,15 +77,15 @@ namespace Gov.Cscp.VictimServices.Public
                     opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
 
-            
+
             services.RegisterPermissionHandler();
 
             // setup key ring to persist in storage.
-            if (! string.IsNullOrEmpty(Configuration["KEY_RING_DIRECTORY"]))
+            if (!string.IsNullOrEmpty(Configuration["KEY_RING_DIRECTORY"]))
             {
                 services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(Configuration["KEY_RING_DIRECTORY"]));
             }
-            
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -96,12 +97,12 @@ namespace Gov.Cscp.VictimServices.Public
             {
                 options.MultipartBodyLengthLimit = 1073741824; // 1 GB
             });
-            
+
             // health checks
             services.AddHealthChecks(checks =>
             {
                 checks.AddValueTaskCheck("HTTP Endpoint", () => new ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
-                                
+
             });
 
             services.AddSession();
