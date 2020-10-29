@@ -1,5 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
 using System.Xml.Serialization;
 
 namespace Gov.Cscp.VictimServices.Public.ViewModels

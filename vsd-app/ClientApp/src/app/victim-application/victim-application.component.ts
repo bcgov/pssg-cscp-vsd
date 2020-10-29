@@ -255,9 +255,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   producePDF() {
     console.log("get pdf from aem service");
-    this.aemService.getPDF(this.harvestForm()).subscribe((res) => {
+    this.aemService.getPDF(this.harvestForm()).subscribe((res: any) => {
       console.log("got something:");
       console.log(res);
+      if (res.responseMessage) {
+        window.open(res.responseMessage);
+      }
     });
     // window.scroll(0, 0);
     // this.showPrintView = true;
