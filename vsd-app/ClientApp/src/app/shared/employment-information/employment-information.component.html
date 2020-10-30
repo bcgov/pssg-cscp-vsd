@@ -37,7 +37,7 @@
                 </app-field>
             </div>
             <div *ngIf="form.get('wereYouAtWorkAtTimeOfIncident').value === CRMBoolean.True">
-                <app-field label="Have you applied to WorkerSafe BC?" [required]="form.get('wereYouAtWorkAtTimeOfIncident').value === CRMBoolean.True" [valid]="isFieldValid('haveYouAppliedToWorkSafe')" errorMessage="Please select an option">
+                <app-field label="Have you applied to WorkSafe BC?" [required]="form.get('wereYouAtWorkAtTimeOfIncident').value === CRMBoolean.True" [valid]="isFieldValid('haveYouAppliedToWorkSafe')" errorMessage="Please select an option">
                     <label class="inline-label">
                         <input type="radio" [value]="CRMBoolean.True" name="haveYouAppliedToWorkSafe" formControlName="haveYouAppliedToWorkSafe">
                         <span>Yes</span>
