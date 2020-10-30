@@ -11,7 +11,15 @@ export class AEMService {
 
     constructor(private http: HttpClient) { }
 
-    public getPDF(application: Application) {
-        return this.http.post(this.apiPath + '/getPDF', application, { headers: this.headers });
+    public getVictimApplicationPDF(application: Application) {
+        return this.http.post(this.apiPath + '/victim', application, { headers: this.headers });
+    }
+
+    public getIFMApplicationPDF(application: Application) {
+        return this.http.post(this.apiPath + '/ifm', application, { headers: this.headers });
+    }
+
+    public getWitnessApplicationPDF(application: Application) {
+        return this.http.post(this.apiPath + '/witness', application, { headers: this.headers });
     }
 }
