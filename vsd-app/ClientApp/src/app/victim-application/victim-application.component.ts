@@ -254,7 +254,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   getAEMPDF() {
-    this.aemService.getVictimApplicationPDF(this.harvestForm()).subscribe((res: any) => {
+    let application: Application = this.harvestForm();
+    application.CrimeInformation.crimeLocations[0].location = application.CrimeInformation.crimeLocations.map(a => a.location).join(', ');
+    this.aemService.getVictimApplicationPDF(application).subscribe((res: any) => {
       console.log(res);
       if (res.responseMessage) {
         //this downloads the pdf

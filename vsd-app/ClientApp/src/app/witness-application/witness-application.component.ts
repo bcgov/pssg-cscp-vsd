@@ -26,6 +26,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { LookupService } from '../services/lookup.service';
 import { iLookupData } from '../models/lookup-data.model';
 import { config } from '../../config';
+import { AEMService } from '../services/aem.service';
 
 const moment = _rollupMoment || _moment;
 
@@ -86,6 +87,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     public snackBar: MatSnackBar,
     private dialog: MatDialog,
     public lookupService: LookupService,
+    private aemService: AEMService,
   ) {
     super();
     this.formFullyValidated = false;
@@ -288,7 +290,30 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     this.showPrintView = false;
   }
 
-  producePDF() {
+  getAEMPDF() {
+    let application: Application = this.harvestForm();
+    application.CrimeInformation.crimeLocations[0].location = application.CrimeInformation.crimeLocations.map(a => a.location).join(', ');
+    this.aemService.getWitnessApplicationPDF(application).subscribe((res: any) => {
+      console.log(res);
+      if (res.responseMessage) {
+        //this downloads the pdf
+        let downloadLink = document.createElement("a");
+        downloadLink.href = "data:application/pdf;base64," + res.responseMessage;
+        downloadLink.download = "Witness-Application.pdf";
+        downloadLink.target = "_blank";
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        //this will display it in another tab to view it, but doesn't seem to allow downloading....
+        // var win = window.open();
+        // win.document.write('<iframe src="data:application/pdf;base64,' + res.responseMessage + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+      }
+    });
+  }
+
+  printApplication() {
     window.scroll(0, 0);
     this.showPrintView = true;
     document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");

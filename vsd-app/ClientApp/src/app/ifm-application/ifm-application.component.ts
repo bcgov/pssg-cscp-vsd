@@ -378,7 +378,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   getAEMPDF() {
-    this.aemService.getIFMApplicationPDF(this.harvestForm()).subscribe((res: any) => {
+    let application: Application = this.harvestForm();
+    application.CrimeInformation.crimeLocations[0].location = application.CrimeInformation.crimeLocations.map(a => a.location).join(', ');
+    this.aemService.getIFMApplicationPDF(application).subscribe((res: any) => {
       console.log(res);
       if (res.responseMessage) {
         //this downloads the pdf
