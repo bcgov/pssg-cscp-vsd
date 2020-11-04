@@ -10,6 +10,7 @@ import { POSTAL_CODE } from "../regex.constants";
 import { AddressHelper } from "../address/address.helper";
 import { iLookupData } from "../../models/lookup-data.model";
 import { Subscription } from "rxjs";
+import { config } from "../../../config";
 
 @Component({
     selector: 'app-medical-information',
@@ -133,7 +134,9 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
             this.setDoctorPhoneValidators();
         });
 
-        this.provinceList = this.lookupData.provinces.map(p => p.vsd_name);
+        this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value == config.canada_crm_id)
+        .map(p => p.vsd_name)
+        .sort((a, b) => a.localeCompare(b));
     }
 
     ngOnDestroy() {

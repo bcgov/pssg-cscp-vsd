@@ -178,7 +178,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'primaryAddress');
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'alternateAddress');
         this.addressHelper.setAddressAsRequired(this.form, 'primaryAddress');
-        this.addressHelper.markAsTouched(this.form, 'primaryAddress');
+        // this.addressHelper.markAsTouched(this.form, 'primaryAddress');
 
         this.setControlValidators(phoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
         this.setControlValidators(emailControl, [Validators.email]);
@@ -277,13 +277,14 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         let phoneVal = this.form.get('phoneNumber').value;
         let altPhoneVal = this.form.get('alternatePhoneNumber').value;
         let voicemailControl = this.form.get('leaveVoicemail');
+        let options = { onlySelf: true, emitEvent: false };
         if (phoneVal || altPhoneVal) {
             this.isVoiceMailRequired = true;
-            this.setControlValidators(voicemailControl, [Validators.required, Validators.min(1), Validators.max(100000003)]);
+            this.setControlValidators(voicemailControl, [Validators.required, Validators.min(1), Validators.max(100000003)], options);
         }
         else {
             this.isVoiceMailRequired = false;
-            this.clearControlValidators(voicemailControl);
+            this.clearControlValidators(voicemailControl, options);
         }
     }
 }

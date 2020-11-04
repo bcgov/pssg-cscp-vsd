@@ -130,7 +130,7 @@
     <ng-container *ngIf="formType === ApplicationType.Victim_Application">
         <section>
             <h2 class="blue-header">Other Benefits</h2>
-            <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply:</p>
+            <p>If you have received or will recieve other benefits as a result of the crime, check all that apply:</p>
             <div class="radio-list">
                 <app-field>
                     <label>
@@ -146,7 +146,7 @@
                 </app-field>
                 <app-field>
                     <label>
-                        <input type="checkbox" [value]="true" name="haveIncomeAssistance" formControlName="haveIncomeAssistanceBenefits">
+                        <input type="checkbox" [value]="true" name="haveIncomeAssistanceBenefits" formControlName="haveIncomeAssistanceBenefits">
                         Income Assistance
                     </label>
                 </app-field>
@@ -165,7 +165,7 @@
                 <app-field>
                     <label>
                         <input type="checkbox" [value]="true" name="haveCivilActionBenefits" formControlName="haveCivilActionBenefits">
-                        Benefits you have recieved as a result of civil action
+                        Benefits you have received as a result of civil action
                     </label>
                 </app-field>
                 <app-field>
@@ -386,7 +386,7 @@
 
                 <!-- IFM Other Benefits -->
                 <h2 class="blue-header">Other Benefits</h2>
-                <p>If you have recieved or will recieve other benefits as a result of the crime, check all that apply:</p>
+                <p>If you have received or will recieve other benefits as a result of the crime, check all that apply:</p>
                 <div class="radio-list">
                     <ng-container>
                         <app-field>
@@ -428,7 +428,7 @@
                         <app-field>
                             <label>
                                 <input type="checkbox" [value]="true" name="haveCivilActionBenefits" formControlName="haveCivilActionBenefits" (change)="changeOtherBenefitValidity($event)">
-                                Benefits you have recieved as a result of civil action
+                                Benefits you have received as a result of civil action
                             </label>
                         </app-field>
                         <app-field>
@@ -443,8 +443,6 @@
                             </section>
                         </app-field>
                     </ng-container>
-
-
                 </div>
             </section>
         </section>

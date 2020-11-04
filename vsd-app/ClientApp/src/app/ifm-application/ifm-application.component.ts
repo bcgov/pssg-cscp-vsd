@@ -30,6 +30,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { iLookupData } from '../models/lookup-data.model';
 import { LookupService } from '../services/lookup.service';
 import { config } from '../../config';
+import { AEMService } from '../services/aem.service';
 
 const moment = _rollupMoment || _moment;
 
@@ -91,6 +92,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     private dialog: MatDialog,
     public state: StateService,
     public lookupService: LookupService,
+    private aemService: AEMService,
   ) {
     super();
     this.formFullyValidated = false;
@@ -365,7 +367,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     this.showPrintView = false;
   }
 
-  producePDF() {
+  printApplication() {
     console.log("attempt to print invoice");
     window.scroll(0, 0);
     this.showPrintView = true;
@@ -373,6 +375,17 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     setTimeout(() => {
       window.print();
     }, 100);
+  }
+
+  getAEMPDF() {
+    console.log("get pdf from aem service");
+    this.aemService.getIFMApplicationPDF(this.harvestForm()).subscribe((res: any) => {
+      console.log("got something:");
+      console.log(res);
+      if (res.responseMessage) {
+        window.open(res.responseMessage);
+      }
+    });
   }
 
   cloneFormToVictim(currentForm) {

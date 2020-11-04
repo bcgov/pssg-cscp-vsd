@@ -85,7 +85,7 @@
           <span class="right-buttons">
             <!-- [class.disabled]="!didLoad" -->
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
-            <button (click)="markAsTouched(); producePDF();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
+            <button (click)="markAsTouched(); getAEMPDF();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
             <div class="submit-grid">
               <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT IFM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
               <button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='VictimToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
