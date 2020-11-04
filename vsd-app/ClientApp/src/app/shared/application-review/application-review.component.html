@@ -1232,7 +1232,7 @@
                         <th>Type</th>
                         <td>{{ valueOrEmpty(item.get('providerType')) }} </td>
                     </tr>
-                    <tr *ngIf="form.get('authorizationInformation.allowCvapStaffSharing').value === enumHelper.AllowCvapStaffSharingValues.Yes_Agency">
+                    <tr *ngIf="item.get('providerType').value === 'Agency'">
                         <th>Agency Name</th>
                         <td>{{ valueOrEmpty(item.get('authorizedPersonAgencyName')) }}</td>
                     </tr>

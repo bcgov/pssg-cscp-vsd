@@ -57,7 +57,7 @@
 
         <section *ngIf="showWhyDidYouNotApplySooner">
             <app-field label="Please briefly explain why you did not apply sooner" [tooltipReference]="fileWithinYearTemplate">
-                <textarea class="form-control standard" formControlName="whyDidYouNotApplySooner"></textarea>
+                <textarea class="form-control standard" formControlName="whyDidYouNotApplySooner" maxlength="750"></textarea>
             </app-field>
             <ng-template #fileWithinYearTemplate><strong>One-Year Time Limit</strong><br />Applications to CVAP must be submitted within one year of the date of the incident. An explanation is required to determine if the time limit can be extended. The one year time limit does not apply if the applicant is a minor (under 19 years old) or if the application is from a victim of sexual offence.</ng-template>
         </section>
