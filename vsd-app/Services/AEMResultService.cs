@@ -46,11 +46,15 @@ namespace Gov.Cscp.VictimServices.Public.Services
 
             var _responseContent = await _httpResponse.Content.ReadAsStringAsync();
 
-            var result = new AEMResult();
-            result.responseCode = _statusCode;
-            result.responseMessage = _responseContent;
-
+            AEMResult result = await _httpResponse.Content.ReadAsAsync<AEMResult>();
             Console.WriteLine(result);
+
+            if ((int)result.responseCode == 200)
+            {
+                HttpResponseMessage msg = await _client.GetAsync(result.responseMessage);
+                byte[] msgContent = await msg.Content.ReadAsByteArrayAsync();
+                result.responseMessage = Convert.ToBase64String(msgContent);
+            }
 
             return result;
         }

@@ -254,12 +254,22 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   getAEMPDF() {
-    console.log("get pdf from aem service");
     this.aemService.getVictimApplicationPDF(this.harvestForm()).subscribe((res: any) => {
-      console.log("got something:");
       console.log(res);
       if (res.responseMessage) {
-        window.open(res.responseMessage);
+        //this downloads the pdf
+        let downloadLink = document.createElement("a");
+        downloadLink.href = "data:application/pdf;base64," + res.responseMessage;
+        downloadLink.download = "Victim-Application.pdf";
+        downloadLink.target = "_blank";
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        //this will display it in another tab to view it, but doesn't seem to allow downloading....
+        // var win = window.open();
+        // win.document.write('<iframe src="data:application/pdf;base64,' + res.responseMessage + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
       }
     });
   }
