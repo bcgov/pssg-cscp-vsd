@@ -28,9 +28,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 string requestJson = getAEMJSON(model, "victim");
 
                 AEMResult result = await _aemResultService.Post(requestJson);
-                int code = (int)result.responseCode;
-
-                return StatusCode((int)result.responseCode, result.responseMessage.ToString());
+                return StatusCode((int)result.responseCode, result);
             }
             finally { }
         }
@@ -43,9 +41,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 string requestJson = getAEMJSON(model, "ifm");
 
                 AEMResult result = await _aemResultService.Post(requestJson);
-                int code = (int)result.responseCode;
-
-                return StatusCode((int)result.responseCode, result.responseMessage.ToString());
+                return StatusCode((int)result.responseCode, result);
             }
             finally { }
         }
@@ -58,9 +54,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 string requestJson = getAEMJSON(model, "witness");
 
                 AEMResult result = await _aemResultService.Post(requestJson);
-                int code = (int)result.responseCode;
-
-                return StatusCode((int)result.responseCode, result.responseMessage.ToString());
+                return StatusCode((int)result.responseCode, result);
             }
             finally { }
         }
