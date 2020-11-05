@@ -10,7 +10,7 @@ import { MatSnackBar, MatDialog } from '@angular/material';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { FormBase } from '../shared/form-base';
-import { ApplicationType } from '../shared/enums-list';
+import { ApplicationType, OnBehalfOf } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
@@ -21,7 +21,6 @@ import { PersonalInfoHelper } from '../shared/personal-information/personal-info
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
 import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
-import { Subscription } from 'rxjs';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { StateService } from '../services/state.service';
 import * as _ from 'lodash';
@@ -31,6 +30,7 @@ import { iLookupData } from '../models/lookup-data.model';
 import { LookupService } from '../services/lookup.service';
 import { config } from '../../config';
 import { AEMService } from '../services/aem.service';
+import { DocumentCollectioninformation } from '../interfaces/victim-restitution.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -48,7 +48,6 @@ const moment = _rollupMoment || _moment;
 export class IfmApplicationComponent extends FormBase implements OnInit {
   @ViewChild('stepper') ifmStepper: MatVerticalStepper;
   FORM_TYPE = ApplicationType.IFM_Application;
-  busy: Subscription;
   form: FormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
@@ -218,30 +217,36 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   submitApplication() {
     this.submitting = true;
     if (this.form.valid) {
-      this.busy = this.justiceDataService.submitApplication(this.harvestForm())
-        .subscribe(
-          data => {
-            if (data['isSuccess'] == true) {
-              this.router.navigate(['/application-success']);
-            }
-            else {
+      this.getApplicationPDFs().then((pdfs: DocumentCollectioninformation[]) => {
+        let form = this.harvestForm();
+        form.ApplicationPDFs = pdfs;
+        this.justiceDataService.submitApplication(form)
+          .subscribe(
+            data => {
+              if (data['isSuccess'] == true) {
+                this.router.navigate(['/application-success']);
+              }
+              else {
+                this.submitting = false;
+                this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+                console.log('Error submitting application');
+                if (this.isIE) {
+                  alert("Encountered an error. Please use another browser as this may resolve the problem.")
+                }
+              }
+            },
+            error => {
               this.submitting = false;
-              this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
               if (this.isIE) {
                 alert("Encountered an error. Please use another browser as this may resolve the problem.")
               }
             }
-          },
-          error => {
-            this.submitting = false;
-            this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-            console.log('Error submitting application');
-            if (this.isIE) {
-              alert("Encountered an error. Please use another browser as this may resolve the problem.")
-            }
-          }
-        );
+          );
+      }).catch((err) => {
+        console.log(err);
+      });
     } else {
       this.submitting = false;
       console.log("form not validated");
@@ -253,49 +258,55 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     this.submitting = true;
     if (this.form.valid) {
       let thisForm = _.cloneDeep(this.form);
-      this.busy = this.justiceDataService.submitApplication(this.harvestForm())
-        .subscribe(
-          data => {
-            if (data['isSuccess'] == true) {
-              if (type === "IFM") {
-                this.submitting = false;
-                let ifmForm = this.cloneFormToIFM(thisForm);
-                this.ifmStepper.reset();
+      this.getApplicationPDFs().then((pdfs: DocumentCollectioninformation[]) => {
+        let form = this.harvestForm();
+        form.ApplicationPDFs = pdfs;
+        this.justiceDataService.submitApplication(form)
+          .subscribe(
+            data => {
+              if (data['isSuccess'] == true) {
+                if (type === "IFM") {
+                  this.submitting = false;
+                  let ifmForm = this.cloneFormToIFM(thisForm);
+                  this.ifmStepper.reset();
 
-                this.form = ifmForm;
-              }
-              else if (type === "VICTIM") {
-                this.submitting = false;
+                  this.form = ifmForm;
+                }
+                else if (type === "VICTIM") {
+                  this.submitting = false;
 
-                let victimForm = this.cloneFormToVictim(thisForm);
+                  let victimForm = this.cloneFormToVictim(thisForm);
 
-                this.state.cloning = true;
-                this.state.data = victimForm;
+                  this.state.cloning = true;
+                  this.state.data = victimForm;
 
-                this.router.navigate(['/victim-application']);
+                  this.router.navigate(['/victim-application']);
+                }
+                else {
+                  this.router.navigate(['/application-success']);
+                }
               }
               else {
-                this.router.navigate(['/application-success']);
+                this.submitting = false;
+                this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+                console.log('Error submitting application');
+                if (this.isIE) {
+                  alert("Encountered an error. Please use another browser as this may resolve the problem.")
+                }
               }
-            }
-            else {
+            },
+            error => {
               this.submitting = false;
-              this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
               if (this.isIE) {
                 alert("Encountered an error. Please use another browser as this may resolve the problem.")
               }
             }
-          },
-          error => {
-            this.submitting = false;
-            this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-            console.log('Error submitting application');
-            if (this.isIE) {
-              alert("Encountered an error. Please use another browser as this may resolve the problem.")
-            }
-          }
-        );
+          );
+      }).catch((err) => {
+        console.log(err);
+      });
     } else {
       this.submitting = false;
       console.log("form not validated");
@@ -307,6 +318,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     let data = {
       ApplicationType: this.FORM_TYPE,
       ApplicationDate: new Date(),
+      ApplicationPDFs: [],
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
@@ -325,6 +337,11 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     }
     if (data.RepresentativeInformation.mostRecentMailingAddressSameAsPersonal == true) {
       data.RepresentativeInformation.representativeAddress = data.PersonalInformation.primaryAddress;
+    }
+    if (data.VictimInformation.victimSameContactInfo) {
+      data.VictimInformation.phoneNumber = data.PersonalInformation.phoneNumber;
+      data.VictimInformation.alternatePhoneNumber = data.PersonalInformation.alternatePhoneNumber;
+      data.VictimInformation.email = data.PersonalInformation.email;
     }
 
     return data;
@@ -377,26 +394,81 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     }, 100);
   }
 
-  getAEMPDF() {
-    let application: Application = this.harvestForm();
-    application.CrimeInformation.crimeLocations[0].location = application.CrimeInformation.crimeLocations.map(a => a.location).join(', ');
-    this.aemService.getIFMApplicationPDF(application).subscribe((res: any) => {
-      console.log(res);
-      if (res.responseMessage) {
-        //this downloads the pdf
-        let downloadLink = document.createElement("a");
-        downloadLink.href = "data:application/pdf;base64," + res.responseMessage;
-        downloadLink.download = "IFM-Application.pdf";
-        downloadLink.target = "_blank";
+  downloadPDF() {
+    this.getAEMPDF().then((pdf: string) => {
+      let downloadLink = document.createElement("a");
+      downloadLink.href = "data:application/pdf;base64," + pdf;
+      downloadLink.download = "IFM-Application.pdf";
+      downloadLink.target = "_blank";
 
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }).catch((err) => {
+      console.log("error getting pdf");
+      console.log(err);
+    });
+  }
 
-        //this will display it in another tab to view it, but doesn't seem to allow downloading....
-        // var win = window.open();
-        // win.document.write('<iframe src="data:application/pdf;base64,' + res.responseMessage + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+  getAEMPDF(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let application: Application = this.harvestForm();
+      //full name display option for single fields
+      application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
+      //display all locations as a single comma separated string
+      application.CrimeInformation.crimeLocations[0].location = application.CrimeInformation.crimeLocations.map(a => a.location).join(', ');
+      //for on behalf of, if you chose parent, pdf format doesn't match webform, so relationship workaround
+      if (application.RepresentativeInformation.completingOnBehalfOf == OnBehalfOf.Parent) {
+        application.RepresentativeInformation.relationshipToPersonParent = application.RepresentativeInformation.relationshipToPerson;
+        application.RepresentativeInformation.relationshipToPerson = "";
       }
+      this.aemService.getIFMApplicationPDF(application).subscribe((res: any) => {
+        console.log(res);
+        if (res.responseMessage) {
+          resolve(res.responseMessage);
+        }
+        else {
+          reject(res);
+        }
+      });
+    });
+  }
+
+  getAuthPDF(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let application: Application = this.harvestForm();
+      //full name display option for single fields
+      application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
+      this.aemService.getAuthorizationPDF(application).subscribe((res: any) => {
+        console.log(res);
+        if (res.responseMessage) {
+          resolve(res.responseMessage);
+        }
+        else {
+          reject(res);
+        }
+      });
+    });
+  }
+
+  getApplicationPDFs() {
+    return new Promise(async (resolve, reject) => {
+      let ret: DocumentCollectioninformation[] = [];
+      let pdf = await this.getAEMPDF();
+      ret.push({
+        body: pdf,
+        filename: "IFM-Application.pdf",
+        subject: "",
+      });
+
+      let auth_pdf = await this.getAuthPDF();
+      ret.push({
+        body: auth_pdf,
+        filename: "Authorization.pdf",
+        subject: "",
+      });
+
+      resolve(ret);
     });
   }
 

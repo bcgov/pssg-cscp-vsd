@@ -59,6 +59,19 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             finally { }
         }
 
+        [HttpPost("authorization")]
+        public async Task<IActionResult> GetAuthorizationPDF([FromBody] ApplicationFormModel model)
+        {
+            try
+            {
+                string requestJson = getAEMJSON(model, "authorization");
+
+                AEMResult result = await _aemResultService.Post(requestJson);
+                return StatusCode((int)result.responseCode, result);
+            }
+            finally { }
+        }
+
         private static string getAEMJSON(ApplicationFormModel model, string application_type)
         {
             XmlSerializer xsSubmit = new XmlSerializer(typeof(ApplicationFormModel));
@@ -97,6 +110,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     break;
                 case "witness":
                     aem_form = "CVAP0003";
+                    break;
+                case "authorization":
+                    aem_form = "CVAP0004";
                     break;
                 default:
                     //form type not defined

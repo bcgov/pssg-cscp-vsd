@@ -6,6 +6,7 @@ import { DocumentCollectioninformation } from "./victim-restitution.interface";
 export interface Application {
   ApplicationType: number;
   ApplicationDate: Date;
+  ApplicationPDFs: DocumentCollectioninformation[];
   Introduction: Introduction;
   PersonalInformation: PersonalInformation;
   VictimInformation?: VictimInformation;
@@ -34,6 +35,10 @@ export interface PersonalInformation {
   leaveVoicemail: number;
   maritalStatus: number;
   name: NameBlock;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  fullName: string;
   occupation: string;
   permissionToContactViaMethod: boolean;
   phoneNumber: string;
@@ -151,6 +156,7 @@ export interface RepresentativeInformation {
   documents: DocumentCollectioninformation[];
   mostRecentMailingAddressSameAsPersonal: boolean;
   relationshipToPerson: string;
+  relationshipToPersonParent: string;
   representativeAddress: Address;
   representativeAlternatePhoneNumber: string;
   representativeEmail: string;
@@ -241,6 +247,7 @@ export interface VictimInformation {
   lastName: string;
   middleName?: string;
   mostRecentMailingAddressSameAsPersonal: boolean;
+  victimSameContactInfo: boolean;
   occupation?: string;
   otherFirstName?: string;
   otherLastName?: string;

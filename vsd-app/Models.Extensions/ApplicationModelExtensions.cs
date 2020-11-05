@@ -164,12 +164,22 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // Include upload file
                 try
                 {
-                    int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length;
+                    int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length + model.ApplicationPDFs.Length;
 
                     if (documentCollectionLength > 0)
                     {
                         application.DocumentCollection = new Documentcollection[documentCollectionLength];
                         int documentIndex = 0;
+
+                        for (int i = 0; i < model.ApplicationPDFs.Length; ++i)
+                        {
+                            Documentcollection tempDocumentCollection = new Documentcollection();
+                            tempDocumentCollection.body = model.ApplicationPDFs[i].body;
+                            tempDocumentCollection.filename = model.ApplicationPDFs[i].fileName;
+                            tempDocumentCollection.subject = model.ApplicationPDFs[i].subject;
+                            application.DocumentCollection[documentIndex] = tempDocumentCollection;
+                            ++documentIndex;
+                        }
 
                         for (int i = 0; i < model.CrimeInformation.documents.Length; ++i)
                         {

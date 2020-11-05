@@ -331,6 +331,13 @@ input.form-control {
     }
 }
 
+.download-grid {
+    display: inline-grid;
+    button {
+        margin-bottom: 5px;
+    }
+}
+
 .white-icon {
     color: white !important;
 }
@@ -349,6 +356,10 @@ input.form-control {
 
 .right-buttons {
     float: right;
+}
+
+.left-buttons {
+    float: left;
 }
 
 .print-button {

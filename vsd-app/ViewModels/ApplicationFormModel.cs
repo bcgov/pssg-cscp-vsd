@@ -7,6 +7,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     public class ApplicationFormModel
     {
         public int ApplicationType { get; set; }
+        public DocumentCollectioninformation[] ApplicationPDFs { get; set; }
         public DateTime ApplicationDate { get; set; }
         public Introduction Introduction { get; set; }
         public Personalinformation PersonalInformation { get; set; }
@@ -30,6 +31,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string firstName { get; set; }
         public string middleName { get; set; }
         public string lastName { get; set; }
+        public string fullName { get; set; }
         public string iHaveOtherNames { get; set; }
         public string otherFirstName { get; set; }
         public string otherLastName { get; set; }

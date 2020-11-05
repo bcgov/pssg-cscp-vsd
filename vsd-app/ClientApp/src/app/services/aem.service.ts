@@ -22,4 +22,8 @@ export class AEMService {
     public getWitnessApplicationPDF(application: Application) {
         return this.http.post(this.apiPath + '/witness', application, { headers: this.headers });
     }
+
+    public getAuthorizationPDF(application: Application){
+        return this.http.post(this.apiPath + '/authorization', application, { headers: this.headers });
+    }
 }
