@@ -373,7 +373,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       let auth_pdf = await this.getAuthPDF();
       ret.push({
         body: auth_pdf,
-        filename: "Authorization.pdf",
+        filename: "Authorization Form.pdf",
         subject: "",
       });
 
