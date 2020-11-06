@@ -1,10 +1,13 @@
-<div class="form-wrapper" style="position: relative;">
+<div class="form-wrapper" style="position: relative;" [class.dark-overlay]="submitting">
+  <div class="loading-indicator" *ngIf="submitting">
+    <mat-spinner mode="indeterminate"></mat-spinner>
+  </div>
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter" [class.hidden]="showPrintView">
       <h3>Immediate Family Member Application</h3>
       <section class="application-nav sticky-top">
         <div>
-          <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
+          <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper [class.disabled-stepper]="submitting">
             <ng-template matStepperIcon="edit">
               <mat-icon>done</mat-icon>
             </ng-template>
@@ -85,14 +88,14 @@
           <span class="right-buttons">
             <!-- [class.disabled]="!didLoad" -->
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
-            <div class="left-buttons download-grid">
-              <button (click)="printApplication();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
-              <button (click)="downloadPDF();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">DOWNLOAD PDF</button>
+            <div class="left-buttons download-grid" [class.disabled-wrapper]="submitting">
+              <button (click)="printApplication();" class="btn btn-primary print-button" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
+              <button (click)="downloadPDF();" class="btn btn-primary print-button" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">DOWNLOAD PDF</button>
             </div>
-            <div class="submit-grid">
-              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT IFM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
-              <button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='VictimToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
-              <button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary" [class.disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW IFM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='IFMToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
+            <div class="submit-grid" [class.disabled-wrapper]="submitting">
+              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT IFM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
+              <button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='VictimToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
+              <button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW IFM APPLICATION <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='IFMToolTip'><i class='fa fa-info-circle white-icon'></i></span> <i class="fas fa-chevron-right"></i></button>
             </div>
           </span>
         </section>

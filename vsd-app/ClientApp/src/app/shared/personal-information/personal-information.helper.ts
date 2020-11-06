@@ -39,6 +39,9 @@ export class PersonalInfoHelper {
                 EmailValidator('email')
             ]],
 
+
+            doNotLiveAtAddress: [''],
+            mailRecipient: [''],
             primaryAddress: fb.group({
                 line1: ['', [Validators.required]],
                 line2: [''],

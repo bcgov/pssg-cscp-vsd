@@ -287,4 +287,10 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             this.clearControlValidators(voicemailControl, options);
         }
     }
+
+    doNotLiveAtAddressChange(val: boolean) {
+        if (!val) {
+            this.form.get('mailRecipient').patchValue('');
+        }
+    }
 }

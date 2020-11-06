@@ -380,8 +380,35 @@ input.form-control {
 }
 
 .is-disabled {
-    cursor: default;
     opacity: 0.5;
     text-decoration: none;
     pointer-events: none;
+}
+
+.disabled-wrapper {
+    cursor: not-allowed;
+}
+
+.disabled-stepper {
+    pointer-events: none;
+}
+
+.loading-indicator {
+    position: fixed;
+    z-index: 999;
+    height: 6em;
+    width: 6em;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.dark-overlay {
+    opacity: 0.7;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
 }

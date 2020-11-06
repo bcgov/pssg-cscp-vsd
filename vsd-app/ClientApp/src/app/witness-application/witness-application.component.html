@@ -1,10 +1,13 @@
-<div class="form-wrapper" style="position: relative;">
+<div class="form-wrapper" style="position: relative;" [class.dark-overlay]="submitting">
+  <div class="loading-indicator" *ngIf="submitting">
+    <mat-spinner mode="indeterminate"></mat-spinner>
+  </div>
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter" [class.hidden]="showPrintView">
       <h3>Witness Application</h3>
       <section class="application-nav sticky-top">
         <div>
-          <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
+          <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper [class.disabled-stepper]="submitting">
             <ng-template matStepperIcon="edit">
               <mat-icon>done</mat-icon>
             </ng-template>
@@ -83,12 +86,13 @@
           <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
           <span class="right-buttons">
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
-            <div class="left-buttons download-grid">
-              <button (click)="printApplication();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
-              <button (click)="downloadPDF();" class="btn btn-primary print-button" *ngIf="stepper.selectedIndex == 9">DOWNLOAD PDF</button>
+            <div class="left-buttons download-grid" [class.disabled-wrapper]="submitting">
+              <button (click)="printApplication();" class="btn btn-primary print-button" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
+              <button (click)="downloadPDF();" class="btn btn-primary print-button" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">DOWNLOAD PDF</button>
             </div>
-            <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" *ngIf="!submitting && stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
-            <button class="btn btn-primary disabled" *ngIf="submitting && stepper.selectedIndex == 9">SUBMITTING APPLICATION <i class="fas fa-chevron-right"></i></button>
+            <div class="submit-grid" [class.disabled-wrapper]="submitting">
+              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
+            </div>
           </span>
         </section>
       </form>

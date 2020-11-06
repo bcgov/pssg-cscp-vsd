@@ -245,6 +245,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
             }
           );
       }).catch((err) => {
+        this.submitting = false;
         console.log(err);
       });
     } else {
@@ -305,6 +306,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
             }
           );
       }).catch((err) => {
+        this.submitting = false;
         console.log(err);
       });
     } else {
@@ -454,21 +456,42 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   getApplicationPDFs() {
     return new Promise(async (resolve, reject) => {
       let ret: DocumentCollectioninformation[] = [];
-      let pdf = await this.getAEMPDF();
-      ret.push({
-        body: pdf,
-        filename: "IFM-Application.pdf",
-        subject: "",
-      });
+      let promise_array = [];
 
-      let auth_pdf = await this.getAuthPDF();
-      ret.push({
-        body: auth_pdf,
-        filename: "Authorization Form.pdf",
-        subject: "",
-      });
+      promise_array.push(new Promise((resolve, reject) => {
+        this.getAEMPDF().then((pdf: string) => {
+          ret.push({
+            body: pdf,
+            filename: "IFM-Application.pdf",
+            subject: "",
+          });
+          resolve();
+        }).catch((err) => {
+          console.log(err);
+          reject();
+        });
+      }));
 
-      resolve(ret);
+      promise_array.push(new Promise((resolve, reject) => {
+        this.getAuthPDF().then((auth_pdf: string) => {
+          ret.push({
+            body: auth_pdf,
+            filename: "Authorization Form.pdf",
+            subject: "",
+          });
+          resolve();
+        }).catch((err) => {
+          console.log(err);
+          reject();
+        });
+      }));
+
+      Promise.all(promise_array).then((res) => {
+        resolve(ret);
+      }).catch((err) => {
+        console.log(err);
+        reject(err);
+      });
     });
   }
 

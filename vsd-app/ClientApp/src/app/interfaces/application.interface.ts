@@ -43,6 +43,7 @@ export interface PersonalInformation {
   permissionToContactViaMethod: boolean;
   phoneNumber: string;
   preferredMethodOfContact: number;
+  mailRecipient: string;
   primaryAddress: Address;
   relationshipToVictim: string;
   relationshipToVictimOther: string;

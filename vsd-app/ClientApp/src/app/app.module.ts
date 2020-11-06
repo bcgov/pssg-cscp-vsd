@@ -104,10 +104,12 @@ import { DigitOnlyDirective } from './directive/number-only.directive';
 import { DateFieldComponent } from './shared/date-field/date-field.component';
 import { AEMService } from './services/aem.service';
 import { GSTWarningDialog } from './shared/dialogs/gst-warning/gst-warning.dialog';
+import { AddressLegacyComponent } from './shared/address-legacy/address-legacy.component';
 
 @NgModule({
   declarations: [
     AddressComponent,
+    AddressLegacyComponent,
     AppComponent,
     ApplicationCancelledComponent,
     ApplicationReviewComponent,

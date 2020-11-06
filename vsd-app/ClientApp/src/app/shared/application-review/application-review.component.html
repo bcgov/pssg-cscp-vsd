@@ -129,6 +129,14 @@
         <table class="table table-striped review-table">
             <tbody>
                 <tr>
+                    <th>I do not live at the following address</th>
+                    <td><span [innerHTML]="checkmarkOrEmpty('personalInformation.doNotLiveAtAddress')"></span></td>
+                </tr>
+                <tr *ngIf="form.get('personalInformation.doNotLiveAtAddress').value == true">
+                    <th>Mail Recipient</th>
+                    <td>{{ valueOrEmpty('personalInformation.mailRecipient') }}</td>
+                </tr>
+                <tr>
                     <th>Primary Address</th>
                     <td><span *ngIf="addressHelper.hasAddressInfo(form.get('personalInformation.primaryAddress').value)" [innerHTML]="displayMailingSubAddress('personalInformation.primaryAddress')"></span></td>
                 </tr>

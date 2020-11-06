@@ -71,6 +71,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_applicantsprimaryprovince = model.PersonalInformation.primaryAddress.province;
                     application.Application.vsd_applicantsprimarycountry = model.PersonalInformation.primaryAddress.country;
                     application.Application.vsd_applicantsprimarypostalcode = model.PersonalInformation.primaryAddress.postalCode;
+
+                    if (!string.IsNullOrEmpty(model.PersonalInformation.mailRecipient))
+                    {
+                        application.Application.vsd_applicantsprimaryaddressline3 = model.PersonalInformation.mailRecipient;
+                    }
                 }
 
                 if (model.PersonalInformation.alternateAddress != null)

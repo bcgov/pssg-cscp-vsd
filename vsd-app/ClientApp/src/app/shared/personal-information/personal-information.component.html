@@ -228,9 +228,28 @@
             <h3>Primary Mailing Address <app-tool-tip [trigger]="primaryAddressTemplate"></app-tool-tip>
             </h3>
             <ng-template #primaryAddressTemplate>Once your claim is processed you will receive a written decision, please provide a mailing address for written correspondences. If your mailing address changes please contact CVAP to update.</ng-template>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label class="inline-label">
+                <input type="checkbox" style="margin-right: 10px;" formControlName="doNotLiveAtAddress" [value]="true" (change)="doNotLiveAtAddressChange($event.target.checked)">
+                <span>I do not live at the following address.</span>
+            </label>
+        </div>
+        <div class="col-md-6" *ngIf="form.get('doNotLiveAtAddress').value === true">
+            <app-field label="Please indicate the recipient." [required]="false" [valid]="isFieldValid('mailRecipient')" errorMessage="Please enter a valid recipient">
+                <input class="form-control" type="text" formControlName="mailRecipient" maxlength="100">
+            </app-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true"></app-address>
         </div>
     </div>
+
+
     <div class="row">
         <div class="col-12">
             <h3>
