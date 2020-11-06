@@ -210,6 +210,32 @@ textarea.form-control {
   }
 }
 
+.line-item-table {
+  border-collapse: separate;
+  border-spacing: 3px;
+
+  tr {
+    background-color: #f1f4fa;
+
+    th,
+    td {
+      border: 0 !important;
+    }
+
+    th {
+      font-weight: normal;
+    }
+
+    td {
+      font-weight: bold;
+    }
+  }
+
+  &.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #e1e8f2;
+  }
+}
+
 .label {
   font-size: 16px;
   font-weight: normal;

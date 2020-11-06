@@ -276,6 +276,12 @@ export class FormBase {
     return '--';
   }
 
+  public checkmarkFromControl(control: AbstractControl): string {
+    if (control.value === true)
+      return '<i class="fa fa-check"> </i>';
+    return '--';
+  }
+
   public valueOrEmpty(controlName: any, emptyValue = '--'): string {
     let control = null;
 
