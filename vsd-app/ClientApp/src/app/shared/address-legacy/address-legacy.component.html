@@ -1,0 +1,50 @@
+<div [formGroup]="group" class="address-info">
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Country" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('country', isDisabled)" errorMessage="Please select your country">
+        <select class="form-control" formControlName="country" (change)="updateLocation($event)">
+          <option value="">Choose a country</option>
+          <option *ngFor="let item of countryList" [value]="item.name">
+            {{ item.name }}
+          </option>
+        </select>
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('province', isDisabled)" errorMessage="Please select your province/state">
+        <select class="form-control" formControlName="province">
+          <option value="">Choose a {{ provinceType }}</option>
+          <option *ngFor="let item of provinceList" [value]="item">
+            {{ item }}
+          </option>
+        </select>
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Mailing Address" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('line1', isDisabled)" errorMessage="Please enter your mailing address">
+        <input class="form-control" type="text" formControlName="line1" placeholder="Street Number, Street Address, PO Box, C/O" />
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="Mailing Address Line 2">
+        <input class="form-control" type="text" formControlName="line2" placeholder="Apartment, Suite, Building, Floor">
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="City" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('city', isDisabled)" errorMessage="Please enter your city">
+        <input class="form-control" type="text" formControlName="city">
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="{{ postalCodeType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('postalCode', isDisabled)" errorMessage="Please enter your postal code">
+        <input class="form-control" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
+      </app-field>
+    </div>
+  </div>
+</div>

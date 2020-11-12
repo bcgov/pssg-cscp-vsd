@@ -41,6 +41,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
 
         public string vsd_applicantsprimaryaddressline1 { get; set; }
         public string vsd_applicantsprimaryaddressline2 { get; set; }
+        public string vsd_applicantsprimaryaddressline3 { get; set; }
         public string vsd_applicantsprimarycity { get; set; }
         public string vsd_applicantsprimaryprovince { get; set; }
         public string vsd_applicantsprimarypostalcode { get; set; }

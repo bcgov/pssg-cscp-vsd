@@ -10,7 +10,7 @@ import { MatSnackBar, MatDialog } from '@angular/material';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { FormBase } from '../shared/form-base';
-import { ApplicationType } from '../shared/enums-list';
+import { ApplicationType, OnBehalfOf } from '../shared/enums-list';
 import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, VictimInformation } from '../interfaces/application.interface';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
@@ -26,6 +26,8 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { LookupService } from '../services/lookup.service';
 import { iLookupData } from '../models/lookup-data.model';
 import { config } from '../../config';
+import { AEMService } from '../services/aem.service';
+import { DocumentCollectioninformation } from '../interfaces/victim-restitution.interface';
 
 const moment = _rollupMoment || _moment;
 
@@ -86,6 +88,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     public snackBar: MatSnackBar,
     private dialog: MatDialog,
     public lookupService: LookupService,
+    private aemService: AEMService,
   ) {
     super();
     this.formFullyValidated = false;
@@ -203,13 +206,25 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   submitApplication() {
     this.submitting = true;
     if (this.form.valid) {
-      this.justiceDataService.submitApplication(this.harvestForm())
-        .subscribe(
-          data => {
-            if (data['isSuccess'] == true) {
-              this.router.navigate(['/application-success']);
-            }
-            else {
+      this.getApplicationPDFs().then((pdfs: DocumentCollectioninformation[]) => {
+        let form = this.harvestForm();
+        form.ApplicationPDFs = pdfs;
+        this.justiceDataService.submitApplication(form)
+          .subscribe(
+            data => {
+              if (data['isSuccess'] == true) {
+                this.router.navigate(['/application-success']);
+              }
+              else {
+                this.submitting = false;
+                this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+                console.log('Error submitting application');
+                if (this.isIE) {
+                  alert("Encountered an error. Please use another browser as this may resolve the problem.")
+                }
+              }
+            },
+            error => {
               this.submitting = false;
               this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
               console.log('Error submitting application');
@@ -217,16 +232,11 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
                 alert("Encountered an error. Please use another browser as this may resolve the problem.")
               }
             }
-          },
-          error => {
-            this.submitting = false;
-            this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-            console.log('Error submitting application');
-            if (this.isIE) {
-              alert("Encountered an error. Please use another browser as this may resolve the problem.")
-            }
-          }
-        );
+          );
+      }).catch((err) => {
+        this.submitting = false;
+        console.log(err);
+      });
     } else {
       this.submitting = false;
       console.log("form not validated");
@@ -238,6 +248,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     let data = {
       ApplicationType: this.FORM_TYPE,
       ApplicationDate: new Date(),
+      ApplicationPDFs: [],
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
@@ -256,6 +267,11 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     }
     if (data.RepresentativeInformation.mostRecentMailingAddressSameAsPersonal == true) {
       data.RepresentativeInformation.representativeAddress = data.PersonalInformation.primaryAddress;
+    }
+    if (data.VictimInformation.victimSameContactInfo) {
+      data.VictimInformation.phoneNumber = data.PersonalInformation.phoneNumber;
+      data.VictimInformation.alternatePhoneNumber = data.PersonalInformation.alternatePhoneNumber;
+      data.VictimInformation.email = data.PersonalInformation.email;
     }
 
     return data;
@@ -288,7 +304,106 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     this.showPrintView = false;
   }
 
-  producePDF() {
+  downloadPDF() {
+    this.getAEMPDF().then((pdf: string) => {
+      let downloadLink = document.createElement("a");
+      downloadLink.href = "data:application/pdf;base64," + pdf;
+      downloadLink.download = "Witness-Application.pdf";
+      downloadLink.target = "_blank";
+
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }).catch((err) => {
+      console.log("error getting pdf");
+      console.log(err);
+    });
+  }
+
+  getAEMPDF(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let application: Application = this.harvestForm();
+      //full name display option for single fields
+      application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
+      //display all locations as a single comma separated string
+      application.CrimeInformation.crimeLocations[0].location = application.CrimeInformation.crimeLocations.map(a => a.location).join(', ');
+      //for on behalf of, if you chose parent, pdf format doesn't match webform, so relationship workaround
+      if (application.RepresentativeInformation.completingOnBehalfOf == OnBehalfOf.Parent) {
+        application.RepresentativeInformation.relationshipToPersonParent = application.RepresentativeInformation.relationshipToPerson;
+        application.RepresentativeInformation.relationshipToPerson = "";
+      }
+      this.aemService.getWitnessApplicationPDF(application).subscribe((res: any) => {
+        console.log(res);
+        if (res.responseMessage) {
+          resolve(res.responseMessage);
+        }
+        else {
+          reject(res);
+        }
+      });
+    });
+  }
+
+  getAuthPDF(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let application: Application = this.harvestForm();
+      //full name display option for single fields
+      application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
+      this.aemService.getAuthorizationPDF(application).subscribe((res: any) => {
+        console.log(res);
+        if (res.responseMessage) {
+          resolve(res.responseMessage);
+        }
+        else {
+          reject(res);
+        }
+      });
+    });
+  }
+
+  getApplicationPDFs() {
+    return new Promise(async (resolve, reject) => {
+      let ret: DocumentCollectioninformation[] = [];
+      let promise_array = [];
+
+      promise_array.push(new Promise((resolve, reject) => {
+        this.getAEMPDF().then((pdf: string) => {
+          ret.push({
+            body: pdf,
+            filename: "Witness-Application.pdf",
+            subject: "",
+          });
+          resolve();
+        }).catch((err) => {
+          console.log(err);
+          reject();
+        });
+      }));
+
+      promise_array.push(new Promise((resolve, reject) => {
+        this.getAuthPDF().then((auth_pdf: string) => {
+          ret.push({
+            body: auth_pdf,
+            filename: "Authorization Form.pdf",
+            subject: "",
+          });
+          resolve();
+        }).catch((err) => {
+          console.log(err);
+          reject();
+        });
+      }));
+
+      Promise.all(promise_array).then((res) => {
+        resolve(ret);
+      }).catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+    });
+  }
+
+  printApplication() {
     window.scroll(0, 0);
     this.showPrintView = true;
     document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");

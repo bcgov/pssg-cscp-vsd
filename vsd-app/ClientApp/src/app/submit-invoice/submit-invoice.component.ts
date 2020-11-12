@@ -1,22 +1,20 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { User } from '../models/user.model';
-import { Subject, Subscription } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-// tslint:disable-next-line:no-duplicate-imports
-import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
-import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
-
-import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { FormBase } from '../shared/form-base';
-import { EnumHelper } from '../shared/enums-list';
-import { MY_FORMATS } from '../shared/enums-list';
-import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
-import { DynamicsApplicationModel } from '../models/dynamics-application.model';
-import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { EnumHelper } from '../shared/enums-list';
+import { FormBase } from '../shared/form-base';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { GSTWarningDialog } from '../shared/dialogs/gst-warning/gst-warning.dialog';
+import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
+import { JusticeApplicationDataService } from '../services/justice-application-data.service';
+import { MY_FORMATS } from '../shared/enums-list';
+import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { POSTAL_CODE } from '../shared/regex.constants';
+import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
+import { Subject, Subscription } from 'rxjs';
+import { User } from '../models/user.model';
 import * as _ from 'lodash';
 
 @Component({
@@ -24,15 +22,10 @@ import * as _ from 'lodash';
   templateUrl: './submit-invoice.component.html',
   styleUrls: ['./submit-invoice.component.scss'],
   providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-
-
 
 export class SubmitInvoiceComponent extends FormBase implements OnInit {
   postalRegex = POSTAL_CODE;
@@ -66,6 +59,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   didValidateVendor: boolean = false;
   isCounsellorValid: boolean = false;
   didValidateCounsellor: boolean = false;
+
+  public counsellor_level: number = 0;
 
   today = new Date();
 
@@ -403,16 +398,29 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
           this.justiceDataService.validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName).subscribe((res: any) => {
             this.didValidateCounsellor = true;
             this.isCounsellorValid = res.IsSuccess;
+            if (this.isCounsellorValid) {
+              this.counsellor_level = res.CounsellorLevel;
+
+              if (this.form.get('invoiceDetails.gstApplicable').value == true) {
+                this.checkCousellorLevel();
+              }
+            }
           });
         }
         break;
       }
       case 'counsellor': {
-
         if (vendorNumber && vendorPostalCode && counsellorNumber && counsellorLastName) {
           this.justiceDataService.validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName).subscribe((res: any) => {
             this.didValidateCounsellor = true;
             this.isCounsellorValid = res.IsSuccess;
+            if (this.isCounsellorValid) {
+              this.counsellor_level = res.CounsellorLevel;
+
+              if (this.form.get('invoiceDetails.gstApplicable').value == true) {
+                this.checkCousellorLevel();
+              }
+            }
           });
         }
         else {
@@ -423,6 +431,19 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       default: {
         break;
       }
+    }
+  }
+
+  checkCousellorLevel() {
+    if (this.form.get('invoiceDetails.gstApplicable').value == true && (this.counsellor_level == 4 || this.counsellor_level == 5)) {
+      let dialogRef = this.dialog.open(GSTWarningDialog, {
+        autoFocus: false,
+        data: {}
+      });
+
+      dialogRef.afterClosed().subscribe(() => {
+        this.form.get('invoiceDetails.gstApplicable').patchValue(false);
+      })
     }
   }
 }

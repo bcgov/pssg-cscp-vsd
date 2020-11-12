@@ -183,7 +183,7 @@
                       <label>
                         GST Applicable?
                         <span>
-                          <input type="checkbox" [value]="true" name="gstApplicable" formControlName="gstApplicable">
+                          <input type="checkbox" [value]="true" name="gstApplicable" formControlName="gstApplicable" (change)="checkCousellorLevel()">
                           Yes
                         </span>
                       </label>
@@ -360,19 +360,21 @@
               </table>
 
               <h3>Line Item Summary</h3>
-              <table class="table table-striped review-table">
+              <table class="table table-striped line-item-table">
                 <thead>
                   <tr>
                     <th>SESSION DATES</th>
                     <th>COUNSELLING TYPE</th>
                     <th>HOURS</th>
+                    <th>MISSED SESSION</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let item of lineItemsControls.controls; let i = index;">
-                    <td style="width: 30%">{{ datesOrEmpty([item.get('sessionDate')]) }}</td>
-                    <td style="width: 35%">{{ enumHelper.InvoiceCounsellingType[valueForEnum(item.get('counsellingType'))] }}</td>
-                    <td style="width: 35%">{{ item.get('sessionHours').value }}</td>
+                    <td style="width: 25%">{{ datesOrEmpty([item.get('sessionDate')]) }}</td>
+                    <td style="width: 30%">{{ enumHelper.InvoiceCounsellingType[valueForEnum(item.get('counsellingType'))] }}</td>
+                    <td style="width: 30%">{{ item.get('sessionHours').value }}</td>
+                    <td style="width: 15%; min-width: 132px;"><span [innerHTML]="checkmarkFromControl(item.get('missedSession'))"></span></td>
                   </tr>
                 </tbody>
               </table>
