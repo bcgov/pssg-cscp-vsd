@@ -247,13 +247,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     }
   }
 
-  @HostListener('window:afterprint')
-  onafterprint() {
-    document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
-    window.scroll(0, 0);
-    this.showPrintView = false;
-  }
-
   downloadPDF() {
     this.getAEMPDF().then((pdf: string) => {
       let downloadLink = document.createElement("a");
@@ -360,6 +353,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     setTimeout(() => {
       window.print();
     }, 100);
+  }
+
+  @HostListener('window:afterprint')
+  onafterprint() {
+    document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
+    window.scroll(0, 0);
+    this.showPrintView = false;
   }
 
   submitApplication() {
