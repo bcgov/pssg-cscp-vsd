@@ -1,12 +1,11 @@
 import { OnInit, Component, Input, OnDestroy } from "@angular/core";
 import { FormBase } from "../form-base";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material";
-import { FormGroup, Validators, FormBuilder, ControlContainer, FormControl } from "@angular/forms";
+import { FormGroup, Validators, FormBuilder, ControlContainer } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { COUNTRIES_ADDRESS } from "../address/country-list";
 import { REPRESENTATIVE_LIST } from "../../constants/representative-list";
-import { FileBundle } from "../../models/file-bundle";
 import { AddressHelper } from "../address/address.helper";
 import { EmailValidator } from "../validators/email.validator";
 import { RepresentativeInfoHelper } from "./representative-information.helper";

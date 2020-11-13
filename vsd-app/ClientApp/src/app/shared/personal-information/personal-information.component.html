@@ -232,9 +232,9 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <label class="inline-label">
+            <label class="inline-label inline-checkbox-label">
                 <input type="checkbox" style="margin-right: 10px;" formControlName="doNotLiveAtAddress" [value]="true" (change)="doNotLiveAtAddressChange($event.target.checked)">
-                <span>I do not live at the following address.</span>
+                <span class="mr-0">I do not live at the following address.</span>
             </label>
         </div>
         <div class="col-md-6" *ngIf="form.get('doNotLiveAtAddress').value === true">

@@ -1,35 +1,35 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { AEMService } from '../services/aem.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatStepper, MatVerticalStepper } from '@angular/material/stepper';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatSnackBar, MatDialog } from '@angular/material';
-import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
-import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { FormBase } from '../shared/form-base';
-import { ApplicationType, OnBehalfOf } from '../shared/enums-list';
-import { MY_FORMATS } from '../shared/enums-list';
 import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
-import { window } from 'ngx-bootstrap';
-import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
-import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
+import { ApplicationType, OnBehalfOf } from '../shared/enums-list';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
+import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
+import { DocumentCollectioninformation } from '../interfaces/victim-restitution.interface';
+import { EmploymentInfoHelper } from '../shared/employment-information/employment-information.helper';
+import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
+import { FormBase } from '../shared/form-base';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { JusticeApplicationDataService } from '../services/justice-application-data.service';
+import { LookupService } from '../services/lookup.service';
+import { MY_FORMATS } from '../shared/enums-list';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatStepper, MatVerticalStepper } from '@angular/material/stepper';
+import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
-import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
-import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
-import { EmploymentInfoHelper } from '../shared/employment-information/employment-information.helper';
-import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
-import * as _ from 'lodash';
-import { StateService } from '../services/state.service';
-import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { LookupService } from '../services/lookup.service';
-import { iLookupData } from '../models/lookup-data.model';
+import { StateService } from '../services/state.service';
+import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
+import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { config } from '../../config';
-import { AEMService } from '../services/aem.service';
-import { DocumentCollectioninformation } from '../interfaces/victim-restitution.interface';
+import { iLookupData } from '../models/lookup-data.model';
+import { window } from 'ngx-bootstrap';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-victim-application',
@@ -265,7 +265,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   getAEMPDF(): Promise<string> {
     return new Promise((resolve, reject) => {
-      let application: Application = this.harvestForm();
+      let application: Application = _.cloneDeep(this.harvestForm());
       //full name display option for single fields
       application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
       //display all locations as a single comma separated string
@@ -289,7 +289,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   getAuthPDF(): Promise<string> {
     return new Promise((resolve, reject) => {
-      let application: Application = this.harvestForm();
+      let application: Application = _.cloneDeep(this.harvestForm());
       //full name display option for single fields
       application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
       this.aemService.getAuthorizationPDF(application).subscribe((res: any) => {
