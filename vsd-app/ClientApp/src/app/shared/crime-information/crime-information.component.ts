@@ -206,16 +206,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     }
 
     if (this.lookupData.police_detachments && this.lookupData.police_detachments.length > 0) {
-      let preferred_police_detachments = this.lookupData.police_detachments.filter(pd => config.preferred_police_detachments.findIndex(ppd => ppd.vsd_policedetachmentid == pd.vsd_policedetachmentid) >= 0);
-      let remaining_police_detachments = this.lookupData.police_detachments.filter(pd => config.preferred_police_detachments.findIndex(ppd => ppd.vsd_policedetachmentid == pd.vsd_policedetachmentid) < 0);
-
-      preferred_police_detachments.sort(function (a, b) {
-        return config.preferred_police_detachments.findIndex(c => c.vsd_policedetachmentid == a.vsd_policedetachmentid) - config.preferred_police_detachments.findIndex(c => c.vsd_policedetachmentid == b.vsd_policedetachmentid);
-      });
-
-      remaining_police_detachments.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-
-      this.policeForceList = preferred_police_detachments.concat(remaining_police_detachments).map(pd => pd.vsd_name);
+      this.policeForceList = this.lookupData.police_detachments.map(pd => pd.vsd_name);
     }
     else {
       this.lookupService.getPoliceDetachments().subscribe((res) => {
@@ -224,17 +215,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
           this.lookupData.police_detachments.sort(function (a, b) {
             return a.vsd_name.localeCompare(b.vsd_name);
           });
+          this.policeForceList = this.lookupData.police_detachments.map(pd => pd.vsd_name);
         }
-        let preferred_police_detachments = this.lookupData.police_detachments.filter(pd => config.preferred_police_detachments.findIndex(ppd => ppd.vsd_policedetachmentid == pd.vsd_policedetachmentid) >= 0);
-        let remaining_police_detachments = this.lookupData.police_detachments.filter(pd => config.preferred_police_detachments.findIndex(ppd => ppd.vsd_policedetachmentid == pd.vsd_policedetachmentid) < 0);
-
-        preferred_police_detachments.sort(function (a, b) {
-          return config.preferred_police_detachments.findIndex(c => c.vsd_policedetachmentid == a.vsd_policedetachmentid) - config.preferred_police_detachments.findIndex(c => c.vsd_policedetachmentid == b.vsd_policedetachmentid);
-        });
-
-        remaining_police_detachments.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-
-        this.policeForceList = preferred_police_detachments.concat(remaining_police_detachments).map(pd => pd.vsd_name);
       });
     }
 
@@ -320,14 +302,6 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     while (this.courtLocationItems.length !== 0) {
       this.courtLocationItems.removeAt(0);
     }
-    // for (let i = 0; i < this.courtLocationItems.length; ++i) {
-
-    //   this.CourtFileGroup = this.courtLocationItems.controls[i] as FormGroup;
-    //   this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as FormControl;
-    //   this.clearControlValidators(this.thisCourtFileLocation);
-    // }
-
-    // this.courtLocationItems.patchValue([]);
   }
 
   applyToCourtOrLegalYes(): void {
@@ -458,9 +432,11 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     let endDate = this.form.get('crimePeriodEnd').value;
     if (endDate && moment(endDate).isBefore(startDate)) {
       this.form.get('crimePeriodEnd').patchValue(null);
+      endDate = null;
     }
 
-    this.showWhyDidYouNotApplySooner = moment(startDate).isBefore(this.oneYearAgo);
+    this.validateCrimePeriodWithinOneYear();
+
     this.form.get('overOneYearFromCrime').patchValue(this.showWhyDidYouNotApplySooner ? CRMBoolean.True : CRMBoolean.False);
 
     let birthdate = this.form.parent.get('personalInformation.birthDate').value;
@@ -469,6 +445,26 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     }
     else {
       this.showCrimeDateWarning = false;
+    }
+  }
+
+  validateCrimePeriodWithinOneYear() {
+    let startDate = moment(this.form.get('crimePeriodStart').value);
+    let endDate = this.form.get('crimePeriodEnd').value;
+
+    let crimePeriodEndDate = startDate;
+    if (endDate) {
+      crimePeriodEndDate = endDate;
+    }
+    else if (this.form.get('whenDidCrimeOccur').value === true || this.form.get('unsureOfCrimeDates').value === true) {
+      crimePeriodEndDate = null;
+    }
+
+    if (crimePeriodEndDate) {
+      this.showWhyDidYouNotApplySooner = moment(crimePeriodEndDate).isBefore(this.oneYearAgo);
+    }
+    else {
+      this.showWhyDidYouNotApplySooner = false;
     }
   }
 
@@ -483,6 +479,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       crimePeriodEndControl.patchValue(null);
       this.clearControlValidators(crimePeriodEndControl);
     }
+
+    this.validateCrimePeriodWithinOneYear();
   }
 
   unsureOfCrimeDateChange(event) {
@@ -496,6 +494,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       crimePeriodEndControl.patchValue(null);
       this.clearControlValidators(crimePeriodEndControl);
     }
+
+    this.validateCrimePeriodWithinOneYear();
   }
 
   reportStartChange(index: number) {
@@ -527,7 +527,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   policeForceSelected(index: number) {
-    
+
   }
 
   applyToCourtForMoneyFromOffenderChange() {

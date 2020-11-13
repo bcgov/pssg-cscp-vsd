@@ -26,7 +26,17 @@ export const config = {
         { vsd_name: "Italy", vsd_countryid: "31b05a13-e149-ea11-b816-00505683fbf4" },
         { vsd_name: "China", vsd_countryid: "15b05a13-e149-ea11-b816-00505683fbf4" },
         { vsd_name: "Russia", vsd_countryid: "64bb1d2f-e56a-ea11-b812-005056830319" },
-    ]
+    ],
+
+    accepted_file_extensions: {
+        "pdf": true,
+        "png": true,
+        "jpeg": true,
+        "jpg": true,
+        "doc": true,
+        "docx": true,
+        "ppt": true,
+    }
 
 
 

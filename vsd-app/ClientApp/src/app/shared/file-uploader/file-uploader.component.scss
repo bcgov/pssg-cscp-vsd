@@ -1,7 +1,7 @@
 ::ng-deep .drop-zone {
-    border: 1px dashed #A5BADB !important;
-    background-color: #F1F4FA;
-    border-radius: 5PX !important;
+    border: 1px dashed #a5badb !important;
+    background-color: #f1f4fa;
+    border-radius: 5px !important;
     padding-bottom: 20px;
 }
 
@@ -10,7 +10,7 @@
 }
 
 .file-list {
-    background-color: #F1F4FA;
+    background-color: #f1f4fa;
     margin-bottom: 3px;
     display: flex;
     justify-content: space-between;
@@ -25,4 +25,9 @@
 .upload-wrapper {
     position: relative;
     margin: auto;
+}
+
+.remove-chip {
+    margin-top: 16px !important;
+    margin-left: 10px !important;
 }
