@@ -436,3 +436,11 @@ input.form-control {
 .no-app-field-botton-margin section {
     margin-bottom: 0px !important;
 }
+
+.app-field-bold label {
+    font-weight: bold !important;
+}
+
+.app-field-bold label > span {
+    font-weight: 400 !important;
+}

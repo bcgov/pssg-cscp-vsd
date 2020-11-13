@@ -249,6 +249,19 @@
         </div>
     </div>
 
+    <div class="row mt-3 mb-3">
+        <div class="col-md-6">
+            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('preferredMethodOfContact')" errorMessage="Please select your preferred method of contact" [tooltipReference]="preferredMethodOfContactTemplate" class="no-app-field-botton-margin app-field-bold">
+                <select class="form-control" formControlName="preferredMethodOfContact">
+                    <option value="0">Select...</option>
+                    <option value="2">Phone Call</option>
+                    <option value="1">Email</option>
+                    <option value="4">Mail</option>
+                </select>
+            </app-field>
+            <ng-template #preferredMethodOfContactTemplate>Should the program have any questions, what is your preferred method of contact?</ng-template>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-12">
@@ -257,20 +270,6 @@
             </h3>
             <ng-template #altAddressTemplate>Please provide an alternate address that we may forward correspondences to when mail is returned from the primary address. e.g. an address of an immediate family member or trusted person.</ng-template>
             <app-address [group]="form.get('alternateAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('preferredMethodOfContact')" errorMessage="Please select your preferred method of contact" [tooltipReference]="preferredMethodOfContactTemplate">
-                <select class="form-control" formControlName="preferredMethodOfContact">
-                    <option value="0">Select...</option>
-                    <option value="2">Phone Call</option>
-                    <option value="1">Email</option>
-                    <option value="4">Mail</option>
-                    <!-- <option value="100000002">Alternate Mail</option> -->
-                </select>
-            </app-field>
-            <ng-template #preferredMethodOfContactTemplate>Should the program have any questions, what is your preferred method of contact?</ng-template>
         </div>
     </div>
 
