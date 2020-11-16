@@ -173,7 +173,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         let altPhoneControl = this.form.get('alternatePhoneNumber');
         let emailControl = this.form.get('email');
         let emailConfirmControl = this.form.get('confirmEmail');
-        let agreeToCVAPControl = this.form.get('agreeToCvapCommunicationExchange');
+        let agreeToCVAPEmailControl = this.form.get('agreeToCvapCommunicationExchange');
 
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'primaryAddress');
         this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'alternateAddress');
@@ -183,7 +183,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         this.setControlValidators(phoneControl, [Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
         this.setControlValidators(emailControl, [Validators.email]);
         this.setControlValidators(emailConfirmControl, [Validators.email, EmailValidator('email')]);
-        this.clearControlValidators(agreeToCVAPControl);
+        this.clearControlValidators(agreeToCVAPEmailControl);
 
         let contactMethod = parseInt(value);
         if (contactMethod === 2) { //phone call
@@ -194,22 +194,15 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         } else if (contactMethod === 1) { //Email
             this.setControlValidators(emailControl, [Validators.required, Validators.email]);
             this.setControlValidators(emailConfirmControl, [Validators.required, Validators.email, EmailValidator('email')]);
-            this.setControlValidators(agreeToCVAPControl, [Validators.requiredTrue]);
+            this.setControlValidators(agreeToCVAPEmailControl, [Validators.requiredTrue]);
             this.phoneIsRequired = false;
             this.emailIsRequired = true;
             this.addressIsRequired = false;
-        } else if (contactMethod === 4) { //Primary Mail
+        } else if (contactMethod === 4) { //Mail
             this.phoneIsRequired = false;
             this.emailIsRequired = false;
             this.addressIsRequired = true;
             this.alternateAddressIsRequired = false;
-        } else if (contactMethod === 100000002) { //Alternate Mail
-            this.addressHelper.setAddressAsRequired(this.form, 'alternateAddress');
-            this.addressHelper.markAsTouched(this.form, 'alternateAddress');
-            this.phoneIsRequired = false;
-            this.emailIsRequired = false;
-            this.addressIsRequired = false;
-            this.alternateAddressIsRequired = true;
         }
 
         let voicemailOption = parseInt(this.form.get('leaveVoicemail').value);
@@ -222,6 +215,14 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         }
         else if (voicemailOption === 100000002) { //Alternate only
             this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
+        }
+
+        console.log("check can email");
+        console.log(agreeToCVAPEmailControl.value);
+
+        if (agreeToCVAPEmailControl.value === true) {
+            this.setControlValidators(emailControl, [Validators.required, Validators.email]);
+            this.setControlValidators(emailConfirmControl, [Validators.required, Validators.email, EmailValidator('email')]);
         }
     }
 
@@ -292,5 +293,9 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         if (!val) {
             this.form.get('mailRecipient').patchValue('');
         }
+    }
+
+    canEmailChange(val: boolean) {
+        this.preferredMethodOfContactChange(this.form.get('preferredMethodOfContact').value);
     }
 }

@@ -86,7 +86,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
             this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
         }
         else {
-            this.lookupService.getRelationships().subscribe((res) => {
+            this.lookupService.getOptionalAuthorizationRelationships().subscribe((res) => {
                 this.lookupData.relationships = res.value;
                 if (this.lookupData.relationships) {
                     this.lookupData.relationships.sort(function (a, b) {
@@ -99,29 +99,10 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
     }
 
     addAuthorizationInformation(makeAuthorizedSignatureRequired: boolean = false): void {
-        let validationType = this.form.get('allowCvapStaffSharing').value;
         let options = { onlySelf: true, emitEvent: false };
         this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
         let authPerson: FormGroup = this.authInfoHelper.createAuthorizedPerson(this.fb);
 
-        // if (validationType === 100000001) { //Yes-Person
-        //     let agencyControl = authPerson.get('authorizedPersonAgencyName');
-
-        //     this.clearControlValidators(agencyControl);
-
-        // }
-        // else if (validationType === 100000002) {//Yes-Agency
-        //     let agencyControl = authPerson.get('authorizedPersonAgencyName');
-        //     let authorizedPersonFirstNameControl = authPerson.get('authorizedPersonFirstName');
-        //     let authorizedPersonLastNameControl = authPerson.get('authorizedPersonLastName');
-        //     let authorizedPersonRelationshipControl = authPerson.get('authorizedPersonRelationship');
-
-        //     this.setControlValidators(agencyControl, [Validators.required]);
-
-        //     this.clearControlValidators(authorizedPersonFirstNameControl);
-        //     this.clearControlValidators(authorizedPersonLastNameControl);
-        //     this.clearControlValidators(authorizedPersonRelationshipControl);
-        // }
         this.authorizedPersons.push(authPerson);
         this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
         this.showRemoveAuthorization = this.authorizedPersons.length > 1;
@@ -193,7 +174,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
             this.setControlValidators(authorizedPersonFirstNameControl, [Validators.required]);
             this.setControlValidators(authorizedPersonLastNameControl, [Validators.required]);
             this.setControlValidators(authorizedPersonRelationshipControl, [Validators.required]);
-            
+
             agencyControl.patchValue('');
             this.clearControlValidators(agencyControl);
         }

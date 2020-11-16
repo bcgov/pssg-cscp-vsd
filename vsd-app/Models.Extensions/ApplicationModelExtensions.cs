@@ -310,50 +310,50 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     if (model.MedicalInformation.otherTreatments.Count() > 0)
                     {
-                        if (model.MedicalInformation.otherTreatments[0].providerCompany.Length > 0)
+                        // if (model.MedicalInformation.otherTreatments[0].providerCompany.Length > 0)
+                        // {
+                        Providercollection[] tempProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
                         {
-                            Providercollection[] tempProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
-                            {
-                                vsd_companyname = t.providerCompany,
-                                vsd_firstname = t.providerFirstName,
-                                vsd_lastname = t.providerLastName,
-                                vsd_phonenumber = t.providerPhoneNumber,
-                                vsd_addressline1 = t.providerAddress != null ? t.providerAddress.line1 : "",
-                                vsd_addressline2 = t.providerAddress != null ? t.providerAddress.line2 : "",
-                                vsd_city = t.providerAddress != null ? t.providerAddress.city : "",
-                                vsd_province = t.providerAddress != null ? t.providerAddress.province : "",
-                                vsd_country = t.providerAddress != null ? t.providerAddress.country : "",
-                                vsd_postalcode = t.providerAddress != null ? t.providerAddress.postalCode : "",
-                                vsd_relationship1 = t.providerType,
-                                vsd_email = !String.IsNullOrEmpty(t.providerEmail) ? t.providerEmail : "",
-                                vsd_fax = !String.IsNullOrEmpty(t.providerFax) ? t.providerFax : "",
-                                vsd_relationship1other = t.providerTypeText,
-                            }).ToArray();
+                            vsd_companyname = t.providerCompany,
+                            vsd_firstname = t.providerFirstName,
+                            vsd_lastname = t.providerLastName,
+                            vsd_phonenumber = t.providerPhoneNumber,
+                            vsd_addressline1 = t.providerAddress != null ? t.providerAddress.line1 : "",
+                            vsd_addressline2 = t.providerAddress != null ? t.providerAddress.line2 : "",
+                            vsd_city = t.providerAddress != null ? t.providerAddress.city : "",
+                            vsd_province = t.providerAddress != null ? t.providerAddress.province : "",
+                            vsd_country = t.providerAddress != null ? t.providerAddress.country : "",
+                            vsd_postalcode = t.providerAddress != null ? t.providerAddress.postalCode : "",
+                            vsd_relationship1 = t.providerType,
+                            vsd_email = !String.IsNullOrEmpty(t.providerEmail) ? t.providerEmail : "",
+                            vsd_fax = !String.IsNullOrEmpty(t.providerFax) ? t.providerFax : "",
+                            vsd_relationship1other = t.providerTypeText,
+                        }).Where(t => !string.IsNullOrEmpty(t.vsd_relationship1)).ToArray();
 
-                            int tempProviderCount = 0;
-                            if (application.ProviderCollection == null)
-                            {
-                                tempProviderCount = 0;
-                            }
-                            else
-                            {
-                                tempProviderCount = application.ProviderCollection.Count();
-                            }
-                            Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                            if (application.ProviderCollection == null)
-                            {
-                                tempCombinedCollection = tempProviderCollection;
-                            }
-                            else
-                            {
-                                Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                            }
-                            Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                            if (tempCombinedCollection.Length > 0)
-                            {
-                                application.ProviderCollection = tempCombinedCollection;
-                            }
+                        int tempProviderCount = 0;
+                        if (application.ProviderCollection == null)
+                        {
+                            tempProviderCount = 0;
                         }
+                        else
+                        {
+                            tempProviderCount = application.ProviderCollection.Count();
+                        }
+                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
+                        if (application.ProviderCollection == null)
+                        {
+                            tempCombinedCollection = tempProviderCollection;
+                        }
+                        else
+                        {
+                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+                        }
+                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
+                        if (tempCombinedCollection.Length > 0)
+                        {
+                            application.ProviderCollection = tempCombinedCollection;
+                        }
+                        // }
                     }
                 }
 

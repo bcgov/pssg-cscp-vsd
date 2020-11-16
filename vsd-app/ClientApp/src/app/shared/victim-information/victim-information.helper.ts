@@ -17,7 +17,6 @@ export class VictimInfoHelper {
             dateOfNameChange: [''],
 
             gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
-            birthDate: ['', [Validators.required]],
             maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
 
             victimSameContactInfo: [''],
@@ -29,14 +28,13 @@ export class VictimInfoHelper {
                 EmailValidator('email')
             ]],
 
-            // Bind a subscribe event on this field being true. Change victim primary address when applicant address changes
-            mostRecentMailingAddressSameAsPersonal: ['', Validators.required],
+            mostRecentMailingAddressSameAsPersonal: [''],
 
             primaryAddress: fb.group({
-                line1: [''],//, Validators.required],
+                line1: [''],
                 line2: [''],
-                city: [''],//, Validators.required],
-                postalCode: ['', [Validators.pattern(this.postalRegex)]],//, Validators.required]],
+                city: [''],
+                postalCode: ['', [Validators.pattern(this.postalRegex)]],
                 province: [{ value: 'British Columbia', disabled: false }],
                 country: [{ value: 'Canada', disabled: false }],
             }),
@@ -45,6 +43,10 @@ export class VictimInfoHelper {
         if (form_type === ApplicationType.IFM_Application) {
             group['sin'] = ['', [Validators.minLength(9), Validators.maxLength(9)]];
             group['occupation'] = [''];
+            group['birthDate'] = ['', [Validators.required]];
+        }
+        else if (form_type === ApplicationType.Witness_Application) {
+            group['birthDate'] = [''];
         }
 
         return fb.group(group);

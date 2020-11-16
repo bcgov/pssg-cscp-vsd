@@ -171,13 +171,12 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
 
     createTreatmentItem(): FormGroup {
         let group = {
-            providerCompany: ['', Validators.required],
+            providerCompany: [''],
             providerEmail: ['', [Validators.email]],
             providerFirstName: [''],
             providerLastName: [''],
             providerPhoneNumber: [''],
             providerFax: [''],
-            // providerAddress: [''],
             providerAddress: this.fb.group({
                 line1: [''],
                 line2: [''],
@@ -201,7 +200,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
 
     addDoctor(): void {
         this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as FormControl;
-        this.familyDoctorClinicItem.setValidators([Validators.required]);// .validator = Validators.required;
+        this.familyDoctorClinicItem.setValidators([Validators.required]);
         this.familyDoctorClinicItem.updateValueAndValidity();
     }
 

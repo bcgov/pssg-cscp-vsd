@@ -600,7 +600,7 @@
                 </tr>
                 <tr *ngIf="formType === ApplicationType.Victim_Application">
                     <th>Type of provider</th>
-                    <td>{{ item.get('providerType').value }}</td>
+                    <td>{{ item.get('providerType').value }}<span *ngIf="item.get('providerType').value === 'Other'"> : {{item.get('providerTypeText').value}}</span></td>
                 </tr>
                 <tr>
                     <th>Mailing Address</th>
