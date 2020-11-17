@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import * as moment from 'moment';
 
@@ -39,12 +39,6 @@ export class DateFieldComponent implements OnInit {
         }
     }
 
-    pad(num, size) {
-        num = num.toString();
-        while (num.length < size) num = "0" + num;
-        return num;
-    }
-
     output() {
         if (this.day == 0 || this.month == -1 || this.year == 0) {
             this.control.patchValue('');
@@ -77,5 +71,4 @@ export class DateFieldComponent implements OnInit {
 
         this.control.patchValue(date);
     }
-
 }

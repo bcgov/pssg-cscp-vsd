@@ -42,7 +42,7 @@
 
   <hr />
 
-  <section *ngIf="form.get('completingOnBehalfOf').value === 100000001 || form.get('completingOnBehalfOf').value === 100000002 || form.get('completingOnBehalfOf').value === 100000003">
+  <section *ngIf="form.get('completingOnBehalfOf').value === 100000002 || form.get('completingOnBehalfOf').value === 100000003">
     <p>Complete the following before continuing with the application.</p>
     <h2 class="blue-header">Person Completing the Application</h2>
 
@@ -68,7 +68,7 @@
     <h3>Contact Information</h3>
     <div class="row">
       <div class="col-12">
-        <app-field label="Are the applicant's phone number(s) and email address the same or to be used for you?" [valid]="isFieldValid('applicantSameContactInfo')" [required]="true" errorMessage="Please make a selection">
+        <app-field label="Are your email and phone number(s) the same as the applicants?" [valid]="isFieldValid('applicantSameContactInfo')" [required]="true" errorMessage="Please make a selection">
           <label class="inline-label">
             <input type="radio" [value]="true" formControlName="applicantSameContactInfo">
             <span>Yes</span>
@@ -135,7 +135,7 @@
 
     <div class="row">
       <div class="col-md-6">
-        <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('representativePreferredMethodOfContact')" errorMessage="Please select your preferred method of contact">
+        <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('representativePreferredMethodOfContact')" errorMessage="Please select your preferred method of contact" class="app-field-bold">
           <select class="form-control" formControlName="representativePreferredMethodOfContact">
             <option value="0">Select...</option>
             <option value="100000000">Email</option>

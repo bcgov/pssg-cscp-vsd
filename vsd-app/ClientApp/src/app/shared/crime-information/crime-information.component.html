@@ -41,7 +41,7 @@
                 <div class="end-date-container">
                     <span *ngIf="form.get('whenDidCrimeOccur').value === true || form.get('unsureOfCrimeDates').value === true" class="end-date-span">
                         <span class="tick-span"> - </span>
-                        <app-date-field [control]="form.get('crimePeriodEnd')" class="full-width" [min]="crimePeriodStartDate" [max]="todaysDate"></app-date-field>
+                        <app-date-field [control]="form.get('crimePeriodEnd')" class="full-width" [min]="crimePeriodStartDate" [max]="todaysDate" (change)="validateCrimePeriodWithinOneYear()"></app-date-field>
                     </span>
                 </div>
             </div>
@@ -76,7 +76,6 @@
                                         {{ item }}
                                     </option>
                                 </select>
-                                <!-- <input class="form-control standard" type="text" formControlName="location" [typeahead]="cityList"> -->
                                 <a href="javascript:void(0);" (click)="removeCrimeLocation(i)" *ngIf="showRemoveCrimeLocation" class="remove-location-button">
                                     <i class="fas fa-trash-alt"></i> Remove Location
                                 </a>
@@ -107,8 +106,6 @@
                     <div class="half-width">
                         <app-date-field [control]="form.get('dateOfDeath')" [max]="todaysDate"></app-date-field>
                     </div>
-                    <!-- <input type="text" [max]="todaysDate" class="form-control date-picker" formControlName="dateOfDeath" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfDeathPicker" (focus)="dateOfDeathPicker.open()" (click)="dateOfDeathPicker.open()" readonly>
-                    <mat-datepicker #dateOfDeathPicker></mat-datepicker> -->
                 </app-field>
             </div>
 
@@ -121,7 +118,7 @@
                 <textarea class="form-control standard" formControlName="crimeInjuries" maxlength="750"></textarea>
             </app-field>
 
-            <app-field label="If you have any additional information, please upload it below">
+            <app-field label="If you have any additional information, please upload it below" class="no-app-field-botton-margin">
             </app-field>
             <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')"></app-file-uploader>
         </section>
@@ -191,15 +188,11 @@
                                 <input type="checkbox" [value]="true" name="policeReportedMultipleTimes" formControlName="policeReportedMultipleTimes" (click)="clearReportEndDate(i);">
                             </td>
                             <td>
-                                <!-- <app-date-field [control]="item.get('reportStartDate')" [max]="today" (change)="reportStartChange(i)"></app-date-field> -->
-
                                 <input type="text" [max]="today" (dateChange)="reportStartChange(i, $event)" class="form-control date-picker" formControlName="reportStartDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportStartDatePicker" (focus)="reportStartDatePicker.open()" (click)="reportStartDatePicker.open()" readonly>
                                 <mat-datepicker #reportStartDatePicker></mat-datepicker>
                             </td>
                             <td>
                                 <span *ngIf="item.controls.policeReportedMultipleTimes.value === true">
-                                    <!-- <app-date-field [control]="item.get('reportEndDate')" [max]="today" [min]="policeReportMinDates[i]"></app-date-field> -->
-
                                     <input type="text" [max]="today" [min]="policeReportMinDates[i]" class="form-control date-picker" [class.input-error]="!isMyControlValid(item.get('reportEndDate'))" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
                                     <mat-datepicker #reportEndDatePicker></mat-datepicker>
                                 </span>

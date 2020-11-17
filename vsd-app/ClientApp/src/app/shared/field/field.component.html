@@ -1,6 +1,6 @@
 <section class="app-field" [ngClass]="!valid ? 'app-field with-error' : 'app-field'">
   <span *ngIf="leadingText">{{leadingText}} <p></p> </span>
-  <label *ngIf="label">{{label}} <span *ngIf="tooltipReference" class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='tooltipReference'><i class='fa fa-info-circle'> </i></span> <span *ngIf="required" class="error-states">*</span></label>
+  <label *ngIf="label">{{label}}<span *ngIf="tooltipReference" class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='tooltipReference'> <i class='fa fa-info-circle'> </i></span><span *ngIf="required" class="error-states"> *</span></label>
   <br *ngIf="label">
   <table style="width: 100%">
     <tr>

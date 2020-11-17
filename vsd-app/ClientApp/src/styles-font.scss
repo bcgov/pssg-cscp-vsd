@@ -78,6 +78,26 @@ html {
     border-radius: 5px;
 }
 
+.btn.btn-warning {
+    color: #212529;
+    background-color: #f9ca54;
+    border-color: #f9ca54;
+    min-width: 120px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.btn-warning:hover {
+    color: #212529;
+    background-color: #f8bf2f;
+    border-color: #f7bb23;
+}
+
+.btn-warning.focus,
+.btn-warning:focus {
+    box-shadow: 0 0 0 0.2rem rgba(217, 177, 78, 0.5);
+}
+
 .ctx-home {
     background: #f2f2f2;
 }
@@ -411,4 +431,16 @@ input.form-control {
     top: 0;
     left: 0;
     width: 100%;
+}
+
+.no-app-field-botton-margin section {
+    margin-bottom: 0px !important;
+}
+
+.app-field-bold label {
+    font-weight: bold !important;
+}
+
+.app-field-bold label > span {
+    font-weight: 400 !important;
 }

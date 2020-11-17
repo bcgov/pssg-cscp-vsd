@@ -199,14 +199,14 @@
 
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
+            <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
                 <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
             </app-field>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm your email address">
+            <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm your email address">
                 <input class="form-control" type="text" (blur)="trimEmail(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
             </app-field>
         </div>
@@ -216,7 +216,7 @@
         <div class="col-12">
             <app-field [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('agreeToCvapCommunicationExchange')" errorMessage="Please check agreement">
                 <label class="inline-label inline-checkbox-label">
-                    <input type="checkbox" style="margin-right: 10px;" formControlName="agreeToCvapCommunicationExchange" [value]="true">
+                    <input type="checkbox" style="margin-right: 10px;" formControlName="agreeToCvapCommunicationExchange" [value]="true" (change)="canEmailChange($event.target.checked)">
                     <span>I agree that the Crime Victim Assistance Program can communicate with me about my application and exchange documents via my email address.<span *ngIf="preferredMethodOfContact.value === '1'" class="error-states">*</span></span>
                 </label>
             </app-field>
@@ -232,9 +232,9 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <label class="inline-label">
+            <label class="inline-label inline-checkbox-label">
                 <input type="checkbox" style="margin-right: 10px;" formControlName="doNotLiveAtAddress" [value]="true" (change)="doNotLiveAtAddressChange($event.target.checked)">
-                <span>I do not live at the following address.</span>
+                <span class="mr-0">I do not live at the following address.</span>
             </label>
         </div>
         <div class="col-md-6" *ngIf="form.get('doNotLiveAtAddress').value === true">
@@ -249,6 +249,19 @@
         </div>
     </div>
 
+    <div class="row mt-3 mb-3">
+        <div class="col-md-6">
+            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('preferredMethodOfContact')" errorMessage="Please select your preferred method of contact" [tooltipReference]="preferredMethodOfContactTemplate" class="no-app-field-botton-margin app-field-bold">
+                <select class="form-control" formControlName="preferredMethodOfContact">
+                    <option value="0">Select...</option>
+                    <option value="2">Phone Call</option>
+                    <option value="1">Email</option>
+                    <option value="4">Mail</option>
+                </select>
+            </app-field>
+            <ng-template #preferredMethodOfContactTemplate>Should the program have any questions, what is your preferred method of contact?</ng-template>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-12">
@@ -257,20 +270,6 @@
             </h3>
             <ng-template #altAddressTemplate>Please provide an alternate address that we may forward correspondences to when mail is returned from the primary address. e.g. an address of an immediate family member or trusted person.</ng-template>
             <app-address [group]="form.get('alternateAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('preferredMethodOfContact')" errorMessage="Please select your preferred method of contact" [tooltipReference]="preferredMethodOfContactTemplate">
-                <select class="form-control" formControlName="preferredMethodOfContact">
-                    <option value="0">Select...</option>
-                    <option value="2">Phone Call</option>
-                    <option value="1">Email</option>
-                    <option value="4">Mail</option>
-                    <!-- <option value="100000002">Alternate Mail</option> -->
-                </select>
-            </app-field>
-            <ng-template #preferredMethodOfContactTemplate>Should the program have any questions, what is your preferred method of contact?</ng-template>
         </div>
     </div>
 

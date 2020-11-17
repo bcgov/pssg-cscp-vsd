@@ -139,6 +139,21 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             finally { }
         }
 
+        [HttpGet("auth_relationships")]
+        public async Task<IActionResult> GetOptionalAuthorizationRelationships()
+        {
+            try
+            {
+                // set the endpoint action
+                string endpointUrl = "vsd_relationships?$select=vsd_name&$filter=statecode eq 0 and vsd_optionalauthorizedrelationship eq true";
+
+                // get the response
+                DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
+                return StatusCode((int)result.statusCode, result.result.ToString());
+            }
+            finally { }
+        }
+
         [HttpGet("police_detachments")]
         public async Task<IActionResult> GetPoliceDetachments()
         {

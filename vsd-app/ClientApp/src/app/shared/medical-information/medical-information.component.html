@@ -176,7 +176,7 @@
                     <h3>Provider {{ i + 1 }}</h3>
                     <div class="row">
                         <div class="col-md-6">
-                            <app-field label="Name of Company/Organization" [required]="true" [valid]="isMyControlValid(item.get('providerCompany'))" errorMessage="Please enter company name">
+                            <app-field label="Name of Company/Organization" [required]="false" [valid]="isMyControlValid(item.get('providerCompany'))" errorMessage="Please enter company name">
                                 <input type="text" class="form-control" formControlName="providerCompany">
                             </app-field>
                         </div>
