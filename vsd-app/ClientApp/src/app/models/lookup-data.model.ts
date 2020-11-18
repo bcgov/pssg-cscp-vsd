@@ -3,6 +3,7 @@ export interface iLookupData {
     provinces: iProvince[];
     cities: iCity[];
     relationships: iRelationship[];
+    representativeRelationships: iRelationship[];
     courts: iCourt[];
     police_detachments: iPoliceDetachment[];
 }

@@ -154,6 +154,21 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             finally { }
         }
 
+        [HttpGet("representative_relationships")]
+        public async Task<IActionResult> GetRepresentativeRelationships()
+        {
+            try
+            {
+                // set the endpoint action
+                string endpointUrl = "vsd_relationships?$select=vsd_name&$filter=statecode eq 0 and vsd_cvap_representativerelationship eq true";
+
+                // get the response
+                DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
+                return StatusCode((int)result.statusCode, result.result.ToString());
+            }
+            finally { }
+        }
+
         [HttpGet("police_detachments")]
         public async Task<IActionResult> GetPoliceDetachments()
         {

@@ -5,13 +5,13 @@ import { FormGroup, Validators, FormBuilder, ControlContainer } from "@angular/f
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { COUNTRIES_ADDRESS } from "../address/country-list";
-import { REPRESENTATIVE_LIST } from "../../constants/representative-list";
 import { AddressHelper } from "../address/address.helper";
 import { EmailValidator } from "../validators/email.validator";
 import { RepresentativeInfoHelper } from "./representative-information.helper";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
 import { iLookupData } from "../../models/lookup-data.model";
+import { LookupService } from "../../services/lookup.service";
 
 @Component({
     selector: 'app-representative-information',
@@ -50,11 +50,11 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         private controlContainer: ControlContainer,
         private fb: FormBuilder,
         private route: ActivatedRoute,
+        public lookupService: LookupService,
     ) {
         super();
         var canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
         this.provinceList = canada.areas;
-        this.relationshipList = REPRESENTATIVE_LIST.name;
     }
 
     ngOnInit() {
@@ -97,6 +97,21 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         this.contactInfoSubscription = this.form.get('applicantSameContactInfo').valueChanges.subscribe(value => {
             this.copyPersonalContactInfoToRepresentative(this.form.parent);
         });
+
+        if (this.lookupData.representativeRelationships && this.lookupData.representativeRelationships.length > 0) {
+            this.relationshipList = this.lookupData.representativeRelationships.map(r => r.vsd_name);
+        }
+        else {
+            this.lookupService.getRepresentativeRelationships().subscribe((res) => {
+                this.lookupData.representativeRelationships = res.value;
+                if (this.lookupData.representativeRelationships) {
+                    this.lookupData.representativeRelationships.sort(function (a, b) {
+                        return a.vsd_name.localeCompare(b.vsd_name);
+                    });
+                }
+                this.relationshipList = this.lookupData.representativeRelationships.map(r => r.vsd_name);
+            });
+        }
     }
 
     ngOnDestroy() {

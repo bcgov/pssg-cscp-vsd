@@ -74,6 +74,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     provinces: [],
     cities: [],
     relationships: [],
+    representativeRelationships: [],
     courts: [],
     police_detachments: [],
   };
@@ -131,6 +132,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         this.lookupData.cities = res.value;
         if (this.lookupData.cities) {
           this.lookupData.cities.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+        }
+        resolve();
+      });
+    }));
+
+    promise_array.push(new Promise((resolve, reject) => {
+      this.lookupService.getRepresentativeRelationships().subscribe((res) => {
+        this.lookupData.representativeRelationships = res.value;
+        if (this.lookupData.representativeRelationships) {
+          this.lookupData.representativeRelationships.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
         }
         resolve();
       });
