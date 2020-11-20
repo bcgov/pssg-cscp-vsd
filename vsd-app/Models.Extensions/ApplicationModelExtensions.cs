@@ -158,16 +158,21 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_crimedetails = model.CrimeInformation.crimeDetails;
                 application.Application.vsd_cvap_injuries = model.CrimeInformation.crimeInjuries;
 
+
                 // Include upload file
                 try
                 {
                     int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length + model.ApplicationPDFs.Length;
+                    
+                    application.Application.vsd_cvap_crimedocumentuploaded = model.CrimeInformation.documents.Length > 0;
+                    application.Application.vsd_cvap_onbehalfofdocumentuploaded = model.RepresentativeInformation.documents.Length > 0;
 
                     if (documentCollectionLength > 0)
                     {
                         application.DocumentCollection = new Documentcollection[documentCollectionLength];
                         int documentIndex = 0;
 
+                        //PDF copy of application, and extra copy of just the auth page
                         for (int i = 0; i < model.ApplicationPDFs.Length; ++i)
                         {
                             Documentcollection tempDocumentCollection = new Documentcollection();
