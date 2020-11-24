@@ -4,8 +4,6 @@ import { Application } from '../interfaces/application.interface';
 import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 import { VictimRestitution } from '../interfaces/victim-restitution.interface';
 import { OffenderRestitution } from '../interfaces/offender-restitution.interface';
-import { Observable } from 'rxjs';
-import { Binary } from 'selenium-webdriver/firefox';
 
 @Injectable()
 export class JusticeApplicationDataService {
@@ -34,10 +32,6 @@ export class JusticeApplicationDataService {
 
   public submitOffenderRestitutionApplication(offenderRestitution: OffenderRestitution) {
     return this.http.post(this.apiPath + 'submitoffenderrestitution', offenderRestitution, { headers: this.headers });
-  }
-
-  public createPDF(htmlInput: String): Observable<any> {
-    return this.http.post<any>(this.apiPath + 'getweasypdf', htmlInput, { headers: this.pdfHeaders });
   }
 
   public getSampleCall() {

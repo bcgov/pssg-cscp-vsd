@@ -8,11 +8,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
     {
         public static CounsellorInvoiceDynamicsModel ToDynamicsModel(this CounsellorInvoiceFormModel model)
         {
-            var outputModel = new CounsellorInvoiceDynamicsModel();
+            CounsellorInvoiceDynamicsModel outputModel = new CounsellorInvoiceDynamicsModel();
             if (model == null || model.InvoiceDetails == null)
                 return outputModel;
 
-            var invoiceDetails = model.InvoiceDetails;
+            Invoicedetails invoiceDetails = model.InvoiceDetails;
             outputModel.VendorNumber = invoiceDetails.vendorNumber;
             outputModel.VendorPostalCode = invoiceDetails.vendorPostalCode;
 
@@ -31,8 +31,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
             outputModel.ExemptFromGST = invoiceDetails.exemptFromGst;
 
-            var lineItems = new List<CounsellorInvoiceLineItem>();
-            foreach (var lineItem in invoiceDetails.lineItems)
+            List<CounsellorInvoiceLineItem> lineItems = new List<CounsellorInvoiceLineItem>();
+            foreach (Lineitem lineItem in invoiceDetails.lineItems)
             {
                 lineItems.Add(new CounsellorInvoiceLineItem
                 {

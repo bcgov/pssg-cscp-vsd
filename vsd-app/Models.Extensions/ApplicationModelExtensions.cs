@@ -10,7 +10,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
     {
         public static ApplicationDynamicsModel ToVsdVictimsModel(this ApplicationFormModel model)
         {
-            var application = new ApplicationDynamicsModel();
+            ApplicationDynamicsModel application = new ApplicationDynamicsModel();
             application.Application = new Application();
 
             if (model == null)
