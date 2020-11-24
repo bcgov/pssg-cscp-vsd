@@ -133,15 +133,5 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
             return StatusCode((int)result.statusCode, result.result.ToString());
         }
-
-        // Sample error result
-        // "message": "{\"@odata.context\":\"https://victimservicesdev.api.crm3.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.vsd_CreateCVAPClaimResponse\",\"IsSuccess\":false,\"Result\":\"Error: Applicant's First Name is required..\"}"
-        // internal class DynamicsResponse
-        // {
-        //     public string odatacontext { get; set; }
-        //     public bool IsSuccess { get; set; }
-        //     public bool IsCompletedSuccessfully { get; set; }
-        //     public string Result { get; set; }
-        // }
     }
 }

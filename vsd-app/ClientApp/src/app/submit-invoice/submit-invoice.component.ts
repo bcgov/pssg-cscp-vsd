@@ -16,6 +16,8 @@ import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 import { Subject, Subscription } from 'rxjs';
 import { User } from '../models/user.model';
 import * as _ from 'lodash';
+import { AEMService } from '../services/aem.service';
+import { DocumentCollectioninformation } from '../interfaces/victim-restitution.interface';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -73,6 +75,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     private fb: FormBuilder,
     public snackBar: MatSnackBar,
     private dialog: MatDialog,
+    private aemService: AEMService,
   ) {
     super();
     this.formFullyValidated = false;
@@ -96,15 +99,38 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   printInvoice() {
-    window.scroll(0, 0);
+    let invoice = <CounsellorInvoice>{
+      InvoiceDetails: this.form.get('invoiceDetails').value,
+    };
+    let date_string = invoice.InvoiceDetails.invoiceDate.getFullYear() + MONTHS[invoice.InvoiceDetails.invoiceDate.getMonth()] + invoice.InvoiceDetails.invoiceDate.getDate();
 
-    this.showPrintView = true;
-    //hide slide close thing
-    document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
 
-    setTimeout(() => {
-      window.print();
-    }, 100);
+    this.getAEMPDF().then((pdf: string) => {
+      let downloadLink = document.createElement("a");
+      downloadLink.href = "data:application/pdf;base64," + pdf;
+      downloadLink.download = `Invoice-${invoice.InvoiceDetails.invoiceNumber}-${date_string}.pdf`;
+      downloadLink.target = "_blank";
+
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }).catch((err) => {
+      console.log("error getting pdf");
+      console.log(err);
+    });
+
+
+    // window.scroll(0, 0);
+
+    // this.showPrintView = true;
+    // //hide slide close thing
+    // document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
+
+    // setTimeout(() => {
+    //   window.print();
+    // }, 100);
+
+
   }
 
   @HostListener('window:afterprint')
@@ -324,6 +350,11 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     const formData = <CounsellorInvoice>{
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
+
+    this.getInvoicePDF(formData).then(res => {
+
+    });
+
     this.busy = this.justiceDataService.submitCounsellorInvoice(formData)
       .subscribe(res => {
         subResult.next(res);
@@ -331,6 +362,54 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.busy2 = Promise.resolve(this.busy);
 
     return subResult;
+  }
+
+  getInvoicePDF(invoice: CounsellorInvoice) {
+    return new Promise(async (resolve, reject) => {
+      let ret: DocumentCollectioninformation[] = [];
+      let promise_array = [];
+      let date_string = invoice.InvoiceDetails.invoiceDate.getFullYear() + MONTHS[invoice.InvoiceDetails.invoiceDate.getMonth()] + invoice.InvoiceDetails.invoiceDate.getDate();
+
+      promise_array.push(new Promise((resolve, reject) => {
+        this.getAEMPDF().then((pdf: string) => {
+          ret.push({
+            body: pdf,
+            filename: `Invoice-${invoice.InvoiceDetails.invoiceNumber}-${date_string}.pdf`,
+            subject: "",
+          });
+          resolve();
+        }).catch((err) => {
+          console.log(err);
+          reject();
+        });
+      }));
+
+      Promise.all(promise_array).then((res) => {
+        resolve(ret);
+      }).catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+    });
+  }
+
+  getAEMPDF(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let invoice = <CounsellorInvoice>{
+        InvoiceDetails: this.form.get('invoiceDetails').value,
+      };
+      invoice.InvoiceDetails.claimantFullName = invoice.InvoiceDetails.claimantsFirstName + ' ' + invoice.InvoiceDetails.claimantLastName;
+
+      this.aemService.getInvoicePDF(invoice).subscribe((res: any) => {
+        console.log(res);
+        if (res.responseMessage) {
+          resolve(res.responseMessage);
+        }
+        else {
+          reject(res);
+        }
+      });
+    });
   }
 
   markAsTouched() {
@@ -447,3 +526,5 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     }
   }
 }
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

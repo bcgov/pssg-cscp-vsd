@@ -12,6 +12,7 @@ export interface InvoiceDetails {
   claimNumber: string;
   claimantsFirstName: string;
   claimantLastName: string;
+  claimantFullName?: string;
   invoiceNumber: string;
   invoiceDate: Date;
   submitterFullName: string;

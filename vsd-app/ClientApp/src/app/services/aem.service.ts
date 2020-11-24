@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Application } from '../interfaces/application.interface';
+import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 
 @Injectable()
 export class AEMService {
@@ -25,5 +26,9 @@ export class AEMService {
 
     public getAuthorizationPDF(application: Application){
         return this.http.post(this.apiPath + '/authorization', application, { headers: this.headers });
+    }
+
+    public getInvoicePDF(invoice: CounsellorInvoice){
+        return this.http.post(this.apiPath + '/invoice', invoice, { headers: this.headers });
     }
 }

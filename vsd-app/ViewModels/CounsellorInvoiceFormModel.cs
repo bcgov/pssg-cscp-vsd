@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace Gov.Cscp.VictimServices.Public.ViewModels
 {
@@ -24,7 +25,10 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string submitterFullName { get; set; }
         public string submitterEmailAddress { get; set; }
         public bool exemptFromGst { get; set; }
+
+        [XmlArrayItem("element")]
         public Lineitem[] lineItems { get; set; }
+        
         public bool declaredAndSigned { get; set; }  // Not used in transfer to Dynamics
     }
 
