@@ -102,13 +102,15 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     let invoice = <CounsellorInvoice>{
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
-    let date_string = invoice.InvoiceDetails.invoiceDate.getFullYear() + MONTHS[invoice.InvoiceDetails.invoiceDate.getMonth()] + invoice.InvoiceDetails.invoiceDate.getDate();
+    invoice.InvoiceDetails.exemptFromGst = !invoice.InvoiceDetails.gstApplicable;
+    console.log(invoice);
+    // let date_string = invoice.InvoiceDetails.invoiceDate.getFullYear() + MONTHS[invoice.InvoiceDetails.invoiceDate.getMonth()] + invoice.InvoiceDetails.invoiceDate.getDate();
 
 
     this.getAEMPDF().then((pdf: string) => {
       let downloadLink = document.createElement("a");
       downloadLink.href = "data:application/pdf;base64," + pdf;
-      downloadLink.download = `Invoice-${invoice.InvoiceDetails.invoiceNumber}-${date_string}.pdf`;
+      downloadLink.download = 'invoice.pdf';//`Invoice-${invoice.InvoiceDetails.invoiceNumber}-${date_string}.pdf`;
       downloadLink.target = "_blank";
 
       document.body.appendChild(downloadLink);
@@ -350,6 +352,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     const formData = <CounsellorInvoice>{
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
+    formData.InvoiceDetails.exemptFromGst = !formData.InvoiceDetails.gstApplicable;
 
     this.getInvoicePDF(formData).then(res => {
 
@@ -398,7 +401,12 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       let invoice = <CounsellorInvoice>{
         InvoiceDetails: this.form.get('invoiceDetails').value,
       };
-      invoice.InvoiceDetails.claimantFullName = invoice.InvoiceDetails.claimantsFirstName + ' ' + invoice.InvoiceDetails.claimantLastName;
+      invoice.InvoiceDetails.exemptFromGst = !invoice.InvoiceDetails.gstApplicable;
+      invoice.InvoiceDetails.claimantsFullName = invoice.InvoiceDetails.claimantsFirstName + ' ' + invoice.InvoiceDetails.claimantsLastName;
+
+      invoice.InvoiceDetails.lineItems.forEach(line => {
+        line.counsellingTypeName = COUNSELLING_TYPES[line.counsellingType];
+      });
 
       this.aemService.getInvoicePDF(invoice).subscribe((res: any) => {
         console.log(res);
@@ -528,3 +536,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const COUNSELLING_TYPES = {
+  100000000: "Counselling Session",
+  100000001: "Court Supporting Counselling",
+  100000002: "Psycho-educational sessions",
+}
