@@ -15,14 +15,16 @@ namespace Gov.Cscp.VictimServices.Public.Services
     public class COASTAuthService : ICOASTAuthService
     {
         private IConfiguration _configuration;
+        private HttpClient _client;
         private DateTime _accessTokenExpiration;
         private string _token;
 
-        public COASTAuthService(IConfiguration configuration)
+        public COASTAuthService(IConfiguration configuration, HttpClient httpClient)
         {
-            this._configuration = configuration;
-            this._accessTokenExpiration = DateTime.Now;
-            this._token = "";
+            _client = httpClient;
+            _configuration = configuration;
+            _accessTokenExpiration = DateTime.Now;
+            _token = "";
         }
 
         public async Task<string> GetToken()
@@ -45,22 +47,20 @@ namespace Gov.Cscp.VictimServices.Public.Services
                         !string.IsNullOrEmpty(serviceAccountUsername) &&
                         !string.IsNullOrEmpty(serviceAccountPassword))
                     {
-                        var stsClient = new HttpClient();
-
                         var pairs = new List<KeyValuePair<string, string>>
-                    {
-                        new KeyValuePair<string, string>("resource", applicationGroupResource),
-                        new KeyValuePair<string, string>("client_id", applicationGroupClientId),
-                        new KeyValuePair<string, string>("client_secret", applicationGroupSecret),
-                        new KeyValuePair<string, string>("username", serviceAccountUsername),
-                        new KeyValuePair<string, string>("password", serviceAccountPassword),
-                        new KeyValuePair<string, string>("scope", "openid"),
-                        new KeyValuePair<string, string>("response_mode", "form_post"),
-                        new KeyValuePair<string, string>("grant_type", "password")
+                        {
+                            new KeyValuePair<string, string>("resource", applicationGroupResource),
+                            new KeyValuePair<string, string>("client_id", applicationGroupClientId),
+                            new KeyValuePair<string, string>("client_secret", applicationGroupSecret),
+                            new KeyValuePair<string, string>("username", serviceAccountUsername),
+                            new KeyValuePair<string, string>("password", serviceAccountPassword),
+                            new KeyValuePair<string, string>("scope", "openid"),
+                            new KeyValuePair<string, string>("response_mode", "form_post"),
+                            new KeyValuePair<string, string>("grant_type", "password")
                         };
 
                         var content = new FormUrlEncodedContent(pairs);
-                        var _httpResponse = await stsClient.PostAsync(adfsOauth2Uri, content);
+                        var _httpResponse = await _client.PostAsync(adfsOauth2Uri, content);
                         var _responseContent = await _httpResponse.Content.ReadAsStringAsync();
 
                         JObject response = JObject.Parse(_httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult());
@@ -81,10 +81,9 @@ namespace Gov.Cscp.VictimServices.Public.Services
                         }
 
                         // set global access token expiry time to the value returned subtract 60 seconds for minute long authentication communication delays
-                        this._accessTokenExpiration = DateTime.Now.AddSeconds(expirationSeconds - 60);
-                        this._token = token;
+                        _accessTokenExpiration = DateTime.Now.AddSeconds(expirationSeconds - 60);
+                        _token = token;
                         return token;
-
                     }
                     else
                     {
@@ -100,7 +99,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
             }
             else
             {
-                return this._token;
+                return _token;
             }
         }
     }

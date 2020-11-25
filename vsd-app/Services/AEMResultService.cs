@@ -31,6 +31,12 @@ namespace Gov.Cscp.VictimServices.Public.Services
         private async Task<AEMResult> AEMResultAsync(string requestJson)
         {
             string endpointUrl = _configuration["AEM_INTERFACE_URI"];
+            if (String.IsNullOrEmpty(endpointUrl)) {
+                AEMResult failResult = new AEMResult();
+                failResult.responseCode = System.Net.HttpStatusCode.InternalServerError;
+                failResult.responseMessage = "No AEM_INTERFACE_URI found. Verify project secrets are configured correctly.";
+                return failResult;
+            }
             requestJson = requestJson.Replace("fortunecookie", "@odata.");
 
             Console.WriteLine(endpointUrl);
