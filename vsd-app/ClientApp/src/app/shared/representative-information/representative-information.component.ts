@@ -63,8 +63,8 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
             this.form.markAsTouched();
             this.setRequiredFields(this.form.get('completingOnBehalfOf').value);
         }, 0);
-        console.log("representative info component");
-        console.log(this.form);
+        // console.log("representative info component");
+        // console.log(this.form);
 
         if (this.formType === ApplicationType.Victim_Application) {
             this.header = "Victim";

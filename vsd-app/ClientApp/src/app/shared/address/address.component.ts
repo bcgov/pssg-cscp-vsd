@@ -209,7 +209,7 @@ export class AddressComponent implements OnInit {
 
       if (this.provinceList.length == 0) {
         this.lookupService.getCitiesByCountry(this.selectedCountry.vsd_countryid).subscribe((city_res) => {
-          console.log(city_res);
+          // console.log(city_res);
           if (city_res.value) {
             this.cityList = city_res.value;
             this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
@@ -240,7 +240,7 @@ export class AddressComponent implements OnInit {
     this.selectedProvince = this.lookupData.provinces.filter(c => c.vsd_name.toLowerCase() == selection)[0];
     if (this.selectedProvince) {
       this.lookupService.getCitiesByProvince(this.selectedCountry.vsd_countryid, this.selectedProvince.vsd_provinceid).subscribe((city_res) => {
-        console.log(city_res);
+        // console.log(city_res);
         if (city_res.value) {
           this.cityList = city_res.value;
           this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));

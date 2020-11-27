@@ -64,7 +64,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_applicantsprimarycountry = model.PersonalInformation.primaryAddress.country;
                     application.Application.vsd_applicantsprimarypostalcode = model.PersonalInformation.primaryAddress.postalCode;
 
-                    if (!string.IsNullOrEmpty(model.PersonalInformation.mailRecipient))
+                    if (model.PersonalInformation.doNotLiveAtAddress && string.IsNullOrEmpty(model.PersonalInformation.mailRecipient))
+                    {
+                        application.Application.vsd_applicantsprimaryaddressline3 = "c/o";
+                    }
+                    else if (!string.IsNullOrEmpty(model.PersonalInformation.mailRecipient))
                     {
                         application.Application.vsd_applicantsprimaryaddressline3 = model.PersonalInformation.mailRecipient;
                     }
@@ -163,7 +167,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 try
                 {
                     int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length + model.ApplicationPDFs.Length;
-                    
+
                     application.Application.vsd_cvap_crimedocumentuploaded = model.CrimeInformation.documents.Length > 0;
                     application.Application.vsd_cvap_onbehalfofdocumentuploaded = model.RepresentativeInformation.documents.Length > 0;
 

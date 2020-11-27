@@ -51,6 +51,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int? leaveVoicemail { get; set; }
         public string alternatePhoneNumber { get; set; }
         public string email { get; set; }
+        public bool doNotLiveAtAddress { get; set; }
         public string mailRecipient { get; set; }
         public Address primaryAddress { get; set; }
         public Address alternateAddress { get; set; }

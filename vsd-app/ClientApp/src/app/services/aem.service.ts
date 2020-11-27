@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Application } from '../interfaces/application.interface';
 import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 
 @Injectable()
 export class AEMService {
@@ -15,23 +15,38 @@ export class AEMService {
     constructor(private http: HttpClient) { }
 
     public getVictimApplicationPDF(application: Application) {
-        return this.http.post(this.apiPath + '/victim', application, { headers: this.headers }).pipe(catchError(this.handleError));
+        return this.http.post(this.apiPath + '/victim', application, { headers: this.headers }).pipe(
+            retry(3),
+            catchError(this.handleError)
+        );
     }
 
     public getIFMApplicationPDF(application: Application) {
-        return this.http.post(this.apiPath + '/ifm', application, { headers: this.headers }).pipe(catchError(this.handleError));
+        return this.http.post(this.apiPath + '/ifm', application, { headers: this.headers }).pipe(
+            retry(3),
+            catchError(this.handleError)
+        );
     }
 
     public getWitnessApplicationPDF(application: Application) {
-        return this.http.post(this.apiPath + '/witness', application, { headers: this.headers }).pipe(catchError(this.handleError));
+        return this.http.post(this.apiPath + '/witness', application, { headers: this.headers }).pipe(
+            retry(3),
+            catchError(this.handleError)
+        );
     }
 
     public getAuthorizationPDF(application: Application) {
-        return this.http.post(this.apiPath + '/authorization', application, { headers: this.headers }).pipe(catchError(this.handleError));
+        return this.http.post(this.apiPath + '/authorization', application, { headers: this.headers }).pipe(
+            retry(3),
+            catchError(this.handleError)
+        );
     }
 
     public getInvoicePDF(invoice: CounsellorInvoice) {
-        return this.http.post(this.apiPath + '/invoice', invoice, { headers: this.headers }).pipe(catchError(this.handleError));
+        return this.http.post(this.apiPath + '/invoice', invoice, { headers: this.headers }).pipe(
+            retry(3),
+            catchError(this.handleError)
+        );
     }
 
     protected handleError(err): Observable<never> {

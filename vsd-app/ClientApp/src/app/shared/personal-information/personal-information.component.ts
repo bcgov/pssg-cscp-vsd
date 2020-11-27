@@ -66,8 +66,8 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
         setTimeout(() => { this.form.markAsTouched(); }, 0);
-        console.log("personal info component");
-        console.log(this.form);
+        // console.log("personal info component");
+        // console.log(this.form);
 
         this.header = "Personal";
         if (this.formType === ApplicationType.Victim_Application) {
@@ -216,9 +216,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         else if (voicemailOption === 100000002) { //Alternate only
             this.setControlValidators(altPhoneControl, [Validators.required, Validators.minLength(this.phoneMinLength), Validators.maxLength(this.phoneMaxLength)]);
         }
-
-        console.log("check can email");
-        console.log(agreeToCVAPEmailControl.value);
 
         if (agreeToCVAPEmailControl.value === true) {
             this.setControlValidators(emailControl, [Validators.required, Validators.email]);

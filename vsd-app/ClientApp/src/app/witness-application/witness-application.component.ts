@@ -148,8 +148,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
     Promise.all(promise_array).then((res) => {
       this.didLoad = true;
-      console.log("Lookup data");
-      console.log(this.lookupData);
+      // console.log("Lookup data");
+      // console.log(this.lookupData);
     });
 
     if (completeOnBehalfOf) {
@@ -224,7 +224,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         this.justiceDataService.submitApplication(form)
           .subscribe(
             data => {
-              if (data['isSuccess'] == true) {
+              if (data['IsSuccess'] == true) {
                 this.router.navigate(['/application-success']);
               }
               else {
@@ -247,6 +247,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
           );
       }).catch((err) => {
         this.submitting = false;
+        this.snackBar.open('Error submitting application. ', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        console.log('Error submitting application. Problem getting AEM pdfs...');
         console.log(err);
       });
     } else {

@@ -156,8 +156,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
     Promise.all(promise_array).then((res) => {
       this.didLoad = true;
-      console.log("Lookup data");
-      console.log(this.lookupData);
+      // console.log("Lookup data");
+      // console.log(this.lookupData);
     });
 
     if (completeOnBehalfOf) {
@@ -234,7 +234,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         this.justiceDataService.submitApplication(form)
           .subscribe(
             data => {
-              if (data['isSuccess'] == true) {
+              if (data['IsSuccess'] == true) {
                 this.router.navigate(['/application-success']);
               }
               else {
@@ -257,6 +257,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
           );
       }).catch((err) => {
         this.submitting = false;
+        this.snackBar.open('Error submitting application. ', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        console.log('Error submitting application. Problem getting AEM pdfs...');
         console.log(err);
       });
     } else {
@@ -276,7 +278,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         this.justiceDataService.submitApplication(form)
           .subscribe(
             data => {
-              if (data['isSuccess'] == true) {
+              if (data['IsSuccess'] == true) {
                 if (type === "IFM") {
                   this.submitting = false;
                   let ifmForm = this.cloneFormToIFM(thisForm);
@@ -318,6 +320,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
           );
       }).catch((err) => {
         this.submitting = false;
+        this.snackBar.open('Error submitting application. ', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        console.log('Error submitting application. Problem getting AEM pdfs...');
         console.log(err);
       });
     } else {
@@ -391,14 +395,14 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   @HostListener('window:afterprint')
   onafterprint() {
-    console.log("after print");
+    // console.log("after print");
     document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
     window.scroll(0, 0);
     this.showPrintView = false;
   }
 
   printApplication() {
-    console.log("attempt to print invoice");
+    // console.log("attempt to print invoice");
     window.scroll(0, 0);
     this.showPrintView = true;
     document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
@@ -615,13 +619,10 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
-    console.log("authorizedPersonsLength: ", authorizedPersonsLength);
 
     for (let i = 0; i < authorizedPersonsLength; ++i) {
       authorizedPersons.push(this.authInfoHelper.createAuthorizedPerson(this.fb));
     }
-
-    console.log(authorizedPersons);
 
     ret.get('authorizationInformation').patchValue(currentForm.get('authorizationInformation').value);
     ret.get('authorizationInformation').get('approvedAuthorityNotification').patchValue('');

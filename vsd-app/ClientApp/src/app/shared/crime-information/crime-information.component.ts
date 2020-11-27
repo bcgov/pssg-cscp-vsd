@@ -93,8 +93,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.form = <FormGroup>this.controlContainer.control;
     setTimeout(() => { this.form.markAsTouched(); }, 0);
 
-    console.log("crime info component");
-    console.log(this.form);
+    // console.log("crime info component");
+    // console.log(this.form);
     this.policeReportItems = this.form.get('policeReports') as FormArray;
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
 

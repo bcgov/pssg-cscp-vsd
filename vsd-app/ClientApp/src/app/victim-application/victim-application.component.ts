@@ -149,8 +149,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
     Promise.all(promise_array).then((res) => {
       this.didLoad = true;
-      console.log("Lookup data");
-      console.log(this.lookupData);
+      // console.log("Lookup data");
+      // console.log(this.lookupData);
     });
 
 
@@ -389,7 +389,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         this.justiceDataService.submitApplication(form)
           .subscribe(
             data => {
-              if (data['isSuccess'] == true) {
+              if (data['IsSuccess'] == true) {
                 this.router.navigate(['/application-success']);
               }
               else {
@@ -412,6 +412,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           );
       }).catch((err) => {
         this.submitting = false;
+        this.snackBar.open('Error submitting application. ', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        console.log('Error submitting application. Problem getting AEM pdfs...');
         console.log(err);
       });
     } else {
@@ -431,7 +433,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         this.justiceDataService.submitApplication(form)
           .subscribe(
             data => {
-              if (data['isSuccess'] == true) {
+              if (data['IsSuccess'] == true) {
                 if (type === "VICTIM") {
                   this.submitting = false;
                   let victimForm = this.cloneFormToVictim(thisForm);
@@ -472,6 +474,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           );
       }).catch((err) => {
         this.submitting = false;
+        this.snackBar.open('Error submitting application. ', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        console.log('Error submitting application. Problem getting AEM pdfs...');
         console.log(err);
       })
     } else {
@@ -585,12 +589,27 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     console.log(currentForm);
     let ret = this.buildApplicationForm(ApplicationType.IFM_Application);
 
+    ret.get('personalInformation').get('preferredMethodOfContact').patchValue(currentForm.get('personalInformation').get('preferredMethodOfContact').value);
+    ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(currentForm.get('personalInformation').get('permissionToContactViaMethod').value);
+    ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue(currentForm.get('personalInformation').get('agreeToCvapCommunicationExchange').value);
+    ret.get('personalInformation').get('phoneNumber').patchValue(currentForm.get('personalInformation').get('phoneNumber').value);
+    ret.get('personalInformation').get('leaveVoicemail').patchValue(currentForm.get('personalInformation').get('leaveVoicemail').value);
+    ret.get('personalInformation').get('alternatePhoneNumber').patchValue(currentForm.get('personalInformation').get('alternatePhoneNumber').value);
+    ret.get('personalInformation').get('email').patchValue(currentForm.get('personalInformation').get('email').value);
+    ret.get('personalInformation').get('confirmEmail').patchValue(currentForm.get('personalInformation').get('confirmEmail').value);
+    ret.get('personalInformation').get('doNotLiveAtAddress').patchValue(currentForm.get('personalInformation').get('doNotLiveAtAddress').value);
+    ret.get('personalInformation').get('mailRecipient').patchValue(currentForm.get('personalInformation').get('mailRecipient').value);
+    ret.get('personalInformation').get('primaryAddress').patchValue(currentForm.get('personalInformation').get('primaryAddress').value);
+    ret.get('personalInformation').get('alternateAddress').patchValue(currentForm.get('personalInformation').get('alternateAddress').value);
+
     ret.get('victimInformation').patchValue(currentForm.get('personalInformation').value);
 
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
     let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
     let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
     let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
+    let courtFilesLength = currentForm.get('crimeInformation').get('courtFiles').value.length;
+    let courtFiles = ret.get('crimeInformation').get('courtFiles') as FormArray;
 
     for (let i = 0; i < crimeLocationsLength - 1; ++i) {
       crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
@@ -598,6 +617,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
     for (let i = 0; i < policeReportsLength; ++i) {
       policeReports.push(this.crimeInfoHelper.createPoliceReport(this.fb));
+    }
+
+    for (let i = 0; i < courtFilesLength; ++i) {
+      courtFiles.push(this.crimeInfoHelper.createCourtInfoItem(this.fb));
     }
 
     ret.get('crimeInformation').patchValue(currentForm.get('crimeInformation').value);

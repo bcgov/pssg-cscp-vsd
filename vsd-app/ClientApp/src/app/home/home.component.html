@@ -15,6 +15,14 @@
           <p>The program may also provide benefits to <strong>Immediate Family Members</strong> of an injured or deceased victim of crime, as well as <strong>Witnesses</strong> to the crime with a close personal relationship to the victim.</p>
           <p>To begin your application, select the option below that applies to you. If you are applying on behalf of one of the following, the following page will ask for your relationship to the person you are applying on behalf of.</p>
 
+          <div class="attention">
+            <h3>Time needed to complete this application</h3>
+            <p>This application will take approximately 45 minutes to complete. You will not be able to save and come back to your application, so please be sure that you have enough time to finish it in one session.</p>
+            <p class="mt-3">If this is not convenient, the application form is available in PDF format at <a href="https://www.gov.bc.ca/crimevictimassistance" target="_blank">www.gov.bc.ca/crimevictimassistance</a>. To download the appropriate viewer, visit <a href="http://get.adobe.com/reader" target="_blank">http://get.adobe.com/reader</a>.</p>
+            <p class="mt-3">Print versions of the application form are also available from the Crime Victim Assistance Program or a local victim service program.</p>
+            <p class="mt-3">A local victim service program can help help you complete the web or PDF application. To locate a program near you, call VictimLink BC toll free at <strong class="phone-number">1-800-563-0808</strong>.</p>
+          </div>
+
           <div [formGroup]="form">
             <app-field label="Please select the application form that applies to you." (change)="updateForm($event)" [required]="true">
               <select class="form-control" style="width: 350px;" formControlName="applicationType">
