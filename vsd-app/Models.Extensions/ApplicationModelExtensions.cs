@@ -163,10 +163,14 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_injuries = model.CrimeInformation.crimeInjuries;
 
 
-                // Include upload file
+                // Include upload files
                 try
                 {
-                    int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length + model.ApplicationPDFs.Length + model.EmploymentIncomeInformation.documents.Length;
+                    int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length + model.ApplicationPDFs.Length;
+                    if (model.EmploymentIncomeInformation != null)
+                    {
+                        documentCollectionLength += model.EmploymentIncomeInformation.documents.Length;
+                    }
 
                     application.Application.vsd_cvap_crimedocumentuploaded = model.CrimeInformation.documents.Length > 0;
                     application.Application.vsd_cvap_onbehalfofdocumentuploaded = model.RepresentativeInformation.documents.Length > 0;

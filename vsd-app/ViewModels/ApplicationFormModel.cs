@@ -78,6 +78,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         [XmlArrayItem("element")]
         public Policereport[] policeReports { get; set; }
 
+        [XmlArrayItem("element")]
+        public Offender[] additionalOffenders { get; set; }
+
         public Racafinformation racafInformation { get; set; }
         public int haveYouSuedOffender { get; set; }
         public int offenderBeenCharged { get; set; }
@@ -129,6 +132,14 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public DateTime? reportStartDate { get; set; }
         public DateTime? reportEndDate { get; set; }
         public string policeReportedMultipleTimes { get; set; }
+    }
+
+    public class Offender
+    {
+        public string firstName { get; set; }
+        public string middleName { get; set; }
+        public string lastName { get; set; }
+        public string relationship { get; set; }
     }
 
     public class Medicalinformation
@@ -285,6 +296,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     {
         public string approvedAuthorityNotification { get; set; }
         public string readAndUnderstoodTermsAndConditions { get; set; }
+        public string signName { get; set; }
         public string signature { get; set; }
         public int? allowCvapStaffSharing { get; set; }
 

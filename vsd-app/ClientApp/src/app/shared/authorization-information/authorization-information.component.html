@@ -4,7 +4,7 @@
   </div>
   <p>This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program by email at <a href="mailto:cvap@gov.bc.ca">cvap@gov.bc.ca</a> or at (604) 660-3888 or toll free at 1-866-660-3888.</p>
 
-  <section>
+  <div [class.with-error]="!form.get('signName').valid && form.get('signName').touched">
     <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, hereby authorize: <span class="error-states ng-star-inserted">*</span></p>
     <!-- <h2>By signing this section you hereby authorize:</h2> -->
     <ol class="list punctuated">
@@ -18,7 +18,7 @@
       <li><span>Canada Revenue Agency or other similar agency in any other jurisdiction, to give the Crime Victim Assistance Program, upon request information as to my employment income;</span></li>
       <li><span>The Ministry of Children and Family Development (MCFD) to give the Crime Victim Assistance Program, on request, a copy of information relevant to this application.</span></li>
     </ol>
-  </section>
+  </div>
 
   <section>
     <h2 class="blue-header">Standard Authorization & Signature</h2>
