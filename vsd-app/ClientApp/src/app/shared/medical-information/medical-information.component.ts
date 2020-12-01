@@ -65,8 +65,8 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
         setTimeout(() => { this.form.markAsTouched(); }, 0);
-        console.log("medical info component");
-        console.log(this.form);
+        // console.log("medical info component");
+        // console.log(this.form);
 
         if (this.formType === ApplicationType.Victim_Application) {
             this.otherTreatmentLabel = "Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?";

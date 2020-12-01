@@ -21,6 +21,7 @@ export class EmploymentInfoHelper {
             daysWorkMissedEnd: [''],
             workersCompensationClaimNumber: [''],
             employers: fb.array([]),
+            documents: fb.array([]),
         };
 
         return fb.group(group);

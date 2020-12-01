@@ -40,7 +40,7 @@ export class PersonalInfoHelper {
             ]],
 
 
-            doNotLiveAtAddress: [''],
+            doNotLiveAtAddress: [false],
             mailRecipient: [''],
             primaryAddress: fb.group({
                 line1: ['', [Validators.required]],

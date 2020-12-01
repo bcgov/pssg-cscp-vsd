@@ -45,8 +45,8 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
     ngOnInit() {
         this.form = <FormGroup>this.controlContainer.control;
         setTimeout(() => { this.form.markAsTouched(); }, 0);
-        console.log("victim info component");
-        console.log(this.form);
+        // console.log("victim info component");
+        // console.log(this.form);
 
         if (this.form.get('victimSameContactInfo').value === true) {
             this.copyPersonalContactInfoToVictim(this.form.parent);

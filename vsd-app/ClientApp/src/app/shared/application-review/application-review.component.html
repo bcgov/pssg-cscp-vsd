@@ -369,6 +369,17 @@
                     <th>Relationship to alleged offender</th>
                     <td>{{ valueOrEmpty('crimeInformation.offenderRelationship') }} </td>
                 </tr>
+                <ng-container *ngFor="let item of form.get('crimeInformation.additionalOffenders')['controls']; let i = index;">
+                    <tr>
+                        <th>Additional Offender Name</th>
+                        <td>{{ multiValueOrEmpty([item.get('firstName'), item.get('middleName'), item.get('lastName')]) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Relationship to alleged offender</th>
+                        <td>{{ valueOrEmpty(item.get('relationship')) }} </td>
+                    </tr>
+                </ng-container>
                 <tr>
                     <th>Has the alleged offender been charged?</th>
                     <td>{{ enumHelper.OffenderBeenCharged[valueForEnum('crimeInformation.offenderBeenCharged')] }}</td>
@@ -1055,6 +1066,21 @@
                         <th>Mailing Address</th>
                         <td><span *ngIf="addressHelper.hasAddressInfo(item.get('employerAddress').value)" [innerHTML]="displayMailingAddress(item.get('employerAddress'))"></span></td>
                     </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-striped review-table">
+                <tbody>
+                    <ng-container *ngFor="let document of form.get('employmentIncomeInformation.documents')['controls']; let i = index;">
+                        <tr>
+                            <th>Additional Information</th>
+                            <td>{{ valueOrEmpty(document.get('filename')) }}</td>
+                        </tr>
+                        <tr *ngIf="document.get('subject').value">
+                            <th>File Description</th>
+                            <td>{{ valueOrEmpty(document.get('subject')) }}</td>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </table>
         </div>

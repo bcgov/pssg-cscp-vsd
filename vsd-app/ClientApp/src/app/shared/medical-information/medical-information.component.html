@@ -9,9 +9,9 @@
         <h2 class="blue-header">Coverage</h2>
 
         <h3>
-            Medical Services Coverage <app-tool-tip [trigger]="mspcTemplate"></app-tool-tip>
+            Medical Services Coverage <app-tool-tip [trigger]="mspTemplate"></app-tool-tip>
         </h3>
-        <ng-template #mspcTemplate><strong>Health Plan / Dental Plan Coverage</strong><br />CVAP will only pay expenses or provide benefits that are not already covered by your existing health or dental plan</ng-template>
+        <ng-template #mspTemplate>Medical Services Plan (MSP) enrolment is mandatory for all residents of BC</ng-template>
 
         <app-field label="Do you have provincial medical services coverage? (e.g. BC Care Card or other provincial coverage)" [valid]="isFieldValid('doYouHaveMedicalServicesCoverage')" [required]="true" errorMessage="Please select an option">
             <label class="inline-label">
@@ -36,7 +36,10 @@
             </app-field>
         </section>
 
-        <h3>Other Health Coverage</h3>
+        <h3>
+            Other Health Coverage <app-tool-tip [trigger]="otherHealthTemplate"></app-tool-tip>
+        </h3>
+        <ng-template #otherHealthTemplate><strong>Health Plan / Dental Plan Coverage</strong><br />CVAP will only pay expenses or provide benefits that are not already covered by your existing health or dental plan</ng-template>
         <app-field label="Do you have other health coverage? (e.g. Blue Cross)" [valid]="isFieldValid('doYouHaveOtherHealthCoverage')" [required]="true" errorMessage="Please select an option">
             <label class="inline-label">
                 <input type="radio" [value]="CRMBoolean.True" name="doYouHaveOtherHealthCoverage" formControlName="doYouHaveOtherHealthCoverage" (change)="doYouHaveOtherHealthCoverageChange(true)">
@@ -148,7 +151,7 @@
                     </app-field>
                 </div>
                 <div class="col-md-6">
-                    <app-field label="Fax" [valid]="isMyControlValid(form.get('familyDoctorFax'))" errorMessage="Please enter a valid fax number">
+                    <app-field [label]="'Fax' + (formType === ApplicationType.Victim_Application ? ' (providing will assist with obtaining medical information)' : '')" [valid]="isMyControlValid(form.get('familyDoctorFax'))" errorMessage="Please enter a valid fax number">
                         <input mask='(000) 000 0000' class="form-control" type="text" formControlName="familyDoctorFax">
                     </app-field>
                 </div>

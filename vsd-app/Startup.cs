@@ -35,9 +35,9 @@ namespace Gov.Cscp.VictimServices.Public
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<ICOASTAuthService, COASTAuthService>();
             services.AddTransient<TokenHandler>();
 
+            services.AddHttpClient<ICOASTAuthService, COASTAuthService>();
             services.AddHttpClient<IDynamicsResultService, DynamicsResultService>().AddHttpMessageHandler<TokenHandler>();
             services.AddHttpClient<IAEMResultService, AEMResultService>();
 

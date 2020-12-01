@@ -57,6 +57,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   showAddPoliceReport: boolean = true;
   showRemovePoliceReport: boolean = false;
+  showAddMoreOffenders: boolean = false;
 
   courtFileItems: FormArray;
   showAddCourtInfo: boolean = true;
@@ -93,8 +94,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.form = <FormGroup>this.controlContainer.control;
     setTimeout(() => { this.form.markAsTouched(); }, 0);
 
-    console.log("crime info component");
-    console.log(this.form);
+    // console.log("crime info component");
+    // console.log(this.form);
     this.policeReportItems = this.form.get('policeReports') as FormArray;
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
 
@@ -547,5 +548,32 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       this.clearControlValidators(expensesAwardedControl);
       this.clearControlValidators(expensesReceivedControl);
     }
+  }
+
+  moreThanOneOffenderChange(val: boolean) {
+    this.showAddMoreOffenders = val;
+
+    if (val == false) {
+      let additionalOffenders = this.form.get('additionalOffenders') as FormArray;
+      while (additionalOffenders.length > 0) {
+        additionalOffenders.removeAt(0);
+      }
+    }
+  }
+
+  addOffender() {
+    let additionalOffenders = this.form.get('additionalOffenders') as FormArray;
+    if (additionalOffenders.length < 5) {
+      additionalOffenders.push(this.crimeInfoHelper.createAdditionalOffender(this.fb));
+    }
+
+    if (additionalOffenders.length == 5) this.showAddMoreOffenders = false;
+  }
+
+  removeOffender(index: number) {
+    let additionalOffenders = this.form.get('additionalOffenders') as FormArray;
+    additionalOffenders.removeAt(index);
+
+    if (additionalOffenders.length < 5) this.showAddMoreOffenders = true;
   }
 }

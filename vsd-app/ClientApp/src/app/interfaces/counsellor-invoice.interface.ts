@@ -11,7 +11,8 @@ export interface InvoiceDetails {
   vendorPostalCode: string;
   claimNumber: string;
   claimantsFirstName: string;
-  claimantLastName: string;
+  claimantsLastName: string;
+  claimantsFullName?: string;
   invoiceNumber: string;
   invoiceDate: Date;
   submitterFullName: string;
@@ -23,6 +24,7 @@ export interface InvoiceDetails {
 }
 export interface LineItem {
   counsellingType: number;
+  counsellingTypeName?: string;
   sessionDate: Date;
   sessionHours: number;
   sessionAmount: number;  // Not used in transfer to Dynamics

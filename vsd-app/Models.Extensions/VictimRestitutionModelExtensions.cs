@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
 using Gov.Cscp.VictimServices.Public.ViewModels;
-using Gov.Cscp.VictimServices.Public.Infrastructure;
 
 namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 {
@@ -11,7 +9,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
     {
         public static VictimRestitutionDynamicsModel ToVictimRestitutionModel(this VictimRestitutionFormModel model)
         {
-            var application = new VictimRestitutionDynamicsModel();;
+            var application = new VictimRestitutionDynamicsModel();
+            application.Application = new Application();
 
             if (model == null)
                 return null;

@@ -326,7 +326,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
       this.save().subscribe(
         data => {
           console.log(data);
-          if (data['isSuccess'] == true) {
+          if (data['IsSuccess'] == true) {
             this.currentPanel = 'success';
           } else {
             this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });

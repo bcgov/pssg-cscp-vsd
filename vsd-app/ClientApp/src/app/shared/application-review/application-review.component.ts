@@ -67,7 +67,7 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
         console.log("review component");
         console.log(this.form);
 
-        console.log(this.pages);
+        // console.log(this.pages);
     }
 
     gotoPageIndex(selectPage: number): void {

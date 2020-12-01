@@ -25,7 +25,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
-                string requestJson = getAEMJSON(model, "victim");
+                string xml = getApplicationXML(model);
+                string requestJson = getAEMJSON(xml, "victim");
 
                 AEMResult result = await _aemResultService.Post(requestJson);
                 return StatusCode((int)result.responseCode, result);
@@ -38,7 +39,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
-                string requestJson = getAEMJSON(model, "ifm");
+                string xml = getApplicationXML(model);
+                string requestJson = getAEMJSON(xml, "ifm");
 
                 AEMResult result = await _aemResultService.Post(requestJson);
                 return StatusCode((int)result.responseCode, result);
@@ -51,7 +53,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
-                string requestJson = getAEMJSON(model, "witness");
+                string xml = getApplicationXML(model);
+                string requestJson = getAEMJSON(xml, "witness");
 
                 AEMResult result = await _aemResultService.Post(requestJson);
                 return StatusCode((int)result.responseCode, result);
@@ -64,7 +67,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
-                string requestJson = getAEMJSON(model, "authorization");
+                string xml = getApplicationXML(model);
+                string requestJson = getAEMJSON(xml, "authorization");
 
                 AEMResult result = await _aemResultService.Post(requestJson);
                 return StatusCode((int)result.responseCode, result);
@@ -72,7 +76,21 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             finally { }
         }
 
-        private static string getAEMJSON(ApplicationFormModel model, string application_type)
+        [HttpPost("invoice")]
+        public async Task<IActionResult> GetInvoicePDF([FromBody] CounsellorInvoiceFormModel model)
+        {
+            try
+            {
+                string xml = getInvoiceXML(model);
+                string requestJson = getAEMJSON(xml, "invoice");
+
+                AEMResult result = await _aemResultService.Post(requestJson);
+                return StatusCode((int)result.responseCode, result);
+            }
+            finally { }
+        }
+
+        private static string getApplicationXML(ApplicationFormModel model)
         {
             XmlSerializer xsSubmit = new XmlSerializer(typeof(ApplicationFormModel));
             var encoding = Encoding.GetEncoding("ISO-8859-1");
@@ -83,21 +101,55 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 Encoding = encoding
             };
 
-            string xml2 = "";
+            string xml = "";
             using (var stream = new MemoryStream())
             {
                 using (var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings))
                 {
                     xsSubmit.Serialize(xmlWriter, model);
                 }
-                xml2 = encoding.GetString(stream.ToArray());
+                xml = encoding.GetString(stream.ToArray());
             }
 
-            xml2 = xml2.Replace(" xsi:nil=\"true\"", "");
-            xml2 = xml2.Replace("data:image/png;base64,", "");
-            xml2 = xml2.Replace(" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-            xml2 = xml2.Replace(" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"", "");
+            xml = xml.Replace(" xsi:nil=\"true\"", "");
+            xml = xml.Replace("data:image/png;base64,", "");
+            xml = xml.Replace(" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+            xml = xml.Replace(" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"", "");
 
+            return xml;
+        }
+
+        private static string getInvoiceXML(CounsellorInvoiceFormModel model)
+        {
+            XmlSerializer xsSubmit = new XmlSerializer(typeof(CounsellorInvoiceFormModel));
+            var encoding = Encoding.GetEncoding("ISO-8859-1");
+            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings
+            {
+                Indent = true,
+                OmitXmlDeclaration = false,
+                Encoding = encoding
+            };
+
+            string xml = "";
+            using (var stream = new MemoryStream())
+            {
+                using (var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings))
+                {
+                    xsSubmit.Serialize(xmlWriter, model);
+                }
+                xml = encoding.GetString(stream.ToArray());
+            }
+
+            xml = xml.Replace(" xsi:nil=\"true\"", "");
+            xml = xml.Replace("data:image/png;base64,", "");
+            xml = xml.Replace(" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+            xml = xml.Replace(" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"", "");
+
+            return xml;
+        }
+
+        private static string getAEMJSON(string xml, string application_type)
+        {
             string aem_app = "coast-cva"; //CVAP AEM app
             string aem_form = "";
             switch (application_type)
@@ -114,13 +166,16 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 case "authorization":
                     aem_form = "CVAP0004";
                     break;
+                case "invoice":
+                    aem_form = "CVAP0005";
+                    break;
                 default:
                     //form type not defined
                     break;
             }
             string document_format = "pdfa";
 
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(xml2);
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(xml);
             var encoded = System.Convert.ToBase64String(plainTextBytes);
 
             string requestJson = "{\"aem_app\":\"" + aem_app + "\"," +

@@ -12,7 +12,8 @@
     <mat-chip-list>
       <mat-chip *ngFor="let fileName of fileCollection.fileName; let i=index" [selectable]="true" [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
         {{fileName}}
-        <mat-icon matChipRemove>cancel</mat-icon>
+        <i class="fa fa-times-circle remove-icon"></i>
+        <!-- <mat-icon matChipRemove>cancel</mat-icon> -->
       </mat-chip>
       <!--This is not working so need to figure out how to get description to go with file upload-->
       <!--<input #tempInputBox title="Description" formControlName="fileDescription" id="fileDescription" class="form-control" name="fileDescription" type="text">-->

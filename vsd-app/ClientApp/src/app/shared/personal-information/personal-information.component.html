@@ -265,20 +265,20 @@
 
     <div class="row">
         <div class="col-12">
-            <h3>
-                Alternate Mailing Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
-            </h3>
-            <ng-template #altAddressTemplate>Please provide an alternate address that we may forward correspondences to when mail is returned from the primary address. e.g. an address of an immediate family member or trusted person.</ng-template>
-            <app-address [group]="form.get('alternateAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
+            <label class="inline-label">
+                <input type="checkbox" style="margin-right: 10px;" formControlName="permissionToContactViaMethod" [value]="true">
+                <span>I give permission to be contacted via this method. </span>
+            </label>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <label class="inline-label">
-                <input type="checkbox" style="margin-right: 10px;" formControlName="permissionToContactViaMethod" [value]="true">
-                <span>I give permission to be contacted via this method. </span>
-            </label>
+            <h3>
+                Alternate Mailing Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip>
+            </h3>
+            <ng-template #altAddressTemplate>Please provide an alternate address that we may forward correspondences to when mail is returned from the primary address. e.g. an address of an immediate family member or trusted person.</ng-template>
+            <app-address [group]="form.get('alternateAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
         </div>
     </div>
 </div>

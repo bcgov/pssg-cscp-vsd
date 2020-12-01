@@ -9,10 +9,10 @@
         <div>
           <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper [class.disabled-stepper]="submitting">
             <ng-template matStepperIcon="edit">
-              <mat-icon>done</mat-icon>
+              <i class="fa fa-check"></i>
             </ng-template>
             <ng-template matStepperIcon="error">
-              <mat-icon>clear</mat-icon>
+              <i class="fa fa-times"></i>
             </ng-template>
             <ng-template matStepperIcon="number">
             </ng-template>

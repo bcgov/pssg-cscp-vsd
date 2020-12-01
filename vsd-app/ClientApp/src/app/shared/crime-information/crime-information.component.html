@@ -214,6 +214,13 @@
             <h2 class="blue-header">Accused & Court Information</h2>
             <h3>Name of the Accused <span>(if known)</span></h3>
 
+            <app-field>
+                <label>
+                    <input type="checkbox" [value]="true" name="moreThanOneOffender" formControlName="moreThanOneOffender" (change)="moreThanOneOffenderChange($event.target.checked)">
+                    Is there more than one Accused?
+                </label>
+            </app-field>
+
             <div class="row">
                 <div class="col-4">
                     <app-field label="First Name">
@@ -258,6 +265,47 @@
                     </app-field>
                 </div>
                 <div class="col-6">
+                </div>
+            </div>
+
+            <div formArrayName="additionalOffenders" *ngFor="let item of form.get('additionalOffenders')['controls']; let i = index;">
+                <div [formGroupName]="i" class="additional-offender-info">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <app-field label="First Name">
+                                <input class="form-control" type="text" formControlName="firstName">
+                            </app-field>
+                        </div>
+                        <div class="col-md-4">
+                            <app-field label="Middle Name">
+                                <input class="form-control" type="text" formControlName="middleName">
+                            </app-field>
+                        </div>
+                        <div class="col-md-4">
+                            <app-field label="Last Name">
+                                <input class="form-control" type="text" formControlName="lastName">
+                            </app-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <app-field label="Relationship to the Accused (if any)">
+                                <input class="form-control" type="text" formControlName="relationship">
+                            </app-field>
+                        </div>
+                        <div class="col">
+                            <div class="remove-button">
+                                <br>
+                                <i class="fas fa-times-circle text-danger center-clear-btn" (click)="removeOffender(i)"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4" *ngIf="showAddMoreOffenders">
+                <div class="col-md-12">
+                    <a href="javascript:void(0);" class="btn btn-secondary" (click)="addOffender()">Add an Accused</a>
                 </div>
             </div>
 

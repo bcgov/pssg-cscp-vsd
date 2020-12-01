@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
 using Gov.Cscp.VictimServices.Public.ViewModels;
@@ -11,7 +10,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
     {
         public static ApplicationDynamicsModel ToVsdVictimsModel(this ApplicationFormModel model)
         {
-            var application = new ApplicationDynamicsModel();
+            ApplicationDynamicsModel application = new ApplicationDynamicsModel();
             application.Application = new Application();
 
             if (model == null)
@@ -47,14 +46,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_applicantssocialinsurancenumber = model.PersonalInformation.sin;
                 application.Application.vsd_indigenous = model.PersonalInformation.indigenousStatus;
 
-                // what format does dynamics expect in the JSON?
-                // currently the Dynamics UI only allows a 10-digit number and uses some fancy input masking to include the parens and hyphens 
-                // Form side should mimic the fancy javascript input masking from the Dynamics UI, and probably just represent it as a pure 10 digit number behind the scenes and in the JSON
-                // Ideally the whole thing would support international numbers and use the E.164 standard for behind-the-scenes representation
-                // (see https://www.sitepoint.com/working-phone-numbers-javascript/ for inspiration)
-                // but for now we should only support whatever the Dynamics UI supports - no sense adding extra features that can't be used because of the Dynamics side
                 application.Application.vsd_applicantsprimaryphonenumber = model.PersonalInformation.phoneNumber;
-                // application.Application.vsd_leavevoicemail = model.PersonalInformation.leaveVoicemail;
                 if (model.PersonalInformation.leaveVoicemail > 0)
                 {
                     application.Application.vsd_voicemailoption = model.PersonalInformation.leaveVoicemail;
@@ -72,9 +64,13 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_applicantsprimarycountry = model.PersonalInformation.primaryAddress.country;
                     application.Application.vsd_applicantsprimarypostalcode = model.PersonalInformation.primaryAddress.postalCode;
 
-                    if (!string.IsNullOrEmpty(model.PersonalInformation.mailRecipient))
+                    if (model.PersonalInformation.doNotLiveAtAddress && string.IsNullOrEmpty(model.PersonalInformation.mailRecipient))
                     {
-                        application.Application.vsd_applicantsprimaryaddressline3 = model.PersonalInformation.mailRecipient;
+                        application.Application.vsd_applicantsprimaryaddressline3 = "c/o";
+                    }
+                    else if (!string.IsNullOrEmpty(model.PersonalInformation.mailRecipient))
+                    {
+                        application.Application.vsd_applicantsprimaryaddressline3 = "c/o " + model.PersonalInformation.mailRecipient;
                     }
                 }
 
@@ -166,16 +162,21 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_crimedetails = model.CrimeInformation.crimeDetails;
                 application.Application.vsd_cvap_injuries = model.CrimeInformation.crimeInjuries;
 
+
                 // Include upload file
                 try
                 {
-                    int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length + model.ApplicationPDFs.Length;
+                    int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length + model.ApplicationPDFs.Length + model.EmploymentIncomeInformation.documents.Length;
+
+                    application.Application.vsd_cvap_crimedocumentuploaded = model.CrimeInformation.documents.Length > 0;
+                    application.Application.vsd_cvap_onbehalfofdocumentuploaded = model.RepresentativeInformation.documents.Length > 0;
 
                     if (documentCollectionLength > 0)
                     {
                         application.DocumentCollection = new Documentcollection[documentCollectionLength];
                         int documentIndex = 0;
 
+                        //PDF copy of application, and extra copy of just the auth page
                         for (int i = 0; i < model.ApplicationPDFs.Length; ++i)
                         {
                             Documentcollection tempDocumentCollection = new Documentcollection();
@@ -205,6 +206,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             application.DocumentCollection[documentIndex] = tempDocumentCollection;
                             ++documentIndex;
                         }
+
+                        for (int i = 0; i < model.EmploymentIncomeInformation.documents.Length; ++i)
+                        {
+                            Documentcollection tempDocumentCollection = new Documentcollection();
+                            tempDocumentCollection.body = model.EmploymentIncomeInformation.documents[i].body;
+                            tempDocumentCollection.filename = model.EmploymentIncomeInformation.documents[i].fileName;
+                            tempDocumentCollection.subject = model.EmploymentIncomeInformation.documents[i].subject;
+                            application.DocumentCollection[documentIndex] = tempDocumentCollection;
+                            ++documentIndex;
+                        }
                     }
 
                 }
@@ -228,6 +239,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         vsd_policereportingenddate = r.reportEndDate
                     }).ToArray();
                 }
+
+                //TODO - add info for new COAST field once we have details
+                // application.Application. = model.CrimeInformation.moreThanOneOffender;
 
                 application.Application.vsd_cvap_offenderfirstname = model.CrimeInformation.offenderFirstName;
                 application.Application.vsd_cvap_offendermiddlename = model.CrimeInformation.offenderMiddleName;
@@ -310,8 +324,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     if (model.MedicalInformation.otherTreatments.Count() > 0)
                     {
-                        // if (model.MedicalInformation.otherTreatments[0].providerCompany.Length > 0)
-                        // {
                         Providercollection[] tempProviderCollection = model.MedicalInformation.otherTreatments.Select(t => new Providercollection
                         {
                             vsd_companyname = t.providerCompany,
@@ -353,7 +365,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         {
                             application.ProviderCollection = tempCombinedCollection;
                         }
-                        // }
                     }
                 }
 
@@ -709,14 +720,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             if (application.Application.vsd_applicanttype == (int)ApplicationType.ImmediateFamilyMember && model.CrimeInformation.victimDeceasedFromCrime == 100000001)
             {
                 application.Application.vsd_cvap_ifmmissedwork = model.ExpenseInformation.missedWorkDueToDeathOfVictim;
-                // if (model.ExpenseInformation.daysWorkMissedStart.HasValue)
-                // {
                 application.Application.vsd_cvap_ifmmissedworkstart = model.ExpenseInformation.daysWorkMissedStart;
-                // }
-                // if (model.ExpenseInformation.daysWorkMissedEnd.HasValue)
-                // {
                 application.Application.vsd_cvap_ifmmissedworkend = model.ExpenseInformation.daysWorkMissedEnd;
-                // }
 
                 application.Application.vsd_cvap_ifmlostwages = model.ExpenseInformation.didYouLoseWages;
                 application.Application.vsd_cvap_ifmcontactemployer = model.ExpenseInformation.mayContactEmployer;
@@ -805,11 +810,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_onbehalfofdeclaration = model.RepresentativeInformation.completingOnBehalfOf;
             }
 
-            if (model.DeclarationInformation != null)
-            {
-                // TODO: Apparently we don't do anything with this information? No obvious fields on the Dynamics side to feed this into
-            }
-
             if (model.AuthorizationInformation != null)
             {
                 application.Application.vsd_cvap_onbehalfofdeclaration = model.RepresentativeInformation.completingOnBehalfOf;
@@ -820,7 +820,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             if (model.AuthorizationInformation.allowCvapStaffSharing > 0)
             {
                 application.Application.vsd_cvap_optionalauthorization = model.AuthorizationInformation.allowCvapStaffSharing;
-                // application.Application.vsd_cvap_agency_person_authorization = model.AuthorizationInformation.allowCvapStaffSharing;
             }
             application.Application.vsd_optionalauthorizationsignature = model.AuthorizationInformation.authorizedPersonSignature;
 

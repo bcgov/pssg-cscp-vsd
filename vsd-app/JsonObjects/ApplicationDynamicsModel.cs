@@ -33,7 +33,6 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public int? vsd_indigenous { get; set; }
 
         public string vsd_applicantsprimaryphonenumber { get; set; }
-        // public bool vsd_leavevoicemail { get; set; }
         public int? vsd_voicemailoption { get; set; }
         public string vsd_applicantsalternatephonenumber { get; set; }
         public string vsd_applicantsemail { get; set; }
@@ -88,9 +87,6 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_injuries { get; set; }
 
         public int? vsd_cvap_reporttopolice { get; set; }
-        // public string vsd_cvap_policedetachment { get; set; } //deleted in COAST
-        // public DateTime? vsd_cvap_policereportingstartdate { get; set; }
-        // public DateTime? vsd_cvap_policereportingenddate { get; set; }
         public string vsd_cvap_crimereportedto { get; set; }
 
         public string vsd_cvap_offenderfirstname { get; set; }
@@ -153,6 +149,9 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public int? vsd_cvap_optionalauthorization { get; set; }
         public int? vsd_cvap_agency_person_authorization { get; set; }
         public string vsd_optionalauthorizationsignature { get; set; }
+
+        public bool vsd_cvap_crimedocumentuploaded { get; set; }
+        public bool vsd_cvap_onbehalfofdocumentuploaded { get; set; }
     }
 
     public class Courtinfocollection

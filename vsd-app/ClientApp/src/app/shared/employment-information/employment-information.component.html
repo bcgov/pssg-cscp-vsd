@@ -218,7 +218,18 @@
                         <app-address (change)="setEmployerPhoneValidators(item)" [group]="item.get('employerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="item.get('contactable').value === CRMBoolean.True"></app-address>
                     </div>
                 </div>
+
                 <button class="btn btn-secondary mb-3" (click)="addEmployer()">Add Additional Employer</button>
+
+                <ng-container *ngIf="form.get('areYouSelfEmployed').value === CRMBoolean.True">
+                    <p>To verify your employment and income loss, CVAP will require additional documents (e.g. invoices, receipts, pay stubs, contracts, bank statements, tax assessments) that will confirm you were working and receiving income at the time of the offence.</p>
+
+                    <app-field label="Please upload any documents you have available" class="no-app-field-botton-margin">
+                    </app-field>
+                    <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')"></app-file-uploader>
+                </ng-container>
+
+
             </ng-container>
 
         </section>

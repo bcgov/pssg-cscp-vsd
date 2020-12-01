@@ -51,6 +51,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int? leaveVoicemail { get; set; }
         public string alternatePhoneNumber { get; set; }
         public string email { get; set; }
+        public bool doNotLiveAtAddress { get; set; }
         public string mailRecipient { get; set; }
         public Address primaryAddress { get; set; }
         public Address alternateAddress { get; set; }
@@ -87,6 +88,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string crimeInjuries { get; set; }
         public string crimeLocation { get; set; }
         public string noPoliceReportIdentification { get; set; }
+        public bool moreThanOneOffender { get; set; }
         public string offenderFirstName { get; set; }
         public string offenderLastName { get; set; }
         public string offenderMiddleName { get; set; }
@@ -237,6 +239,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
         [XmlArrayItem("element")]
         public Employer[] employers { get; set; }
+
+        [XmlArrayItem("element")]
+        public DocumentCollectioninformation[] documents { get; set; }
 
         public int? mayContactEmployer { get; set; }
     }

@@ -86,8 +86,8 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
             }
 
         }, 0);
-        console.log("employment info");
-        console.log(this.form);
+        // console.log("employment info");
+        // console.log(this.form);
 
         let endDate = this.form.get('daysWorkMissedEnd').value;
         if (endDate) {

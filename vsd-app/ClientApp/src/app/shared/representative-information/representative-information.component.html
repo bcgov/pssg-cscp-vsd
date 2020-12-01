@@ -50,17 +50,17 @@
     <div class="row">
       <div class="col-md-4">
         <app-field label="First Name" [required]="true" [valid]="isFieldValid('representativeFirstName')" errorMessage="Please enter a first name">
-          <input class="form-control" type="text" formControlName="representativeFirstName" placeholder="Full Name">
+          <input class="form-control" type="text" formControlName="representativeFirstName">
         </app-field>
       </div>
       <div class="col-md-4">
         <app-field label="Middle Name" [required]="false" errorMessage="Please enter a middle name">
-          <input class="form-control" type="text" formControlName="representativeMiddleName" placeholder="Full Name">
+          <input class="form-control" type="text" formControlName="representativeMiddleName">
         </app-field>
       </div>
       <div class="col-md-4">
         <app-field label="Last Name" [required]="true" [valid]="isFieldValid('representativeLastName')" errorMessage="Please enter a last name">
-          <input class="form-control" type="text" formControlName="representativeLastName" placeholder="Full Name">
+          <input class="form-control" type="text" formControlName="representativeLastName">
         </app-field>
       </div>
     </div>

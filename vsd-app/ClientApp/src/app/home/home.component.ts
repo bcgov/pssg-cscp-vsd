@@ -100,7 +100,7 @@ export class HomeComponent extends FormBase implements OnInit {
           break;
       }
 
-      console.log(applicationType);
+      // console.log(applicationType);
       let navigationExtras: NavigationExtras = {
         queryParams: { 'ob': behalfOf }
       };
@@ -108,7 +108,7 @@ export class HomeComponent extends FormBase implements OnInit {
       this.router.navigate([routeUrl], navigationExtras);
     } else {
       this.showValidationMessage = true;
-      console.log("form not validated");
+      // console.log("form not validated");
     }
   }
 }
