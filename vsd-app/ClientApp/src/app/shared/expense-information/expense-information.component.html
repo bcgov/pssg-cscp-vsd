@@ -340,7 +340,7 @@
                                     </app-field>
                                 </div>
                                 <div class="col-md-6">
-                                    <app-field label="Email Address" [required]="form.get('mayContactEmployer').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerEmail'))" errorMessage="Please enter your employer's email address">
+                                    <app-field label="Email Address" [required]="false" [valid]="isMyControlValid(item.get('employerEmail'))" errorMessage="Please enter your employer's email address">
                                         <input type="text" class="form-control" (blur)="trimEmail(item.get('employerEmail'))" formControlName="employerEmail" maxlength="100">
                                     </app-field>
                                 </div>
@@ -361,7 +361,7 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <app-field label="Phone Number of Contact Person" [required]="form.get('mayContactEmployer').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
+                                    <app-field label="Phone Number of Company/Contact Person" [required]="form.get('mayContactEmployer').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
                                         <input class="form-control" mask='(000) 000 0000' type="text" formControlName="employerPhoneNumber" *ngIf="item.get('employerAddress.country').value === 'Canada' || item.get('employerAddress.country').value === 'United States of America'; else phone_no_mask">
                                         <ng-template #phone_no_mask>
                                             <input class="form-control" type="text" formControlName="employerPhoneNumber" digitOnly>
