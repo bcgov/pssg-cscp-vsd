@@ -14,7 +14,7 @@
         </app-field>
         <mat-chip class="remove-chip" [selectable]="true" [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
           {{fileItem.controls.filename.value}}
-          <mat-icon matChipRemove>cancel</mat-icon>
+          <i class="fa fa-times-circle remove-icon"></i>
         </mat-chip>
       </mat-chip-list>
     </div>

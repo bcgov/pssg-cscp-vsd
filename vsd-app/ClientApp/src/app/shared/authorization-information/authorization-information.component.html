@@ -5,7 +5,8 @@
   <p>This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program by email at <a href="mailto:cvap@gov.bc.ca">cvap@gov.bc.ca</a> or at (604) 660-3888 or toll free at 1-866-660-3888.</p>
 
   <section>
-    <h2>By signing this section you hereby authorize:</h2>
+    <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, hereby authorize: <span class="error-states ng-star-inserted">*</span></p>
+    <!-- <h2>By signing this section you hereby authorize:</h2> -->
     <ol class="list punctuated">
       <li><span>The doctor, dentist, optometrist, chiropractor, or other health care professional who treated my injuries (physical and/or psychological) to give the Crime Victim Assistance Program, on request, medical or other reports regarding my injuries, treatment or other information relevant to this application;</span></li>
       <li><span>The police or other law enforcement authorities to give the Crime Victim Assistance Program, on request, a copy of police reports, statements, incident reports or other information relevant to this application;</span></li>
@@ -35,7 +36,8 @@
       </label>
     </app-field>
 
-    <app-field label="Applicant's Signature" [required]="true" [valid]="isFieldValid('signature')" errorMessage="Please provide your digital signature">
+    <ng-template #victimIsAMinor>If the victim is a minor (12-18 years) <strong>and</strong> seeking medical benefits, the victim's name and signature is required on this page.</ng-template>
+    <app-field label="Signature" [required]="true" [valid]="isFieldValid('signature')" errorMessage="Please provide your digital signature" [tooltipReference]="formType === ApplicationType.Victim_Application ? victimIsAMinor : ''">
       <div class="signature-trigger" (click)="showSignPad('signature')" *ngIf="!hasSignature('signature')">
         <p>Click this box to sign</p>
       </div>

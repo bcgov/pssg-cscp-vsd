@@ -64,8 +64,8 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
         if (this.formType === ApplicationType.Witness_Application) {
             this.pages = WitnessApplicationPages;
         }
-        // console.log("review component");
-        // console.log(this.form);
+        console.log("review component");
+        console.log(this.form);
 
         // console.log(this.pages);
     }

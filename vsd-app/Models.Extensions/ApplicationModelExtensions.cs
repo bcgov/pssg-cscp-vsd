@@ -70,7 +70,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     }
                     else if (!string.IsNullOrEmpty(model.PersonalInformation.mailRecipient))
                     {
-                        application.Application.vsd_applicantsprimaryaddressline3 = model.PersonalInformation.mailRecipient;
+                        application.Application.vsd_applicantsprimaryaddressline3 = "c/o " + model.PersonalInformation.mailRecipient;
                     }
                 }
 
@@ -166,7 +166,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // Include upload file
                 try
                 {
-                    int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length + model.ApplicationPDFs.Length;
+                    int documentCollectionLength = model.CrimeInformation.documents.Length + model.RepresentativeInformation.documents.Length + model.ApplicationPDFs.Length + model.EmploymentIncomeInformation.documents.Length;
 
                     application.Application.vsd_cvap_crimedocumentuploaded = model.CrimeInformation.documents.Length > 0;
                     application.Application.vsd_cvap_onbehalfofdocumentuploaded = model.RepresentativeInformation.documents.Length > 0;
@@ -206,6 +206,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             application.DocumentCollection[documentIndex] = tempDocumentCollection;
                             ++documentIndex;
                         }
+
+                        for (int i = 0; i < model.EmploymentIncomeInformation.documents.Length; ++i)
+                        {
+                            Documentcollection tempDocumentCollection = new Documentcollection();
+                            tempDocumentCollection.body = model.EmploymentIncomeInformation.documents[i].body;
+                            tempDocumentCollection.filename = model.EmploymentIncomeInformation.documents[i].fileName;
+                            tempDocumentCollection.subject = model.EmploymentIncomeInformation.documents[i].subject;
+                            application.DocumentCollection[documentIndex] = tempDocumentCollection;
+                            ++documentIndex;
+                        }
                     }
 
                 }
@@ -229,6 +239,9 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         vsd_policereportingenddate = r.reportEndDate
                     }).ToArray();
                 }
+
+                //TODO - add info for new COAST field once we have details
+                // application.Application. = model.CrimeInformation.moreThanOneOffender;
 
                 application.Application.vsd_cvap_offenderfirstname = model.CrimeInformation.offenderFirstName;
                 application.Application.vsd_cvap_offendermiddlename = model.CrimeInformation.offenderMiddleName;

@@ -10,6 +10,7 @@ export class AuthInfoHelper {
         let group = {
             approvedAuthorityNotification: ['', Validators.requiredTrue],
             readAndUnderstoodTermsAndConditions: ['', Validators.requiredTrue],
+            signName: ['', Validators.required],
             signature: ['', Validators.required],
             allowCvapStaffSharing: [0],
             authorizedPerson: fb.array([]),

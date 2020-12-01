@@ -25,6 +25,9 @@ export class CrimeInfoHelper {
             policeReports: fb.array([]),
             noPoliceReportIdentification: [''],
 
+            moreThanOneOffender: [false],
+            additionalOffenders: fb.array([]),
+
             offenderFirstName: [''],
             offenderMiddleName: [''],
             offenderLastName: [''],
@@ -90,6 +93,15 @@ export class CrimeInfoHelper {
         return fb.group({
             courtFileNumber: [''],
             courtLocation: ['', [Validators.required]]
+        });
+    }
+
+    createAdditionalOffender(fb: FormBuilder): FormGroup {
+        return fb.group({
+            firstName: [''],
+            middleName: [''],
+            lastName: [''],
+            relationship: [''],
         });
     }
 }

@@ -61,11 +61,13 @@ export interface CrimeInformation {
   haveYouSuedOffender: number;
   intendToSueOffender?: number;
   noPoliceReportIdentification: string;
+  moreThanOneOffender: boolean;
   offenderBeenCharged: number;
   offenderFirstName: string;
   offenderLastName: string;
   offenderMiddleName: string;
   offenderRelationship: string;
+  additionalOffenders: OffenderInfo[];
   overOneYearFromCrime: number;
   policeReportedMultipleTimes: string;
   policeReports: Policereport[];
@@ -151,6 +153,7 @@ export interface EmploymentIncomeInformation {
   wereYouEmployedAtTimeOfCrime?: number;
   workersCompensationClaimNumber: string;
   wsbcClaimNumber?: string;
+  documents: DocumentCollectioninformation[];
 }
 export interface RepresentativeInformation {
   completingOnBehalfOf?: number;
@@ -178,6 +181,7 @@ export interface AuthorizationInformation {
   authorizedPersonAuthorizesDiscussion: string;
   authorizedPersonSignature: string;
   readAndUnderstoodTermsAndConditions: string;
+  signName: string;
   signature: string;
 }
 
@@ -255,4 +259,11 @@ export interface VictimInformation {
   phoneNumber?: string;
   primaryAddress: Address;
   sin: string;
+}
+
+export interface OffenderInfo {
+  firstName: string;
+  middleNmae: string;
+  lastName: string;
+  relationship: string;
 }
