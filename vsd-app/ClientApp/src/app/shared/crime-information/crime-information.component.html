@@ -247,26 +247,6 @@
                 <div class="col-8">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-6">
-                    <app-field label="Has the Person(s) Responsible been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.True" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-                            <span>Yes</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.False" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-                            <span>No</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-                            <span>Unknown</span>
-                        </label>
-                    </app-field>
-                </div>
-                <div class="col-6">
-                </div>
-            </div>
 
             <div formArrayName="additionalOffenders" *ngFor="let item of form.get('additionalOffenders')['controls']; let i = index;">
                 <div [formGroupName]="i" class="additional-offender-info">
@@ -306,6 +286,27 @@
             <div class="row mb-4" *ngIf="showAddMoreOffenders">
                 <div class="col-md-12">
                     <a href="javascript:void(0);" class="btn btn-secondary" (click)="addOffender()">Add an Accused</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <app-field label="Has the Person(s) Responsible been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMMultiBoolean.True" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                            <span>Yes</span>
+                        </label>
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMMultiBoolean.False" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                            <span>No</span>
+                        </label>
+                        <label class="inline-label">
+                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+                            <span>Unknown</span>
+                        </label>
+                    </app-field>
+                </div>
+                <div class="col-6">
                 </div>
             </div>
 
