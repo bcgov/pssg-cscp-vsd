@@ -6,6 +6,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
     public class CounsellorInvoiceFormModel
     {
         public Invoicedetails InvoiceDetails { get; set; }
+        public DocumentCollectioninformation[] DocumentCollection { get; set; }
     }
 
     public class Invoicedetails

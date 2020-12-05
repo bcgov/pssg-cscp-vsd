@@ -283,7 +283,7 @@
                 </div>
             </div>
 
-            <div class="row mb-4" *ngIf="showAddMoreOffenders">
+            <div class="row mb-4" *ngIf="form.get('showAddMoreOffenders').value === true;">
                 <div class="col-md-12">
                     <a href="javascript:void(0);" class="btn btn-secondary" (click)="addOffender()">Add an Accused</a>
                 </div>

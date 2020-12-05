@@ -18,6 +18,7 @@ import { User } from '../models/user.model';
 import * as _ from 'lodash';
 import { AEMService } from '../services/aem.service';
 import { DocumentCollectioninformation } from '../interfaces/victim-restitution.interface';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -103,14 +104,15 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
     invoice.InvoiceDetails.exemptFromGst = !invoice.InvoiceDetails.gstApplicable;
-    // console.log(invoice);
-    // let date_string = invoice.InvoiceDetails.invoiceDate.getFullYear() + MONTHS[invoice.InvoiceDetails.invoiceDate.getMonth()] + invoice.InvoiceDetails.invoiceDate.getDate();
+    console.log(invoice);
+    let invoiceDate = moment(invoice.InvoiceDetails.invoiceDate).toDate();
+    let date_string = invoiceDate.getFullYear() + MONTHS[invoiceDate.getMonth()] + invoiceDate.getDate();
 
 
     this.getAEMPDF().then((pdf: string) => {
       let downloadLink = document.createElement("a");
       downloadLink.href = "data:application/pdf;base64," + pdf;
-      downloadLink.download = 'invoice.pdf';//`Invoice-${invoice.InvoiceDetails.invoiceNumber}-${date_string}.pdf`;
+      downloadLink.download = `Invoice-${invoice.InvoiceDetails.invoiceNumber}-${date_string}.pdf`;
       downloadLink.target = "_blank";
 
       document.body.appendChild(downloadLink);
@@ -121,28 +123,12 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       console.log(err);
     });
 
-
-    // window.scroll(0, 0);
-
-    // this.showPrintView = true;
-    // //hide slide close thing
-    // document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
-
-    // setTimeout(() => {
-    //   window.print();
-    // }, 100);
-
-
   }
 
   @HostListener('window:afterprint')
   onafterprint() {
     document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
     window.scroll(0, 0);
-    // this.showFormPanel = false;
-    // this.showReviewPanel = false;
-    // this.showSuccessPanel = true;
-    // this.showCancelPanel = false;
 
     this.showPrintView = false;
   }
@@ -199,7 +185,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   invoiceCancel(): void {
     window.scroll(0, 0);
 
-    // $event.preventDefault();
     this.showFormPanel = false;
     this.showReviewPanel = false;
     this.showSuccessPanel = false;
@@ -286,28 +271,42 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.formSubmitted = true;
     if (this.form.valid) {
       this.formFullyValidated = true;
-      this.save().subscribe(
-        data => {
-          if (data['IsSuccess'] == true) {
-            this.invoiceSuccess();
-          }
-          else {
-            this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-            console.log('Error submitting invoice. ' + data['message']);
+      const formData = <CounsellorInvoice>{
+        InvoiceDetails: this.form.get('invoiceDetails').value,
+      };
+      formData.InvoiceDetails.exemptFromGst = !formData.InvoiceDetails.gstApplicable;
+
+      this.getInvoicePDF(formData).then((pdfs: DocumentCollectioninformation[]) => {
+        formData.DocumentCollection = pdfs;
+
+        this.save(formData).subscribe(
+          data => {
+            if (data['IsSuccess'] == true) {
+              this.invoiceSuccess();
+            }
+            else {
+              this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              console.log('Error submitting invoice. ' + data['message']);
+              if (this.isIE) {
+                alert("Encountered an error. Please use another browser as this may resolve the problem.")
+              }
+            }
+          },
+          error => {
+            this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+            console.log('Error submitting invoice');
             if (this.isIE) {
               alert("Encountered an error. Please use another browser as this may resolve the problem.")
             }
-          }
-        },
-        error => {
-          this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-          console.log('Error submitting invoice');
-          if (this.isIE) {
-            alert("Encountered an error. Please use another browser as this may resolve the problem.")
-          }
-        },
-        () => { }
-      );
+          },
+          () => { }
+        );
+
+      });
+
+
+
+
     } else {
       console.log("form not validated");
       this.formFullyValidated = false;
@@ -347,16 +346,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     // window.scroll(0, 0);
   }
 
-  save(): Subject<{}> {
+  save(formData: CounsellorInvoice): Subject<{}> {
     const subResult = new Subject<{}>();
-    const formData = <CounsellorInvoice>{
-      InvoiceDetails: this.form.get('invoiceDetails').value,
-    };
-    formData.InvoiceDetails.exemptFromGst = !formData.InvoiceDetails.gstApplicable;
-
-    this.getInvoicePDF(formData).then(res => {
-
-    });
 
     this.busy = this.justiceDataService.submitCounsellorInvoice(formData)
       .subscribe(res => {
@@ -371,7 +362,9 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     return new Promise(async (resolve, reject) => {
       let ret: DocumentCollectioninformation[] = [];
       let promise_array = [];
-      let date_string = invoice.InvoiceDetails.invoiceDate.getFullYear() + MONTHS[invoice.InvoiceDetails.invoiceDate.getMonth()] + invoice.InvoiceDetails.invoiceDate.getDate();
+      // console.log(invoice.InvoiceDetails.invoiceDate);
+      let invoiceDate = moment(invoice.InvoiceDetails.invoiceDate).toDate();
+      let date_string = invoiceDate.getFullYear() + MONTHS[invoiceDate.getMonth()] + invoiceDate.getDate();
 
       promise_array.push(new Promise((resolve, reject) => {
         this.getAEMPDF().then((pdf: string) => {

@@ -552,6 +552,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   moreThanOneOffenderChange(val: boolean) {
     this.showAddMoreOffenders = val;
+    this.form.get('showAddMoreOffenders').patchValue(val);
 
     if (val == false) {
       let additionalOffenders = this.form.get('additionalOffenders') as FormArray;
