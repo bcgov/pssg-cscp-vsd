@@ -59,9 +59,6 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Crimeinformation
     {
-        // public DateTime? policeReportedDate { get; set; }
-        // public DateTime? policeReportedEndDate { get; set; }
-        // public string policeReportedWhichPoliceForce { get; set; }
         [XmlArrayItem("element")]
         public Courtfile[] courtFiles { get; set; }
 
@@ -82,16 +79,16 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Offender[] additionalOffenders { get; set; }
 
         public Racafinformation racafInformation { get; set; }
-        public int haveYouSuedOffender { get; set; }
-        public int offenderBeenCharged { get; set; }
         public int wasReportMadeToPolice { get; set; }
-        public int? intendToSueOffender { get; set; }
         public int? overOneYearFromCrime { get; set; }
         public string crimeDetails { get; set; }
         public string crimeInjuries { get; set; }
         public string crimeLocation { get; set; }
         public string noPoliceReportIdentification { get; set; }
         public bool moreThanOneOffender { get; set; }
+        public int haveYouSuedOffender { get; set; }
+        public int offenderBeenCharged { get; set; }
+        public int? intendToSueOffender { get; set; }
         public string offenderFirstName { get; set; }
         public string offenderLastName { get; set; }
         public string offenderMiddleName { get; set; }
@@ -164,8 +161,6 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string familyDoctorPhoneNumber { get; set; }
         public string familyDoctorFax { get; set; }
         public Address familyDoctorAddress { get; set; }
-        // public string familyDoctorAddressLine1 { get; set; }
-        // public string familyDoctorAddressLine2 { get; set; }
         public string hadOtherTreatments { get; set; }
 
         [XmlArrayItem("element")]

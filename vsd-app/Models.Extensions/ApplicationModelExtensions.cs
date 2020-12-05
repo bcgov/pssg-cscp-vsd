@@ -247,12 +247,43 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 //TODO - add info for new COAST field once we have details
                 // application.Application. = model.CrimeInformation.moreThanOneOffender;
 
-                application.Application.vsd_cvap_offenderfirstname = model.CrimeInformation.offenderFirstName;
-                application.Application.vsd_cvap_offendermiddlename = model.CrimeInformation.offenderMiddleName;
-                application.Application.vsd_cvap_offenderlastname = model.CrimeInformation.offenderLastName;
+                if (!string.IsNullOrEmpty(model.CrimeInformation.offenderFirstName) || !string.IsNullOrEmpty(model.CrimeInformation.offenderMiddleName) || !string.IsNullOrEmpty(model.CrimeInformation.offenderLastName) || !string.IsNullOrEmpty(model.CrimeInformation.offenderRelationship))
+                {
+                    Providercollection[] tempProviderCollection = new Providercollection[1];
+                    tempProviderCollection[0] = new Providercollection();
+                    tempProviderCollection[0].vsd_firstname = model.CrimeInformation.offenderFirstName;
+                    tempProviderCollection[0].vsd_middlename = model.CrimeInformation.offenderMiddleName;
+                    tempProviderCollection[0].vsd_lastname = model.CrimeInformation.offenderLastName;
+                    tempProviderCollection[0].vsd_relationship1 = "Accused";
+                    tempProviderCollection[0].vsd_relationship2 = "Other";
+                    tempProviderCollection[0].vsd_relationship2other = model.CrimeInformation.offenderRelationship;
 
-                application.Application.vsd_cvap_relationshiptooffender = model.CrimeInformation.offenderRelationship;
+                    AddProvidersToCollection(tempProviderCollection, application);
+                }
+
+                if (model.CrimeInformation.additionalOffenders.Length > 0)
+                {
+                    Providercollection[] tempProviderCollection = model.CrimeInformation.additionalOffenders.Select(o => new Providercollection
+                    {
+                        vsd_firstname = o.firstName,
+                        vsd_middlename = o.middleName,
+                        vsd_lastname = o.lastName,
+                        vsd_relationship1 = "Accused",
+                        vsd_relationship2 = "Other",
+                        vsd_relationship2other = o.relationship,
+                    }).Where(o => !string.IsNullOrEmpty(o.vsd_firstname) || !string.IsNullOrEmpty(o.vsd_middlename) || !string.IsNullOrEmpty(o.vsd_lastname) || !string.IsNullOrEmpty(o.vsd_relationship2other)).ToArray();
+
+                    AddProvidersToCollection(tempProviderCollection, application);
+                }
+
+                // application.Application.vsd_cvap_offenderfirstname = model.CrimeInformation.offenderFirstName;
+                // application.Application.vsd_cvap_offendermiddlename = model.CrimeInformation.offenderMiddleName;
+                // application.Application.vsd_cvap_offenderlastname = model.CrimeInformation.offenderLastName;
+                // application.Application.vsd_cvap_relationshiptooffender = model.CrimeInformation.offenderRelationship;
+
                 application.Application.vsd_cvap_isoffendercharged = model.CrimeInformation.offenderBeenCharged;
+                application.Application.vsd_cvap_isoffendersued = model.CrimeInformation.haveYouSuedOffender;
+                application.Application.vsd_cvap_intentiontosueoffender = model.CrimeInformation.intendToSueOffender;
 
                 // Setup courtFiles, don't show if there isn't any
                 if (model.CrimeInformation.courtFiles != null)
@@ -269,9 +300,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         }
                     }
                 }
-
-                application.Application.vsd_cvap_isoffendersued = model.CrimeInformation.haveYouSuedOffender;
-                application.Application.vsd_cvap_intentiontosueoffender = model.CrimeInformation.intendToSueOffender;
 
                 if (model.CrimeInformation.racafInformation != null)
                 {
@@ -346,29 +374,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_relationship1other = t.providerTypeText,
                         }).Where(t => !string.IsNullOrEmpty(t.vsd_relationship1)).ToArray();
 
-                        int tempProviderCount = 0;
-                        if (application.ProviderCollection == null)
-                        {
-                            tempProviderCount = 0;
-                        }
-                        else
-                        {
-                            tempProviderCount = application.ProviderCollection.Count();
-                        }
-                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                        if (application.ProviderCollection == null)
-                        {
-                            tempCombinedCollection = tempProviderCollection;
-                        }
-                        else
-                        {
-                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                        }
-                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                        if (tempCombinedCollection.Length > 0)
-                        {
-                            application.ProviderCollection = tempCombinedCollection;
-                        }
+                        AddProvidersToCollection(tempProviderCollection, application);
                     }
                 }
 
@@ -396,29 +402,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_relationship2other = t.authorizedPersonRelationship.Equals("Other") ? t.authorizedPersonRelationshipOther : "",
                         }).ToArray();
 
-                        int tempProviderCount = 0;
-                        if (application.ProviderCollection == null)
-                        {
-                            tempProviderCount = 0;
-                        }
-                        else
-                        {
-                            tempProviderCount = application.ProviderCollection.Count();
-                        }
-                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                        if (application.ProviderCollection == null)
-                        {
-                            tempCombinedCollection = tempProviderCollection;
-                        }
-                        else
-                        {
-                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                        }
-                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                        if (tempCombinedCollection.Length > 0)
-                        {
-                            application.ProviderCollection = tempCombinedCollection;
-                        }
+                        AddProvidersToCollection(tempProviderCollection, application);
                     }
                 }
             }
@@ -447,29 +431,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_fax = f.employerFax,
                         }).ToArray();
 
-                        int tempProviderCount = 0;
-                        if (application.ProviderCollection == null)
-                        {
-                            tempProviderCount = 0;
-                        }
-                        else
-                        {
-                            tempProviderCount = application.ProviderCollection.Count();
-                        }
-                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                        if (application.ProviderCollection == null)
-                        {
-                            tempCombinedCollection = tempProviderCollection;
-                        }
-                        else
-                        {
-                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                        }
-                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                        if (tempCombinedCollection.Length > 0)
-                        {
-                            application.ProviderCollection = tempCombinedCollection;
-                        }
+                        AddProvidersToCollection(tempProviderCollection, application);
                     }
                 }
             }
@@ -496,29 +458,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
                 tempProviderCollection[0].vsd_relationship1 = "Family Doctor";
 
-                int tempProviderCount = 0;
-                if (application.ProviderCollection == null)
-                {
-                    tempProviderCount = 0;
-                }
-                else
-                {
-                    tempProviderCount = application.ProviderCollection.Count();
-                }
-                Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                if (application.ProviderCollection == null)
-                {
-                    tempCombinedCollection = tempProviderCollection;
-                }
-                else
-                {
-                    Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                }
-                Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                if (tempCombinedCollection.Length > 0)
-                {
-                    application.ProviderCollection = tempCombinedCollection;
-                }
+                AddProvidersToCollection(tempProviderCollection, application);
             }
 
             if (model.RepresentativeInformation != null)
@@ -549,29 +489,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             tempProviderCollection[0].vsd_postalcode = model.RepresentativeInformation.representativeAddress.postalCode;
                         }
 
-                        int tempProviderCount = 0;
-                        if (application.ProviderCollection == null)
-                        {
-                            tempProviderCount = 0;
-                        }
-                        else
-                        {
-                            tempProviderCount = application.ProviderCollection.Count();
-                        }
-                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                        if (application.ProviderCollection == null)
-                        {
-                            tempCombinedCollection = tempProviderCollection;
-                        }
-                        else
-                        {
-                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                        }
-                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                        if (tempCombinedCollection.Length > 0)
-                        {
-                            application.ProviderCollection = tempCombinedCollection;
-                        }
+                        AddProvidersToCollection(tempProviderCollection, application);
                     }
                 }
             }
@@ -751,29 +669,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             vsd_fax = f.employerFax,
                         }).ToArray();
 
-                        int tempProviderCount = 0;
-                        if (application.ProviderCollection == null)
-                        {
-                            tempProviderCount = 0;
-                        }
-                        else
-                        {
-                            tempProviderCount = application.ProviderCollection.Count();
-                        }
-                        Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + tempProviderCollection.Count()];
-                        if (application.ProviderCollection == null)
-                        {
-                            tempCombinedCollection = tempProviderCollection;
-                        }
-                        else
-                        {
-                            Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
-                        }
-                        Array.Copy(tempProviderCollection, 0, tempCombinedCollection, tempProviderCount, tempProviderCollection.Count());
-                        if (tempCombinedCollection.Length > 0)
-                        {
-                            application.ProviderCollection = tempCombinedCollection;
-                        }
+                        AddProvidersToCollection(tempProviderCollection, application);
                     }
                 }
             }
@@ -828,6 +724,33 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             application.Application.vsd_optionalauthorizationsignature = model.AuthorizationInformation.authorizedPersonSignature;
 
             return application;
+        }
+
+        private static void AddProvidersToCollection(Providercollection[] providers, ApplicationDynamicsModel application)
+        {
+            int tempProviderCount = 0;
+            if (application.ProviderCollection == null)
+            {
+                tempProviderCount = 0;
+            }
+            else
+            {
+                tempProviderCount = application.ProviderCollection.Count();
+            }
+            Providercollection[] tempCombinedCollection = new Providercollection[tempProviderCount + providers.Count()];
+            if (application.ProviderCollection == null)
+            {
+                tempCombinedCollection = providers;
+            }
+            else
+            {
+                Array.Copy(application.ProviderCollection, tempCombinedCollection, tempProviderCount);
+            }
+            Array.Copy(providers, 0, tempCombinedCollection, tempProviderCount, providers.Count());
+            if (tempCombinedCollection.Length > 0)
+            {
+                application.ProviderCollection = tempCombinedCollection;
+            }
         }
     }
 }
