@@ -34,6 +34,8 @@ export class CrimeInfoHelper {
             offenderRelationship: [''],
             offenderBeenCharged: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
 
+            showAddMoreOffenders: [false],
+
             courtFiles: fb.array([]),
 
             haveYouSuedOffender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000001)]],

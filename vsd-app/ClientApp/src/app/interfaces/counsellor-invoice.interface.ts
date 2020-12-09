@@ -1,5 +1,8 @@
+import { DocumentCollectioninformation } from "./victim-restitution.interface";
+
 export interface CounsellorInvoice {
   InvoiceDetails: InvoiceDetails;
+  DocumentCollection: DocumentCollectioninformation[];
 }
 export interface InvoiceDetails {
   registeredCounsellorWithCvap: boolean;  // Not used in transfer to Dynamics
