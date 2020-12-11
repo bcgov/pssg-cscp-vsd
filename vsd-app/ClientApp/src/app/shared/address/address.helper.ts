@@ -7,7 +7,7 @@ export class AddressHelper {
     zipRegex = ZIP_CODE;
 
     public clearAddressValidatorsAndErrors(form: FormGroup, field: string) {
-        let options = { onlySelf: true, emitEvent: false };
+        let options = { onlySelf: false, emitEvent: true };
         let addressControls = [
             form.get(field + '.country'),
             form.get(field + '.province'),
@@ -47,7 +47,7 @@ export class AddressHelper {
     }
 
     public setAddressAsRequired(form: FormGroup, field: string) {
-        let options = { onlySelf: true, emitEvent: false };
+        let options = { onlySelf: false, emitEvent: true };
         let addressControls = [
             form.get(field + '.country'),
             form.get(field + '.province'),

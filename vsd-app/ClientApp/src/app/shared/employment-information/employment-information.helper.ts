@@ -14,7 +14,7 @@ export class EmploymentInfoHelper {
             didYouLoseWages: [''],
             sin: ['', [Validators.minLength(9), Validators.maxLength(9)]],
             areYouSelfEmployed: [''],
-            mayContactEmployer: [''],
+            // mayContactEmployer: [''],
             haveYouAppliedForWorkersCompensation: [''],
             areYouStillOffWork: [''],
             daysWorkMissedStart: [''],

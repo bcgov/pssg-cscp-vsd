@@ -626,14 +626,14 @@ export class FormBase {
     target.get('representativeConfirmEmail').updateValueAndValidity(options);
   }
 
-  setControlValidators(control: AbstractControl | FormControl, newValidator: ValidatorFn | ValidatorFn[], options = { onlySelf: true, emitEvent: true }) {
+  setControlValidators(control: AbstractControl | FormControl, newValidator: ValidatorFn | ValidatorFn[], options = { onlySelf: false, emitEvent: true }) {
     control.setValidators(newValidator);
     control.updateValueAndValidity(options);
   }
 
-  clearControlValidators(control: AbstractControl | FormControl, options = { onlySelf: true, emitEvent: true }) {
-    control.clearValidators();
+  clearControlValidators(control: AbstractControl | FormControl, options = { onlySelf: false, emitEvent: true }) {
     control.setErrors(null, options);
+    control.clearValidators();
     control.updateValueAndValidity(options);
   }
 }
