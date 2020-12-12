@@ -26,9 +26,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         [HttpPost("saveapplication")]
         public async Task<IActionResult> SaveApplication([FromBody] ApplicationFormModel model)
         {
-            if (model == null)
+            if (!ModelState.IsValid)
             {
-                return StatusCode(502);
+                return BadRequest(ModelState);
             }
 
             string endpointAction = "vsd_CreateCVAPClaim";
@@ -48,9 +48,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         [HttpPost("submitcounsellorinvoice")]
         public async Task<IActionResult> SubmitCounsellorInvoice([FromBody] CounsellorInvoiceFormModel model)
         {
-            if (model == null)
+            if (!ModelState.IsValid)
             {
-                return StatusCode(502);
+                return BadRequest(ModelState);
             }
 
             string endpointAction = "vsd_SubmitCounselorInvoice";
@@ -70,9 +70,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         [HttpPost("submitvictimrestitution")]
         public async Task<IActionResult> SubmitVictimRestitution([FromBody] VictimRestitutionFormModel model)
         {
-            if (model == null)
+            if (!ModelState.IsValid)
             {
-                return StatusCode(502);
+                return BadRequest(ModelState);
             }
 
             var endpointAction = "vsd_CreateRestitutionCase";
@@ -92,9 +92,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         [HttpPost("submitoffenderrestitution")]
         public async Task<IActionResult> SubmitOffenderRestitution([FromBody] OffenderRestitutionFormModel model)
         {
-            if (model == null)
+            if (!ModelState.IsValid)
             {
-                return StatusCode(502);
+                return BadRequest(ModelState);
             }
 
             var offenderRestitution = model.ToOffenderRestitutionModel();

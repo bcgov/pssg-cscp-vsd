@@ -25,6 +25,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 string xml = getApplicationXML(model);
                 string requestJson = getAEMJSON(xml, "victim");
 
@@ -39,6 +44,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 string xml = getApplicationXML(model);
                 string requestJson = getAEMJSON(xml, "ifm");
 
@@ -53,6 +63,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 string xml = getApplicationXML(model);
                 string requestJson = getAEMJSON(xml, "witness");
 
@@ -67,6 +82,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 string xml = getApplicationXML(model);
                 string requestJson = getAEMJSON(xml, "authorization");
 
@@ -81,6 +101,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                
                 string xml = getInvoiceXML(model);
                 string requestJson = getAEMJSON(xml, "invoice");
 
