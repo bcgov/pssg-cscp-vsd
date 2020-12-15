@@ -103,7 +103,7 @@ export class AddressComponent implements OnInit {
 
     let promise_array = [];
     if (!this.lookupData.countries || this.lookupData.countries.length == 0) {
-      promise_array.push(new Promise((resolve, reject) => {
+      promise_array.push(new Promise<void>((resolve, reject) => {
         this.lookupService.getCountries().subscribe((res) => {
           this.lookupData.countries = res.value;
           if (this.lookupData.countries) {
@@ -117,7 +117,7 @@ export class AddressComponent implements OnInit {
     }
 
     if (!this.lookupData.provinces || this.lookupData.provinces.length == 0) {
-      promise_array.push(new Promise((resolve, reject) => {
+      promise_array.push(new Promise<void>((resolve, reject) => {
         this.lookupService.getProvinces().subscribe((res) => {
           this.lookupData.provinces = res.value;
           if (this.lookupData.provinces) {

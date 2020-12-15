@@ -366,7 +366,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       let invoiceDate = moment(invoice.InvoiceDetails.invoiceDate).toDate();
       let date_string = invoiceDate.getFullYear() + MONTHS[invoiceDate.getMonth()] + invoiceDate.getDate();
 
-      promise_array.push(new Promise((resolve, reject) => {
+      promise_array.push(new Promise<void>((resolve, reject) => {
         this.getAEMPDF().then((pdf: string) => {
           ret.push({
             body: pdf,

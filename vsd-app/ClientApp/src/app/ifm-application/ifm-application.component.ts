@@ -114,7 +114,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
     let promise_array = [];
 
-    promise_array.push(new Promise((resolve, reject) => {
+    promise_array.push(new Promise<void>((resolve, reject) => {
       this.lookupService.getCountries().subscribe((res) => {
         this.lookupData.countries = res.value;
         if (this.lookupData.countries) {
@@ -124,7 +124,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       });
     }));
 
-    promise_array.push(new Promise((resolve, reject) => {
+    promise_array.push(new Promise<void>((resolve, reject) => {
       this.lookupService.getProvinces().subscribe((res) => {
         this.lookupData.provinces = res.value;
         if (this.lookupData.provinces) {
@@ -134,7 +134,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       });
     }));
 
-    promise_array.push(new Promise((resolve, reject) => {
+    promise_array.push(new Promise<void>((resolve, reject) => {
       this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
         this.lookupData.cities = res.value;
         if (this.lookupData.cities) {
@@ -144,7 +144,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       });
     }));
 
-    promise_array.push(new Promise((resolve, reject) => {
+    promise_array.push(new Promise<void>((resolve, reject) => {
       this.lookupService.getRepresentativeRelationships().subscribe((res) => {
         this.lookupData.representativeRelationships = res.value;
         if (this.lookupData.representativeRelationships) {
@@ -473,7 +473,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       let ret: DocumentCollectioninformation[] = [];
       let promise_array = [];
 
-      promise_array.push(new Promise((resolve, reject) => {
+      promise_array.push(new Promise<void>((resolve, reject) => {
         this.getAEMPDF().then((pdf: string) => {
           ret.push({
             body: pdf,
@@ -487,7 +487,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         });
       }));
 
-      promise_array.push(new Promise((resolve, reject) => {
+      promise_array.push(new Promise<void>((resolve, reject) => {
         this.getAuthPDF().then((auth_pdf: string) => {
           ret.push({
             body: auth_pdf,
