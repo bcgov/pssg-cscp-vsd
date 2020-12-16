@@ -46,22 +46,22 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
 
             //uncomment this one the document collection is added to the API
-            // if (model.DocumentCollection.Length > 0)
-            // {
-            //     outputModel.DocumentCollection = new Documentcollection[model.DocumentCollection.Length];
+            if (model.DocumentCollection.Length > 0)
+            {
+                outputModel.DocumentCollection = new Documentcollection[model.DocumentCollection.Length];
 
-            //     int documentIndex = 0;
-            //     for (int i = 0; i < model.DocumentCollection.Length; ++i)
-            //     {
-            //         Documentcollection tempDocumentCollection = new Documentcollection();
-            //         tempDocumentCollection.body = model.DocumentCollection[i].body;
-            //         tempDocumentCollection.filename = model.DocumentCollection[i].fileName;
-            //         tempDocumentCollection.subject = model.DocumentCollection[i].subject;
-            //         outputModel.DocumentCollection[documentIndex] = tempDocumentCollection;
-            //         ++documentIndex;
-            //     }
+                int documentIndex = 0;
+                for (int i = 0; i < model.DocumentCollection.Length; ++i)
+                {
+                    Documentcollection tempDocumentCollection = new Documentcollection();
+                    tempDocumentCollection.body = model.DocumentCollection[i].body;
+                    tempDocumentCollection.filename = model.DocumentCollection[i].fileName;
+                    tempDocumentCollection.subject = model.DocumentCollection[i].subject;
+                    outputModel.DocumentCollection[documentIndex] = tempDocumentCollection;
+                    ++documentIndex;
+                }
 
-            // }
+            }
 
             return outputModel;
         }

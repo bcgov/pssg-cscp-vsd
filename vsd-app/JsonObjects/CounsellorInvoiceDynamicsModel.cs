@@ -18,8 +18,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public bool ExemptFromGST { get; set; }
         public CounsellorInvoiceLineItem[] InvoiceLineItems { get; set; }
 
-        //this needs to be added to the API for this to work
-        // public Documentcollection[] DocumentCollection { get; set; }
+        public Documentcollection[] DocumentCollection { get; set; }
     }
 
     public class CounsellorInvoiceLineItem

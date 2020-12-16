@@ -317,27 +317,64 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   submitAndCreateNew() {
     //first submit, then
     if (this.form.valid) {
+
+      this.formFullyValidated = true;
       const formData = <CounsellorInvoice>{
         InvoiceDetails: this.form.get('invoiceDetails').value,
       };
       formData.InvoiceDetails.exemptFromGst = !formData.InvoiceDetails.gstApplicable;
-      this.busy = this.justiceDataService.submitCounsellorInvoice(formData).subscribe(
-        data => {
-          if (data['IsSuccess'] == true) {
-            this.invoiceEdit();
-            this.cloneInvoice(_.cloneDeep(this.form));
-          }
-          else {
-            this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-            console.log('Error submitting invoice. ' + data['message']);
-          }
-        },
-        error => {
-          this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-          console.log('Error submitting invoice');
-        },
-        () => { }
-      );
+
+      this.getInvoicePDF(formData).then((pdfs: DocumentCollectioninformation[]) => {
+        formData.DocumentCollection = pdfs;
+
+        this.save(formData).subscribe(
+          data => {
+            if (data['IsSuccess'] == true) {
+              this.invoiceEdit();
+              this.cloneInvoice(_.cloneDeep(this.form));
+            }
+            else {
+              this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              console.log('Error submitting invoice. ' + data['message']);
+              if (this.isIE) {
+                alert("Encountered an error. Please use another browser as this may resolve the problem.")
+              }
+            }
+          },
+          error => {
+            this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+            console.log('Error submitting invoice');
+            if (this.isIE) {
+              alert("Encountered an error. Please use another browser as this may resolve the problem.")
+            }
+          },
+          () => { }
+        );
+
+      });
+
+
+      // const formData = <CounsellorInvoice>{
+      //   InvoiceDetails: this.form.get('invoiceDetails').value,
+      // };
+      // formData.InvoiceDetails.exemptFromGst = !formData.InvoiceDetails.gstApplicable;
+      // this.busy = this.justiceDataService.submitCounsellorInvoice(formData).subscribe(
+      //   data => {
+      //     if (data['IsSuccess'] == true) {
+      //       this.invoiceEdit();
+      //       this.cloneInvoice(_.cloneDeep(this.form));
+      //     }
+      //     else {
+      //       this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+      //       console.log('Error submitting invoice. ' + data['message']);
+      //     }
+      //   },
+      //   error => {
+      //     this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+      //     console.log('Error submitting invoice');
+      //   },
+      //   () => { }
+      // );
     } else {
       console.log("form not validated");
       this.formFullyValidated = false;
