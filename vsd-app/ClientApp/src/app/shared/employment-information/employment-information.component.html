@@ -178,7 +178,7 @@
                                 </app-field>
                             </div>
                             <div class="col-md-6">
-                                <app-field label="Email Address" [required]="item.get('contactable').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerEmail'))" errorMessage="Please enter your employer's email address">
+                                <app-field label="Email Address" [required]="false" [valid]="isMyControlValid(item.get('employerEmail'))" errorMessage="Please enter your employer's email address">
                                     <input type="text" class="form-control" (blur)="trimEmail(item.get('employerEmail'))" formControlName="employerEmail" maxlength="100">
                                 </app-field>
                             </div>
@@ -197,7 +197,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <app-field label="Phone Number of Contact Person" [required]="item.get('contactable').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
+                                <app-field label="Phone Number of Company/Contact Person" [required]="item.get('contactable').value === CRMBoolean.True" [valid]="isMyControlValid(item.get('employerPhoneNumber'))" errorMessage="Please enter a contact phone number">
                                     <input type="text" mask='(000) 000 0000' class="form-control" formControlName="employerPhoneNumber" *ngIf="item.get('employerAddress.country').value === 'Canada' || item.get('employerAddress.country').value === 'United States of America'; else phone_no_mask">
                                     <ng-template #phone_no_mask>
                                         <input class="form-control" type="text" formControlName="employerPhoneNumber" digitOnly>

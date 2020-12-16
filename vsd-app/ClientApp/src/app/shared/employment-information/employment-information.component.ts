@@ -203,6 +203,8 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
                 let control = thisEmployer.get('contactable');
 
                 if (value === CRMBoolean.True) {
+                    // let options = { onlySelf: true, emitEvent: false }
+                    control.patchValue(null);
                     this.clearControlValidators(control);
                 }
                 else {
@@ -213,10 +215,12 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     }
 
     contactableChange(val: boolean, index: number) {
+        console.log("contactable change");
+        
         let currentEmployers = this.form.get('employers') as FormArray;
         let thisEmployer = currentEmployers.controls[index] as FormGroup;
-        let mayContactEmployer = this.form.get('mayContactEmployer');
-        mayContactEmployer.patchValue(val ? CRMBoolean.True : CRMBoolean.False);
+        // let mayContactEmployer = this.form.get('mayContactEmployer');
+        // mayContactEmployer.patchValue(val ? CRMBoolean.True : CRMBoolean.False);
 
         if (thisEmployer) {
             let nameControl = thisEmployer.get('employerName');
@@ -224,13 +228,13 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
             let phoneControl = thisEmployer.get('employerPhoneNumber');
             if (val) {
                 this.setControlValidators(nameControl, [Validators.required]);
-                this.setControlValidators(emailControl, [Validators.required, Validators.email]);
+                // this.setControlValidators(emailControl, [Validators.required, Validators.email]);
                 this.setControlValidators(phoneControl, [Validators.required]);
                 this.addressHelper.setAddressAsRequired(thisEmployer, 'employerAddress');
             }
             else {
                 this.clearControlValidators(nameControl);
-                this.clearControlValidators(emailControl);
+                // this.clearControlValidators(emailControl);
                 this.clearControlValidators(phoneControl);
                 this.addressHelper.clearAddressValidatorsAndErrors(thisEmployer, 'employerAddress');
             }
