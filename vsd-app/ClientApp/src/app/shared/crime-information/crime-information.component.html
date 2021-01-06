@@ -291,7 +291,7 @@
 
             <div class="row">
                 <div class="col-6">
-                    <app-field label="Has the Person(s) Responsible been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
+                    <app-field label="Has any of the Person(s) Responsible been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
                         <label class="inline-label">
                             <input type="radio" [value]="CRMMultiBoolean.True" name="offenderBeenCharged" formControlName="offenderBeenCharged">
                             <span>Yes</span>
@@ -344,7 +344,7 @@
                 </div>
             </div>
 
-            <app-field label="Have you sued the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('haveYouSuedOffender')" errorMessage="Please make a selection">
+            <app-field label="Have you sued any of the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('haveYouSuedOffender')" errorMessage="Please make a selection">
                 <label class="inline-label">
                     <input type="radio" [value]="CRMBoolean.True" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
                     <span>Yes</span>
@@ -355,7 +355,7 @@
                 </label>
             </app-field>
             <section *ngIf="form.get('haveYouSuedOffender').value === CRMBoolean.False">
-                <app-field label="Do you intend to sue the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
+                <app-field label="Do you intend to sue any of the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
                     <label class="inline-label">
                         <input type="radio" [value]="CRMMultiBoolean.True" name="intendToSueOffender" formControlName="intendToSueOffender">
                         <span>Yes</span>
