@@ -1,22 +1,25 @@
 <div [formGroup]="form">
   <div class="page-header">
-    <h1>Authorization</h1>
+    <h1>Authorization and Consent</h1>
   </div>
-  <p>This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program by email at <a href="mailto:cvap@gov.bc.ca">cvap@gov.bc.ca</a> or at (604) 660-3888 or toll free at 1-866-660-3888.</p>
+  <p>Section 6 of the <i>Crime Victim Assistance Act</i> allows the Crime Victim Assistance Program to collect your personal information from persons and organizations for the purpose of determining your eligibility for benefits and provides the authority for these organizations to disclose your personal information to Crime Victim Assistance Program for the same purpose.</p>
+  <p>By signing below, I am authorizing the Crime Victim Assistance Program to request a report or information from a medical practitioner, a health professional, an expert and/or one or more of the third parties listed below. I am also consenting to the Crime Victim Assistance Program contacting these third parties to seek verification of the medical, financial, or other employment information I have provided. I understand that the Crime Victim Assistance Program may contact and seek or verify information from these parties for the purpose of determining my eligibility for benefits:</p>
+
+  <!-- <p>This section authorizes the Crime Victim Assistance Program to contact the persons and organizations listed so that we may process your claim for benefits. You may be required to submit other authorizations that are needed to process your claim. If you have any questions about the collection and use of the information gathered by the Crime Victim Assistance Program, please contact the program by email at <a href="mailto:cvap@gov.bc.ca">cvap@gov.bc.ca</a> or at (604) 660-3888 or toll free at 1-866-660-3888.</p> -->
 
   <div [class.with-error]="!form.get('signName').valid && form.get('signName').touched">
     <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, hereby authorize: <span class="error-states ng-star-inserted">*</span></p>
     <!-- <h2>By signing this section you hereby authorize:</h2> -->
     <ol class="list punctuated">
-      <li><span>The doctor, dentist, optometrist, chiropractor, or other health care professional who treated my injuries (physical and/or psychological) to give the Crime Victim Assistance Program, on request, medical or other reports regarding my injuries, treatment or other information relevant to this application;</span></li>
-      <li><span>The police or other law enforcement authorities to give the Crime Victim Assistance Program, on request, a copy of police reports, statements, incident reports or other information relevant to this application;</span></li>
-      <li><span>WorkSafe BC or other authorities from which the victim received or will receive or will be eligible to receive payments from provincial, federal or other jurisdictions funds to give the Crime Victim Assistance Program, on request, information relevant to this application.</span></li>
-      <li><span>My employer(s) or similar authority to give the Crime Victim Assistance Program, on request, information as to my employment earnings, benefits or other information relevant to this application;</span></li>
-      <li><span>Any accident, disability, sickness, life insurance/assurance company or private pension scheme or extended health benefits scheme from which payments or services were received or will be received to give the Crime Victim Assistance Program, on request, information relevant to this application;</span></li>
-      <li><span>Human Resources and Skills Development Canada or Aboriginal Affairs and Northern Development Canada or any other authority from which payments were received or will be received to give the Crime Victim Assistance Program, on request information relevant to this application;</span></li>
-      <li><span>The Canada Employment Insurance Commission or the Canada Pension Plan or similar employment insurance and pension plans from other jurisdictions, to give the Crime Victim Assistance Program, on request, information as to benefits received or to be received relevant to this application;</span></li>
-      <li><span>Canada Revenue Agency or other similar agency in any other jurisdiction, to give the Crime Victim Assistance Program, upon request information as to my employment income;</span></li>
-      <li><span>The Ministry of Children and Family Development (MCFD) to give the Crime Victim Assistance Program, on request, a copy of information relevant to this application.</span></li>
+      <li><span>The doctor, dentist, optometrist, chiropractor, or other health care professional who treated my injuries (physical and/or psychological), to obtain medical or other reports regarding my injuries, treatment or information relevant to this application.</span></li>
+      <li><span>The police or other law enforcement authorities, to obtain copies of police reports, statements, incident reports or other information relevant to this application;</span></li>
+      <li><span>The Workers' Compensation Board of BC or other authority from which I received or will receive or will be eligible to receive payments from provincial, federal or other jurisdictions funds, to obtain information relevant to this application;</span></li>
+      <li><span>My employer(s) or similar authority, to obtain information as to my employment, earnings, benefits or other information relevant to this application;</span></li>
+      <li><span>Any accident, disability, sickness, life insurance/assurance company or private pension scheme or extended health benefits scheme from which payments or services were received or will be received, to obtain information relevant to this application;</span></li>
+      <li><span>Human Resources and Skills Development Canada or Aboriginal Affairs and Northern Development Canada or any other authority from which payments were received or will be received, to obtain information relevant to this application;</span></li>
+      <li><span>The Canada Employment Insurance Commission or the Canada Pension Plan or similar employment insurance and pension plans from other jurisdiction to obtain information as to benefits received or to be received relevant to this application;</span></li>
+      <li><span>Canada Revenue Agency or other similar agency in any jurisdiction to obtain information as to my employment income.</span></li>
+      <li><span>The Ministry of Children and Family Development to obtain information relevant to this application.</span></li>
     </ol>
   </div>
 
@@ -47,8 +50,8 @@
       </div>
     </app-field>
 
-    <h2 class="blue-header">Optional Authorization</h2>
-    <app-field label="Would you like to allow CVAP staff to discuss your file with a victim services agency or a person?" [valid]="isFieldValid('allowCvapStaffSharing')" errorMessage="Please select an option">
+    <h2 class="blue-header">Release of Information - Optional</h2>
+    <app-field label="Crime Victim Assistance Program staff requires your written permission to discuss the information in your file with other persons. Please complete this section if you want to allow program staff to discuss your file with a victim services agency or another person, such as a family member." [valid]="isFieldValid('allowCvapStaffSharing')" errorMessage="Please select an option">
       <label class="inline-label">
         <input type="radio" [value]="CRMBoolean.True" name="allowCvapStaffSharing" formControlName="allowCvapStaffSharing">
         <span>Yes</span>
@@ -139,7 +142,9 @@
       <app-field [valid]="isFieldValid('authorizedPersonAuthorizesDiscussion')" errorMessage="Please check this box to indicate that you accept Declaration" [required]="true">
         <label>
           <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion" [required]="true">
-          I hereby authorize the Crime Victim Assistance Program staff to discuss my claim with the above named authorized person(s). <span class="error-states ng-star-inserted">*</span>
+          I hereby give my consent to the Crime Victim Assistance Program staff to discuss my claim (e.g. status and benefit eligibility) with the above person(s) or agency for the purpose of assisting me in the application process.
+          <br>
+          The Crime Victim Assistance Program may provide or share my financial, medical, and employment information with this authorized contact. <span class="error-states ng-star-inserted">*</span>
         </label>
       </app-field>
 
