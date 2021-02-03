@@ -2,10 +2,10 @@ export interface iLookupData {
     countries: iCountry[];
     provinces: iProvince[];
     cities: iCity[];
-    relationships: iRelationship[];
-    representativeRelationships: iRelationship[];
-    courts: iCourt[];
-    police_detachments: iPoliceDetachment[];
+    relationships?: iRelationship[];
+    representativeRelationships?: iRelationship[];
+    courts?: iCourt[];
+    police_detachments?: iPoliceDetachment[];
 }
 
 export interface iCountry {

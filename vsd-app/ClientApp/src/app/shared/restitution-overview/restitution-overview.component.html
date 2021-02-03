@@ -1,0 +1,121 @@
+<div [formGroup]="form">
+    <div class="page-header">
+        <h1>{{applicant}} Applying to the Restitution Program
+        </h1>
+    </div>
+
+    <h3>Who can apply (or be referred) to the Restitution Program?</h3>
+    <section *ngIf="formType.val === ResitutionForm.Victim.val">
+        <ul class="list">
+            <li>Are you owed money on a restitution order that has not been paid in full?</li>
+            <li>Was the restitution order issued by an adult criminal court in the province of B.C.?</li>
+        </ul>
+
+        <p>If you answered “yes” to these questions, you can apply to the Restitution Program using the online form. If you are unsure of the answer to these questions, please contact the Restitution Program. Note: for some situations, probation officer permission may be required for the Restitution Program to open a file.</p>
+
+        <h3>What are the benefits to working with the Restitution Program?</h3>
+        <p>No appearances in civil or criminal court are required as part of your involvement with the Restitution Program. Contact with the offender is not necessary. Participation helps you collect restitution you are owed.</p>
+
+        <h3>What happens after I apply?</h3>
+        <p>Once you apply to the Restitution Program:</p>
+
+        <table class="steps">
+            <tr>
+                <th>Step 1:</th>
+                <td>We assess your application to ensure we can facilitate the restitution payments to you.</td>
+            </tr>
+            <tr>
+                <th>Step 2:</th>
+                <td>We connect with the offender listed on the restitution order and ask them to work with the Program.</td>
+            </tr>
+            <tr>
+                <th>Step 3:</th>
+                <td>We discuss payment options with the offender to encourage the best plan to comply with the order.</td>
+            </tr>
+            <tr>
+                <th>Step 4:</th>
+                <td>Payments may begin.</td>
+            </tr>
+            <tr>
+                <th>Step 5:</th>
+                <td>We forward restitution money received from the offender to you and to other victims listed on the restitution order.</td>
+            </tr>
+            <tr>
+                <th>Step 6:</th>
+                <td>We provide “Statements of Restitution Payment” for you to track payment progress.</td>
+            </tr>
+        </table>
+        <p><em>We consider safety concerns of all parties listed on the restitution order on an ongoing basis.</em></p>
+
+        <h3>What else does the Restitution Program do?</h3>
+        <ul class="list">
+            <li>Provides support and information to victims who have unpaid restitution orders;</li>
+            <li>Responds to general inquiries regarding restitution orders;</li>
+            <li>Provides referrals to appropriate resources; and</li>
+            <li>Provides general information regarding collecting on restitution orders through the civil court processes.</li>
+        </ul>
+
+    </section>
+
+    <section *ngIf="formType.val === ResitutionForm.Offender.val">
+        <ul class="list">
+            <li>Do you have an unpaid restitution order?</li>
+            <li>Are you over 19 and was your restitution order issued by an adult criminal court in BC?</li>
+        </ul>
+
+        <p>If you answered “yes” to these questions, you can apply (or be referred by your parole/probation officer) to the Restitution Program using the online form. If you are unsure of the answer to these questions, please contact the Restitution Program. Note: if you have a probation officer, the Restitution Program may need to seek his or her permission before opening a file.</p>
+
+        <h3>What does the Restitution Program do?</h3>
+        <ul class="list">
+            <li>We work to engage the victim(s) named on the restitution order in the Program.</li>
+            <li>Help is available if you owe money on a restitution order</li>
+            <li>We work with you to confirm your intentions for payment are realistic, achievable, and consistent with timely compliance of the order.</li>
+            <li>We accept full or partial restitution order payments (e.g., installments) from you and pay the victim on your behalf.</li>
+            <li>We ensure your payments are distributed equitably on orders with multiple victims.</li>
+            <li>We communicate your progress to your supervising probation or parole officer upon request and to the victim.</li>
+        </ul>
+
+        <h3>What are the benefits to working with the Restitution Program?</h3>
+        <ul>
+            <li>No appearances in civil or criminal court are required as part of your involvement in the Restitution Program.</li>
+            <li>Initiating payments helps you to demonstrate a willingness to comply with your court order.</li>
+            <li>Your participation may help you to avoid impacts to your credit rating.</li>
+            <li>Working with the Program eliminates the need for you to contact the victim(s) named on the order.</li>
+        </ul>
+
+        <h3>What happens after I apply?</h3>
+        <p>Once you apply to the Restitution Program:</p>
+
+        <table class="steps">
+            <tr>
+                <th>Step 1:</th>
+                <td>We assess your application to ensure we can facilitate your restitution payments.</td>
+            </tr>
+            <tr>
+                <th>Step 2:</th>
+                <td>We connect with the victim listed on the restitution order and invite them to work with the Program.</td>
+            </tr>
+            <tr>
+                <th>Step 3:</th>
+                <td>We discuss payment options with you to determine the best plan given your current circumstances.</td>
+            </tr>
+            <tr>
+                <th>Step 4:</th>
+                <td>You may begin making payments.</td>
+            </tr>
+            <tr>
+                <th>Step 5:</th>
+                <td>We forward restitution money received from you to the victim listed on the restitution order.</td>
+            </tr>
+            <tr>
+                <th>Step 6:</th>
+                <td>We provide “Statements of Restitution Payment” for your records each time cheques are mailed to the victim.</td>
+            </tr>
+        </table>
+        <p><em>We consider safety concerns of all parties listed on the restitution order on an ongoing basis.</em></p>
+
+        <h3>What if I am in federal custody?</h3>
+        <p>While you are in federal custody you can make payments to the Restitution Program from your institutional bank account. We can assist you in getting started.</p>
+
+    </section>
+</div>

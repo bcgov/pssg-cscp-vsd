@@ -1,0 +1,88 @@
+<div class="form-wrapper" style="position: relative;" [class.dark-overlay]="submitting">
+    <div class="loading-indicator" *ngIf="submitting">
+        <mat-spinner mode="indeterminate"></mat-spinner>
+    </div>
+
+    <div class="row" [formGroup]="form">
+        <div class="col-lg-3 col-sm-12 application-gutter" [class.hidden]="showPrintView">
+            <h3>{{FORM_TYPE.name}} Application</h3>
+            <section class="application-nav sticky-top">
+                <div>
+                    <mat-vertical-stepper linear (selectionChange)="gotoPage($event)" #stepper [class.disabled-stepper]="submitting">
+                        <ng-template matStepperIcon="edit">
+                            <i class="fa fa-check"></i>
+                        </ng-template>
+                        <ng-template matStepperIcon="error">
+                            <i class="fa fa-times"></i>
+                        </ng-template>
+                        <ng-template matStepperIcon="number">
+                        </ng-template>
+
+                        <mat-step label="Overview" [stepControl]="fb.group({name: ['introduction']})" [hasError]="!isMyControlValid(form.get('introduction'))"></mat-step>
+                        <mat-step [label]="FORM_TYPE.name + ' Application'" [stepControl]="fb.group({name: ['restitutionInformation']})" [hasError]="!isMyControlValid(form.get('restitutionInformation'))"></mat-step>
+                        <mat-step label="Review & Submit"></mat-step>
+                    </mat-vertical-stepper>
+
+
+                    <div class="submit-container learn-benefits">
+                        <div class="submit-content">
+                            <h2>Restitution Program Contact Information</h2>
+                            <p>
+                                Restitution Program<br />
+                                Ministry of Public Safety & Solicitor General<br />
+                                PO Box 5550 Station Terminal<br />
+                                Vancouver, B.C. V6B 1H1
+                            </p>
+                            <p>
+                                <strong>Lower Mainland:</strong> 604-660-4898<br />
+                                <strong>Toll Free:</strong> 1-844-660-4898<br />
+                                <strong>Fax:</strong> 604-660-5340
+                            </p>
+                            <p>
+                                <strong>Email: </strong><a href="mailto: restitution@gov.bc.ca" class="white-link">restitution@gov.bc.ca</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="pdfPrintGroup" class="col-lg-7 col-sm-12">
+            <form [formGroup]="form">
+                <div *ngIf="isIE" class="alert alert-danger warning-message">
+                    <p>It looks like you are using an unsupported browser.</p>
+                    <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
+                </div>
+
+                <!-- <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == PAGES.OVERVIEW || showPrintView"></app-introduction> -->
+                <app-restitution-overview [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == PAGES.OVERVIEW || showPrintView"></app-restitution-overview>
+
+                <div class="pagebreak"> </div>
+                <app-restitution-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="restitutionInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == PAGES.RESTITUTION_INFORMATION || showPrintView"></app-restitution-information>
+
+                <!--<div class="pagebreak"> </div>
+                <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 2 || showPrintView"></app-crime-information> -->
+
+
+                <div *ngIf="showValidationMessage" class="error-summary">
+                    <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+                    <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
+                </div>
+
+                <section class="button-container" *ngIf="!showPrintView">
+                    <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+                    <span class="right-buttons">
+                        <button (click)="gotoNextStep(stepper);" class="btn btn-primary continue-btn" *ngIf="stepper.selectedIndex < PAGES.REVIEW">CONTINUE <i class="fas fa-chevron-right"></i></button>
+                        <div class="left-buttons download-grid" [class.disabled-wrapper]="submitting">
+                            <button (click)="printApplication();" class="btn btn-primary print-button" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
+                        </div>
+                        <div class="submit-grid" [class.disabled-wrapper]="submitting">
+                            <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == PAGES.REVIEW">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </span>
+                </section>
+            </form>
+        </div>
+    </div>
+
+</div>
