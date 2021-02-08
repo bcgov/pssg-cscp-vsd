@@ -1,6 +1,7 @@
 using Gov.Cscp.VictimServices.Public.Models;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
+using System.Net;
 using System.Threading.Tasks;
 using System;
 
@@ -31,7 +32,8 @@ namespace Gov.Cscp.VictimServices.Public.Services
         private async Task<AEMResult> AEMResultAsync(string requestJson)
         {
             string endpointUrl = _configuration["AEM_INTERFACE_URI"];
-            if (String.IsNullOrEmpty(endpointUrl)) {
+            if (String.IsNullOrEmpty(endpointUrl))
+            {
                 AEMResult failResult = new AEMResult();
                 failResult.responseCode = System.Net.HttpStatusCode.InternalServerError;
                 failResult.responseMessage = "No AEM_INTERFACE_URI found. Verify project secrets are configured correctly.";
@@ -45,7 +47,8 @@ namespace Gov.Cscp.VictimServices.Public.Services
             HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
             _httpRequest.Content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
 
-            HttpResponseMessage _httpResponse = await _client.SendAsync(_httpRequest);
+            var _httpResponse = await _client.SendAsync(_httpRequest);
+            Console.WriteLine("Got response...");
 
             AEMResult result = await _httpResponse.Content.ReadAsAsync<AEMResult>();
             Console.WriteLine(result);
