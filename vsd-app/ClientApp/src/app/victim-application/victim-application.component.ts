@@ -294,7 +294,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         else {
           reject(res);
         }
-      });
+      },
+        (err) => {
+          reject(err);
+          console.log(err);
+        });
     });
   }
 
@@ -311,7 +315,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         else {
           reject(res);
         }
-      });
+      },
+        (err) => {
+          reject(err);
+          console.log(err);
+        });
     });
   }
 

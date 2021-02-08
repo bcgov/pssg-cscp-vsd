@@ -354,7 +354,11 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         else {
           reject(res);
         }
-      });
+      },
+        (err) => {
+          reject(err);
+          console.log(err);
+        });
     });
   }
 
@@ -371,7 +375,11 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         else {
           reject(res);
         }
-      });
+      },
+        (err) => {
+          reject(err);
+          console.log(err);
+        });
     });
   }
 
