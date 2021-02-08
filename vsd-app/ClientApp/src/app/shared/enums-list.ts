@@ -166,6 +166,11 @@ export class EnumHelper {
   }
 }
 
+export const ResitutionForm = {
+  Victim:   <IOptionSetVal> { val: 100000002, name: "Victim Restitution" },
+  Offender: <IOptionSetVal> { val: 100000003, name: "Offender Restitution" },
+};
+
 export enum CRMBoolean {
   True = 100000001,
   False = 100000000,
@@ -179,11 +184,17 @@ export enum CRMMultiBoolean {
 export enum ApplicationType {
   Victim_Application = 100000002,
   IFM_Application = 100000001,
-  Witness_Application = 100000000
+  Witness_Application = 100000000,
+  Offender_Application = 100000003,
 }
 
 export enum OnBehalfOf {
   Myself = 100000000,
   Parent = 100000002,
   Legal_Guardian = 100000003
+}
+
+export interface IOptionSetVal {
+  name: string;
+  val: number;
 }

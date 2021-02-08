@@ -1,8 +1,17 @@
+import { EnumHelper } from './enums-list';
+import { MatStepper } from '@angular/material';
 import { ValidatorFn, ValidationErrors, AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
+import * as _ from 'lodash';
 import * as _moment from 'moment';
 
 export class FormBase {
   form: FormGroup;
+  today = new Date();
+  oldestHuman = new Date(this.today.getFullYear() - 120, this.today.getMonth(), this.today.getDay());
+  enum = new EnumHelper();
+  showValidationMessage: boolean = false;
+  public currentFormStep: number = 0;
+  max_selected_index: number = 0;
 
   isFieldValid(field: string, disabled: boolean = false) {
     if (disabled === true) return true;
@@ -19,7 +28,7 @@ export class FormBase {
   }
 
   isMyControlValid(control: AbstractControl) {
-    return control.valid || !control.touched;
+    return control.valid || !control.touched || control.disabled;
   }
 
   validateSIN(sin, isRequired) {
@@ -464,6 +473,69 @@ export class FormBase {
     const value = control.value;
     control.setValue('');
     control.setValue(value.trim());
+  }
+
+  markAsTouched() {
+    this.form.markAsTouched();
+  }
+
+  gotoPage(selectPage: MatStepper): void {
+    console.log("goto page");
+    console.log(this.form);
+    window.scroll(0, 0);
+    this.showValidationMessage = false;
+    this.currentFormStep = selectPage.selectedIndex;
+    if (this.currentFormStep > this.max_selected_index) this.max_selected_index = this.currentFormStep;
+  }
+
+  gotoNextStep(stepper: MatStepper, emptyPage?: boolean): void {
+    if (stepper) {
+      const desiredFormIndex: number = stepper.selectedIndex;
+      const step_header = stepper._stepHeader.find(step => step.index == desiredFormIndex);
+      const step_label = step_header ? step_header.label : "";
+      const this_step = stepper._steps.find(step => step.label == step_label);
+      if (this_step) {
+        const formGroupName = this_step.stepControl.get("name").value;
+        console.log(`Form for validation is ${formGroupName}.`);
+        const formParts = this.form.get(formGroupName);
+        console.log(this.form);
+
+        let formValid = true;
+
+        if (formParts != null) {
+          formValid = formParts.valid;
+          console.log(_.cloneDeep(formParts));
+        } else {
+          alert('That was a null form. Nothing to validate');
+        }
+
+        if (emptyPage != null) {
+          if (emptyPage == true) {
+            formValid = true;
+          }
+        }
+
+        if (formValid) {
+          console.log('Form is valid so proceeding to next step.');
+          this.showValidationMessage = false;
+          window.scroll(0, 0);
+          stepper.next();
+        } else {
+          console.log('Form is not valid rerun the validation and show the validation message.');
+          this.validateAllFormFields(formParts);
+          this.showValidationMessage = true;
+        }
+      }
+    }
+  }
+
+  gotoPreviousStep(stepper: MatStepper): void {
+    if (stepper) {
+      console.log('Going back a step');
+      this.showValidationMessage = false;
+      window.scroll(0, 0);
+      stepper.previous();
+    }
   }
 
   copyPersonalContactInfoToVictim(form: FormGroup | FormArray) {

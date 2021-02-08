@@ -34,9 +34,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   postalRegex = POSTAL_CODE;
   currentUser: User;
   dataLoaded = false;
-  busy: Subscription;
-  busy2: Promise<any>;
-  busy3: Promise<any>;
+  submitting: boolean = false;
 
   form: FormGroup;
   enumHelper = new EnumHelper();
@@ -270,6 +268,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   submitInvoice() {
     this.formSubmitted = true;
     if (this.form.valid) {
+      this.submitting = true;
       this.formFullyValidated = true;
       const formData = <CounsellorInvoice>{
         InvoiceDetails: this.form.get('invoiceDetails').value,
@@ -281,6 +280,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
         this.save(formData).subscribe(
           data => {
+            this.submitting = false;
             if (data['IsSuccess'] == true) {
               this.invoiceSuccess();
             }
@@ -293,6 +293,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
             }
           },
           error => {
+            this.submitting = false;
             this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting invoice');
             if (this.isIE) {
@@ -301,12 +302,10 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
           },
           () => { }
         );
-
+      }).catch(err => {
+        this.submitting = false;
+        console.log(err);
       });
-
-
-
-
     } else {
       console.log("form not validated");
       this.formFullyValidated = false;
@@ -317,7 +316,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   submitAndCreateNew() {
     //first submit, then
     if (this.form.valid) {
-
+      this.submitting = true;
       this.formFullyValidated = true;
       const formData = <CounsellorInvoice>{
         InvoiceDetails: this.form.get('invoiceDetails').value,
@@ -329,6 +328,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
         this.save(formData).subscribe(
           data => {
+            this.submitting = false;
             if (data['IsSuccess'] == true) {
               this.invoiceEdit();
               this.cloneInvoice(_.cloneDeep(this.form));
@@ -342,6 +342,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
             }
           },
           error => {
+            this.submitting = false;
             this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
             console.log('Error submitting invoice');
             if (this.isIE) {
@@ -351,46 +352,25 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
           () => { }
         );
 
+      }).catch(err => {
+        this.submitting = false;
+        console.log(err);
       });
-
-
-      // const formData = <CounsellorInvoice>{
-      //   InvoiceDetails: this.form.get('invoiceDetails').value,
-      // };
-      // formData.InvoiceDetails.exemptFromGst = !formData.InvoiceDetails.gstApplicable;
-      // this.busy = this.justiceDataService.submitCounsellorInvoice(formData).subscribe(
-      //   data => {
-      //     if (data['IsSuccess'] == true) {
-      //       this.invoiceEdit();
-      //       this.cloneInvoice(_.cloneDeep(this.form));
-      //     }
-      //     else {
-      //       this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-      //       console.log('Error submitting invoice. ' + data['message']);
-      //     }
-      //   },
-      //   error => {
-      //     this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-      //     console.log('Error submitting invoice');
-      //   },
-      //   () => { }
-      // );
     } else {
       console.log("form not validated");
       this.formFullyValidated = false;
       this.markAsTouched();
     }
-    // window.scroll(0, 0);
   }
 
   save(formData: CounsellorInvoice): Subject<{}> {
     const subResult = new Subject<{}>();
 
-    this.busy = this.justiceDataService.submitCounsellorInvoice(formData)
+    this.justiceDataService.submitCounsellorInvoice(formData)
       .subscribe(res => {
         subResult.next(res);
       }, err => subResult.next(false));
-    this.busy2 = Promise.resolve(this.busy);
+
 
     return subResult;
   }

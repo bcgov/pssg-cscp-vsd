@@ -45,6 +45,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
   postalRegex = POSTAL_CODE;
   currentUser: User;
   dataLoaded = false;
+  submitting: boolean = false;
   busy: Promise<any>;
   busy2: Promise<any>;
   busy3: Promise<any>;
@@ -75,7 +76,7 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
-    private fb: FormBuilder,
+    public fb: FormBuilder,
     // private router: Router,
     // private route: ActivatedRoute,
     public snackBar: MatSnackBar,
@@ -247,38 +248,38 @@ export class VictimRestitutionComponent extends FormBase implements OnInit, CanD
     this.currentFormStep = selectPage;
   }
 
-  gotoPage(selectPage: MatStepper): void {
-    window.scroll(0, 0);
-    this.showValidationMessage = false;
-    this.currentFormStep = selectPage.selectedIndex;
-  }
+  // gotoPage(selectPage: MatStepper): void {
+  //   window.scroll(0, 0);
+  //   this.showValidationMessage = false;
+  //   this.currentFormStep = selectPage.selectedIndex;
+  // }
 
-  gotoNextStep(stepper: MatStepper): void {
-    if (stepper != null) {
-      let desiredFormIndex = stepper.selectedIndex;
-      let formGroupName = this.getFormGroupName(desiredFormIndex);
+  // gotoNextStep(stepper: MatStepper): void {
+  //   if (stepper != null) {
+  //     let desiredFormIndex = stepper.selectedIndex;
+  //     let formGroupName = this.getFormGroupName(desiredFormIndex);
 
-      this.formFullyValidated = this.form.valid;
+  //     this.formFullyValidated = this.form.valid;
 
-      if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
-        let formParts = this.form.get(formGroupName);
-        let formValid = true;
+  //     if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
+  //       let formParts = this.form.get(formGroupName);
+  //       let formValid = true;
 
-        if (formParts != null) {
-          formValid = formParts.valid;
-        }
+  //       if (formParts != null) {
+  //         formValid = formParts.valid;
+  //       }
 
-        if (formValid) {
-          this.showValidationMessage = false;
-          window.scroll(0, 0);
-          stepper.next();
-        } else {
-          this.validateAllFormFields(formParts);
-          this.showValidationMessage = true;
-        }
-      }
-    }
-  }
+  //       if (formValid) {
+  //         this.showValidationMessage = false;
+  //         window.scroll(0, 0);
+  //         stepper.next();
+  //       } else {
+  //         this.validateAllFormFields(formParts);
+  //         this.showValidationMessage = true;
+  //       }
+  //     }
+  //   }
+  // }
 
   addCourtInfo(): void {
     this.courtFileItems = this.form.get('restitutionInformation.courtFiles') as FormArray;

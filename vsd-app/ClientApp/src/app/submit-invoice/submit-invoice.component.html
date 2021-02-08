@@ -1,5 +1,7 @@
-<div class="form-wrapper" style="position: relative;">
-  <div [ngBusy]="[busy, busy2]"></div>
+<div class="form-wrapper" style="position: relative;" [class.dark-overlay]="submitting">
+  <div class="loading-indicator" *ngIf="submitting">
+    <mat-spinner mode="indeterminate"></mat-spinner>
+  </div>
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter" *ngIf="!showPrintView">
 
@@ -420,8 +422,8 @@
         <section class="button-container" *ngIf="!showPrintView">
           <a [routerLink]="" (click)="showCancelDialog()"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Invoice</a>
           <span style="float: right;">
-            <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary">SUBMIT INVOICE AND EXIT <i class="fas fa-chevron-right"></i></button>
-            <button (click)="submitAndCreateNew()" class="btn btn-primary ml-2">SUBMIT AND CREATE A NEW INVOICE <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='submitToolTip'><i class='fa fa-info-circle white-icon'> </i></span><i class="fas fa-chevron-right"></i></button>
+            <button (click)="markAsTouched(); submitInvoice();" class="btn btn-primary" [class.is-disabled]="submitting">SUBMIT INVOICE AND EXIT <i class="fas fa-chevron-right"></i></button>
+            <button (click)="submitAndCreateNew()" class="btn btn-primary ml-2" [class.is-disabled]="submitting">SUBMIT AND CREATE A NEW INVOICE <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='submitToolTip'><i class='fa fa-info-circle white-icon'> </i></span><i class="fas fa-chevron-right"></i></button>
             <ng-template #submitToolTip>
               <p>Some information (Payee, Counselor, Submitted) will be auto-populated and are editable if needed.</p>
             </ng-template>

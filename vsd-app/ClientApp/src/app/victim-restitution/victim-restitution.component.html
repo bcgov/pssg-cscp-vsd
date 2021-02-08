@@ -1,39 +1,46 @@
 <div class="form-wrapper" style="position: relative;">
-  <div [ngBusy]="[busy, busy2]"></div>
+  <div class="loading-indicator" *ngIf="submitting">
+    <mat-spinner mode="indeterminate"></mat-spinner>
+  </div>
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter">
-      <section [ngClass]="currentPanel === 'form' ? 'application-nav' : 'application-nav application-nav-hidden'">
-        <h3>Victim Restitution Application</h3>
-        <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper>
-          <ng-template matStepperIcon="edit">
-            <i class="fa fa-check"></i>
-          </ng-template>
-          <ng-template matStepperIcon="number">
-          </ng-template>
-          <mat-step label="Overview"></mat-step>
-          <mat-step label="Victim Restitution Application"></mat-step>
-          <mat-step label="Review & Submit"></mat-step>
-        </mat-vertical-stepper>
-      </section>
+      <h3>Victim Restitution Application</h3>
+      <section class="application-nav sticky-top">
+        <div>
+          <mat-vertical-stepper linear (selectionChange)="gotoPage($event)" #stepper [class.disabled-stepper]="submitting">
+            <ng-template matStepperIcon="edit">
+              <i class="fa fa-check"></i>
+            </ng-template>
+            <ng-template matStepperIcon="error">
+              <i class="fa fa-times"></i>
+            </ng-template>
+            <ng-template matStepperIcon="number">
+            </ng-template>
 
-      <section class="submit-container learn-benefits">
-        <div class="submit-content">
-          <h2>Restitution Program Contact Information</h2>
-          <p>
-            Restitution Program<br />
-            Ministry of Public Safety & Solicitor General<br />
-            PO Box 5550 Station Terminal<br />
-            Vancouver, B.C. V6B 1H1
-          </p>
-          <p>
-            <strong>Lower Mainland:</strong> 604-660-4898<br />
-            <strong>Toll Free:</strong> 1-844-660-4898<br />
-            <strong>Fax:</strong> 604-660-5340
-          </p>
-          <p>
-            <strong>Email:</strong><br />
-            <a href="mailto: restitution@gov.bc.ca">restitution@gov.bc.ca</a>
-          </p>
+            <mat-step label="Overview" [stepControl]="fb.group({name: ['introduction']})" [hasError]="!isMyControlValid(form.get('introduction'))"></mat-step>
+            <mat-step label="Victim Restitution Application" [stepControl]="fb.group({name: ['restitutionInformation']})" [hasError]="!isMyControlValid(form.get('restitutionInformation'))"></mat-step>
+            <mat-step label="Review & Submit"></mat-step>
+          </mat-vertical-stepper>
+
+          <div class="submit-container learn-benefits">
+            <div class="submit-content">
+              <h2>Restitution Program Contact Information</h2>
+              <p>
+                Restitution Program<br />
+                Ministry of Public Safety & Solicitor General<br />
+                PO Box 5550 Station Terminal<br />
+                Vancouver, B.C. V6B 1H1
+              </p>
+              <p>
+                <strong>Lower Mainland:</strong> 604-660-4898<br />
+                <strong>Toll Free:</strong> 1-844-660-4898<br />
+                <strong>Fax:</strong> 604-660-5340
+              </p>
+              <p>
+                <strong>Email: </strong><a href="mailto: restitution@gov.bc.ca" class="white-link">restitution@gov.bc.ca</a>
+              </p>
+            </div>
+          </div>
         </div>
       </section>
     </div>
