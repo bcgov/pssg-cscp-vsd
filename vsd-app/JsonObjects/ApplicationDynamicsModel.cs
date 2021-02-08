@@ -11,6 +11,19 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public Documentcollection[] DocumentCollection { get; set; }
     }
 
+    public enum CRMBoolean
+    {
+        True = 100000001,
+        False = 100000000,
+    }
+
+    public enum CRMMultiBoolean
+    {
+        True = 100000000,
+        False = 100000001,
+        Undecided = 100000002
+    }
+
     public class Application
     {
         public string odatatype => "Microsoft.Dynamics.CRM.vsd_application";
@@ -86,6 +99,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_crimedetails { get; set; }
         public string vsd_cvap_injuries { get; set; }
 
+        public int? vsd_cvap_multipleaccused { get; set; }
         public int? vsd_cvap_reporttopolice { get; set; }
         public string vsd_cvap_crimereportedto { get; set; }
 
