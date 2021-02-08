@@ -426,7 +426,11 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         else {
           reject(res);
         }
-      });
+      },
+        (err) => {
+          reject(err);
+          console.log(err);
+        });
     });
   }
 
