@@ -244,8 +244,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     }).ToArray();
                 }
 
-                //TODO - add info for new COAST field once we have details
-                // application.Application. = model.CrimeInformation.moreThanOneOffender;
+                application.Application.vsd_cvap_multipleaccused = model.CrimeInformation.moreThanOneOffender ? (int)CRMBoolean.True : (int)CRMBoolean.False;
 
                 if (!string.IsNullOrEmpty(model.CrimeInformation.offenderFirstName) || !string.IsNullOrEmpty(model.CrimeInformation.offenderMiddleName) || !string.IsNullOrEmpty(model.CrimeInformation.offenderLastName) || !string.IsNullOrEmpty(model.CrimeInformation.offenderRelationship))
                 {
