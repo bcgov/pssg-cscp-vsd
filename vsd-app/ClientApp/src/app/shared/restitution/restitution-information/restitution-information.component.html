@@ -1,0 +1,155 @@
+<div [formGroup]="form">
+    <div class="page-header">
+        <h1>{{page_header}}</h1>
+    </div>
+
+    <p *ngIf="formType.val === ResitutionForm.Offender.val">
+        To apply to the Restitution Program, please complete and sign this application form, then review and submit it.<br />
+        A Restitution caseworker will be in touch with you regarding the next steps.
+    </p>
+
+    <h2 class="blue-header">{{applicant_type}} Information</h2>
+    <h3>{{applicant_type}} Information</h3>
+
+    <div class="row">
+        <div class="col-md-4">
+            <app-field [label]="applicant_type + ' First Name'" [required]="true" [valid]="isFieldValid('firstName')" errorMessage="Please enter your first name" [disabled]="isDisabled">
+                <input class="form-control" type="text" formControlName="firstName" maxlength="100">
+            </app-field>
+        </div>
+        <div class="col-md-4">
+            <app-field [label]="applicant_type + ' Middle Name'" [required]="false" [valid]="isFieldValid('middleName')" errorMessage="Please enter your middle name" [disabled]="isDisabled">
+                <input class="form-control" type="text" formControlName="middleName" maxlength="100">
+            </app-field>
+        </div>
+        <div class="col-md-4">
+            <app-field [label]="applicant_type + ' Last Name'" [required]="true" [valid]="isFieldValid('lastName')" errorMessage="Please enter your last name" [disabled]="isDisabled">
+                <input class="form-control" type="text" formControlName="lastName" maxlength="100">
+            </app-field>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 date-col">
+            <app-field label="Birth Date" [required]="true" [valid]="isMyControlValid(form.get('birthDate'))" errorMessage="Please enter your birth date" [disabled]="isDisabled">
+                <app-date-field [control]="form.get('birthDate')" [max]="today" [disabled]="isDisabled"></app-date-field>
+            </app-field>
+        </div>
+
+        <div class="col flex-col">
+            <app-field label="Gender" [required]="true" [valid]="isMyControlValid(form.get('gender'))" errorMessage="Please select your gender" [disabled]="isDisabled">
+                <label class="inline-label">
+                    <input type="radio" [value]="enum.CRMGender.Male.val" name="gender" formControlName="gender">
+                    <span>M</span>
+                </label>
+                <label class="inline-label">
+                    <input type="radio" [value]="enum.CRMGender.Female.val" name="gender" formControlName="gender">
+                    <span>F</span>
+                </label>
+                <label class="inline-label">
+                    <input type="radio" [value]="enum.CRMGender.X.val" name="gender" formControlName="gender">
+                    <span>X <app-tool-tip [trigger]="genderXToolTip"></app-tool-tip></span>
+                </label>
+            </app-field>
+        </div>
+        <ng-template #genderXToolTip>This category includes persons whose current gender was not reported exclusively as male or female. It includes persons who were reported as being unsure of their gender, persons who were reported as both male and female, or neither male nor female.</ng-template>
+    </div>
+
+    <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
+
+        <!-- add component for designate -->
+        <div class="row">
+            <div class="col-12">
+                <h3>Authorized Victim Designate</h3>
+                <p>Victims have the option of assigning a designate to communicate with the Restitution Program on their behalf.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <app-field label="Do you want to authorize someone to be a Victim Designate?" [required]="true" [valid]="isMyControlValid(form.get('authoriseVictimDesignate'))" errorMessage="Please make a selection" [disabled]="isDisabled">
+                    <label class="inline-label">
+                        <input type="radio" [value]="CRMBoolean.True" name="authoriseVictimDesignate" formControlName="authoriseVictimDesignate" (change)="authorizeDesignateChange()">
+                        <span>Yes</span>
+                    </label>
+                    <label class="inline-label">
+                        <input type="radio" [value]="CRMBoolean.False" name="authoriseVictimDesignate" formControlName="authoriseVictimDesignate" (change)="authorizeDesignateChange()">
+                        <span>No</span>
+                    </label>
+                </app-field>
+            </div>
+        </div>
+
+        <div formArrayName="designate" *ngFor="let item of form.get('designate')['controls']; let i = index;">
+            <div [formGroupName]="i" class="designate-info">
+                <div class="row">
+                    <div class="col-md-4">
+                        <app-field label="Authorized Designate First Name" [required]="true" [valid]="isMyControlValid(item.get('firstName'))" errorMessage="Please enter your designate's first name" [disabled]="isDisabled">
+                            <input class="form-control" type="text" formControlName="firstName" maxlength="100">
+                        </app-field>
+                    </div>
+                    <div class="col-md-4">
+                        <app-field label="Authorized Designate Middle Name" [required]="false" [valid]="isMyControlValid(item.get('middleName'))" errorMessage="Please enter your designate's middle name" [disabled]="isDisabled">
+                            <input class="form-control" type="text" formControlName="middleName" maxlength="100">
+                        </app-field>
+                    </div>
+                    <div class="col-md-4">
+                        <app-field label="Authorized Designate Last Name" [required]="true" [valid]="isMyControlValid(item.get('lastName'))" errorMessage="Please enter your designate's last name" [disabled]="isDisabled">
+                            <input class="form-control" type="text" formControlName="lastName" maxlength="100">
+                        </app-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label class="inline-label inline-checkbox-label">
+                            <input type="checkbox" [value]="true" name="actOnBehalf" formControlName="actOnBehalf">
+                            <span>I hereby authorize to act on my behalf for the purposes of involvement with the Restitution Program which includes personal information pertaining to me.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <app-restitution-contact-information [formGroup]="form.get('contactInformation')" [formType]="formType" [lookupData]="lookupData" formGroupName="contactInformation" [isDisabled]="isDisabled"></app-restitution-contact-information>
+
+    <ng-container *ngIf="formType.val === ResitutionForm.Offender.val">
+        <h2 class="blue-header">Correctional</h2>
+
+        <!-- add page/component for probationOfficer... -->
+
+        <div formGroupName="probationOfficer" class="court-info">
+            <div class="row">
+                <div class="col-md-6">
+                    <app-field label="Parole/Probation Officer First Name" [valid]="isMyControlValid(form.get('probationOfficer.firstName'))" errorMessage="Please enter your officer's first name" [disabled]="isDisabled">
+                        <input class="form-control" type="text" formControlName="firstName" maxlength="100">
+                    </app-field>
+                </div>
+                <div class="col-md-6">
+                    <app-field label="Parole/Probation Officer Last Name" [valid]="isMyControlValid(form.get('probationOfficer.lastName'))" errorMessage="Please enter your officer's last name" [disabled]="isDisabled">
+                        <input class="form-control" type="text" formControlName="lastName" maxlength="100">
+                    </app-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <app-field label="Custody Location (if applicable)" [valid]="isMyControlValid(form.get('probationOfficer.custodyLocation'))" errorMessage="Please enter your officer's last name" [disabled]="isDisabled">
+                        <input class="form-control" type="text" formControlName="custodyLocation" maxlength="100">
+                    </app-field>
+                </div>
+                <div class="col-md-6">
+                    <app-field label="Phone Number" [valid]="isMyControlValid(form.get('probationOfficer.phoneNumber'))" errorMessage="Please enter your officer's phone number" [disabled]="isDisabled">
+                        <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber">
+                    </app-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <app-field label="Email Address" [valid]="isMyControlValid(form.get('probationOfficer.email'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
+                        <input class="form-control" type="text" formControlName="email" maxlength="100">
+                    </app-field>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

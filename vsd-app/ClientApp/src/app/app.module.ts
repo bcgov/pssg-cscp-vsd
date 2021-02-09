@@ -87,7 +87,7 @@ import { PersonalInformationComponent } from './shared/personal-information/pers
 import { PhonePipe } from './pipes/phone.pipe';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
 import { RepresentativeInformationComponent } from './shared/representative-information/representative-information.component';
-import { RestitutionProgramComponent } from './restitution-program/restitution-program.component';
+import { RestitutionApplicationComponent } from './restitution-application/restitution-application.component';
 import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { StateService } from './services/state.service';
@@ -106,8 +106,9 @@ import { VictimInformationComponent } from './shared/victim-information/victim-i
 import { VictimRestitutionComponent } from './victim-restitution/victim-restitution.component';
 import { VictimRestitutionReviewComponent } from './victim-restitution/victim-restitution-review.component';
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
-import { RestitutionOverviewComponent } from './shared/restitution-overview/restitution-overview.component';
-import { RestitutionInformationComponent } from './shared/restitution-information/restitution-information.component';
+import { RestitutionOverviewComponent } from './shared/restitution/restitution-overview/restitution-overview.component';
+import { RestitutionInformationComponent } from './shared/restitution/restitution-information/restitution-information.component';
+import { RestitutionContactInformationComponent } from './shared/restitution/contact-information/contact-information.component';
 
 @NgModule({
   declarations: [
@@ -147,9 +148,10 @@ import { RestitutionInformationComponent } from './shared/restitution-informatio
     PhonePipe,
     QuickExitComponent,
     RepresentativeInformationComponent,
+    RestitutionContactInformationComponent,
     RestitutionInformationComponent,
     RestitutionOverviewComponent,
-    RestitutionProgramComponent,
+    RestitutionApplicationComponent,
     SignPadDialog,
     StaticComponent,
     SubmitInvoiceComponent,

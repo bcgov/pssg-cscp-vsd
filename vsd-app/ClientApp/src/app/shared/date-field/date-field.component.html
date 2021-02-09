@@ -1,12 +1,12 @@
-<div class="date-container">
+<div class="date-container" [class.disabled-cursor]="disabled">
   <div class="day-container">
-    <select class="form-control day-drop-down" (change)="output()" [(ngModel)]="day">
+    <select class="form-control day-drop-down" (change)="output()" [(ngModel)]="day" [class.is-disabled]="disabled">
       <option [value]="0">Day</option>
       <option *ngFor="let item of dayList" [value]="item">{{item}}</option>
     </select>
   </div>
   <div class="month-container">
-    <select class="form-control month-drop-down" (change)="output()" [(ngModel)]="month">
+    <select class="form-control month-drop-down" (change)="output()" [(ngModel)]="month" [class.is-disabled]="disabled">
       <option [value]="-1">Month</option>
       <option [value]="0">January</option>
       <option [value]="1">February</option>
@@ -23,7 +23,7 @@
     </select>
   </div>
   <div class="year-container">
-    <select class="form-control year-drop-down" (change)="output()" [(ngModel)]="year">
+    <select class="form-control year-drop-down" (change)="output()" [(ngModel)]="year" [class.is-disabled]="disabled">
       <option [value]="0">Year</option>
       <option *ngFor="let item of yearList" [value]="item">{{item}}</option>
     </select>

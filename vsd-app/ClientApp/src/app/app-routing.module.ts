@@ -12,7 +12,7 @@ import { ApplicationSuccessComponent } from './application-success/application-s
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { TestComponent } from './test/test.component';
-import { RestitutionProgramComponent } from './restitution-program/restitution-program.component';
+import { RestitutionApplicationComponent } from './restitution-application/restitution-application.component';
 import { ApplicationType, EnumHelper, ResitutionForm } from './shared/enums-list';
 
 const routes: Routes = [
@@ -42,15 +42,25 @@ const routes: Routes = [
   },
   {
     path: 'victim-restitution',
-    component: RestitutionProgramComponent,
+    component: RestitutionApplicationComponent,
     data: { formType: ResitutionForm.Victim }
     //canDeactivate: [CanDeactivateGuard]
   },
   {
     path: 'offender-restitution',
     // component: OffenderRestitutionComponent,
-    component: RestitutionProgramComponent,
+    component: RestitutionApplicationComponent,
     data: { formType: ResitutionForm.Offender }
+    //canDeactivate: [CanDeactivateGuard]
+  },
+  {
+    path: 'victim-restitution-old',
+    component: VictimRestitutionComponent,
+    //canDeactivate: [CanDeactivateGuard]
+  },
+  {
+    path: 'offender-restitution-old',
+    component: OffenderRestitutionComponent,
     //canDeactivate: [CanDeactivateGuard]
   },
   {

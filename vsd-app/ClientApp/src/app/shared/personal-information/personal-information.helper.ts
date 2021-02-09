@@ -31,14 +31,11 @@ export class PersonalInfoHelper {
             leaveVoicemail: [0],
             alternatePhoneNumber: [''],
 
-            // email: [''],
-            // confirmEmail: [''],
             email: ['', [Validators.email]],
             confirmEmail: ['', [
                 Validators.email,
                 EmailValidator('email')
             ]],
-
 
             doNotLiveAtAddress: [false],
             mailRecipient: [''],

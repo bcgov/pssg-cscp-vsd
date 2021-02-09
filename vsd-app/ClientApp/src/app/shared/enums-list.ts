@@ -164,6 +164,18 @@ export class EnumHelper {
     100000001: 'Court Supporting Counselling',
     100000002: 'Psycho-educational sessions',
   }
+
+  public CRMGender = {
+    Male:   <IOptionSetVal> { val: 100000000, name: "M" },
+    Female: <IOptionSetVal> { val: 100000001, name: "F" },
+    X:      <IOptionSetVal> { val: 100000002, name: "X" },
+  }
+
+  public ContactMethods = {
+    Phone:  <IOptionSetVal> { val: 2, name: "Phone Call" },
+    Email:  <IOptionSetVal> { val: 1, name: "Email" },
+    Mail:   <IOptionSetVal> { val: 4, name: "Mail" },
+  }
 }
 
 export const ResitutionForm = {

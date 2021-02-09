@@ -10,7 +10,7 @@ import { JusticeApplicationDataService } from '../services/justice-application-d
 import { LookupService } from '../services/lookup.service';
 import { MatSnackBar, MatDialog, MatVerticalStepper } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { RestitutionInfoHelper } from '../shared/restitution-information/restitution-information.helper';
+import { RestitutionInfoHelper } from '../shared/restitution/restitution-information/restitution-information.helper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { StateService } from '../services/state.service';
 import { config } from '../../config';
@@ -24,16 +24,16 @@ enum PAGES {
 }
 
 @Component({
-    selector: 'app-restitution-program',
-    templateUrl: './restitution-program.component.html',
-    styleUrls: ['./restitution-program.component.scss'],
+    selector: 'app-restitution-application',
+    templateUrl: './restitution-application.component.html',
+    styleUrls: ['./restitution-application.component.scss'],
     providers: [
         { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
         { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } },
     ],
 })
-export class RestitutionProgramComponent extends FormBase implements OnInit {
+export class RestitutionApplicationComponent extends FormBase implements OnInit {
     @ViewChild('stepper') restitutionStepper: MatVerticalStepper;
     FORM_TYPE: IOptionSetVal = { val: -1, name: '' };
     ApplicationType = ApplicationType;
@@ -115,8 +115,8 @@ export class RestitutionProgramComponent extends FormBase implements OnInit {
 
         Promise.all(promise_array).then((res) => {
             this.didLoad = true;
-            // console.log("Lookup data");
-            // console.log(this.lookupData);
+            console.log("Lookup data");
+            console.log(this.lookupData);
         });
     }
 

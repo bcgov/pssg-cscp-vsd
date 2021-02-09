@@ -1,6 +1,7 @@
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { IOptionSetVal, ResitutionForm } from "../enums-list";
-import { POSTAL_CODE } from "../regex.constants";
+import { IOptionSetVal, ResitutionForm } from "../../enums-list";
+import { POSTAL_CODE } from "../../regex.constants";
+import { EmailValidator } from "../../validators/email.validator";
 
 export class RestitutionInfoHelper {
     postalRegex = POSTAL_CODE;
@@ -12,21 +13,28 @@ export class RestitutionInfoHelper {
             gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
             birthDate: ['', [Validators.required]],
 
-            preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(100000002)]], // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
+            contactInformation: fb.group({
+                preferredMethodOfContact: [null, [Validators.required, Validators.min(1), Validators.max(100000002)]], // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
 
-            mailingAddress: fb.group({
-                line1: ['', [Validators.required]],
-                line2: [''],
-                city: ['', [Validators.required]],
-                postalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
-                province: [{ value: 'British Columbia', disabled: false }, [Validators.required]],
-                country: [{ value: 'Canada', disabled: false }, [Validators.required]],
+                mailingAddress: fb.group({
+                    line1: ['', [Validators.required]],
+                    line2: [''],
+                    city: ['', [Validators.required]],
+                    postalCode: ['', [Validators.required, Validators.pattern(this.postalRegex)]],
+                    province: [{ value: 'British Columbia', disabled: false }, [Validators.required]],
+                    country: [{ value: 'Canada', disabled: false }, [Validators.required]],
+                }),
+
+                phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
+                alternatePhoneNumber: [''],
+                email: ['', [Validators.email]],
+                confirmEmail: ['', [
+                    Validators.email,
+                    EmailValidator('email')
+                ]],
+                leaveMessage: [''],
             }),
 
-            phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
-            alternatePhoneNumber: [''],
-            email: ['', [Validators.email]],
-            permissionToLeaveDetailedMessage: [''],
 
             courtFiles: fb.array([this.createCourtFile(fb)]),
 
@@ -40,6 +48,16 @@ export class RestitutionInfoHelper {
             group["authoriseVictimDesignate"] = ['', Validators.required];
             group["designate"] = fb.array([]);
             group["vsw"] = fb.array([this.createVSW(fb)]);
+        }
+
+        if (form_type.val === ResitutionForm.Offender.val) {
+            group["probationOfficer"] = fb.group({
+                firstName: [''],
+                lastName: [''],
+                custodyLocation: [''],
+                phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
+                email: ['', [Validators.email]],
+            });
         }
 
         return fb.group(group);
@@ -61,7 +79,7 @@ export class RestitutionInfoHelper {
             firstName: ['', [Validators.required]],
             middleName: [''],
             lastName: ['', [Validators.required]],
-            actOnBehalf: [''],
+            actOnBehalf: [false],
         });
     }
 

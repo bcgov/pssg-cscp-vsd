@@ -1,12 +1,13 @@
-import { FormBase } from "../form-base";
+import { FormBase } from "../../form-base";
 import { OnInit, Component, Input } from "@angular/core";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog } from "@angular/material";
-import { FormGroup, ControlContainer } from "@angular/forms";
+import { FormGroup, ControlContainer, FormArray, FormBuilder } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, IOptionSetVal, ResitutionForm } from "../enums-list";
-import { iLookupData } from "../../models/lookup-data.model";
-import { POSTAL_CODE } from "../regex.constants";
-import { AddressHelper } from "../address/address.helper";
+import { MY_FORMATS, IOptionSetVal, ResitutionForm, CRMBoolean } from "../../enums-list";
+import { iLookupData } from "../../../models/lookup-data.model";
+import { POSTAL_CODE } from "../../regex.constants";
+import { AddressHelper } from "../../address/address.helper";
+import { RestitutionInfoHelper } from "./restitution-information.helper";
 
 @Component({
     selector: 'app-restitution-information',
@@ -20,9 +21,11 @@ import { AddressHelper } from "../address/address.helper";
 export class RestitutionInformationComponent extends FormBase implements OnInit {
     @Input() formType: IOptionSetVal;
     @Input() lookupData: iLookupData;
+    @Input() isDisabled: boolean;
     public form: FormGroup;
     ResitutionForm = ResitutionForm;
     postalRegex = POSTAL_CODE;
+    CRMBoolean = CRMBoolean;
 
     page_header: string = "";
     applicant_type: string = "";
@@ -33,9 +36,12 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
 
     isIE: boolean = false;
 
+    restitutionInfoHelper = new RestitutionInfoHelper();
+
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
+        private fb: FormBuilder,
     ) {
         super();
     }
@@ -46,8 +52,8 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
 
         this.form = <FormGroup>this.controlContainer.control;
         setTimeout(() => { this.form.markAsTouched(); }, 0);
-        // console.log("overview component");
-        // console.log(this.formType);
+        console.log("restitution info component");
+        console.log(this.form);
 
         if (this.formType.val === ResitutionForm.Victim.val) {
             this.page_header = "Victim Information & Addresses";
@@ -59,4 +65,28 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
         }
 
     }
+
+    authorizeDesignateChange() {
+        if (this.form.get("authoriseVictimDesignate").value === CRMBoolean.True) {
+            this.addDesignate();
+        }
+        else {
+            this.removeDesignate();
+        }
+    }
+
+    addDesignate() {
+        let designate = this.form.get('designate') as FormArray;
+        if (designate.length == 0) {
+            designate.push(this.restitutionInfoHelper.createDesignate(this.fb));
+        }
+    }
+
+    removeDesignate() {
+        let designate = this.form.get('designate') as FormArray;
+        while (designate.length > 0) {
+            designate.removeAt(0);
+        }
+    }
+
 }

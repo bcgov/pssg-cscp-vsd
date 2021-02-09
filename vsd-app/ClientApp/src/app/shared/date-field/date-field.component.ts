@@ -11,6 +11,7 @@ export class DateFieldComponent implements OnInit {
     @Input() control: AbstractControl;
     @Input() max: Date;
     @Input() min: Date;
+    @Input() disabled: boolean;
     dayList = [];
     yearList = [];
 
