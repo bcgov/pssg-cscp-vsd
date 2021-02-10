@@ -1,0 +1,41 @@
+<div [formGroup]="form">
+    <div class="page-header">
+        <h1>Review & Submit</h1>
+    </div>
+    <p>Please check the accuracy of the information entered in your application before submitting.</p>
+
+    <h2 class="blue-header">
+        {{applicant_type}} Information <span class="hide-for-print"><button (click)="gotoPageAndEdit(PAGES.RESTITUTION_INFORMATION, 'ApplicantInformation');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+    </h2>
+
+    <h2 class="blue-header">
+        Contact Information <span class="hide-for-print"><button (click)="gotoPageAndEdit(PAGES.RESTITUTION_INFORMATION, 'ContactInformation');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+    </h2>
+
+    <ng-container *ngIf="formType.val === ResitutionForm.Offender.val">
+        <h2 class="blue-header">
+            Correctional <span class="hide-for-print"><button (click)="gotoPageAndEdit(PAGES.RESTITUTION_INFORMATION, 'ProbationOfficerInformation');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
+
+    </ng-container>
+
+    <h2 class="blue-header">
+        Restitution Order Information <span class="hide-for-print"><button (click)="gotoPageAndEdit(PAGES.RESTITUTION_INFORMATION, 'CourtFileInformation');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+    </h2>
+
+    <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
+        <h2 class="blue-header">
+            Victim Service Worker <span class="hide-for-print"><button (click)="gotoPageAndEdit(PAGES.RESTITUTION_INFORMATION, 'VSWInformation');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+        </h2>
+
+    </ng-container>
+
+
+    <h2 class="blue-header">
+        Copy of Restitution Order <span class="hide-for-print"><button (click)="gotoPageAndEdit(PAGES.RESTITUTION_INFORMATION, 'DocumentInformation');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+    </h2>
+
+    <h2 class="blue-header">
+        Declaration <span class="hide-for-print"><button (click)="gotoPageAndEdit(PAGES.RESTITUTION_INFORMATION, 'SignatureInformation');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></span>
+    </h2>
+</div>

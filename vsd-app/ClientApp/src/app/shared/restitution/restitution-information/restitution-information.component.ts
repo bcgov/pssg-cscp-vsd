@@ -1,6 +1,6 @@
 import { FormBase } from "../../form-base";
 import { OnInit, Component, Input } from "@angular/core";
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog } from "@angular/material";
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDialogConfig } from "@angular/material";
 import { FormGroup, ControlContainer, FormArray, FormBuilder } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, IOptionSetVal, ResitutionForm, CRMBoolean } from "../../enums-list";
@@ -8,6 +8,7 @@ import { iLookupData } from "../../../models/lookup-data.model";
 import { POSTAL_CODE } from "../../regex.constants";
 import { AddressHelper } from "../../address/address.helper";
 import { RestitutionInfoHelper } from "./restitution-information.helper";
+import { SignPadDialog } from "../../../sign-dialog/sign-dialog.component";
 
 @Component({
     selector: 'app-restitution-information',
@@ -34,26 +35,21 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
     phoneMinLength: number = 10;
     phoneMaxLength: number = 15;
 
-    isIE: boolean = false;
-
     restitutionInfoHelper = new RestitutionInfoHelper();
 
     constructor(
         private controlContainer: ControlContainer,
-        private matDialog: MatDialog,
         private fb: FormBuilder,
+        private matDialog: MatDialog,
     ) {
         super();
     }
 
     ngOnInit() {
-        var ua = window.navigator.userAgent;
-        this.isIE = /MSIE|Trident/.test(ua);
-
         this.form = <FormGroup>this.controlContainer.control;
         setTimeout(() => { this.form.markAsTouched(); }, 0);
-        console.log("restitution info component");
-        console.log(this.form);
+        // console.log("restitution info component");
+        // console.log(this.form);
 
         if (this.formType.val === ResitutionForm.Victim.val) {
             this.page_header = "Victim Information & Addresses";
@@ -63,7 +59,6 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
             this.page_header = "Restitution Program Offender Application";
             this.applicant_type = "Offender";
         }
-
     }
 
     authorizeDesignateChange() {
@@ -89,4 +84,31 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
         }
     }
 
+    addCourtFile() {
+        let courtFiles = this.form.get('courtFiles') as FormArray;
+        courtFiles.push(this.restitutionInfoHelper.createCourtFile(this.fb));
+    }
+
+    removeCourtFile(index: number) {
+        let courtFiles = this.form.get('courtFiles') as FormArray;
+        courtFiles.removeAt(index);
+    }
+
+    showSignPad(control): void {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.disableClose = true;
+        dialogConfig.autoFocus = true;
+
+        const dialogRef = this.matDialog.open(SignPadDialog, dialogConfig);
+        dialogRef.afterClosed().subscribe(
+            data => {
+                var patchObject = {};
+                patchObject[control] = data;
+                this.form.patchValue(
+                    patchObject
+                );
+            },
+            err => console.log(err)
+        );
+    }
 }

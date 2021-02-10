@@ -109,6 +109,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
 import { RestitutionOverviewComponent } from './shared/restitution/restitution-overview/restitution-overview.component';
 import { RestitutionInformationComponent } from './shared/restitution/restitution-information/restitution-information.component';
 import { RestitutionContactInformationComponent } from './shared/restitution/contact-information/contact-information.component';
+import { RestitutionReviewComponent } from './shared/restitution/review/review.component';
 
 @NgModule({
   declarations: [
@@ -148,10 +149,11 @@ import { RestitutionContactInformationComponent } from './shared/restitution/con
     PhonePipe,
     QuickExitComponent,
     RepresentativeInformationComponent,
+    RestitutionApplicationComponent,
     RestitutionContactInformationComponent,
     RestitutionInformationComponent,
     RestitutionOverviewComponent,
-    RestitutionApplicationComponent,
+    RestitutionReviewComponent,
     SignPadDialog,
     StaticComponent,
     SubmitInvoiceComponent,

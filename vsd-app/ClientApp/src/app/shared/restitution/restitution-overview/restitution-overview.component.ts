@@ -1,6 +1,6 @@
 import { FormBase } from "../../form-base";
 import { OnInit, Component, Input } from "@angular/core";
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog } from "@angular/material";
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material";
 import { FormGroup, ControlContainer } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, IOptionSetVal, ResitutionForm } from "../../enums-list";
@@ -20,19 +20,13 @@ export class RestitutionOverviewComponent extends FormBase implements OnInit {
     ResitutionForm = ResitutionForm;
     applicant: string = "";
 
-    isIE: boolean = false;
-
     constructor(
         private controlContainer: ControlContainer,
-        private matDialog: MatDialog,
     ) {
         super();
     }
 
     ngOnInit() {
-        var ua = window.navigator.userAgent;
-        this.isIE = /MSIE|Trident/.test(ua);
-
         this.form = <FormGroup>this.controlContainer.control;
         setTimeout(() => { this.form.markAsTouched(); }, 0);
         // console.log("overview component");

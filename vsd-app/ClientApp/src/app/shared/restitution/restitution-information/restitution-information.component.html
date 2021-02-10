@@ -8,7 +8,7 @@
         A Restitution caseworker will be in touch with you regarding the next steps.
     </p>
 
-    <h2 class="blue-header">{{applicant_type}} Information</h2>
+    <h2 class="blue-header" id="ApplicantInformation">{{applicant_type}} Information</h2>
     <h3>{{applicant_type}} Information</h3>
 
     <div class="row">
@@ -56,8 +56,6 @@
     </div>
 
     <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
-
-        <!-- add component for designate -->
         <div class="row">
             <div class="col-12">
                 <h3>Authorized Victim Designate</h3>
@@ -114,42 +112,151 @@
     <app-restitution-contact-information [formGroup]="form.get('contactInformation')" [formType]="formType" [lookupData]="lookupData" formGroupName="contactInformation" [isDisabled]="isDisabled"></app-restitution-contact-information>
 
     <ng-container *ngIf="formType.val === ResitutionForm.Offender.val">
-        <h2 class="blue-header">Correctional</h2>
+        <h2 class="blue-header" id="ProbationOfficerInformation">Correctional</h2>
 
-        <!-- add page/component for probationOfficer... -->
+        <div class="row">
+            <div class="col-md-6">
+                <app-field label="Parole/Probation Officer First Name" [valid]="isMyControlValid(form.get('probationOfficerFirstName'))" errorMessage="Please enter your officer's first name" [disabled]="isDisabled">
+                    <input class="form-control" type="text" formControlName="probationOfficerFirstName" maxlength="100">
+                </app-field>
+            </div>
+            <div class="col-md-6">
+                <app-field label="Parole/Probation Officer Last Name" [valid]="isMyControlValid(form.get('probationOfficerLastName'))" errorMessage="Please enter your officer's last name" [disabled]="isDisabled">
+                    <input class="form-control" type="text" formControlName="probationOfficerLastName" maxlength="100">
+                </app-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <app-field label="Custody Location (if applicable)" [valid]="isMyControlValid(form.get('probationOfficerCustodyLocation'))" errorMessage="Please enter your officer's last name" [disabled]="isDisabled">
+                    <input class="form-control" type="text" formControlName="probationOfficerCustodyLocation" maxlength="100">
+                </app-field>
+            </div>
+            <div class="col-md-6">
+                <app-field label="Phone Number" [valid]="isMyControlValid(form.get('probationOfficerPhoneNumber'))" errorMessage="Please enter your officer's phone number" [disabled]="isDisabled">
+                    <input class="form-control" mask='(000) 000 0000' type="text" formControlName="probationOfficerPhoneNumber">
+                </app-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <app-field label="Email Address" [valid]="isMyControlValid(form.get('probationOfficerEmail'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
+                    <input class="form-control" type="text" formControlName="probationOfficerEmail" maxlength="100">
+                </app-field>
+            </div>
+        </div>
+    </ng-container>
 
-        <div formGroupName="probationOfficer" class="court-info">
-            <div class="row">
-                <div class="col-md-6">
-                    <app-field label="Parole/Probation Officer First Name" [valid]="isMyControlValid(form.get('probationOfficer.firstName'))" errorMessage="Please enter your officer's first name" [disabled]="isDisabled">
+    <h2 class="blue-header" id="CourtFileInformation">Restitution Order Information</h2>
+
+    <div formArrayName="courtFiles" *ngFor="let item of form.get('courtFiles')['controls']; let i = index;">
+        <div [formGroupName]="i" class="court-file-info">
+            <div class="row remove-row">
+                <div class="col">
+                    <app-field label="First Name" [valid]="isMyControlValid(item.get('firstName'))" errorMessage="Please enter first name" [disabled]="isDisabled">
                         <input class="form-control" type="text" formControlName="firstName" maxlength="100">
                     </app-field>
                 </div>
-                <div class="col-md-6">
-                    <app-field label="Parole/Probation Officer Last Name" [valid]="isMyControlValid(form.get('probationOfficer.lastName'))" errorMessage="Please enter your officer's last name" [disabled]="isDisabled">
+                <div class="col">
+                    <app-field label="Middle Name" [valid]="isMyControlValid(item.get('middleName'))" errorMessage="Please enter middle name" [disabled]="isDisabled">
+                        <input class="form-control" type="text" formControlName="middleName" maxlength="100">
+                    </app-field>
+                </div>
+                <div class="col">
+                    <app-field label="Last Name" [valid]="isMyControlValid(item.get('lastName'))" errorMessage="Please enter last name" [disabled]="isDisabled">
                         <input class="form-control" type="text" formControlName="lastName" maxlength="100">
                     </app-field>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <app-field label="Custody Location (if applicable)" [valid]="isMyControlValid(form.get('probationOfficer.custodyLocation'))" errorMessage="Please enter your officer's last name" [disabled]="isDisabled">
-                        <input class="form-control" type="text" formControlName="custodyLocation" maxlength="100">
-                    </app-field>
-                </div>
-                <div class="col-md-6">
-                    <app-field label="Phone Number" [valid]="isMyControlValid(form.get('probationOfficer.phoneNumber'))" errorMessage="Please enter your officer's phone number" [disabled]="isDisabled">
-                        <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber">
-                    </app-field>
+
+                <div class="col-1" *ngIf="form.get('courtFiles')['controls'].length > 1">
+                    <div class="remove-button">
+                        <br>
+                        <i class="fas fa-times-circle text-danger center-clear-btn" (click)="removeCourtFile(i)"></i>
+                    </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="col-md-6">
-                    <app-field label="Email Address" [valid]="isMyControlValid(form.get('probationOfficer.email'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
-                        <input class="form-control" type="text" formControlName="email" maxlength="100">
+                <div class="col-md-4">
+                    <app-field label="Relationship" [valid]="isMyControlValid(item.get('relationship'))" errorMessage="Please enter relationship" [disabled]="isDisabled">
+                        <input class="form-control" type="text" formControlName="relationship" maxlength="100">
+                    </app-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <app-field label="Court File Number" [valid]="isMyControlValid(item.get('fileNumber'))" errorMessage="Please enter file number" [disabled]="isDisabled">
+                        <input class="form-control" type="text" formControlName="fileNumber" maxlength="100">
+                    </app-field>
+                </div>
+                <div class="col-md-4">
+                    <app-field label="Court Location" [valid]="isMyControlValid(item.get('location'))" errorMessage="Please enter location" [disabled]="isDisabled">
+                        <input class="form-control" type="text" formControlName="location" maxlength="100">
                     </app-field>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div>
+        <button *ngIf="!isDisabled" class="btn btn-secondary" (click)="addCourtFile()">+ ADD COURT FILE</button>
+    </div>
+
+
+    <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
+        <h2 class="blue-header" id="VSWInformation">Victim Service Worker</h2>
+
+        <div formArrayName="vsw" *ngFor="let item of form.get('vsw')['controls']; let i = index;">
+            <div [formGroupName]="i" class="vsw-info">
+                <div class="row">
+                    <div class="col-md-6">
+                        <app-field label="Victim Service Worker First Name" [valid]="isMyControlValid(item.get('firstName'))" [disabled]="isDisabled">
+                            <input class="form-control" type="text" formControlName="firstName" maxlength="100">
+                        </app-field>
+                    </div>
+                    <div class="col-md-6">
+                        <app-field label="Victim Service Worker Last Name" [valid]="isMyControlValid(item.get('lastName'))" [disabled]="isDisabled">
+                            <input class="form-control" type="text" formControlName="lastName" maxlength="100">
+                        </app-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <app-field label="Program Name" [valid]="isMyControlValid(item.get('program'))" [disabled]="isDisabled">
+                            <input class="form-control" type="text" formControlName="program" maxlength="100">
+                        </app-field>
+                    </div>
+                    <div class="col-md-6">
+                        <app-field label="Email Address" [valid]="isMyControlValid(item.get('email'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
+                            <input class="form-control" type="text" formControlName="email" maxlength="100">
+                        </app-field>
+                    </div>
+                </div>
+            </div>
+        </div>
     </ng-container>
+
+    <h2 class="blue-header" id="DocumentInformation">Copy of Restitution Order</h2>
+    <p>Where possible, please include a copy of the Restitution Order when submitting this application.</p>
+    <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')"></app-file-uploader>
+
+    <h2 class="blue-header" id="SignatureInformation">Declaration & Signature</h2>
+    <app-field [required]="true" [valid]="isFieldValid('declaredAndSigned')" errorMessage="Please check this box to indicate that you accept Declaration">
+        <label>
+            <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
+            I submit this application in support of a claim for benefits available to {{applicant_type}} under the <em>Crime Victim Assistance Act</em>, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
+        </label>
+    </app-field>
+
+    <app-field label="Signature" [required]="true" [valid]="isFieldValid('signature')" errorMessage="Please provide your digital signature">
+        <div class="signature-trigger" (click)="showSignPad('signature')" *ngIf="!hasSignature('signature')">
+            <p>Click this box to sign</p>
+        </div>
+        <div *ngIf="hasSignature('signature')" class="signature-preview">
+            <img src="{{ valueOrEmpty('signature') }}" />
+            <a class="redo" (click)="showSignPad('signature')">Redo Signature</a>
+        </div>
+    </app-field>
 </div>

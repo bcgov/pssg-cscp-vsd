@@ -16,7 +16,7 @@ import { StateService } from '../services/state.service';
 import { config } from '../../config';
 import { iLookupData } from '../models/lookup-data.model';
 
-enum PAGES {
+export enum RESTITUTION_PAGES {
     OVERVIEW,
     RESTITUTION_INFORMATION,
     REVIEW,
@@ -42,7 +42,7 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit 
     submitting: boolean = false;
     public showPrintView: boolean = false;
 
-    PAGES = PAGES;
+    PAGES = RESTITUTION_PAGES;
 
     lookupData: iLookupData = {
         countries: [],

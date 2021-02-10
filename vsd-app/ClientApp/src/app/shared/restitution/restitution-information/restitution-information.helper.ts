@@ -51,13 +51,11 @@ export class RestitutionInfoHelper {
         }
 
         if (form_type.val === ResitutionForm.Offender.val) {
-            group["probationOfficer"] = fb.group({
-                firstName: [''],
-                lastName: [''],
-                custodyLocation: [''],
-                phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
-                email: ['', [Validators.email]],
-            });
+            group["probationOfficerFirstName"] = [''];
+            group["probationOfficerLastName"] = [''];
+            group["probationOfficerCustodyLocation"] = [''];
+            group["probationOfficerPhoneNumber"] = [''];
+            group["probationOfficerEmail"] = ['', [Validators.email]];
         }
 
         return fb.group(group);
