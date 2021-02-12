@@ -14,3 +14,35 @@ h3 {
     margin-top: 30px;
     margin-bottom: 20px;
 }
+
+.review-table {
+    border-collapse: separate;
+    border-spacing: 3px;
+
+    tr {
+        background-color: #f1f4fa;
+
+        th,
+        td {
+            //background-color: #e1e8f2;
+            border: 0 !important;
+        }
+
+        th {
+            font-weight: normal;
+            width: 30%;
+        }
+
+        td {
+            font-weight: bold;
+            width: 70%;
+            max-width: 440px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &.table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: #e1e8f2;
+    }
+}
