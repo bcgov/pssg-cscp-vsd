@@ -1,0 +1,80 @@
+<div [formGroup]="form">
+    <h2 class="blue-header" id="ContactInformation">Contact Information</h2>
+    <p *ngIf="formType.val === ResitutionForm.Victim.val">Contact information for the Victim (or the Victim Designate)</p>
+    <p *ngIf="formType.val === ResitutionForm.Offender.val">Contact information for the Offender (or the Offender Designate)</p>
+
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isMyControlValid(form.get('preferredMethodOfContact'))" errorMessage="Please select your preferred method of contact">
+                <select class="form-control" formControlName="preferredMethodOfContact">
+                    <option [value]="null">Select...</option>
+                    <option [value]="enum.ContactMethods.Phone.val">Phone Call</option>
+                    <option [value]="enum.ContactMethods.Email.val">Email</option>
+                    <option [value]="enum.ContactMethods.Mail.val">Mail</option>
+                </select>
+            </app-field>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h3>Mailing Address</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <app-address [group]="form.get('mailingAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true" [isDisabled]="isDisabled"></app-address>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h3>Communication</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Primary Phone Number (inc. area code)" [valid]="isMyControlValid(form.get('phoneNumber'))" errorMessage="Please enter your phone number" [disabled]="isDisabled">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" *ngIf="form.get('mailingAddress.country').value === 'Canada' || form.get('mailingAddress.country').value === 'United States of America'; else phone_no_mask">
+                <ng-template #phone_no_mask>
+                    <input class="form-control" type="text" formControlName="phoneNumber" digitOnly>
+                </ng-template>
+            </app-field>
+        </div>
+        <div class="col-md-6">
+            <app-field label="Alternate Phone Number (inc. area code)" [valid]="isMyControlValid(form.get('alternatePhoneNumber'))" errorMessage="Please enter your phone number" [disabled]="isDisabled">
+                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber" *ngIf="form.get('mailingAddress.country').value === 'Canada' || form.get('mailingAddress.country').value === 'United States of America'; else alt_phone_no_mask">
+                <ng-template #alt_phone_no_mask>
+                    <input class="form-control" type="text" formControlName="alternatePhoneNumber" digitOnly>
+                </ng-template>
+            </app-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Email Address" [valid]="isMyControlValid(form.get('email'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
+                <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
+            </app-field>
+        </div>
+
+        <div class="col-md-6">
+            <app-field label="Confirm Email Address" [valid]="isMyControlValid(form.get('confirmEmail'))" errorMessage="Please confirm your email address" [disabled]="isDisabled">
+                <input class="form-control" type="text" (blur)="trimEmail(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
+            </app-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <app-field label="May we leave a detailed message?" errorMessage="" [disabled]="isDisabled" [valid]="isMyControlValid(form.get('leaveMessage'))" errorMessage="Please choose an option">
+                <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.True" formControlName="leaveMessage">
+                    <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.False" formControlName="leaveMessage">
+                    <span>No</span>
+                </label>
+            </app-field>
+        </div>
+    </div>
+</div>

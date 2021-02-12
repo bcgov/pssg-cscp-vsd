@@ -13,6 +13,7 @@ export class FieldComponent implements OnInit {
   @Input() tooltipReference: string;
   @Input() leadingText: string;
   @Input() errorMessage: string;
+  @Input() disabled: boolean;
 
   constructor() { }
 

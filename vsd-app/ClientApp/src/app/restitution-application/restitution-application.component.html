@@ -60,8 +60,8 @@
                 <div class="pagebreak"> </div>
                 <app-restitution-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="restitutionInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == PAGES.RESTITUTION_INFORMATION || showPrintView"></app-restitution-information>
 
-                <!--<div class="pagebreak"> </div>
-                <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 2 || showPrintView"></app-crime-information> -->
+                <div class="pagebreak"> </div>
+                <app-restitution-review [formGroup]="form" [formType]="FORM_TYPE" [parentStepper]="stepper" *ngIf="this.currentFormStep == PAGES.REVIEW || showPrintView"></app-restitution-review>
 
 
                 <div *ngIf="showValidationMessage" class="error-summary">
