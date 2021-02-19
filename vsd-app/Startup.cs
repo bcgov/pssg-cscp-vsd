@@ -16,9 +16,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using NWebsec.AspNetCore.Mvc;
 using NWebsec.AspNetCore.Mvc.Csp;
+using Serilog;
+using Serilog.Exceptions;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace Gov.Cscp.VictimServices.Public
 {
@@ -161,6 +164,51 @@ namespace Gov.Cscp.VictimServices.Public
             {
                 routes.MapRoute(name: "default", template: "{controller}/{action=Index}/{id?}");
             });
+
+            if (!string.IsNullOrEmpty(Configuration["SPLUNK_COLLECTOR_URL"]) &&
+                !string.IsNullOrEmpty(Configuration["SPLUNK_TOKEN"])
+                )
+            {
+
+                Serilog.Sinks.Splunk.CustomFields fields = new Serilog.Sinks.Splunk.CustomFields();
+                if (!string.IsNullOrEmpty(Configuration["SPLUNK_CHANNEL"]))
+                {
+                    fields.CustomFieldList.Add(new Serilog.Sinks.Splunk.CustomField("channel", Configuration["SPLUNK_CHANNEL"]));
+                }
+                var splunkUri = new Uri(Configuration["SPLUNK_COLLECTOR_URL"]);
+                var upperSplunkHost = splunkUri.Host?.ToUpperInvariant() ?? string.Empty;
+
+                // Fix for bad SSL issues 
+                Log.Logger = new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .Enrich.WithExceptionDetails()
+                    .WriteTo.Console()
+                    .WriteTo.EventCollector(splunkHost: Configuration["SPLUNK_COLLECTOR_URL"],
+                       sourceType: "portal", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
+                       restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
+#pragma warning disable CA2000 // Dispose objects before losing scope
+                                    messageHandler: new HttpClientHandler()
+                                    {
+                                        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; }
+                                    }
+#pragma warning restore CA2000 // Dispose objects before losing scope
+                                  )
+                    .CreateLogger();
+
+                Serilog.Debugging.SelfLog.Enable(Console.Error);
+
+                Log.Logger.Information("CVAP Webforms Started");
+
+            }
+            else
+            {
+                Log.Logger = new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .Enrich.WithExceptionDetails()
+                    .WriteTo.Console()
+                    .CreateLogger();
+            }
+
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core, see https://go.microsoft.com/fwlink/?linkid=864501
