@@ -2,11 +2,13 @@ using Gov.Cscp.VictimServices.Public.Models;
 using Gov.Cscp.VictimServices.Public.Services;
 using Gov.Cscp.VictimServices.Public.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Xml;
-using System.IO;
-using System.Text;
+using System;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -14,10 +16,12 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
     public class AEMController : Controller
     {
         private readonly IAEMResultService _aemResultService;
+        private readonly ILogger _logger;
 
         public AEMController(IAEMResultService aemResultService)
         {
             this._aemResultService = aemResultService;
+            _logger = Log.Logger;
         }
 
         [HttpPost("victim")]
@@ -27,6 +31,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    _logger.Error($"API call to 'GetVictimApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
                     return BadRequest(ModelState);
                 }
 
@@ -35,6 +40,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 AEMResult result = await _aemResultService.Post(requestJson);
                 return StatusCode((int)result.responseCode, result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while getting victim application PDF. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }
@@ -46,6 +56,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    _logger.Error($"API call to 'GetIFMApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
                     return BadRequest(ModelState);
                 }
 
@@ -54,6 +65,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 AEMResult result = await _aemResultService.Post(requestJson);
                 return StatusCode((int)result.responseCode, result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while getting ifm application PDF. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }
@@ -65,6 +81,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    _logger.Error($"API call to 'GetWitnessApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
                     return BadRequest(ModelState);
                 }
 
@@ -73,6 +90,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 AEMResult result = await _aemResultService.Post(requestJson);
                 return StatusCode((int)result.responseCode, result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while getting witness application PDF. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }
@@ -84,6 +106,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    _logger.Error($"API call to 'GetAuthorizationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
                     return BadRequest(ModelState);
                 }
 
@@ -92,6 +115,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 AEMResult result = await _aemResultService.Post(requestJson);
                 return StatusCode((int)result.responseCode, result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while getting authorization PDF. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }
@@ -103,14 +131,20 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    _logger.Error($"API call to 'GetInvoicePDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
                     return BadRequest(ModelState);
                 }
-                
+
                 string xml = getInvoiceXML(model);
                 string requestJson = getAEMJSON(xml, "invoice");
 
                 AEMResult result = await _aemResultService.Post(requestJson);
                 return StatusCode((int)result.responseCode, result);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while getting invoice PDF. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }

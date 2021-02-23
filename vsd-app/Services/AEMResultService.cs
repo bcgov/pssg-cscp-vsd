@@ -1,9 +1,11 @@
 using Gov.Cscp.VictimServices.Public.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Rest;
 using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
 using System;
+using Serilog;
 
 namespace Gov.Cscp.VictimServices.Public.Services
 {
@@ -16,11 +18,13 @@ namespace Gov.Cscp.VictimServices.Public.Services
     {
         private HttpClient _client;
         private IConfiguration _configuration;
+        private readonly ILogger _logger;
 
         public AEMResultService(IConfiguration configuration, HttpClient httpClient)
         {
             _client = httpClient;
             _configuration = configuration;
+            _logger = Log.Logger;
         }
 
         public async Task<AEMResult> Post(string modelJson)
@@ -41,23 +45,26 @@ namespace Gov.Cscp.VictimServices.Public.Services
             }
             requestJson = requestJson.Replace("fortunecookie", "@odata.");
 
-            Console.WriteLine(endpointUrl);
-            Console.WriteLine(requestJson);
+            // Console.WriteLine(endpointUrl);
+            // Console.WriteLine(requestJson);
 
             HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
             _httpRequest.Content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
 
             var _httpResponse = await _client.SendAsync(_httpRequest);
-            Console.WriteLine("Got response...");
 
             AEMResult result = await _httpResponse.Content.ReadAsAsync<AEMResult>();
-            Console.WriteLine(result);
+            // Console.WriteLine(result);
 
             if ((int)result.responseCode == 200)
             {
                 HttpResponseMessage msg = await _client.GetAsync(result.responseMessage);
                 byte[] msgContent = await msg.Content.ReadAsByteArrayAsync();
                 result.responseMessage = Convert.ToBase64String(msgContent);
+            }
+            else
+            {
+                _logger.Error(new HttpOperationException($"Error calling API function {endpointUrl}. Source = VSD"), $"Error calling API function {endpointUrl}. Source = VSD. Error is:\n{result}\n\nJSON sent:{requestJson}", result, requestJson);
             }
 
             return result;

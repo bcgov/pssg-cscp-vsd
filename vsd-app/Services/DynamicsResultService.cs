@@ -1,5 +1,7 @@
 ﻿using Gov.Cscp.VictimServices.Public.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Rest;
+using Serilog;
 using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
@@ -17,11 +19,13 @@ namespace Gov.Cscp.VictimServices.Public.Services
     {
         private HttpClient _client;
         private IConfiguration _configuration;
+        private readonly ILogger _logger;
 
         public DynamicsResultService(IConfiguration configuration, HttpClient httpClient)
         {
             _client = httpClient;
             _configuration = configuration;
+            _logger = Log.Logger;
         }
 
         public async Task<DynamicsResult> Get(string endpointUrl)
@@ -41,8 +45,8 @@ namespace Gov.Cscp.VictimServices.Public.Services
             endpointUrl = _configuration["DYNAMICS_ODATA_URI"] + endpointUrl;
             requestJson = requestJson.Replace("fortunecookie", "@odata.");
 
-            Console.WriteLine(endpointUrl);
-            Console.WriteLine(requestJson);
+            // Console.WriteLine(endpointUrl);
+            // Console.WriteLine(requestJson);
 
             HttpRequestMessage _httpRequest = new HttpRequestMessage(method, endpointUrl);
             _httpRequest.Content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
@@ -58,7 +62,12 @@ namespace Gov.Cscp.VictimServices.Public.Services
             var clean = _responseContent.Replace("@odata.", "fortunecookie");
             result.result = Newtonsoft.Json.Linq.JObject.Parse(clean);
 
-            Console.WriteLine(result.result);
+            if (result.result.ContainsKey("IsSuccess") && result.result["IsSuccess"].ToString().Equals("False"))
+            {
+                _logger.Error(new HttpOperationException($"Error calling API function {endpointUrl}. Source = VSD"), $"Error calling API function {endpointUrl}. Source = VSD. Error is:\n{result.result}\n\nJSON sent:{requestJson}", result.result, requestJson);
+            }
+
+            // Console.WriteLine(result.result);
 
             return result;
         }
