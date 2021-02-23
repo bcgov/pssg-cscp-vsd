@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Gov.Cscp.VictimServices.Public.Models;
 using Gov.Cscp.VictimServices.Public.Services;
-using Gov.Cscp.VictimServices.Public.Models;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using System.Threading.Tasks;
+using System;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -9,10 +11,12 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
     public class LookupController : Controller
     {
         private readonly IDynamicsResultService _dynamicsResultService;
+        private readonly ILogger _logger;
 
         public LookupController(IDynamicsResultService dynamicsResultService)
         {
             this._dynamicsResultService = dynamicsResultService;
+            _logger = Log.Logger;
         }
 
         [HttpGet("countries")]
@@ -27,6 +31,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
 
                 return StatusCode((int)result.statusCode, result.result.ToString());
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up countries in COAST. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }
@@ -44,6 +53,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 return StatusCode((int)result.statusCode, result.result.ToString());
             }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up provinces in COAST. Source = VSD");
+                return BadRequest();
+            }
             finally { }
         }
 
@@ -58,6 +72,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 // get the response
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
                 return StatusCode((int)result.statusCode, result.result.ToString());
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up cities in COAST. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }
@@ -90,6 +109,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 return StatusCode((int)result.statusCode, result.result.ToString());
             }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while searching cities in COAST. Source = VSD");
+                return BadRequest();
+            }
             finally { }
         }
 
@@ -106,6 +130,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
                 return StatusCode((int)result.statusCode, result.result.ToString());
             }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up citites by country in COAST. Source = VSD");
+                return BadRequest();
+            }
             finally { }
         }
 
@@ -120,6 +149,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 // get the response
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
                 return StatusCode((int)result.statusCode, result.result.ToString());
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up cities by province in COAST. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }
@@ -136,6 +170,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
                 return StatusCode((int)result.statusCode, result.result.ToString());
             }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up relationships in COAST. Source = VSD");
+                return BadRequest();
+            }
             finally { }
         }
 
@@ -150,6 +189,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 // get the response
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
                 return StatusCode((int)result.statusCode, result.result.ToString());
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up optional auth relationships in COAST. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }
@@ -166,6 +210,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
                 return StatusCode((int)result.statusCode, result.result.ToString());
             }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up representative relationships in COAST. Source = VSD");
+                return BadRequest();
+            }
             finally { }
         }
 
@@ -181,6 +230,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
                 return StatusCode((int)result.statusCode, result.result.ToString());
             }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up police detachments in COAST. Source = VSD");
+                return BadRequest();
+            }
             finally { }
         }
 
@@ -195,6 +249,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 // get the response
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
                 return StatusCode((int)result.statusCode, result.result.ToString());
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up courts in COAST. Source = VSD");
+                return BadRequest();
             }
             finally { }
         }

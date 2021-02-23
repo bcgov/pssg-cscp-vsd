@@ -169,7 +169,6 @@ namespace Gov.Cscp.VictimServices.Public
                 !string.IsNullOrEmpty(Configuration["SPLUNK_TOKEN"])
                 )
             {
-
                 Serilog.Sinks.Splunk.CustomFields fields = new Serilog.Sinks.Splunk.CustomFields();
                 if (!string.IsNullOrEmpty(Configuration["SPLUNK_CHANNEL"]))
                 {
@@ -198,7 +197,6 @@ namespace Gov.Cscp.VictimServices.Public
                 Serilog.Debugging.SelfLog.Enable(Console.Error);
 
                 Log.Logger.Information("CVAP Webforms Started");
-
             }
             else
             {
