@@ -5,7 +5,7 @@ import { FormGroup, ControlContainer } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
-import { iLookupData } from "../../models/lookup-data.model";
+import { iLookupData } from "../../interfaces/lookup-data.interface";
 
 @Component({
     selector: 'app-declaration-information',

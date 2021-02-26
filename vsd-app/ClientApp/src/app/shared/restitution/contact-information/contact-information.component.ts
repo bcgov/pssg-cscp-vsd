@@ -4,7 +4,7 @@ import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/materia
 import { FormGroup, ControlContainer } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, IOptionSetVal, ResitutionForm, CRMBoolean } from "../../enums-list";
-import { iLookupData } from "../../../models/lookup-data.model";
+import { iLookupData } from "../../../interfaces/lookup-data.interface";
 
 @Component({
     selector: 'app-restitution-contact-information',

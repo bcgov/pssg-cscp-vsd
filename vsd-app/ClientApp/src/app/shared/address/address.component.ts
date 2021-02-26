@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { COUNTRIES_ADDRESS } from './country-list';
 import { POSTAL_CODE, ZIP_CODE } from '../regex.constants';
-import { CitiesSearchResponse, iCity, iCountry, iLookupData, iProvince } from '../../models/lookup-data.model';
+import { CitiesSearchResponse, iCity, iCountry, iLookupData, iProvince } from '../../interfaces/lookup-data.interface';
 import { config } from '../../../config';
 import { LookupService } from '../../services/lookup.service';
 import { noop, Observable, Observer, of, throwError } from 'rxjs';

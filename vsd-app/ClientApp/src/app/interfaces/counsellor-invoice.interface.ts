@@ -1,4 +1,4 @@
-import { DocumentCollectioninformation } from "./victim-restitution.interface";
+import { DocumentCollectioninformation } from "./application.interface";
 
 export interface CounsellorInvoice {
   InvoiceDetails: InvoiceDetails;

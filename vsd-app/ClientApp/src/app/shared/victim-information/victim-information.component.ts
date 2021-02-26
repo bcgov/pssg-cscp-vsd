@@ -5,7 +5,7 @@ import { FormGroup, FormBuilder, ControlContainer, AbstractControl, Validators }
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { Subscription } from "rxjs";
-import { iLookupData } from "../../models/lookup-data.model";
+import { iLookupData } from "../../interfaces/lookup-data.interface";
 
 @Component({
     selector: 'app-victim-information',

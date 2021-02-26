@@ -10,7 +10,7 @@ import { CrimeInfoHelper } from "./crime-information.helper";
 import { config } from '../../../config';
 import { Subscription } from "rxjs";
 import { AddressHelper } from "../address/address.helper";
-import { iLookupData } from "../../models/lookup-data.model";
+import { iLookupData } from "../../interfaces/lookup-data.interface";
 import { LookupService } from "../../services/lookup.service";
 
 @Component({

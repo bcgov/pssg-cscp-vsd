@@ -64,7 +64,6 @@ namespace Gov.Cscp.VictimServices.Public.Services
 
             if (result.result.ContainsKey("IsSuccess") && result.result["IsSuccess"].ToString().Equals("False"))
             {
-                // _logger.Error(new HttpOperationException($"Error calling API function {endpointUrl}. Source = VSD"), $"Error calling API function {endpointUrl}. Source = VSD. Error is:\n{result.result}\n\nJSON sent:{requestJson}", result.result, requestJson);
                 _logger.Information(new HttpOperationException($"Received a fail response from {endpointUrl}. Source = VSD"), $"COAST resturned IsSuccess = False. \nSource = VSD. \nError is:\n{result.result}\n\nJSON sent:{requestJson}", result.result, requestJson);
             }
 

@@ -13,12 +13,11 @@ import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { POSTAL_CODE } from '../shared/regex.constants';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
-import { Subject, Subscription } from 'rxjs';
-import { User } from '../models/user.model';
+import { Subject } from 'rxjs';
 import * as _ from 'lodash';
 import { AEMService } from '../services/aem.service';
-import { DocumentCollectioninformation } from '../interfaces/victim-restitution.interface';
 import * as moment from 'moment';
+import { DocumentCollectioninformation } from '../interfaces/application.interface';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -32,7 +31,6 @@ import * as moment from 'moment';
 
 export class SubmitInvoiceComponent extends FormBase implements OnInit {
   postalRegex = POSTAL_CODE;
-  currentUser: User;
   dataLoaded = false;
   submitting: boolean = false;
 

@@ -14,7 +14,7 @@ import { RestitutionInfoHelper } from '../shared/restitution/restitution-informa
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { StateService } from '../services/state.service';
 import { config } from '../../config';
-import { iLookupData } from '../models/lookup-data.model';
+import { iLookupData } from '../interfaces/lookup-data.interface';
 
 export enum RESTITUTION_PAGES {
     OVERVIEW,

@@ -1,7 +1,5 @@
 import { Address } from "./address.interface";
 import { Courtfile } from "./files.interface";
-import { NameBlock } from "../name-block/name-block.component";
-import { DocumentCollectioninformation } from "./victim-restitution.interface";
 
 export interface Application {
   ApplicationType: number;
@@ -17,6 +15,11 @@ export interface Application {
   RepresentativeInformation: RepresentativeInformation;
   DeclarationInformation: DeclarationInformation;
   AuthorizationInformation: AuthorizationInformation;
+}
+export interface DocumentCollectioninformation {
+  filename: string;
+  body: string;
+  subject: string;
 }
 export interface Introduction {
   understoodInformation: string;
@@ -48,6 +51,11 @@ export interface PersonalInformation {
   relationshipToVictim: string;
   relationshipToVictimOther: string;
   sin: string;
+}
+export interface NameBlock {
+  firstName: string;
+  middleName: string;
+  lastName: string;
 }
 export interface CrimeInformation {
   courtFiles: Courtfile[];

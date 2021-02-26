@@ -10,7 +10,7 @@ import { COUNTRIES_ADDRESS_2 } from "../address/country-list";
 import { EmploymentInfoHelper } from "./employment-information.helper";
 import { Subscription } from "rxjs";
 import { AddressHelper } from "../address/address.helper";
-import { iLookupData } from "../../models/lookup-data.model";
+import { iLookupData } from "../../interfaces/lookup-data.interface";
 
 @Component({
     selector: 'app-employment-information',

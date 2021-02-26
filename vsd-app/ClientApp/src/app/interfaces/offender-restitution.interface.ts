@@ -1,5 +1,5 @@
 import { Address } from "./address.interface";
-import { DocumentCollectioninformation } from "./victim-restitution.interface";
+import { DocumentCollectioninformation } from "./application.interface";
 
 export interface OffenderRestitution {
   RestitutionInformation: OffenderRestitutionInformation;
