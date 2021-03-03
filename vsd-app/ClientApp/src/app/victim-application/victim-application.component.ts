@@ -1,6 +1,6 @@
 import { AEMService } from '../services/aem.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation } from '../interfaces/application.interface';
+import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, DocumentCollectioninformation } from '../interfaces/application.interface';
 import { ApplicationType, OnBehalfOf } from '../shared/enums-list';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
@@ -8,7 +8,6 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
-import { DocumentCollectioninformation } from '../interfaces/victim-restitution.interface';
 import { EmploymentInfoHelper } from '../shared/employment-information/employment-information.helper';
 import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
 import { FormBase } from '../shared/form-base';
@@ -27,7 +26,7 @@ import { StateService } from '../services/state.service';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { config } from '../../config';
-import { iLookupData } from '../models/lookup-data.model';
+import { iLookupData } from '../interfaces/lookup-data.interface';
 import { window } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 

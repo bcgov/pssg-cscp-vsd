@@ -8,7 +8,7 @@ import { COUNTRIES_ADDRESS } from "../address/country-list";
 import { HOSPITALS } from "../hospital-list";
 import { POSTAL_CODE } from "../regex.constants";
 import { AddressHelper } from "../address/address.helper";
-import { iLookupData } from "../../models/lookup-data.model";
+import { iLookupData } from "../../interfaces/lookup-data.interface";
 import { Subscription } from "rxjs";
 import { config } from "../../../config";
 

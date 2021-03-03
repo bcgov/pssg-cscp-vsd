@@ -8,7 +8,7 @@ import { POSTAL_CODE } from "../regex.constants";
 import { AddressHelper } from "../address/address.helper";
 import { EmailValidator } from "../validators/email.validator";
 import { Subscription } from "rxjs";
-import { iLookupData } from "../../models/lookup-data.model";
+import { iLookupData } from "../../interfaces/lookup-data.interface";
 
 @Component({
     selector: 'app-personal-information',

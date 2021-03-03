@@ -4,7 +4,7 @@ import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDialogCon
 import { FormGroup, ControlContainer, FormArray, FormBuilder } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, IOptionSetVal, ResitutionForm, CRMBoolean } from "../../enums-list";
-import { iLookupData } from "../../../models/lookup-data.model";
+import { iLookupData } from "../../../interfaces/lookup-data.interface";
 import { POSTAL_CODE } from "../../regex.constants";
 import { AddressHelper } from "../../address/address.helper";
 import { RestitutionInfoHelper } from "./restitution-information.helper";

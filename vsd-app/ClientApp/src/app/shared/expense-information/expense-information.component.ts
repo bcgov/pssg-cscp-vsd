@@ -8,7 +8,7 @@ import { SummaryOfBenefitsDialog } from "../../summary-of-benefits/summary-of-be
 import * as moment from 'moment';
 import { Subscription } from "rxjs";
 import { AddressHelper } from "../address/address.helper";
-import { iLookupData } from "../../models/lookup-data.model";
+import { iLookupData } from "../../interfaces/lookup-data.interface";
 
 @Component({
   selector: 'app-expense-information',

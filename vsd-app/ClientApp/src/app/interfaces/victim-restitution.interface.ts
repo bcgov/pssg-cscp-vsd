@@ -1,4 +1,5 @@
 import { Address } from "./address.interface";
+import { DocumentCollectioninformation } from "./application.interface";
 import { Courtfile, ProviderFile } from "./files.interface";
 
 export interface VictimRestitution {
@@ -45,8 +46,4 @@ export interface VictimRestitutionInformation {
 
 }
 
-export interface DocumentCollectioninformation {
-  filename: string;
-  body: string;
-  subject: string;
-}
+

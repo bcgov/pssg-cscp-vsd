@@ -1,4 +1,4 @@
-using Gov.Cscp.VictimServices.Public.Authorization;
+// using Gov.Cscp.VictimServices.Public.Authorization;
 using Gov.Cscp.VictimServices.Public.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -81,7 +81,7 @@ namespace Gov.Cscp.VictimServices.Public
                 });
 
 
-            services.RegisterPermissionHandler();
+            // services.RegisterPermissionHandler();
 
             // setup key ring to persist in storage.
             if (!string.IsNullOrEmpty(Configuration["KEY_RING_DIRECTORY"]))

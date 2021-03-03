@@ -10,7 +10,6 @@ export class JusticeApplicationDataService {
   apiPath = 'api/justice/';
   pdfHeaders: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json;charset=UTF-8',
-    //  'Access-Control-Allow-Origin' : 'http://localhost:59451'
   });
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
@@ -32,18 +31,6 @@ export class JusticeApplicationDataService {
 
   public submitOffenderRestitutionApplication(offenderRestitution: OffenderRestitution) {
     return this.http.post(this.apiPath + 'submitoffenderrestitution', offenderRestitution, { headers: this.headers });
-  }
-
-  public getSampleCall() {
-    return this.http.get<string>(this.apiPath + 'apitest', { headers: this.headers });
-  }
-
-  public getSampleData() {
-    return this.http.get<string>(this.apiPath + 'getdata', { headers: this.headers });
-  }
-
-  public getDynamicsTest() {
-    return this.http.get<string>(this.apiPath + 'dynamicstest', { headers: this.headers });
   }
 
   public validateVendor(vendorNumber, vendorPostalCode) {

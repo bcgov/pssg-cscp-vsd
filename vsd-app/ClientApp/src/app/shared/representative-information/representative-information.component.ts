@@ -10,7 +10,7 @@ import { EmailValidator } from "../validators/email.validator";
 import { RepresentativeInfoHelper } from "./representative-information.helper";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
-import { iLookupData } from "../../models/lookup-data.model";
+import { iLookupData } from "../../interfaces/lookup-data.interface";
 import { LookupService } from "../../services/lookup.service";
 
 @Component({

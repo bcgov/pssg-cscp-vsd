@@ -7,7 +7,7 @@ import { FormGroup, ControlContainer, FormBuilder, FormArray, Validators, Abstra
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { POSTAL_CODE } from "../regex.constants";
 import { AuthInfoHelper } from "./authorization-information.helper";
-import { iLookupData } from "../../models/lookup-data.model";
+import { iLookupData } from "../../interfaces/lookup-data.interface";
 import { LookupService } from "../../services/lookup.service";
 
 
