@@ -463,6 +463,11 @@ export class FormBase {
     return address;
   }
 
+  getOptionSetNameFromVal(optionSet, val: number) {
+    let ret = Object.values(optionSet).find((o) => o["val"] == val);
+    return ret ? ret["name"] : "--";
+  }
+
   public trimValue(control: FormControl) {
     const value = control.value;
     control.setValue('');

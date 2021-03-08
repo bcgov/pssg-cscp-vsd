@@ -38,15 +38,6 @@ export class EnumHelper {
     100000005: 'Single',
   }
 
-  public IndigenousStatus = {
-    0: "",
-    100000000: "First Nations",
-    100000001: "Métis",
-    100000002: "Inuit",
-    100000003: "Prefer Not to Answer",
-    100000004: "Not Applicable",
-  }
-
   public VoicemailOptions = {
     0: "",
     100000000: "Primary and Alternate",
@@ -176,11 +167,20 @@ export class EnumHelper {
     Email:  <IOptionSetVal> { val: 1, name: "Email" },
     Mail:   <IOptionSetVal> { val: 4, name: "Mail" },
   }
+
+  public IndigenousStatus = {
+    BLANK:                  <IOptionSetVal> { val: 0, name: "--" },
+    First_Nations:          <IOptionSetVal> { val: 100000000, name: "First Nations" },
+    Metis:                  <IOptionSetVal> { val: 100000001, name: "Métis" },
+    Inuit:                  <IOptionSetVal> { val: 100000002, name: "Inuit" },
+    Prefere_Not_To_Answer:  <IOptionSetVal> { val: 100000003, name: "Prefer Not to Answer" },
+    Not_Applicable:         <IOptionSetVal> { val: 100000004, name: "Not Applicable" },
+  }
 }
 
 export const ResitutionForm = {
-  Victim:   <IOptionSetVal> { val: 100000002, name: "Victim Restitution" },
-  Offender: <IOptionSetVal> { val: 100000003, name: "Offender Restitution" },
+  Victim:   <IOptionSetVal> { val: 100000002, name: "Victim" },
+  Offender: <IOptionSetVal> { val: 100000003, name: "Offender" },
 };
 
 export enum CRMBoolean {

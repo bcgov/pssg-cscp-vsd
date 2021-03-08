@@ -23,6 +23,14 @@
                     <td>{{ valueOrEmpty('restitutionInformation.lastName') }} </td>
                 </tr>
                 <tr>
+                    <th>Other First Name</th>
+                    <td>{{ valueOrEmpty('restitutionInformation.otherFirstName') }} </td>
+                </tr>
+                <tr>
+                    <th>Other Last Name</th>
+                    <td>{{ valueOrEmpty('restitutionInformation.otherLastName') }} </td>
+                </tr>
+                <tr>
                     <th>Birth Date</th>
                     <td>{{ valueOrEmpty('restitutionInformation.birthDate', '') | date }}</td>
                 </tr>
@@ -30,38 +38,44 @@
                     <th>Gender</th>
                     <td>{{ enumHelper.Gender[valueForEnum('restitutionInformation.gender')] }} </td>
                 </tr>
+                <tr>
+                    <th>Do you identify as an Indigenous person?</th>
+                    <td>{{ getOptionSetNameFromVal(enumHelper.IndigenousStatus, valueOrEmpty('restitutionInformation.indigenousStatus')) }}</td>
+                </tr>
             </tbody>
         </table>
 
-        <ng-container *ngIf="form.get('restitutionInformation.authoriseVictimDesignate').value === CRMBoolean.True">
-            <div *ngFor="let item of form.get('restitutionInformation.designate')['controls']; let i = index">
-                <h3>Authorized Victim Designate</h3>
-                <table class="table table-striped review-table">
-                    <tbody>
-                        <tr>
-                            <th>First Name</th>
-                            <td>{{ valueOrEmpty(item.get('firstName')) }}</td>
-                        </tr>
-                        <tr>
-                            <th>Middle Name</th>
-                            <td>{{ valueOrEmpty(item.get('middleName')) }}</td>
-                        </tr>
-                        <tr>
-                            <th>Last Name</th>
-                            <td>{{ valueOrEmpty(item.get('lastName')) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
+            <ng-container *ngIf="form.get('restitutionInformation.authoriseVictimDesignate').value === CRMBoolean.True">
+                <div *ngFor="let item of form.get('restitutionInformation.designate')['controls']; let i = index">
+                    <h3>Authorized Victim Designate</h3>
+                    <table class="table table-striped review-table">
+                        <tbody>
+                            <tr>
+                                <th>First Name</th>
+                                <td>{{ valueOrEmpty(item.get('firstName')) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Middle Name</th>
+                                <td>{{ valueOrEmpty(item.get('middleName')) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Last Name</th>
+                                <td>{{ valueOrEmpty(item.get('lastName')) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                <div *ngIf="item.get('actOnBehalf').value === true">
-                    <p>
-                        <label class="inline-label inline-checkbox-label">
-                            <input type="checkbox" [checked]="item.get('actOnBehalf').value === true" disabled="disabled" />
-                            <span>I hereby authorize to act on my behalf for the purposes of involvement with the Restitution Program which includes personal information pertaining to me.</span>
-                        </label>
-                    </p>
+                    <div *ngIf="item.get('actOnBehalf').value === true">
+                        <p>
+                            <label class="inline-label inline-checkbox-label">
+                                <input type="checkbox" [checked]="item.get('actOnBehalf').value === true" disabled="disabled" />
+                                <span>I hereby authorize to act on my behalf for the purposes of involvement with the Restitution Program which includes personal information pertaining to me.</span>
+                            </label>
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </ng-container>
         </ng-container>
     </ng-container>
 

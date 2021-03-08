@@ -61,6 +61,16 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
         }
     }
 
+    iHaveOtherNamesChange(val: boolean) {
+        if (!val) {
+            let otherFirstNameControl = this.form.get('otherFirstName');
+            let otherLastNameControl = this.form.get('otherLastName');
+
+            otherFirstNameControl.patchValue('');
+            otherLastNameControl.patchValue('');
+        }
+    }
+
     authorizeDesignateChange() {
         if (this.form.get("authoriseVictimDesignate").value === CRMBoolean.True) {
             this.addDesignate();

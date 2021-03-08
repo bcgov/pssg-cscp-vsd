@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { isDevMode } from '@angular/core';
 import 'rxjs/add/operator/filter';
+import { HeaderTitleService } from './services/titile.service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     private router: Router,
+    private headerTitleService: HeaderTitleService
   ) {
     this.isDevMode = isDevMode();
     this.router.events.subscribe((event) => {
@@ -35,7 +37,11 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.headerTitleService.title.subscribe(updatedTitle => {
+      this.title = updatedTitle;
+    });
+
   }
 
   isIE10orLower() {

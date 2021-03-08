@@ -5,7 +5,7 @@
 
     <div class="row" [formGroup]="form">
         <div class="col-lg-3 col-sm-12 application-gutter" [class.hidden]="showPrintView">
-            <h3>{{FORM_TYPE.name}} Application</h3>
+            <h3>Restitution Program - {{FORM_TYPE.name}} Application</h3>
             <section class="application-nav sticky-top">
                 <div>
                     <mat-vertical-stepper linear (selectionChange)="gotoPage($event)" #stepper [class.disabled-stepper]="submitting">
@@ -36,6 +36,7 @@
                             <p>
                                 <strong>Lower Mainland:</strong> 604-660-4898<br />
                                 <strong>Toll Free:</strong> 1-844-660-4898<br />
+                                <strong>Text:</strong> 236-688-4802<br />
                                 <strong>Fax:</strong> 604-660-5340
                             </p>
                             <p>

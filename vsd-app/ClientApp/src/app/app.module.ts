@@ -90,6 +90,7 @@ import { RestitutionOverviewComponent } from './shared/restitution/restitution-o
 import { RestitutionInformationComponent } from './shared/restitution/restitution-information/restitution-information.component';
 import { RestitutionContactInformationComponent } from './shared/restitution/contact-information/contact-information.component';
 import { RestitutionReviewComponent } from './shared/restitution/review/review.component';
+import { HeaderTitleService } from './services/titile.service';
 
 @NgModule({
   declarations: [
@@ -234,6 +235,7 @@ import { RestitutionReviewComponent } from './shared/restitution/review/review.c
     JusticeApplicationDataService,
     LookupService,
     StateService,
+    HeaderTitleService,
     Title,
   ],
   entryComponents: [
