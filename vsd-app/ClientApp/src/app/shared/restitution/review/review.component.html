@@ -56,12 +56,12 @@
                                 <td>{{ valueOrEmpty(item.get('firstName')) }}</td>
                             </tr>
                             <tr>
-                                <th>Middle Name</th>
-                                <td>{{ valueOrEmpty(item.get('middleName')) }}</td>
-                            </tr>
-                            <tr>
                                 <th>Last Name</th>
                                 <td>{{ valueOrEmpty(item.get('lastName')) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Preffered Name</th>
+                                <td>{{ valueOrEmpty(item.get('preferredName')) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -87,7 +87,7 @@
             <tbody>
                 <tr>
                     <th>Preferred Method of Contact</th>
-                    <td>{{ enumHelper.ApplicantPreferredMethodOfContact[valueForEnum('restitutionInformation.contactInformation.preferredMethodOfContact')] }}
+                    <td>{{ getOptionSetNameFromVal(enumHelper.ContactMethods, valueOrEmpty('restitutionInformation.contactInformation.preferredMethodOfContact')) }}
                     </td>
                 </tr>
             </tbody>
@@ -115,13 +115,18 @@
                     <td>{{ valueOrEmpty('restitutionInformation.contactInformation.alternatePhoneNumber') | phone }} </td>
                 </tr>
                 <tr>
+                    <th>Leave Voicemail?</th>
+                    <td>{{ getOptionSetNameFromVal(enumHelper.LeaveVoicemail, valueOrEmpty('restitutionInformation.contactInformation.leaveVoicemail')) }}
+                    </td>
+                </tr>
+                <tr>
                     <th>Email Address</th>
                     <td>{{ valueOrEmpty('restitutionInformation.contactInformation.email') }} </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th>May we leave you a detailed message?</th>
                     <td>{{ enumHelper.boolEnum[valueForEnum('restitutionInformation.contactInformation.leaveMessage')] }} </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </ng-container>
@@ -162,22 +167,25 @@
         </h2>
         <table class="table table-striped review-table" *ngFor="let item of form.get('restitutionInformation.courtFiles')['controls']; let i = index">
             <tbody>
-                <tr>
-                    <th>First Name</th>
-                    <td>{{ valueOrEmpty(item.get('firstName')) }}</td>
-                </tr>
-                <tr>
-                    <th>Middle Name</th>
-                    <td>{{ valueOrEmpty(item.get('middleName')) }}</td>
-                </tr>
-                <tr>
-                    <th>Last Name</th>
-                    <td>{{ valueOrEmpty(item.get('lastName')) }}</td>
-                </tr>
-                <tr>
-                    <th>Relationship</th>
-                    <td>{{ valueOrEmpty(item.get('relationship')) }}</td>
-                </tr>
+                <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
+                    <tr>
+                        <th>Offender First Name</th>
+                        <td>{{ valueOrEmpty(item.get('firstName')) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Offender Middle Name</th>
+                        <td>{{ valueOrEmpty(item.get('middleName')) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Offender Last Name</th>
+                        <td>{{ valueOrEmpty(item.get('lastName')) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Relationship to the Offender</th>
+                        <td>{{ valueOrEmpty(item.get('relationship')) }}</td>
+                    </tr>
+                </ng-container>
+
                 <tr>
                     <th>Court File Number</th>
                     <td>{{ valueOrEmpty(item.get('fileNumber')) }}</td>
@@ -207,6 +215,10 @@
                 <tr>
                     <th>Program Name</th>
                     <td>{{ valueOrEmpty(item.get('program')) }}</td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>{{ valueOrEmpty(item.get('phoneNumber')) | phone }} </td>
                 </tr>
                 <tr>
                     <th>Email Address</th>

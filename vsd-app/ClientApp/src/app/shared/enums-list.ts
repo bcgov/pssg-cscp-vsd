@@ -163,6 +163,7 @@ export class EnumHelper {
   }
 
   public ContactMethods = {
+    BLANK:  <IOptionSetVal> { val: 0, name: "--" },
     Phone:  <IOptionSetVal> { val: 2, name: "Phone Call" },
     Email:  <IOptionSetVal> { val: 1, name: "Email" },
     Mail:   <IOptionSetVal> { val: 4, name: "Mail" },
@@ -175,6 +176,14 @@ export class EnumHelper {
     Inuit:                  <IOptionSetVal> { val: 100000002, name: "Inuit" },
     Prefere_Not_To_Answer:  <IOptionSetVal> { val: 100000003, name: "Prefer Not to Answer" },
     Not_Applicable:         <IOptionSetVal> { val: 100000004, name: "Not Applicable" },
+  }
+
+  public LeaveVoicemail = {
+    BLANK:                  <IOptionSetVal> { val: 0, name: "--" },
+    Primary_And_Alternate:  <IOptionSetVal> { val: 100000000, name: "Primary and Alternate" },
+    Primary_Only:           <IOptionSetVal> { val: 100000001, name: "Primary only" },
+    Altrernate_Only:        <IOptionSetVal> { val: 100000002, name: "Alternate only" },
+    No_Voicemain:           <IOptionSetVal> { val: 100000003, name: "No Voicemail" },
   }
 }
 

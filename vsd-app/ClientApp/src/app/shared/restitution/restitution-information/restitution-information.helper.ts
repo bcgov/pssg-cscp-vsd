@@ -33,16 +33,17 @@ export class RestitutionInfoHelper {
 
                 phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
                 alternatePhoneNumber: [''],
+                leaveVoicemail: [0],
                 email: ['', [Validators.email]],
                 confirmEmail: ['', [
                     Validators.email,
                     EmailValidator('email')
                 ]],
-                leaveMessage: [''],
+                // leaveMessage: [''],
             }),
 
 
-            courtFiles: fb.array([this.createCourtFile(fb)]),
+            courtFiles: fb.array([this.createCourtFile(fb, form_type)]),
 
             documents: fb.array([]),
 
@@ -67,22 +68,27 @@ export class RestitutionInfoHelper {
         return fb.group(group);
     }
 
-    createCourtFile(fb: FormBuilder): FormGroup {
-        return fb.group({
-            firstName: [''],
-            middleName: [''],
-            lastName: [''],
-            relationship: [''],
+    createCourtFile(fb: FormBuilder, form_type: IOptionSetVal): FormGroup {
+        let group = {
             fileNumber: [''],
             location: [''],
-        });
+        };
+
+        if (form_type.val === ResitutionForm.Victim.val) {
+            group["firstName"] = [''];
+            group["middleName"] = [''];
+            group["lastName"] = [''];
+            group["relationship"] = [''];
+        }
+
+        return fb.group(group);
     }
 
     createDesignate(fb: FormBuilder): FormGroup {
         return fb.group({
             firstName: ['', [Validators.required]],
-            middleName: [''],
             lastName: ['', [Validators.required]],
+            preferredName: [''],
             actOnBehalf: [false],
         });
     }
@@ -92,6 +98,7 @@ export class RestitutionInfoHelper {
             firstName: [''],
             lastName: [''],
             program: [''],
+            phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
             email: ['', [Validators.email]],
         });
     }

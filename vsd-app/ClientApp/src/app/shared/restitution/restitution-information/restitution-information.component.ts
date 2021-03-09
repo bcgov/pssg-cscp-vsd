@@ -96,7 +96,7 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
 
     addCourtFile() {
         let courtFiles = this.form.get('courtFiles') as FormArray;
-        courtFiles.push(this.restitutionInfoHelper.createCourtFile(this.fb));
+        courtFiles.push(this.restitutionInfoHelper.createCourtFile(this.fb, this.formType));
     }
 
     removeCourtFile(index: number) {
