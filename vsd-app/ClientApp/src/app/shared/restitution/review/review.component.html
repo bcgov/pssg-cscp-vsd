@@ -46,7 +46,7 @@
         </table>
 
         <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
-            <ng-container *ngIf="form.get('restitutionInformation.authoriseVictimDesignate').value === CRMBoolean.True">
+            <ng-container *ngIf="form.get('restitutionInformation.authorizeDesignate').value === CRMBoolean.True">
                 <div *ngFor="let item of form.get('restitutionInformation.designate')['controls']; let i = index">
                     <h3>Authorized Victim Designate</h3>
                     <table class="table table-striped review-table">

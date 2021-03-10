@@ -72,7 +72,7 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
     }
 
     authorizeDesignateChange() {
-        if (this.form.get("authoriseVictimDesignate").value === CRMBoolean.True) {
+        if (this.form.get("authorizeDesignate").value === CRMBoolean.True) {
             this.addDesignate();
         }
         else {

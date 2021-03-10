@@ -94,22 +94,23 @@
         </div>
     </div>
 
-    <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
+    <ng-container>
         <div class="row">
             <div class="col-12">
-                <h3>Authorized Victim Designate</h3>
-                <p>Victims have the option of assigning a designate to communicate with the Restitution Program on their behalf.</p>
+                <h3 *ngIf="formType.val === ResitutionForm.Victim.val">Authorized Victim Designate</h3>
+                <h3 *ngIf="formType.val === ResitutionForm.Offender.val">Authorized Applicant Designate</h3>
+                <!-- <p>Victims have the option of assigning a designate to communicate with the Restitution Program on their behalf.</p> -->
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <app-field label="Do you want to authorize someone to be a Victim Designate?" [required]="true" [valid]="isMyControlValid(form.get('authoriseVictimDesignate'))" errorMessage="Please make a selection" [disabled]="isDisabled">
+                <app-field [label]="'Do you want to authorize someone to be ' + (formType.val === ResitutionForm.Victim.val ? 'a Victim' : 'an Applicant') + ' Designate?'" [required]="true" [valid]="isMyControlValid(form.get('authorizeDesignate'))" errorMessage="Please make a selection" [disabled]="isDisabled">
                     <label class="inline-label">
-                        <input type="radio" [value]="CRMBoolean.True" name="authoriseVictimDesignate" formControlName="authoriseVictimDesignate" (change)="authorizeDesignateChange()">
+                        <input type="radio" [value]="CRMBoolean.True" name="authorizeDesignate" formControlName="authorizeDesignate" (change)="authorizeDesignateChange()">
                         <span>Yes</span>
                     </label>
                     <label class="inline-label">
-                        <input type="radio" [value]="CRMBoolean.False" name="authoriseVictimDesignate" formControlName="authoriseVictimDesignate" (change)="authorizeDesignateChange()">
+                        <input type="radio" [value]="CRMBoolean.False" name="authorizeDesignate" formControlName="authorizeDesignate" (change)="authorizeDesignateChange()">
                         <span>No</span>
                     </label>
                 </app-field>
@@ -151,7 +152,7 @@
     <app-restitution-contact-information [formGroup]="form.get('contactInformation')" [formType]="formType" [lookupData]="lookupData" formGroupName="contactInformation" [isDisabled]="isDisabled"></app-restitution-contact-information>
 
     <ng-container *ngIf="formType.val === ResitutionForm.Offender.val">
-        <h2 class="blue-header" id="ProbationOfficerInformation">Correctional</h2>
+        <h2 class="blue-header" id="ProbationOfficerInformation">Probation/Parole/Custody Information</h2>
 
         <div class="row">
             <div class="col-md-6">
@@ -167,20 +168,20 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <app-field label="Custody Location (if applicable)" [valid]="isMyControlValid(form.get('probationOfficerCustodyLocation'))" errorMessage="Please enter your officer's last name" [disabled]="isDisabled">
-                    <input class="form-control" type="text" formControlName="probationOfficerCustodyLocation" maxlength="100">
+                <app-field label="Parole/Probation Officer Phone Number" [valid]="isMyControlValid(form.get('probationOfficerPhoneNumber'))" errorMessage="Please enter your officer's phone number" [disabled]="isDisabled">
+                    <input class="form-control" mask='(000) 000 0000' type="text" formControlName="probationOfficerPhoneNumber">
                 </app-field>
             </div>
             <div class="col-md-6">
-                <app-field label="Phone Number" [valid]="isMyControlValid(form.get('probationOfficerPhoneNumber'))" errorMessage="Please enter your officer's phone number" [disabled]="isDisabled">
-                    <input class="form-control" mask='(000) 000 0000' type="text" formControlName="probationOfficerPhoneNumber">
+                <app-field label="Parole/Probation Officer Email Address" [valid]="isMyControlValid(form.get('probationOfficerEmail'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
+                    <input class="form-control" type="text" formControlName="probationOfficerEmail" maxlength="100">
                 </app-field>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <app-field label="Email Address" [valid]="isMyControlValid(form.get('probationOfficerEmail'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
-                    <input class="form-control" type="text" formControlName="probationOfficerEmail" maxlength="100">
+                <app-field label="Custody Location (if applicable)" [valid]="isMyControlValid(form.get('probationOfficerCustodyLocation'))" errorMessage="Please enter your officer's last name" [disabled]="isDisabled">
+                    <input class="form-control" type="text" formControlName="probationOfficerCustodyLocation" maxlength="100">
                 </app-field>
             </div>
         </div>

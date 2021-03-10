@@ -19,6 +19,9 @@ export class RestitutionInfoHelper {
             gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
             indigenousStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000004)]],
 
+            authorizeDesignate: ['', Validators.required],
+            designate: fb.array([]),
+
             contactInformation: fb.group({
                 preferredMethodOfContact: [null, [Validators.required, Validators.min(1), Validators.max(100000002)]], // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
 
@@ -39,9 +42,7 @@ export class RestitutionInfoHelper {
                     Validators.email,
                     EmailValidator('email')
                 ]],
-                // leaveMessage: [''],
             }),
-
 
             courtFiles: fb.array([this.createCourtFile(fb, form_type)]),
 
@@ -52,8 +53,6 @@ export class RestitutionInfoHelper {
         }
 
         if (form_type.val === ResitutionForm.Victim.val) {
-            group["authoriseVictimDesignate"] = ['', Validators.required];
-            group["designate"] = fb.array([]);
             group["vsw"] = fb.array([this.createVSW(fb)]);
         }
 
