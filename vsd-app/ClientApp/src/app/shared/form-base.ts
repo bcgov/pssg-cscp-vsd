@@ -463,7 +463,7 @@ export class FormBase {
     return address;
   }
 
-  getOptionSetNameFromVal(optionSet, val: number) {
+  getOptionSetNameFromVal(optionSet, val: any) {
     let ret = Object.values(optionSet).find((o) => o["val"] == val);
     return ret ? ret["name"] : "--";
   }
