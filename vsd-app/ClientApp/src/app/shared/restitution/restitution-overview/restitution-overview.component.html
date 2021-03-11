@@ -1,10 +1,9 @@
 <div [formGroup]="form">
     <div class="page-header">
-        <h1>{{applicant}} Applying to the Restitution Program
-        </h1>
+        <h1>Information for {{applicant}}s Applying to the Restitution Program</h1>
     </div>
 
-    <h3>Who can apply (or be referred) to the Restitution Program?</h3>
+    <h3 class="mt-0">Who can apply to the Restitution Program?</h3>
     <section *ngIf="formType.val === ResitutionForm.Victim.val">
         <ul class="list">
             <li>Are you owed money on a restitution order that has not been paid in full?</li>

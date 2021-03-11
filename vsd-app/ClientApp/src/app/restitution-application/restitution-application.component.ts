@@ -2,7 +2,7 @@ import { AEMService } from '../services/aem.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationType, IOptionSetVal, MY_FORMATS } from '../shared/enums-list';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { FormBase } from "../shared/form-base";
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
@@ -15,6 +15,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { StateService } from '../services/state.service';
 import { config } from '../../config';
 import { iLookupData } from '../interfaces/lookup-data.interface';
+import { HeaderTitleService } from '../services/titile.service';
 
 export enum RESTITUTION_PAGES {
     OVERVIEW,
@@ -33,7 +34,7 @@ export enum RESTITUTION_PAGES {
         { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } },
     ],
 })
-export class RestitutionApplicationComponent extends FormBase implements OnInit {
+export class RestitutionApplicationComponent extends FormBase implements OnInit, OnDestroy {
     @ViewChild('stepper') restitutionStepper: MatVerticalStepper;
     FORM_TYPE: IOptionSetVal = { val: -1, name: '' };
     ApplicationType = ApplicationType;
@@ -62,8 +63,13 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit 
         public state: StateService,
         public lookupService: LookupService,
         private aemService: AEMService,
+        private headerTitleService: HeaderTitleService,
     ) {
         super();
+    }
+
+    ngOnDestroy() {
+        this.headerTitleService.setTitle("Crime Victim Assistance Program");
     }
 
     ngOnInit() {
@@ -72,6 +78,7 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit 
         let form_type = this.route.snapshot.data['formType'];
         if (form_type) {
             this.FORM_TYPE = form_type;
+            this.headerTitleService.setTitle("Restitution Program");
         }
         if (this.state.cloning) {
             this.form = this.state.data;

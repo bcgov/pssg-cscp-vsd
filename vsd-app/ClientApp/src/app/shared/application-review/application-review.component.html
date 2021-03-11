@@ -91,7 +91,7 @@
                 </tr>
                 <tr>
                     <th>Do you identify as an Indigenous person?</th>
-                    <td>{{ enumHelper.IndigenousStatus[valueOrEmpty('personalInformation.indigenousStatus')] }}</td>
+                    <td>{{ getOptionSetNameFromVal(enumHelper.IndigenousStatus, valueOrEmpty('personalInformation.indigenousStatus')) }}</td>
                 </tr>
                 <tr>
                     <th>Primary Phone Number</th>
@@ -119,7 +119,7 @@
                 </tr>
                 <tr>
                     <th>Preferred Method of Contact</th>
-                    <td>{{ enumHelper.ApplicantPreferredMethodOfContact[valueForEnum('personalInformation.preferredMethodOfContact')]  }}
+                    <td>{{ enumHelper.ApplicantPreferredMethodOfContact[valueForEnum('personalInformation.preferredMethodOfContact')] }}
                     </td>
                 </tr>
             </tbody>
@@ -812,7 +812,8 @@
                                 <th>Other</th>
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"></span>
                                     <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true">
-                                        {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
+                                        {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Additional Details</th>
@@ -932,7 +933,8 @@
                                 <th>Other</th>
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherBenefits')"></span>
                                     <span *ngIf="form.get('expenseInformation.haveOtherBenefits').value === true">
-                                        {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span></td>
+                                        {{ valueOrEmpty('expenseInformation.otherSpecificBenefits') }}</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -951,7 +953,8 @@
                                 <th>Other</th>
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"></span>
                                     <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true">
-                                        {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
+                                        {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Additional Details</th>
@@ -1128,7 +1131,7 @@
                 <tbody>
                     <tr>
                         <th>Preferred Method of Contact</th>
-                        <td>{{ enumHelper.ParticipantPreferredMethodOfContact[valueForEnum('representativeInformation.representativePreferredMethodOfContact')]  }}
+                        <td>{{ enumHelper.ParticipantPreferredMethodOfContact[valueForEnum('representativeInformation.representativePreferredMethodOfContact')] }}
                         </td>
                     </tr>
                     <tr>

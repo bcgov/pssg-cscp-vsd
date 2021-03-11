@@ -10,8 +10,17 @@ export class RestitutionInfoHelper {
             firstName: ['', Validators.required],
             middleName: [''],
             lastName: ['', Validators.required],
-            gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
+
+            iHaveOtherNames: [''],
+            otherFirstName: [''],
+            otherLastName: [''],
+
             birthDate: ['', [Validators.required]],
+            gender: [0, [Validators.required, Validators.min(100000000), Validators.max(100000002)]],
+            indigenousStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000004)]],
+
+            authorizeDesignate: ['', Validators.required],
+            designate: fb.array([]),
 
             contactInformation: fb.group({
                 preferredMethodOfContact: [null, [Validators.required, Validators.min(1), Validators.max(100000002)]], // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
@@ -27,16 +36,15 @@ export class RestitutionInfoHelper {
 
                 phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
                 alternatePhoneNumber: [''],
+                leaveVoicemail: [0],
                 email: ['', [Validators.email]],
                 confirmEmail: ['', [
                     Validators.email,
                     EmailValidator('email')
                 ]],
-                leaveMessage: [''],
             }),
 
-
-            courtFiles: fb.array([this.createCourtFile(fb)]),
+            courtFiles: fb.array([this.createCourtFile(fb, form_type)]),
 
             documents: fb.array([]),
 
@@ -45,8 +53,6 @@ export class RestitutionInfoHelper {
         }
 
         if (form_type.val === ResitutionForm.Victim.val) {
-            group["authoriseVictimDesignate"] = ['', Validators.required];
-            group["designate"] = fb.array([]);
             group["vsw"] = fb.array([this.createVSW(fb)]);
         }
 
@@ -61,22 +67,27 @@ export class RestitutionInfoHelper {
         return fb.group(group);
     }
 
-    createCourtFile(fb: FormBuilder): FormGroup {
-        return fb.group({
-            firstName: [''],
-            middleName: [''],
-            lastName: [''],
-            relationship: [''],
+    createCourtFile(fb: FormBuilder, form_type: IOptionSetVal): FormGroup {
+        let group = {
             fileNumber: [''],
             location: [''],
-        });
+        };
+
+        if (form_type.val === ResitutionForm.Victim.val) {
+            group["firstName"] = [''];
+            group["middleName"] = [''];
+            group["lastName"] = [''];
+            group["relationship"] = [''];
+        }
+
+        return fb.group(group);
     }
 
     createDesignate(fb: FormBuilder): FormGroup {
         return fb.group({
             firstName: ['', [Validators.required]],
-            middleName: [''],
             lastName: ['', [Validators.required]],
+            preferredName: [''],
             actOnBehalf: [false],
         });
     }
@@ -86,6 +97,7 @@ export class RestitutionInfoHelper {
             firstName: [''],
             lastName: [''],
             program: [''],
+            phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
             email: ['', [Validators.email]],
         });
     }

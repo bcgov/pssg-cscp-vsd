@@ -7,7 +7,7 @@
         <div class="col-md-6">
             <app-field label="Preferred Method of Contact" [required]="true" [valid]="isMyControlValid(form.get('preferredMethodOfContact'))" errorMessage="Please select your preferred method of contact">
                 <select class="form-control" formControlName="preferredMethodOfContact">
-                    <option [value]="null">Select...</option>
+                    <option [value]="enum.ContactMethods.BLANK.val">Select...</option>
                     <option [value]="enum.ContactMethods.Phone.val">Phone Call</option>
                     <option [value]="enum.ContactMethods.Email.val">Email</option>
                     <option [value]="enum.ContactMethods.Mail.val">Mail</option>
@@ -51,6 +51,19 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-6">
+            <app-field label="I authorize the Restitution Program to leave a voicemail on this phone #" [valid]="isMyControlValid(form.get('leaveVoicemail'))" errorMessage="Please select an option">
+                <select class="form-control" formControlName="leaveVoicemail">
+                    <option [value]="enum.LeaveVoicemail.BLANK.val">Select...</option>
+                    <option [value]="enum.LeaveVoicemail.Primary_And_Alternate.val">Primary and Alternate</option>
+                    <option [value]="enum.LeaveVoicemail.Primary_Only.val">Primary only</option>
+                    <option [value]="enum.LeaveVoicemail.Altrernate_Only.val">Alternate only</option>
+                    <option [value]="enum.LeaveVoicemail.No_Voicemain.val">No Voicemail</option>
+                </select>
+            </app-field>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <app-field label="Email Address" [valid]="isMyControlValid(form.get('email'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
                 <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
@@ -63,7 +76,7 @@
             </app-field>
         </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
         <div class="col">
             <app-field label="May we leave a detailed message?" errorMessage="" [disabled]="isDisabled" [valid]="isMyControlValid(form.get('leaveMessage'))" errorMessage="Please choose an option">
                 <label class="inline-label">
@@ -76,5 +89,5 @@
                 </label>
             </app-field>
         </div>
-    </div>
+    </div> -->
 </div>

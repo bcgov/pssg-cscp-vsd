@@ -13,7 +13,7 @@ export interface VictimRestitutionInformation {
   victimGender: number;
   victimBirthDate?: Date;
 
-  uthoriseVictimDesignate: boolean;
+  authorizeDesignate: boolean;
   authorisedDesignateFirstName: string;
   authorisedDesignateMiddleName: string;
   authorisedDesignateLastName: string;

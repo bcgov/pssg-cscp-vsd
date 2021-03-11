@@ -16,7 +16,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int victimGender { get; set; }
         public DateTime? victimBirthDate { get; set; }
 
-        public bool authoriseVictimDesignate { get; set; }
+        public bool authorizeDesignate { get; set; }
         public string authorisedDesignateFirstName { get; set; }
         public string authorisedDesignateMiddleName { get; set; }
         public string authorisedDesignateLastName { get; set; }

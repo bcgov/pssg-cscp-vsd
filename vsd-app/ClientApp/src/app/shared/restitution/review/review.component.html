@@ -23,6 +23,14 @@
                     <td>{{ valueOrEmpty('restitutionInformation.lastName') }} </td>
                 </tr>
                 <tr>
+                    <th>Other First Name</th>
+                    <td>{{ valueOrEmpty('restitutionInformation.otherFirstName') }} </td>
+                </tr>
+                <tr>
+                    <th>Other Last Name</th>
+                    <td>{{ valueOrEmpty('restitutionInformation.otherLastName') }} </td>
+                </tr>
+                <tr>
                     <th>Birth Date</th>
                     <td>{{ valueOrEmpty('restitutionInformation.birthDate', '') | date }}</td>
                 </tr>
@@ -30,38 +38,44 @@
                     <th>Gender</th>
                     <td>{{ enumHelper.Gender[valueForEnum('restitutionInformation.gender')] }} </td>
                 </tr>
+                <tr>
+                    <th>Do you identify as an Indigenous person?</th>
+                    <td>{{ getOptionSetNameFromVal(enumHelper.IndigenousStatus, valueOrEmpty('restitutionInformation.indigenousStatus')) }}</td>
+                </tr>
             </tbody>
         </table>
 
-        <ng-container *ngIf="form.get('restitutionInformation.authoriseVictimDesignate').value === CRMBoolean.True">
-            <div *ngFor="let item of form.get('restitutionInformation.designate')['controls']; let i = index">
-                <h3>Authorized Victim Designate</h3>
-                <table class="table table-striped review-table">
-                    <tbody>
-                        <tr>
-                            <th>First Name</th>
-                            <td>{{ valueOrEmpty(item.get('firstName')) }}</td>
-                        </tr>
-                        <tr>
-                            <th>Middle Name</th>
-                            <td>{{ valueOrEmpty(item.get('middleName')) }}</td>
-                        </tr>
-                        <tr>
-                            <th>Last Name</th>
-                            <td>{{ valueOrEmpty(item.get('lastName')) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
+            <ng-container *ngIf="form.get('restitutionInformation.authorizeDesignate').value === CRMBoolean.True">
+                <div *ngFor="let item of form.get('restitutionInformation.designate')['controls']; let i = index">
+                    <h3>Authorized Victim Designate</h3>
+                    <table class="table table-striped review-table">
+                        <tbody>
+                            <tr>
+                                <th>First Name</th>
+                                <td>{{ valueOrEmpty(item.get('firstName')) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Last Name</th>
+                                <td>{{ valueOrEmpty(item.get('lastName')) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Preffered Name</th>
+                                <td>{{ valueOrEmpty(item.get('preferredName')) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                <div *ngIf="item.get('actOnBehalf').value === true">
-                    <p>
-                        <label class="inline-label inline-checkbox-label">
-                            <input type="checkbox" [checked]="item.get('actOnBehalf').value === true" disabled="disabled" />
-                            <span>I hereby authorize to act on my behalf for the purposes of involvement with the Restitution Program which includes personal information pertaining to me.</span>
-                        </label>
-                    </p>
+                    <div *ngIf="item.get('actOnBehalf').value === true">
+                        <p>
+                            <label class="inline-label inline-checkbox-label">
+                                <input type="checkbox" [checked]="item.get('actOnBehalf').value === true" disabled="disabled" />
+                                <span>I hereby authorize to act on my behalf for the purposes of involvement with the Restitution Program which includes personal information pertaining to me.</span>
+                            </label>
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </ng-container>
         </ng-container>
     </ng-container>
 
@@ -73,7 +87,7 @@
             <tbody>
                 <tr>
                     <th>Preferred Method of Contact</th>
-                    <td>{{ enumHelper.ApplicantPreferredMethodOfContact[valueForEnum('restitutionInformation.contactInformation.preferredMethodOfContact')] }}
+                    <td>{{ getOptionSetNameFromVal(enumHelper.ContactMethods, valueOrEmpty('restitutionInformation.contactInformation.preferredMethodOfContact')) }}
                     </td>
                 </tr>
             </tbody>
@@ -101,13 +115,18 @@
                     <td>{{ valueOrEmpty('restitutionInformation.contactInformation.alternatePhoneNumber') | phone }} </td>
                 </tr>
                 <tr>
+                    <th>Leave Voicemail?</th>
+                    <td>{{ getOptionSetNameFromVal(enumHelper.LeaveVoicemail, valueOrEmpty('restitutionInformation.contactInformation.leaveVoicemail')) }}
+                    </td>
+                </tr>
+                <tr>
                     <th>Email Address</th>
                     <td>{{ valueOrEmpty('restitutionInformation.contactInformation.email') }} </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th>May we leave you a detailed message?</th>
                     <td>{{ enumHelper.boolEnum[valueForEnum('restitutionInformation.contactInformation.leaveMessage')] }} </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </ng-container>
@@ -148,22 +167,25 @@
         </h2>
         <table class="table table-striped review-table" *ngFor="let item of form.get('restitutionInformation.courtFiles')['controls']; let i = index">
             <tbody>
-                <tr>
-                    <th>First Name</th>
-                    <td>{{ valueOrEmpty(item.get('firstName')) }}</td>
-                </tr>
-                <tr>
-                    <th>Middle Name</th>
-                    <td>{{ valueOrEmpty(item.get('middleName')) }}</td>
-                </tr>
-                <tr>
-                    <th>Last Name</th>
-                    <td>{{ valueOrEmpty(item.get('lastName')) }}</td>
-                </tr>
-                <tr>
-                    <th>Relationship</th>
-                    <td>{{ valueOrEmpty(item.get('relationship')) }}</td>
-                </tr>
+                <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
+                    <tr>
+                        <th>Offender First Name</th>
+                        <td>{{ valueOrEmpty(item.get('firstName')) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Offender Middle Name</th>
+                        <td>{{ valueOrEmpty(item.get('middleName')) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Offender Last Name</th>
+                        <td>{{ valueOrEmpty(item.get('lastName')) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Relationship to the Offender</th>
+                        <td>{{ valueOrEmpty(item.get('relationship')) }}</td>
+                    </tr>
+                </ng-container>
+
                 <tr>
                     <th>Court File Number</th>
                     <td>{{ valueOrEmpty(item.get('fileNumber')) }}</td>
@@ -193,6 +215,10 @@
                 <tr>
                     <th>Program Name</th>
                     <td>{{ valueOrEmpty(item.get('program')) }}</td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>{{ valueOrEmpty(item.get('phoneNumber')) | phone }} </td>
                 </tr>
                 <tr>
                     <th>Email Address</th>
