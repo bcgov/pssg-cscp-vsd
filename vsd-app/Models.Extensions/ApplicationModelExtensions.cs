@@ -43,7 +43,15 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_applicantsmaritalstatus = model.PersonalInformation.maritalStatus;
 
                 application.Application.vsd_applicantsoccupation = model.PersonalInformation.occupation;
+
                 application.Application.vsd_applicantssocialinsurancenumber = model.PersonalInformation.sin;
+                if (application.Application.vsd_applicantssocialinsurancenumber.Length == 9)
+                {
+                    application.Application.vsd_applicantssocialinsurancenumber = application.Application.vsd_applicantssocialinsurancenumber.Substring(0, 3) + " " +
+                                                                                application.Application.vsd_applicantssocialinsurancenumber.Substring(3, 3) + " " +
+                                                                                application.Application.vsd_applicantssocialinsurancenumber.Substring(6);
+                }
+
                 application.Application.vsd_indigenous = model.PersonalInformation.indigenousStatus;
 
                 application.Application.vsd_applicantsprimaryphonenumber = model.PersonalInformation.phoneNumber;
@@ -64,6 +72,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_applicantsprimarycountry = model.PersonalInformation.primaryAddress.country;
                     application.Application.vsd_applicantsprimarypostalcode = model.PersonalInformation.primaryAddress.postalCode;
 
+                    //postal code formatting - if it is a Canadian postal code of expected length
+                    if (application.Application.vsd_applicantsprimarycountry.Equals("Canada"))
+                    {
+                        application.Application.vsd_applicantsprimarypostalcode = application.Application.vsd_applicantsprimarypostalcode.ToUpper();
+                        if (application.Application.vsd_applicantsprimarypostalcode.Length == 6)
+                        {
+                            application.Application.vsd_applicantsprimarypostalcode = application.Application.vsd_applicantsprimarypostalcode.Substring(0, 3) + " " + application.Application.vsd_applicantsprimarypostalcode.Substring(3);
+                        }
+                    }
+
                     if (model.PersonalInformation.doNotLiveAtAddress && string.IsNullOrEmpty(model.PersonalInformation.mailRecipient))
                     {
                         application.Application.vsd_applicantsprimaryaddressline3 = "c/o";
@@ -82,6 +100,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_applicantsalternateprovince = model.PersonalInformation.alternateAddress.province;
                     application.Application.vsd_applicantsalternatecountry = model.PersonalInformation.alternateAddress.country;
                     application.Application.vsd_applicantsalternatepostalcode = model.PersonalInformation.alternateAddress.postalCode;
+
+                    //postal code formatting - if it is a Canadian postal code of expected length
+                    if (application.Application.vsd_applicantsalternatecountry.Equals("Canada"))
+                    {
+                        application.Application.vsd_applicantsalternatepostalcode = application.Application.vsd_applicantsalternatepostalcode.ToUpper();
+                        if (application.Application.vsd_applicantsalternatepostalcode.Length == 6)
+                        {
+                            application.Application.vsd_applicantsalternatepostalcode = application.Application.vsd_applicantsalternatepostalcode.Substring(0, 3) + " " + application.Application.vsd_applicantsalternatepostalcode.Substring(3);
+                        }
+                    }
                 }
             }
 
@@ -108,7 +136,14 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
 
                 application.Application.vsd_cvap_victimoccupation = model.VictimInformation.occupation;
+
                 application.Application.vsd_cvap_victimsocialinsurancenumber = model.VictimInformation.sin;
+                if (application.Application.vsd_cvap_victimsocialinsurancenumber.Length == 9)
+                {
+                    application.Application.vsd_cvap_victimsocialinsurancenumber = application.Application.vsd_cvap_victimsocialinsurancenumber.Substring(0, 3) + " " +
+                                                                                application.Application.vsd_cvap_victimsocialinsurancenumber.Substring(3, 3) + " " +
+                                                                                application.Application.vsd_cvap_victimsocialinsurancenumber.Substring(6);
+                }
 
                 application.Application.vsd_cvap_victimprimaryphonenumber = model.VictimInformation.phoneNumber;
                 application.Application.vsd_cvap_victimalternatephonenumber = model.VictimInformation.alternatePhoneNumber;
@@ -122,6 +157,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_victimprovince = model.VictimInformation.primaryAddress.province;
                     application.Application.vsd_cvap_victimcountry = model.VictimInformation.primaryAddress.country;
                     application.Application.vsd_cvap_victimpostalcode = model.VictimInformation.primaryAddress.postalCode;
+
+                    //postal code formatting - if it is a Canadian postal code of expected length
+                    if (application.Application.vsd_cvap_victimcountry.Equals("Canada"))
+                    {
+                        application.Application.vsd_cvap_victimpostalcode = application.Application.vsd_cvap_victimpostalcode.ToUpper();
+                        if (application.Application.vsd_cvap_victimpostalcode.Length == 6)
+                        {
+                            application.Application.vsd_cvap_victimpostalcode = application.Application.vsd_cvap_victimpostalcode.Substring(0, 3) + " " + application.Application.vsd_cvap_victimpostalcode.Substring(3);
+                        }
+                    }
                 }
 
             }
@@ -322,6 +367,16 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_racaf_lawyerprovince = model.CrimeInformation.racafInformation.lawyerAddress?.province;
                     application.Application.vsd_racaf_lawyerpostalcode = model.CrimeInformation.racafInformation.lawyerAddress?.postalCode;
                     application.Application.vsd_racaf_lawyercountry = model.CrimeInformation.racafInformation.lawyerAddress?.country;
+
+                    //postal code formatting - if it is a Canadian postal code of expected length
+                    if (application.Application.vsd_racaf_lawyercountry.Equals("Canada"))
+                    {
+                        application.Application.vsd_racaf_lawyerpostalcode = application.Application.vsd_racaf_lawyerpostalcode.ToUpper();
+                        if (application.Application.vsd_racaf_lawyerpostalcode.Length == 6)
+                        {
+                            application.Application.vsd_racaf_lawyerpostalcode = application.Application.vsd_racaf_lawyerpostalcode.Substring(0, 3) + " " + application.Application.vsd_racaf_lawyerpostalcode.Substring(3);
+                        }
+                    }
 
                     application.Application.vsd_racaf_signature = model.CrimeInformation.racafInformation.signature;
                     application.Application.vsd_racaf_fullname = model.CrimeInformation.racafInformation.signName;
@@ -727,6 +782,19 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
         private static void AddProvidersToCollection(Providercollection[] providers, ApplicationDynamicsModel application)
         {
+            foreach (Providercollection provider in providers)
+            {
+                //postal code formatting - if it is a Canadian postal code of expected length
+                if (provider.vsd_country.Equals("Canada"))
+                {
+                    provider.vsd_postalcode = provider.vsd_postalcode.ToUpper();
+                    if (provider.vsd_postalcode.Length == 6)
+                    {
+                        provider.vsd_postalcode = provider.vsd_postalcode.Substring(0, 3) + " " + provider.vsd_postalcode.Substring(3);
+                    }
+                }
+            }
+
             int tempProviderCount = 0;
             if (application.ProviderCollection == null)
             {
