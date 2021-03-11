@@ -220,10 +220,15 @@
                 <div class="row">
                     <div class="col-md-4">
                         <app-field label="Relationship to the Offender" [valid]="isMyControlValid(item.get('relationship'))" errorMessage="Please enter relationship" [disabled]="isDisabled">
-                            <input class="form-control" type="text" formControlName="relationship" maxlength="100">
+                            <select class="form-control" formControlName="relationship">
+                                <option value="">Select...</option>
+                                <option *ngFor="let rel of relationshipList" [value]="rel">{{ rel }} </option>
+                            </select>
+                            <app-tool-tip *ngIf="item.get('relationship').value === 'Acquaintance'" [trigger]="relationshipToolTip" class="relationshipToolTip"></app-tool-tip>
                         </app-field>
                     </div>
                 </div>
+                <ng-template #relationshipToolTip>Use this category for close friends, neighbours, authority figures, reverse authority figures, business relationships and casual acquaintances.</ng-template>
             </ng-container>
 
             <div class="row" [class.remove-row]="formType.val === ResitutionForm.Offender.val">

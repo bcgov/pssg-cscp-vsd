@@ -9,6 +9,7 @@ import { POSTAL_CODE } from "../../regex.constants";
 import { AddressHelper } from "../../address/address.helper";
 import { RestitutionInfoHelper } from "./restitution-information.helper";
 import { SignPadDialog } from "../../../sign-dialog/sign-dialog.component";
+import { LookupService } from "../../../services/lookup.service";
 
 @Component({
     selector: 'app-restitution-information',
@@ -35,12 +36,15 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
     phoneMinLength: number = 10;
     phoneMaxLength: number = 15;
 
+    relationshipList: any = [];
+
     restitutionInfoHelper = new RestitutionInfoHelper();
 
     constructor(
         private controlContainer: ControlContainer,
         private fb: FormBuilder,
         private matDialog: MatDialog,
+        public lookupService: LookupService,
     ) {
         super();
     }
@@ -59,6 +63,24 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
             this.page_header = "Restitution Program Offender Application";
             this.applicant_type = "Offender";
         }
+
+        // if (this.lookupData.relationships && this.lookupData.relationships.length > 0) {
+        //     this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
+        // }
+        // else {
+        //     this.lookupService.getRestitutionRelationships().subscribe((res) => {
+        //         this.lookupData.relationships = res.value;
+        //         if (this.lookupData.relationships) {
+        //             this.lookupData.relationships.sort(function (a, b) {
+        //                 return a.vsd_name.localeCompare(b.vsd_name);
+        //             });
+        //         }
+        //         this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
+        //     });
+        // }
+
+        console.log("TODO - realtionship list should be loaded dynamically from COAST");
+        this.relationshipList = ["Family relationship", "Other intimate relationship", "Acquaintance", "Criminal relationship", "Stranger", "Unknown"];
     }
 
     iHaveOtherNamesChange(val: boolean) {
