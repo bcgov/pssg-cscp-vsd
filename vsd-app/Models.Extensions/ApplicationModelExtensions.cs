@@ -73,7 +73,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_applicantsprimarypostalcode = model.PersonalInformation.primaryAddress.postalCode;
 
                     //postal code formatting - if it is a Canadian postal code of expected length
-                    if (application.Application.vsd_applicantsprimarycountry.Equals("Canada"))
+                    if (!String.IsNullOrEmpty(application.Application.vsd_applicantsprimarycountry) && application.Application.vsd_applicantsprimarycountry.Equals("Canada") && !String.IsNullOrEmpty(application.Application.vsd_applicantsprimarypostalcode))
                     {
                         application.Application.vsd_applicantsprimarypostalcode = application.Application.vsd_applicantsprimarypostalcode.ToUpper();
                         if (application.Application.vsd_applicantsprimarypostalcode.Length == 6)
@@ -102,7 +102,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_applicantsalternatepostalcode = model.PersonalInformation.alternateAddress.postalCode;
 
                     //postal code formatting - if it is a Canadian postal code of expected length
-                    if (application.Application.vsd_applicantsalternatecountry.Equals("Canada"))
+                    if (!String.IsNullOrEmpty(application.Application.vsd_applicantsalternatecountry) && application.Application.vsd_applicantsalternatecountry.Equals("Canada") && !String.IsNullOrEmpty(application.Application.vsd_applicantsalternatepostalcode))
                     {
                         application.Application.vsd_applicantsalternatepostalcode = application.Application.vsd_applicantsalternatepostalcode.ToUpper();
                         if (application.Application.vsd_applicantsalternatepostalcode.Length == 6)
@@ -159,7 +159,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_cvap_victimpostalcode = model.VictimInformation.primaryAddress.postalCode;
 
                     //postal code formatting - if it is a Canadian postal code of expected length
-                    if (application.Application.vsd_cvap_victimcountry.Equals("Canada"))
+                    if (!String.IsNullOrEmpty(application.Application.vsd_cvap_victimcountry) && application.Application.vsd_cvap_victimcountry.Equals("Canada") && !String.IsNullOrEmpty(application.Application.vsd_cvap_victimpostalcode))
                     {
                         application.Application.vsd_cvap_victimpostalcode = application.Application.vsd_cvap_victimpostalcode.ToUpper();
                         if (application.Application.vsd_cvap_victimpostalcode.Length == 6)
@@ -369,7 +369,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     application.Application.vsd_racaf_lawyercountry = model.CrimeInformation.racafInformation.lawyerAddress?.country;
 
                     //postal code formatting - if it is a Canadian postal code of expected length
-                    if (application.Application.vsd_racaf_lawyercountry.Equals("Canada"))
+                    if (!String.IsNullOrEmpty(application.Application.vsd_racaf_lawyercountry) && application.Application.vsd_racaf_lawyercountry.Equals("Canada") && !String.IsNullOrEmpty(application.Application.vsd_racaf_lawyerpostalcode))
                     {
                         application.Application.vsd_racaf_lawyerpostalcode = application.Application.vsd_racaf_lawyerpostalcode.ToUpper();
                         if (application.Application.vsd_racaf_lawyerpostalcode.Length == 6)
@@ -785,7 +785,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             foreach (Providercollection provider in providers)
             {
                 //postal code formatting - if it is a Canadian postal code of expected length
-                if (provider.vsd_country.Equals("Canada"))
+                if (!String.IsNullOrEmpty(provider.vsd_country) && provider.vsd_country.Equals("Canada") && !String.IsNullOrEmpty(provider.vsd_postalcode))
                 {
                     provider.vsd_postalcode = provider.vsd_postalcode.ToUpper();
                     if (provider.vsd_postalcode.Length == 6)
