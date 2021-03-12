@@ -56,12 +56,12 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
         // console.log(this.form);
 
         if (this.formType.val === ResitutionForm.Victim.val) {
-            this.page_header = "Victim Information & Addresses";
+            this.page_header = "Victim Application";
             this.applicant_type = "Victim";
         }
         else if (this.formType.val === ResitutionForm.Offender.val) {
-            this.page_header = "Restitution Program Offender Application";
-            this.applicant_type = "Offender";
+            this.page_header = "Offender Application";
+            this.applicant_type = "Applicant";
         }
 
         // if (this.lookupData.relationships && this.lookupData.relationships.length > 0) {
