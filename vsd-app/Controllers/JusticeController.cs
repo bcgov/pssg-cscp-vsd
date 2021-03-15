@@ -52,7 +52,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected error while saving application. Source = VSD");
+                _logger.Error(e, "Unexpected error while saving application. Source = VSD", model);
                 return BadRequest();
             }
             finally { }
@@ -84,7 +84,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected error while submitting counsellor invoice. Source = VSD");
+                _logger.Error(e, "Unexpected error while submitting counsellor invoice. Source = VSD", model);
                 return BadRequest();
             }
             finally { }
@@ -116,7 +116,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected error while saving victim restitution. Source = VSD");
+                _logger.Error(e, "Unexpected error while saving victim restitution. Source = VSD", model);
                 return BadRequest();
             }
             finally { }
@@ -149,7 +149,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected error while saving offender restitution. Source = VSD");
+                _logger.Error(e, "Unexpected error while saving offender restitution. Source = VSD", model);
                 return BadRequest();
             }
             finally { }
@@ -169,7 +169,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected error while validating vendor. Source = VSD");
+                _logger.Error(e, "Unexpected error while validating vendor. Source = VSD", VendorNumber, VendorPostalCode);
                 return BadRequest();
             }
             finally { }

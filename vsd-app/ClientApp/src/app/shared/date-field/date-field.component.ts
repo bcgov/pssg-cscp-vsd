@@ -42,7 +42,7 @@ export class DateFieldComponent implements OnInit {
 
     output() {
         if (this.day == 0 || this.month == -1 || this.year == 0) {
-            this.control.patchValue('');
+            this.control.patchValue(null);
             return;
         }
 

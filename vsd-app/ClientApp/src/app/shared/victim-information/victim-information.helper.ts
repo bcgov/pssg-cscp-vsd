@@ -43,10 +43,10 @@ export class VictimInfoHelper {
         if (form_type === ApplicationType.IFM_Application) {
             group['sin'] = ['', [Validators.minLength(9), Validators.maxLength(9)]];
             group['occupation'] = [''];
-            group['birthDate'] = ['', [Validators.required]];
+            group['birthDate'] = [null, [Validators.required]];
         }
         else if (form_type === ApplicationType.Witness_Application) {
-            group['birthDate'] = [''];
+            group['birthDate'] = [null];
         }
 
         return fb.group(group);

@@ -45,7 +45,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_applicantsoccupation = model.PersonalInformation.occupation;
 
                 application.Application.vsd_applicantssocialinsurancenumber = model.PersonalInformation.sin;
-                if (application.Application.vsd_applicantssocialinsurancenumber.Length == 9)
+                if (!String.IsNullOrEmpty(application.Application.vsd_applicantssocialinsurancenumber) && application.Application.vsd_applicantssocialinsurancenumber.Length == 9)
                 {
                     application.Application.vsd_applicantssocialinsurancenumber = application.Application.vsd_applicantssocialinsurancenumber.Substring(0, 3) + " " +
                                                                                 application.Application.vsd_applicantssocialinsurancenumber.Substring(3, 3) + " " +
@@ -138,7 +138,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_cvap_victimoccupation = model.VictimInformation.occupation;
 
                 application.Application.vsd_cvap_victimsocialinsurancenumber = model.VictimInformation.sin;
-                if (application.Application.vsd_cvap_victimsocialinsurancenumber.Length == 9)
+                if (!String.IsNullOrEmpty(application.Application.vsd_cvap_victimsocialinsurancenumber) && application.Application.vsd_cvap_victimsocialinsurancenumber.Length == 9)
                 {
                     application.Application.vsd_cvap_victimsocialinsurancenumber = application.Application.vsd_cvap_victimsocialinsurancenumber.Substring(0, 3) + " " +
                                                                                 application.Application.vsd_cvap_victimsocialinsurancenumber.Substring(3, 3) + " " +
