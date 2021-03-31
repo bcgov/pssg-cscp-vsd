@@ -39,6 +39,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     emailIsRequired: boolean = false;
     addressIsRequired: boolean = false;
     alternateAddressIsRequired: boolean = false;
+    addressHasOtherOption: boolean = false;
 
     addressHelper = new AddressHelper();
 
@@ -78,6 +79,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             this.addressSubscription = this.form.get('primaryAddress').valueChanges.subscribe(value => {
                 this.copyPersonalAddressToRepresentativeAddress(this.form.parent);
                 this.setPhoneValidators();
+                this.setEmailValidators();
             });
 
             this.phoneSubscription = this.form.get('phoneNumber').valueChanges.subscribe(value => {
@@ -221,6 +223,9 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
             this.setControlValidators(emailControl, [Validators.required, Validators.email]);
             this.setControlValidators(emailConfirmControl, [Validators.required, Validators.email, EmailValidator('email')]);
         }
+
+        //verify that email is marked as required per "Other" address rule
+        this.setEmailValidators();
     }
 
     iHaveOtherNamesChange(val: boolean) {
@@ -283,6 +288,27 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         else {
             this.isVoiceMailRequired = false;
             this.clearControlValidators(voicemailControl, options);
+        }
+    }
+
+    setEmailValidators() {
+        this.addressHasOtherOption = false;
+        //if the user selects "Other" for any of the Primary Address fields Country, Province, or City
+        //Then email is required for CVAP to follow up with the submitter about their address information
+
+        //email was already required - so we don't need to do anything right now
+        if (this.emailIsRequired) {
+            return;
+        }
+        let address = this.form.get('primaryAddress');
+        let emailControl = this.form.get('email');
+
+        if (address.get("country").value == "Other" || address.get("province").value == "Other" || address.get("city").value == "Other") {
+            this.addressHasOtherOption = true;
+            this.setControlValidators(emailControl, [Validators.required, Validators.email]);
+        }
+        else {
+            this.setControlValidators(emailControl, [Validators.email]);
         }
     }
 

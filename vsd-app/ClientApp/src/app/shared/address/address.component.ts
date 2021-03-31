@@ -8,6 +8,7 @@ import { LookupService } from '../../services/lookup.service';
 import { noop, Observable, Observer, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry, catchError, map, switchMap, tap } from 'rxjs/operators';
+import { listener } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-address',
@@ -67,6 +68,7 @@ export class AddressComponent implements OnInit {
   }
 
   ngOnInit() {
+    //need to ensure only ONE Other option is in each dropdown...
     //city search
     this.suggestions$ = new Observable((observer: Observer<string>) => {
       observer.next(this.group['controls']['city'].value.toString());
@@ -146,11 +148,13 @@ export class AddressComponent implements OnInit {
     pref_countries.sort(function (a, b) {
       return config.preferred_countries.findIndex(c => c.vsd_countryid == a.vsd_countryid) - config.preferred_countries.findIndex(c => c.vsd_countryid == b.vsd_countryid);
     });
+    if (!this.alreadyHasOtherOption(pref_countries) && !this.alreadyHasOtherOption(remaining_countries)) pref_countries.push(config.other_country);
 
     remaining_countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
 
     this.countryList = pref_countries.concat(remaining_countries);
     this.cityList = this.lookupData.cities;
+    if (!this.alreadyHasOtherOption(this.cityList)) this.cityList.push(config.other_city);
     this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
 
     let canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
@@ -166,6 +170,7 @@ export class AddressComponent implements OnInit {
 
     if (this.selectedCountry) {
       this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value === this.selectedCountry.vsd_countryid);
+      if (!this.alreadyHasOtherOption(this.provinceList)) this.provinceList.push(config.other_province);
       this.provinceList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
     }
 
@@ -195,6 +200,7 @@ export class AddressComponent implements OnInit {
     this.selectedCountry = this.lookupData.countries.filter(c => c.vsd_name.toLowerCase() == selection)[0];
     if (this.selectedCountry) {
       this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value === this.selectedCountry.vsd_countryid);
+      if (!this.alreadyHasOtherOption(this.provinceList)) this.provinceList.push(config.other_province);
       if (this.provinceList) {
         this.provinceList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
       }
@@ -207,28 +213,29 @@ export class AddressComponent implements OnInit {
 
       this.setProvinceAndPostalType(this.selectedCountry.vsd_name);
 
-      if (this.provinceList.length == 0) {
+      if (this.provinceList.length == 1 && this.selectedCountry && this.selectedCountry.vsd_countryid) {
         this.lookupService.getCitiesByCountry(this.selectedCountry.vsd_countryid).subscribe((city_res) => {
           // console.log(city_res);
           if (city_res.value) {
             this.cityList = city_res.value;
+            if (!this.alreadyHasOtherOption(this.cityList)) this.cityList.push(config.other_city);
             this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
           }
           else {
-            this.cityList = [];
+            this.cityList = [config.other_city];
           }
           this.setCityValidators();
         });
       }
       else {
-        this.cityList = [];
+        this.cityList = [config.other_city];
         this.setCityValidators();
       }
     }
     else {
-      this.provinceList = [];
+      this.provinceList = [config.other_province];
       this.setProvinceAndPostalType("");
-      this.cityList = [];
+      this.cityList = [config.other_city];
       this.setCityValidators();
     }
   }
@@ -238,21 +245,22 @@ export class AddressComponent implements OnInit {
     cityControl.patchValue('');
     let selection = event.target.value.toLowerCase();
     this.selectedProvince = this.lookupData.provinces.filter(c => c.vsd_name.toLowerCase() == selection)[0];
-    if (this.selectedProvince) {
+    if (this.selectedProvince && this.selectedCountry && this.selectedCountry.vsd_countryid && this.selectedProvince.vsd_provinceid) {
       this.lookupService.getCitiesByProvince(this.selectedCountry.vsd_countryid, this.selectedProvince.vsd_provinceid).subscribe((city_res) => {
         // console.log(city_res);
         if (city_res.value) {
           this.cityList = city_res.value;
+          if (!this.alreadyHasOtherOption(this.cityList)) this.cityList.push(config.other_city);
           this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
         }
         else {
-          this.cityList = [];
+          this.cityList = [config.other_city];
         }
         this.setCityValidators();
       });
     }
     else {
-      this.cityList = [];
+      this.cityList = [config.other_city];
       this.setCityValidators();
     }
   }
@@ -324,4 +332,10 @@ export class AddressComponent implements OnInit {
       this.isCityDisabled = false;
     }
   }
+
+  alreadyHasOtherOption(list: any) {
+    return list.findIndex(o => o.vsd_name == "Other") >= 0;
+  }
 }
+
+

@@ -199,14 +199,14 @@
 
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
+            <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true || addressHasOtherOption" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
                 <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
             </app-field>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm your email address">
+            <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true || addressHasOtherOption" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm your email address">
                 <input class="form-control" type="text" (blur)="trimEmail(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
             </app-field>
         </div>
@@ -243,6 +243,9 @@
             </app-field>
         </div>
     </div>
+
+    <p>When entering an address, throughout this application, if the Country, Province/State or City is not in the dropdown list, use the "Other" option and a staff member will contact you by email to obtain the information. Please provide an email address for this purpose.</p>
+
     <div class="row">
         <div class="col-12">
             <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true"></app-address>

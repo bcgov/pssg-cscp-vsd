@@ -26,7 +26,12 @@ export const config = {
         { vsd_name: "Italy", vsd_countryid: "31b05a13-e149-ea11-b816-00505683fbf4" },
         { vsd_name: "China", vsd_countryid: "15b05a13-e149-ea11-b816-00505683fbf4" },
         { vsd_name: "Russia", vsd_countryid: "64bb1d2f-e56a-ea11-b812-005056830319" },
+        { vsd_name: "Other", vsd_countryid: "" },
     ],
+
+    other_country: { vsd_name: "Other", vsd_countryid: "" },
+    other_province: { vsd_name: "Other", vsd_countryid: "", _vsd_countryid_value: "", vsd_code: "", vsd_provinceid: "" },
+    other_city: { vsd_name: "Other", _vsd_countryid_value: "", _vsd_stateid_value: "", vsd_cityid: "" },
 
     accepted_file_extensions: {
         "pdf": true,
