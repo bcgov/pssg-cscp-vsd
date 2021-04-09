@@ -493,7 +493,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
           this.isVendorValid = false;
         }
 
-        if (vendorNumber && vendorPostalCode && counsellorNumber && counsellorLastName && !this.didValidateCounsellor) {
+        if (vendorNumber && vendorPostalCode && counsellorNumber && counsellorLastName) {
           this.justiceDataService.validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName).subscribe((res: any) => {
             this.didValidateCounsellor = true;
             this.isCounsellorValid = res.IsSuccess;
