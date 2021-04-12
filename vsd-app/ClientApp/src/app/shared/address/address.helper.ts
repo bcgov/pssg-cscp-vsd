@@ -24,7 +24,16 @@ export class AddressHelper {
             control.updateValueAndValidity(options);
         }
 
-        postalControl.setValidators([Validators.pattern(this.postalRegex)]);
+        if (form.get(field + '.country').value === "Canada") {
+            postalControl.setValidators([Validators.pattern(this.postalRegex)]);
+        }
+        else if (form.get(field + '.country').value === "United States of America") {
+            postalControl.setValidators([Validators.pattern(this.zipRegex)]);
+        }
+        else {
+            postalControl.clearValidators();
+        }
+
         postalControl.setErrors(null, options);
         // postalControl.markAsTouched();
         postalControl.updateValueAndValidity(options);
