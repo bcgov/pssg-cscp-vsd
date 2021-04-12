@@ -164,6 +164,7 @@ export class AddressComponent implements OnInit {
 
     let countryVal = this.group['controls']['country'].value.toString();
     this.selectedCountry = this.lookupData.countries.filter(c => c.vsd_name.toLowerCase() == countryVal.toLowerCase())[0];
+    if (countryVal === "Other") this.selectedCountry = { vsd_name: "Other", vsd_countryid: "123" };
     if (!this.selectedCountry) {
       this.selectedCountry = this.lookupData.countries.filter(p => p.vsd_name.toLowerCase() === 'canada')[0];
     }
