@@ -154,8 +154,15 @@ export class AddressComponent implements OnInit {
 
     this.countryList = pref_countries.concat(remaining_countries);
     this.cityList = this.lookupData.cities;
-    if (!this.alreadyHasOtherOption(this.cityList)) this.cityList.push(config.other_city);
     this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+    let other_city_index = this.getOtherIndex(this.cityList)
+    if (other_city_index < 0) {
+      this.cityList.push(config.other_city);
+    }
+    else {
+      let other_city = this.cityList.splice(other_city_index, 1)[0];
+      this.cityList.push(other_city);
+    }
 
     let canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
     this.provinceType = canada.areaType;
@@ -171,8 +178,15 @@ export class AddressComponent implements OnInit {
 
     if (this.selectedCountry) {
       this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value === this.selectedCountry.vsd_countryid);
-      if (!this.alreadyHasOtherOption(this.provinceList)) this.provinceList.push(config.other_province);
       this.provinceList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+      let other_province_index = this.getOtherIndex(this.provinceList)
+      if (other_province_index < 0) {
+        this.provinceList.push(config.other_province);
+      }
+      else {
+        let other_province = this.provinceList.splice(other_province_index, 1)[0];
+        this.provinceList.push(other_province);
+      }
     }
 
     if (this.selectedCountry) {
@@ -201,9 +215,16 @@ export class AddressComponent implements OnInit {
     this.selectedCountry = this.lookupData.countries.filter(c => c.vsd_name.toLowerCase() == selection)[0];
     if (this.selectedCountry) {
       this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value === this.selectedCountry.vsd_countryid);
-      if (!this.alreadyHasOtherOption(this.provinceList)) this.provinceList.push(config.other_province);
       if (this.provinceList) {
         this.provinceList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+      }
+      let other_province_index = this.getOtherIndex(this.provinceList)
+      if (other_province_index < 0) {
+        this.provinceList.push(config.other_province);
+      }
+      else {
+        let other_province = this.provinceList.splice(other_province_index, 1)[0];
+        this.provinceList.push(other_province);
       }
 
       provinceControl.patchValue('');
@@ -219,8 +240,17 @@ export class AddressComponent implements OnInit {
           // console.log(city_res);
           if (city_res.value) {
             this.cityList = city_res.value;
-            if (!this.alreadyHasOtherOption(this.cityList)) this.cityList.push(config.other_city);
-            this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+            if (this.cityList) {
+              this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+            }
+            let other_city_index = this.getOtherIndex(this.cityList)
+            if (other_city_index < 0) {
+              this.cityList.push(config.other_city);
+            }
+            else {
+              let other_city = this.cityList.splice(other_city_index, 1)[0];
+              this.cityList.push(other_city);
+            }
           }
           else {
             this.cityList = [config.other_city];
@@ -251,8 +281,17 @@ export class AddressComponent implements OnInit {
         // console.log(city_res);
         if (city_res.value) {
           this.cityList = city_res.value;
-          if (!this.alreadyHasOtherOption(this.cityList)) this.cityList.push(config.other_city);
-          this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+          if (this.cityList) {
+            this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+          }
+          let other_city_index = this.getOtherIndex(this.cityList)
+          if (other_city_index < 0) {
+            this.cityList.push(config.other_city);
+          }
+          else {
+            let other_city = this.cityList.splice(other_city_index, 1)[0];
+            this.cityList.push(other_city);
+          }
         }
         else {
           this.cityList = [config.other_city];
@@ -336,6 +375,10 @@ export class AddressComponent implements OnInit {
 
   alreadyHasOtherOption(list: any) {
     return list.findIndex(o => o.vsd_name == "Other") >= 0;
+  }
+
+  getOtherIndex(list: any) {
+    return list.findIndex(o => o.vsd_name == "Other");
   }
 }
 
