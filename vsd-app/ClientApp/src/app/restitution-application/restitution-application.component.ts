@@ -16,6 +16,8 @@ import { StateService } from '../services/state.service';
 import { config } from '../../config';
 import { iLookupData } from '../interfaces/lookup-data.interface';
 import { HeaderTitleService } from '../services/titile.service';
+import { convertRestitutionToCRM } from './restitution.to.crm';
+import { iRestitutionApplication } from '../interfaces/restitution.interface';
 
 export enum RESTITUTION_PAGES {
     OVERVIEW,
@@ -136,10 +138,48 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
         return this.fb.group(group);
     }
 
-    submitApplication() {
+    harvestForm(): iRestitutionApplication {
+        let data = {
+            ApplicationType: this.FORM_TYPE,
+            RestitutionInformation: this.form.get('restitutionInformation').value,
+        } as iRestitutionApplication;
 
+        return data;
     }
 
+    submitApplication() {
+        this.submitting = true;
+        if (this.form.valid) {
+            let form = this.harvestForm();
+            let data = convertRestitutionToCRM(form);
+            this.justiceDataService.submitRestitutionApplication(data)
+                .subscribe(
+                    data => {
+                        if (data['IsSuccess'] == true) {
+                            console.log("TODO - show restitution success");
+                        }
+                        else {
+                            this.submitting = false;
+                            this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+                            if (this.isIE) {
+                                alert("Encountered an error. Please use another browser as this may resolve the problem.")
+                            }
+                        }
+                    },
+                    error => {
+                        this.submitting = false;
+                        this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+                        if (this.isIE) {
+                            alert("Encountered an error. Please use another browser as this may resolve the problem.")
+                        }
+                    }
+                );
+        } else {
+            this.submitting = false;
+            console.log("form not validated");
+            this.markAsTouched();
+        }
+    }
 
     verifyCancellation(): void {
         let self = this;
