@@ -8,7 +8,6 @@ import { LookupService } from '../../services/lookup.service';
 import { noop, Observable, Observer, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry, catchError, map, switchMap, tap } from 'rxjs/operators';
-import { listener } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-address',
@@ -148,7 +147,7 @@ export class AddressComponent implements OnInit {
     pref_countries.sort(function (a, b) {
       return config.preferred_countries.findIndex(c => c.vsd_countryid == a.vsd_countryid) - config.preferred_countries.findIndex(c => c.vsd_countryid == b.vsd_countryid);
     });
-    if (!this.alreadyHasOtherOption(pref_countries) && !this.alreadyHasOtherOption(remaining_countries)) pref_countries.push(config.other_country);
+    if (!this.alreadyHasOtherOption(pref_countries) && !this.alreadyHasOtherOption(remaining_countries)) pref_countries.unshift(config.other_country);
 
     remaining_countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
 
@@ -157,11 +156,11 @@ export class AddressComponent implements OnInit {
     this.cityList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
     let other_city_index = this.getOtherIndex(this.cityList)
     if (other_city_index < 0) {
-      this.cityList.push(config.other_city);
+      this.cityList.unshift(config.other_city);
     }
     else {
       let other_city = this.cityList.splice(other_city_index, 1)[0];
-      this.cityList.push(other_city);
+      this.cityList.unshift(other_city);
     }
 
     let canada = COUNTRIES_ADDRESS.filter(c => c.name.toLowerCase() == 'canada')[0];
@@ -181,11 +180,11 @@ export class AddressComponent implements OnInit {
       this.provinceList.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
       let other_province_index = this.getOtherIndex(this.provinceList)
       if (other_province_index < 0) {
-        this.provinceList.push(config.other_province);
+        this.provinceList.unshift(config.other_province);
       }
       else {
         let other_province = this.provinceList.splice(other_province_index, 1)[0];
-        this.provinceList.push(other_province);
+        this.provinceList.unshift(other_province);
       }
     }
 
@@ -220,11 +219,11 @@ export class AddressComponent implements OnInit {
       }
       let other_province_index = this.getOtherIndex(this.provinceList)
       if (other_province_index < 0) {
-        this.provinceList.push(config.other_province);
+        this.provinceList.unshift(config.other_province);
       }
       else {
         let other_province = this.provinceList.splice(other_province_index, 1)[0];
-        this.provinceList.push(other_province);
+        this.provinceList.unshift(other_province);
       }
 
       provinceControl.patchValue('');
@@ -245,11 +244,11 @@ export class AddressComponent implements OnInit {
             }
             let other_city_index = this.getOtherIndex(this.cityList)
             if (other_city_index < 0) {
-              this.cityList.push(config.other_city);
+              this.cityList.unshift(config.other_city);
             }
             else {
               let other_city = this.cityList.splice(other_city_index, 1)[0];
-              this.cityList.push(other_city);
+              this.cityList.unshift(other_city);
             }
           }
           else {
@@ -286,11 +285,11 @@ export class AddressComponent implements OnInit {
           }
           let other_city_index = this.getOtherIndex(this.cityList)
           if (other_city_index < 0) {
-            this.cityList.push(config.other_city);
+            this.cityList.unshift(config.other_city);
           }
           else {
             let other_city = this.cityList.splice(other_city_index, 1)[0];
-            this.cityList.push(other_city);
+            this.cityList.unshift(other_city);
           }
         }
         else {

@@ -17,6 +17,7 @@ export const config = {
     ],
 
     preferred_countries: [
+        { vsd_name: "Other", vsd_countryid: "" },
         { vsd_name: "Canada", vsd_countryid: "52e224c4-989a-e811-8155-480fcff4f6a1" },
         { vsd_name: "United States of America", vsd_countryid: "49b05a13-e149-ea11-b816-00505683fbf4" },
         { vsd_name: "Mexico", vsd_countryid: "39b05a13-e149-ea11-b816-00505683fbf4" },
@@ -26,7 +27,6 @@ export const config = {
         { vsd_name: "Italy", vsd_countryid: "31b05a13-e149-ea11-b816-00505683fbf4" },
         { vsd_name: "China", vsd_countryid: "15b05a13-e149-ea11-b816-00505683fbf4" },
         { vsd_name: "Russia", vsd_countryid: "64bb1d2f-e56a-ea11-b812-005056830319" },
-        { vsd_name: "Other", vsd_countryid: "" },
     ],
 
     other_country: { vsd_name: "Other", vsd_countryid: "" },
