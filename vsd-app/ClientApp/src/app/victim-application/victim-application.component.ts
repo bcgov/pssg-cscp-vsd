@@ -276,6 +276,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   getAEMPDF(): Promise<string> {
     return new Promise((resolve, reject) => {
       let application: Application = _.cloneDeep(this.harvestForm());
+      //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
+      application.CrimeInformation.documents.forEach(doc => doc.body = "");
+      application.EmploymentIncomeInformation.documents.forEach(doc => doc.body = "");
+      application.RepresentativeInformation.documents.forEach(doc => doc.body = "");
+
+
       //full name display option for single fields
       application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
       //display all locations as a single comma separated string
@@ -304,6 +310,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   getAuthPDF(): Promise<string> {
     return new Promise((resolve, reject) => {
       let application: Application = _.cloneDeep(this.harvestForm());
+      //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
+      application.CrimeInformation.documents.forEach(doc => doc.body = "");
+      application.EmploymentIncomeInformation.documents.forEach(doc => doc.body = "");
+      application.RepresentativeInformation.documents.forEach(doc => doc.body = "");
       //full name display option for single fields
       application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
       this.aemService.getAuthorizationPDF(application).subscribe((res: any) => {
