@@ -80,23 +80,20 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
             });
         }
 
-        // if (this.lookupData.relationships && this.lookupData.relationships.length > 0) {
-        //     this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
-        // }
-        // else {
-        //     this.lookupService.getRestitutionRelationships().subscribe((res) => {
-        //         this.lookupData.relationships = res.value;
-        //         if (this.lookupData.relationships) {
-        //             this.lookupData.relationships.sort(function (a, b) {
-        //                 return a.vsd_name.localeCompare(b.vsd_name);
-        //             });
-        //         }
-        //         this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
-        //     });
-        // }
-
-        console.log("TODO - realtionship list should be loaded dynamically from COAST");
-        this.relationshipList = ["Family relationship", "Other intimate relationship", "Acquaintance", "Criminal relationship", "Stranger", "Unknown"];
+        if (this.lookupData.relationships && this.lookupData.relationships.length > 0) {
+            this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
+        }
+        else {
+            this.lookupService.getRestitutionRelationships().subscribe((res) => {
+                this.lookupData.relationships = res.value;
+                if (this.lookupData.relationships) {
+                    this.lookupData.relationships.sort(function (a, b) {
+                        return a.vsd_name.localeCompare(b.vsd_name);
+                    });
+                }
+                this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
+            });
+        }
     }
 
     iHaveOtherNamesChange(val: boolean) {

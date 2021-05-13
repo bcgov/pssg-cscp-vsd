@@ -218,6 +218,26 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             finally { }
         }
 
+        [HttpGet("restitution_relationships")]
+        public async Task<IActionResult> GetRestitutionRelationships()
+        {
+            try
+            {
+                // set the endpoint action
+                string endpointUrl = "vsd_relationships?$select=vsd_name&$filter=statecode eq 0 and vsd_rest_offenderrelationship eq true";
+
+                // get the response
+                DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
+                return StatusCode((int)result.statusCode, result.result.ToString());
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up representative relationships in COAST. Source = VSD");
+                return BadRequest();
+            }
+            finally { }
+        }
+
         [HttpGet("police_detachments")]
         public async Task<IActionResult> GetPoliceDetachments()
         {
