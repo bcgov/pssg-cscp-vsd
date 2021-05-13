@@ -80,6 +80,13 @@ export class LookupService {
     );
   }
 
+  getRestitutionRelationships(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/restitution_relationships`, { headers: this.headers }).pipe(
+      retry(3),
+      catchError(this.handleError)
+    );
+  }
+
   getPoliceDetachments(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/police_detachments`, { headers: this.headers }).pipe(
       retry(3),
