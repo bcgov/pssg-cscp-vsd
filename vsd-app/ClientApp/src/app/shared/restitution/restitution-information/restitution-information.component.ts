@@ -37,6 +37,7 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
     phoneMaxLength: number = 15;
 
     relationshipList: any = [];
+    courtList: any = [];
 
     restitutionInfoHelper = new RestitutionInfoHelper();
 
@@ -62,6 +63,21 @@ export class RestitutionInformationComponent extends FormBase implements OnInit 
         else if (this.formType.val === ResitutionForm.Offender.val) {
             this.page_header = "Offender Application";
             this.applicant_type = "Applicant";
+        }
+
+        if (this.lookupData.courts && this.lookupData.courts.length > 0) {
+            this.courtList = this.lookupData.courts.map(c => c.vsd_name);
+        }
+        else {
+            this.lookupService.getCourts().subscribe((res) => {
+                this.lookupData.courts = res.value;
+                if (this.lookupData.courts) {
+                    this.lookupData.courts.sort(function (a, b) {
+                        return a.vsd_name.localeCompare(b.vsd_name);
+                    });
+                }
+                this.courtList = this.lookupData.courts.map(c => c.vsd_name);
+            });
         }
 
         // if (this.lookupData.relationships && this.lookupData.relationships.length > 0) {

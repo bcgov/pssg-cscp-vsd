@@ -89,8 +89,9 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
 import { RestitutionOverviewComponent } from './shared/restitution/restitution-overview/restitution-overview.component';
 import { RestitutionInformationComponent } from './shared/restitution/restitution-information/restitution-information.component';
 import { RestitutionContactInformationComponent } from './shared/restitution/contact-information/contact-information.component';
-import { RestitutionReviewComponent } from './shared/restitution/review/review.component';
+import { RestitutionReviewComponent } from './shared/restitution/review/restitution-review.component';
 import { HeaderTitleService } from './services/titile.service';
+import { RestitutionSuccessComponent } from './shared/restitution/success/restitution-success.component';
 
 @NgModule({
   declarations: [
@@ -126,6 +127,7 @@ import { HeaderTitleService } from './services/titile.service';
     RestitutionInformationComponent,
     RestitutionOverviewComponent,
     RestitutionReviewComponent,
+    RestitutionSuccessComponent,
     SignPadDialog,
     SubmitInvoiceComponent,
     SummaryOfBenefitsDialog,

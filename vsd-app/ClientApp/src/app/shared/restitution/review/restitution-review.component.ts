@@ -9,8 +9,8 @@ import { RESTITUTION_PAGES } from "../../../restitution-application/restitution-
 
 @Component({
     selector: 'app-restitution-review',
-    templateUrl: './review.component.html',
-    styleUrls: ['./review.component.scss'],
+    templateUrl: './restitution-review.component.html',
+    styleUrls: ['./restitution-review.component.scss'],
     providers: [
         { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },

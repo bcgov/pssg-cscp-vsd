@@ -9,10 +9,20 @@ export function convertRestitutionToCRM(application: iRestitutionApplication) {
 
     let crm_application: iRestitutionCRM = {
         Application: getCRMApplication(application),
-        CourtInfoCollection: getCRMCourtInfoCollection(application),
-        ProviderCollection: getCRMProviderCollection(application),
-        DocumentCollection: getCRMDocumentCollection(application),
+        // CourtInfoCollection: getCRMCourtInfoCollection(application),
+        // ProviderCollection: getCRMProviderCollection(application),
+        // DocumentCollection: getCRMDocumentCollection(application),
     }
+
+    let courtInfo = getCRMCourtInfoCollection(application);
+    if (courtInfo.length > 0) crm_application.CourtInfoCollection = courtInfo;
+
+    let providers = getCRMProviderCollection(application);
+    if (providers.length > 0) crm_application.ProviderCollection = providers;
+
+    let documents = getCRMDocumentCollection(application);
+    if (documents.length > 0) crm_application.DocumentCollection = documents;
+
 
     console.log("restitution crm:");
     console.log(crm_application);
@@ -52,10 +62,12 @@ function getCRMCourtInfoCollection(application: iRestitutionApplication) {
     let ret: iCRMCourtInfo[] = [];
 
     application.RestitutionInformation.courtFiles.forEach(file => {
-        ret.push({
-            vsd_courtfilenumber: file.fileNumber,
-            vsd_courtlocation: file.location,
-        });
+        if (checkHasFileInfo(file)) {
+            ret.push({
+                vsd_courtfilenumber: file.fileNumber,
+                vsd_courtlocation: file.location,
+            });
+        }
     });
 
     return ret;
@@ -129,6 +141,9 @@ function getCRMDocumentCollection(application: iRestitutionApplication) {
 
 function checkFileHasOffender(file: iCourtFile) {
     return (file && (file.firstName || file.middleName || file.lastName || file.relationship));
+}
+function checkHasFileInfo(file: iCourtFile) {
+    return (file && (file.fileNumber || file.location));
 }
 function checkProbationOfficerHasValue(application: iRestitutionApplication) {
     return (application.RestitutionInformation.probationOfficerFirstName || application.RestitutionInformation.probationOfficerLastName || application.RestitutionInformation.probationOfficerPhoneNumber || application.RestitutionInformation.probationOfficerEmail || application.RestitutionInformation.probationOfficerCustodyLocation)

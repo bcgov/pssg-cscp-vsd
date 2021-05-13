@@ -179,7 +179,7 @@ export class EnumHelper {
   }
 
   public LeaveVoicemail = {
-    BLANK:                  <IOptionSetVal> { val: 0, name: "--" },
+    BLANK:                  <IOptionSetVal> { val: null, name: "--" },
     Primary_And_Alternate:  <IOptionSetVal> { val: 100000000, name: "Primary and Alternate" },
     Primary_Only:           <IOptionSetVal> { val: 100000001, name: "Primary only" },
     Altrernate_Only:        <IOptionSetVal> { val: 100000002, name: "Alternate only" },
