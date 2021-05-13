@@ -10,6 +10,7 @@ import { ApplicationCancelledComponent } from './application-cancelled/applicati
 import { NotFoundComponent } from './not-found/not-found.component';
 import { RestitutionApplicationComponent } from './restitution-application/restitution-application.component';
 import { ResitutionForm } from './shared/enums-list';
+import { RestitutionSuccessComponent } from './shared/restitution/success/restitution-success.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
   {
     path: 'application-success',
     component: ApplicationSuccessComponent,
+  },
+  {
+    path: 'restitution-success',
+    component: RestitutionSuccessComponent,
   },
   { path: '**', component: NotFoundComponent }
 ];

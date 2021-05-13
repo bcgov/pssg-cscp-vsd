@@ -17,12 +17,14 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IDynamicsResultService _dynamicsResultService;
+        private readonly IRestitutionResultService _restitutionResultService;
         private readonly ILogger _logger;
 
-        public JusticeController(IConfiguration configuration, IDynamicsResultService dynamicsResultService)
+        public JusticeController(IConfiguration configuration, IDynamicsResultService dynamicsResultService, IRestitutionResultService restitutionResultService)
         {
             _configuration = configuration;
             this._dynamicsResultService = dynamicsResultService;
+            this._restitutionResultService = restitutionResultService;
             _logger = Log.Logger;
         }
 
@@ -106,77 +108,12 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 settings.NullValueHandling = NullValueHandling.Ignore;
                 var modelString = JsonConvert.SerializeObject(model, settings);
 
-                DynamicsResult result = await _dynamicsResultService.Post(endpointAction, modelString);
+                DynamicsResult result = await _restitutionResultService.Post(endpointAction, modelString);
                 return StatusCode((int)result.statusCode, result.result.ToString());
             }
             catch (Exception e)
             {
                 _logger.Error(e, "Unexpected error while saving victim restitution. Source = VSD", model);
-                return BadRequest();
-            }
-            finally { }
-        }
-
-        [HttpPost("submitvictimrestitution")]
-        public async Task<IActionResult> SubmitVictimRestitution([FromBody] VictimRestitutionFormModel model)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    _logger.Error($"API call to 'SubmitVictimRestitution' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
-                    return BadRequest(ModelState);
-                }
-
-                var endpointAction = "vsd_CreateRestitutionCase";
-                var dynamicsModel = model.ToVictimRestitutionModel(); // model.ToDynamicsModel();
-                JsonSerializerSettings settings = new JsonSerializerSettings();
-                settings.NullValueHandling = NullValueHandling.Ignore;
-                var invoiceJson = JsonConvert.SerializeObject(dynamicsModel, settings);
-                invoiceJson = invoiceJson.Replace("odatatype", "@odata.type");
-
-                Console.WriteLine("Invoice JSON:");
-                Console.WriteLine(invoiceJson);
-
-                DynamicsResult result = await _dynamicsResultService.Post(endpointAction, invoiceJson);
-                return StatusCode((int)result.statusCode, result.result.ToString());
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Unexpected error while saving victim restitution. Source = VSD", model);
-                return BadRequest();
-            }
-            finally { }
-        }
-
-        [HttpPost("submitoffenderrestitution")]
-        public async Task<IActionResult> SubmitOffenderRestitution([FromBody] OffenderRestitutionFormModel model)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    _logger.Error($"API call to 'SubmitOffenderRestitution' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
-                    return BadRequest(ModelState);
-                }
-
-                var offenderRestitution = model.ToOffenderRestitutionModel();
-                JsonSerializerSettings settings = new JsonSerializerSettings();
-                settings.NullValueHandling = NullValueHandling.Ignore;
-                var offenderRestitutionJson = JsonConvert.SerializeObject(offenderRestitution, settings);
-                offenderRestitutionJson = offenderRestitutionJson.Replace("odatatype", "@odata.type");
-
-                var endpointAction = "vsd_CreateRestitutionCase";
-
-                Console.WriteLine("Invoice JSON:");
-                Console.WriteLine(offenderRestitutionJson);
-
-                DynamicsResult result = await _dynamicsResultService.Post(endpointAction, offenderRestitutionJson);
-                return StatusCode((int)result.statusCode, result.result.ToString());
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Unexpected error while saving offender restitution. Source = VSD", model);
                 return BadRequest();
             }
             finally { }

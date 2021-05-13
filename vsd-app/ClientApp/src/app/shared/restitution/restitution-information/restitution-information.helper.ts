@@ -36,7 +36,7 @@ export class RestitutionInfoHelper {
 
                 phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
                 alternatePhoneNumber: [''],
-                leaveVoicemail: [0],
+                leaveVoicemail: [null],
                 email: ['', [Validators.email]],
                 confirmEmail: ['', [
                     Validators.email,

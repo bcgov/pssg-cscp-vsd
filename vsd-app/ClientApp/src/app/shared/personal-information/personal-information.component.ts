@@ -39,7 +39,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     emailIsRequired: boolean = false;
     addressIsRequired: boolean = false;
     alternateAddressIsRequired: boolean = false;
-    addressHasOtherOption: boolean = false;
 
     addressHelper = new AddressHelper();
 
@@ -292,24 +291,13 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     }
 
     setEmailValidators() {
-        this.addressHasOtherOption = false;
-        //if the user selects "Other" for any of the Primary Address fields Country, Province, or City
-        //Then email is required for CVAP to follow up with the submitter about their address information
-
         //email was already required - so we don't need to do anything right now
         if (this.emailIsRequired) {
             return;
         }
         let address = this.form.get('primaryAddress');
         let emailControl = this.form.get('email');
-
-        if (address.get("country").value == "Other" || address.get("province").value == "Other" || address.get("city").value == "Other") {
-            this.addressHasOtherOption = true;
-            this.setControlValidators(emailControl, [Validators.required, Validators.email]);
-        }
-        else {
-            this.setControlValidators(emailControl, [Validators.email]);
-        }
+        this.setControlValidators(emailControl, [Validators.email]);
     }
 
     doNotLiveAtAddressChange(val: boolean) {

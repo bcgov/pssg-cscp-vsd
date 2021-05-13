@@ -328,7 +328,7 @@ input.form-control {
 }
 
 .learn-benefits {
-    margin-top: 50px;
+    margin-top: 25px;
 }
 
 .button-container {
@@ -451,4 +451,11 @@ input.form-control {
 
 .app-field-bold label > span {
     font-weight: 400 !important;
+}
+
+.tooltip-info-container {
+    margin-top: 25px;
+    .tooltip-icon {
+        font-size: 20px;
+    }
 }

@@ -237,9 +237,15 @@
                         <input class="form-control" type="text" formControlName="fileNumber" maxlength="100">
                     </app-field>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-8">
                     <app-field label="Court Location" [valid]="isMyControlValid(item.get('location'))" errorMessage="Please enter location" [disabled]="isDisabled">
-                        <input class="form-control" type="text" formControlName="location" maxlength="100">
+                        <select class="form-control" formControlName="location">
+                            <option value="">Choose a court</option>
+                            <option *ngFor="let item of courtList" [value]="item">
+                                {{ item }}
+                            </option>
+                        </select>
+                        <!-- <input class="form-control" type="text" formControlName="location" maxlength="100"> -->
                     </app-field>
                 </div>
                 <div class="col-1" *ngIf="formType.val === ResitutionForm.Offender.val && form.get('courtFiles')['controls'].length > 1">

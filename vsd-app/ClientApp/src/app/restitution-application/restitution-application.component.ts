@@ -53,6 +53,8 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
         cities: [],
     };
 
+    courtList: string[] = [];
+
     restitutionInfoHelper = new RestitutionInfoHelper();
 
     constructor(
@@ -80,15 +82,9 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
         let form_type = this.route.snapshot.data['formType'];
         if (form_type) {
             this.FORM_TYPE = form_type;
-            this.headerTitleService.setTitle("Restitution Program");
         }
-        if (this.state.cloning) {
-            this.form = this.state.data;
-            this.state.cloning = false;
-        }
-        else {
-            this.form = this.buildApplicationForm();
-        }
+        this.headerTitleService.setTitle("Restitution Program");
+        this.form = this.buildApplicationForm();
 
         let promise_array = [];
 
@@ -156,7 +152,8 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
                 .subscribe(
                     data => {
                         if (data['IsSuccess'] == true) {
-                            console.log("TODO - show restitution success");
+                            this.submitting = false;
+                            this.router.navigate(['/restitution-success']);
                         }
                         else {
                             this.submitting = false;

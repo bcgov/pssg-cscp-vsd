@@ -1,8 +1,8 @@
 export interface iRestitutionCRM {
     Application: iCRMApplication;
-    CourtInfoCollection: iCRMCourtInfo[];
-    DocumentCollection: iCRMDocument[];
-    ProviderCollection: iCRMParticipant[];
+    CourtInfoCollection?: iCRMCourtInfo[];
+    DocumentCollection?: iCRMDocument[];
+    ProviderCollection?: iCRMParticipant[];
 }
 export interface iCRMApplication {
     vsd_applicanttype: number;
