@@ -172,6 +172,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, FORM),
       declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, FORM),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, FORM),
+      totalAttachmentSize: [0],
     };
 
     if (FORM === ApplicationType.IFM_Application) {

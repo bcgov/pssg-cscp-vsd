@@ -148,7 +148,9 @@
 
     <ng-container *ngIf="form.get('completingOnBehalfOf').value === 100000003">
       <h2 class="blue-header">Proof of Legal Authority</h2>
-      <p>Note: The Crime Victim Assistance Program requires proof of your authority to apply for benefits on behalf of the applicant. Please attach the legal documentation here.</p>
+      <p>Note: The Crime Victim Assistance Program requires proof of your authority to apply for benefits on behalf of the applicant. Please attach the legal documentation here.
+        <strong>File size limit:</strong> one file cannot exceed 2MB and all files uploaded to application cannot exceed 3.5MB
+      </p>
 
       <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')"></app-file-uploader>
     </ng-container>

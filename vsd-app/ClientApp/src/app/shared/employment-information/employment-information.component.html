@@ -224,8 +224,8 @@
                 <ng-container *ngIf="form.get('areYouSelfEmployed').value === CRMBoolean.True">
                     <p>To verify your employment and income loss, CVAP will require additional documents (e.g. invoices, receipts, pay stubs, contracts, bank statements, tax assessments) that will confirm you were working and receiving income at the time of the offence.</p>
 
-                    <app-field label="Please upload any documents you have available" class="no-app-field-botton-margin">
-                    </app-field>
+                    <p>Please upload any documents you have available <strong>File size limit:</strong> one file cannot exceed 2MB and all files uploaded to application cannot exceed 3.5MB</p>
+
                     <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')"></app-file-uploader>
                 </ng-container>
 

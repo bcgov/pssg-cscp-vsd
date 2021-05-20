@@ -129,6 +129,7 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
         let group = {
             introduction: this.fb.group({}),
             restitutionInformation: this.restitutionInfoHelper.setupFormGroup(this.fb, FORM),
+            totalAttachmentSize: [0],
         };
 
         return this.fb.group(group);

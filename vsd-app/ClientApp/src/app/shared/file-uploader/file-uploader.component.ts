@@ -1,5 +1,6 @@
-import { Component, ViewChild, ElementRef, Input } from '@angular/core';
-import { FormBuilder, FormArray } from '@angular/forms';
+import { Component, ViewChild, ElementRef, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormArray, FormGroup, ControlContainer } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 import { config } from '../../../config';
 
 @Component({
@@ -7,13 +8,22 @@ import { config } from '../../../config';
   templateUrl: './file-uploader.component.html',
   styleUrls: ['./file-uploader.component.scss']
 })
-export class FileUploaderComponent {
+export class FileUploaderComponent implements OnInit {
   @ViewChild('files') myInputVariable: ElementRef;
   @Input() formType: number;
   @Input() documents: FormArray;
+  public form: FormGroup;
 
+  MAX_FILE_SIZE = 2 * 1024 * 1024; //2MB
+  MAX_TOTAL_FILE_SIZE = 3.5 * 1024 * 1024; //3.5MB
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+    private controlContainer: ControlContainer,
+    public snackBar: MatSnackBar) { }
+
+  ngOnInit() {
+    this.form = <FormGroup>this.controlContainer.control;
+  }
 
   fakeBrowseClick(): void {
     this.myInputVariable.nativeElement.value = "";
@@ -22,7 +32,20 @@ export class FileUploaderComponent {
   }
 
   onFilesAdded(files: FileList): void {
+    let totalSize = this.form.parent.get("totalAttachmentSize").value;
     for (let i = 0; i < files.length; i++) {
+      if (files[i].size > this.MAX_FILE_SIZE) {
+        console.log(files[i].size / (1024 * 1024));
+        this.snackBar.open('File cannot exceed 2MB', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        continue;
+      }
+
+      if ((totalSize + files[i].size) > this.MAX_TOTAL_FILE_SIZE) {
+        console.log((totalSize + files[i].size) / (1024 * 1024));
+        this.snackBar.open('Files uploaded to application cannot exceed 3.5MB', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        continue;
+      }
+
       // convert the file to base64 for upload
       const reader: FileReader = new FileReader();
       reader.readAsDataURL(files.item(i));
@@ -36,18 +59,29 @@ export class FileUploaderComponent {
         else {
           let file_extenstion = files.item(i).name.trim().split('.').pop();
           if (config.accepted_file_extensions[file_extenstion]) {
+            totalSize += files[i].size;
             this.documents.push(this.fb.group({
               filename: [files.item(i).name],
               body: [body],
-              subject: ['']
+              subject: [''],
+              size: files[i].size,
             }));
+          }
+          else {
+            this.snackBar.open('Unsupported file type', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
           }
         }
       };
       reader.onerror = error => console.log('Error: ', error);
     }
+
+    this.form.parent.get("totalAttachmentSize").patchValue(totalSize);
   }
   removeItem(index: number): void {
+    let totalSize = this.form.parent.get("totalAttachmentSize").value;
+    let fileSize = this.documents.at(index).get("size").value;
+    totalSize -= fileSize;
+    this.form.parent.get("totalAttachmentSize").patchValue(totalSize);
     this.documents.removeAt(index);
   }
 }

@@ -307,6 +307,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
+      totalAttachmentSize: [0],
     });
   }
 
@@ -338,7 +339,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       let application: Application = _.cloneDeep(this.harvestForm());
       //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
       application.CrimeInformation.documents.forEach(doc => doc.body = "");
-      application.EmploymentIncomeInformation.documents.forEach(doc => doc.body = "");
       application.RepresentativeInformation.documents.forEach(doc => doc.body = "");
       //full name display option for single fields
       application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
@@ -370,7 +370,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       let application: Application = _.cloneDeep(this.harvestForm());
       //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
       application.CrimeInformation.documents.forEach(doc => doc.body = "");
-      application.EmploymentIncomeInformation.documents.forEach(doc => doc.body = "");
       application.RepresentativeInformation.documents.forEach(doc => doc.body = "");
       //full name display option for single fields
       application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;

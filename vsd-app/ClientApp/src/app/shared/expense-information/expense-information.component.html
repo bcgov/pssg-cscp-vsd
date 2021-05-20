@@ -17,13 +17,13 @@
                 <app-field>
                     <label>
                         <input type="checkbox" [value]="true" name="haveMedicalExpenses" formControlName="haveMedicalExpenses" (change)="changeGroupValidity($event)">
-                        Medical Expenses <app-tool-tip [trigger]="benefitsMedicalExpenses"></app-tool-tip>
+                        Medical expenses <app-tool-tip [trigger]="benefitsMedicalExpenses"></app-tool-tip>
                     </label>
                 </app-field>
                 <app-field>
                     <label>
                         <input type="checkbox" [value]="true" name="haveDentalExpenses" formControlName="haveDentalExpenses" (change)="changeGroupValidity($event)">
-                        Dental Expenses <app-tool-tip [trigger]="benefitsDental"></app-tool-tip>
+                        Dental expenses <app-tool-tip [trigger]="benefitsDental"></app-tool-tip>
                     </label>
                 </app-field>
                 <app-field>
@@ -53,19 +53,19 @@
                 <app-field>
                     <label>
                         <input type="checkbox" [value]="true" name="haveProtectiveMeasureExpenses" formControlName="haveProtectiveMeasureExpenses" (change)="changeGroupValidity($event)">
-                        Protective Measures for Security Devices <app-tool-tip [trigger]="benefitsSecurityDevices"></app-tool-tip>
+                        Protective measures for security devices <app-tool-tip [trigger]="benefitsSecurityDevices"></app-tool-tip>
                     </label>
                 </app-field>
                 <app-field>
                     <label>
                         <input type="checkbox" [value]="true" name="haveProtectiveMovingExpenses" formControlName="haveProtectiveMovingExpenses" (change)="changeGroupValidity($event)">
-                        Protective Measures for Moving Expenses <app-tool-tip [trigger]="benefitsMovingExpenses"></app-tool-tip>
+                        Protective measures for moving expenses <app-tool-tip [trigger]="benefitsMovingExpenses"></app-tool-tip>
                     </label>
                 </app-field>
                 <app-field>
                     <label>
                         <input type="checkbox" [value]="true" name="haveTransportationToObtainBenefits" formControlName="haveTransportationToObtainBenefits" (change)="changeGroupValidity($event)">
-                        Transportation to Obtain Benefits <app-tool-tip [trigger]="benefitsTransportation"></app-tool-tip>
+                        Transportation to obtain benefits <app-tool-tip [trigger]="benefitsTransportation"></app-tool-tip>
                     </label>
                 </app-field>
                 <app-field>
@@ -305,13 +305,6 @@
                                 </span>
                             </div>
                         </div>
-
-
-                        <!-- <input type="text" [max]="today" (dateChange)="daysWorkMissedStartChange($event)" class="form-control date-picker" formControlName="daysWorkMissedStart" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedStartPicker" (focus)="daysWorkMissedStartPicker.open()" (click)="daysWorkMissedStartPicker.open()" readonly>
-                        <mat-datepicker #daysWorkMissedStartPicker></mat-datepicker>
-                        <span> - </span>
-                        <input type="text" [max]="today" [min]="minEndDate" (dateChange)="daysWorkMissedEndChange($event)" class="form-control date-picker" formControlName="daysWorkMissedEnd" placeholder="yyyy-mm-dd" [matDatepicker]="daysWorkMissedEndPicker" (focus)="daysWorkMissedEndPicker.open()" (click)="daysWorkMissedEndPicker.open()" readonly>
-                        <mat-datepicker #daysWorkMissedEndPicker></mat-datepicker> -->
                     </app-field>
 
                     <app-field label="Social Insurance Number (SIN)" [required]="form.get('didYouLoseWages').value === CRMBoolean.True" [valid]="isFieldValid('sin')" errorMessage="Please enter your SIN">
@@ -549,7 +542,7 @@
 </ng-template>
 <ng-template #benefitsSecurityDevices>
     <h3>Protective Measures for Security Devices</h3>
-    <p>Victims who are at risk of additional harm from the perpetrator or are so traumatized by fear they cannot lead normal lives</p>
+    <p>Victims who are at risk of additional harm from the perpetrator or are traumatized to the extent that they cannot perform regular daily activities</p>
     <p><strong>Examples:</strong></p>
     <ul>
         <li>Security or communication equipment and services</li>
@@ -558,7 +551,7 @@
 </ng-template>
 <ng-template #benefitsMovingExpenses>
     <h3>Protective Measures for Moving Expenses</h3>
-    <p>Victims who are at risk of additional harm from the perpetrator or are so traumatized by fear they cannot lead normal lives</p>
+    <p>Victims who are at risk of additional harm from the perpetrator or are traumatized to the extent that they cannot perform regular daily activities</p>
     <p><strong>Examples:</strong></p>
     <ul>
         <li>Moving truck rental</li>
