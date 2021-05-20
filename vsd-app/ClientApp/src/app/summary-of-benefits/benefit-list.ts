@@ -36,7 +36,7 @@ export class BenefitLists {
     },
     {
       title: 'Protective measures, services, or expenses',
-      target: 'Victims who are at risk of additional harm from the perpetrator or are so traumatized by fear they cannot lead normal lives.',
+      target: 'Victims who are at risk of additional harm from the perpetrator or are traumatized to the extent that they cannot perform regular daily activities',
       examples: [
         'Security or communication equipment and services',
         'Courses for personal protection or security',

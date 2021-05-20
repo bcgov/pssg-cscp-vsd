@@ -56,7 +56,7 @@
         </section>
 
         <section *ngIf="showWhyDidYouNotApplySooner">
-            <app-field label="Please briefly explain why you did not apply sooner" [tooltipReference]="fileWithinYearTemplate">
+            <app-field label="Please briefly explain why you did not apply sooner (does not apply to victims of sexual assault and minors)" [tooltipReference]="fileWithinYearTemplate">
                 <textarea class="form-control standard" formControlName="whyDidYouNotApplySooner" maxlength="750"></textarea>
             </app-field>
             <ng-template #fileWithinYearTemplate><strong>One-Year Time Limit</strong><br />Applications to CVAP must be submitted within one year of the date of the incident. An explanation is required to determine if the time limit can be extended. The one year time limit does not apply if the applicant is a minor (under 19 years old) or if the application is from a victim of sexual offence.</ng-template>
@@ -118,8 +118,8 @@
                 <textarea class="form-control standard" formControlName="crimeInjuries" maxlength="750"></textarea>
             </app-field>
 
-            <app-field label="If you have any additional information, please upload it below" class="no-app-field-botton-margin">
-            </app-field>
+            <p>If you have any additional information, please upload it below. <strong>File size limit:</strong> one file cannot exceed 2MB and all files uploaded to application cannot exceed 3.5MB</p>
+
             <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')"></app-file-uploader>
         </section>
     </section>
@@ -354,7 +354,7 @@
                 </label>
             </app-field>
             <section *ngIf="form.get('haveYouSuedOffender').value === CRMBoolean.False">
-                <app-field label="Do you intend to sue any of the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
+                <app-field label="Do you intend to sue any of the Person(s) Responsible or seek restitution through criminal proceedings?" [required]="true" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
                     <label class="inline-label">
                         <input type="radio" [value]="CRMMultiBoolean.True" name="intendToSueOffender" formControlName="intendToSueOffender">
                         <span>Yes</span>
@@ -365,7 +365,7 @@
                     </label>
                     <label class="inline-label">
                         <input type="radio" [value]="CRMMultiBoolean.Undecided" name="intendToSueOffender" formControlName="intendToSueOffender">
-                        <span>Undecided</span>
+                        <span>Unsure</span>
                     </label>
                 </app-field>
             </section>

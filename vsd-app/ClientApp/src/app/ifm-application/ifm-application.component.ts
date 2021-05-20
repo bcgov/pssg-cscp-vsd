@@ -379,6 +379,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, FORM),
       declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, FORM),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, FORM),
+      totalAttachmentSize: [0],
     };
 
     if (FORM === ApplicationType.IFM_Application) {
@@ -431,7 +432,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       let application: Application = _.cloneDeep(this.harvestForm());
       //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
       application.CrimeInformation.documents.forEach(doc => doc.body = "");
-      application.EmploymentIncomeInformation.documents.forEach(doc => doc.body = "");
       application.RepresentativeInformation.documents.forEach(doc => doc.body = "");
       //full name display option for single fields
       application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
@@ -463,7 +463,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       let application: Application = _.cloneDeep(this.harvestForm());
       //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
       application.CrimeInformation.documents.forEach(doc => doc.body = "");
-      application.EmploymentIncomeInformation.documents.forEach(doc => doc.body = "");
       application.RepresentativeInformation.documents.forEach(doc => doc.body = "");
       //full name display option for single fields
       application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
