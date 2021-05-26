@@ -48,7 +48,7 @@
       </app-field>
     </div>
     <div class="col-md-6">
-      <app-field label="{{ postalCodeType }}" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('postalCode', isDisabled)" errorMessage="Please enter your {{postalCodeType.toLowerCase()}}">
+      <app-field label="{{ postalCodeType }}" [required]="showChildrenAsRequired && group['controls']['country'].value?.toLowerCase() === 'canada'" [valid]="isSubFieldValid('postalCode', isDisabled)" errorMessage="Please enter your {{postalCodeType.toLowerCase()}}">
         <input class="form-control" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
       </app-field>
     </div>

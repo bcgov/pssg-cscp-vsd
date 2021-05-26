@@ -164,13 +164,15 @@
 
     <h2 class="blue-header">Contact Information</h2>
 
+
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2' || leaveVoicemail.value === '100000000' || leaveVoicemail.value === '100000001'" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number">
+            <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2' || leaveVoicemail.value === '100000000' || leaveVoicemail.value === '100000001'" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number" [tooltipReference]="primaryPhoneToolTip">
                 <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else phone_no_mask" (input)="setVoicemailValidators()">
                 <ng-template #phone_no_mask>
                     <input class="form-control" type="text" formControlName="phoneNumber" digitOnly (input)="setVoicemailValidators()">
                 </ng-template>
+                <ng-template #primaryPhoneToolTip>If you are applying with a phone number that is from outside of Canada, complete the Mailing Address section below before entering your phone number.</ng-template>
             </app-field>
         </div>
         <div class="col-md-6">
