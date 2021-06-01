@@ -35,16 +35,23 @@ export class FileUploaderComponent implements OnInit {
     let totalSize = this.form.parent.get("totalAttachmentSize").value;
     for (let i = 0; i < files.length; i++) {
       if (files[i].size > this.MAX_FILE_SIZE) {
-        console.log(files[i].size / (1024 * 1024));
+        console.log("File too big:", (files[i].size / (1024 * 1024)).toFixed(2) + "MB");
         this.snackBar.open('File cannot exceed 2MB', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
         continue;
       }
-
       if ((totalSize + files[i].size) > this.MAX_TOTAL_FILE_SIZE) {
-        console.log((totalSize + files[i].size) / (1024 * 1024));
+        console.log("Total size too big:", ((totalSize + files[i].size) / (1024 * 1024)).toFixed(2) + "MB")
         this.snackBar.open('Files uploaded to application cannot exceed 3.5MB', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
         continue;
       }
+
+      let file_extenstion = files.item(i).name.trim().split('.').pop();
+      if (!config.accepted_file_extensions[file_extenstion]) {
+        this.snackBar.open('Unsupported file type', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        continue;
+      }
+
+      totalSize += files[i].size;
 
       // convert the file to base64 for upload
       const reader: FileReader = new FileReader();
@@ -57,19 +64,12 @@ export class FileUploaderComponent implements OnInit {
           this.documents.controls[fileIndex].get('body').patchValue(body);
         }
         else {
-          let file_extenstion = files.item(i).name.trim().split('.').pop();
-          if (config.accepted_file_extensions[file_extenstion]) {
-            totalSize += files[i].size;
-            this.documents.push(this.fb.group({
-              filename: [files.item(i).name],
-              body: [body],
-              subject: [''],
-              size: files[i].size,
-            }));
-          }
-          else {
-            this.snackBar.open('Unsupported file type', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-          }
+          this.documents.push(this.fb.group({
+            filename: [files.item(i).name],
+            body: [body],
+            subject: [''],
+            size: files[i].size,
+          }));
         }
       };
       reader.onerror = error => console.log('Error: ', error);
