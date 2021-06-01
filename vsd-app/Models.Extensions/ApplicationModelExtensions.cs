@@ -435,7 +435,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 // Setup Representatives, if available
                 if (model.AuthorizationInformation != null)
                 {
-                    application.Application.vsd_authorizationsignature = model.AuthorizationInformation.signature;
+                    // application.Application.vsd_authorizationsignature = model.AuthorizationInformation.signature;
                     if (model.AuthorizationInformation.authorizedPerson != null && model.AuthorizationInformation.authorizedPerson.Length > 0)
                     {
                         Providercollection[] tempProviderCollection = model.AuthorizationInformation.authorizedPerson.Select(t => new Providercollection
@@ -770,7 +770,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_authorizationsignature = model.AuthorizationInformation.signature;
             }
 
-            application.Application.vsd_applicantssignature = model.AuthorizationInformation.signature;
+            if (model.DeclarationInformation != null)
+            {
+                application.Application.vsd_applicantssignature = model.DeclarationInformation.signature;
+            }
+            
             if (model.AuthorizationInformation.allowCvapStaffSharing > 0)
             {
                 application.Application.vsd_cvap_optionalauthorization = model.AuthorizationInformation.allowCvapStaffSharing;
