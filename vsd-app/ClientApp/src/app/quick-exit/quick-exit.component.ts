@@ -12,7 +12,7 @@ import { DOCUMENT } from '@angular/common';
         transform: 'translateX(0)',
       })),
       state('closed', style({
-        transform: 'translateX(240px)',
+        transform: 'translateX(-240px)',
       })),
       transition('open => closed', [
         animate('1s')

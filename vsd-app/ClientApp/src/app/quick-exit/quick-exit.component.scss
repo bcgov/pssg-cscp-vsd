@@ -1,7 +1,7 @@
 .slide-close {
   position: fixed;
   bottom: 20px;
-  right: 0;
+  left: 0;
   background-color: #f1dede;
   color: #a12621;
   height: 60px;
@@ -24,8 +24,8 @@
   .close-box {
     width: 50px;
     text-align: center;
-    padding-left: 10px;
-    padding-right: 0;
+    padding-left: 0px;
+    padding-right: 10px;
   }
 
   .close-info {
