@@ -94,7 +94,7 @@
         </div>
     </div>
 
-    <app-field label="Gender" [required]="true" [valid]="isFieldValid('gender')" errorMessage="Please select your gender">
+    <app-field label="Gender" [required]="false" [valid]="isFieldValid('gender')" errorMessage="Please select your gender">
         <label class="inline-label">
             <input type="radio" [value]="100000000" name="gender" formControlName="gender">
             <span>M</span>
@@ -109,7 +109,7 @@
         </label>
     </app-field>
 
-    <ng-template #genderXToolTip>This category includes persons whose current gender was not reported exclusively as male or female. It includes persons who were reported as being unsure of their gender, persons who were reported as both male and female, or neither male nor female.</ng-template>
+    <ng-template #genderXToolTip>Persons whose current gender is not exclusively as male or female. It includes people who are unsure of their gender, do not have one gender, have no gender, are gender fluid, or are Two-Spirit.</ng-template>
 
     <div class="row">
         <div class="col-md-6">
@@ -160,6 +160,10 @@
                 </select>
             </app-field>
         </div>
+    </div>
+
+    <div class="attention">
+        <p>Please note that your answers to questions about demographic information (e.g., gender, Indigenous identity) allow the Community Safety and Crime Prevention branch to better understand who accesses our programs so we may continue to improve our service delivery. Your response is voluntary and the information you provide does not impact your ability to access these services.</p>
     </div>
 
     <h2 class="blue-header">Contact Information</h2>
