@@ -59,11 +59,11 @@
     <app-field label="Gender" [required]="false" [valid]="isFieldValid('gender')" errorMessage="Please select your gender">
         <label class="inline-label">
             <input type="radio" [value]="100000000" name="gender" formControlName="gender">
-            <span>M</span>
+            <span>M <app-tool-tip [trigger]="genderMToolTip"></app-tool-tip></span>
         </label>
         <label class="inline-label">
             <input type="radio" [value]="100000001" name="gender" formControlName="gender">
-            <span>F</span>
+            <span>F <app-tool-tip [trigger]="genderFToolTip"></app-tool-tip></span>
         </label>
         <label class="inline-label">
             <input type="radio" [value]="100000002" name="gender" formControlName="gender">
@@ -71,7 +71,9 @@
         </label>
     </app-field>
 
-    <ng-template #genderXToolTip>Persons whose current gender is not exclusively as male or female. It includes people who are unsure of their gender, do not have one gender, have no gender, are gender fluid, or are Two-Spirit.</ng-template>
+    <ng-template #genderMToolTip>Persons whose current gender is male. This includes cisgender and transgender persons who are male.</ng-template>
+    <ng-template #genderFToolTip>Persons whose current gender is female. This includes cisgender and transgender persons who are female.</ng-template>
+    <ng-template #genderXToolTip>Persons whose current gender is not exclusively male or female. It includes people who are unsure of their gender, do not have one gender, have no gender, are gender fluid, or are Two-Spirit.</ng-template>
 
     <div class="row">
         <div class="col-md-6">

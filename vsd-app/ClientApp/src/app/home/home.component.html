@@ -57,7 +57,7 @@
                 <app-field label="I am:" [required]="true">
                   <label>
                     <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                    Completing this application for myself
+                    Completing this application for myself <app-tool-tip [trigger]="onBehalfOfToolTip"></app-tool-tip>
                   </label>
                   <label *ngIf="selectedApplicationType === 1">
                     <!--This will never happen, but kept here in case they want it back-->
@@ -74,6 +74,8 @@
                   </label>
                 </app-field>
               </section>
+
+              <ng-template #onBehalfOfToolTip>This option should also be chosen when completing the application in consultation with a victim service worker or support person.</ng-template>
 
               <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
                 <app-field label="Did the crime occur in BC" [required]="true">
