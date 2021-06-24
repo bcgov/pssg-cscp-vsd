@@ -75,7 +75,7 @@
                     <span class="right-buttons">
                         <button (click)="gotoNextStep(stepper);" class="btn btn-primary continue-btn" *ngIf="stepper.selectedIndex < PAGES.REVIEW">CONTINUE <i class="fas fa-chevron-right"></i></button>
                         <div class="left-buttons download-grid" [class.disabled-wrapper]="submitting">
-                            <button (click)="printApplication();" class="btn btn-primary print-button" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
+                            <button (click)="printApplication();" class="btn btn-primary print-button" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == PAGES.REVIEW">PRINT PDF</button>
                         </div>
                         <div class="submit-grid" [class.disabled-wrapper]="submitting">
                             <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == PAGES.REVIEW">SUBMIT APPLICATION <i class="fas fa-chevron-right"></i></button>

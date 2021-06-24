@@ -395,14 +395,12 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   @HostListener('window:afterprint')
   onafterprint() {
-    // console.log("after print");
     document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
     window.scroll(0, 0);
     this.showPrintView = false;
   }
 
   printApplication() {
-    // console.log("attempt to print invoice");
     window.scroll(0, 0);
     this.showPrintView = true;
     document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");

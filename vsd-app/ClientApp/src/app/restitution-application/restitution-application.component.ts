@@ -84,7 +84,14 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
             this.FORM_TYPE = form_type;
         }
         this.headerTitleService.setTitle("Restitution Program");
-        this.form = this.buildApplicationForm();
+
+        if (this.state.cloning) {
+            this.form = this.cloneForm(this.state.data);
+            this.state.cloning = false;
+        }
+        else {
+            this.form = this.buildApplicationForm();
+        }
 
         let promise_array = [];
 
@@ -125,6 +132,30 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
         });
     }
 
+    cloneForm(data, FORM: IOptionSetVal = this.FORM_TYPE): FormGroup {
+        let clonedForm: FormGroup = data.form;
+
+        let courtFiles = clonedForm.get('restitutionInformation.courtFiles') as FormArray;
+        while (courtFiles.length > 0) {
+            courtFiles.removeAt(0);
+        }
+
+        courtFiles.push(this.restitutionInfoHelper.createCourtFile(this.fb, FORM));
+
+        let documents = clonedForm.get('restitutionInformation.documents') as FormArray;
+        while (documents.length > 0) {
+            documents.removeAt(0);
+        }
+
+        clonedForm.get('restitutionInformation.declaredAndSigned').patchValue('');
+        clonedForm.get('restitutionInformation.declaredAndSigned').markAsUntouched();
+        clonedForm.get('restitutionInformation.signature').patchValue('');
+        clonedForm.get('restitutionInformation').markAsUntouched();
+
+        this.state.data = null;
+        return clonedForm;
+    }
+
     buildApplicationForm(FORM: IOptionSetVal = this.FORM_TYPE): FormGroup {
         let group = {
             introduction: this.fb.group({}),
@@ -154,6 +185,7 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
                     data => {
                         if (data['IsSuccess'] == true) {
                             this.submitting = false;
+                            this.state.data = { type: this.FORM_TYPE, form: this.form };
                             this.router.navigate(['/restitution-success']);
                         }
                         else {
@@ -205,7 +237,7 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
     @HostListener('window:afterprint')
     onafterprint() {
         document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
-        window.scroll(0, 0);
+        window.scroll(0, document.body.scrollHeight);
         this.showPrintView = false;
     }
 

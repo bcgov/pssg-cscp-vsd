@@ -37,7 +37,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_relationshiptovictim { get; set; }
         public string vsd_relationshipother1 { get; set; }
 
-        public int vsd_applicantsgendercode { get; set; }
+        public int? vsd_applicantsgendercode { get; set; }
         public DateTime? vsd_applicantsbirthdate { get; set; }
         public int? vsd_applicantsmaritalstatus { get; set; }
 

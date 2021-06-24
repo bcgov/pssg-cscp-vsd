@@ -1,6 +1,6 @@
 import { iCRMApplication, iCRMCourtInfo, iCRMParticipant, iRestitutionCRM } from "../interfaces/dynamics/crm-restitution";
 import { iRestitutionApplication, iCourtFile, iDocument } from "../interfaces/restitution.interface";
-import { ApplicationType } from "../shared/enums-list";
+import { ApplicationType, CRMBoolean, EnumHelper } from "../shared/enums-list";
 
 
 export function convertRestitutionToCRM(application: iRestitutionApplication) {
@@ -9,9 +9,6 @@ export function convertRestitutionToCRM(application: iRestitutionApplication) {
 
     let crm_application: iRestitutionCRM = {
         Application: getCRMApplication(application),
-        // CourtInfoCollection: getCRMCourtInfoCollection(application),
-        // ProviderCollection: getCRMProviderCollection(application),
-        // DocumentCollection: getCRMDocumentCollection(application),
     }
 
     let courtInfo = getCRMCourtInfoCollection(application);
@@ -41,18 +38,37 @@ function getCRMApplication(application: iRestitutionApplication) {
         vsd_applicantsgendercode: application.RestitutionInformation.gender,
         vsd_applicantsbirthdate: application.RestitutionInformation.birthDate,
         vsd_indigenous: application.RestitutionInformation.indigenousStatus,
-        vsd_applicantspreferredmethodofcontact: application.RestitutionInformation.contactInformation.preferredMethodOfContact,
-        vsd_applicantsprimaryphonenumber: application.RestitutionInformation.contactInformation.phoneNumber,
-        vsd_applicantsalternatephonenumber: application.RestitutionInformation.contactInformation.alternatePhoneNumber,
-        vsd_applicantsemail: application.RestitutionInformation.contactInformation.email,
-        vsd_applicantsprimaryaddressline1: application.RestitutionInformation.contactInformation.mailingAddress.line1,
-        vsd_applicantsprimaryaddressline2: application.RestitutionInformation.contactInformation.mailingAddress.line2,
-        vsd_applicantsprimarycity: application.RestitutionInformation.contactInformation.mailingAddress.city,
-        vsd_applicantsprimaryprovince: application.RestitutionInformation.contactInformation.mailingAddress.province,
-        vsd_applicantsprimarypostalcode: application.RestitutionInformation.contactInformation.mailingAddress.postalCode,
-        vsd_applicantsprimarycountry: application.RestitutionInformation.contactInformation.mailingAddress.country,
-        vsd_voicemailoption: application.RestitutionInformation.contactInformation.leaveVoicemail,
+
+        vsd_applicantspreferredmethodofcontact: null,
+        vsd_smspreferred: null,
+        vsd_applicantsprimaryphonenumber: '',
+        vsd_applicantsalternatephonenumber: '',
+        vsd_applicantsemail: '',
+        vsd_applicantsprimaryaddressline1: '',
+        vsd_applicantsprimaryaddressline2: '',
+        vsd_applicantsprimarycity: '',
+        vsd_applicantsprimaryprovince: '',
+        vsd_applicantsprimarypostalcode: '',
+        vsd_applicantsprimarycountry: '',
+        vsd_voicemailoption: null,
         vsd_applicantssignature: application.RestitutionInformation.signature,
+    }
+
+    let hasDesignate = (application.RestitutionInformation.authorizeDesignate && application.RestitutionInformation.designate.length > 0);
+
+    if (!hasDesignate) {
+        crm_application.vsd_applicantspreferredmethodofcontact = application.RestitutionInformation.contactInformation.preferredMethodOfContact;
+        crm_application.vsd_smspreferred = application.RestitutionInformation.contactInformation.smsPreferred;
+        crm_application.vsd_applicantsprimaryphonenumber = application.RestitutionInformation.contactInformation.phoneNumber;
+        crm_application.vsd_applicantsalternatephonenumber = application.RestitutionInformation.contactInformation.alternatePhoneNumber;
+        crm_application.vsd_applicantsemail = application.RestitutionInformation.contactInformation.email;
+        crm_application.vsd_applicantsprimaryaddressline1 = application.RestitutionInformation.contactInformation.mailingAddress.line1;
+        crm_application.vsd_applicantsprimaryaddressline2 = application.RestitutionInformation.contactInformation.mailingAddress.line2;
+        crm_application.vsd_applicantsprimarycity = application.RestitutionInformation.contactInformation.mailingAddress.city;
+        crm_application.vsd_applicantsprimaryprovince = application.RestitutionInformation.contactInformation.mailingAddress.province;
+        crm_application.vsd_applicantsprimarypostalcode = application.RestitutionInformation.contactInformation.mailingAddress.postalCode;
+        crm_application.vsd_applicantsprimarycountry = application.RestitutionInformation.contactInformation.mailingAddress.country;
+        crm_application.vsd_voicemailoption = application.RestitutionInformation.contactInformation.leaveVoicemail;
     }
 
     return crm_application;
@@ -75,17 +91,51 @@ function getCRMCourtInfoCollection(application: iRestitutionApplication) {
 
 function getCRMProviderCollection(application: iRestitutionApplication) {
     let ret: iCRMParticipant[] = [];
+    let enumHelper = new EnumHelper();
 
     if (application.RestitutionInformation.authorizeDesignate && application.RestitutionInformation.designate.length > 0) {
         let designate = application.RestitutionInformation.designate[0];
         //add designate...
-        ret.push({
+        let toAdd: iCRMParticipant = {
             vsd_firstname: designate.firstName,
             vsd_lastname: designate.lastName,
             vsd_preferredname: designate.preferredName,
             //need crm field: designate.actOnBehalf,
-            vsd_relationship1: "Authorized Person"
-        });
+            vsd_relationship1: "Designate",
+
+            //set contact info
+            vsd_addressline1: application.RestitutionInformation.contactInformation.mailingAddress.line1,
+            vsd_addressline2: application.RestitutionInformation.contactInformation.mailingAddress.line2,
+            vsd_city: application.RestitutionInformation.contactInformation.mailingAddress.city,
+            vsd_province: application.RestitutionInformation.contactInformation.mailingAddress.province,
+            vsd_postalcode: application.RestitutionInformation.contactInformation.mailingAddress.postalCode,
+            vsd_country: application.RestitutionInformation.contactInformation.mailingAddress.country,
+            vsd_phonenumber: application.RestitutionInformation.contactInformation.phoneNumber,
+            vsd_alternatephonenumber: application.RestitutionInformation.contactInformation.alternatePhoneNumber,
+            vsd_email: application.RestitutionInformation.contactInformation.email,
+            vsd_voicemailoptions: application.RestitutionInformation.contactInformation.leaveVoicemail,
+        };
+
+        switch (application.RestitutionInformation.contactInformation.preferredMethodOfContact) {
+            case enumHelper.ContactMethods.BLANK.val:
+                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.BLANK.val;
+                break;
+            case enumHelper.ContactMethods.Email.val:
+                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.Email.val;
+                break;
+            case enumHelper.ContactMethods.Mail.val:
+                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.Mail.val;
+                break;
+            case enumHelper.ContactMethods.Phone.val:
+                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.Phone.val;
+                break;
+        }
+
+        if (application.RestitutionInformation.contactInformation.smsPreferred == CRMBoolean.True) {
+            toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.SMS.val;
+        }
+
+        ret.push(toAdd);
     }
 
     //if victim application - there may be offenders (which are included in the "courtFiles")
@@ -108,7 +158,7 @@ function getCRMProviderCollection(application: iRestitutionApplication) {
             vsd_phonenumber: application.RestitutionInformation.probationOfficerPhoneNumber,
             vsd_email: application.RestitutionInformation.probationOfficerEmail,
             vsd_rest_custodylocation: application.RestitutionInformation.probationOfficerCustodyLocation,
-            vsd_relationship1: "Parole Officer",
+            vsd_relationship1: "Probation Officer",
         });
     }
 

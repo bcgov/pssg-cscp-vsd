@@ -39,6 +39,7 @@ export interface iDesignate {
 
 export interface iContactInformation {
   preferredMethodOfContact: number;
+  smsPreferred?: number;
   mailingAddress: Address;
   phoneNumber: string;
   alternatePhoneNumber: string;

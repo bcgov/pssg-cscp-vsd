@@ -99,7 +99,6 @@
             <div class="col-12">
                 <h3 *ngIf="formType.val === ResitutionForm.Victim.val">Authorized Victim Designate</h3>
                 <h3 *ngIf="formType.val === ResitutionForm.Offender.val">Authorized Applicant Designate</h3>
-                <!-- <p>Victims have the option of assigning a designate to communicate with the Restitution Program on their behalf.</p> -->
             </div>
         </div>
         <div class="row">
@@ -245,7 +244,6 @@
                                 {{ item }}
                             </option>
                         </select>
-                        <!-- <input class="form-control" type="text" formControlName="location" maxlength="100"> -->
                     </app-field>
                 </div>
                 <div class="col-1" *ngIf="formType.val === ResitutionForm.Offender.val && form.get('courtFiles')['controls'].length > 1">
@@ -257,11 +255,6 @@
             </div>
         </div>
     </div>
-
-    <div>
-        <button *ngIf="!isDisabled" class="btn btn-secondary" (click)="addCourtFile()">+ ADD RESTITUTION ORDER</button>
-    </div>
-
 
     <ng-container *ngIf="formType.val === ResitutionForm.Victim.val">
         <h2 class="blue-header" id="VSWInformation">Victim Service Worker</h2>
