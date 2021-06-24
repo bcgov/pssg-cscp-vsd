@@ -237,7 +237,7 @@ export class RestitutionApplicationComponent extends FormBase implements OnInit,
     @HostListener('window:afterprint')
     onafterprint() {
         document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
-        window.scroll(0, 0);
+        window.scroll(0, document.body.scrollHeight);
         this.showPrintView = false;
     }
 

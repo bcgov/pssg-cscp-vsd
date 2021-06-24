@@ -4,19 +4,6 @@
     <p *ngIf="formType.val === ResitutionForm.Offender.val">Contact information for the Offender (or the Offender Designate)</p>
 
     <div class="row">
-        <div class="col-md-6">
-            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isMyControlValid(form.get('preferredMethodOfContact'))" errorMessage="Please select your preferred method of contact">
-                <select class="form-control" formControlName="preferredMethodOfContact">
-                    <option [value]="enum.ContactMethods.BLANK.val">Select...</option>
-                    <option [value]="enum.ContactMethods.Phone.val">Phone Call</option>
-                    <option [value]="enum.ContactMethods.Email.val">Email</option>
-                    <option [value]="enum.ContactMethods.Mail.val">Mail</option>
-                </select>
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-12">
             <h3>Mailing Address</h3>
         </div>
@@ -32,9 +19,36 @@
             <h3>Communication</h3>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Primary Phone Number (inc. area code)" [valid]="isMyControlValid(form.get('phoneNumber'))" errorMessage="Please enter your phone number" [disabled]="isDisabled">
+            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isMyControlValid(form.get('preferredMethodOfContact'))" errorMessage="Please select your preferred method of contact">
+                <select class="form-control" formControlName="preferredMethodOfContact" (change)="preferredMethodOfContactChange()">
+                    <option [value]="enum.ContactMethods.BLANK.val">Select...</option>
+                    <option [value]="enum.ContactMethods.Phone.val">Phone Call</option>
+                    <option [value]="enum.ContactMethods.Email.val">Email</option>
+                    <option [value]="enum.ContactMethods.Mail.val">Mail</option>
+                </select>
+            </app-field>
+        </div>
+
+        <div class="col-md-6" *ngIf="form.get('preferredMethodOfContact').value == enum.ContactMethods.Phone.val">
+            <app-field label="SMS Preferred?" errorMessage="" [disabled]="isDisabled" [valid]="isMyControlValid(form.get('smsPreferred'))" errorMessage="Please choose an option">
+                <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.True" formControlName="smsPreferred">
+                    <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                    <input type="radio" [value]="CRMBoolean.False" formControlName="smsPreferred">
+                    <span>No</span>
+                </label>
+            </app-field>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <app-field label="Primary Phone Number (inc. area code)" [required]="form.get('preferredMethodOfContact').value == enum.ContactMethods.Phone.val" [valid]="isMyControlValid(form.get('phoneNumber'))" errorMessage="Please enter your phone number" [disabled]="isDisabled">
                 <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" *ngIf="form.get('mailingAddress.country').value === 'Canada' || form.get('mailingAddress.country').value === 'United States of America'; else phone_no_mask">
                 <ng-template #phone_no_mask>
                     <input class="form-control" type="text" formControlName="phoneNumber" digitOnly>
@@ -58,14 +72,14 @@
                     <option [value]="enum.LeaveVoicemail.Primary_And_Alternate.val">Primary and Alternate</option>
                     <option [value]="enum.LeaveVoicemail.Primary_Only.val">Primary only</option>
                     <option [value]="enum.LeaveVoicemail.Altrernate_Only.val">Alternate only</option>
-                    <option [value]="enum.LeaveVoicemail.No_Voicemain.val">No Voicemail</option>
+                    <option [value]="enum.LeaveVoicemail.No_Voicemail.val">No Voicemail</option>
                 </select>
             </app-field>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Email Address" [valid]="isMyControlValid(form.get('email'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
+            <app-field label="Email Address" [required]="form.get('preferredMethodOfContact').value == enum.ContactMethods.Email.val" [valid]="isMyControlValid(form.get('email'))" errorMessage="Please enter your email address" [disabled]="isDisabled">
                 <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
             </app-field>
         </div>

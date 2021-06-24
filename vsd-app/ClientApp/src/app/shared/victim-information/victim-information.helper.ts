@@ -16,7 +16,7 @@ export class VictimInfoHelper {
             otherLastName: [''],
             dateOfNameChange: [''],
 
-            gender: [0],
+            gender: [null],
             maritalStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
 
             victimSameContactInfo: [''],

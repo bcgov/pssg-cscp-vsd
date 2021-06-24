@@ -169,6 +169,14 @@ export class EnumHelper {
     Mail:   <IOptionSetVal> { val: 4, name: "Mail" },
   }
 
+  public ParticipantContactMethods = {
+    BLANK:  <IOptionSetVal> { val: 0, name: "--" },
+    Email:  <IOptionSetVal> { val: 100000000, name: "Email" },
+    Mail:   <IOptionSetVal> { val: 100000001, name: "Mail" },
+    Phone:  <IOptionSetVal> { val: 100000002, name: "Phone Call" },
+    SMS:    <IOptionSetVal> { val: 100000003, name: "SMS" },
+  }
+
   public IndigenousStatus = {
     BLANK:                  <IOptionSetVal> { val: 0, name: "--" },
     First_Nations:          <IOptionSetVal> { val: 100000000, name: "First Nations" },
@@ -183,7 +191,7 @@ export class EnumHelper {
     Primary_And_Alternate:  <IOptionSetVal> { val: 100000000, name: "Primary and Alternate" },
     Primary_Only:           <IOptionSetVal> { val: 100000001, name: "Primary only" },
     Altrernate_Only:        <IOptionSetVal> { val: 100000002, name: "Alternate only" },
-    No_Voicemain:           <IOptionSetVal> { val: 100000003, name: "No Voicemail" },
+    No_Voicemail:           <IOptionSetVal> { val: 100000003, name: "No Voicemail" },
   }
 }
 

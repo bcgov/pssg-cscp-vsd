@@ -16,7 +16,7 @@ export class PersonalInfoHelper {
             otherLastName: [''],
             dateOfNameChange: [''],
 
-            gender: [0],
+            gender: [null],
             birthDate: ['', [Validators.required]],
             sin: ['', [Validators.minLength(9), Validators.maxLength(9)]],
             occupation: [''],
