@@ -33,7 +33,7 @@ export class RestitutionInfoHelper {
                 }),
 
                 preferredMethodOfContact: [null, [Validators.required, Validators.min(1), Validators.max(100000002)]], // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
-                smsPreferred: [null],
+                // smsPreferred: [null],
 
                 phoneNumber: ['', [Validators.minLength(10), Validators.maxLength(15)]],
                 alternatePhoneNumber: [''],
