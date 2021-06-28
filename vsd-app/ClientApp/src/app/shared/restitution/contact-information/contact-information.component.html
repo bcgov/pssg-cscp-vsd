@@ -32,8 +32,8 @@
             </app-field>
         </div>
 
-        <div class="col-md-6" *ngIf="form.get('preferredMethodOfContact').value == enum.ContactMethods.Phone.val">
-            <app-field label="SMS Preferred?" errorMessage="" [disabled]="isDisabled" [valid]="isMyControlValid(form.get('smsPreferred'))" errorMessage="Please choose an option">
+        <div class="col-md-6">
+            <app-field label="SMS/Text Preferred?" errorMessage="" [disabled]="isDisabled" [valid]="isMyControlValid(form.get('smsPreferred'))" errorMessage="Please choose an option">
                 <label class="inline-label">
                     <input type="radio" [value]="CRMBoolean.True" formControlName="smsPreferred">
                     <span>Yes</span>
