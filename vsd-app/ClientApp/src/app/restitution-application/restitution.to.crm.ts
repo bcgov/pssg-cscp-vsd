@@ -40,7 +40,7 @@ function getCRMApplication(application: iRestitutionApplication) {
         vsd_indigenous: application.RestitutionInformation.indigenousStatus,
 
         vsd_applicantspreferredmethodofcontact: null,
-        vsd_smspreferred: null,
+        // vsd_smspreferred: null,
         vsd_applicantsprimaryphonenumber: '',
         vsd_applicantsalternatephonenumber: '',
         vsd_applicantsemail: '',
@@ -58,7 +58,7 @@ function getCRMApplication(application: iRestitutionApplication) {
 
     if (!hasDesignate) {
         crm_application.vsd_applicantspreferredmethodofcontact = application.RestitutionInformation.contactInformation.preferredMethodOfContact;
-        crm_application.vsd_smspreferred = application.RestitutionInformation.contactInformation.smsPreferred;
+        // crm_application.vsd_smspreferred = application.RestitutionInformation.contactInformation.smsPreferred;
         crm_application.vsd_applicantsprimaryphonenumber = application.RestitutionInformation.contactInformation.phoneNumber;
         crm_application.vsd_applicantsalternatephonenumber = application.RestitutionInformation.contactInformation.alternatePhoneNumber;
         crm_application.vsd_applicantsemail = application.RestitutionInformation.contactInformation.email;
@@ -131,9 +131,9 @@ function getCRMProviderCollection(application: iRestitutionApplication) {
                 break;
         }
 
-        if (application.RestitutionInformation.contactInformation.smsPreferred == CRMBoolean.True) {
-            toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.SMS.val;
-        }
+        // if (application.RestitutionInformation.contactInformation.smsPreferred == CRMBoolean.True) {
+        //     toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.SMS.val;
+        // }
 
         ret.push(toAdd);
     }

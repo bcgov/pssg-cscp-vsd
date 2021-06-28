@@ -15,7 +15,7 @@ export interface iCRMApplication {
     vsd_applicantsbirthdate: Date;
     vsd_indigenous: number;
     vsd_applicantspreferredmethodofcontact: number;
-    vsd_smspreferred?: number;
+    // vsd_smspreferred?: number;
     vsd_applicantsprimaryphonenumber?: string;
     vsd_applicantsalternatephonenumber?: string;
     vsd_applicantsemail?: string;
