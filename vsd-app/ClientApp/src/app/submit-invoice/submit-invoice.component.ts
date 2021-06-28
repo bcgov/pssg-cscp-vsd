@@ -18,6 +18,7 @@ import * as _ from 'lodash';
 import { AEMService } from '../services/aem.service';
 import * as moment from 'moment';
 import { DocumentCollectioninformation } from '../interfaces/application.interface';
+import { MessageDialog } from '../shared/dialogs/message-dialog/message.dialog';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -33,6 +34,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   postalRegex = POSTAL_CODE;
   dataLoaded = false;
   submitting: boolean = false;
+  hasDuplicateLineItem: boolean = false;
 
   form: FormGroup;
   enumHelper = new EnumHelper();
@@ -266,6 +268,14 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   submitInvoice() {
     this.formSubmitted = true;
     if (this.form.valid) {
+      if (this.hasDuplicateLineItem) {
+        this.dialog.open(MessageDialog, {
+          autoFocus: false,
+          data: { title: "Duplicate Line Items", message: "Multiple line items detected with same session date and counselling type." }
+        });
+        return;
+      }
+
       this.submitting = true;
       this.formFullyValidated = true;
       const formData = <CounsellorInvoice>{
@@ -314,6 +324,13 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   submitAndCreateNew() {
     //first submit, then
     if (this.form.valid) {
+      if (this.hasDuplicateLineItem) {
+        this.dialog.open(MessageDialog, {
+          autoFocus: false,
+          data: { title: "Duplicate Line Items", message: "Multiple line items detected with same session date and counselling type." }
+        });
+        return;
+      }
       this.submitting = true;
       this.formFullyValidated = true;
       const formData = <CounsellorInvoice>{
@@ -542,7 +559,30 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
       dialogRef.afterClosed().subscribe(() => {
         this.form.get('invoiceDetails.gstApplicable').patchValue(false);
-      })
+      });
+    }
+  }
+
+  checkForDuplicateLineItems() {
+    let lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+
+    let data = [];
+    for (let i = 0; i < lineItems.length; ++i) {
+      let item = this.lineItems.at(i) as FormGroup;
+      data.push({ type: item.get("counsellingType").value, date: item.get("sessionDate").value.toString() });
+    }
+
+    let duplicates = data.filter((d1, index, self) => self.findIndex(d2 => d1.type == d2.type && d1.date == d2.date) != index);
+
+    if (duplicates.length > 0) {
+      this.hasDuplicateLineItem = true;
+      this.dialog.open(MessageDialog, {
+        autoFocus: false,
+        data: { title: "Duplicate Line Item", message: "This counselling type already entered for this date, please review session date." }
+      });
+    }
+    else {
+      this.hasDuplicateLineItem = false;
     }
   }
 }

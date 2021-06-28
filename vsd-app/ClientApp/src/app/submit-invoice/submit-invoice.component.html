@@ -127,7 +127,7 @@
                     <div [formGroupName]="i" class="invoice-item row no-gutter">
                       <div class="col-3">
                         <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter session date">
-                          <input type="text" [max]="today" class="form-control date-picker" [matDatepicker]="sessionDate_i" placeholder="yyyy-mm-dd" formControlName="sessionDate" (click)="sessionDate_i.open()">
+                          <input type="text" [max]="today" class="form-control date-picker" [matDatepicker]="sessionDate_i" placeholder="yyyy-mm-dd" formControlName="sessionDate" (click)="sessionDate_i.open()" (change)="checkForDuplicateLineItems()" (dateChange)="checkForDuplicateLineItems()">
                           <span style="display: none;">
                             <mat-datepicker-toggle matSuffix [for]="sessionDate_i"></mat-datepicker-toggle>
                           </span>
@@ -136,7 +136,7 @@
                       </div>
                       <div class="col-3">
                         <app-field label="Counselling Type" [required]="true" [valid]="isControlValid(item, 'counsellingType')" errorMessage="Select type">
-                          <select class="form-control fixed-select" formControlName="counsellingType">
+                          <select class="form-control fixed-select" formControlName="counsellingType" (change)="checkForDuplicateLineItems()">
                             <option value="0">Select...</option>
                             <option value="100000000">Counselling Session</option>
                             <option value="100000001">Court Supporting Counselling</option>

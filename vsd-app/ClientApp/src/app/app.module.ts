@@ -92,6 +92,7 @@ import { RestitutionContactInformationComponent } from './shared/restitution/con
 import { RestitutionReviewComponent } from './shared/restitution/review/restitution-review.component';
 import { HeaderTitleService } from './services/titile.service';
 import { RestitutionSuccessComponent } from './shared/restitution/success/restitution-success.component';
+import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,7 @@ import { RestitutionSuccessComponent } from './shared/restitution/success/restit
     FieldComponent,
     FileUploaderComponent,
     GSTWarningDialog,
+    MessageDialog,
     HomeComponent,
     IfmApplicationComponent,
     IntroductionComponent,
@@ -245,6 +247,7 @@ import { RestitutionSuccessComponent } from './shared/restitution/success/restit
     CancelDialog,
     InvoiceInstructionsDialog,
     GSTWarningDialog,
+    MessageDialog,
     SignPadDialog,
     SummaryOfBenefitsDialog,
   ],
