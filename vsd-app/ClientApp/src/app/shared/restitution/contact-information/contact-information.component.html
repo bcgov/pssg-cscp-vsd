@@ -32,23 +32,24 @@
             </app-field>
         </div>
 
-        <!-- <div class="col-md-6">
-            <app-field label="SMS/Text Preferred?" errorMessage="" [disabled]="isDisabled" [valid]="isMyControlValid(form.get('smsPreferred'))" errorMessage="Please choose an option">
+        <div class="col-md-6">
+            <ng-template #SMSPreferredTooltip>If yes, please ensure that your primary phone number can receive SMS/Text messages.</ng-template>
+            <app-field label="SMS/Text Preferred?" errorMessage="" [disabled]="isDisabled" [valid]="isMyControlValid(form.get('smsPreferred'))" errorMessage="Please choose an option" [tooltipReference]="SMSPreferredTooltip">
                 <label class="inline-label">
-                    <input type="radio" [value]="CRMBoolean.True" formControlName="smsPreferred">
+                    <input type="radio" [value]="CRMBoolean.True" formControlName="smsPreferred" (change)="preferredMethodOfContactChange()">
                     <span>Yes</span>
                 </label>
                 <label class="inline-label">
-                    <input type="radio" [value]="CRMBoolean.False" formControlName="smsPreferred">
+                    <input type="radio" [value]="CRMBoolean.False" formControlName="smsPreferred" (change)="preferredMethodOfContactChange()">
                     <span>No</span>
                 </label>
             </app-field>
-        </div> -->
+        </div>
     </div>
 
     <div class="row">
         <div class="col-md-6">
-            <app-field label="Primary Phone Number (inc. area code)" [required]="form.get('preferredMethodOfContact').value == enum.ContactMethods.Phone.val" [valid]="isMyControlValid(form.get('phoneNumber'))" errorMessage="Please enter your phone number" [disabled]="isDisabled">
+            <app-field label="Primary Phone Number (inc. area code)" [required]="form.get('preferredMethodOfContact').value == enum.ContactMethods.Phone.val || form.get('smsPreferred').value == CRMBoolean.True" [valid]="isMyControlValid(form.get('phoneNumber'))" errorMessage="Please enter your phone number" [disabled]="isDisabled">
                 <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" *ngIf="form.get('mailingAddress.country').value === 'Canada' || form.get('mailingAddress.country').value === 'United States of America'; else phone_no_mask">
                 <ng-template #phone_no_mask>
                     <input class="form-control" type="text" formControlName="phoneNumber" digitOnly>

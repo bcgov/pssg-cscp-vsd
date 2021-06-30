@@ -553,7 +553,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('otherFirstName').patchValue('');
     ret.get('personalInformation').get('otherLastName').patchValue('');
     ret.get('personalInformation').get('dateOfNameChange').patchValue('');
-    ret.get('personalInformation').get('gender').patchValue(0);
+    ret.get('personalInformation').get('gender').patchValue(null);
     ret.get('personalInformation').get('birthDate').patchValue('');
     ret.get('personalInformation').get('maritalStatus').patchValue(0);
     ret.get('personalInformation').get('sin').patchValue('');
