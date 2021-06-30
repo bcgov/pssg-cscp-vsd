@@ -43,24 +43,24 @@ export class RestitutionContactInformationComponent extends FormBase implements 
 
         if (preferredVal == this.enum.ContactMethods.Phone.val) {
             this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(15)]);
-
             this.setControlValidators(emailControl, [Validators.email]);
         }
         else if (preferredVal == this.enum.ContactMethods.Email.val) {
             this.setControlValidators(emailControl, [Validators.required, Validators.email]);
-
             this.setControlValidators(phoneControl, [Validators.minLength(10), Validators.maxLength(15)]);
-            // this.form.get("smsPreferred").patchValue(null);
         }
         else if (preferredVal == this.enum.ContactMethods.Mail.val) {
             this.setControlValidators(phoneControl, [Validators.minLength(10), Validators.maxLength(15)]);
             this.setControlValidators(emailControl, [Validators.email]);
-            // this.form.get("smsPreferred").patchValue(null);
         }
         else {
             this.setControlValidators(phoneControl, [Validators.minLength(10), Validators.maxLength(15)]);
             this.setControlValidators(emailControl, [Validators.email]);
-            // this.form.get("smsPreferred").patchValue(null);
+        }
+
+        let smsPreferred = this.form.get("smsPreferred").value;
+        if (smsPreferred == CRMBoolean.True) {
+            this.setControlValidators(phoneControl, [Validators.required, Validators.minLength(10), Validators.maxLength(15)]);
         }
     }
 }

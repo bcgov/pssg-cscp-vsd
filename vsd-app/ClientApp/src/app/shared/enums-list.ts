@@ -170,6 +170,12 @@ export class EnumHelper {
   }
 
   public ParticipantContactMethods = {
+    Email:  <IOptionSetVal> { val: 100000000, name: "Email" },
+    Phone:  <IOptionSetVal> { val: 100000001, name: "Phone Call" },
+    Mail:   <IOptionSetVal> { val: 100000002, name: "Mail" },
+  }
+
+  public ParticipantRestitutionContactMethods = {
     BLANK:  <IOptionSetVal> { val: 0, name: "--" },
     Email:  <IOptionSetVal> { val: 100000000, name: "Email" },
     Mail:   <IOptionSetVal> { val: 100000001, name: "Mail" },

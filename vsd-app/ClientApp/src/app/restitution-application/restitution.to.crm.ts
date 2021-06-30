@@ -40,7 +40,7 @@ function getCRMApplication(application: iRestitutionApplication) {
         vsd_indigenous: application.RestitutionInformation.indigenousStatus,
 
         vsd_applicantspreferredmethodofcontact: null,
-        // vsd_smspreferred: null,
+        vsd_smspreferred: null,
         vsd_applicantsprimaryphonenumber: '',
         vsd_applicantsalternatephonenumber: '',
         vsd_applicantsemail: '',
@@ -58,7 +58,7 @@ function getCRMApplication(application: iRestitutionApplication) {
 
     if (!hasDesignate) {
         crm_application.vsd_applicantspreferredmethodofcontact = application.RestitutionInformation.contactInformation.preferredMethodOfContact;
-        // crm_application.vsd_smspreferred = application.RestitutionInformation.contactInformation.smsPreferred;
+        crm_application.vsd_smspreferred = application.RestitutionInformation.contactInformation.smsPreferred;
         crm_application.vsd_applicantsprimaryphonenumber = application.RestitutionInformation.contactInformation.phoneNumber;
         crm_application.vsd_applicantsalternatephonenumber = application.RestitutionInformation.contactInformation.alternatePhoneNumber;
         crm_application.vsd_applicantsemail = application.RestitutionInformation.contactInformation.email;
@@ -114,26 +114,27 @@ function getCRMProviderCollection(application: iRestitutionApplication) {
             vsd_alternatephonenumber: application.RestitutionInformation.contactInformation.alternatePhoneNumber,
             vsd_email: application.RestitutionInformation.contactInformation.email,
             vsd_voicemailoptions: application.RestitutionInformation.contactInformation.leaveVoicemail,
+            vsd_preferredmethodofcontact: convertToParticipantMethodOfContact(application.RestitutionInformation.contactInformation.preferredMethodOfContact),
         };
 
         switch (application.RestitutionInformation.contactInformation.preferredMethodOfContact) {
             case enumHelper.ContactMethods.BLANK.val:
-                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.BLANK.val;
+                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantRestitutionContactMethods.BLANK.val;
                 break;
             case enumHelper.ContactMethods.Email.val:
-                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.Email.val;
+                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantRestitutionContactMethods.Email.val;
                 break;
             case enumHelper.ContactMethods.Mail.val:
-                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.Mail.val;
+                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantRestitutionContactMethods.Mail.val;
                 break;
             case enumHelper.ContactMethods.Phone.val:
-                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.Phone.val;
+                toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantRestitutionContactMethods.Phone.val;
                 break;
         }
 
-        // if (application.RestitutionInformation.contactInformation.smsPreferred == CRMBoolean.True) {
-        //     toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantContactMethods.SMS.val;
-        // }
+        if (application.RestitutionInformation.contactInformation.smsPreferred == CRMBoolean.True) {
+            toAdd.vsd_restcontactpreferenceforupdates = enumHelper.ParticipantRestitutionContactMethods.SMS.val;
+        }
 
         ret.push(toAdd);
     }
@@ -172,6 +173,31 @@ function getCRMProviderCollection(application: iRestitutionApplication) {
             vsd_email: vsw.email,
             vsd_relationship1: "Victim Service Worker",
         });
+    }
+
+    return ret;
+}
+
+function convertToParticipantMethodOfContact(input) {
+    let ret = null;
+    let val = parseInt(input);
+    let enumHelper = new EnumHelper();
+    switch (val) {
+        case (enumHelper.ContactMethods.Email.val): {
+            ret = enumHelper.ParticipantContactMethods.Email.val;
+            break;
+        }
+        case (enumHelper.ContactMethods.Mail.val): {
+            ret = enumHelper.ParticipantContactMethods.Mail.val;
+            break;
+        }
+        case (enumHelper.ContactMethods.Phone.val): {
+            ret = enumHelper.ParticipantContactMethods.Phone.val;
+            break;
+        }
+        default: {
+            break;
+        }
     }
 
     return ret;

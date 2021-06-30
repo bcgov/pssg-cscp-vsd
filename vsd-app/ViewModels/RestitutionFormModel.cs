@@ -23,7 +23,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public DateTime? vsd_applicantsbirthdate { get; set; }
         public int? vsd_indigenous { get; set; }
         public int? vsd_applicantspreferredmethodofcontact { get; set; }
-        // public int? vsd_smspreferred { get; set; }
+        public int? vsd_smspreferred { get; set; }
         public string vsd_applicantsprimaryphonenumber { get; set; }
         public string vsd_applicantsalternatephonenumber { get; set; }
         public string vsd_applicantsemail { get; set; }
@@ -59,6 +59,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string vsd_province { get; set; }
         public string vsd_country { get; set; }
         public string vsd_postalcode { get; set; }
+        public int? vsd_preferredmethodofcontact { get; set; }
         public int? vsd_restcontactpreferenceforupdates { get; set; }
         public string vsd_phonenumber { get; set; }
         public string vsd_alternatephonenumber { get; set; }
