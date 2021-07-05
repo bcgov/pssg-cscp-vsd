@@ -226,6 +226,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
     this.lineItems.removeAt(index);
     this.showRemoveLine = this.lineItems.length > 1;
+    this.checkForDuplicateLineItems();
   }
 
   showSignPad(group, control): void {
@@ -271,7 +272,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       if (this.hasDuplicateLineItem) {
         this.dialog.open(MessageDialog, {
           autoFocus: false,
-          data: { title: "Duplicate Line Items", message: "Multiple line items detected with same session date and counselling type." }
+          data: { title: DUPLICATE_LINE_ITEMS_TITLE, message: DUPLICATE_LINE_ITEMS_MESSAGE }
         });
         return;
       }
@@ -327,7 +328,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       if (this.hasDuplicateLineItem) {
         this.dialog.open(MessageDialog, {
           autoFocus: false,
-          data: { title: "Duplicate Line Items", message: "Multiple line items detected with same session date and counselling type." }
+          data: { title: DUPLICATE_LINE_ITEMS_TITLE, message: DUPLICATE_LINE_ITEMS_MESSAGE }
         });
         return;
       }
@@ -593,3 +594,6 @@ const COUNSELLING_TYPES = {
   100000001: "Court Supporting Counselling",
   100000002: "Psycho-educational sessions",
 }
+
+const DUPLICATE_LINE_ITEMS_TITLE = "Duplicate Line Items";
+const DUPLICATE_LINE_ITEMS_MESSAGE = "Multiple line items detected with same session date and counselling type, please review line items before submitting this invoice.";
