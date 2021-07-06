@@ -1,0 +1,45 @@
+<div [formGroup]="group" class="address-info">
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Country" [required]="showChildrenAsRequired && countryList.length > 0" [valid]="isSubFieldValid('country', isDisabled)" errorMessage="Please select your country">
+        <select class="form-control" formControlName="country" (change)="onCountryChange($event)">
+          <option value="">Choose a country</option>
+          <option *ngFor="let item of countryList" [value]="item.vsd_name">
+            {{ item.vsd_name }}
+          </option>
+        </select>
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired && provinceList.length > 0" [valid]="isSubFieldValid('province', isDisabled || isProvinceDisabled)" errorMessage="Please select your {{provinceType.toLowerCase()}}">
+        <input formControlName="province" typeaheadOptionField="vsd_name" [typeahead]="provinceList" class="form-control">
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Mailing Address" [required]="showChildrenAsRequired" [valid]="isSubFieldValid('line1', isDisabled)" errorMessage="Please enter your mailing address">
+        <input class="form-control" type="text" formControlName="line1" placeholder="Street Number, Street Address, PO Box" />
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="Mailing Address Line 2">
+        <input class="form-control" type="text" formControlName="line2" placeholder="Apartment, Suite, Building, Floor">
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="City" [required]="showChildrenAsRequired && cityList.length > 0" [valid]="isSubFieldValid('city', isDisabled || isCityDisabled)" errorMessage="Please select your city">
+        <input formControlName="city" typeaheadOptionField="vsd_name" [typeahead]="citySuggestions$" [typeaheadAsync]="true" class="form-control">
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="{{ postalCodeType }}" [required]="showChildrenAsRequired && group['controls']['country'].value?.toLowerCase() === 'canada'" [valid]="isSubFieldValid('postalCode', isDisabled)" errorMessage="Please enter your {{postalCodeType.toLowerCase()}}">
+        <input class="form-control" type="text" placeholder="{{ postalCodeSample }}" formControlName="postalCode">
+      </app-field>
+    </div>
+  </div>
+</div>
