@@ -93,10 +93,12 @@ import { RestitutionReviewComponent } from './shared/restitution/review/restitut
 import { HeaderTitleService } from './services/titile.service';
 import { RestitutionSuccessComponent } from './shared/restitution/success/restitution-success.component';
 import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
+import { RestitutionAddressComponent } from './shared/restitution-address/address.component';
 
 @NgModule({
   declarations: [
     AddressComponent,
+    RestitutionAddressComponent,
     AppComponent,
     ApplicationCancelledComponent,
     ApplicationReviewComponent,
