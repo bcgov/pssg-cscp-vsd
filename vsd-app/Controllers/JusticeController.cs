@@ -17,14 +17,12 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IDynamicsResultService _dynamicsResultService;
-        private readonly IRestitutionResultService _restitutionResultService;
         private readonly ILogger _logger;
 
-        public JusticeController(IConfiguration configuration, IDynamicsResultService dynamicsResultService, IRestitutionResultService restitutionResultService)
+        public JusticeController(IConfiguration configuration, IDynamicsResultService dynamicsResultService)
         {
             _configuration = configuration;
             this._dynamicsResultService = dynamicsResultService;
-            this._restitutionResultService = restitutionResultService;
             _logger = Log.Logger;
         }
 
@@ -87,33 +85,6 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             catch (Exception e)
             {
                 _logger.Error(e, "Unexpected error while submitting counsellor invoice. Source = VSD", model);
-                return BadRequest();
-            }
-            finally { }
-        }
-
-        [HttpPost("submitrestitution")]
-        public async Task<IActionResult> SubmitRestitution([FromBody] RestitutionFormModel model)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    _logger.Error($"API call to 'SubmitRestitution' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
-                    return BadRequest(ModelState);
-                }
-
-                var endpointAction = "vsd_CreateRestitutionCase";
-                JsonSerializerSettings settings = new JsonSerializerSettings();
-                settings.NullValueHandling = NullValueHandling.Ignore;
-                var modelString = JsonConvert.SerializeObject(model, settings);
-
-                DynamicsResult result = await _restitutionResultService.Post(endpointAction, modelString);
-                return StatusCode((int)result.statusCode, result.result.ToString());
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Unexpected error while saving victim restitution. Source = VSD", model);
                 return BadRequest();
             }
             finally { }

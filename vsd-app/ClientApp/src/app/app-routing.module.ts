@@ -8,9 +8,6 @@ import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.componen
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { RestitutionApplicationComponent } from './restitution-application/restitution-application.component';
-import { ResitutionForm } from './shared/enums-list';
-import { RestitutionSuccessComponent } from './shared/restitution/success/restitution-success.component';
 
 const routes: Routes = [
   {
@@ -34,26 +31,12 @@ const routes: Routes = [
     component: SubmitInvoiceComponent,
   },
   {
-    path: 'victim-restitution',
-    component: RestitutionApplicationComponent,
-    data: { formType: ResitutionForm.Victim }
-  },
-  {
-    path: 'offender-restitution',
-    component: RestitutionApplicationComponent,
-    data: { formType: ResitutionForm.Offender }
-  },
-  {
     path: 'application-cancelled',
     component: ApplicationCancelledComponent,
   },
   {
     path: 'application-success',
     component: ApplicationSuccessComponent,
-  },
-  {
-    path: 'restitution-success',
-    component: RestitutionSuccessComponent,
   },
   { path: '**', component: NotFoundComponent }
 ];

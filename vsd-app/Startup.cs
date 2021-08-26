@@ -39,11 +39,9 @@ namespace Gov.Cscp.VictimServices.Public
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<TokenHandler>();
-            services.AddTransient<RestitutionTokenHandler>();
 
             services.AddHttpClient<ICOASTAuthService, COASTAuthService>();
             services.AddHttpClient<IDynamicsResultService, DynamicsResultService>().AddHttpMessageHandler<TokenHandler>();
-            services.AddHttpClient<IRestitutionResultService, RestitutionResultService>().AddHttpMessageHandler<RestitutionTokenHandler>();
             services.AddHttpClient<IAEMResultService, AEMResultService>();
 
             // Add a memory cache
