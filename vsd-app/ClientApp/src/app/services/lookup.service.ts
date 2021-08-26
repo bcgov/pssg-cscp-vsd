@@ -11,9 +11,19 @@ export class LookupService {
   // this should query the test api
   apiUrl = 'api/Lookup';
 
+  cvapEmail: string = "";
+  cvapCounsellingEmail: string = "";
+
   constructor(
     private http: HttpClient,
   ) { }
+
+  getCVAPEmails(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cvap-emails`, { headers: this.headers }).pipe(
+      retry(3),
+      catchError(this.handleError)
+    );
+  }
 
   getCountries(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/countries`, { headers: this.headers }).pipe(

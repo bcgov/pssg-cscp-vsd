@@ -1,22 +1,46 @@
 ﻿using Gov.Cscp.VictimServices.Public.Models;
 using Gov.Cscp.VictimServices.Public.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using System.Threading.Tasks;
 using System;
+using System.Net;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("api/[controller]")]
     public class LookupController : Controller
     {
+        private readonly IConfiguration configuration;
         private readonly IDynamicsResultService _dynamicsResultService;
         private readonly ILogger _logger;
 
-        public LookupController(IDynamicsResultService dynamicsResultService)
+        public LookupController(IConfiguration configuration, IDynamicsResultService dynamicsResultService)
         {
+            this.configuration = configuration;
             this._dynamicsResultService = dynamicsResultService;
             _logger = Log.Logger;
+        }
+
+        [HttpGet("cvap-emails")]
+        public async Task<IActionResult> GetContactEmail()
+        {
+            try
+            {
+                CVAPEmailResult res = new CVAPEmailResult
+                {
+                    CVAPEmail = configuration["CVAP_EMAIL"],
+                    CVAPCounsellingEmail = configuration["CVAP_COUNSELLING_EMAIL"],
+                };
+                return await Task.FromResult(StatusCode((int)HttpStatusCode.OK, res));
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up contact email. Source = VSU");
+                return BadRequest();
+            }
+            finally { }
         }
 
         [HttpGet("countries")]
@@ -277,5 +301,11 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             finally { }
         }
+    }
+
+    public class CVAPEmailResult
+    {
+        public string CVAPEmail { get; set; }
+        public string CVAPCounsellingEmail { get; set; }
     }
 }

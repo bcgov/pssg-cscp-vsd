@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Microsoft.AspNetCore.CookiePolicy;
 
 namespace Gov.Cscp.VictimServices.Public
 {
@@ -39,11 +40,9 @@ namespace Gov.Cscp.VictimServices.Public
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<TokenHandler>();
-            services.AddTransient<RestitutionTokenHandler>();
 
             services.AddHttpClient<ICOASTAuthService, COASTAuthService>();
             services.AddHttpClient<IDynamicsResultService, DynamicsResultService>().AddHttpMessageHandler<TokenHandler>();
-            services.AddHttpClient<IRestitutionResultService, RestitutionResultService>().AddHttpMessageHandler<RestitutionTokenHandler>();
             services.AddHttpClient<IAEMResultService, AEMResultService>();
 
             // Add a memory cache
@@ -143,6 +142,33 @@ namespace Gov.Cscp.VictimServices.Public
             app.UseXContentTypeOptions();
             app.UseXfo(xfo => xfo.Deny());
 
+            if (!env.IsDevelopment())  // when running locally we can't have a strict CSP
+            {
+                // Content-Security-Policy header
+                app.UseCsp(opts =>
+                {
+                    opts
+                        .BlockAllMixedContent()
+                        .StyleSources(s => s.Self().UnsafeInline().CustomSources("https://use.fontawesome.com",
+                        "https://stackpath.bootstrapcdn.com",
+                        "https://fonts.googleapis.com"))
+                        .FontSources(s => s.Self().CustomSources("https://use.fontawesome.com", "https://fonts.gstatic.com"))
+                        .FormActions(s => s.Self())
+                        .FrameAncestors(s => s.Self())
+                        .ImageSources(s => s.Self().CustomSources("data:"))
+                        .DefaultSources(s => s.Self())
+                        .ObjectSources(s => s.Self().CustomSources("data:"))
+                        .FrameSources(s => s.Self().CustomSources("data:"))
+                        .ScriptSources(s => s.Self().CustomSources("https://apis.google.com",
+                        "https://maxcdn.bootstrapcdn.com",
+                        "https://cdnjs.cloudflare.com",
+                        "https://code.jquery.com",
+                        "https://stackpath.bootstrapcdn.com",
+                        "https://fonts.googleapis.com"));
+
+                });
+            }
+
             StaticFileOptions staticFileOptions = new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -161,6 +187,14 @@ namespace Gov.Cscp.VictimServices.Public
             app.UseNoCacheHttpHeaders();
             // IMPORTANT: This session call MUST go before UseMvc()
             app.UseSession();
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always,
+                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None
+            });
+            
             //app.UseAuthentication();
             app.UseMvc(routes =>
             {

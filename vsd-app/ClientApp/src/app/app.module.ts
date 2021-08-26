@@ -74,7 +74,6 @@ import { PersonalInformationComponent } from './shared/personal-information/pers
 import { PhonePipe } from './pipes/phone.pipe';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
 import { RepresentativeInformationComponent } from './shared/representative-information/representative-information.component';
-import { RestitutionApplicationComponent } from './restitution-application/restitution-application.component';
 import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { StateService } from './services/state.service';
@@ -86,19 +85,12 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { VictimInformationComponent } from './shared/victim-information/victim-information.component';
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
-import { RestitutionOverviewComponent } from './shared/restitution/restitution-overview/restitution-overview.component';
-import { RestitutionInformationComponent } from './shared/restitution/restitution-information/restitution-information.component';
-import { RestitutionContactInformationComponent } from './shared/restitution/contact-information/contact-information.component';
-import { RestitutionReviewComponent } from './shared/restitution/review/restitution-review.component';
 import { HeaderTitleService } from './services/titile.service';
-import { RestitutionSuccessComponent } from './shared/restitution/success/restitution-success.component';
 import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
-import { RestitutionAddressComponent } from './shared/restitution-address/address.component';
 
 @NgModule({
   declarations: [
     AddressComponent,
-    RestitutionAddressComponent,
     AppComponent,
     ApplicationCancelledComponent,
     ApplicationReviewComponent,
@@ -126,12 +118,6 @@ import { RestitutionAddressComponent } from './shared/restitution-address/addres
     PhonePipe,
     QuickExitComponent,
     RepresentativeInformationComponent,
-    RestitutionApplicationComponent,
-    RestitutionContactInformationComponent,
-    RestitutionInformationComponent,
-    RestitutionOverviewComponent,
-    RestitutionReviewComponent,
-    RestitutionSuccessComponent,
     SignPadDialog,
     SubmitInvoiceComponent,
     SummaryOfBenefitsDialog,

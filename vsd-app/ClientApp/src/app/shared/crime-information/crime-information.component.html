@@ -240,8 +240,19 @@
             </div>
             <div class="row">
                 <div class="col-4">
-                    <app-field label="Relationship to the Accused (if any)">
+                    <!-- <app-field label="Relationship to the Accused">
                         <input class="form-control" type="text" formControlName="offenderRelationship">
+                    </app-field> -->
+
+                    <app-field label="Relationship to the Accused" [tooltipReference]="relationshipToAccusedToolTip">
+                        <select class="form-control" formControlName="offenderRelationship">
+                            <option value="">Select...</option>
+                            <option value="Intimate Partner Relationship">Intimate Partner Relationship</option>
+                            <option value="Other Family Relationship">Other Family Relationship</option>
+                            <option value="Acquaintance">Acquaintance</option>
+                            <option value="Stranger">Stranger</option>
+                            <option value="Other Victim-Accused Relationship">Other Victim-Accused Relationship</option>
+                        </select>
                     </app-field>
                 </div>
                 <div class="col-8">
@@ -493,3 +504,60 @@
 <!-- Tool tips -->
 <ng-template #estimateDateRange>Please estimate the time frame the report was made.</ng-template>
 <ng-template #policeForceInfo>If police force not found or out of province, please select the "other" option at the bottom of the list.</ng-template>
+
+<ng-template #relationshipToAccusedToolTip>
+        <table class="table relationship-table">
+            <thead>
+                <tr>
+                    <th>Classification</th>
+                    <th class="description-column">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Intimate Partner Relationship
+                    </td>
+                    <td>
+                        Refers to current and former spouses (legally married, separated, divorced and common-law), and dating partners.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Other Family Relationship
+                    </td>
+                    <td>
+                        Refers to parents (biological, step, adoptive and foster), children (biological, step, adopted and foster), siblings (biological, step, half, adopted and foster) and extended family members (e.g., grandparents, uncles, aunts, cousins and in-laws).
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Acquaintance
+                    </td>
+                    <td>
+                        Refers to friends, neighbours, authority figures, business relationships, casual acquaintances.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Stranger
+                    </td>
+                    <td>
+                        Refers to individuals who do not know one another.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Other Victim-Accused Relationship
+                    </td>
+                    <td>
+                        Refers to relationships that are other than the above categories, or is unknown.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</ng-template>

@@ -6,6 +6,7 @@ import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
 import { iLookupData } from "../../interfaces/lookup-data.interface";
+import { LookupService } from "../../services/lookup.service";
 
 @Component({
     selector: 'app-declaration-information',
@@ -25,10 +26,12 @@ export class DeclarationInformationComponent extends FormBase implements OnInit 
     public form: FormGroup;
     ApplicationType = ApplicationType;
     eligible_name: string;
+    cvapEmail: string = "";
 
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
+        private lookupService: LookupService
     ) {
         super();
     }
@@ -47,6 +50,15 @@ export class DeclarationInformationComponent extends FormBase implements OnInit 
         }
         if (this.formType === ApplicationType.Witness_Application) {
             this.eligible_name = "Witnesses";
+        }
+
+        if (this.lookupService.cvapEmail) {
+            this.cvapEmail = this.lookupService.cvapEmail;
+        }
+        else {
+            this.lookupService.getCVAPEmails().subscribe((res) => {
+                this.cvapEmail = res.cvapEmail;
+            });
         }
     }
 
