@@ -30,7 +30,7 @@
           </p>
           <p>
             <strong>Email:</strong><br />
-            <a href="mailto: cvap@gov.bc.ca">cvap@gov.bc.ca</a>
+            <a [href]="'mailto: ' + cvapEmail">{{cvapEmail}}</a>
           </p>
         </div>
       </section>
@@ -78,7 +78,7 @@
                   </app-field>
                 </div>
               </div>
-              <span *ngIf="!isCounsellorValid && didValidateCounsellor" class="error-states error-container">The system has found a discrepancy with the counsellor information entered. If the registration number and last name are correct please contact <a href="mailto: CVAPcounselling@gov.bc.ca">CVAPcounselling@gov.bc.ca</a> to determine the cause of the error.</span>
+              <span *ngIf="!isCounsellorValid && didValidateCounsellor" class="error-states error-container">The system has found a discrepancy with the counsellor information entered. If the registration number and last name are correct please contact <a [href]="'mailto: ' + cvapCounsellingEmail">{{cvapCounsellingEmail}}</a> to determine the cause of the error.</span>
 
               <h3>Payment Method</h3>
               <section>

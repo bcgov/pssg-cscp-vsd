@@ -5,6 +5,7 @@ import { FormGroup, ControlContainer } from "@angular/forms";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType } from "../enums-list";
 import { SummaryOfBenefitsDialog } from "../../summary-of-benefits/summary-of-benefits.component";
+import { LookupService } from "../../services/lookup.service";
 
 @Component({
     selector: 'app-introduction',
@@ -25,10 +26,13 @@ export class IntroductionComponent extends FormBase implements OnInit {
     applicant: string = "";
 
     isIE: boolean = false;
+    cvapEmail: string = "";
+    cvapCounsellingEmail: string = "";
 
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
+        private lookupService: LookupService,
     ) {
         super();
     }
@@ -50,6 +54,17 @@ export class IntroductionComponent extends FormBase implements OnInit {
         }
         else if (this.formType === ApplicationType.Witness_Application) {
             this.applicant = "Witnesses";
+        }
+
+        if (this.lookupService.cvapEmail) {
+            this.cvapEmail = this.lookupService.cvapEmail;
+            this.cvapCounsellingEmail = this.lookupService.cvapCounsellingEmail;
+        }
+        else {
+            this.lookupService.getCVAPEmails().subscribe((res) => {
+                this.cvapEmail = res.cvapEmail;
+                this.cvapCounsellingEmail = res.cvapCounsellingEmail;
+            });
         }
     }
 

@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { isDevMode } from '@angular/core';
 import 'rxjs/add/operator/filter';
 import { HeaderTitleService } from './services/titile.service';
+import { LookupService } from './services/lookup.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,8 @@ export class AppComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     private router: Router,
-    private headerTitleService: HeaderTitleService
+    private headerTitleService: HeaderTitleService,
+    private lookupService: LookupService
   ) {
     this.isDevMode = isDevMode();
     this.router.events.subscribe((event) => {
@@ -42,17 +44,19 @@ export class AppComponent implements OnInit {
       this.title = updatedTitle;
     });
 
+    this.lookupService.getCVAPEmails().subscribe((res) => {
+      if (res) {
+        this.lookupService.cvapEmail = res.cvapEmail;
+        this.lookupService.cvapCounsellingEmail = res.cvapCounsellingEmail;
+      }
+    });
   }
 
   isIE10orLower() {
-    let result, jscriptVersion;
-    result = false;
-
-    jscriptVersion = new Function('/*@cc_on return @_jscript_version; @*/')();
-
-    if (jscriptVersion !== undefined) {
-      result = true;
+    if (window.document["documentMode"]) {
+      return true;
     }
-    return result;
+
+    return false;
   }
 }

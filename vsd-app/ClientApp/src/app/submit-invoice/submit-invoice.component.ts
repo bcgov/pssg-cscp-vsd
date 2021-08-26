@@ -19,6 +19,7 @@ import { AEMService } from '../services/aem.service';
 import * as moment from 'moment';
 import { DocumentCollectioninformation } from '../interfaces/application.interface';
 import { MessageDialog } from '../shared/dialogs/message-dialog/message.dialog';
+import { LookupService } from '../services/lookup.service';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -69,12 +70,16 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   isIE: boolean = false;
 
+  cvapEmail: string = "";
+  cvapCounsellingEmail: string = "";
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: FormBuilder,
     public snackBar: MatSnackBar,
     private dialog: MatDialog,
     private aemService: AEMService,
+    private lookupService: LookupService,
   ) {
     super();
     this.formFullyValidated = false;
@@ -88,6 +93,17 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.form = this.buildInvoiceForm();
     this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
     this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
+
+    if (this.lookupService.cvapEmail) {
+      this.cvapEmail = this.lookupService.cvapEmail;
+      this.cvapCounsellingEmail = this.lookupService.cvapCounsellingEmail;
+    }
+    else {
+      this.lookupService.getCVAPEmails().subscribe((res) => {
+        this.cvapEmail = res.cvapEmail;
+        this.cvapCounsellingEmail = res.cvapCounsellingEmail;
+      });
+    }
   }
 
   showInvoiceInstructions() {

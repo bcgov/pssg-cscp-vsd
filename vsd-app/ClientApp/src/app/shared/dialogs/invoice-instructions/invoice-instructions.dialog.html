@@ -4,10 +4,10 @@
 <div mat-dialog-content>
     <p><strong>Who may use this invoice form?</strong></p>
     <p>Invoices can only be submitted for counsellors that are registered with CVAP.
-        If the counsellor is not registered, please contact <a href="mailto: CVAPcounselling@gov.bc.ca">CVAPcounselling@gov.bc.ca</a> to obtain the registration package.
+        If the counsellor is not registered, please contact <a [href]="'mailto: ' + cvapCounsellingEmail">{{cvapCounsellingEmail}}</a> to obtain the registration package.
         You will obtain a vendor number and counsellor registration number once registered.</p>
 
-    <p>If the counsellor is registered with CVAP, an error message may display if there is any discrepancy in the information. Please check that the registration number and last name are correct and if the error persists, contact <a href="mailto: CVAPcounselling@gov.bc.ca">CVAPcounselling@gov.bc.ca</a> to determine the reason.</p>
+    <p>If the counsellor is registered with CVAP, an error message may display if there is any discrepancy in the information. Please check that the registration number and last name are correct and if the error persists, contact <a [href]="'mailto: ' + cvapCounsellingEmail">{{cvapCounsellingEmail}}</a> to determine the reason.</p>
 
     <p><strong>What types of counselling sessions can be submitted?</strong></p>
     <ul>
@@ -18,7 +18,7 @@
     </ul>
     <p><strong>What type of invoice cannot be submitted?</strong></p>
     <ul>
-        <li>Progress report (progress reports and invoices for this service should be submitted to cvap@gov.bc.ca for payment)</li>
+        <li>Progress report (progress reports and invoices for this service should be submitted to {{cvapEmail}} for payment)</li>
     </ul>
     <p><strong>Can more than one invoice be submitted?</strong></p>
     <p>An invoice will need to be submitted for each individual claimant.
