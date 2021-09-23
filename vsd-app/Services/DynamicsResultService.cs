@@ -67,7 +67,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
                 _logger.Information(new HttpOperationException($"Received a fail response from {endpointUrl}. Source = VSD"), $"COAST resturned IsSuccess = False. \nSource = VSD. \nError is:\n{result.result}\n\nJSON sent:{requestJson}", result.result, requestJson);
             }
 
-            if (_statusCode == HttpStatusCode.InternalServerError)
+            if (!(new HttpResponseMessage((HttpStatusCode)_statusCode).IsSuccessStatusCode))
             {
                 _logger.Error(new HttpOperationException($"Error calling API function {endpointUrl}. Source = VSD"), $"Error calling API function {endpointUrl}. \nSource = VSD. \nError is:\n{result.result}\n\nJSON sent:{requestJson}", result.result, requestJson);
             }
