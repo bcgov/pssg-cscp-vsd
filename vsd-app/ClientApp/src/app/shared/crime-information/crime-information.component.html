@@ -240,10 +240,6 @@
             </div>
             <div class="row">
                 <div class="col-4">
-                    <!-- <app-field label="Relationship to the Accused">
-                        <input class="form-control" type="text" formControlName="offenderRelationship">
-                    </app-field> -->
-
                     <app-field label="Relationship to the Accused" [tooltipReference]="relationshipToAccusedToolTip">
                         <select class="form-control" formControlName="offenderRelationship">
                             <option value="">Select...</option>
@@ -280,8 +276,15 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <app-field label="Relationship to the Accused (if any)">
-                                <input class="form-control" type="text" formControlName="relationship">
+                            <app-field label="Relationship to the Accused" [tooltipReference]="relationshipToAccusedToolTip">
+                                <select class="form-control" formControlName="relationship">
+                                    <option value="">Select...</option>
+                                    <option value="Intimate Partner Relationship">Intimate Partner Relationship</option>
+                                    <option value="Other Family Relationship">Other Family Relationship</option>
+                                    <option value="Acquaintance">Acquaintance</option>
+                                    <option value="Stranger">Stranger</option>
+                                    <option value="Other Victim-Accused Relationship">Other Victim-Accused Relationship</option>
+                                </select>
                             </app-field>
                         </div>
                         <div class="col">
