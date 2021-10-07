@@ -349,6 +349,17 @@ input.form-control {
     button {
         margin-bottom: 5px;
     }
+    .btn-submit {
+        width: 100%;
+    }
+    app-tool-tip {
+        position: absolute;
+        right: -20px;
+        top: 10px;
+    }
+    div {
+        position: relative;
+    }
 }
 
 .download-grid {

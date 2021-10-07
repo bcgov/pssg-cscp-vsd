@@ -50,15 +50,19 @@
               <p class="welcome-text">Welcome to the Crime Victim Assistance Program's (CVAP) invoice submission form for counselling services.</p>
               <p>First time users please click the link to review instructions. <a [routerLink]="" (click)="showInvoiceInstructions()">Link</a></p>
 
-              <h3 id="PayeeInformation">Payee Information</h3>
+              <h3 id="PayeeInformation">Payee Information <app-tool-tip [trigger]="payeeInfo"></app-tool-tip></h3>
+              <ng-template #payeeInfo>
+                <p>The legal name to whom the cheque/payment is made to.</p>
+              </ng-template>
+
               <div class="row">
                 <div class="col-md-6">
-                  <app-field label="Vendor Number" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorNumber')" errorMessage="Please enter the vendor number">
+                  <app-field label="Vendor Number" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorNumber')" errorMessage="Please enter the payee's vendor number">
                     <input class="form-control" type="text" formControlName="vendorNumber" maxlength="100" (change)="checkVendorStatus('vendor')" [class.input-valid]="isVendorValid && didValidateVendor" [class.input-invalid]="!isVendorValid && didValidateVendor">
                   </app-field>
                 </div>
                 <div class="col-md-6">
-                  <app-field label="Postal Code" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorPostalCode')" errorMessage="Please enter your postal code">
+                  <app-field label="Postal Code" [required]="true" [valid]="isFieldValid('invoiceDetails.vendorPostalCode')" errorMessage="Please enter the payee's postal code">
                     <input class="form-control" type="text" placeholder="V9A 0A9" formControlName="vendorPostalCode" (change)="checkVendorStatus('vendor')" [class.input-valid]="isVendorValid && didValidateVendor" [class.input-invalid]="!isVendorValid && didValidateVendor">
                   </app-field>
                 </div>
@@ -303,7 +307,6 @@
             <p *ngIf="!showPrintView">Please check the accuracy of the information entered in your invoice before submitting.</p>
 
             <section>
-
               <h2 class="blue-header">Payee Information <button *ngIf="!showPrintView" (click)="invoiceEdit('PayeeInformation');" class="btn review-btn"><i class="fa fa-pencil"></i> VIEW AND EDIT</button></h2>
               <table class="table table-striped review-table">
                 <tbody>
