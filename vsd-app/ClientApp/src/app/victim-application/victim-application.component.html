@@ -91,14 +91,14 @@
           <span class="right-buttons">
             <!-- [class.disabled]="!didLoad" -->
             <button (click)="gotoNextStep(stepper);" class="btn btn-primary continue-btn" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
-            <div class="left-buttons download-grid" [class.disabled-wrapper]="submitting">
-              <button (click)="printApplication();" class="btn btn-primary print-button" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">PRINT PDF</button>
-              <button (click)="downloadPDF();" class="btn btn-primary print-button" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">DOWNLOAD PDF</button>
+            <div class="left-buttons download-grid" [class.disabled-wrapper]="submitting" *ngIf="stepper.selectedIndex == 9">
+              <button (click)="printApplication();" class="btn btn-primary print-button" [class.is-disabled]="submitting">PRINT PDF</button>
+              <button (click)="downloadPDF();" class="btn btn-primary print-button" [class.is-disabled]="submitting">DOWNLOAD PDF</button>
             </div>
-            <div class="submit-grid" [class.disabled-wrapper]="submitting">
-              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary btn-submit" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT VICTIM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
-              <div><button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary btn-submit" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW VICTIM APPLICATION <i class="fas fa-chevron-right"></i></button> <app-tool-tip [trigger]="VictimToolTip"></app-tool-tip></div>
-              <div><button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary btn-submit" [class.is-disabled]="submitting" *ngIf="stepper.selectedIndex == 9">SUBMIT AND START NEW IFM APPLICATION <i class="fas fa-chevron-right"></i></button> <app-tool-tip [trigger]="IFMToolTip"></app-tool-tip></div>
+            <div class="submit-grid" [class.disabled-wrapper]="submitting" *ngIf="stepper.selectedIndex == 9">
+              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary btn-submit" [class.is-disabled]="submitting">SUBMIT VICTIM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
+              <div><button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary btn-submit" [class.is-disabled]="submitting">SUBMIT AND START NEW VICTIM APPLICATION <i class="fas fa-chevron-right"></i></button> <app-tool-tip [trigger]="VictimToolTip"></app-tool-tip></div>
+              <div><button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary btn-submit" [class.is-disabled]="submitting">SUBMIT AND START NEW IFM APPLICATION <i class="fas fa-chevron-right"></i></button> <app-tool-tip [trigger]="IFMToolTip"></app-tool-tip></div>
             </div>
           </span>
         </section>
