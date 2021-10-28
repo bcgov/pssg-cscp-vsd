@@ -1,5 +1,5 @@
 import { FormBase } from "../form-base";
-import { Input, Component, OnInit } from "@angular/core";
+import { Input, Component, OnInit, OnDestroy } from "@angular/core";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDialogConfig } from "@angular/material";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MY_FORMATS, ApplicationType, EnumHelper, CRMBoolean } from "../enums-list";
@@ -9,6 +9,7 @@ import { POSTAL_CODE } from "../regex.constants";
 import { AuthInfoHelper } from "./authorization-information.helper";
 import { iLookupData } from "../../interfaces/lookup-data.interface";
 import { LookupService } from "../../services/lookup.service";
+import { Subscription } from "rxjs";
 
 
 @Component({
@@ -23,7 +24,7 @@ import { LookupService } from "../../services/lookup.service";
         { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ],
 })
-export class AuthorizationInformationComponent extends FormBase implements OnInit {
+export class AuthorizationInformationComponent extends FormBase implements OnInit, OnDestroy {
     @Input() formType: number;
     @Input() lookupData: iLookupData;
     public form: FormGroup;
@@ -40,6 +41,8 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
 
     CRMBoolean = CRMBoolean;
 
+    staffSharingSubscription: Subscription;
+
     constructor(
         private controlContainer: ControlContainer,
         private matDialog: MatDialog,
@@ -55,7 +58,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
         // console.log("auth info component");
         // console.log(this.form);
 
-        this.form.get('allowCvapStaffSharing').valueChanges.subscribe(value => {
+        this.staffSharingSubscription = this.form.get('allowCvapStaffSharing').valueChanges.subscribe(value => {
             let options = { onlySelf: true, emitEvent: false };
             let authorizedPersonAuthorizesDiscussion = this.form.get('authorizedPersonAuthorizesDiscussion');
             let authorizedPersonSignature = this.form.get('authorizedPersonSignature');
@@ -96,6 +99,10 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
                 this.relationshipList = this.lookupData.relationships.map(r => r.vsd_name);
             });
         }
+    }
+
+    ngOnDestroy() {
+        if (this.staffSharingSubscription) this.staffSharingSubscription.unsubscribe();
     }
 
     addAuthorizationInformation(makeAuthorizedSignatureRequired: boolean = false): void {
