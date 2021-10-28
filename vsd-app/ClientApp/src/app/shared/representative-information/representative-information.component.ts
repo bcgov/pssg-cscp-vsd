@@ -126,7 +126,6 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     }
 
     setRequiredFields(completingOnBehalfOf: number) {
-        console.log("setRequiredFields");
         let representativeFirstName = this.form.get('representativeFirstName');
         let representativeLastName = this.form.get('representativeLastName');
         let applicantSameContactInfo = this.form.get('applicantSameContactInfo');
