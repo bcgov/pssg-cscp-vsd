@@ -45,6 +45,8 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     addressHelper = new AddressHelper();
     addressInfoSubscription: Subscription;
     contactInfoSubscription: Subscription;
+    completingOnBehalfOfSubscription: Subscription;
+    methodOfContactSubscription: Subscription;
 
     constructor(
         private controlContainer: ControlContainer,
@@ -78,11 +80,13 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
         this.originalOnBehalfOf = parseInt(this.route.snapshot.queryParamMap.get('ob'));
 
-        this.form.get('completingOnBehalfOf').valueChanges.subscribe(value => {
+        this.completingOnBehalfOfSubscription = this.form.get('completingOnBehalfOf').valueChanges.subscribe(value => {
+            let relationshipToPersonControl = this.form.get('relationshipToPerson');
+            relationshipToPersonControl.patchValue('');
             this.setRequiredFields(value);
         });
 
-        this.form.get('representativePreferredMethodOfContact').valueChanges.subscribe(value => {
+        this.methodOfContactSubscription = this.form.get('representativePreferredMethodOfContact').valueChanges.subscribe(value => {
             let contactMethod = parseInt(value);
             let completingOnBehalfOf = this.form.get('completingOnBehalfOf').value;
             if (completingOnBehalfOf === 100000002 || completingOnBehalfOf === 100000003) {
@@ -115,7 +119,9 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     }
 
     ngOnDestroy() {
-        if (this.addressInfoSubscription) this.addressInfoSubscription.unsubscribe();
+        if (this.completingOnBehalfOfSubscription) this.completingOnBehalfOfSubscription.unsubscribe();
+        if (this.methodOfContactSubscription) this.methodOfContactSubscription.unsubscribe();
+        if (this.contactInfoSubscription) this.contactInfoSubscription.unsubscribe();
         if (this.contactInfoSubscription) this.contactInfoSubscription.unsubscribe();
     }
 
@@ -135,7 +141,6 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
         let relationshipToPersonControl = this.form.get('relationshipToPerson');
         if (completingOnBehalfOf === 100000003) { //legal rep, fill in relationshipToPerson
-            relationshipToPersonControl.patchValue('');
             this.setControlValidators(relationshipToPersonControl, [Validators.required]);
         }
         else if (completingOnBehalfOf === 100000002) {
@@ -143,10 +148,8 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
             this.clearControlValidators(relationshipToPersonControl);
         }
         else {
-            relationshipToPersonControl.patchValue('');
             this.clearControlValidators(relationshipToPersonControl);
         }
-
 
         let useValidation = completingOnBehalfOf === 100000002 || completingOnBehalfOf === 100000003;
         if (useValidation) {

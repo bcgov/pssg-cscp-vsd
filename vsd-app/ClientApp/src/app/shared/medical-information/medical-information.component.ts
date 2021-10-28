@@ -76,7 +76,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
         }
 
         if (this.formType === ApplicationType.Victim_Application) {
-            this.form.get('wereYouTreatedAtHospital').valueChanges.subscribe(value => {
+            this.wereYouTreatedAtHospitalSubscription = this.form.get('wereYouTreatedAtHospital').valueChanges.subscribe(value => {
                 let hospitalControl = this.form.get('treatedAtHospitalName');
                 let options = { onlySelf: true, emitEvent: false };
 
@@ -107,7 +107,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
                 // hospitalControl.updateValueAndValidity();
             });
 
-            this.form.get('treatedOutsideBc').valueChanges.subscribe(value => {
+            this.treatedOutsideBcSubscription = this.form.get('treatedOutsideBc').valueChanges.subscribe(value => {
                 let hospitalControl = this.form.get('treatedAtHospitalName');
                 let outsideBCHospitalControl = this.form.get('treatedOutsideBcHospitalName');
 
@@ -135,8 +135,8 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
         });
 
         this.provinceList = this.lookupData.provinces.filter(p => p._vsd_countryid_value == config.canada_crm_id)
-        .map(p => p.vsd_name)
-        .sort((a, b) => a.localeCompare(b));
+            .map(p => p.vsd_name)
+            .sort((a, b) => a.localeCompare(b));
     }
 
     ngOnDestroy() {

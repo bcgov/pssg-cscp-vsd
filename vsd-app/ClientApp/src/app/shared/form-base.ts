@@ -485,8 +485,8 @@ export class FormBase {
   }
 
   gotoPage(selectPage: MatStepper): void {
-    console.log("goto page");
-    console.log(this.form);
+    // console.log("goto page");
+    // console.log(this.form);
     window.scroll(0, 0);
     this.showValidationMessage = false;
     this.currentFormStep = selectPage.selectedIndex;
@@ -501,15 +501,15 @@ export class FormBase {
       const this_step = stepper._steps.find(step => step.label == step_label);
       if (this_step) {
         const formGroupName = this_step.stepControl.get("name").value;
-        console.log(`Form for validation is ${formGroupName}.`);
+        // console.log(`Form for validation is ${formGroupName}.`);
         const formParts = this.form.get(formGroupName);
-        console.log(this.form);
+        // console.log(this.form);
 
         let formValid = true;
 
         if (formParts != null) {
           formValid = formParts.valid;
-          console.log(_.cloneDeep(formParts));
+          // console.log(_.cloneDeep(formParts));
         } else {
           alert('That was a null form. Nothing to validate');
         }
@@ -521,12 +521,12 @@ export class FormBase {
         }
 
         if (formValid) {
-          console.log('Form is valid so proceeding to next step.');
+          // console.log('Form is valid so proceeding to next step.');
           this.showValidationMessage = false;
           window.scroll(0, 0);
           stepper.next();
         } else {
-          console.log('Form is not valid rerun the validation and show the validation message.');
+          // console.log('Form is not valid rerun the validation and show the validation message.');
           this.validateAllFormFields(formParts);
           this.showValidationMessage = true;
         }
@@ -536,7 +536,7 @@ export class FormBase {
 
   gotoPreviousStep(stepper: MatStepper): void {
     if (stepper) {
-      console.log('Going back a step');
+      // console.log('Going back a step');
       this.showValidationMessage = false;
       window.scroll(0, 0);
       stepper.previous();
