@@ -35,12 +35,12 @@ export class FileUploaderComponent implements OnInit {
     let totalSize = this.form.parent.get("totalAttachmentSize").value;
     for (let i = 0; i < files.length; i++) {
       if (files[i].size > this.MAX_FILE_SIZE) {
-        console.log("File too big:", (files[i].size / (1024 * 1024)).toFixed(2) + "MB");
+        // console.log("File too big:", (files[i].size / (1024 * 1024)).toFixed(2) + "MB");
         this.snackBar.open('File cannot exceed 2MB', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
         continue;
       }
       if ((totalSize + files[i].size) > this.MAX_TOTAL_FILE_SIZE) {
-        console.log("Total size too big:", ((totalSize + files[i].size) / (1024 * 1024)).toFixed(2) + "MB")
+        // console.log("Total size too big:", ((totalSize + files[i].size) / (1024 * 1024)).toFixed(2) + "MB")
         this.snackBar.open('Files uploaded to application cannot exceed 3.5MB', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
         continue;
       }

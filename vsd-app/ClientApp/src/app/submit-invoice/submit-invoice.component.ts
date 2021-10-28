@@ -118,7 +118,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       InvoiceDetails: this.form.get('invoiceDetails').value,
     };
     invoice.InvoiceDetails.exemptFromGst = !invoice.InvoiceDetails.gstApplicable;
-    console.log(invoice);
+    // console.log(invoice);
     let invoiceDate = moment(invoice.InvoiceDetails.invoiceDate).toDate();
     let date_string = invoiceDate.getFullYear() + MONTHS[invoiceDate.getMonth()] + invoiceDate.getDate();
 

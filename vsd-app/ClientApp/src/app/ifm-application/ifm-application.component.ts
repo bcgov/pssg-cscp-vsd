@@ -199,7 +199,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     if (stepper != null) {
       var desiredFormIndex = stepper.selectedIndex;
       var formGroupName = this.getFormGroupName(desiredFormIndex);
-      console.log(`Form for validation is ${formGroupName}.`);
+      // console.log(`Form for validation is ${formGroupName}.`);
 
       this.formFullyValidated = this.form.valid;
 
@@ -209,7 +209,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
         if (formParts != null) {
           formValid = formParts.valid;
-          console.log(formParts);
+          // console.log(formParts);
         }
 
         if (formValid) {
@@ -523,8 +523,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   cloneFormToVictim(currentForm) {
-    console.log("cloning IFM to Victim");
-    console.log(currentForm);
+    // console.log("cloning IFM to Victim");
+    // console.log(currentForm);
     let ret = this.buildApplicationForm(ApplicationType.Victim_Application);
 
     ret.get('personalInformation').patchValue(currentForm.get('personalInformation').value);
@@ -584,8 +584,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   cloneFormToIFM(currentForm) {
-    console.log("cloning IFM to IFM");
-    console.log(currentForm);
+    // console.log("cloning IFM to IFM");
+    // console.log(currentForm);
 
     let ret = this.buildApplicationForm(ApplicationType.IFM_Application);
 

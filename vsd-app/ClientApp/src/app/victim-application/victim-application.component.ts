@@ -219,7 +219,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       const desiredFormIndex: number = stepper.selectedIndex;
       // get the text value of the form index
       const formGroupName = elements[desiredFormIndex];
-      console.log(`Form for validation is ${formGroupName}.`);
+      // console.log(`Form for validation is ${formGroupName}.`);
       // be sure that the stepper is in range
       if (desiredFormIndex >= 0 && desiredFormIndex < elements.length) {
         // collect the matching form group from the form
@@ -231,7 +231,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         if (formParts != null) {
           // collect the validity of it
           formValid = formParts.valid;
-          console.log(formParts);
+          // console.log(formParts);
         } else {
           alert('That was a null form. Nothing to validate')
         }
@@ -245,7 +245,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         }
 
         if (formValid) {
-          console.log('Form is valid so proceeding to next step.')
+          // console.log('Form is valid so proceeding to next step.')
           this.showValidationMessage = false;
           window.scroll(0, 0);
           stepper.next();
@@ -541,8 +541,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   cloneFormToVictim(currentForm) {
-    console.log("cloning Victim to Victim");
-    console.log(currentForm);
+    // console.log("cloning Victim to Victim");
+    // console.log(currentForm);
     let ret = this.buildApplicationForm(ApplicationType.Victim_Application);
 
     ret.get('personalInformation').patchValue(currentForm.get('personalInformation').value);
@@ -603,8 +603,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   cloneFormToIFM(currentForm) {
-    console.log("cloning Victim to IFM");
-    console.log(currentForm);
+    // console.log("cloning Victim to IFM");
+    // console.log(currentForm);
     let ret = this.buildApplicationForm(ApplicationType.IFM_Application);
 
     ret.get('personalInformation').get('preferredMethodOfContact').patchValue(currentForm.get('personalInformation').get('preferredMethodOfContact').value);
