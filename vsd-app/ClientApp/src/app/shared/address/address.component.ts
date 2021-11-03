@@ -76,11 +76,7 @@ export class AddressComponent implements OnInit {
           let countryVal = this.group['controls']['country'].value.toString();
           let provinceVal = this.group['controls']['province'].value.toString();
           let searchVal = this.group['controls']['city'].value.toString();
-          let limit = 15;
-          return this.http.get<any>(`${this.apiUrl}/cities/search?country=${countryVal}&province=${provinceVal}&searchVal=${searchVal}&limit=${limit}`, { headers: this.headers }).pipe(
-            retry(3),
-            catchError(this.handleError)
-          ).pipe(
+          return this.lookupService.searchCities(countryVal, provinceVal, searchVal).pipe(
             map((data: CitiesSearchResponse) => {
               if (data && data.CityCollection) {
                 data.CityCollection.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
