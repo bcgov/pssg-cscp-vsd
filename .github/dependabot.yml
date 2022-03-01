@@ -1,0 +1,40 @@
+
+# To get started with Dependabot version updates, we need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  # NuGet dependencies
+  - package-ecosystem: "nuget"
+    directory: "/vsd-interfaces"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "10:00"
+  - package-ecosystem: "nuget"
+    directory: "/vsd-app"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "10:00"
+  - package-ecosystem: "nuget"
+    directory: "/vsd-interfaces"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "10:00"
+  - package-ecosystem: "nuget"
+    directory: "/vsd-interfaces"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "10:00"  
+  # npm dependencies - frontend
+  - package-ecosystem: "npm"
+    directory: "/vsd-app/ClientApp"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "10:00"
