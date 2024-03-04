@@ -253,7 +253,7 @@ namespace Gov.Cscp.VictimServices.Public
                 // Only run the angular CLI Server in Development mode (not staging or test.)
                 if (env.IsDevelopment())
                 {
-                    spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);  // Bypass initial load timeout issue
+                    spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);  // Bypass initial load timeout issue                    
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
