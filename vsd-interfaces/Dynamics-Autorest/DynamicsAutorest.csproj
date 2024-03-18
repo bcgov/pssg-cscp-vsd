@@ -1,11 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ProjectGuid>{309D775B-CF5B-4194-9E63-3410A95D20F4}</ProjectGuid>
   </PropertyGroup>
-   <ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.15" />
   </ItemGroup>
-
 </Project>

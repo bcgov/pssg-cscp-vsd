@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Gov.Lclb.Cllb.Interfaces</RootNamespace>
-	<ProjectGuid>{9B63A69E-E3C6-44BD-A24B-C6EC3A499E64}</ProjectGuid>
+    <ProjectGuid>{9B63A69E-E3C6-44BD-A24B-C6EC3A499E64}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.5.3" />
