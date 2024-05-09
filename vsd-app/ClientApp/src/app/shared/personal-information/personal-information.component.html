@@ -56,32 +56,40 @@
     <h3>Other Details</h3>
 
     <div *ngIf="formType === ApplicationType.IFM_Application">
-        <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictim')" errorMessage="Please select a relationship">
-            <label class="inline-label">
-                <input type="radio" [value]="'Spouse'" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Spouse</span>
-            </label>
-            <label class="inline-label">
-                <input type="radio" [value]="'Parent'" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Parent/Guardian</span>
-            </label>
-            <label class="inline-label">
-                <input type="radio" [value]="'Child'" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Child</span>
-            </label>
-            <label class="inline-label">
-                <input type="radio" [value]="'Sibling'" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Sibling</span>
-            </label>
-            <label class="inline-label">
-                <input type="radio" [value]="'Other'" name="relationshipToVictim" formControlName="relationshipToVictim">
-                <span>Other</span>
-            </label>
-            <label class="inline-label" *ngIf="form.get('relationshipToVictim').value === 'Other'">
-                <span>Please specify</span>
-                <input type="text" name="relationshipToVictimOther" formControlName="relationshipToVictimOther">
-            </label>
-        </app-field>
+      <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictim')" errorMessage="Please select a relationship">
+        <label class="inline-label">
+          <input type="radio" [value]="'Spouse'" name="relationshipToVictim" formControlName="relationshipToVictim">
+          <span>Spouse</span>
+        </label>
+        <label class="inline-label">
+          <input type="radio" [value]="'Parent'" name="relationshipToVictim" formControlName="relationshipToVictim">
+          <span>Parent/Guardian</span>
+        </label>
+        <label class="inline-label">
+          <input type="radio" [value]="'Child'" name="relationshipToVictim" formControlName="relationshipToVictim">
+          <span>Child</span>
+        </label>
+        <label class="inline-label">
+          <input type="radio" [value]="'Sibling'" name="relationshipToVictim" formControlName="relationshipToVictim">
+          <span>Sibling</span>
+        </label>
+        <label class="inline-label">
+          <input type="radio" [value]="'Grandparent'" name="relationshipToVictim" formControlName="relationshipToVictim">
+          <span>Grandparent</span>
+        </label>
+        <label class="inline-label">
+          <input type="radio" [value]="'Grandchild'" name="relationshipToVictim" formControlName="relationshipToVictim">
+          <span>Grandchild</span>
+        </label>
+        <label class="inline-label">
+          <input type="radio" [value]="'Other'" name="relationshipToVictim" formControlName="relationshipToVictim">
+          <span>Other</span>
+        </label>
+        <label class="inline-label" *ngIf="form.get('relationshipToVictim').value === 'Other'">
+          <span>Please specify</span>
+          <input type="text" name="relationshipToVictimOther" formControlName="relationshipToVictimOther">
+        </label>
+      </app-field>
     </div>
 
     <div *ngIf="formType === ApplicationType.Witness_Application">
