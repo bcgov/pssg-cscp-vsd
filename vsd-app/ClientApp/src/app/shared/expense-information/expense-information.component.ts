@@ -189,7 +189,8 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
       this.BENEFITS = [
         'haveCounsellingExpenses',
         'haveCounsellingTransportation',
-        'havePrescriptionDrugExpenses'
+        'havePrescriptionDrugExpenses',
+        'haveCrimeSceneCleaningExpenses'
       ];
       this.ADDITIONAL_BENEFITS = [
         'haveVocationalServicesExpenses',
@@ -200,7 +201,6 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveBereavementLeaveExpenses',
         'haveLostOfParentalGuidanceExpenses',
         'haveHomeMakerExpenses',
-        'haveCrimeSceneCleaningExpenses',
         'haveOtherExpenses'
       ];
       this.OTHER_BENEFITS = [

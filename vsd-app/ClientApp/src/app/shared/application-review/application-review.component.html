@@ -628,88 +628,111 @@
         <h3>Benefits Available Through CVAP</h3>
         <table class="table table-striped review-table">
             <tbody>
-                <ng-container *ngIf="formType === ApplicationType.Victim_Application">
-                    <tr>
-                        <th>Medical expenses</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveMedicalExpenses')"></span></td>
-                    </tr>
-                    <tr>
-                        <th>Dental expenses</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDentalExpenses')"></span></td>
-                    </tr>
-                    <tr>
-                        <th>Prescription drug expenses</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePrescriptionDrugExpenses')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Counselling</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingExpenses')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Lost employment income (reimbursed at minimum wage)</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLostEmploymentIncomeExpenses')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Repair or replacement costs of damaged or destroyed personal property that you were wearing
-                            at the time of the incident (e.g. eyeglasses, clothing)</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePersonalPropertyLostExpenses')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Protective Measures for Security Devices</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveProtectiveMeasureExpenses')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Protective Measures for Moving Expenses</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveProtectiveMovingExpenses')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Transportation to Obtain Benefits</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveTransportationToObtainBenefits')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Disability benefits, services or equipment</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDisabilityExpenses')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Crime scene cleaning</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Other</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"> </span> <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true">
-                                {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}</span></td>
-                    </tr>
-                    <tr>
-                        <th>Additional Details</th>
-                        <td>{{valueOrEmpty('expenseInformation.additionalBenefitsDetails')}}</td>
-                    </tr>
-                </ng-container>
-                <ng-container *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
-                    <tr>
-                        <th>Counselling</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingExpenses')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Transportation to obtain counselling</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingTransportation')"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Prescription drug expenses</th>
-                        <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePrescriptionDrugExpenses')"></span>
-                        </td>
-                    </tr>
-                </ng-container>
+              <ng-container *ngIf="formType === ApplicationType.Victim_Application">
+                <tr>
+                  <th>Medical expenses</th>
+                  <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveMedicalExpenses')"></span></td>
+                </tr>
+                <tr>
+                  <th>Dental expenses</th>
+                  <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDentalExpenses')"></span></td>
+                </tr>
+                <tr>
+                  <th>Prescription drug expenses</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePrescriptionDrugExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Counselling</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Lost employment income (reimbursed at minimum wage)</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveLostEmploymentIncomeExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Repair or replacement costs of damaged or destroyed personal property that you were wearing
+                    at the time of the incident (e.g. eyeglasses, clothing)
+                  </th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePersonalPropertyLostExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Protective Measures for Security Devices</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveProtectiveMeasureExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Protective Measures for Moving Expenses</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveProtectiveMovingExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Transportation to Obtain Benefits</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveTransportationToObtainBenefits')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Disability benefits, services or equipment</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveDisabilityExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Crime scene cleaning</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Other</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveOtherExpenses')"> </span> <span *ngIf="form.get('expenseInformation.haveOtherExpenses').value === true">
+                      {{ valueOrEmpty('expenseInformation.otherSpecificExpenses') }}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Additional Details</th>
+                  <td>{{valueOrEmpty('expenseInformation.additionalBenefitsDetails')}}</td>
+                </tr>
+              </ng-container>
+              <ng-container *ngIf="formType === ApplicationType.IFM_Application || formType === ApplicationType.Witness_Application">
+                <tr>
+                  <th>Counselling</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Transportation to obtain counselling</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCounsellingTransportation')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Prescription drug expenses</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.havePrescriptionDrugExpenses')"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Crime scene cleaning</th>
+                  <td>
+                    <span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
+                  </td>
+                </tr>
+              </ng-container>
             </tbody>
         </table>
 
@@ -801,11 +824,6 @@
                             <tr>
                                 <th>Homemaker services</th>
                                 <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveHomeMakerExpenses')"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Crime scene cleaning</th>
-                                <td><span [innerHTML]="checkmarkOrEmpty('expenseInformation.haveCrimeSceneCleaningExpenses')"></span>
                                 </td>
                             </tr>
                             <tr>
