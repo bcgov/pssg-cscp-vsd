@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System;
 using Serilog;
+using Newtonsoft.Json;
 
 namespace Gov.Cscp.VictimServices.Public.Services
 {
@@ -52,8 +53,9 @@ namespace Gov.Cscp.VictimServices.Public.Services
             _httpRequest.Content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
 
             var _httpResponse = await _client.SendAsync(_httpRequest);
-            
-            AEMResult result = await _httpResponse.Content.ReadAsAsync<AEMResult>();
+
+            string resultString = await _httpResponse.Content.ReadAsStringAsync();
+            AEMResult result= JsonConvert.DeserializeObject<AEMResult>(resultString); 
             // Console.WriteLine(result);
 
             if ((int)result.responseCode == 200)
