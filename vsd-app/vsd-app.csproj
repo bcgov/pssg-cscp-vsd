@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<TargetFrameworkIdentifier>net</TargetFrameworkIdentifier>
+		<TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>
 		<TargetFrameworkVersion>8.0</TargetFrameworkVersion>
 		<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
 		<TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
