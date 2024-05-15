@@ -1,0 +1,109 @@
+#Experimental custom base image for .NET8
+ 
+#FROM ubi8/dotnet-80:8.0-6
+#FROM registry.access.redhat.com/ubi8/dotnet-80@sha256:ffd6afab4dadf538a12def0f582c62a64ff1a550b338c518986f9f192b4a9bb1
+
+
+FROM registry.access.redhat.com/ubi8/dotnet-80-runtime
+#FROM registry.access.redhat.com/ubi8/dotnet-80:8.0-6
+
+
+#FROM ubi8/dotnet-80-runtime
+# This image provides a .NET 8.0 environment you can use to run your .NET
+# applications.
+
+# DOTNET_SDK_VERSION must be set to the full SDK version, unless IS_CI is set to true.
+ARG DOTNET_SDK_VERSION=8.0
+ARG RELEASE=1
+ARG IS_CI
+ARG DOTNET_TARBALL
+
+ENV PATH=/opt/app-root/src/.local/bin:/opt/app-root/src/bin:/opt/app-root/.dotnet/tools:${PATH} \
+    STI_SCRIPTS_PATH=/usr/libexec/s2i \
+    DOTNET_GENERATE_ASPNET_CERTIFICATE=false \
+    # This skips the first time running text
+    DOTNET_NOLOGO=true \
+    # Like Microsoft images, provide the SDK version
+    DOTNET_SDK_VERSION=$DOTNET_SDK_VERSION
+
+LABEL io.k8s.description="Platform for building and running .NET 8 applications" \
+      io.openshift.tags="builder,.net,dotnet,dotnetcore,dotnet-80"
+
+# Labels consumed by Red Hat build service
+LABEL name="registry.access.redhat.com/ubi8/dotnet-80" \
+      com.redhat.component="dotnet-80-container" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
+      version="8.0" \
+      release="$RELEASE"
+
+# Switch to root for package installs
+USER 0
+
+
+ENV PATH=/opt/app-root/src/.local/bin:/opt/app-root/src/bin:/opt/app-root/node_modules/.bin:/opt/app-root/.dotnet/tools/:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin STI_SCRIPTS_PATH=/usr/libexec/s2i
+
+COPY ./8.0/build/s2i/bin/ /usr/libexec/s2i
+#RUN rpm -q --whatprovides python-devel
+#RUN rpm -q --whatprovides python-setuptools
+
+
+# With microdnf we were having issue with getting proper version of some of the packages
+# Would use yum for those cases; yum could be used all along instead of microdnf
+# microdnf was installed by default; hence started using that
+RUN microdnf install yum
+	
+
+
+# Install packages:
+# - dotnet-sdk--*: provides the .NET SDK.
+# - procps-ng: provides 'pidof' which is needed by the 'odo' Devfile to find the running 'dotnet' process.
+RUN [ -n "${DOTNET_TARBALL}" ] || ( \
+    INSTALL_PKGS="dotnet-sdk-8.0 procps-ng" && \
+    microdnf install -y --setopt=tsflags=nodocs --setopt=install_weak_deps=0 $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    microdnf clean all -y && \
+# yum cache files may still exist (and quite large in size)
+    rm -rf /var/cache/yum/* )
+# Tarball install (in the runtime base image)
+RUN [ -z "${DOTNET_TARBALL}" ] || ( \
+    INSTALL_PKGS="procps-ng" && \
+    microdnf install -y --setopt=tsflags=nodocs --setopt=install_weak_deps=0 $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    microdnf clean all -y && \
+# yum cache files may still exist (and quite large in size)
+    rm -rf /var/cache/yum/* )
+
+# Python Support
+RUN INSTALL_PKGS="python38 python38-devel python38-setuptools python38-pip  \
+         npm nodejs-nodemon  rsync procps-ng findutils" && \
+    yum -y module enable python38:3.8 && \
+
+    yum -y module enable nodejs:14 && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    yum --disableplugin=subscription-manager && \
+    yum clean all -y && \
+# yum cache files may still exist (and quite large in size)
+    rm -rf /var/cache/yum/*	
+	
+#RUN mkdir /opt/app-root/src
+WORKDIR /opt/app-root/src
+RUN npm config list
+#RUN npm set python=/usr/bin/python3.8
+RUN npm --version
+
+#Run npm install -g npm@10.7.0
+
+Run npm install -f -g npm@8.18.0
+RUN npm install  -f -g node@14.18.2
+#RUN npm install -g sass
+#RUN npm install  -g node-gyp@10.1.0 
+
+RUN npm install  -f -g node-gyp
+RUN dotnet help
+RUN /usr/libexec/s2i/container-tool build-tool
+RUN chown -R 1001:0 /opt/app-root \
+    && fix-permissions /opt/app-root
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+USER 1001
+CMD ["/bin/sh" "-c" "/usr/libexec/s2i/usage"]
