@@ -42,38 +42,17 @@ USER 0
 
 ENV PATH=/opt/app-root/src/.local/bin:/opt/app-root/src/bin:/opt/app-root/node_modules/.bin:/opt/app-root/.dotnet/tools/:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin STI_SCRIPTS_PATH=/usr/libexec/s2i
 
-# Got from https://github.com/redhat-developer/s2i-dotnetcore/tree/main/8.0/build/s2i/bin
 COPY ./8.0/build/s2i/bin/ /usr/libexec/s2i
 #RUN rpm -q --whatprovides python-devel
 #RUN rpm -q --whatprovides python-setuptools
 
 
-RUN microdnf -y install python3-devel
-RUN microdnf install python3-setuptools
-RUN microdnf install python3-pip
-RUN microdnf install python38
-#RUN microdnf install dotnet-sdk-8.0
-RUN microdnf install dotnet-sdk-8.0
-RUN microdnf install rsync
-RUN microdnf install procps-ng
-RUN microdnf install findutils
+# With microdnf we were having issue with getting proper version of some of the packages
+# Would use yum for those cases; yum could be used all along instead of microdnf
+# microdnf was installed by default; hence started using that
+RUN microdnf install yum
+	
 
-RUN microdnf -y install npm
-RUN npm --version
-RUN microdnf -y install nodejs 
-
-#RUN microdnf -y install nodejs-14
-RUN microdnf -y install nodejs-nodemon 
-
-RUN #/bin/sh -c INSTALL_PKGS="python38  " \
-    microdnf module disable npm && \
-    microdnf module enable npm:10.7.0 && \
-	microdnf module disable nodejs && \
-    microdnf module enable nodejs:18.17.0 && \
-    microdnf module enable python38:3.8 && \
-    #microdnf --nodocs install $INSTALL_PKGS && \
-    microdnf clean all -y && \
-    rm -rf /var/cache/yum/*
 
 # Install packages:
 # - dotnet-sdk--*: provides the .NET SDK.
@@ -94,34 +73,33 @@ RUN [ -z "${DOTNET_TARBALL}" ] || ( \
 # yum cache files may still exist (and quite large in size)
     rm -rf /var/cache/yum/* )
 
-# Check the versions of the environment variables match the installed versions.
-#RUN [ "$IS_CI" == "true" ] || ( \
-#        printf "Checking framework versions ${DOTNET_VERSION} and ${ASPNET_VERSION} against:\n$(dotnet --list-runtimes)" && \
-#        dotnet --list-runtimes | grep "Microsoft.NETCore.App ${DOTNET_VERSION} " && \
-#        dotnet --list-runtimes | grep "Microsoft.AspNetCore.App ${ASPNET_VERSION} " && \
-#        printf "Checking SDK version ${DOTNET_SDK_VERSION} against:\n$(dotnet --list-sdks)" && \
-#        dotnet --list-sdks | grep "^${DOTNET_SDK_VERSION} " )
+# Python Support
+RUN INSTALL_PKGS="python38 python38-devel python38-setuptools python38-pip  \
+         npm nodejs-nodemon  rsync procps-ng findutils" && \
+    yum -y module enable python38:3.8 && \
 
-#    &&     yum -y module enable python38:3.8 \
-#    &&     yum -y module enable nodejs:14 \
-#    &&     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS \
-#    &&     rpm -V $INSTALL_PKGS \
-#    &&     yum --disableplugin=subscription-manager \
-#    &&     yum clean all -y \
-#    &&     rm -rf /var/cache/yum/*
-
-#RUN microdnf -y module enable python38:3.8 \
-#    &&     microdnf -y module enable nodejs:14 \
-#    &&     microdnf --disableplugin=subscription-manager \
-#    &&     microdnf clean all -y \
-#    &&     rm -rf /var/cache/yum/*
-
+    yum -y module enable nodejs:14 && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    yum --disableplugin=subscription-manager && \
+    yum clean all -y && \
+# yum cache files may still exist (and quite large in size)
+    rm -rf /var/cache/yum/*	
+	
 #RUN mkdir /opt/app-root/src
 WORKDIR /opt/app-root/src
-RUN npm config set python /usr/bin/python3.8
-#RUN npm i -g npm
+RUN npm config list
+#RUN npm set python=/usr/bin/python3.8
+RUN npm --version
 
-RUN npm install -g node-gyp
+#Run npm install -g npm@10.7.0
+
+Run npm install -f -g npm@8.18.0
+RUN npm install  -f -g node@14.18.2
+#RUN npm install -g sass
+#RUN npm install  -g node-gyp@10.1.0 
+
+RUN npm install  -f -g node-gyp
 RUN dotnet help
 RUN /usr/libexec/s2i/container-tool build-tool
 RUN chown -R 1001:0 /opt/app-root \
