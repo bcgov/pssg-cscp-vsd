@@ -48,6 +48,7 @@
                 <br>
                 <p>
                   Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Immediate Family Member. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Immediate Family Member that was in effect at that time will apply.
+                  <app-tool-tip [trigger]="changestotheCrimeVictim"></app-tool-tip>
                 </p>
               </div>
 
@@ -129,4 +130,6 @@
     </div>
   </div>
 </div>
-
+<ng-template #changestotheCrimeVictim>
+  For offences that occurred before January 1, 2024, an Immediate Family Member is defined as a person who, at the time of the eligible offence that resulted in the death or injury of a victim, was a spouse, child, sibling, step sibling,half sibling, parent of the victim or, <strong>if financially dependent on the victim, a grandparent or grandchild of the victim.</strong>
+</ng-template>
