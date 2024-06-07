@@ -242,7 +242,7 @@ export class BenefitLists {
     },
     {
       title: 'Crime scene cleaning',
-      target: 'Immediate Family Members who need specialized cleaning of the victim’s home or vehicle(if the victim is deceased), or their own home or vehicle, because the crime was committed there',
+      target: 'Immediate Family Members who need specialized cleaning of the victim’s home or vehicle (if the victim is deceased), or their own home or vehicle, because the crime was committed there',
       examples: [
         'Specialized cleaning and disinfecting of contaminated areas',
         'Replacement of contaminated flooring, wall covering, or other built-in features',
