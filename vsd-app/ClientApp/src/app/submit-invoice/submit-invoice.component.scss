@@ -376,6 +376,8 @@ hr {
 .form-totals {
   .gst {
     margin-bottom: 15px;
+    margin-top: 15px; 
+    font-size: 18px;
   }
 
   .grand-total {
@@ -437,4 +439,14 @@ hr {
 
 .welcome-text {
   font-size: 20px;
+}
+
+.header-alert {
+  color: #CE3E39	
+}
+
+.link-span {
+  color: #0c5cb1;
+  text-decoration: underline;
+  cursor: pointer;
 }
