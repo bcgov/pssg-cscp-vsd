@@ -3,7 +3,7 @@
     <h1>Application on Behalf of {{header}}</h1>
   </div>
 
-  <p>This section provides information regarding applying on behalf of an applicant. This information is only necessary if you are a guardian or legal representative of the applicant.</p>
+  <p>This section provides information regarding applying on behalf of an applicant.</p>
   <div class="attention" *ngIf="form.get('completingOnBehalfOf').value === originalOnBehalfOf">
     <p>You previously selected the option below. Verify that this is correct before continuing with the application.</p>
   </div>
@@ -24,11 +24,15 @@
 
       <label>
         <input type="radio" [value]="100000003" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-        A legal representative or legal guardian completing this application on behalf of someone else
+        A legal representative or legal guardian completing this application on behalf of someone else, or
+        <br/>
+        <div style="padding-left: 20px">a third party completing on behalf of an incapable adult.
+          <app-tool-tip [trigger]="legalRepresentativeTooltip"></app-tool-tip>
+        </div>
       </label>
     </app-field>
   </section>
-
+  <ng-template #legalRepresentativeTooltip>If the person does not have a legal representative and is physically or mentally incapable of making the application, <strong>a third party</strong> may complete the application on their behalf. <strong>NOTE:</strong> This does not include victim service or other support workers who are providing assistance to a capable person.</ng-template>
   <div class="row" *ngIf="form.get('completingOnBehalfOf').value === 100000003">
     <div class="col-md-6">
       <app-field label="Relationship to Person" [required]="true" errorMessage="Please select a relationship" [valid]="isMyControlValid(form.get('relationshipToPerson'))">
@@ -147,7 +151,7 @@
     </div>
 
     <ng-container *ngIf="form.get('completingOnBehalfOf').value === 100000003">
-      <h2 class="blue-header">Proof of Legal Authority</h2>
+      <h2 class="blue-header">Proof of Legal Authority, If Applicable</h2>
       <p>Note: The Crime Victim Assistance Program requires proof of your authority to apply for benefits on behalf of the applicant. Please attach the legal documentation here.
         <strong>File size limit:</strong> one file cannot exceed 2MB and all files uploaded to application cannot exceed 3.5MB
       </p>
