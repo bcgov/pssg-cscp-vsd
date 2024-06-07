@@ -2,13 +2,13 @@
     <div class="page-header">
         <h1>Victim Information</h1>
     </div>
-    <h2 class="blue-header">Victim Information</h2>
+    <h2 class="blue-header">Victim Information, if known</h2>
 
     <h3>Victim Name</h3>
 
     <div class="row">
         <div class="col-4">
-            <app-field label="First Name" [required]="true" [valid]="isFieldValid('firstName')" errorMessage="Please enter your first name">
+            <app-field label="First Name" [required]="false" [valid]="isFieldValid('firstName')">
                 <input class="form-control" type="text" formControlName="firstName" maxlength="100">
             </app-field>
         </div>
@@ -18,7 +18,7 @@
             </app-field>
         </div>
         <div class="col-4">
-            <app-field label="Last Name" [required]="true" [valid]="isFieldValid('lastName')" errorMessage="Please enter your last name">
+            <app-field label="Last Name" [required]="false" [valid]="isFieldValid('lastName')">
                 <input class="form-control" type="text" formControlName="lastName" maxlength="100">
             </app-field>
         </div>
@@ -82,7 +82,7 @@
             </app-field>
         </div>
         <div class="col-md-6">
-            <app-field label="Marital Status" [required]="true" [valid]="isFieldValid('maritalStatus')" errorMessage="Please select your marital status">
+            <app-field label="Marital Status" [required]="false" [valid]="isFieldValid('maritalStatus')">
                 <select class="form-control" formControlName="maritalStatus">
                     <option value="0">Select...</option>
                     <option value="100000000">Married</option>
@@ -111,7 +111,7 @@
         </div>
     </div>
 
-    <h2 class="blue-header">Victim's Contact Information</h2>
+    <h2 class="blue-header">Victim's Contact Information, if known</h2>
     <div class="row">
         <div class="col-12">
             <app-field label="Is the applicant's phone number(s) and email address the same or to be used for the victim?">

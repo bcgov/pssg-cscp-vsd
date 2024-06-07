@@ -23,8 +23,12 @@
     <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/victim-application">Victims</a>.</p>
   </div>
   <div *ngIf="formType === ApplicationType.Witness_Application">
-    <p>This application form is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who is not related to the victim but has a strong emotional attachment to the victim and witnesses in close proximity an eligible offence that causes a life-threatening injury or death to the victim or witnesses the immediate aftermath of an eligible offence that caused the death of the victim.</p>
+    <p>This application package is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who witnesses in close proximity a prescribed, or the immediate aftermath of a prescribed offence, that causes a life-threatening injury to, or the death of, the victim.</p>
     <p>If this definition does not apply to you, please see the application forms for <a routerLink="/ifm-application">Immediate Family Members</a> or <a routerLink="/victim-application">Victims</a>.</p>
+    <p>
+      Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Witness. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Wtness that was in effect at that time will apply.
+      <app-tool-tip [trigger]="witnessTooltip"></app-tool-tip>
+    </p>
   </div>
 
   <div class="attention">
@@ -130,4 +134,7 @@
 </div>
 <ng-template #changestotheCrimeVictim>
   For offences that occurred before January 1, 2024, an Immediate Family Member is defined as a person who, at the time of the eligible offence that resulted in the death or injury of a victim, was a spouse, child, sibling, step sibling,half sibling, parent of the victim or, <strong>if financially dependent on the victim, a grandparent or grandchild of the victim.</strong>
+</ng-template>
+<ng-template #witnessTooltip>
+  For offences that occurred before January 1, 2024, a Witness is defined as a person who is not related to the victim but <strong>has a strong emotional attachment to the victim</strong> and witnesses in close proximity an eligible offence that causes a life-threatening injury or death to the victim <strong>or</strong> witnesses the immediate aftermath of an eligible offence that caused the death of the victim.
 </ng-template>
