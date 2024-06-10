@@ -1,3 +1,4 @@
 
 vsd-app/vsd-app\.sln\.DotSettings
 /.vs
+.env
