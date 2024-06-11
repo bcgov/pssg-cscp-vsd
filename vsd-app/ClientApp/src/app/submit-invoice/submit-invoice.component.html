@@ -4,12 +4,17 @@
   </div>
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter" *ngIf="!showPrintView">
-
+    <section class="invoice-questions">
+        <div class="submit-content">
+          <h3 class="header-alert"><strong>NEW RATE INCREASE INFORMATION</strong></h3>
+          <p><strong>Please note that CVAP’s counselling rates have increased for sessions provided to eligible clients on or after January 1, 2024:  <a href="https://www2.gov.bc.ca/assets/gov/law-crime-and-justice/criminal-justice/bc-criminal-justice-system/if-victim/publications/cvap-counsellors-qa-2024.pdf" target="_blank">Crime Victim Assistance Regulation Q&A for Counsellors (gov.bc.ca)</a>. Please ensure you are billing at the new rate. It is your responsibility to ensure that your client is not over-paying any required top up amount.</strong></p>
+        </div>
+      </section>
       <section class="invoice-questions">
         <div class="submit-content">
           <h3>Questions about submitting invoices?</h3>
           <p>Review the counselling guidelines outlined before submitting. This will open a new window.</p>
-          <p><a href="https://www2.gov.bc.ca/assets/gov/law-crime-and-justice/criminal-justice/bc-criminal-justice-system/if-victim/publications/cvap-counselling-guidelines.pdf" target="_blank" class="btn btn-secondary">Counselling Guidelines <i class="fa fa-external-link"></i></a></p>
+          <p><a href="https://www2.gov.bc.ca/assets/gov/law-crime-and-justice/criminal-justice/bc-criminal-justice-system/if-victim/publications/cvap-counselling-guidelines-2024.pdf" target="_blank" class="btn btn-secondary">Counselling Guidelines <i class="fa fa-external-link"></i></a></p>
         </div>
       </section>
 
@@ -184,9 +189,9 @@
                 </div>
                 <div class="form-totals clearfix">
                   <div class="row gst">
-                    <div class="col text-right">
-                      <label>
-                        GST Applicable?
+                    <div class="col text-left">
+                      <label class="header-alert">
+                        <strong>CLICK IF GST TO BE PAID</strong>&nbsp;
                         <span>
                           <input type="checkbox" [value]="true" name="gstApplicable" formControlName="gstApplicable" (change)="checkCousellorLevel()">
                           Yes
@@ -445,7 +450,7 @@
             </div>
             <h3>You have successfully submitted an invoice to the Crime Victim Assistance Program. If you would like to print your invoice, please click <a class="print-link" (click)="printInvoice()">here</a>.</h3>
             <p>In the event that there is an issue with the information submitted, a staff member from the Crime Victim Assistance Program will contact you.</p>
-            <p><a href="/submit-invoice">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
+            <p><span (click)="resetForm()" class="link-span">Click here to return to Crime Victim Assistance Program Invoicing Home Page</span></p>
           </div>
         </div>
       </div>
@@ -458,11 +463,10 @@
           <div class="col-md-9">
             <p>You have successfully cancelled the invoice.</p>
             <p>Please contact the Crime Victim Assistance Program (CVAP) if you need information to assist you in completing the invoice submission process. <em>Refer to the CVAP Contact Information on the left.</em>"</p>
-            <p><a href="/submit-invoice">Click here to return to Crime Victim Assistance Program Invoicing Home Page</a></p>
+            <p><span (click)="resetForm()" class="link-span">Click here to return to Crime Victim Assistance Program Invoicing Home Page</span></p>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>

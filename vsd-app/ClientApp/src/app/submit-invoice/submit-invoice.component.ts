@@ -106,6 +106,27 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     }
   }
 
+  resetForm() {
+    this.form.reset();
+    this.form = this.buildInvoiceForm();
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.formFullyValidated = false;
+    this.formSubmitted = false;
+    this.showFormPanel = true;
+    this.showReviewPanel = false;
+    this.showSuccessPanel = false;
+    this.showCancelPanel = false;
+    this.invoiceSubTotal = 0.00;
+    this.invoiceGrandTotal = 0.00;
+    this.isVendorValid = false;
+    this.didValidateVendor = false;
+    this.isCounsellorValid = false;
+    this.didValidateCounsellor = false;
+    this.showRemoveLine = false;
+    this.hasDuplicateLineItem = false;
+  }
+
   showInvoiceInstructions() {
     this.dialog.open(InvoiceInstructionsDialog, {
       autoFocus: false,
