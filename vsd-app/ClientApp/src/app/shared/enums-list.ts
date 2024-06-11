@@ -138,7 +138,7 @@ export class EnumHelper {
     100000000: 'Completing this application for myself',
     100000001: 'A Victim Service Worker or other person helping a victim complete this application',
     100000002: 'A parent completing this application for my minor child (under 19 years of age)',
-    100000003: 'A legal representative or legal guardian completing this application on behalf of someone else',
+    100000003: 'A legal representative or legal guardian completing this application on behalf of someone else, or a third party completing on behalf of an incapable adult.',
   }
 
   public ProviderSpecialistType = {

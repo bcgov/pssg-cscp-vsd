@@ -80,13 +80,17 @@
                   </label>
                   <label>
                     <input type="radio" [value]="100000003" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                    A legal representative or legal guardian completing this application on behalf of someone else
+                    A legal representative or legal guardian completing this application on behalf of someone else, or
+                    <br/>
+                    <div style="padding-left: 20px">a third party completing on behalf of an incapable adult.
+                      <app-tool-tip [trigger]="legalRepresentativeTooltip"></app-tool-tip>
+                    </div>
                   </label>
                 </app-field>
               </section>
 
               <ng-template #onBehalfOfToolTip>This option should also be chosen when completing the application in consultation with a victim service worker or support person.</ng-template>
-
+              <ng-template #legalRepresentativeTooltip>If the person does not have a legal representative and is physically or mentally incapable of making the application, <strong>a third party</strong> may complete the application on their behalf. <strong>NOTE:</strong> This does not include victim service or other support workers who are providing assistance to a capable person.</ng-template>
               <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
                 <app-field label="Did the crime occur in BC" [required]="true">
                   <table style="width: 100%" class="out-of-line">
