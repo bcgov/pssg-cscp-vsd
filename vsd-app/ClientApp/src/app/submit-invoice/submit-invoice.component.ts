@@ -320,6 +320,9 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         InvoiceDetails: this.form.get('invoiceDetails').value,
       };
       formData.InvoiceDetails.exemptFromGst = !formData.InvoiceDetails.gstApplicable;
+      if (formData.InvoiceDetails.claimNumber.length === 10) {
+        formData.InvoiceDetails.claimNumber += "0";
+      }
 
       this.getInvoicePDF(formData).then((pdfs: DocumentCollectioninformation[]) => {
         formData.DocumentCollection = pdfs;
