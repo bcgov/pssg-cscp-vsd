@@ -117,7 +117,7 @@
             Prescription drug expenses <app-tool-tip [trigger]="benefitsPrescription"></app-tool-tip>
           </label>
         </app-field>
-        <app-field>
+        <app-field *ngIf="formType === ApplicationType.IFM_Application">
           <label>
             <input type="checkbox" [value]="true" name="haveCrimeSceneCleaningExpenses" formControlName="haveCrimeSceneCleaningExpenses" (change)="changeGroupValidity($event)">
             Crime scene cleaning expenses<app-tool-tip [trigger]="expensesFamilyCrimeSceneCleaning"></app-tool-tip>
@@ -600,6 +600,7 @@
     <li>Specialized cleaning and disinfecting of contaminated areas</li>
     <li>Replacement of contaminated flooring, wall covering, or other built-in features</li>
   </ul>
+  <p><strong>Changes to the Crime Victim Assistance Act came into effect on January 1, 2024</strong>. If you are applying in relation to an offence that happened before January 1, 2024, the eligibility criteria for this benefit that were in effect at that time will apply.</p>
 </ng-template>
 <ng-template #lostWagesTemplate>
   <p><strong>Lost wages or income</strong></p>
