@@ -98,30 +98,28 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     if (result.statusCode != HttpStatusCode.OK)
                     {
                         _logger.Error($"Failed to retrieve incidents. Status code: {result.statusCode}");
-                        Serilog.Log.Error("Failed to retrieve incidents.");
                     }
 
                     var incidents = result.result["value"].ToObject<List<Incident>>();
                     if (incidents == null || incidents.Count == 0)
                     {
                         _logger.Information("No incidents found for the given criteria.");
-                        Serilog.Log.Error("No incidents found for the given criteria.");
                     }
                     
                     // Log the GUIDs of the fetched incidents
-                    _logger.Information($"Incident GUIDs: {JsonSerializer.Serialize(incidents)}");
+                    // _logger.Information($"Incident GUIDs: {JsonSerializer.Serialize(incidents)}");
 
                     // Iterate through each fetched incident
                     foreach (var incident in incidents)
                     {
                     // log the incident details
-                    _logger.Information($"Incident details: {JsonSerializer.Serialize(incident)}");
+                    // _logger.Information($"Incident details: {JsonSerializer.Serialize(incident)}");
                     
                     // Check if the case is inactive
                     bool isCaseInactive = await IsCaseInactive(incident.IncidentId);
 
                     // Log the value of the incident id with the returned value
-                    _logger.Information($"IncidentId: {incident.IncidentId}, IsCaseInactive: {isCaseInactive}");
+                    // _logger.Information($"IncidentId: {incident.IncidentId}, IsCaseInactive: {isCaseInactive}");
 
                     /* statuscode:
                         - 100,000,001: Draft
@@ -133,31 +131,76 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                         - 3: Idle
                     */
 
-                    if (isCaseInactive) 
+                    /* vsd_cvap_entitlements
+                        - 100,000,000: Intake
+                        - 100,000,001: Ready for Original Decision
+                        - 100,000,002: Ready for Reassessment
+                        - 100,000,003: Ready for Reconsideration
+                        - 100,000,004: Queued for Adjudication
+                        - 100,000,005: Adjudication In Progress
+                        - 100,000,006: Ongoing Administration
+                        - 100,000,007: Claim Ineligible
+                        - 100,000,008: Queued for Reassessment
+                        - 100,000,009: Reassessment In Progress
+                        - 100,000,010: Closed
+                    */
+
+                    /* vsd_caseresolution
+                        - 100,000,000: Abandoned
+                        - 100,000,001: Withdrawn
+                        - 100,000,002: Fulfilled/Concluded
+                        - 100,000,003: Denied
+                        - 100,000,004: Archived
+                        - 100,000,005: Created in Error
+                        - 100,000,006: Duplicate
+                        - 100,000,007: No Action Required
+                    */
+
+                    /* vsd_resolvecase
+                        - 100,000,000: No
+                        - 100,000,001: Yes
+                    */
+
+                    if (true) 
                     {
                         if (incident.StatusCode == 1)
                         {
+                            // const string patchJson = "{\"vsd_cvap_entitlements\": 100000010, \"vsd_caseconclusionresult\": \"Case is auto closed due to inactivity from 6 months.\", \"vsd_caseresolution\": 100000002, \"vsd_resolvecase\": 100000001}";
+                            _logger.Information("Updating case status to closed for incident: " + incident.IncidentId);
+                            string patchJson = JsonSerializer.Serialize(new { description = "Test description!" });
+                            _logger.Information("Patch JSON: " + patchJson);
+                            DynamicsResult patchResult = await _dynamicsResultService.Patch($"incidents({incident.IncidentId})", patchJson);
+                            
+                            _logger.Information("1 Patch Result from Dynamics: " + patchResult.result);
+
                             // Update case:
-                            // Update Claim Progress Status to "Closed"
-                            // Update Case Conclusion Result to "Case is auto closed due to inactivity from 6 months."
-                            // Update Case Resolution to "Fulfilled/Concluded"
-                            // Update Resolve Case to "Yes"
+                            // Update Claim Progress Status to "Closed" -> vsd_cvap_entitlements (option set)
+                            // Update Case Conclusion Result to "Case is auto closed due to inactivity from 6 months." -> vsd_caseconclusionresult (text)
+                            // Update Case Resolution to "Fulfilled/Concluded" -> vsd_caseresolution (option set)
+                            // Update Resolve Case to "Yes" -> vsd_resolvecase (option set)
+
                         }
                         else if (incident.StatusCode == 3 || incident.StatusCode == 4 || incident.StatusCode == 100000003) 
                         {
-                            // Change record status to 1 (In Progress)
+                            // const string patchJson = "{\"statuscode\": 1, \"vsd_cvap_entitlements\": 100000010, \"vsd_caseconclusionresult\": \"Case is auto closed due to inactivity from 6 months.\", \"vsd_caseresolution\": 100000002, \"vsd_resolvecase\": 100000001}";
+                            _logger.Information("Updating case status to closed for incident: " + incident.IncidentId);
+                            string patchJson = JsonSerializer.Serialize(new { description = "Test description!" });
+                            _logger.Information("Patch JSON: " + patchJson);
+                            DynamicsResult patchResult = await _dynamicsResultService.Patch($"incidents({incident.IncidentId})", patchJson);
+                            _logger.Information("2 Patch Result from Dynamics: " + patchResult.result);
+
+                            // Change record status to 1 (In Progress) -> statuscode
                             // Update case: 
-                            // Update Claim Progress Status to "Closed"
-                            // Update Case Conclusion Result to "Case is auto closed due to inactivity from 6 months."
-                            // Update Case Resolution to "Fulfilled/Concluded"
-                            // Update Resolve Case to "Yes"
+                            // Update Claim Progress Status to "Closed" -> vsd_cvap_entitlements (option set)
+                            // Update Case Conclusion Result to "Case is auto closed due to inactivity from 6 months." -> vsd_caseconclusionresult (text)
+                            // Update Case Resolution to "Fulfilled/Concluded" -> vsd_caseresolution (option set)
+                            // Update Resolve Case to "Yes" -> vsd_resolvecase (option set)
 
                         }
                     }
                 }
             } catch (Exception e) {
                 _logger.Error(e, "Error in CaseClosure");
-                Serilog.Log.Error(e, "Error in CaseClosure");
             }
         // }); 
         return Ok();

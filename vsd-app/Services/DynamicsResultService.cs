@@ -13,6 +13,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
     {
         Task<DynamicsResult> Get(string endpointUrl);
         Task<DynamicsResult> Post(string endpointUrl, string requestJson);
+        Task<DynamicsResult> Patch(string endpointUrl, string requestJson);
     }
 
     public class DynamicsResultService : IDynamicsResultService
@@ -37,6 +38,12 @@ namespace Gov.Cscp.VictimServices.Public.Services
         public async Task<DynamicsResult> Post(string endpointUrl, string modelJson)
         {
             DynamicsResult blob = await DynamicsResultAsync(HttpMethod.Post, endpointUrl, modelJson);
+            return blob;
+        }
+
+        public async Task<DynamicsResult> Patch(string endpointUrl, string modelJson)
+        {
+            DynamicsResult blob = await DynamicsResultAsync(new HttpMethod("PATCH"), endpointUrl, modelJson);
             return blob;
         }
 
