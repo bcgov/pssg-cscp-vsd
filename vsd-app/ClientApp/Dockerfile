@@ -1,21 +1,17 @@
-# matches the node version used by openshift S2i image
-FROM node:10 as node
+# Create build image layer
+FROM node:8.9.4 as build
 
-WORKDIR /usr/src/app
+COPY ./vsd-app/ClientApp ./vsd-app/ClientApp
 
-# install a specific NPM version
-RUN npm install -g npm@6.10.3
+WORKDIR /vsd-app/ClientApp
 
-# copy package and package-lock
-COPY package*.json ./
+RUN npm install
+RUN npm run build -- --base-href /cvapwebform --prod
 
-# run npm as continuous integration (Fetches dependencies every build.)
-RUN npm ci
-
-COPY . .
-
-# ng serve (4200)
-# webpack hot module reload (49153)
-EXPOSE 4200 49153
-
-CMD ["npm", "start", "--", "--poll=500"]
+# Create runtime image layer, copy build image contents into this image
+FROM caddy:latest as final
+COPY ./vsd-app/ClientApp/Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /vsd-app/ClientApp/dist/ /site
+ENV BASE_URL=
+ENV API_URL=
+EXPOSE 2015
