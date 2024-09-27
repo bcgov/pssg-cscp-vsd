@@ -37,7 +37,7 @@ jobs:
       - name: Pull image
         run: docker pull $IMAGE_ID || true
 
-      - name: Build and push vsu-app
+      - name: Build and push vsd-app
         uses: docker/build-push-action@v6
         with:
           build-args: |
@@ -72,7 +72,7 @@ jobs:
       - name: Pull image
         run: docker pull $IMAGE_ID || true
 
-      - name: Build and push vsu-app
+      - name: Build and push vsd-app
         uses: docker/build-push-action@v6
         with:
           build-args: |
