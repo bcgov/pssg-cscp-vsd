@@ -1,0 +1,85 @@
+name: cd-vsd-app
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'vsd-app/**'
+      - 'vsd-interfaces/**'
+      - '.github/workflows/cd-vsd.yml'
+
+env:
+  APP_NAME: vsd
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
+  IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
+
+jobs:
+  build-vsd-api:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+    env:
+      IMAGE_NAME: api
+      VSD_API_DOCKERFILE_PATH: ./vsd-app/Dockerfile
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx tooling
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log into OpenShift Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.IMAGE_REGISTRY }}
+          username: ${{ secrets.OCP4_USERNAME }}
+          password: ${{ secrets.OCP4_PASSWORD }}
+
+      - name: Pull image
+        run: docker pull $IMAGE_ID || true
+
+      - name: Build and push vsd-app
+        uses: docker/build-push-action@v6
+        with:
+          build-args: |
+            BUILD_ID="${{ env.BUILD_ID }}"
+          cache-from: |
+            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}
+          file: ${{ env.VSD_API_DOCKERFILE_PATH }}
+          push: true
+          tags: |
+            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev
+
+  build-vsd-ui:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+    env:
+      IMAGE_NAME: ui
+      VSD_UI_DOCKERFILE_PATH: ./vsd-app/ClientApp/Dockerfile
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx tooling
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log into OpenShift Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.IMAGE_REGISTRY }}
+          username: ${{ secrets.OCP4_USERNAME }}
+          password: ${{ secrets.OCP4_PASSWORD }}
+
+      - name: Pull image
+        run: docker pull $IMAGE_ID || true
+
+      - name: Build and push vsd-app
+        uses: docker/build-push-action@v6
+        with:
+          build-args: |
+            BUILD_ID="${{ env.BUILD_ID }}"
+          cache-from: |
+            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}
+          file: ${{ env.VSD_UI_DOCKERFILE_PATH }}
+          push: true
+          tags: |
+            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev

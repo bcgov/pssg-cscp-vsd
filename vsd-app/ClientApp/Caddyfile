@@ -1,0 +1,37 @@
+{
+	admin off
+}
+
+:2015 {
+	log stdout
+
+	root * /site
+
+	header {
+  		# Enable HTTP Strict Transport Security (HSTS) to force clients to always connect via HTTPS (do not use if only testing)
+  		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  		# Enable cross-site filter (XSS) and tell browser to block detected attacks
+  		X-XSS-Protection "1; mode=block"
+  		# Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
+  		X-Content-Type-Options "nosniff"
+		# Disallow the site to be rendered within a frame (clickjacking protection)
+		X-Frame-Options "DENY"
+		# Set CSP to support Angular
+		Content-Security-Policy "default-src 'self'; script-src 'self' https://apis.google.com https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com https://code.jquery.com https://stackpath.bootstrapcdn.com https://fonts.googleapis.com; object-src 'self' data:; style-src 'self' 'unsafe-inline' https://use.fontawesome.com https://stackpath.bootstrapcdn.com https://fonts.googleapis.com;img-src 'self' data:; frame-src 'self' data:;font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com; form-action 'self'; frame-ancestors 'self'; block-all-mixed-content"
+		# Set referrer policy
+		Referrer-Policy "same-origin"
+  	}
+
+	encode zstd gzip
+
+	route {
+		@jstype path *.js
+    	header @jstype Content-Type text/javascript
+
+		uri strip_prefix {$BASE_URL}
+		reverse_proxy /api* {$API_URL}
+		try_files {path} {path}/ /index.html?{query}
+	}
+
+	file_server
+}
