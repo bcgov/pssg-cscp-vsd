@@ -245,18 +245,18 @@ namespace Gov.Cscp.VictimServices.Public
                     .CreateLogger();
             }
 
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core, see https://go.microsoft.com/fwlink/?linkid=864501
-                spa.Options.SourcePath = "ClientApp";
+            // app.UseSpa(spa =>
+            // {
+            //     // To learn more about options for serving an Angular SPA from ASP.NET Core, see https://go.microsoft.com/fwlink/?linkid=864501
+            //     spa.Options.SourcePath = "ClientApp";
 
-                // Only run the angular CLI Server in Development mode (not staging or test.)
-                if (env.IsDevelopment())
-                {
-                    spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);  // Bypass initial load timeout issue                    
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+            //     // Only run the angular CLI Server in Development mode (not staging or test.)
+            //     if (env.IsDevelopment())
+            //     {
+            //         spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);  // Bypass initial load timeout issue                    
+            //         spa.UseAngularCliServer(npmScript: "start");
+            //     }
+            // });
         }
     }
 }
