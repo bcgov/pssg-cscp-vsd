@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   lite: false,
-  apiRootUrl: 'cvapwebform'
+  apiRootUrl: 'cvapwebform/'
 };
