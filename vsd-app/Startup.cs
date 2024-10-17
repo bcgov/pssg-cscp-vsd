@@ -1,5 +1,6 @@
 // using Gov.Cscp.VictimServices.Public.Authorization;
 using Gov.Cscp.VictimServices.Public.Services;
+using Gov.Cscp.VictimServices.Public.BackgroundWorkItem;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -40,6 +41,7 @@ namespace Gov.Cscp.VictimServices.Public
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
             services.AddTransient<TokenHandler>();
 
             services.AddHttpClient<ICOASTAuthService, COASTAuthService>();
