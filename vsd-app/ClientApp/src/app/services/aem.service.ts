@@ -4,13 +4,13 @@ import { Application } from '../interfaces/application.interface';
 import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AEMService {
     baseUrl = environment.apiRootUrl;
     apiPath = this.baseUrl.concat('api/AEM');
-    
+
     headers: HttpHeaders = new HttpHeaders({
         'Content-Type': 'application/json'
     });
