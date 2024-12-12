@@ -60,12 +60,12 @@
     "survey-angular": "^1.0.28",
     "web-animations-js": "^2.3.1",
     "webpack": "^4.28.3",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^5.2.0",
     "xmlhttprequest": "^1.8.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.10.0",
+    "@angular-devkit/build-angular": "~19.0.5",
     "@angular/cli": "~7.0.6",
     "@angular/compiler-cli": "~7.0.4",
     "@angular/language-service": "~7.0.0",
