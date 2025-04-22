@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --source-map --host 0.0.0.0 --proxy-config proxy.config.json",
+    "start": "ng serve --host 0.0.0.0 --proxy-config proxy.config.json",
     "build": "ng build --extract-css --base-href /cvapwebform/ --deploy-url /cvapwebform/",
     "builduat": "ng build --extract-css --base-href /uat/cvapwebform/ --deploy-url /uat/cvapwebform/",
     "buildprod": "ng build --extract-css --base-href /cvapwebform/ --deploy-url /cvapwebform/",
