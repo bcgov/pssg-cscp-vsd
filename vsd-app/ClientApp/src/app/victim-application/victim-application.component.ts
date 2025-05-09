@@ -176,7 +176,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     };
 
     if (FORM === ApplicationType.IFM_Application) {
-      group["victimInformation"] = this.victimInfoHelper.setupFormGroup(this.fb, FORM);
+      group["victimInformation"] = this.victimInfoHelper.setupFormGroupForIfmApplication(this.fb);
     }
 
     if (FORM === ApplicationType.Victim_Application) {

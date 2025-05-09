@@ -29,7 +29,6 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   ApplicationType = ApplicationType;
 
   BENEFITS: string[];
-  ADDITIONAL_BENEFITS: string[];
   OTHER_BENEFITS: string[];
   header: string;
 
@@ -75,7 +74,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveCrimeSceneCleaningExpenses',
         'haveOtherExpenses'
       ];
-      this.ADDITIONAL_BENEFITS = [
+      this.OTHER_BENEFITS = [
         'haveDisabilityPlanBenefits',
         'haveEmploymentInsuranceBenefits',
         'haveIncomeAssistanceBenefits',
@@ -190,9 +189,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveCounsellingExpenses',
         'haveCounsellingTransportation',
         'havePrescriptionDrugExpenses',
-        'haveCrimeSceneCleaningExpenses'
-      ];
-      this.ADDITIONAL_BENEFITS = [
+        'haveCrimeSceneCleaningExpenses',
         'haveVocationalServicesExpenses',
         'haveIncomeSupportExpenses',
         'haveChildcareExpenses',
@@ -219,9 +216,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
       this.BENEFITS = [
         'haveCounsellingExpenses',
         'haveCounsellingTransportation',
-        'havePrescriptionDrugExpenses'
-      ];
-      this.ADDITIONAL_BENEFITS = [
+        'havePrescriptionDrugExpenses',
         'haveCrimeSceneCleaningExpenses',
         'haveOtherExpenses'
       ];
@@ -277,31 +272,6 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     expenseMinimumMet = oneChecked ? 'yes' : '';
     this.form.patchValue({
       minimumExpensesSelected: expenseMinimumMet
-    });
-  }
-
-  changeAdditionalBenefitGroupValidity(values: any): void {
-    let minimumBenefitsMet = '';
-    let x: AbstractControl[] = [];
-    this.ADDITIONAL_BENEFITS.forEach((benefit) => {
-      x.push(this.form.get(benefit));
-    });
-    let oneChecked = false;
-    x.forEach(c => {
-      if (oneChecked)
-        return;
-
-      if (c instanceof FormControl) {
-        if (c.value === true)
-          oneChecked = true;
-      }
-    });
-
-    // fake a 'true' as a string
-    minimumBenefitsMet = oneChecked ? 'yes' : '';
-
-    this.form.patchValue({
-      minimumAdditionalBenefitsSelected: minimumBenefitsMet
     });
   }
 
