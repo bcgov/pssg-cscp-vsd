@@ -23,7 +23,8 @@ COPY ./vsd-app/ClientApp/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /vsd-app/ClientApp/dist/ /site
 
 # Add version files
-RUN /bin/sh -c 'echo "$BUILD_ID" > /site/build_id.txt && echo "$BUILD_VERSION" > /site/version.txt'
+RUN echo "${BUILD_ID}" > /app/build_id.txt && echo "${BUILD_VERSION}" > /app/version.txt
+
 
 ENV BASE_URL=
 ENV API_URL=
