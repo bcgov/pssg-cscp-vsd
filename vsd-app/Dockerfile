@@ -35,7 +35,7 @@ ARG BUILD_VERSION
 ENV BUILD_ID=${BUILD_ID}
 ENV BUILD_VERSION=${BUILD_VERSION}
 
-# Write to text files for inspection
+# Write to text files for inspection.
 RUN echo "${BUILD_ID}" > /app/build_id.txt && echo "${BUILD_VERSION}" > /app/version.txt
 
 EXPOSE 8080

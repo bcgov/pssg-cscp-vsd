@@ -22,8 +22,8 @@ ENV BUILD_VERSION=${BUILD_VERSION}
 COPY ./vsd-app/ClientApp/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /vsd-app/ClientApp/dist/ /site
 
-# Add version files
-RUN echo "${BUILD_ID}" > /app/build_id.txt && echo "${BUILD_VERSION}" > /app/version.txt
+# Add version files.
+RUN echo "${BUILD_ID}" > /site/build_id.txt && echo "${BUILD_VERSION}" > /site/version.txt
 
 
 ENV BASE_URL=
