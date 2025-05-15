@@ -300,7 +300,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         understoodInformation: [null, Validators.requiredTrue]
       }),
       personalInformation: this.personalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
-      victimInformation: this.victimInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
+      victimInformation: this.victimInfoHelper.setupFormGroupForWitnessApplication(this.fb),
       crimeInformation: this.crimeInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       medicalInformation: this.medicalInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),
       expenseInformation: this.expenseInfoHelper.setupFormGroup(this.fb, this.FORM_TYPE),

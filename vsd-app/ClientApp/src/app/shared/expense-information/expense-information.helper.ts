@@ -22,7 +22,6 @@ export class ExpenseInfoHelper {
       otherSpecificExpenses: [''],
       additionalBenefitsDetails: [''],
       minimumExpensesSelected: ['', Validators.required],
-      minimumAdditionalBenefitsSelected: [''],
       minimumOtherBenefitsSelected: [''],//, Validators.required],
 
       haveDisabilityPlanBenefits: [false],
@@ -42,7 +41,6 @@ export class ExpenseInfoHelper {
         haveCounsellingTransportation: [false],
         havePrescriptionDrugExpenses: [false],
         minimumExpensesSelected: ['', Validators.required],
-        minimumAdditionalBenefitsSelected: [''],//, Validators.required], // Dynamically required
         minimumOtherBenefitsSelected: [''], // Dynamically required
 
         haveCrimeSceneCleaningExpenses: [false],
@@ -78,7 +76,6 @@ export class ExpenseInfoHelper {
         employers: fb.array([this.createEmployerItem(fb)]),
         mayContactEmployer: [''],
         minimumExpensesSelected: ['', Validators.required],
-        minimumAdditionalBenefitsSelected: [''],//, Validators.required],
         minimumOtherBenefitsSelected: [''],//, Validators.required],
 
         additionalBenefitsDetails: [''],//, Validators.required], ??
