@@ -32,6 +32,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     ApplicationType = ApplicationType;
     provinceList: string[];
     relationshipList: string[];
+    imfRelationshipList: string[];
     header: string;
 
     originalOnBehalfOf: number;
@@ -101,6 +102,21 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
         this.contactInfoSubscription = this.form.get('applicantSameContactInfo').valueChanges.subscribe(value => {
             this.copyPersonalContactInfoToRepresentative(this.form.parent);
         });
+
+        if (this.lookupData.imfRepresentativeRelationships && this.lookupData.imfRepresentativeRelationships.length > 0) {
+            this.imfRelationshipList = this.lookupData.imfRepresentativeRelationships.map(r => r.vsd_name);
+        }
+        else {
+            this.lookupService.getIMFRepresentativeRelationships().subscribe((res) => {
+                this.lookupData.imfRepresentativeRelationships = res.value;
+                if (this.lookupData.imfRepresentativeRelationships) {
+                    this.lookupData.imfRepresentativeRelationships.sort(function (a, b) {
+                        return a.vsd_name.localeCompare(b.vsd_name);
+                    });
+                }
+                this.imfRelationshipList = this.lookupData.imfRepresentativeRelationships.map(r => r.vsd_name);
+            });
+        }
 
         if (this.lookupData.representativeRelationships && this.lookupData.representativeRelationships.length > 0) {
             this.relationshipList = this.lookupData.representativeRelationships.map(r => r.vsd_name);

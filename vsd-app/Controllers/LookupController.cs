@@ -223,7 +223,27 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             try
             {
                 // set the endpoint action
-                string endpointUrl = "vsd_relationships?$select=vsd_name&$filter=statecode eq 0 and vsd_cvap_representativerelationship eq true";
+                string endpointUrl = "vsd_relationships?$select=vsd_name&$filter=statecode eq 0 and vsd_cvap_representativerelationship eq true and vsd_cvap_representativerelationship_imf_only ne true ";
+
+                // get the response
+                DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);
+                return StatusCode((int)result.statusCode, result.result.ToString());
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Unexpected error while looking up representative relationships in COAST. Source = VSD");
+                return BadRequest();
+            }
+            finally { }
+        }
+
+        [HttpGet("imf_representative_relationships")]
+        public async Task<IActionResult> GetIMFRepresentativeRelationships()
+        {
+            try
+            {
+                // set the endpoint action
+                string endpointUrl = "vsd_relationships?$filter=statecode eq 0 and vsd_cvap_representativerelationship eq true";
 
                 // get the response
                 DynamicsResult result = await _dynamicsResultService.Get(endpointUrl);

@@ -92,6 +92,13 @@ export class LookupService {
     );
   }
 
+   getIMFRepresentativeRelationships(): Observable<any> {
+    return this.http.get<any>(`${this.apiPath}/imf_representative_relationships`, { headers: this.headers }).pipe(
+      retry(3),
+      catchError(this.handleError)
+    );
+  }
+
   getRestitutionRelationships(): Observable<any> {
     return this.http.get<any>(`${this.apiPath}/restitution_relationships`, { headers: this.headers }).pipe(
       retry(3),
