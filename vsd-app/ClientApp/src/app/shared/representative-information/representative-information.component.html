@@ -38,8 +38,13 @@
       <app-field label="Relationship to Person" [required]="true" errorMessage="Please select a relationship" [valid]="isMyControlValid(form.get('relationshipToPerson'))">
         <select class="form-control" formControlName="relationshipToPerson">
           <option value="">Select...</option>
-          <option *ngFor="let item of relationshipList" [value]="item">{{ item }}</option>
-        </select>
+          <span *ngIf="this.formType != ApplicationType.IFM_Application" >
+            <option *ngFor="let item of relationshipList" [value]="item">{{ item }}</option>
+          </span>
+          <span *ngIf="this.formType == ApplicationType.IFM_Application" >
+            <option *ngFor="let item of imfRelationshipList" [value]="item">{{ item }}</option>
+          </span>
+          </select>
       </app-field>
     </div>
   </div>
