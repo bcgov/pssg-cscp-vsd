@@ -243,17 +243,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             //formParts.valid = true;
           }
         }
-        stepper.next();
-        // if (formValid) {
-        //   // console.log('Form is valid so proceeding to next step.')
-        //   this.showValidationMessage = false;
-        //   window.scroll(0, 0);
-        //   stepper.next();
-        // } else {
-        //   console.log('Form is not valid rerun the validation and show the validation message.')
-        //   this.validateAllFormFields(formParts);
-        //   this.showValidationMessage = true;
-        // }
+         if (formValid) {
+           // console.log('Form is valid so proceeding to next step.')
+           this.showValidationMessage = false;
+           window.scroll(0, 0);
+           stepper.next();
+         } else {
+           console.log('Form is not valid rerun the validation and show the validation message.')
+           this.validateAllFormFields(formParts);
+           this.showValidationMessage = true;
+         }
       }
     }
   }
