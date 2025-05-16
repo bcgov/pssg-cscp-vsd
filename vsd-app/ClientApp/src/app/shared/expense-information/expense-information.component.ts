@@ -217,8 +217,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveCounsellingExpenses',
         'haveCounsellingTransportation',
         'havePrescriptionDrugExpenses',
-        'haveCrimeSceneCleaningExpenses',
-        'haveOtherExpenses'
+        'haveCrimeSceneCleaningExpenses'
       ];
     }
   }

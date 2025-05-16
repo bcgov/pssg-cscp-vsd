@@ -44,8 +44,6 @@ export class ExpenseInfoHelper {
         minimumOtherBenefitsSelected: [''], // Dynamically required
 
         haveCrimeSceneCleaningExpenses: [false],
-        haveOtherExpenses: [false],
-        otherSpecificExpenses: [''],
         additionalBenefitsDetails: [''],//, Validators.required], ??
       };
     }
