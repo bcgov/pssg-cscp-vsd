@@ -1,12 +1,11 @@
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Azure;
 using Gov.Cscp.VictimServices.Public.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Rest;
-using System.Net.Http;
-using System.Net;
-using System.Threading.Tasks;
-using System;
-using Serilog;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace Gov.Cscp.VictimServices.Public.Services
 {
@@ -41,13 +40,11 @@ namespace Gov.Cscp.VictimServices.Public.Services
             {
                 AEMResult failResult = new AEMResult();
                 failResult.responseCode = System.Net.HttpStatusCode.InternalServerError;
-                failResult.responseMessage = "No AEM_INTERFACE_URI found. Verify project secrets are configured correctly.";
+                failResult.responseMessage =
+                    "No AEM_INTERFACE_URI found. Verify project secrets are configured correctly.";
                 return failResult;
             }
             requestJson = requestJson.Replace("fortunecookie", "@odata.");
-
-            // Console.WriteLine(endpointUrl);
-            // Console.WriteLine(requestJson);
 
             HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
             _httpRequest.Content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
@@ -55,8 +52,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
             var _httpResponse = await _client.SendAsync(_httpRequest);
 
             string resultString = await _httpResponse.Content.ReadAsStringAsync();
-            AEMResult result= JsonConvert.DeserializeObject<AEMResult>(resultString); 
-            // Console.WriteLine(result);
+            AEMResult result = JsonConvert.DeserializeObject<AEMResult>(resultString);
 
             if ((int)result.responseCode == 200)
             {
@@ -66,7 +62,12 @@ namespace Gov.Cscp.VictimServices.Public.Services
             }
             else
             {
-                _logger.Error(new HttpOperationException($"Error calling API function {endpointUrl}. Source = VSD"), $"Error calling API function {endpointUrl}. Source = VSD. Error is:\n{result}\n\nJSON sent:{requestJson}", result, requestJson);
+                _logger.Error(
+                    new RequestFailedException($"Error calling API function {endpointUrl}. Source = VSD"),
+                    $"Error calling API function {endpointUrl}. Source = VSD. Error is:\n{result}\n\nJSON sent:{requestJson}",
+                    result,
+                    requestJson
+                );
             }
 
             return result;

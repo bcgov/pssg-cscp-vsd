@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace Gov.Cscp.VictimServices.Public
 {
@@ -87,7 +87,7 @@ namespace Gov.Cscp.VictimServices.Public
                         // fix for OpenShift bug where the pod reports the number of sockets / logical processors in the host computer rather than the amount available.
                         string sql = "EXEC sp_configure 'show advanced options', 1;";
                         SqlCommand cmd = new SqlCommand(sql, conn);
-                        cmd.ExecuteNonQuery();                       
+                        cmd.ExecuteNonQuery();
 
                         sql = "RECONFIGURE WITH OVERRIDE;";
                         cmd = new SqlCommand(sql, conn);
@@ -101,17 +101,41 @@ namespace Gov.Cscp.VictimServices.Public
                         cmd = new SqlCommand(sql, conn);
                         cmd.ExecuteNonQuery();
 
-
                         // create the login if it does not exist.
-                        sql = "IF NOT EXISTS (SELECT name FROM master.sys.server_principals    WHERE name = '" + username + "') BEGIN\n CREATE LOGIN " + username + " WITH PASSWORD = '" + password + "';\nEND";
+                        sql =
+                            "IF NOT EXISTS (SELECT name FROM master.sys.server_principals    WHERE name = '"
+                            + username
+                            + "') BEGIN\n CREATE LOGIN "
+                            + username
+                            + " WITH PASSWORD = '"
+                            + password
+                            + "';\nEND";
                         cmd = new SqlCommand(sql, conn);
                         cmd.ExecuteNonQuery();
 
-                        sql = "IF  NOT EXISTS(SELECT name FROM sys.databases WHERE name = N'" + database + "')\nBEGIN\nCREATE DATABASE[" + database + "]; ALTER AUTHORIZATION ON DATABASE::[" + database + "] TO " + username + "\nEND";
+                        sql =
+                            "IF  NOT EXISTS(SELECT name FROM sys.databases WHERE name = N'"
+                            + database
+                            + "')\nBEGIN\nCREATE DATABASE["
+                            + database
+                            + "]; ALTER AUTHORIZATION ON DATABASE::["
+                            + database
+                            + "] TO "
+                            + username
+                            + "\nEND";
                         cmd = new SqlCommand(sql, conn);
                         cmd.ExecuteNonQuery();
 
-                        sql = "USE " + database + "; IF NOT EXISTS (SELECT su.name as DatabaseUser FROM sys.sysusers su join sys.syslogins sl on sl.sid = su.sid where sl.name = '" + username + "')\nBEGIN\nCREATE USER " + username + " FOR LOGIN " + username + ";END";
+                        sql =
+                            "USE "
+                            + database
+                            + "; IF NOT EXISTS (SELECT su.name as DatabaseUser FROM sys.sysusers su join sys.syslogins sl on sl.sid = su.sid where sl.name = '"
+                            + username
+                            + "')\nBEGIN\nCREATE USER "
+                            + username
+                            + " FOR LOGIN "
+                            + username
+                            + ";END";
                         cmd = new SqlCommand(sql, conn);
                         cmd.ExecuteNonQuery();
 

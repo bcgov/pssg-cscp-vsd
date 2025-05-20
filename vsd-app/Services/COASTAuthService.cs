@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 
 namespace Gov.Cscp.VictimServices.Public.Services
 {
@@ -31,70 +31,68 @@ namespace Gov.Cscp.VictimServices.Public.Services
         {
             if (DateTime.Now.CompareTo(_accessTokenExpiration) > 0)
             {
-                try
+                string adfsOauth2Uri = _configuration["ADFS_OAUTH2_URI"];
+                string applicationGroupResource = _configuration["DYNAMICS_APP_GROUP_RESOURCE"];
+                string applicationGroupClientId = _configuration["DYNAMICS_APP_GROUP_CLIENT_ID"];
+                string applicationGroupSecret = _configuration["DYNAMICS_APP_GROUP_SECRET"];
+                string serviceAccountUsername = _configuration["DYNAMICS_USERNAME"];
+                string serviceAccountPassword = _configuration["DYNAMICS_PASSWORD"];
+
+                if (
+                    !string.IsNullOrEmpty(adfsOauth2Uri)
+                    && !string.IsNullOrEmpty(applicationGroupResource)
+                    && !string.IsNullOrEmpty(applicationGroupClientId)
+                    && !string.IsNullOrEmpty(applicationGroupSecret)
+                    && !string.IsNullOrEmpty(serviceAccountUsername)
+                    && !string.IsNullOrEmpty(serviceAccountPassword)
+                )
                 {
-                    string adfsOauth2Uri = _configuration["ADFS_OAUTH2_URI"];
-                    string applicationGroupResource = _configuration["DYNAMICS_APP_GROUP_RESOURCE"];
-                    string applicationGroupClientId = _configuration["DYNAMICS_APP_GROUP_CLIENT_ID"];
-                    string applicationGroupSecret = _configuration["DYNAMICS_APP_GROUP_SECRET"];
-                    string serviceAccountUsername = _configuration["DYNAMICS_USERNAME"];
-                    string serviceAccountPassword = _configuration["DYNAMICS_PASSWORD"];
-
-                    if (!string.IsNullOrEmpty(adfsOauth2Uri) &&
-                        !string.IsNullOrEmpty(applicationGroupResource) &&
-                        !string.IsNullOrEmpty(applicationGroupClientId) &&
-                        !string.IsNullOrEmpty(applicationGroupSecret) &&
-                        !string.IsNullOrEmpty(serviceAccountUsername) &&
-                        !string.IsNullOrEmpty(serviceAccountPassword))
+                    var pairs = new List<KeyValuePair<string, string>>
                     {
-                        var pairs = new List<KeyValuePair<string, string>>
-                        {
-                            new KeyValuePair<string, string>("resource", applicationGroupResource),
-                            new KeyValuePair<string, string>("client_id", applicationGroupClientId),
-                            new KeyValuePair<string, string>("client_secret", applicationGroupSecret),
-                            new KeyValuePair<string, string>("username", serviceAccountUsername),
-                            new KeyValuePair<string, string>("password", serviceAccountPassword),
-                            new KeyValuePair<string, string>("scope", "openid"),
-                            new KeyValuePair<string, string>("response_mode", "form_post"),
-                            new KeyValuePair<string, string>("grant_type", "password")
-                        };
+                        new KeyValuePair<string, string>("resource", applicationGroupResource),
+                        new KeyValuePair<string, string>("client_id", applicationGroupClientId),
+                        new KeyValuePair<string, string>("client_secret", applicationGroupSecret),
+                        new KeyValuePair<string, string>("username", serviceAccountUsername),
+                        new KeyValuePair<string, string>("password", serviceAccountPassword),
+                        new KeyValuePair<string, string>("scope", "openid"),
+                        new KeyValuePair<string, string>("response_mode", "form_post"),
+                        new KeyValuePair<string, string>("grant_type", "password"),
+                    };
 
-                        var content = new FormUrlEncodedContent(pairs);
-                        var _httpResponse = await _client.PostAsync(adfsOauth2Uri, content);
-                        var _responseContent = await _httpResponse.Content.ReadAsStringAsync();
+                    var content = new FormUrlEncodedContent(pairs);
+                    var _httpResponse = await _client.PostAsync(adfsOauth2Uri, content);
+                    var _responseContent = await _httpResponse.Content.ReadAsStringAsync();
 
-                        JObject response = JObject.Parse(_httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult());
-                        string token = response.GetValue("access_token").ToString();
-                        int expirationSeconds;
-                        bool secondsParsed = int.TryParse(response.GetValue("expires_in").ToString(), out expirationSeconds);
+                    JObject response = JObject.Parse(
+                        _httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult()
+                    );
+                    string token = response.GetValue("access_token").ToString();
+                    int expirationSeconds;
+                    bool secondsParsed = int.TryParse(
+                        response.GetValue("expires_in").ToString(),
+                        out expirationSeconds
+                    );
 
-                        if (!secondsParsed)
-                        {
-                            expirationSeconds = 3600;
-                            throw new Exception("The expiration seconds were not parsed so a default of one hour is used.");
-                        }
-                        if (token == null)
-                        {
-                            //token problem
-                            return "";
-                            throw new Exception("The token couldn't be parsed.");
-                        }
-
-                        // set global access token expiry time to the value returned subtract 60 seconds for minute long authentication communication delays
-                        _accessTokenExpiration = DateTime.Now.AddSeconds(expirationSeconds - 60);
-                        _token = token;
-                        return token;
-                    }
-                    else
+                    if (!secondsParsed)
                     {
-                        return "error";
-                        throw new Exception("No configured connection to Dynamics.");
+                        expirationSeconds = 3600;
+                        throw new Exception("The expiration seconds were not parsed so a default of one hour is used.");
                     }
+                    if (token == null)
+                    {
+                        //token problem
+                        return "";
+                        throw new Exception("The token couldn't be parsed.");
+                    }
+
+                    // set global access token expiry time to the value returned subtract 60 seconds for minute long authentication communication delays
+                    _accessTokenExpiration = DateTime.Now.AddSeconds(expirationSeconds - 60);
+                    _token = token;
+                    return token;
                 }
-                catch (Exception e)
+                else
                 {
-                    return "error";
-                    throw e;
+                    throw new Exception("No configured connection to Dynamics.");
                 }
             }
             else

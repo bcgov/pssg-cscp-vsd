@@ -27,6 +27,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string custodyLocation { get; set; }
         public string custodyPhoneNumber { get; set; }
         public string custodyEmailAddress { get; set; }
+
         //public object[] restitutionOrders { get; set; }
         public bool declaredAndSigned { get; set; }
         public string signature { get; set; }

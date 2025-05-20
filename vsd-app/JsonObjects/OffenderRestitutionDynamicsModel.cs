@@ -9,7 +9,4 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public Providercollection[] ProviderCollection { get; set; }
         public Documentcollection[] DocumentCollection { get; set; }
     }
-
 }
-
-

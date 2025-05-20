@@ -11,9 +11,9 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Invoicedetails
     {
-        public bool registeredCounsellorWithCvap { get; set; }  // Not used in transfer to Dynamics
-        public bool doYouHaveCvapCounsellorNumber { get; set; }  // Not used in transfer to Dynamics
-        public bool doYouHaveVendorNumberOnFile { get; set; }  // Not used in transfer to Dynamics
+        public bool registeredCounsellorWithCvap { get; set; } // Not used in transfer to Dynamics
+        public bool doYouHaveCvapCounsellorNumber { get; set; } // Not used in transfer to Dynamics
+        public bool doYouHaveVendorNumberOnFile { get; set; } // Not used in transfer to Dynamics
         public string counsellorRegistrationNumber { get; set; }
         public string counsellorLastName { get; set; }
         public string vendorNumber { get; set; }
@@ -32,7 +32,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         [XmlArrayItem("element")]
         public Lineitem[] lineItems { get; set; }
 
-        public bool declaredAndSigned { get; set; }  // Not used in transfer to Dynamics
+        public bool declaredAndSigned { get; set; } // Not used in transfer to Dynamics
     }
 
     public class Lineitem
@@ -41,7 +41,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string counsellingTypeName { get; set; }
         public DateTime sessionDate { get; set; }
         public float sessionHours { get; set; }
-        public int sessionAmount { get; set; }  // Not used in transfer to Dynamics
+        public int sessionAmount { get; set; } // Not used in transfer to Dynamics
         public bool missedSession { get; set; }
     }
 }
