@@ -1,0 +1,74 @@
+name: Trivy Scanner
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  trivy-scan:
+    name: Trivy Filesystem and Secrets Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Trivy
+        run: |
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.1_Linux-64bit.deb
+          sudo dpkg -i trivy_0.50.1_Linux-64bit.deb
+
+
+      - name: Trivy FS scan - frontend (Angular)
+        run: |
+          trivy fs vsd-app/ClientApp \
+            --scanners vuln,secret \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1 \
+            --timeout 5m \
+            --format sarif \
+            --output trivy-frontend.sarif
+
+      - name: Trivy config scan - Angular Dockerfile
+        run: |
+          trivy config vsd-app/ClientApp/src/Dockerfile \
+            --severity MEDIUM,HIGH,CRITICAL \
+            --exit-code 0 \
+            --format table        
+
+
+      - name: Trivy FS scan - backend (.NET Web API)
+        run: |
+          trivy fs vsd-app/ \
+            --scanners vuln,secret \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1 \
+            --timeout 5m \
+            --format sarif \
+            --output trivy-backend.sarif
+
+      - name: Trivy config scan - Backend Dockerfile
+        run: |
+          trivy config vsd-app/Dockerfile \
+            --severity MEDIUM,HIGH,CRITICAL \
+            --exit-code 0 \
+            --format table
+
+
+      - name: Upload frontend scan results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: trivy-frontend.sarif
+
+      - name: Upload backend scan results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: trivy-backend.sarif
