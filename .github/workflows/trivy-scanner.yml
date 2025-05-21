@@ -38,7 +38,7 @@ jobs:
 
       - name: Trivy config scan - Angular Dockerfile
         run: |
-          trivy config vsd-app/ClientApp/src/Dockerfile \
+          trivy config vsd-app/ClientApp/Dockerfile \
             --severity MEDIUM,HIGH,CRITICAL \
             --exit-code 0 \
             --format table        
