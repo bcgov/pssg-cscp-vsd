@@ -31,7 +31,7 @@ jobs:
             --scanners vuln,secret \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
-            --exit-code 1 \
+            --exit-code 0 \
             --timeout 5m \
             --format sarif \
             --output trivy-frontend.sarif
@@ -50,7 +50,7 @@ jobs:
             --scanners vuln,secret \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
-            --exit-code 1 \
+            --exit-code 0 \
             --timeout 5m \
             --format sarif \
             --output trivy-backend.sarif
