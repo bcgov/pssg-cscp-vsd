@@ -3,6 +3,7 @@ export interface iLookupData {
     provinces: iProvince[];
     cities: iCity[];
     relationships?: iRelationship[];
+    imfRepresentativeRelationships?: iRelationship[];
     representativeRelationships?: iRelationship[];
     courts?: iCourt[];
     police_detachments?: iPoliceDetachment[];
@@ -38,6 +39,8 @@ export interface iCity {
 export interface iRelationship {
     vsd_name: string;
     vsd_relationshipid: string;
+    vsd_cvap_representativerelationship_imf_only?: boolean;
+
 }
 
 export interface iCourt {

@@ -138,7 +138,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
     promise_array.push(new Promise<void>((resolve, reject) => {
       this.lookupService.getRepresentativeRelationships().subscribe((res) => {
-        this.lookupData.representativeRelationships = res.value;
+        this.lookupData.representativeRelationships = res.value.filter(r => r.vsd_cvap_representativerelationship_imf_only != true);
         if (this.lookupData.representativeRelationships) {
           this.lookupData.representativeRelationships.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
         }
@@ -176,7 +176,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     };
 
     if (FORM === ApplicationType.IFM_Application) {
-      group["victimInformation"] = this.victimInfoHelper.setupFormGroup(this.fb, FORM);
+      group["victimInformation"] = this.victimInfoHelper.setupFormGroupForIfmApplication(this.fb);
     }
 
     if (FORM === ApplicationType.Victim_Application) {
@@ -243,17 +243,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             //formParts.valid = true;
           }
         }
-
-        if (formValid) {
-          // console.log('Form is valid so proceeding to next step.')
-          this.showValidationMessage = false;
-          window.scroll(0, 0);
-          stepper.next();
-        } else {
-          console.log('Form is not valid rerun the validation and show the validation message.')
-          this.validateAllFormFields(formParts);
-          this.showValidationMessage = true;
-        }
+         if (formValid) {
+           // console.log('Form is valid so proceeding to next step.')
+           this.showValidationMessage = false;
+           window.scroll(0, 0);
+           stepper.next();
+         } else {
+           console.log('Form is not valid rerun the validation and show the validation message.')
+           this.validateAllFormFields(formParts);
+           this.showValidationMessage = true;
+         }
       }
     }
   }

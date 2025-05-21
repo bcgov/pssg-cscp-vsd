@@ -36,11 +36,11 @@ export interface PersonalInformation {
   iHaveOtherNames: string;
   indigenousStatus: number;
   leaveVoicemail: number;
-  maritalStatus: number;
+  maritalStatus?: number;
   name: NameBlock;
-  firstName: string;
+  firstName?: string;
   middleName: string;
-  lastName: string;
+  lastName?: string;
   fullName: string;
   occupation: string;
   permissionToContactViaMethod: boolean;

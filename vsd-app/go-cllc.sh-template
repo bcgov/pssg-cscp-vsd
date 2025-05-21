@@ -15,8 +15,8 @@ export SMTP_HOST=localhost
 export ENCRYPTION_KEY={ENCRYPTION_KEY}
 
 export DYNAMICS_AAD_TENANT_ID=bcgovtrial.onmicrosoft.com
-export DYNAMICS_SERVER_APP_ID_URI=https://lclbpill pressdev.crm3.dynamics.com
-export DYNAMICS_ODATA_URI=https://lclbpill pressdev.crm3.dynamics.com/api/data/v8.2/
+export DYNAMICS_SERVER_APP_ID_URI=https://lclbpillpressdev.crm3.dynamics.com
+export DYNAMICS_ODATA_URI=https://lclbpillpressdev.crm3.dynamics.com/api/data/v8.2/
 export DYNAMICS_CLIENT_ID={CLIENT_ID}
 export DYNAMICS_CLIENT_KEY={CLIENT_KEY}
 
