@@ -1,6 +1,8 @@
 name: Trivy Scanner
 
 on:
+  schedule:
+    - cron: '0 14 */14 * *'  # 14:00 UTC = 6:00 AM PST, 7:00 AM PDT
   push:
     branches: ["**"]
   pull_request:
@@ -26,40 +28,44 @@ jobs:
 
 
       - name: Trivy FS scan - frontend (Angular)
+        continue-on-error: true
         run: |
           trivy fs vsd-app/ClientApp \
             --scanners vuln,secret \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
-            --exit-code 0 \
+            --exit-code 1 \
             --timeout 10m \
             --format sarif \
             --output trivy-frontend.sarif
 
       - name: Trivy config scan - Angular Dockerfile
+        continue-on-error: true
         run: |
           trivy config vsd-app/ClientApp/Dockerfile \
             --severity MEDIUM,HIGH,CRITICAL \
-            --exit-code 0 \
+            --exit-code 1 \
             --format table        
 
 
       - name: Trivy FS scan - backend (.NET Web API)
+        continue-on-error: true
         run: |
           trivy fs vsd-app/ \
             --scanners vuln,secret \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
-            --exit-code 0 \
+            --exit-code 1 \
             --timeout 10m \
             --format sarif \
             --output trivy-backend.sarif
 
       - name: Trivy config scan - Backend Dockerfile
+        continue-on-error: true
         run: |
           trivy config vsd-app/Dockerfile \
             --severity MEDIUM,HIGH,CRITICAL \
-            --exit-code 0 \
+            --exit-code 1 \
             --format table
 
 
