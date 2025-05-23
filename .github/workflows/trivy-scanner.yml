@@ -24,7 +24,7 @@ jobs:
       - name: Install Trivy
         run: |
           wget -qO- https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bash
-          echo "$HOME/bin" >> $GITHUB_PATH
+          echo "$(pwd)/bin" >> $GITHUB_PATH
 
 
       - name: Trivy FS scan
