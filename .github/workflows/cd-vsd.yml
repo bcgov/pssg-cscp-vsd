@@ -62,6 +62,10 @@ jobs:
           tags: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev
 
+      - name: Save image as tarball for Trivy
+        run: |
+          docker save ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev -o ${env.APP_NAME}-${env.IMAGE_NAME}.tar
+
       - name: Install Trivy
         run: |
           wget -qO- https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bash
@@ -70,7 +74,7 @@ jobs:
       - name: Trivy scan for vsd api image
         continue-on-error: true
         run: |
-          trivy image ${{ env.APP_NAME }}/${{ env.IMAGE_NAME }}:dev \
+          trivy image --input vsd-api.tar \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
             --exit-code 1 \
@@ -80,7 +84,7 @@ jobs:
       - name: Upload scan results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: trivy-vsu-api-image-scan.sarif
+          sarif_file: trivy-vsd-api-image-scan.sarif
           category: trivy-built-image-scan-results
 
 
@@ -132,6 +136,11 @@ jobs:
           tags: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev
 
+      - name: Save image as tarball for Trivy
+        run: |
+          docker save ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev -o ${env.APP_NAME}-${env.IMAGE_NAME}.tar
+
+
       - name: Install Trivy
         run: |
           wget -qO- https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bash
@@ -140,7 +149,7 @@ jobs:
       - name: Trivy scan for vsd ui image
         continue-on-error: true
         run: |
-          trivy image ${{ env.APP_NAME }}/${{ env.IMAGE_NAME }}:dev \
+          trivy image --input vsd-ui.tar  \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
             --exit-code 1 \
@@ -150,5 +159,5 @@ jobs:
       - name: Upload scan results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: trivy-vsu-ui-image-scan.sarif
+          sarif_file: trivy-vsd-ui-image-scan.sarif
           category: trivy-built-image-scan-results
