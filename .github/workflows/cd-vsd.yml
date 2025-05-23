@@ -70,7 +70,7 @@ jobs:
       - name: Trivy scan for vsd api image
         continue-on-error: true
         run: |
-          trivy image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:dev \
+          trivy image ${{ env.APP_NAME }}/${{ env.IMAGE_NAME }}:dev \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
             --exit-code 1 \
@@ -140,7 +140,7 @@ jobs:
       - name: Trivy scan for vsd ui image
         continue-on-error: true
         run: |
-          trivy image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:dev \
+          trivy image ${{ env.APP_NAME }}/${{ env.IMAGE_NAME }}:dev \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
             --exit-code 1 \
