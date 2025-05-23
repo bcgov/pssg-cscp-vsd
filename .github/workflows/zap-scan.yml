@@ -1,0 +1,45 @@
+name: OWASP ZAP Scan
+
+on:
+  schedule:
+    - cron: '0 14 */14 * *'  # 14:00 UTC = 6:00 AM PST, 7:00 AM PDT
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [development]
+
+jobs:
+  zap-baseline:
+    name: OWASP ZAP Baseline Scan
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Run ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.6.0
+        with:
+          target: 'https://justice.gov.bc.ca/coastcontracts'
+          cmd_options: '-a -j -J zap-report.json'
+          allow_failures: true
+          fail_action: false
+          rules_file_name: ''
+          zap_cli_options: ''
+
+      - name: Convert ZAP JSON to SARIF
+        uses: advanced-security/zap-sarif-converter-action@v1
+        with:
+          input: zap-report.json
+          output: zap-vsd-scan.sarif
+
+      - name: Upload scan results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: zap-vsd-scan.sarif
+          category: zap-baseline
