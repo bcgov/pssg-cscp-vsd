@@ -27,28 +27,7 @@ jobs:
           echo "$(pwd)/bin" >> $GITHUB_PATH
 
 
-      - name: Trivy FS scan - frontend (Angular)
-        continue-on-error: true
-        run: |
-          trivy fs vsd-app/ClientApp \
-            --scanners vuln,secret \
-            --severity HIGH,CRITICAL \
-            --ignore-unfixed \
-            --exit-code 1 \
-            --timeout 10m \
-            --format sarif \
-            --output trivy-frontend.sarif
-
-      - name: Trivy config scan - Angular Dockerfile
-        continue-on-error: true
-        run: |
-          trivy config vsd-app/ClientApp/Dockerfile \
-            --severity MEDIUM,HIGH,CRITICAL \
-            --exit-code 1 \
-            --format table        
-
-
-      - name: Trivy FS scan - backend (.NET Web API)
+      - name: Trivy FS scan
         continue-on-error: true
         run: |
           trivy fs vsd-app/ \
@@ -58,9 +37,17 @@ jobs:
             --exit-code 1 \
             --timeout 10m \
             --format sarif \
-            --output trivy-backend.sarif
+            --output trivy-vsd-scan.sarif
 
-      - name: Trivy config scan - Backend Dockerfile
+      - name: Trivy config scan - vsd frontend Dockerfile
+        continue-on-error: true
+        run: |
+          trivy config vsd-app/ClientApp/Dockerfile \
+            --severity MEDIUM,HIGH,CRITICAL \
+            --exit-code 1 \
+            --format table        
+
+      - name: Trivy config scan - vsd Backend Dockerfile
         continue-on-error: true
         run: |
           trivy config vsd-app/Dockerfile \
@@ -69,14 +56,8 @@ jobs:
             --format table
 
 
-      - name: Upload frontend scan results
+      - name: Upload scan results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: trivy-frontend.sarif
-          category: trivy-frontend
-
-      - name: Upload backend scan results
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: trivy-backend.sarif
-          category: trivy-backend
+          sarif_file: trivy-vsd-scan.sarif
+          category: trivy-scan-results
