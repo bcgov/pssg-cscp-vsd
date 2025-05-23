@@ -17,31 +17,32 @@ export class FileUploaderComponent implements OnInit {
   MAX_FILE_SIZE = 2 * 1024 * 1024; //2MB
   MAX_TOTAL_FILE_SIZE = 3.5 * 1024 * 1024; //3.5MB
 
-  constructor(private fb: FormBuilder,
-    private controlContainer: ControlContainer,
-    public snackBar: MatSnackBar) { }
+  constructor(private fb: FormBuilder, private controlContainer: ControlContainer, public snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.form = <FormGroup>this.controlContainer.control;
   }
 
   fakeBrowseClick(): void {
-    this.myInputVariable.nativeElement.value = "";
+    this.myInputVariable.nativeElement.value = '';
     // the UI element for the native element style doesn't match so we hide it and fake the user click.
     this.myInputVariable.nativeElement.click();
   }
 
   onFilesAdded(files: FileList): void {
-    let totalSize = this.form.parent.get("totalAttachmentSize").value;
+    let totalSize = this.form.parent.get('totalAttachmentSize').value;
     for (let i = 0; i < files.length; i++) {
       if (files[i].size > this.MAX_FILE_SIZE) {
         // console.log("File too big:", (files[i].size / (1024 * 1024)).toFixed(2) + "MB");
         this.snackBar.open('File cannot exceed 2MB', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
         continue;
       }
-      if ((totalSize + files[i].size) > this.MAX_TOTAL_FILE_SIZE) {
+      if (totalSize + files[i].size > this.MAX_TOTAL_FILE_SIZE) {
         // console.log("Total size too big:", ((totalSize + files[i].size) / (1024 * 1024)).toFixed(2) + "MB")
-        this.snackBar.open('Files uploaded to application cannot exceed 3.5MB', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        this.snackBar.open('Files uploaded to application cannot exceed 3.5MB', 'Fail', {
+          duration: 3500,
+          panelClass: ['red-snackbar']
+        });
         continue;
       }
 
@@ -59,29 +60,30 @@ export class FileUploaderComponent implements OnInit {
       reader.onload = () => {
         let body = reader.result.toString();
         body = body.split(',').slice(-1)[0];
-        let fileIndex = this.documents.controls.findIndex(doc => doc.get('filename').value === files.item(i).name);
+        let fileIndex = this.documents.controls.findIndex((doc) => doc.get('filename').value === files.item(i).name);
         if (fileIndex >= 0) {
           this.documents.controls[fileIndex].get('body').patchValue(body);
-        }
-        else {
-          this.documents.push(this.fb.group({
-            filename: [files.item(i).name],
-            body: [body],
-            subject: [''],
-            size: files[i].size,
-          }));
+        } else {
+          this.documents.push(
+            this.fb.group({
+              filename: [files.item(i).name],
+              body: [body],
+              subject: [''],
+              size: files[i].size
+            })
+          );
         }
       };
-      reader.onerror = error => console.log('Error: ', error);
+      reader.onerror = (error) => console.log('Error: ', error);
     }
 
-    this.form.parent.get("totalAttachmentSize").patchValue(totalSize);
+    this.form.parent.get('totalAttachmentSize').patchValue(totalSize);
   }
   removeItem(index: number): void {
-    let totalSize = this.form.parent.get("totalAttachmentSize").value;
-    let fileSize = this.documents.at(index).get("size").value;
+    let totalSize = this.form.parent.get('totalAttachmentSize').value;
+    let fileSize = this.documents.at(index).get('size').value;
     totalSize -= fileSize;
-    this.form.parent.get("totalAttachmentSize").patchValue(totalSize);
+    this.form.parent.get('totalAttachmentSize').patchValue(totalSize);
     this.documents.removeAt(index);
   }
 }

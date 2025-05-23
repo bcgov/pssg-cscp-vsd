@@ -1,6 +1,6 @@
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import { ApplicationType } from "../enums-list";
-import { POSTAL_CODE } from "../regex.constants";
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { ApplicationType } from '../enums-list';
+import { POSTAL_CODE } from '../regex.constants';
 
 export class ExpenseInfoHelper {
   postalRegex = POSTAL_CODE;
@@ -22,7 +22,7 @@ export class ExpenseInfoHelper {
       otherSpecificExpenses: [''],
       additionalBenefitsDetails: [''],
       minimumExpensesSelected: ['', Validators.required],
-      minimumOtherBenefitsSelected: [''],//, Validators.required],
+      minimumOtherBenefitsSelected: [''], //, Validators.required],
 
       haveDisabilityPlanBenefits: [false],
       haveEmploymentInsuranceBenefits: [false],
@@ -32,7 +32,7 @@ export class ExpenseInfoHelper {
       haveCivilActionBenefits: [false],
       haveOtherBenefits: [false],
       otherSpecificBenefits: [''],
-      noneOfTheAboveBenefits: [false],
+      noneOfTheAboveBenefits: [false]
     };
 
     if (form_type === ApplicationType.Witness_Application) {
@@ -44,7 +44,7 @@ export class ExpenseInfoHelper {
         minimumOtherBenefitsSelected: [''], // Dynamically required
 
         haveCrimeSceneCleaningExpenses: [false],
-        additionalBenefitsDetails: [''],//, Validators.required], ??
+        additionalBenefitsDetails: [''] //, Validators.required], ??
       };
     }
     if (form_type === ApplicationType.IFM_Application) {
@@ -66,7 +66,7 @@ export class ExpenseInfoHelper {
 
         haveOtherBenefits: [false],
         otherSpecificBenefits: [''],
-        missedWorkDueToDeathOfVictim: [''],//, Validators.required],
+        missedWorkDueToDeathOfVictim: [''], //, Validators.required],
         didYouLoseWages: [''], //, Validators.required],
         sin: ['', [Validators.minLength(9), Validators.maxLength(9)]],
         daysWorkMissedStart: [''], //, Validators.required],
@@ -74,19 +74,19 @@ export class ExpenseInfoHelper {
         employers: fb.array([this.createEmployerItem(fb)]),
         mayContactEmployer: [''],
         minimumExpensesSelected: ['', Validators.required],
-        minimumOtherBenefitsSelected: [''],//, Validators.required],
+        minimumOtherBenefitsSelected: [''], //, Validators.required],
 
-        additionalBenefitsDetails: [''],//, Validators.required], ??
+        additionalBenefitsDetails: [''], //, Validators.required], ??
         haveLifeInsuranceBenefits: [false],
         haveDisabilityPlanBenefits: [false],
         haveEmploymentInsuranceBenefits: [false],
         haveIncomeAssistanceBenefits: [false],
         haveCanadaPensionPlanBenefits: [false],
         haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits: [false],
-        haveCivilActionBenefits: [false],
+        haveCivilActionBenefits: [false]
         // Have to turn validation off for now - in case no death date. Though, if death date, then there should be validation
         // TODO: Figure out how to do this.
-      }
+      };
     }
     return fb.group(group);
   }
@@ -105,7 +105,7 @@ export class ExpenseInfoHelper {
         city: [''],
         postalCode: ['', [Validators.pattern(this.postalRegex)]],
         province: [{ value: 'British Columbia', disabled: false }],
-        country: [{ value: 'Canada', disabled: false }],
+        country: [{ value: 'Canada', disabled: false }]
       })
     });
   }

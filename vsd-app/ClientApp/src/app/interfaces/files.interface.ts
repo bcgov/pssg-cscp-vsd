@@ -10,4 +10,3 @@ export interface UploadFile {
   body: string;
   fileName: string;
 }
-

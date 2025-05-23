@@ -1,46 +1,46 @@
 ::ng-deep .drop-zone {
-    border: 1px dashed #a5badb !important;
-    background-color: #f1f4fa;
-    border-radius: 5px !important;
-    padding-bottom: 20px;
+  border: 1px dashed #a5badb !important;
+  background-color: #f1f4fa;
+  border-radius: 5px !important;
+  padding-bottom: 20px;
 }
 
 ::ng-deep .content {
-    color: #424242 !important;
+  color: #424242 !important;
 }
 
 .file-list {
-    background-color: #f1f4fa;
-    margin-bottom: 3px;
-    display: flex;
-    justify-content: space-between;
-    padding: 3px 7px;
-    margin-right: 10px;
+  background-color: #f1f4fa;
+  margin-bottom: 3px;
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 7px;
+  margin-right: 10px;
 }
 
 .no-drop {
-    cursor: no-drop;
+  cursor: no-drop;
 }
 
 .upload-wrapper {
-    position: relative;
-    margin: auto;
+  position: relative;
+  margin: auto;
 }
 
 .remove-chip {
-    margin-top: 16px !important;
-    margin-left: 10px !important;
+  margin-top: 16px !important;
+  margin-left: 10px !important;
 }
 
 .remove-icon {
-    margin-left: 5px;
-    position: relative;
-    top: -1px;
-    opacity: 0.5;
-    font-size: 17px;
+  margin-left: 5px;
+  position: relative;
+  top: -1px;
+  opacity: 0.5;
+  font-size: 17px;
 }
 
 .accepted-file-types {
-    color: gray;
-    font-size: 15px;
+  color: gray;
+  font-size: 15px;
 }

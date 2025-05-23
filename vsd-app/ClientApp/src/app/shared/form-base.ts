@@ -16,8 +16,7 @@ export class FormBase {
   isFieldValid(field: string, disabled: boolean = false) {
     if (disabled === true) return true;
     let formField = this.form.get(field);
-    if (!formField || formField.value === null)
-      return true;
+    if (!formField || formField.value === null) return true;
     if (field === 'personalInformation.sin' || field === 'victimInformation.sin' || field === 'sin') {
       let validator = formField.validator({} as AbstractControl);
       let isRequired = validator && validator.required ? true : false;
@@ -50,33 +49,43 @@ export class FormBase {
 
       even = sin
         // take the digits at the even indices
-        .filter(function (_, i) { return i % 2; })
+        .filter(function (_, i) {
+          return i % 2;
+        })
         // multiply them by two
-        .map(function (n) { return n * 2; })
+        .map(function (n) {
+          return n * 2;
+        })
         // and split them into individual digits
-        .join('').split('');
+        .join('')
+        .split('');
 
       tot = sin
         // take the digits at the odd indices
-        .filter(function (_, i) { return !(i % 2); })
+        .filter(function (_, i) {
+          return !(i % 2);
+        })
         // concatenate them with the transformed numbers above
         .concat(even)
         // it's currently an array of strings; we want numbers
-        .map(function (n) { return +n; })
+        .map(function (n) {
+          return +n;
+        })
         // and take the sum
-        .reduce(function (acc, cur) { return acc + cur; });
+        .reduce(function (acc, cur) {
+          return acc + cur;
+        });
 
       // compare the result against the check digit
       return check === (10 - (tot % 10)) % 10;
-    } else return false;// throw sin + ' is not a valid sin number.';
+    } else return false; // throw sin + ' is not a valid sin number.';
   }
 
   isArrayFieldValid(formArrayName: string, arrayControl: string, arrayIndex: number) {
     let formArray = <FormArray>this.form.get(formArrayName);
     let indexedControl = formArray.controls[arrayIndex];
     let formField = indexedControl.get(arrayControl);
-    if (formField == null)
-      return true;
+    if (formField == null) return true;
 
     return formField.valid || !formField.touched;
   }
@@ -86,8 +95,25 @@ export class FormBase {
   }
 
   public rejectIfNotDigitOrBackSpace(event) {
-    const acceptedKeys = ['Backspace', 'Tab', 'End', 'Home', 'ArrowLeft', 'ArrowRight', 'Control',
-      '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    const acceptedKeys = [
+      'Backspace',
+      'Tab',
+      'End',
+      'Home',
+      'ArrowLeft',
+      'ArrowRight',
+      'Control',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '0'
+    ];
     if (acceptedKeys.indexOf(event.key) === -1) {
       event.preventDefault();
     }
@@ -98,7 +124,7 @@ export class FormBase {
       if (control.value === true) {
         return null;
       } else {
-        return { 'shouldBeTrue': 'But value is false' };
+        return { shouldBeTrue: 'But value is false' };
       }
     };
   }
@@ -121,7 +147,7 @@ export class FormBase {
     const name = control.get('haveMedicalExpenses');
     const alterEgo = control.get('haveDentalExpenses');
 
-    return name.value != false && alterEgo.value != false ? { 'identityRevealed': true } : null;
+    return name.value != false && alterEgo.value != false ? { identityRevealed: true } : null;
   };
 
   public requiredCheckboxGroupValidator(checkboxFields: string[]): ValidatorFn {
@@ -130,7 +156,7 @@ export class FormBase {
         return null;
       }
       let valid = false;
-      checkboxFields.forEach(f => {
+      checkboxFields.forEach((f) => {
         valid = valid || control.parent.get(f).value;
       });
       return valid ? null : { 'required-set': { value: control.value } };
@@ -146,15 +172,15 @@ export class FormBase {
       if (!parentIsChecked) {
         return null;
       }
-      return control.value ? null : { 'required': { value: control.value } };
+      return control.value ? null : { required: { value: control.value } };
     };
   }
 
   validateAllFormFields(formGroup: any) {
-    Object.keys(formGroup.controls).forEach(field => {
+    Object.keys(formGroup.controls).forEach((field) => {
       const control = formGroup.get(field);
       if (control.valid === false) {
-        console.log("invalid: ", field);
+        console.log('invalid: ', field);
       }
 
       if (control instanceof FormControl) {
@@ -177,7 +203,7 @@ export class FormBase {
   }
 
   getErrors(formGroup: any, errors: any = {}) {
-    Object.keys(formGroup.controls).forEach(field => {
+    Object.keys(formGroup.controls).forEach((field) => {
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
         errors[field] = control.errors;
@@ -191,19 +217,16 @@ export class FormBase {
   }
 
   orEmpty(amI: FormControl): string {
-    if (amI == null || amI === undefined)
-      return "--";
+    if (amI == null || amI === undefined) return '--';
 
-    if (amI.value.length == 0)
-      return "--";
+    if (amI.value.length == 0) return '--';
 
     return amI.value;
   }
 
   isChildFieldValid(parent: string, field: string) {
     let formField = this.form.get(parent);
-    if (formField == null)
-      return true;
+    if (formField == null) return true;
 
     return formField.get(field).valid || !formField.get(field).touched;
   }
@@ -214,9 +237,11 @@ export class FormBase {
       formGroup.controls[item].setErrors(null);
 
       // Checks for empty string and empty array.
-      let hasValue = (formGroup.controls[item].value instanceof Array) ? formGroup.controls[item].value.length > 0 :
-        !(formGroup.controls[item].value === "");
-      return (hasValue) ? false : true;
+      let hasValue =
+        formGroup.controls[item].value instanceof Array
+          ? formGroup.controls[item].value.length > 0
+          : !(formGroup.controls[item].value === '');
+      return hasValue ? false : true;
     });
   }
 
@@ -224,35 +249,34 @@ export class FormBase {
     return (control: FormControl): { [key: string]: any } => {
       let formGroup = control.root;
       if (formGroup instanceof FormGroup) {
-
         // Only check if all FormControls are siblings(& present on the nearest FormGroup)
-        if (controlKeys.every((item) => {
-          return formGroup.get(item) != null;
-        })) {
+        if (
+          controlKeys.every((item) => {
+            return formGroup.get(item) != null;
+          })
+        ) {
           let result = this.controlsHaveValueCheck(controlKeys, formGroup);
 
           // If any item is valid return null, if all are invalid return required error.
-          return (result.some((item) => {
+          return result.some((item) => {
             return item === false;
-          })) ? null : { required: true };
+          })
+            ? null
+            : { required: true };
         }
       }
       return null;
-    }
+    };
   }
-
 
   public hasValueSet(controlName: string): boolean {
     var control = this.form.get(controlName);
 
-    if (control == null || control === undefined)
-      return false;
+    if (control == null || control === undefined) return false;
 
-    if (control.value == null || control.value === undefined)
-      return false;
+    if (control.value == null || control.value === undefined) return false;
 
-    if (control.value.length == 0 || control.value.length === undefined)
-      return false;
+    if (control.value.length == 0 || control.value.length === undefined) return false;
 
     return control.value.length > 0;
   }
@@ -263,16 +287,18 @@ export class FormBase {
 
   public requiredSelectChildValidator(selectField: string, conditionalValue: any[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      if (!control.parent
-        || !control.parent.get(selectField)
-        || conditionalValue.indexOf(control.parent.get(selectField).value) === -1) {
+      if (
+        !control.parent ||
+        !control.parent.get(selectField) ||
+        conditionalValue.indexOf(control.parent.get(selectField).value) === -1
+      ) {
         return null;
       }
       const parentIsChecked = control.parent.get(selectField).value;
       if (!parentIsChecked) {
         return null;
       }
-      return control.value ? null : { 'required': { value: control.value } };
+      return control.value ? null : { required: { value: control.value } };
     };
   }
 
@@ -280,45 +306,37 @@ export class FormBase {
   public checkmarkOrEmpty(controlName: string): string {
     var control = this.form.get(controlName);
 
-    if (control.value === true)
-      return '<i class="fa fa-check"> </i>';
+    if (control.value === true) return '<i class="fa fa-check"> </i>';
     return '--';
   }
 
   public checkmarkFromControl(control: AbstractControl): string {
-    if (control.value === true)
-      return '<i class="fa fa-check"> </i>';
+    if (control.value === true) return '<i class="fa fa-check"> </i>';
     return '--';
   }
 
   public valueOrEmpty(controlName: any, emptyValue = '--'): string {
     let control = null;
 
-    if (typeof (controlName) == 'string')
-      control = this.form.get(controlName);
+    if (typeof controlName == 'string') control = this.form.get(controlName);
 
-    if (controlName instanceof FormGroup)
-      control = controlName;
+    if (controlName instanceof FormGroup) control = controlName;
 
-    if (controlName instanceof FormControl)
-      control = controlName;
+    if (controlName instanceof FormControl) control = controlName;
 
-    if (control == null || control === undefined)
-      return emptyValue;
+    if (control == null || control === undefined) return emptyValue;
 
-    if (control.value == null || control.value === undefined)
-      return emptyValue;
+    if (control.value == null || control.value === undefined) return emptyValue;
 
     var value = control.value;
 
-    if (typeof (value) == 'string' && value.length == 0)
-      return emptyValue;
+    if (typeof value == 'string' && value.length == 0) return emptyValue;
 
-    if (typeof (value) == 'number' && value == 0) {
+    if (typeof value == 'number' && value == 0) {
       return emptyValue;
     }
 
-    if (typeof (value) == 'boolean') {
+    if (typeof value == 'boolean') {
       return value ? 'Yes' : 'No';
     }
 
@@ -328,29 +346,24 @@ export class FormBase {
   public valueForEnum(controlName: any): number {
     let control = null;
 
-    if (typeof (controlName) == 'string')
-      control = this.form.get(controlName);
+    if (typeof controlName == 'string') control = this.form.get(controlName);
 
-    if (controlName instanceof FormGroup)
-      control = controlName;
+    if (controlName instanceof FormGroup) control = controlName;
 
-    if (controlName instanceof FormControl)
-      control = controlName;
+    if (controlName instanceof FormControl) control = controlName;
 
-    if (control == null || control === undefined || control.value == null || control.value === undefined)
-      return 0;
+    if (control == null || control === undefined || control.value == null || control.value === undefined) return 0;
 
     var value = control.value;
-    if (typeof (value) == 'string') {
+    if (typeof value == 'string') {
       if (!isNaN(parseFloat(value)) && isFinite(+value)) {
         return parseInt(value);
-      }
-      else {
-        return 0
+      } else {
+        return 0;
       }
     }
 
-    if (typeof (value) !== 'number') {
+    if (typeof value !== 'number') {
       return 0;
     }
 
@@ -363,8 +376,7 @@ export class FormBase {
     for (var i = 0; i < values.length; i++) {
       var control = this.valueOrEmpty(values[i]);
 
-      if (control !== "--")
-        output.push(control);
+      if (control !== '--') output.push(control);
     }
 
     return output.join(' ');
@@ -375,14 +387,13 @@ export class FormBase {
     for (var i = 0; i < values.length; i++) {
       var control = this.valueOrEmpty(values[i]);
 
-      if (control !== "--") {
+      if (control !== '--') {
         let formattedDate = _moment(control).format('MMM Do, Y');
         output.push(formattedDate);
       }
     }
 
-    if (output.length == 0)
-      return '--';
+    if (output.length == 0) return '--';
 
     return output.join(' - ');
   }
@@ -392,8 +403,7 @@ export class FormBase {
     var control2 = this.valueOrEmpty(sin1);
     var control3 = this.valueOrEmpty(sin1);
 
-    if (control1 == '--' || control2 == '--' || control3 == '--')
-      return '--';
+    if (control1 == '--' || control2 == '--' || control3 == '--') return '--';
 
     return control1 + '-' + control2 + '-' + control3;
   }
@@ -401,11 +411,9 @@ export class FormBase {
   public displayMailingSubAddress(addressControl: any): string {
     let control = null;
 
-    if (typeof (addressControl) == 'string')
-      control = this.form.get(addressControl);
+    if (typeof addressControl == 'string') control = this.form.get(addressControl);
 
-    if (addressControl instanceof FormGroup)
-      control = addressControl;
+    if (addressControl instanceof FormGroup) control = addressControl;
 
     let line1 = control.value.line1 || '';
     let line2 = control.value.line2 || '';
@@ -415,16 +423,11 @@ export class FormBase {
     let country = control.value.country || '';
 
     let address = line1 + '<br />';
-    if (line2 != '')
-      address += line2 + '<br />';
-    if (city != '')
-      address += city + '<br />';
-    if (province != '')
-      address += province + '<br />';
-    if (country != '')
-      address += country + '<br />';
-    if (postalCode != '')
-      address += postalCode;
+    if (line2 != '') address += line2 + '<br />';
+    if (city != '') address += city + '<br />';
+    if (province != '') address += province + '<br />';
+    if (country != '') address += country + '<br />';
+    if (postalCode != '') address += postalCode;
 
     return address;
   }
@@ -432,14 +435,11 @@ export class FormBase {
   public displayMailingAddress(addressControl: any): string {
     let control = null;
 
-    if (typeof (addressControl) == 'string')
-      control = this.form.get(addressControl);
+    if (typeof addressControl == 'string') control = this.form.get(addressControl);
 
-    if (addressControl instanceof FormGroup)
-      control = addressControl;
+    if (addressControl instanceof FormGroup) control = addressControl;
 
-    if (control == null || control === undefined)
-      return "--";
+    if (control == null || control === undefined) return '--';
 
     let line1 = control.get('line1').value || '';
     let line2 = control.get('line2').value || '';
@@ -449,23 +449,18 @@ export class FormBase {
     let country = control.get('country').value || '';
 
     let address = line1 + '<br />';
-    if (line2 != '')
-      address += line2 + '<br />';
-    if (city != '')
-      address += city + '<br />';
-    if (province != '')
-      address += province + '<br />';
-    if (country != '')
-      address += country + '<br />';
-    if (postalCode != '')
-      address += postalCode;
+    if (line2 != '') address += line2 + '<br />';
+    if (city != '') address += city + '<br />';
+    if (province != '') address += province + '<br />';
+    if (country != '') address += country + '<br />';
+    if (postalCode != '') address += postalCode;
 
     return address;
   }
 
   getOptionSetNameFromVal(optionSet, val: any) {
-    let ret = Object.values(optionSet).find((o) => o["val"] == val);
-    return ret ? ret["name"] : "--";
+    let ret = Object.values(optionSet).find((o) => o['val'] == val);
+    return ret ? ret['name'] : '--';
   }
 
   public trimValue(control: FormControl) {
@@ -496,11 +491,11 @@ export class FormBase {
   gotoNextStep(stepper: MatStepper, emptyPage?: boolean): void {
     if (stepper) {
       const desiredFormIndex: number = stepper.selectedIndex;
-      const step_header = stepper._stepHeader.find(step => step.index == desiredFormIndex);
-      const step_label = step_header ? step_header.label : "";
-      const this_step = stepper._steps.find(step => step.label == step_label);
+      const step_header = stepper._stepHeader.find((step) => step.index == desiredFormIndex);
+      const step_label = step_header ? step_header.label : '';
+      const this_step = stepper._steps.find((step) => step.label == step_label);
       if (this_step) {
-        const formGroupName = this_step.stepControl.get("name").value;
+        const formGroupName = this_step.stepControl.get('name').value;
         // console.log(`Form for validation is ${formGroupName}.`);
         const formParts = this.form.get(formGroupName);
         // console.log(this.form);
@@ -564,8 +559,7 @@ export class FormBase {
       target.get('alternatePhoneNumber').disable(options);
       target.get('email').disable(options);
       target.get('confirmEmail').disable(options);
-    }
-    else {
+    } else {
       target.get('phoneNumber').enable(options);
       target.get('alternatePhoneNumber').enable(options);
       target.get('email').enable(options);
@@ -605,8 +599,7 @@ export class FormBase {
       target.get('postalCode').disable(options);
       target.get('province').disable(options);
       target.get('country').disable(options);
-    }
-    else {
+    } else {
       target.get('line1').enable(options);
       target.get('line2').enable(options);
       target.get('city').enable(options);
@@ -650,8 +643,7 @@ export class FormBase {
       target.get('postalCode').disable(options);
       target.get('province').disable(options);
       target.get('country').disable(options);
-    }
-    else {
+    } else {
       target.get('line1').enable();
       target.get('line2').enable();
       target.get('city').enable();
@@ -689,8 +681,7 @@ export class FormBase {
       target.get('representativeAlternatePhoneNumber').disable(options);
       target.get('representativeEmail').disable(options);
       target.get('representativeConfirmEmail').disable(options);
-    }
-    else {
+    } else {
       target.get('representativePhoneNumber').enable();
       target.get('representativeAlternatePhoneNumber').enable();
       target.get('representativeEmail').enable();
@@ -703,7 +694,11 @@ export class FormBase {
     target.get('representativeConfirmEmail').updateValueAndValidity(options);
   }
 
-  setControlValidators(control: AbstractControl | FormControl, newValidator: ValidatorFn | ValidatorFn[], options = { onlySelf: false, emitEvent: true }) {
+  setControlValidators(
+    control: AbstractControl | FormControl,
+    newValidator: ValidatorFn | ValidatorFn[],
+    options = { onlySelf: false, emitEvent: true }
+  ) {
     control.setValidators(newValidator);
     control.updateValueAndValidity(options);
   }

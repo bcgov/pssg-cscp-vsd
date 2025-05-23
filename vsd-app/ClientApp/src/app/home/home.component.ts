@@ -20,18 +20,15 @@ export class HomeComponent extends FormBase implements OnInit {
 
   isLocalHost: boolean = false;
   isIE: boolean = false;
-  constructor(
-    private titleService: Title,
-    private fb: FormBuilder,
-    private router: Router) {
+  constructor(private titleService: Title, private fb: FormBuilder, private router: Router) {
     super();
   }
 
   ngOnInit() {
     var ua = window.navigator.userAgent;
     this.isIE = /MSIE|Trident/.test(ua);
-    
-    if (window.location.origin === "http://localhost:5000") {
+
+    if (window.location.origin === 'http://localhost:5000') {
       this.isLocalHost = true;
     }
 
@@ -40,7 +37,7 @@ export class HomeComponent extends FormBase implements OnInit {
     this.form = this.fb.group({
       applicationType: ['0', Validators.required],
       completingOnBehalfOf: ['', Validators.required],
-      wasCrimeInBC: ['', Validators.required],
+      wasCrimeInBC: ['', Validators.required]
     });
   }
 
@@ -101,7 +98,7 @@ export class HomeComponent extends FormBase implements OnInit {
 
       // console.log(applicationType);
       let navigationExtras: NavigationExtras = {
-        queryParams: { 'ob': behalfOf }
+        queryParams: { ob: behalfOf }
       };
 
       this.router.navigate([routeUrl], navigationExtras);

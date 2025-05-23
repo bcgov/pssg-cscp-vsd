@@ -17,10 +17,7 @@ export function EmailValidator(confirmEmailInput: string) {
       });
     }
 
-    if (
-      emailControl.value.toLocaleLowerCase() !==
-      confirmEmailControl.value.toLocaleLowerCase()
-    ) {
+    if (emailControl.value.toLocaleLowerCase() !== confirmEmailControl.value.toLocaleLowerCase()) {
       return {
         notMatch: true
       };

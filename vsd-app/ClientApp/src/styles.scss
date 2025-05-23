@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/theming';
 
-@import "~mygovbc-bootstrap-theme/dist/mygovbc-bootstrap-theme.min.css";
+@import '~mygovbc-bootstrap-theme/dist/mygovbc-bootstrap-theme.min.css';
 
 @include mat-core();
 
@@ -12,14 +12,9 @@ $warn: mat-palette($mat-red, 500);
 $theme: mat-light-theme($primary, $accent, $warn);
 @include angular-material-theme($theme);
 
-
-
-
-
 .ctx-home {
   background: #f2f2f2;
 }
-
 
 h1 {
   font-size: 36px;
@@ -60,13 +55,13 @@ h3 {
   letter-spacing: 0.05em;
 }
 
-
 .btn-group > .btn {
   // mygovbc CSS adds extra margin to buttons
   margin-right: 0;
 }
 
-.btn-group-lg>.btn, .btn-lg {
+.btn-group-lg > .btn,
+.btn-lg {
   font-size: 20px;
 }
 
@@ -77,44 +72,44 @@ h3 {
 
 // loading indicator
 @keyframes spin {
-	from {
-		transform: rotate(0);
-	}
-	to {
-		transform: rotate(360deg);
-	}
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 $indicator-color: #666;
 $indicator-size: 1em;
 $indicator-thickness: 0.2em;
 .loading-indicator {
-	&, &:after {
-		border-radius: 50%;
-		width: $indicator-size;
-		height: $indicator-size;
-	}
-	animation: spin 1.1s infinite linear;
-	border: $indicator-thickness solid transparent;
-	border-top-color: $indicator-color;
-	line-height: 1;
-	margin: 0 auto;
-	position: relative;
-	text-indent: -9999em;
-	transform: translateZ(0);
-	&:after {
-		position: absolute;
-		top: (- $indicator-thickness);
-		left: (- $indicator-thickness);
-		border: $indicator-thickness solid transparentize($indicator-color, 0.8);
-		content: ' ';
-	}
+  &,
+  &:after {
+    border-radius: 50%;
+    width: $indicator-size;
+    height: $indicator-size;
+  }
+  animation: spin 1.1s infinite linear;
+  border: $indicator-thickness solid transparent;
+  border-top-color: $indicator-color;
+  line-height: 1;
+  margin: 0 auto;
+  position: relative;
+  text-indent: -9999em;
+  transform: translateZ(0);
+  &:after {
+    position: absolute;
+    top: (-$indicator-thickness);
+    left: (-$indicator-thickness);
+    border: $indicator-thickness solid transparentize($indicator-color, 0.8);
+    content: ' ';
+  }
 }
 
 .page-load {
   font-size: 2rem;
 }
-
 
 // survey styles
 
@@ -140,8 +135,8 @@ $indicator-thickness: 0.2em;
     border-bottom: 2px solid #e0e3ee;
   }
   // .sv_row {
-    // border: 1px solid #ccf;
-    // padding: 10px;
+  // border: 1px solid #ccf;
+  // padding: 10px;
   // }
   .sv_page .sv_qstn {
     padding-top: 0;
@@ -151,7 +146,6 @@ $indicator-thickness: 0.2em;
     margin: 1em 0;
   }
   .sv_page > .sv_row > .sv_qstn {
-
     padding-top: 1em;
   }
   .sv_q_title {
@@ -190,7 +184,8 @@ $indicator-thickness: 0.2em;
   margin: 0.5em 0;
 }
 
-.survey-helptext, .survey-infotext {
+.survey-helptext,
+.survey-infotext {
   background: #f8faff;
   border: 1px solid #d3d3d8;
   border-radius: 4px;

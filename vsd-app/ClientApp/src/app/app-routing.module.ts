@@ -16,27 +16,27 @@ const routes: Routes = [
   },
   {
     path: 'victim-application',
-    component: VictimApplicationComponent,
+    component: VictimApplicationComponent
   },
   {
     path: 'ifm-application',
-    component: IfmApplicationComponent,
+    component: IfmApplicationComponent
   },
   {
     path: 'witness-application',
-    component: WitnessApplicationComponent,
+    component: WitnessApplicationComponent
   },
   {
     path: 'submit-invoice',
-    component: SubmitInvoiceComponent,
+    component: SubmitInvoiceComponent
   },
   {
     path: 'application-cancelled',
-    component: ApplicationCancelledComponent,
+    component: ApplicationCancelledComponent
   },
   {
     path: 'application-success',
-    component: ApplicationSuccessComponent,
+    component: ApplicationSuccessComponent
   },
   { path: '**', component: NotFoundComponent }
 ];
@@ -46,4 +46,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: []
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

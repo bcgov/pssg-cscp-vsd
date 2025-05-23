@@ -1,5 +1,5 @@
-import { Address } from "./address.interface";
-import { Courtfile } from "./files.interface";
+import { Address } from './address.interface';
+import { Courtfile } from './files.interface';
 
 export interface Application {
   ApplicationType: number;

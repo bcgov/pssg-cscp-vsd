@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'application-success',
@@ -8,6 +8,6 @@ import { Router } from "@angular/router";
 })
 export class ApplicationSuccessComponent {
   constructor(private router: Router) {
-    this.router.navigateByUrl("/application-success");
-    }
+    this.router.navigateByUrl('/application-success');
+  }
 }

@@ -7,15 +7,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   templateUrl: './cancel-dialog.component.html'
 })
 export class CancelApplicationDialog implements OnInit {
-
   applicationType: string;
 
   constructor(
     public dialogRef: MatDialogRef<CancelApplicationDialog>,
     private router: Router,
     private route: ActivatedRoute,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
-  }
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   closeMe(): void {
     this.dialogRef.close(false);

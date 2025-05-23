@@ -8,9 +8,8 @@ describe('SignPadDialog', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SignPadDialog ]
-    })
-    .compileComponents();
+      declarations: [SignPadDialog]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

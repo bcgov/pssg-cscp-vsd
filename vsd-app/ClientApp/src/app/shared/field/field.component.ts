@@ -15,9 +15,7 @@ export class FieldComponent implements OnInit {
   @Input() errorMessage: string;
   @Input() disabled: boolean;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
