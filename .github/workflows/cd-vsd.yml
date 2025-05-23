@@ -64,12 +64,12 @@ jobs:
 
       - name: Save image as tarball for Trivy
         run: |
-          docker save ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev -o ${env.APP_NAME}-${env.IMAGE_NAME}.tar
+          docker save "$IMAGE_REGISTRY/$APP_NAME-$IMAGE_NAME:dev" -o "$APP_NAME-$IMAGE_NAME.tar"
 
       - name: Install Trivy
         run: |
           wget -qO- https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bash
-          echo "$(pwd)/bin" >> $GITHUB_PATH
+          echo "$HOME/bin" >> $GITHUB_PATH
 
       - name: Trivy scan for vsd api image
         continue-on-error: true
@@ -138,13 +138,13 @@ jobs:
 
       - name: Save image as tarball for Trivy
         run: |
-          docker save ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev -o ${env.APP_NAME}-${env.IMAGE_NAME}.tar
+          docker save "$IMAGE_REGISTRY/$APP_NAME-$IMAGE_NAME:dev" -o "$APP_NAME-$IMAGE_NAME.tar"
 
 
       - name: Install Trivy
         run: |
           wget -qO- https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bash
-          echo "$(pwd)/bin" >> $GITHUB_PATH
+          echo "$HOME/bin" >> $GITHUB_PATH
 
       - name: Trivy scan for vsd ui image
         continue-on-error: true
