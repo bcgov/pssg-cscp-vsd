@@ -1,54 +1,40 @@
-name: ZAP Scan - Internal
+name: ZAP Full Scan - Internal
 
 on:
   workflow_dispatch:
 
 jobs:
-  internal-zap-scan:
-    name: ZAP Scan from Self-Hosted Runner
+  zap-full-ui-api:
+    name: ZAP Full Scan from Self-Hosted Runner
     runs-on: self-hosted
 
     strategy:
       matrix:
         include:
-          - name: coast-cpu-dev
-            url: https://coast-cpu-dev.silver.devops.bcgov
-          - name: aem-interface-dev
-            url: https://aem-interface-service-f9a9e6-dev.apps.silver.devops.gov.bc.ca
-          - name: cornet-interface-dev
-            url: https://cornet-interface-service-f9a9e6-dev.apps.silver.devops.gov.bc.ca
+          - name: vsd-ui
+            url: https://coast-vsd-dev.silver.devops.bcgov
+            type: ui
+          - name: vsd-api
+            url: https://coast-vsd-dev.silver.devops.bcgov/swagger.json
+            type: api
 
     steps:
-      - name: Install curl and jq
-        run: sudo apt-get update && sudo apt-get install -y curl jq
-
-      - name: Wait for ZAP to be ready
-        run: |
-          for i in {1..10}; do
-            STATUS=$(curl -s http://zap-scanner:8080/JSON/core/view/version/ | jq -r .version || echo "notready")
-            if [[ "$STATUS" != "notready" ]]; then
-              echo "ZAP Ready - Version: $STATUS"
-              break
-            fi
-            echo "Waiting for ZAP..."
-            sleep 5
-          done
-
-      - name: Run Passive ZAP Scan on ${{ matrix.name }}
-        run: |
-          echo "Scanning ${{ matrix.url }}"
-          curl "http://zap-scanner:8080/JSON/spider/action/scan/?url=${{ matrix.url }}"
-          sleep 20
-          curl "http://zap-scanner:8080/OTHER/core/other/jsonreport/" -o zap-result.json
-
-      - name: Convert JSON to SARIF
-        uses: zaproxy/action-to-sarif@v0.2.0
+      - name: Full Scan UI
+        if: matrix.type == 'ui'
+        uses: zaproxy/action-full-scan@v0.11.0
         with:
-          input: zap-result.json
-          output: zap-results.sarif
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: ${{ matrix.url }}
+          allow_issue_writing: false
+          issue_title: "zap-full-ui-${{ matrix.name }}"
+          artifact_name: "zap-full-ui-${{ matrix.name }}"
 
-      - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v3
+      - name: API Scan
+        if: matrix.type == 'api'
+        uses: zaproxy/action-api-scan@v0.9.0
         with:
-          sarif_file: zap-results.sarif
-          category: zap-${{ matrix.name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: ${{ matrix.url }}
+          allow_issue_writing: false
+          issue_title: "zap-api-${{ matrix.name }}"
+          artifact_name: "zap-api-${{ matrix.name }}"
