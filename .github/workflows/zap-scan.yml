@@ -15,9 +15,6 @@ jobs:
             url: https://coast-vsd-dev.silver.devops.bcgov
 
     steps:
-      - name: Install curl and jq
-        run: sudo apt-get update && sudo apt-get install -y curl jq
-
       - name: Wait for ZAP API to be ready
         run: |
           for i in {1..12}; do
