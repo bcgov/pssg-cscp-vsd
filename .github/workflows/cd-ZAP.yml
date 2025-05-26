@@ -19,6 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Dump all environment variables
+        run: printenv | sort
+
+      - name: Dump GitHub context
+        run: echo '${{ toJSON(github) }}'
+
       - name: Set up Docker Buildx tooling
         uses: docker/setup-buildx-action@v3
 
