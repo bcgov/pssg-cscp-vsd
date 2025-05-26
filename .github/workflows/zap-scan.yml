@@ -30,19 +30,19 @@ jobs:
       - name: Spider target
         run: |
           echo "Starting Spider on ${{ matrix.url }}"
-          curl "http://zap-scanner:8080/JSON/spider/action/scan/?url=${{ matrix.url }}&recurse=true"
+          curl -k "http://zap-scanner:8080/JSON/spider/action/scan/?url=${{ matrix.url }}&recurse=true"
           sleep 20
 
       - name: Start Active Scan
         run: |
           echo "Starting Active Scan on ${{ matrix.url }}"
-          curl "http://zap-scanner:8080/JSON/ascan/action/scan/?url=${{ matrix.url }}&recurse=true"
+          curl -k "http://zap-scanner:8080/JSON/ascan/action/scan/?url=${{ matrix.url }}&recurse=true"
           sleep 20
           # Optionally wait until scan completes (advanced)
 
       - name: Fetch ZAP JSON Report
         run: |
-          curl "http://zap-scanner:8080/OTHER/core/other/jsonreport/" -o zap-${{ matrix.name }}.json
+          curl -k "http://zap-scanner:8080/OTHER/core/other/jsonreport/" -o zap-${{ matrix.name }}.json
 
 
 
