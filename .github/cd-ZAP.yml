@@ -1,0 +1,62 @@
+name: cd-vsd-app
+
+on:
+  workflow_dispatch:
+
+env:
+  APP_NAME: vsd
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
+  IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
+
+jobs:
+  build-vsd-zap:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+    env:
+      IMAGE_NAME: zap
+      VSD_API_DOCKERFILE_PATH: ./Dockerfile
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx tooling
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log into OpenShift Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.IMAGE_REGISTRY }}
+          username: ${{ secrets.OCP4_USERNAME }}
+          password: ${{ secrets.OCP4_PASSWORD }}
+
+      - name: Pull image
+        run: docker pull ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev || true
+
+      - name: Save image as tarball for Trivy
+        run: |
+          docker save "$IMAGE_REGISTRY/$APP_NAME-$IMAGE_NAME:dev" -o "$APP_NAME-$IMAGE_NAME.tar"
+
+      - name: Install Trivy
+        run: |
+          wget -qO- https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bash
+          echo "$(pwd)/bin" >> $GITHUB_PATH
+
+      - name: Trivy scan for vsd zap image
+        continue-on-error: true
+        run: |
+          trivy image --input "$APP_NAME-$IMAGE_NAME.tar" \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1 \
+            --format sarif \
+            --output trivy-$APP_NAME-$IMAGE_NAME-image-scan.sarif
+
+      - name: Upload scan results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-image-scan.sarif
+          category: trivy-built-image-scan-results
+
+
+
+  
