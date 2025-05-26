@@ -1,45 +1,54 @@
-name: OWASP ZAP Scan
+name: ZAP Scan - Internal
 
 on:
-  schedule:
-    - cron: '0 14 */14 * *'  # 14:00 UTC = 6:00 AM PST, 7:00 AM PDT
-  push:
-    branches: ["**"]
-  pull_request:
-    branches: [development]
+  workflow_dispatch:
 
 jobs:
-  zap-baseline:
-    name: OWASP ZAP Baseline Scan
-    runs-on: ubuntu-latest
+  internal-zap-scan:
+    name: ZAP Scan from Self-Hosted Runner
+    runs-on: self-hosted
 
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
+    strategy:
+      matrix:
+        include:
+          - name: coast-cpu-dev
+            url: https://coast-cpu-dev.silver.devops.bcgov
+          - name: aem-interface-dev
+            url: https://aem-interface-service-f9a9e6-dev.apps.silver.devops.gov.bc.ca
+          - name: cornet-interface-dev
+            url: https://cornet-interface-service-f9a9e6-dev.apps.silver.devops.gov.bc.ca
 
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
+      - name: Install curl and jq
+        run: sudo apt-get update && sudo apt-get install -y curl jq
 
-      - name: Run ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.6.0
-        with:
-          target: 'https://justice.gov.bc.ca/coastcontracts'
-          cmd_options: '-a -j -J zap-report.json'
-          allow_failures: true
-          fail_action: false
-          rules_file_name: ''
-          zap_cli_options: ''
+      - name: Wait for ZAP to be ready
+        run: |
+          for i in {1..10}; do
+            STATUS=$(curl -s http://zap-scanner:8080/JSON/core/view/version/ | jq -r .version || echo "notready")
+            if [[ "$STATUS" != "notready" ]]; then
+              echo "ZAP Ready - Version: $STATUS"
+              break
+            fi
+            echo "Waiting for ZAP..."
+            sleep 5
+          done
 
-      - name: Convert ZAP JSON to SARIF
+      - name: Run Passive ZAP Scan on ${{ matrix.name }}
+        run: |
+          echo "Scanning ${{ matrix.url }}"
+          curl "http://zap-scanner:8080/JSON/spider/action/scan/?url=${{ matrix.url }}"
+          sleep 20
+          curl "http://zap-scanner:8080/OTHER/core/other/jsonreport/" -o zap-result.json
+
+      - name: Convert JSON to SARIF
         uses: advanced-security/zap-sarif-converter-action@v1
         with:
-          input: zap-report.json
-          output: zap-vsd-scan.sarif
+          input: zap-result.json
+          output: zap-results.sarif
 
-      - name: Upload scan results
+      - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: zap-vsd-scan.sarif
-          category: zap-baseline
+          sarif_file: zap-results.sarif
+          category: zap-${{ matrix.name }}
