@@ -14,7 +14,7 @@ jobs:
     if: github.repository_owner == 'bcgov'
     env:
       IMAGE_NAME: zap
-      VSD_API_DOCKERFILE_PATH: ./Dockerfile
+      VSD_API_DOCKERFILE_PATH: ./vsd-app/Dockerfile
 
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +31,31 @@ jobs:
 
       - name: Pull image
         run: docker pull ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev || true
+
+      - name: Bump version
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: ${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}=v
+          fetch_all_tags: true
+
+      - name: Create version env var
+        run: echo "BUILD_VERSION=$(echo '${{ steps.tag_version.outputs.new_tag }}' | awk -F-v '{print $NF}')" >> $GITHUB_ENV
+ 
+
+      - name: Build and push vsd-zap
+        uses: docker/build-push-action@v6
+        with:
+          build-args: |
+            BUILD_ID="${{ env.BUILD_ID }}"
+            BUILD_VERSION=${{ env.BUILD_VERSION }}
+          cache-from: |
+            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}
+          file: ${{ env.VSD_API_DOCKERFILE_PATH }}
+          push: true
+          tags: |
+            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev
 
       - name: Save image as tarball for Trivy
         run: |
@@ -56,7 +81,3 @@ jobs:
         with:
           sarif_file: trivy-${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-image-scan.sarif
           category: trivy-built-image-scan-results
-
-
-
-  
