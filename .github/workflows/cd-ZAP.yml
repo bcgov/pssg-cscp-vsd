@@ -14,7 +14,7 @@ jobs:
     if: github.repository_owner == 'bcgov'
     env:
       IMAGE_NAME: zap
-      VSD_API_DOCKERFILE_PATH: ./vsd-app/Dockerfile
+      VSD_ZAP_DOCKERFILE_PATH: ./Dockerfile
 
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
             BUILD_VERSION=${{ env.BUILD_VERSION }}
           cache-from: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}
-          file: ${{ env.VSD_API_DOCKERFILE_PATH }}
+          file: ${{ env.VSD_ZAP_DOCKERFILE_PATH }}
           push: true
           tags: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev
