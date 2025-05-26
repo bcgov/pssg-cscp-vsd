@@ -42,7 +42,7 @@ jobs:
           curl "http://zap-scanner:8080/OTHER/core/other/jsonreport/" -o zap-result.json
 
       - name: Convert JSON to SARIF
-        uses: advanced-security/zap-sarif-converter-action@v1
+        uses: zaproxy/action-to-sarif@v0.2.0
         with:
           input: zap-result.json
           output: zap-results.sarif
