@@ -1,4 +1,4 @@
-name: cd-vsd-app
+name: cd-ZAP
 
 on:
   workflow_dispatch:
