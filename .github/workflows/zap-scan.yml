@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  zap-full-ui-api:
-    name: ZAP Full Scan from Self-Hosted Runner
+  zap-full-scan:
+    name: ZAP Full UI & API Scan
     runs-on: self-hosted
 
     strategy:
@@ -13,16 +13,39 @@ jobs:
         include:
           - name: vsd-ui
             url: https://coast-vsd-dev.silver.devops.bcgov
-            type: ui
 
     steps:
-      - name: Full Scan UI
-        if: matrix.type == 'ui'
-        uses: zaproxy/action-full-scan@v0.11.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          target: ${{ matrix.url }}
-          allow_issue_writing: false
-          issue_title: "zap-full-ui-${{ matrix.name }}"
-          artifact_name: "zap-full-ui-${{ matrix.name }}"
-          
+      - name: Install curl and jq
+        run: sudo apt-get update && sudo apt-get install -y curl jq
+
+      - name: Wait for ZAP API to be ready
+        run: |
+          for i in {1..12}; do
+            STATUS=$(curl -s http://zap-scanner:8080/JSON/core/view/version/ | jq -r .version || echo "notready")
+            if [[ "$STATUS" != "notready" ]]; then
+              echo "ZAP Ready - Version: $STATUS"
+              break
+            fi
+            echo "Waiting for ZAP API..."
+            sleep 5
+          done
+
+      - name: Spider target
+        run: |
+          echo "Starting Spider on ${{ matrix.url }}"
+          curl "http://zap-scanner:8080/JSON/spider/action/scan/?url=${{ matrix.url }}&recurse=true"
+          sleep 20
+
+      - name: Start Active Scan
+        run: |
+          echo "Starting Active Scan on ${{ matrix.url }}"
+          curl "http://zap-scanner:8080/JSON/ascan/action/scan/?url=${{ matrix.url }}&recurse=true"
+          sleep 20
+          # Optionally wait until scan completes (advanced)
+
+      - name: Fetch ZAP JSON Report
+        run: |
+          curl "http://zap-scanner:8080/OTHER/core/other/jsonreport/" -o zap-${{ matrix.name }}.json
+
+
+
