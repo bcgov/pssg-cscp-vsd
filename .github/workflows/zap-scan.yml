@@ -28,6 +28,9 @@ jobs:
           echo "ZAP did not become ready in time"
           exit 1
 
+      - name: Install Java (OpenJDK)
+        run: sudo apt-get update && sudo apt-get install -y openjdk-17-jre
+
       - name: Start spider scan
         run: |
           SPIDER_ID=$(curl -sk "${ZAP_API}/JSON/spider/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}" | jq -r .scan)
