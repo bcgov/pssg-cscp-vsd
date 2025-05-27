@@ -28,9 +28,6 @@ jobs:
           echo "ZAP did not become ready in time"
           exit 1
 
-      - name: Install Java (OpenJDK)
-        run: sudo apt-get update && sudo apt-get install -y openjdk-17-jre
-
       - name: Start spider scan
         run: |
           SPIDER_ID=$(curl -sk "${ZAP_API}/JSON/spider/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}" | jq -r .scan)
@@ -63,13 +60,28 @@ jobs:
         run: |
           curl -sk "${ZAP_API}/OTHER/core/other/jsonreport/?apikey=${ZAP_API_KEY}" -o zap_report.json
 
+      - name: Upload ZAP JSON as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-json-report
+          path: zap_report.json
+
+  zap-sarif:
+    name: SARIF Conversion & Upload
+    runs-on: ubuntu-latest
+    needs: zap-scan
+
+    steps:
+      - name: Download ZAP JSON artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: zap-json-report
+
       - name: Download ZAP SARIF converter
-        run: |
-          curl -L -o zap-sarif-report.jar https://github.com/zaproxy/zap-sarif-report/releases/latest/download/zap-sarif-report.jar
+        run: curl -L -o zap-sarif-report.jar https://github.com/zaproxy/zap-sarif-report/releases/latest/download/zap-sarif-report.jar
 
       - name: Convert ZAP JSON report to SARIF
-        run: |
-          java -jar zap-sarif-report.jar -i zap_report.json -o zap_report.sarif.json
+        run: java -jar zap-sarif-report.jar -i zap_report.json -o zap_report.sarif.json
 
       - name: Upload SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
