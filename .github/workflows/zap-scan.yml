@@ -29,8 +29,6 @@ jobs:
           echo "ZAP did not become ready in time"
           exit 1
 
-      - name: Install file utility
-        run: sudo apt-get update && sudo apt-get install -y file
 
       - name: Start spider scan
         run: |
@@ -73,7 +71,6 @@ jobs:
             head zap_report.json || true
             exit 1
           fi
-          file zap_report.json
           ls -lh zap_report.json
           head zap_report.json
 
