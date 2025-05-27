@@ -3,10 +3,9 @@ name: ZAP Scan
 on:
   workflow_dispatch:
 
-
 jobs:
   zap-api-scan:
-    name: ZAP Direct API Scan
+    name: ZAP API Scan
     runs-on: [self-hosted, linux]
     timeout-minutes: 30
 
@@ -56,3 +55,20 @@ jobs:
             fi
             sleep 10
           done
+
+      - name: Download ZAP report (JSON)
+        run: |
+          curl -sk "${ZAP_API}/OTHER/core/other/jsonreport/?apikey=${ZAP_API_KEY}" -o zap_report.json
+
+      - name: Download ZAP SARIF converter
+        run: |
+          wget https://github.com/zaproxy/zap-sarif-report/releases/latest/download/zap-sarif-report.jar
+
+      - name: Convert ZAP JSON report to SARIF
+        run: |
+          java -jar zap-sarif-report.jar -i zap_report.json -o zap_report.sarif.json
+
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: zap_report.sarif.json
