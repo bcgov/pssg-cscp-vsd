@@ -1,11 +1,11 @@
-name: ZAP Scan
+name: ZAP UI Scan
 
 on:
   workflow_dispatch:
 
 jobs:
-  zap-scan:
-    name: ZAP Scan
+  zap-ui-scan:
+    name: ZAP UI Scan
     runs-on: [self-hosted, linux]
     timeout-minutes: 30
 

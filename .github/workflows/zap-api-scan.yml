@@ -1,0 +1,119 @@
+name: ZAP API Scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  zap-api-scan:
+    name: ZAP API Scan
+    runs-on: [self-hosted, linux]
+    timeout-minutes: 30
+
+    env:
+      ZAP_API: http://zaproxy:8080
+      ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}
+      ZAP_TARGET: https://coast-vsu-dev.silver.devops.bcgov
+
+    steps:
+      - name: Wait for ZAP to be ready
+        run: |
+          set -e
+          for i in {1..30}; do
+            if curl -sk "${ZAP_API}/JSON/core/view/version/?apikey=${ZAP_API_KEY}" | grep version; then
+              echo "ZAP is ready!"
+              exit 0
+            fi
+            echo "Waiting for ZAP..."
+            sleep 10
+          done
+          echo "ZAP did not become ready in time"
+          exit 1
+
+      - name: Trigger API endpoints (prime ZAP with API traffic)
+        env:
+          PROXY: http://zaproxy:8080
+        run: |
+          set -e
+          # LookupController GET endpoints
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/cvap-emails"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/countries"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/provinces"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/cities"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/cities/search?country=CA&province=BC&searchVal=test&limit=10"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/country/CA/cities"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/country/1/province/1/cities"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/relationships"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/auth_relationships"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/representative_relationships"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/imf_representative_relationships"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/restitution_relationships"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/police_detachments"
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/courts"
+          # ConfigurationController GET endpoint
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/configuration"
+          # JusticeController GET endpoint
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/justice/validate_vendor/12345/ABC123"
+          # NotFoundController GET endpoint
+          curl -x $PROXY -sk "${ZAP_TARGET}/404"
+          # JusticeController GET with multiple params (example values)
+          curl -x $PROXY -sk "${ZAP_TARGET}/api/justice/validate_vendor_and_counsellor/12345/ABC123/67890/Smith"
+          # POST endpoints (replace with real example payloads if available)
+          curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/aem/victim"
+          curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/aem/ifm"
+          curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/aem/witness"
+          curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/aem/authorization"
+          curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/aem/invoice"
+          curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/payment/send"
+          curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/paymentschedule/schedule-cvap"
+          curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/justice/saveapplication"
+          curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/justice/submitcounsellorinvoice"
+
+      - name: Start spider scan
+        run: |
+          set -e
+          SPIDER_ID=$(curl -sk "${ZAP_API}/JSON/spider/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}" | jq -r .scan)
+          echo "Spider scan started: $SPIDER_ID"
+          for i in {1..60}; do
+            STATUS=$(curl -sk "${ZAP_API}/JSON/spider/view/status/?apikey=${ZAP_API_KEY}&scanId=$SPIDER_ID" | jq -r .status)
+            echo "Spider progress: $STATUS%"
+            if [ "$STATUS" = "100" ]; then
+              echo "Spider scan completed"
+              break
+            fi
+            sleep 5
+          done
+
+      - name: Start active scan
+        run: |
+          set -e
+          SCAN_ID=$(curl -sk "${ZAP_API}/JSON/ascan/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}" | jq -r .scan)
+          echo "Active scan started: $SCAN_ID"
+          for i in {1..60}; do
+            STATUS=$(curl -sk "${ZAP_API}/JSON/ascan/view/status/?apikey=${ZAP_API_KEY}&scanId=$SCAN_ID" | jq -r .status)
+            echo "Active scan progress: $STATUS%"
+            if [ "$STATUS" = "100" ]; then
+              echo "Active scan completed"
+              break
+            fi
+            sleep 10
+          done
+
+      - name: Download ZAP report (JSON)
+        run: |
+          set -e
+          curl -sk "${ZAP_API}/OTHER/core/other/jsonreport/?apikey=${ZAP_API_KEY}" -o zap_api_report.json
+          # Check file exists and is not empty
+          if [ ! -s zap_api_report.json ]; then
+            echo "Download failed or zap_api_report.json is empty!"
+            ls -lh zap_api_report.json || true
+            head zap_api_report.json || true
+            exit 1
+          fi
+          ls -lh zap_api_report.json
+          head zap_api_report.json
+
+      - name: Upload ZAP JSON as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-api-json-report
+          path: zap_api_report.json
