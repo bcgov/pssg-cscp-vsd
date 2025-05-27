@@ -76,32 +76,21 @@ jobs:
     needs: zap-scan
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Download ZAP JSON artifact
         uses: actions/download-artifact@v4
         with:
           name: zap-json-report
 
-      - name: Download ZAP SARIF converter
-        run: |
-          set -e
-          curl -L -o zap-sarif-report.jar https://github.com/zaproxy/zap-sarif-report/releases/latest/download/zap-sarif-report.jar
-          if [ ! -s zap-sarif-report.jar ]; then
-            echo "Download failed or zap-sarif-report.jar is empty!"
-            head zap-sarif-report.jar
-            exit 1
-          fi
-          file zap-sarif-report.jar
-
-      - name: Inspect downloaded JAR
-        run: |
-          file zap-sarif-report.jar
-          ls -lh zap-sarif-report.jar
-          head zap-sarif-report.jar
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
       - name: Convert ZAP JSON report to SARIF
-        run: |
-          set -e
-          java -jar zap-sarif-report.jar -i zap_report.json -o zap_report.sarif.json
+        run: python devops-scripts/zap_json_to_sarif.py zap_report.json zap_report.sarif.json
 
       - name: Upload SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
