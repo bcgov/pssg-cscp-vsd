@@ -92,6 +92,12 @@ jobs:
           fi
           file zap-sarif-report.jar
 
+      - name: Inspect downloaded JAR
+        run: |
+          file zap-sarif-report.jar
+          ls -lh zap-sarif-report.jar
+          head zap-sarif-report.jar
+
       - name: Convert ZAP JSON report to SARIF
         run: |
           set -e
