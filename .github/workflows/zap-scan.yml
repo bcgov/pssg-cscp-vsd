@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  zap-api-scan:
-    name: ZAP API Scan
+  zap-scan:
+    name: ZAP Scan
     runs-on: [self-hosted, linux]
     timeout-minutes: 30
 
@@ -62,7 +62,7 @@ jobs:
 
       - name: Download ZAP SARIF converter
         run: |
-          wget https://github.com/zaproxy/zap-sarif-report/releases/latest/download/zap-sarif-report.jar
+          curl -L -o zap-sarif-report.jar https://github.com/zaproxy/zap-sarif-report/releases/latest/download/zap-sarif-report.jar
 
       - name: Convert ZAP JSON report to SARIF
         run: |
