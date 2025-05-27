@@ -17,6 +17,7 @@ jobs:
     steps:
       - name: Wait for ZAP to be ready
         run: |
+          set -e
           for i in {1..30}; do
             if curl -sk "${ZAP_API}/JSON/core/view/version/?apikey=${ZAP_API_KEY}" | grep version; then
               echo "ZAP is ready!"
@@ -30,6 +31,7 @@ jobs:
 
       - name: Start spider scan
         run: |
+          set -e
           SPIDER_ID=$(curl -sk "${ZAP_API}/JSON/spider/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}" | jq -r .scan)
           echo "Spider scan started: $SPIDER_ID"
           for i in {1..60}; do
@@ -44,6 +46,7 @@ jobs:
 
       - name: Start active scan
         run: |
+          set -e
           SCAN_ID=$(curl -sk "${ZAP_API}/JSON/ascan/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}" | jq -r .scan)
           echo "Active scan started: $SCAN_ID"
           for i in {1..60}; do
@@ -58,6 +61,7 @@ jobs:
 
       - name: Download ZAP report (JSON)
         run: |
+          set -e
           curl -sk "${ZAP_API}/OTHER/core/other/jsonreport/?apikey=${ZAP_API_KEY}" -o zap_report.json
 
       - name: Upload ZAP JSON as artifact
@@ -78,10 +82,20 @@ jobs:
           name: zap-json-report
 
       - name: Download ZAP SARIF converter
-        run: curl -L -o zap-sarif-report.jar https://github.com/zaproxy/zap-sarif-report/releases/latest/download/zap-sarif-report.jar
+        run: |
+          set -e
+          curl -L -o zap-sarif-report.jar https://github.com/zaproxy/zap-sarif-report/releases/latest/download/zap-sarif-report.jar
+          if [ ! -s zap-sarif-report.jar ]; then
+            echo "Download failed or zap-sarif-report.jar is empty!"
+            head zap-sarif-report.jar
+            exit 1
+          fi
+          file zap-sarif-report.jar
 
       - name: Convert ZAP JSON report to SARIF
-        run: java -jar zap-sarif-report.jar -i zap_report.json -o zap_report.sarif.json
+        run: |
+          set -e
+          java -jar zap-sarif-report.jar -i zap_report.json -o zap_report.sarif.json
 
       - name: Upload SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
