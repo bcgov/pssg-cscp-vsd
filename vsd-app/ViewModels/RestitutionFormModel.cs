@@ -12,7 +12,10 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class RestitutionApplication
     {
-        public string fortunecookietype { get { return "Microsoft.Dynamics.CRM.vsd_application"; } }
+        public string fortunecookietype
+        {
+            get { return "Microsoft.Dynamics.CRM.vsd_application"; }
+        }
         public int vsd_applicanttype { get; set; }
         public string vsd_applicantsfirstname { get; set; }
         public string vsd_applicantsmiddlename { get; set; }
@@ -39,14 +42,20 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class CourtInfo
     {
-        public string fortunecookietype { get { return "Microsoft.Dynamics.CRM.vsd_applicationcourtinformation"; } }
+        public string fortunecookietype
+        {
+            get { return "Microsoft.Dynamics.CRM.vsd_applicationcourtinformation"; }
+        }
         public string vsd_courtfilenumber { get; set; }
         public string vsd_courtlocation { get; set; }
     }
 
     public class Participant
     {
-        public string fortunecookietype { get { return "Microsoft.Dynamics.CRM.vsd_participant"; } }
+        public string fortunecookietype
+        {
+            get { return "Microsoft.Dynamics.CRM.vsd_participant"; }
+        }
         public string vsd_firstname { get; set; }
         public string vsd_middlename { get; set; }
         public string vsd_lastname { get; set; }

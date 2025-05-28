@@ -1,6 +1,6 @@
-﻿using Gov.Cscp.VictimServices.Public.JsonObjects;
+﻿using System.Collections.Generic;
+using Gov.Cscp.VictimServices.Public.JsonObjects;
 using Gov.Cscp.VictimServices.Public.ViewModels;
-using System.Collections.Generic;
 
 namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 {
@@ -34,16 +34,17 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             List<CounsellorInvoiceLineItem> lineItems = new List<CounsellorInvoiceLineItem>();
             foreach (Lineitem lineItem in invoiceDetails.lineItems)
             {
-                lineItems.Add(new CounsellorInvoiceLineItem
-                {
-                    vsd_cvap_counsellingtype = lineItem.counsellingType,
-                    vsd_cvap_sessiondate = lineItem.sessionDate,
-                    vsd_cvap_sessionduration = lineItem.sessionHours,
-                    vsd_missedsession = lineItem.missedSession,
-                });
+                lineItems.Add(
+                    new CounsellorInvoiceLineItem
+                    {
+                        vsd_cvap_counsellingtype = lineItem.counsellingType,
+                        vsd_cvap_sessiondate = lineItem.sessionDate,
+                        vsd_cvap_sessionduration = lineItem.sessionHours,
+                        vsd_missedsession = lineItem.missedSession,
+                    }
+                );
             }
             outputModel.InvoiceLineItems = lineItems.ToArray();
-
 
             //uncomment this one the document collection is added to the API
             if (model.DocumentCollection.Length > 0)
@@ -60,7 +61,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     outputModel.DocumentCollection[documentIndex] = tempDocumentCollection;
                     ++documentIndex;
                 }
-
             }
 
             return outputModel;

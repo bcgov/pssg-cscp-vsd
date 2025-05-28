@@ -1,9 +1,9 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -30,13 +30,18 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 {
                     OutageMessage = configuration.GetValue<string>("CONFIGURATION_OUTAGEINFORMATION_MESSAGE"),
                     OutageStartDate = configuration.GetValue<string>("CONFIGURATION_OUTAGEINFORMATION_STARTDATE"),
-                    OutageEndDate = configuration.GetValue<string>("CONFIGURATION_OUTAGEINFORMATION_ENDDATE")
+                    OutageEndDate = configuration.GetValue<string>("CONFIGURATION_OUTAGEINFORMATION_ENDDATE"),
                 };
 
-                if (string.IsNullOrEmpty(config.OutageMessage) || string.IsNullOrEmpty(config.OutageStartDate) || string.IsNullOrEmpty(config.OutageEndDate))
+                if (
+                    string.IsNullOrEmpty(config.OutageMessage)
+                    || string.IsNullOrEmpty(config.OutageStartDate)
+                    || string.IsNullOrEmpty(config.OutageEndDate)
+                )
                 {
                     return Ok();
-                };
+                }
+                ;
 
                 return Ok(config);
             }

@@ -1,11 +1,11 @@
-﻿using System.Net.Http;
-using System.Text;
-using System.Xml.Linq;
-using System.Xml;
-using System;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Extensions.DependencyInjection;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Utilities;
 
@@ -16,7 +16,7 @@ public class CasHttpClient : ICasHttpClient
 {
     // TODO I remember there are some caveats to HttpClient scope and disposing, which is why the Extension DI register might be better if more HttpClients are added
     // Consider researching and implementing the commented out Extension method below, if time permits. I would assume the Extension would affectively get a HttpClient
-    // from a pool of available HttpClient(s), and dispose of them properly. The downside at first glance seems to be you have multiple client api urls all cluttered 
+    // from a pool of available HttpClient(s), and dispose of them properly. The downside at first glance seems to be you have multiple client api urls all cluttered
     // in one pool of HttpClient(s)
     // There is also the topic of disposing HttpClient, touched here https://stackoverflow.com/questions/15705092/do-httpclient-and-httpclienthandler-have-to-be-disposed-between-requests
     private HttpClient _httpClient = null;
@@ -28,7 +28,7 @@ public class CasHttpClient : ICasHttpClient
         httpClient.DefaultRequestHeaders.Add("secret", clientKey);
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         httpClient.BaseAddress = new Uri(url);
-        httpClient.Timeout = new TimeSpan(1, 0, 0);  // 1 hour timeout 
+        httpClient.Timeout = new TimeSpan(1, 0, 0); // 1 hour timeout
         _httpClient = httpClient;
     }
 
@@ -49,7 +49,10 @@ public class CasHttpClient : ICasHttpClient
         }
         var httpResponse = await response.Content.ReadAsStringAsync();
 
-        var jsonReader = System.Runtime.Serialization.Json.JsonReaderWriterFactory.CreateJsonReader(Encoding.UTF8.GetBytes(httpResponse), new XmlDictionaryReaderQuotas());
+        var jsonReader = System.Runtime.Serialization.Json.JsonReaderWriterFactory.CreateJsonReader(
+            Encoding.UTF8.GetBytes(httpResponse),
+            new XmlDictionaryReaderQuotas()
+        );
 
         var root = XElement.Load(jsonReader);
         if (root.Element("CAS-Returned-Messages") != null)
@@ -57,7 +60,12 @@ public class CasHttpClient : ICasHttpClient
             var casReturnedMessages = root.Element("CAS-Returned-Messages");
             if (casReturnedMessages != null)
             {
-                if (!(casReturnedMessages.Value.Equals("SUCCEEDED", StringComparison.InvariantCultureIgnoreCase) | casReturnedMessages.Value.Contains("Duplicate Submission")))
+                if (
+                    !(
+                        casReturnedMessages.Value.Equals("SUCCEEDED", StringComparison.InvariantCultureIgnoreCase)
+                        | casReturnedMessages.Value.Contains("Duplicate Submission")
+                    )
+                )
                     throw new Exception(casReturnedMessages.Value + "\r\n" + jsonRequest);
             }
             else
@@ -81,7 +89,7 @@ public class CasHttpClient : ICasHttpClient
 //        httpClient.DefaultRequestHeaders.Add("secret", clientKey);
 //        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 //        httpClient.BaseAddress = new Uri(url);
-//        httpClient.Timeout = new TimeSpan(1, 0, 0);  // 1 hour timeout 
+//        httpClient.Timeout = new TimeSpan(1, 0, 0);  // 1 hour timeout
 
 //        services.AddHttpClient<ICasHttpClient, CasHttpClient>(serviceProvider => new CasHttpClient(httpClient));
 //        return services;

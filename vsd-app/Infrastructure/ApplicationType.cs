@@ -4,6 +4,6 @@
     {
         Victim = 100000002,
         ImmediateFamilyMember = 100000001,
-        Witness = 100000000
+        Witness = 100000000,
     }
 }

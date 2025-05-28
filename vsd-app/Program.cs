@@ -14,23 +14,35 @@ namespace Gov.Cscp.VictimServices.Public
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseHealthChecks("/hc")
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    var env = hostingContext.HostingEnvironment;
+            WebHost
+                .CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(
+                    (hostingContext, config) =>
+                    {
+                        var env = hostingContext.HostingEnvironment;
 
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-                    config.AddEnvironmentVariables();
-                })
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    logging.AddConsole(options => options.IncludeScopes = true);
-                    logging.SetMinimumLevel(LogLevel.Debug);
-                    logging.AddDebug();
-                    logging.AddEventSourceLogger();
-                })
+                        config
+                            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                            .AddJsonFile(
+                                $"appsettings.{env.EnvironmentName}.json",
+                                optional: true,
+                                reloadOnChange: true
+                            );
+                        config.AddEnvironmentVariables();
+                    }
+                )
+                .ConfigureLogging(
+                    (hostingContext, logging) =>
+                    {
+                        logging.AddSimpleConsole(opts =>
+                        {
+                            opts.IncludeScopes = true;
+                        });
+                        logging.SetMinimumLevel(LogLevel.Debug);
+                        logging.AddDebug();
+                        logging.AddEventSourceLogger();
+                    }
+                )
                 .UseStartup<Startup>();
     }
 }
