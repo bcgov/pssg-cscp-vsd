@@ -12,7 +12,7 @@ jobs:
     env:
       ZAP_API: http://zaproxy:8080
       ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}
-      ZAP_TARGET: https://coast-vsu-dev.silver.devops.bcgov
+      ZAP_TARGET: https://coast-vsd-dev.silver.devops.bcgov
 
     steps:
       - name: Wait for ZAP to be ready
