@@ -1,6 +1,18 @@
 import { AEMService } from '../services/aem.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Application, Introduction, PersonalInformation, CrimeInformation, MedicalInformation, ExpenseInformation, EmploymentIncomeInformation, RepresentativeInformation, DeclarationInformation, AuthorizationInformation, DocumentCollectioninformation } from '../interfaces/application.interface';
+import {
+  Application,
+  Introduction,
+  PersonalInformation,
+  CrimeInformation,
+  MedicalInformation,
+  ExpenseInformation,
+  EmploymentIncomeInformation,
+  RepresentativeInformation,
+  DeclarationInformation,
+  AuthorizationInformation,
+  DocumentCollectioninformation
+} from '../interfaces/application.interface';
 import { ApplicationType, OnBehalfOf } from '../shared/enums-list';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
@@ -37,10 +49,9 @@ import * as _ from 'lodash';
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } },
-  ],
+    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
+  ]
 })
-
 export class VictimApplicationComponent extends FormBase implements OnInit {
   @ViewChild('stepper') victimStepper: MatVerticalStepper;
   FORM_TYPE = ApplicationType.Victim_Application;
@@ -75,7 +86,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     relationships: [],
     representativeRelationships: [],
     courts: [],
-    police_detachments: [],
+    police_detachments: []
   };
 
   constructor(
@@ -87,7 +98,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     private matDialog: MatDialog,
     public state: StateService,
     public lookupService: LookupService,
-    private aemService: AEMService,
+    private aemService: AEMService
   ) {
     super();
   }
@@ -99,59 +110,67 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     if (this.state.cloning) {
       this.form = this.state.data;
       this.state.cloning = false;
-    }
-    else {
+    } else {
       this.form = this.buildApplicationForm();
     }
 
     let promise_array = [];
 
-    promise_array.push(new Promise<void>((resolve, reject) => {
-      this.lookupService.getCountries().subscribe((res) => {
-        this.lookupData.countries = res.value;
-        if (this.lookupData.countries) {
-          this.lookupData.countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-        }
-        resolve();
-      });
-    }));
+    promise_array.push(
+      new Promise<void>((resolve, reject) => {
+        this.lookupService.getCountries().subscribe((res) => {
+          this.lookupData.countries = res.value;
+          if (this.lookupData.countries) {
+            this.lookupData.countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+          }
+          resolve();
+        });
+      })
+    );
 
-    promise_array.push(new Promise<void>((resolve, reject) => {
-      this.lookupService.getProvinces().subscribe((res) => {
-        this.lookupData.provinces = res.value;
-        if (this.lookupData.provinces) {
-          this.lookupData.provinces.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-        }
-        resolve();
-      });
-    }));
+    promise_array.push(
+      new Promise<void>((resolve, reject) => {
+        this.lookupService.getProvinces().subscribe((res) => {
+          this.lookupData.provinces = res.value;
+          if (this.lookupData.provinces) {
+            this.lookupData.provinces.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+          }
+          resolve();
+        });
+      })
+    );
 
-    promise_array.push(new Promise<void>((resolve, reject) => {
-      this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
-        this.lookupData.cities = res.value;
-        if (this.lookupData.cities) {
-          this.lookupData.cities.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-        }
-        resolve();
-      });
-    }));
+    promise_array.push(
+      new Promise<void>((resolve, reject) => {
+        this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
+          this.lookupData.cities = res.value;
+          if (this.lookupData.cities) {
+            this.lookupData.cities.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+          }
+          resolve();
+        });
+      })
+    );
 
-    promise_array.push(new Promise<void>((resolve, reject) => {
-      this.lookupService.getRepresentativeRelationships().subscribe((res) => {
-        this.lookupData.representativeRelationships = res.value.filter(r => r.vsd_cvap_representativerelationship_imf_only != true);
-        if (this.lookupData.representativeRelationships) {
-          this.lookupData.representativeRelationships.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-        }
-        resolve();
-      });
-    }));
+    promise_array.push(
+      new Promise<void>((resolve, reject) => {
+        this.lookupService.getRepresentativeRelationships().subscribe((res) => {
+          this.lookupData.representativeRelationships = res.value.filter(
+            (r) => r.vsd_cvap_representativerelationship_imf_only != true
+          );
+          if (this.lookupData.representativeRelationships) {
+            this.lookupData.representativeRelationships.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+          }
+          resolve();
+        });
+      })
+    );
 
     Promise.all(promise_array).then((res) => {
       this.didLoad = true;
       // console.log("Lookup data");
       // console.log(this.lookupData);
     });
-
 
     if (completeOnBehalfOf) {
       this.form.get('representativeInformation').patchValue({
@@ -172,15 +191,15 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       representativeInformation: this.representativeInfoHelper.setupFormGroup(this.fb, FORM),
       declarationInformation: this.declarationInfoHelper.setupFormGroup(this.fb, FORM),
       authorizationInformation: this.authInfoHelper.setupFormGroup(this.fb, FORM),
-      totalAttachmentSize: [0],
+      totalAttachmentSize: [0]
     };
 
     if (FORM === ApplicationType.IFM_Application) {
-      group["victimInformation"] = this.victimInfoHelper.setupFormGroupForIfmApplication(this.fb);
+      group['victimInformation'] = this.victimInfoHelper.setupFormGroupForIfmApplication(this.fb);
     }
 
     if (FORM === ApplicationType.Victim_Application) {
-      group["employmentIncomeInformation"] = this.employmentInfoHelper.setupFormGroup(this.fb, FORM);
+      group['employmentIncomeInformation'] = this.employmentInfoHelper.setupFormGroup(this.fb, FORM);
     }
 
     return this.fb.group(group);
@@ -193,7 +212,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     let self = this;
     let dialogRef = this.matDialog.open(CancelDialog, {
       autoFocus: false,
-      data: { type: "Application" }
+      data: { type: 'Application' }
     });
 
     dialogRef.afterClosed().subscribe((res: any) => {
@@ -212,7 +231,17 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   gotoNextStep(stepper: MatStepper, emptyPage?: boolean): void {
     // when a user clicks the continue button we move them to the next part of the form
-    let elements: Array<string> = ['introduction', 'personalInformation', 'crimeInformation', 'medicalInformation', 'expenseInformation', 'employmentIncomeInformation', 'representativeInformation', 'declarationInformation', 'authorizationInformation'];
+    let elements: Array<string> = [
+      'introduction',
+      'personalInformation',
+      'crimeInformation',
+      'medicalInformation',
+      'expenseInformation',
+      'employmentIncomeInformation',
+      'representativeInformation',
+      'declarationInformation',
+      'authorizationInformation'
+    ];
 
     if (stepper != null) {
       // the stepper indexes match our form indexes
@@ -233,7 +262,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           formValid = formParts.valid;
           // console.log(formParts);
         } else {
-          alert('That was a null form. Nothing to validate')
+          alert('That was a null form. Nothing to validate');
         }
 
         // Ensure if the page is empty that the form is valid
@@ -243,67 +272,73 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
             //formParts.valid = true;
           }
         }
-         if (formValid) {
-           // console.log('Form is valid so proceeding to next step.')
-           this.showValidationMessage = false;
-           window.scroll(0, 0);
-           stepper.next();
-         } else {
-           console.log('Form is not valid rerun the validation and show the validation message.')
-           this.validateAllFormFields(formParts);
-           this.showValidationMessage = true;
-         }
+        if (formValid) {
+          // console.log('Form is valid so proceeding to next step.')
+          this.showValidationMessage = false;
+          window.scroll(0, 0);
+          stepper.next();
+        } else {
+          console.log('Form is not valid rerun the validation and show the validation message.');
+          this.validateAllFormFields(formParts);
+          this.showValidationMessage = true;
+        }
       }
     }
   }
 
   downloadPDF() {
-    this.getAEMPDF().then((pdf: string) => {
-      let downloadLink = document.createElement("a");
-      downloadLink.href = "data:application/pdf;base64," + pdf;
-      downloadLink.download = "Victim-Application.pdf";
-      downloadLink.target = "_blank";
+    this.getAEMPDF()
+      .then((pdf: string) => {
+        let downloadLink = document.createElement('a');
+        downloadLink.href = 'data:application/pdf;base64,' + pdf;
+        downloadLink.download = 'Victim-Application.pdf';
+        downloadLink.target = '_blank';
 
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    }).catch((err) => {
-      console.log("error getting pdf");
-      console.log(err);
-    });
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      })
+      .catch((err) => {
+        console.log('error getting pdf');
+        console.log(err);
+      });
   }
 
   getAEMPDF(): Promise<string> {
     return new Promise((resolve, reject) => {
       let application: Application = _.cloneDeep(this.harvestForm());
       //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
-      application.CrimeInformation.documents.forEach(doc => doc.body = "");
-      application.EmploymentIncomeInformation.documents.forEach(doc => doc.body = "");
-      application.RepresentativeInformation.documents.forEach(doc => doc.body = "");
-
+      application.CrimeInformation.documents.forEach((doc) => (doc.body = ''));
+      application.EmploymentIncomeInformation.documents.forEach((doc) => (doc.body = ''));
+      application.RepresentativeInformation.documents.forEach((doc) => (doc.body = ''));
 
       //full name display option for single fields
-      application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
+      application.PersonalInformation.fullName =
+        application.PersonalInformation.firstName + ' ' + application.PersonalInformation.lastName;
       //display all locations as a single comma separated string
-      application.CrimeInformation.crimeLocations[0].location = application.CrimeInformation.crimeLocations.map(a => a.location).join(', ');
+      application.CrimeInformation.crimeLocations[0].location = application.CrimeInformation.crimeLocations
+        .map((a) => a.location)
+        .join(', ');
       //for on behalf of, if you chose parent, pdf format doesn't match webform, so relationship workaround
       if (application.RepresentativeInformation.completingOnBehalfOf == OnBehalfOf.Parent) {
-        application.RepresentativeInformation.relationshipToPersonParent = application.RepresentativeInformation.relationshipToPerson;
-        application.RepresentativeInformation.relationshipToPerson = "";
+        application.RepresentativeInformation.relationshipToPersonParent =
+          application.RepresentativeInformation.relationshipToPerson;
+        application.RepresentativeInformation.relationshipToPerson = '';
       }
-      this.aemService.getVictimApplicationPDF(application).subscribe((res: any) => {
-        console.log(res);
-        if (res.responseMessage) {
-          resolve(res.responseMessage);
-        }
-        else {
-          reject(res);
-        }
-      },
+      this.aemService.getVictimApplicationPDF(application).subscribe(
+        (res: any) => {
+          console.log(res);
+          if (res.responseMessage) {
+            resolve(res.responseMessage);
+          } else {
+            reject(res);
+          }
+        },
         (err) => {
           reject(err);
           console.log(err);
-        });
+        }
+      );
     });
   }
 
@@ -311,24 +346,26 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     return new Promise((resolve, reject) => {
       let application: Application = _.cloneDeep(this.harvestForm());
       //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
-      application.CrimeInformation.documents.forEach(doc => doc.body = "");
-      application.EmploymentIncomeInformation.documents.forEach(doc => doc.body = "");
-      application.RepresentativeInformation.documents.forEach(doc => doc.body = "");
+      application.CrimeInformation.documents.forEach((doc) => (doc.body = ''));
+      application.EmploymentIncomeInformation.documents.forEach((doc) => (doc.body = ''));
+      application.RepresentativeInformation.documents.forEach((doc) => (doc.body = ''));
       //full name display option for single fields
-      application.PersonalInformation.fullName = application.PersonalInformation.firstName + " " + application.PersonalInformation.lastName;
-      this.aemService.getAuthorizationPDF(application).subscribe((res: any) => {
-        console.log(res);
-        if (res.responseMessage) {
-          resolve(res.responseMessage);
-        }
-        else {
-          reject(res);
-        }
-      },
+      application.PersonalInformation.fullName =
+        application.PersonalInformation.firstName + ' ' + application.PersonalInformation.lastName;
+      this.aemService.getAuthorizationPDF(application).subscribe(
+        (res: any) => {
+          console.log(res);
+          if (res.responseMessage) {
+            resolve(res.responseMessage);
+          } else {
+            reject(res);
+          }
+        },
         (err) => {
           reject(err);
           console.log(err);
-        });
+        }
+      );
     });
   }
 
@@ -337,47 +374,57 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       let ret: DocumentCollectioninformation[] = [];
       let promise_array = [];
 
-      promise_array.push(new Promise<void>((resolve, reject) => {
-        this.getAEMPDF().then((pdf: string) => {
-          ret.push({
-            body: pdf,
-            filename: "Victim-Application.pdf",
-            subject: "",
-          });
-          resolve();
-        }).catch((err) => {
-          console.log(err);
-          reject();
-        });
-      }));
+      promise_array.push(
+        new Promise<void>((resolve, reject) => {
+          this.getAEMPDF()
+            .then((pdf: string) => {
+              ret.push({
+                body: pdf,
+                filename: 'Victim-Application.pdf',
+                subject: ''
+              });
+              resolve();
+            })
+            .catch((err) => {
+              console.log(err);
+              reject();
+            });
+        })
+      );
 
-      promise_array.push(new Promise<void>((resolve, reject) => {
-        this.getAuthPDF().then((auth_pdf: string) => {
-          ret.push({
-            body: auth_pdf,
-            filename: "Authorization Form.pdf",
-            subject: "",
-          });
-          resolve();
-        }).catch((err) => {
-          console.log(err);
-          reject();
-        });
-      }));
+      promise_array.push(
+        new Promise<void>((resolve, reject) => {
+          this.getAuthPDF()
+            .then((auth_pdf: string) => {
+              ret.push({
+                body: auth_pdf,
+                filename: 'Authorization Form.pdf',
+                subject: ''
+              });
+              resolve();
+            })
+            .catch((err) => {
+              console.log(err);
+              reject();
+            });
+        })
+      );
 
-      Promise.all(promise_array).then((res) => {
-        resolve(ret);
-      }).catch((err) => {
-        console.log(err);
-        reject(err);
-      });
+      Promise.all(promise_array)
+        .then((res) => {
+          resolve(ret);
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
     });
   }
 
   printApplication() {
     window.scroll(0, 0);
     this.showPrintView = true;
-    document.querySelectorAll(".slide-close")[0].classList.add("hide-for-print");
+    document.querySelectorAll('.slide-close')[0].classList.add('hide-for-print');
     setTimeout(() => {
       window.print();
     }, 100);
@@ -385,57 +432,69 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   @HostListener('window:afterprint')
   onafterprint() {
-    document.querySelectorAll(".slide-close")[0].classList.remove("hide-for-print")
+    document.querySelectorAll('.slide-close')[0].classList.remove('hide-for-print');
     window.scroll(0, 0);
     this.showPrintView = false;
   }
 
   submitApplication() {
     this.submitting = true;
-    if ((this.form.valid) || (this.form.controls.personalInformation.valid // It's OK if this.form.controls.employmentIncomeInformation.valid is not valid
-      && this.form.controls.crimeInformation.valid
-      && this.form.controls.declarationInformation.valid
-      && this.form.controls.expenseInformation.valid
-      && this.form.controls.introduction.valid
-      && this.form.controls.medicalInformation.valid
-      && this.form.controls.personalInformation.valid
-      && this.form.controls.representativeInformation.valid)) {
-      this.getApplicationPDFs().then((pdfs: DocumentCollectioninformation[]) => {
-        let form = this.harvestForm();
-        form.ApplicationPDFs = pdfs;
-        this.justiceDataService.submitApplication(form)
-          .subscribe(
-            data => {
+    if (
+      this.form.valid ||
+      (this.form.controls.personalInformation.valid && // It's OK if this.form.controls.employmentIncomeInformation.valid is not valid
+        this.form.controls.crimeInformation.valid &&
+        this.form.controls.declarationInformation.valid &&
+        this.form.controls.expenseInformation.valid &&
+        this.form.controls.introduction.valid &&
+        this.form.controls.medicalInformation.valid &&
+        this.form.controls.personalInformation.valid &&
+        this.form.controls.representativeInformation.valid)
+    ) {
+      this.getApplicationPDFs()
+        .then((pdfs: DocumentCollectioninformation[]) => {
+          let form = this.harvestForm();
+          form.ApplicationPDFs = pdfs;
+          this.justiceDataService.submitApplication(form).subscribe(
+            (data) => {
               if (data['IsSuccess'] == true) {
                 this.router.navigate(['/application-success']);
-              }
-              else {
+              } else {
                 this.submitting = false;
-                this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+                this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', {
+                  duration: 3500,
+                  panelClass: ['red-snackbar']
+                });
                 console.log('Error submitting application. ' + data['message']);
                 if (this.isIE) {
-                  alert("Encountered an error. Please use another browser as this may resolve the problem.")
+                  alert('Encountered an error. Please use another browser as this may resolve the problem.');
                 }
               }
             },
-            error => {
+            (error) => {
               this.submitting = false;
-              this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              this.snackBar.open('Error submitting application', 'Fail', {
+                duration: 3500,
+                panelClass: ['red-snackbar']
+              });
               console.log('Error submitting application');
               if (this.isIE) {
-                alert("Encountered an error. Please use another browser as this may resolve the problem.")
+                alert('Encountered an error. Please use another browser as this may resolve the problem.');
               }
             }
           );
-      }).catch((err) => {
-        this.submitting = false;
-        this.snackBar.open('Error submitting application. ', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application. Problem getting AEM pdfs...');
-        console.log(err);
-      });
+        })
+        .catch((err) => {
+          this.submitting = false;
+          this.snackBar.open('Error submitting application. ', 'Fail', {
+            duration: 3500,
+            panelClass: ['red-snackbar']
+          });
+          console.log('Error submitting application. Problem getting AEM pdfs...');
+          console.log(err);
+        });
     } else {
       this.submitting = false;
-      console.log("form not validated");
+      console.log('form not validated');
       this.markAsTouched();
     }
   }
@@ -444,21 +503,20 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.submitting = true;
     if (this.form.valid) {
       let thisForm = _.cloneDeep(this.form);
-      this.getApplicationPDFs().then((pdfs: DocumentCollectioninformation[]) => {
-        let form = this.harvestForm();
-        form.ApplicationPDFs = pdfs;
-        this.justiceDataService.submitApplication(form)
-          .subscribe(
-            data => {
+      this.getApplicationPDFs()
+        .then((pdfs: DocumentCollectioninformation[]) => {
+          let form = this.harvestForm();
+          form.ApplicationPDFs = pdfs;
+          this.justiceDataService.submitApplication(form).subscribe(
+            (data) => {
               if (data['IsSuccess'] == true) {
-                if (type === "VICTIM") {
+                if (type === 'VICTIM') {
                   this.submitting = false;
                   let victimForm = this.cloneFormToVictim(thisForm);
                   this.victimStepper.reset();
 
                   this.form = victimForm;
-                }
-                else if (type === "IFM") {
+                } else if (type === 'IFM') {
                   this.submitting = false;
                   let ifmForm = this.cloneFormToIFM(thisForm);
 
@@ -466,38 +524,46 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
                   this.state.data = ifmForm;
 
                   this.router.navigate(['/ifm-application']);
-                }
-                else {
+                } else {
                   this.router.navigate(['/application-success']);
                 }
-              }
-              else {
+              } else {
                 this.submitting = false;
-                this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+                this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', {
+                  duration: 3500,
+                  panelClass: ['red-snackbar']
+                });
                 console.log('Error submitting application. ' + data['message']);
                 if (this.isIE) {
-                  alert("Encountered an error. Please use another browser as this may resolve the problem.")
+                  alert('Encountered an error. Please use another browser as this may resolve the problem.');
                 }
               }
             },
-            error => {
+            (error) => {
               this.submitting = false;
-              this.snackBar.open('Error submitting application', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+              this.snackBar.open('Error submitting application', 'Fail', {
+                duration: 3500,
+                panelClass: ['red-snackbar']
+              });
               console.log('Error submitting application');
               if (this.isIE) {
-                alert("Encountered an error. Please use another browser as this may resolve the problem.")
+                alert('Encountered an error. Please use another browser as this may resolve the problem.');
               }
             }
           );
-      }).catch((err) => {
-        this.submitting = false;
-        this.snackBar.open('Error submitting application. ', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-        console.log('Error submitting application. Problem getting AEM pdfs...');
-        console.log(err);
-      })
+        })
+        .catch((err) => {
+          this.submitting = false;
+          this.snackBar.open('Error submitting application. ', 'Fail', {
+            duration: 3500,
+            panelClass: ['red-snackbar']
+          });
+          console.log('Error submitting application. Problem getting AEM pdfs...');
+          console.log(err);
+        });
     } else {
       this.submitting = false;
-      console.log("form not validated");
+      console.log('form not validated');
       this.markAsTouched();
     }
   }
@@ -515,7 +581,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value as EmploymentIncomeInformation,
       RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
       DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
-      AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
+      AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation
     } as Application;
 
     //using this as a workaround to collect values from disabled fields
@@ -526,13 +592,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     return data;
   }
 
-
   save(): void {
-    this.justiceDataService.submitApplication(this.harvestForm())
-      .subscribe(
-        data => { },
-        err => { }
-      );
+    this.justiceDataService.submitApplication(this.harvestForm()).subscribe(
+      (data) => {},
+      (err) => {}
+    );
   }
 
   markAsTouched() {
@@ -582,7 +646,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('offenderRelationship').patchValue('');
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
-    ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
+    ret
+      .get('crimeInformation')
+      .get('racafInformation')
+      .patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
@@ -606,18 +673,51 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     // console.log(currentForm);
     let ret = this.buildApplicationForm(ApplicationType.IFM_Application);
 
-    ret.get('personalInformation').get('preferredMethodOfContact').patchValue(currentForm.get('personalInformation').get('preferredMethodOfContact').value);
-    ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(currentForm.get('personalInformation').get('permissionToContactViaMethod').value);
-    ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue(currentForm.get('personalInformation').get('agreeToCvapCommunicationExchange').value);
-    ret.get('personalInformation').get('phoneNumber').patchValue(currentForm.get('personalInformation').get('phoneNumber').value);
-    ret.get('personalInformation').get('leaveVoicemail').patchValue(currentForm.get('personalInformation').get('leaveVoicemail').value);
-    ret.get('personalInformation').get('alternatePhoneNumber').patchValue(currentForm.get('personalInformation').get('alternatePhoneNumber').value);
+    ret
+      .get('personalInformation')
+      .get('preferredMethodOfContact')
+      .patchValue(currentForm.get('personalInformation').get('preferredMethodOfContact').value);
+    ret
+      .get('personalInformation')
+      .get('permissionToContactViaMethod')
+      .patchValue(currentForm.get('personalInformation').get('permissionToContactViaMethod').value);
+    ret
+      .get('personalInformation')
+      .get('agreeToCvapCommunicationExchange')
+      .patchValue(currentForm.get('personalInformation').get('agreeToCvapCommunicationExchange').value);
+    ret
+      .get('personalInformation')
+      .get('phoneNumber')
+      .patchValue(currentForm.get('personalInformation').get('phoneNumber').value);
+    ret
+      .get('personalInformation')
+      .get('leaveVoicemail')
+      .patchValue(currentForm.get('personalInformation').get('leaveVoicemail').value);
+    ret
+      .get('personalInformation')
+      .get('alternatePhoneNumber')
+      .patchValue(currentForm.get('personalInformation').get('alternatePhoneNumber').value);
     ret.get('personalInformation').get('email').patchValue(currentForm.get('personalInformation').get('email').value);
-    ret.get('personalInformation').get('confirmEmail').patchValue(currentForm.get('personalInformation').get('confirmEmail').value);
-    ret.get('personalInformation').get('doNotLiveAtAddress').patchValue(currentForm.get('personalInformation').get('doNotLiveAtAddress').value);
-    ret.get('personalInformation').get('mailRecipient').patchValue(currentForm.get('personalInformation').get('mailRecipient').value);
-    ret.get('personalInformation').get('primaryAddress').patchValue(currentForm.get('personalInformation').get('primaryAddress').value);
-    ret.get('personalInformation').get('alternateAddress').patchValue(currentForm.get('personalInformation').get('alternateAddress').value);
+    ret
+      .get('personalInformation')
+      .get('confirmEmail')
+      .patchValue(currentForm.get('personalInformation').get('confirmEmail').value);
+    ret
+      .get('personalInformation')
+      .get('doNotLiveAtAddress')
+      .patchValue(currentForm.get('personalInformation').get('doNotLiveAtAddress').value);
+    ret
+      .get('personalInformation')
+      .get('mailRecipient')
+      .patchValue(currentForm.get('personalInformation').get('mailRecipient').value);
+    ret
+      .get('personalInformation')
+      .get('primaryAddress')
+      .patchValue(currentForm.get('personalInformation').get('primaryAddress').value);
+    ret
+      .get('personalInformation')
+      .get('alternateAddress')
+      .patchValue(currentForm.get('personalInformation').get('alternateAddress').value);
 
     ret.get('victimInformation').patchValue(currentForm.get('personalInformation').value);
 
@@ -645,7 +745,10 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('crimeInformation').get('offenderRelationship').patchValue('');
     ret.get('crimeInformation').get('haveYouSuedOffender').patchValue(0);
     ret.get('crimeInformation').get('intendToSueOffender').patchValue(null);
-    ret.get('crimeInformation').get('racafInformation').patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
+    ret
+      .get('crimeInformation')
+      .get('racafInformation')
+      .patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
     let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;

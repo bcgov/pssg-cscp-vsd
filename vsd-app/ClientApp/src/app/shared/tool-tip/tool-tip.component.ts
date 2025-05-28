@@ -7,9 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ToolTipTriggerComponent implements OnInit {
   @Input() trigger = '';
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

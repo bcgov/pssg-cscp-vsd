@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from "@angular/router";
+import { Router, RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { LookupService } from '../services/lookup.service';
 
@@ -9,12 +9,11 @@ import { LookupService } from '../services/lookup.service';
   styleUrls: ['./application-cancelled.component.scss']
 })
 export class ApplicationCancelledComponent implements OnInit {
-
   applicationType: string;
-  cvapEmail: string = "";
+  cvapEmail: string = '';
 
   constructor(private router: Router, private route: ActivatedRoute, private lookupService: LookupService) {
-    this.router.navigateByUrl("/application-cancelled");
+    this.router.navigateByUrl('/application-cancelled');
   }
 
   ngOnInit() {
@@ -23,8 +22,7 @@ export class ApplicationCancelledComponent implements OnInit {
     //    this.applicationType = myData;
     if (this.lookupService.cvapEmail) {
       this.cvapEmail = this.lookupService.cvapEmail;
-    }
-    else {
+    } else {
       this.lookupService.getCVAPEmails().subscribe((res) => {
         this.cvapEmail = res.cvapEmail;
       });

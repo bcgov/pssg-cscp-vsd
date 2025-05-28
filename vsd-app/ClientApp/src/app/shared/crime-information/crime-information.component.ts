@@ -1,17 +1,24 @@
-import { OnInit, Component, Input, OnDestroy } from "@angular/core";
-import { FormBase } from "../form-base";
-import { MatDialogConfig, MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepickerInputEvent } from "@angular/material";
-import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormControl } from "@angular/forms";
-import { SignPadDialog } from "../../sign-dialog/sign-dialog.component";
-import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, ApplicationType, CRMBoolean, CRMMultiBoolean } from "../enums-list";
+import { OnInit, Component, Input, OnDestroy } from '@angular/core';
+import { FormBase } from '../form-base';
+import {
+  MatDialogConfig,
+  MatDialog,
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  MAT_DATE_FORMATS,
+  MatDatepickerInputEvent
+} from '@angular/material';
+import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormControl } from '@angular/forms';
+import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MY_FORMATS, ApplicationType, CRMBoolean, CRMMultiBoolean } from '../enums-list';
 import * as moment from 'moment';
-import { CrimeInfoHelper } from "./crime-information.helper";
+import { CrimeInfoHelper } from './crime-information.helper';
 import { config } from '../../../config';
-import { Subscription } from "rxjs";
-import { AddressHelper } from "../address/address.helper";
-import { iLookupData } from "../../interfaces/lookup-data.interface";
-import { LookupService } from "../../services/lookup.service";
+import { Subscription } from 'rxjs';
+import { AddressHelper } from '../address/address.helper';
+import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { LookupService } from '../../services/lookup.service';
 
 @Component({
   selector: 'app-crime-information',
@@ -22,8 +29,8 @@ import { LookupService } from "../../services/lookup.service";
     // application's root module. We provide it at the component level here, due to limitations of
     // our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-  ],
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ]
 })
 export class CrimeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
@@ -78,21 +85,24 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   cityList: string[] = [];
   policeForceList: string[] = [];
   courtList: string[] = [];
-  crimeInjuriesLabel: string = "Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 750 characters)";
+  crimeInjuriesLabel: string =
+    'Please specify any injuries, physical or psychological, you sustained as a result of the crime (e.g. bruised leg, broken wrist, sleeplessness). (Maximum 750 characters)';
   addressHelper = new AddressHelper();
 
   constructor(
     private controlContainer: ControlContainer,
     private matDialog: MatDialog,
     private fb: FormBuilder,
-    public lookupService: LookupService,
+    public lookupService: LookupService
   ) {
     super();
   }
 
   ngOnInit() {
     this.form = <FormGroup>this.controlContainer.control;
-    setTimeout(() => { this.form.markAsTouched(); }, 0);
+    setTimeout(() => {
+      this.form.markAsTouched();
+    }, 0);
 
     // console.log("crime info component");
     // console.log(this.form);
@@ -100,7 +110,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
 
     if (this.formType === ApplicationType.IFM_Application) {
-      this.crimeInjuriesLabel = "Please specify any psychological injuries you sustained as a result of the crime (e.g. anxiety, sleeplessness)";
+      this.crimeInjuriesLabel =
+        'Please specify any psychological injuries you sustained as a result of the crime (e.g. anxiety, sleeplessness)';
     }
 
     for (let i = 0; i < this.policeReportItems.length; ++i) {
@@ -113,23 +124,21 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     let birthdate = this.form.parent.get('personalInformation.birthDate').value;
     if (birthdate && moment(birthdate).isAfter(startDate)) {
       this.showCrimeDateWarning = true;
-    }
-    else {
+    } else {
       this.showCrimeDateWarning = false;
     }
 
     this.courtFileItems = this.form.get('courtFiles') as FormArray;
     this.showRemoveCourtInfo = this.courtFileItems.length > 1;
 
-    this.wasReportMadeToPoliceSubscription = this.form.get('wasReportMadeToPolice').valueChanges.subscribe(value => {
+    this.wasReportMadeToPoliceSubscription = this.form.get('wasReportMadeToPolice').valueChanges.subscribe((value) => {
       let noPoliceReportIdentification = this.form.get('noPoliceReportIdentification');
       if (value === CRMMultiBoolean.True) {
         this.addPoliceReport();
         noPoliceReportIdentification.clearValidators();
         noPoliceReportIdentification.setErrors(null);
         noPoliceReportIdentification.setValue('');
-      }
-      else {
+      } else {
         this.removeAllPoliceReports();
 
         noPoliceReportIdentification.setValidators([Validators.required]);
@@ -138,63 +147,61 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       noPoliceReportIdentification.updateValueAndValidity();
     });
 
-    this.applyToCourtForMoneyFromOffenderSubscription = this.form.get('racafInformation.applyToCourtForMoneyFromOffender').valueChanges.subscribe(value => {
-      if (value === CRMMultiBoolean.True) {
-        this.applyToCourtOrLegalYes();
-      }
-      else {
-        this.applyToCourtNo();
-      }
-    });
+    this.applyToCourtForMoneyFromOffenderSubscription = this.form
+      .get('racafInformation.applyToCourtForMoneyFromOffender')
+      .valueChanges.subscribe((value) => {
+        if (value === CRMMultiBoolean.True) {
+          this.applyToCourtOrLegalYes();
+        } else {
+          this.applyToCourtNo();
+        }
+      });
 
-    this.willBeTakingLegalActionSubscription = this.form.get('racafInformation.willBeTakingLegalAction').valueChanges.subscribe(value => {
-      if (value === CRMMultiBoolean.True) {
-        this.applyToCourtOrLegalYes();
-      }
-      else {
-        let doYouHaveALawyerControl = this.form.get('racafInformation.haveLawyer');
-        doYouHaveALawyerControl.patchValue('');
-        this.haveLawyerChange(false);
-        this.legalChangesNo();
-      }
-    });
+    this.willBeTakingLegalActionSubscription = this.form
+      .get('racafInformation.willBeTakingLegalAction')
+      .valueChanges.subscribe((value) => {
+        if (value === CRMMultiBoolean.True) {
+          this.applyToCourtOrLegalYes();
+        } else {
+          let doYouHaveALawyerControl = this.form.get('racafInformation.haveLawyer');
+          doYouHaveALawyerControl.patchValue('');
+          this.haveLawyerChange(false);
+          this.legalChangesNo();
+        }
+      });
 
-    this.offenderBeenChargedSubscription = this.form.get('offenderBeenCharged').valueChanges.subscribe(value => {
+    this.offenderBeenChargedSubscription = this.form.get('offenderBeenCharged').valueChanges.subscribe((value) => {
       if (value === CRMMultiBoolean.True) {
         // Yes
         this.offenderBeenChargedYes();
-      }
-      else {
+      } else {
         // No or Unknown
         this.offenderBeenChargedNo();
       }
     });
 
-    this.haveYouSuedOffenderSubscription = this.form.get('haveYouSuedOffender').valueChanges.subscribe(value => {
+    this.haveYouSuedOffenderSubscription = this.form.get('haveYouSuedOffender').valueChanges.subscribe((value) => {
       if (value === CRMBoolean.True) {
         let intendToSue = this.form.get('intendToSueOffender');
         this.clearControlValidators(intendToSue);
         intendToSue.patchValue('');
         this.suedOrIntendToSueYes();
-      }
-      else if (value === CRMBoolean.False) {
+      } else if (value === CRMBoolean.False) {
         this.suedNo();
       }
     });
 
-    this.intendToSueOffenderSubscription = this.form.get('intendToSueOffender').valueChanges.subscribe(value => {
+    this.intendToSueOffenderSubscription = this.form.get('intendToSueOffender').valueChanges.subscribe((value) => {
       if (value === CRMMultiBoolean.True || value === CRMMultiBoolean.Undecided) {
         this.suedOrIntendToSueYes();
-      }
-      else if (value === CRMMultiBoolean.False) {
+      } else if (value === CRMMultiBoolean.False) {
         this.intendToSueNo();
       }
     });
 
     if (this.lookupData.courts && this.lookupData.courts.length > 0) {
-      this.courtList = this.lookupData.courts.map(c => c.vsd_name);
-    }
-    else {
+      this.courtList = this.lookupData.courts.map((c) => c.vsd_name);
+    } else {
       this.lookupService.getCourts().subscribe((res) => {
         this.lookupData.courts = res.value;
         if (this.lookupData.courts) {
@@ -202,29 +209,27 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
             return a.vsd_name.localeCompare(b.vsd_name);
           });
         }
-        this.courtList = this.lookupData.courts.map(c => c.vsd_name);
+        this.courtList = this.lookupData.courts.map((c) => c.vsd_name);
       });
     }
 
     if (this.lookupData.police_detachments && this.lookupData.police_detachments.length > 0) {
-      this.policeForceList = this.lookupData.police_detachments.map(pd => pd.vsd_name);
-    }
-    else {
+      this.policeForceList = this.lookupData.police_detachments.map((pd) => pd.vsd_name);
+    } else {
       this.lookupService.getPoliceDetachments().subscribe((res) => {
         this.lookupData.police_detachments = res.value;
         if (this.lookupData.police_detachments) {
           this.lookupData.police_detachments.sort(function (a, b) {
             return a.vsd_name.localeCompare(b.vsd_name);
           });
-          this.policeForceList = this.lookupData.police_detachments.map(pd => pd.vsd_name);
+          this.policeForceList = this.lookupData.police_detachments.map((pd) => pd.vsd_name);
         }
       });
     }
 
     if (this.lookupData.cities && this.lookupData.cities.length > 0) {
-      this.cityList = this.lookupData.cities.map(c => c.vsd_name);
-    }
-    else {
+      this.cityList = this.lookupData.cities.map((c) => c.vsd_name);
+    } else {
       this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
         this.lookupData.cities = res.value;
         if (this.lookupData.cities) {
@@ -232,14 +237,15 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
             return a.vsd_name.localeCompare(b.vsd_name);
           });
         }
-        this.cityList = this.lookupData.cities.map(c => c.vsd_name);
+        this.cityList = this.lookupData.cities.map((c) => c.vsd_name);
       });
     }
   }
 
   ngOnDestroy() {
     if (this.wasReportMadeToPoliceSubscription) this.wasReportMadeToPoliceSubscription.unsubscribe();
-    if (this.applyToCourtForMoneyFromOffenderSubscription) this.applyToCourtForMoneyFromOffenderSubscription.unsubscribe();
+    if (this.applyToCourtForMoneyFromOffenderSubscription)
+      this.applyToCourtForMoneyFromOffenderSubscription.unsubscribe();
     if (this.willBeTakingLegalActionSubscription) this.willBeTakingLegalActionSubscription.unsubscribe();
     if (this.haveYouSuedOffenderSubscription) this.haveYouSuedOffenderSubscription.unsubscribe();
     if (this.intendToSueOffenderSubscription) this.intendToSueOffenderSubscription.unsubscribe();
@@ -266,7 +272,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.showAddPoliceReport = this.policeReportItems.length < 5;
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
 
-    this.policeReportMinDates.push(null)
+    this.policeReportMinDates.push(null);
   }
 
   removePoliceReport(index: number): void {
@@ -319,8 +325,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     if (willBeTakingLegal === 100000000) {
       this.setControlValidators(this.signName, [Validators.required]);
       this.setControlValidators(this.signature, [Validators.required]);
-    }
-    else {
+    } else {
       this.signName.patchValue('');
       this.signature.patchValue('');
       this.clearControlValidators(this.signName);
@@ -335,8 +340,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     if (applyToCourt === 100000000) {
       this.setControlValidators(this.signName, [Validators.required]);
       this.setControlValidators(this.signature, [Validators.required]);
-    }
-    else {
+    } else {
       this.signName.patchValue('');
       this.signature.patchValue('');
       this.clearControlValidators(this.signName);
@@ -347,13 +351,15 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   haveLawyerChange(val: boolean) {
     if (!val) {
       this.form.get('racafInformation.lawyerOrFirmName').patchValue('');
-      this.addressHelper.clearAddress(this.form, 'racafInformation.lawyerAddress')
+      this.addressHelper.clearAddress(this.form, 'racafInformation.lawyerAddress');
     }
   }
 
   suedOrIntendToSueYes(): void {
     this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
-    this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
+    this.applyToCourtForMoneyFromOffender = this.form.get(
+      'racafInformation.applyToCourtForMoneyFromOffender'
+    ) as FormControl;
     this.setControlValidators(this.willBeTakingLegalAction, [Validators.required]);
     this.setControlValidators(this.applyToCourtForMoneyFromOffender, [Validators.required]);
   }
@@ -362,12 +368,13 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     let intendToSue = this.form.get('intendToSueOffender') as FormControl;
     this.setControlValidators(intendToSue, [Validators.required]);
     this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
-    this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
+    this.applyToCourtForMoneyFromOffender = this.form.get(
+      'racafInformation.applyToCourtForMoneyFromOffender'
+    ) as FormControl;
     if (intendToSue.value === CRMMultiBoolean.True || intendToSue.value === CRMMultiBoolean.Undecided) {
       this.setControlValidators(this.willBeTakingLegalAction, [Validators.required]);
       this.setControlValidators(this.applyToCourtForMoneyFromOffender, [Validators.required]);
-    }
-    else {
+    } else {
       this.clearControlValidators(this.willBeTakingLegalAction);
       this.clearControlValidators(this.applyToCourtForMoneyFromOffender);
       this.willBeTakingLegalAction.patchValue('');
@@ -385,7 +392,9 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   intendToSueNo(): void {
     this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
-    this.applyToCourtForMoneyFromOffender = this.form.get('racafInformation.applyToCourtForMoneyFromOffender') as FormControl;
+    this.applyToCourtForMoneyFromOffender = this.form.get(
+      'racafInformation.applyToCourtForMoneyFromOffender'
+    ) as FormControl;
     this.clearControlValidators(this.willBeTakingLegalAction);
     this.clearControlValidators(this.applyToCourtForMoneyFromOffender);
     this.willBeTakingLegalAction.patchValue('');
@@ -413,14 +422,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
     const dialogRef = this.matDialog.open(SignPadDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
-      data => {
+      (data) => {
         var patchObject = {};
         patchObject[control] = data;
-        this.form.get(group).patchValue(
-          patchObject
-        );
+        this.form.get(group).patchValue(patchObject);
       },
-      err => console.log(err)
+      (err) => console.log(err)
     );
   }
 
@@ -438,13 +445,14 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
     this.validateCrimePeriodWithinOneYear();
 
-    this.form.get('overOneYearFromCrime').patchValue(this.showWhyDidYouNotApplySooner ? CRMBoolean.True : CRMBoolean.False);
+    this.form
+      .get('overOneYearFromCrime')
+      .patchValue(this.showWhyDidYouNotApplySooner ? CRMBoolean.True : CRMBoolean.False);
 
     let birthdate = this.form.parent.get('personalInformation.birthDate').value;
     if (birthdate && moment(birthdate).isAfter(startDate)) {
       this.showCrimeDateWarning = true;
-    }
-    else {
+    } else {
       this.showCrimeDateWarning = false;
     }
   }
@@ -456,15 +464,16 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     let crimePeriodEndDate = startDate;
     if (endDate) {
       crimePeriodEndDate = endDate;
-    }
-    else if (this.form.get('whenDidCrimeOccur').value === true || this.form.get('unsureOfCrimeDates').value === true) {
+    } else if (
+      this.form.get('whenDidCrimeOccur').value === true ||
+      this.form.get('unsureOfCrimeDates').value === true
+    ) {
       crimePeriodEndDate = null;
     }
 
     if (crimePeriodEndDate) {
       this.showWhyDidYouNotApplySooner = moment(crimePeriodEndDate).isBefore(this.oneYearAgo);
-    }
-    else {
+    } else {
       this.showWhyDidYouNotApplySooner = false;
     }
   }
@@ -475,8 +484,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
     if (this.form.get('whenDidCrimeOccur').value) {
       this.setControlValidators(crimePeriodEndControl, [Validators.required]);
-    }
-    else if (!unsureOfCrimeDatesControl.value) {
+    } else if (!unsureOfCrimeDatesControl.value) {
       crimePeriodEndControl.patchValue(null);
       this.clearControlValidators(crimePeriodEndControl);
     }
@@ -490,8 +498,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     let whenDidCrimeOccurControl = this.form.get('whenDidCrimeOccur');
     if (unsureOfCrimeDatesControl.value) {
       this.setControlValidators(crimePeriodEndControl, [Validators.required]);
-    }
-    else if (!whenDidCrimeOccurControl.value) {
+    } else if (!whenDidCrimeOccurControl.value) {
       crimePeriodEndControl.patchValue(null);
       this.clearControlValidators(crimePeriodEndControl);
     }
@@ -521,15 +528,12 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     if (thisReport.get('policeReportedMultipleTimes').value) {
       thisEndDateControl.patchValue(null);
       this.clearControlValidators(thisEndDateControl);
-    }
-    else {
+    } else {
       this.setControlValidators(thisEndDateControl, [Validators.required]);
     }
   }
 
-  policeForceSelected(index: number) {
-
-  }
+  policeForceSelected(index: number) {}
 
   applyToCourtForMoneyFromOffenderChange() {
     let applyToCourtForMoneyFromOffenderControl = this.form.get('racafInformation.applyToCourtForMoneyFromOffender');

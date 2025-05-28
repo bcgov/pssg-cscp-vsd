@@ -1,6 +1,6 @@
-import { Address } from "./address.interface";
-import { DocumentCollectioninformation } from "./application.interface";
-import { Courtfile, ProviderFile } from "./files.interface";
+import { Address } from './address.interface';
+import { DocumentCollectioninformation } from './application.interface';
+import { Courtfile, ProviderFile } from './files.interface';
 
 export interface VictimRestitution {
   RestitutionInformation: VictimRestitutionInformation;
@@ -43,7 +43,4 @@ export interface VictimRestitutionInformation {
 
   declaredAndSigned: boolean;
   signature: string;
-
 }
-
-

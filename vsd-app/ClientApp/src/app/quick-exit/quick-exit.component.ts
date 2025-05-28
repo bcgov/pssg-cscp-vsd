@@ -8,27 +8,27 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./quick-exit.component.scss'],
   animations: [
     trigger('openClose', [
-      state('open', style({
-        transform: 'translateX(0)',
-      })),
-      state('closed', style({
-        transform: 'translateX(-240px)',
-      })),
-      transition('open => closed', [
-        animate('1s')
-      ]),
-      transition('closed => open', [
-        animate('0.5s')
-      ]),
-    ]),
-  ],
+      state(
+        'open',
+        style({
+          transform: 'translateX(0)'
+        })
+      ),
+      state(
+        'closed',
+        style({
+          transform: 'translateX(-240px)'
+        })
+      ),
+      transition('open => closed', [animate('1s')]),
+      transition('closed => open', [animate('0.5s')])
+    ])
+  ]
 })
 export class QuickExitComponent implements OnInit {
   isOpen = true;
 
-  constructor(@Inject(DOCUMENT) private document: any) {
-
-  }
+  constructor(@Inject(DOCUMENT) private document: any) {}
 
   ngOnInit() {
     setTimeout(() => {

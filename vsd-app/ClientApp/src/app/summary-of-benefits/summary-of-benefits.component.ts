@@ -8,7 +8,6 @@ import { ApplicationType } from '../shared/enums-list';
   styleUrls: ['./summary-of-benefits.component.scss']
 })
 export class SummaryOfBenefitsDialog implements OnInit {
-
   benefitList: any;
   formType: ApplicationType;
   ApplicationType = ApplicationType;
@@ -17,8 +16,7 @@ export class SummaryOfBenefitsDialog implements OnInit {
   showFamilyBenefits: boolean = false;
   showWitnessBenefits: boolean = false;
 
-  constructor(public dialogRef: MatDialogRef<SummaryOfBenefitsDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {
-  }
+  constructor(public dialogRef: MatDialogRef<SummaryOfBenefitsDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   closeMe(): void {
     this.dialogRef.close();
