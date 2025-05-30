@@ -33,6 +33,10 @@ jobs:
         run: |
           curl -sk "${ZAP_API}/JSON/context/action/includeInContext/?apikey=${ZAP_API_KEY}&contextName=api&regex=https://coast-vsd-dev.silver.devops.bcgov/api/.*"
       
+      - name: Exclude non-API endpoints from context
+        run: |
+          curl -sk "${ZAP_API}/JSON/context/action/excludeFromContext/?apikey=${ZAP_API_KEY}&contextName=api&regex=https://coast-vsd-dev.silver.devops.bcgov/(?!api/).*"
+      
       - name: Trigger API endpoints (prime ZAP with API traffic)
         env:
           PROXY: http://zaproxy:8080
