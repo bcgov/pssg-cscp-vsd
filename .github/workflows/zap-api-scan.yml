@@ -29,20 +29,29 @@ jobs:
           echo "ZAP did not become ready in time"
           exit 1
 
+      - name: Create new context and remove previous data
+        run: |
+          # Remove previous session data
+          curl -sk "${ZAP_API}/JSON/core/action/newSession/?apikey=${ZAP_API_KEY}&name=api-only-scan&overwrite=true"
+          # Remove old context if exists
+          curl -sk "${ZAP_API}/JSON/context/action/removeContext/?apikey=${ZAP_API_KEY}&contextName=api" || true
+          # Create new context named 'api'
+          curl -sk "${ZAP_API}/JSON/context/action/newContext/?apikey=${ZAP_API_KEY}&contextName=api"
+
       - name: Include only API endpoints in context
         run: |
           curl -sk "${ZAP_API}/JSON/context/action/includeInContext/?apikey=${ZAP_API_KEY}&contextName=api&regex=https://coast-vsd-dev.silver.devops.bcgov/api/.*"
-      
-      - name: Exclude non-API endpoints from context
+
+      - name: Exclude non-API endpoints from context (strict)
         run: |
           curl -sk "${ZAP_API}/JSON/context/action/excludeFromContext/?apikey=${ZAP_API_KEY}&contextName=api&regex=https://coast-vsd-dev.silver.devops.bcgov/(?!api/).*"
-      
+
       - name: Trigger API endpoints (prime ZAP with API traffic)
         env:
           PROXY: http://zaproxy:8080
         run: |
           set -e
-          # LookupController GET endpoints
+          # ONLY API endpoints! Do not hit any non-API endpoints.
           curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/cvap-emails"
           curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/countries"
           curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/provinces"
@@ -57,15 +66,9 @@ jobs:
           curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/restitution_relationships"
           curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/police_detachments"
           curl -x $PROXY -sk "${ZAP_TARGET}/api/lookup/courts"
-          # ConfigurationController GET endpoint
           curl -x $PROXY -sk "${ZAP_TARGET}/api/configuration"
-          # JusticeController GET endpoint
           curl -x $PROXY -sk "${ZAP_TARGET}/api/justice/validate_vendor/12345/ABC123"
-          # NotFoundController GET endpoint
-          curl -x $PROXY -sk "${ZAP_TARGET}/404"
-          # JusticeController GET with multiple params (example values)
           curl -x $PROXY -sk "${ZAP_TARGET}/api/justice/validate_vendor_and_counsellor/12345/ABC123/67890/Smith"
-          # POST endpoints (replace with real example payloads if available)
           curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/aem/victim"
           curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/aem/ifm"
           curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/aem/witness"
@@ -76,7 +79,7 @@ jobs:
           curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/justice/saveapplication"
           curl -x $PROXY -sk -H "Content-Type: application/json" -d '{}' "${ZAP_TARGET}/api/justice/submitcounsellorinvoice"
 
-      - name: Start spider scan
+      - name: Start spider scan (API context only)
         run: |
           set -e
           SPIDER_ID=$(curl -sk "${ZAP_API}/JSON/spider/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}/api/&contextName=api&subtreeOnly=true" | jq -r .scan)
@@ -91,7 +94,7 @@ jobs:
             sleep 5
           done
 
-      - name: Start active scan
+      - name: Start active scan (API context only)
         run: |
           set -e
           SCAN_ID=$(curl -sk "${ZAP_API}/JSON/ascan/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}/api/&contextName=api&subtreeOnly=true" | jq -r .scan)
