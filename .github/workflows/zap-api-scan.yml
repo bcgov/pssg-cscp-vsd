@@ -29,6 +29,10 @@ jobs:
           echo "ZAP did not become ready in time"
           exit 1
 
+      - name: Include only API endpoints in context
+        run: |
+          curl -sk "${ZAP_API}/JSON/context/action/includeInContext/?apikey=${ZAP_API_KEY}&contextName=api&regex=https://coast-vsd-dev.silver.devops.bcgov/api/.*"
+      
       - name: Trigger API endpoints (prime ZAP with API traffic)
         env:
           PROXY: http://zaproxy:8080
@@ -71,10 +75,10 @@ jobs:
       - name: Start spider scan
         run: |
           set -e
-          SPIDER_ID=$(curl -sk "${ZAP_API}/JSON/spider/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}" | jq -r .scan)
+          SPIDER_ID=$(curl -sk "${ZAP_API}/JSON/spider/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}&contextName=api" | jq -r .scan)
           echo "Spider scan started: $SPIDER_ID"
           for i in {1..60}; do
-            STATUS=$(curl -sk "${ZAP_API}/JSON/spider/view/status/?apikey=${ZAP_API_KEY}&scanId=$SPIDER_ID" | jq -r .status)
+            STATUS=$(curl -sk "${ZAP_API}/JSON/spider/view/status/?apikey=${ZAP_API_KEY}&scanId=$SPIDER_ID&contextName=api" | jq -r .status)
             echo "Spider progress: $STATUS%"
             if [ "$STATUS" = "100" ]; then
               echo "Spider scan completed"
@@ -86,10 +90,10 @@ jobs:
       - name: Start active scan
         run: |
           set -e
-          SCAN_ID=$(curl -sk "${ZAP_API}/JSON/ascan/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}" | jq -r .scan)
+          SCAN_ID=$(curl -sk "${ZAP_API}/JSON/ascan/action/scan/?apikey=${ZAP_API_KEY}&url=${ZAP_TARGET}&contextName=api" | jq -r .scan)
           echo "Active scan started: $SCAN_ID"
           for i in {1..60}; do
-            STATUS=$(curl -sk "${ZAP_API}/JSON/ascan/view/status/?apikey=${ZAP_API_KEY}&scanId=$SCAN_ID" | jq -r .status)
+            STATUS=$(curl -sk "${ZAP_API}/JSON/ascan/view/status/?apikey=${ZAP_API_KEY}&scanId=$SCAN_ID&contextName=api" | jq -r .status)
             echo "Active scan progress: $STATUS%"
             if [ "$STATUS" = "100" ]; then
               echo "Active scan completed"
