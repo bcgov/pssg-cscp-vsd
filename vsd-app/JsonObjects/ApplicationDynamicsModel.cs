@@ -21,7 +21,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
     {
         True = 100000000,
         False = 100000001,
-        Undecided = 100000002
+        Undecided = 100000002,
     }
 
     public class Application
@@ -180,6 +180,7 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string odatatype => "Microsoft.Dynamics.CRM.vsd_applicationpolicenumber";
         public string vsd_policefilenumber { get; set; }
         public string vsd_investigatingpoliceofficername { get; set; }
+
         // public string vsd_policeforce { get; set; }
         public string vsd_policedetachment { get; set; }
         public DateTime? vsd_policereportingstartdate { get; set; }
@@ -218,7 +219,4 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string body { get; set; }
         public string subject { get; set; }
     }
-
 }
-
-

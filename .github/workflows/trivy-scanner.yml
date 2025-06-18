@@ -1,0 +1,63 @@
+name: Trivy Scanner
+
+on:
+  schedule:
+    - cron: '0 14 */14 * *'  # 14:00 UTC = 6:00 AM PST, 7:00 AM PDT
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [development]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  trivy-scan:
+    name: Trivy Filesystem and Secrets Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Trivy
+        run: |
+          wget -qO- https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bash
+          echo "$(pwd)/bin" >> $GITHUB_PATH
+
+
+      - name: Trivy FS scan
+        continue-on-error: true
+        run: |
+          trivy fs vsd-app/ \
+            --scanners vuln,secret \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1 \
+            --timeout 10m \
+            --format sarif \
+            --output trivy-vsd-scan.sarif
+
+      - name: Trivy config scan - vsd frontend Dockerfile
+        continue-on-error: true
+        run: |
+          trivy config vsd-app/ClientApp/Dockerfile \
+            --severity MEDIUM,HIGH,CRITICAL \
+            --exit-code 1 \
+            --format table        
+
+      - name: Trivy config scan - vsd Backend Dockerfile
+        continue-on-error: true
+        run: |
+          trivy config vsd-app/Dockerfile \
+            --severity MEDIUM,HIGH,CRITICAL \
+            --exit-code 1 \
+            --format table
+
+
+      - name: Upload scan results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-vsd-scan.sarif
+          category: trivy-scan-results

@@ -1,14 +1,14 @@
+using System;
+using System.Threading.Tasks;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
-using Gov.Cscp.VictimServices.Public.Models.Extensions;
 using Gov.Cscp.VictimServices.Public.Models;
+using Gov.Cscp.VictimServices.Public.Models.Extensions;
 using Gov.Cscp.VictimServices.Public.Services;
 using Gov.Cscp.VictimServices.Public.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Serilog;
-using System.Threading.Tasks;
-using System;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -33,7 +33,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error($"API call to 'SaveApplication' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
+                    _logger.Error(
+                        $"API call to 'SaveApplication' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                    );
                     return BadRequest(ModelState);
                 }
 
@@ -65,7 +67,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error($"API call to 'SubmitCounsellorInvoice' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
+                    _logger.Error(
+                        $"API call to 'SubmitCounsellorInvoice' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                    );
                     return BadRequest(ModelState);
                 }
 
@@ -95,7 +99,8 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
-                string requestJson = "{\"VendorNumber\":\"" + VendorNumber + "\",\"VendorPostalCode\":\"" + VendorPostalCode + "\"}";
+                string requestJson =
+                    "{\"VendorNumber\":\"" + VendorNumber + "\",\"VendorPostalCode\":\"" + VendorPostalCode + "\"}";
                 string endpointUrl = "vsd_CheckVendorStatus";
 
                 DynamicsResult result = await _dynamicsResultService.Post(endpointUrl, requestJson);
@@ -104,18 +109,39 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected error while validating vendor. Source = VSD", VendorNumber, VendorPostalCode);
+                _logger.Error(
+                    e,
+                    "Unexpected error while validating vendor. Source = VSD",
+                    VendorNumber,
+                    VendorPostalCode
+                );
                 return BadRequest();
             }
             finally { }
         }
 
-        [HttpGet("validate_vendor_and_counsellor/{VendorNumber}/{VendorPostalCode}/{CounsellorNumber}/{CounsellorLastName}")]
-        public async Task<IActionResult> ValidateVendorAndCounsellor(String VendorNumber, String VendorPostalCode, String CounsellorNumber, String CounsellorLastName)
+        [HttpGet(
+            "validate_vendor_and_counsellor/{VendorNumber}/{VendorPostalCode}/{CounsellorNumber}/{CounsellorLastName}"
+        )]
+        public async Task<IActionResult> ValidateVendorAndCounsellor(
+            String VendorNumber,
+            String VendorPostalCode,
+            String CounsellorNumber,
+            String CounsellorLastName
+        )
         {
             try
             {
-                string requestJson = "{\"VendorNumber\":\"" + VendorNumber + "\",\"VendorPostalCode\":\"" + VendorPostalCode + "\",\"CounselorNumber\":\"" + CounsellorNumber + "\",\"CounselorLastName\":\"" + CounsellorLastName + "\"}";
+                string requestJson =
+                    "{\"VendorNumber\":\""
+                    + VendorNumber
+                    + "\",\"VendorPostalCode\":\""
+                    + VendorPostalCode
+                    + "\",\"CounselorNumber\":\""
+                    + CounsellorNumber
+                    + "\",\"CounselorLastName\":\""
+                    + CounsellorLastName
+                    + "\"}";
                 string endpointUrl = "vsd_CheckVendorStatus";
 
                 DynamicsResult result = await _dynamicsResultService.Post(endpointUrl, requestJson);

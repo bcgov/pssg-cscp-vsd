@@ -1,5 +1,5 @@
 import { TestBed, async, ComponentFixture, ComponentFixtureAutoDetect } from '@angular/core/testing';
-import { BrowserModule, By } from "@angular/platform-browser";
+import { BrowserModule, By } from '@angular/platform-browser';
 import { ApplicationCancelledComponent } from './application-cancelled.component';
 
 let component: ApplicationCancelledComponent;
@@ -10,9 +10,7 @@ describe('ApplicationCancelled component', () => {
     TestBed.configureTestingModule({
       declarations: [ApplicationCancelledComponent],
       imports: [BrowserModule],
-      providers: [
-        { provide: ComponentFixtureAutoDetect, useValue: true }
-      ]
+      providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }]
     });
     fixture = TestBed.createComponent(ApplicationCancelledComponent);
     component = fixture.componentInstance;

@@ -1,13 +1,13 @@
-import { DocumentCollectioninformation } from "./application.interface";
+import { DocumentCollectioninformation } from './application.interface';
 
 export interface CounsellorInvoice {
   InvoiceDetails: InvoiceDetails;
   DocumentCollection: DocumentCollectioninformation[];
 }
 export interface InvoiceDetails {
-  registeredCounsellorWithCvap: boolean;  // Not used in transfer to Dynamics
-  doYouHaveCvapCounsellorNumber: boolean;  // Not used in transfer to Dynamics
-  doYouHaveVendorNumberOnFile: boolean;  // Not used in transfer to Dynamics
+  registeredCounsellorWithCvap: boolean; // Not used in transfer to Dynamics
+  doYouHaveCvapCounsellorNumber: boolean; // Not used in transfer to Dynamics
+  doYouHaveVendorNumberOnFile: boolean; // Not used in transfer to Dynamics
   counsellorRegistrationNumber: string;
   counsellorLastName: string;
   vendorNumber: string;
@@ -23,13 +23,13 @@ export interface InvoiceDetails {
   exemptFromGst: boolean;
   gstApplicable: boolean;
   lineItems: LineItem[];
-  declaredAndSigned: boolean;  // Not used in transfer to Dynamics
+  declaredAndSigned: boolean; // Not used in transfer to Dynamics
 }
 export interface LineItem {
   counsellingType: number;
   counsellingTypeName?: string;
   sessionDate: Date;
   sessionHours: number;
-  sessionAmount: number;  // Not used in transfer to Dynamics
+  sessionAmount: number; // Not used in transfer to Dynamics
   missedSession: boolean;
 }

@@ -5,18 +5,8 @@
     "module": "commonjs",
     "target": "es5",
     "baseUrl": "",
-    "types": [
-      "jasmine",
-      "node",
-      "knockout"
-    ]
+    "types": ["jasmine", "node", "knockout"]
   },
-  "files": [
-    "test.ts",
-    "polyfills.ts"
-  ],
-  "include": [
-    "**/*.spec.ts",
-    "**/*.d.ts"
-  ]
+  "files": ["test.ts", "polyfills.ts"],
+  "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

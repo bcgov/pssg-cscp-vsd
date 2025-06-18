@@ -8,61 +8,56 @@ import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AEMService {
-    baseUrl = environment.apiRootUrl;
-    apiPath = this.baseUrl.concat('api/AEM');
+  baseUrl = environment.apiRootUrl;
+  apiPath = this.baseUrl.concat('api/AEM');
 
-    headers: HttpHeaders = new HttpHeaders({
-        'Content-Type': 'application/json'
-    });
+  headers: HttpHeaders = new HttpHeaders({
+    'Content-Type': 'application/json'
+  });
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-    public getVictimApplicationPDF(application: Application) {
-        return this.http.post(this.apiPath + '/victim', application, { headers: this.headers }).pipe(
-            retry(3),
-            catchError(this.handleError)
-        );
+  public getVictimApplicationPDF(application: Application) {
+    return this.http
+      .post(this.apiPath + '/victim', application, { headers: this.headers })
+      .pipe(retry(3), catchError(this.handleError));
+  }
+
+  public getIFMApplicationPDF(application: Application) {
+    return this.http
+      .post(this.apiPath + '/ifm', application, { headers: this.headers })
+      .pipe(retry(3), catchError(this.handleError));
+  }
+
+  public getWitnessApplicationPDF(application: Application) {
+    return this.http
+      .post(this.apiPath + '/witness', application, { headers: this.headers })
+      .pipe(retry(3), catchError(this.handleError));
+  }
+
+  public getAuthorizationPDF(application: Application) {
+    return this.http
+      .post(this.apiPath + '/authorization', application, { headers: this.headers })
+      .pipe(retry(3), catchError(this.handleError));
+  }
+
+  public getInvoicePDF(invoice: CounsellorInvoice) {
+    return this.http
+      .post(this.apiPath + '/invoice', invoice, { headers: this.headers })
+      .pipe(retry(3), catchError(this.handleError));
+  }
+
+  protected handleError(err): Observable<never> {
+    let errorMessage = '';
+    console.log(err);
+    if (err.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      errorMessage = err.error.message;
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      errorMessage = `Backend returned code ${err.status}, body was: ${JSON.stringify(err.error)}`;
     }
-
-    public getIFMApplicationPDF(application: Application) {
-        return this.http.post(this.apiPath + '/ifm', application, { headers: this.headers }).pipe(
-            retry(3),
-            catchError(this.handleError)
-        );
-    }
-
-    public getWitnessApplicationPDF(application: Application) {
-        return this.http.post(this.apiPath + '/witness', application, { headers: this.headers }).pipe(
-            retry(3),
-            catchError(this.handleError)
-        );
-    }
-
-    public getAuthorizationPDF(application: Application) {
-        return this.http.post(this.apiPath + '/authorization', application, { headers: this.headers }).pipe(
-            retry(3),
-            catchError(this.handleError)
-        );
-    }
-
-    public getInvoicePDF(invoice: CounsellorInvoice) {
-        return this.http.post(this.apiPath + '/invoice', invoice, { headers: this.headers }).pipe(
-            retry(3),
-            catchError(this.handleError)
-        );
-    }
-
-    protected handleError(err): Observable<never> {
-        let errorMessage = '';
-        console.log(err);
-        if (err.error instanceof ErrorEvent) {
-            // A client-side or network error occurred. Handle it accordingly.
-            errorMessage = err.error.message;
-        } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            errorMessage = `Backend returned code ${err.status}, body was: ${JSON.stringify(err.error)}`;
-        }
-        return throwError(errorMessage);
-    }
+    return throwError(errorMessage);
+  }
 }

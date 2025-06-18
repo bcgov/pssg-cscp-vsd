@@ -5,12 +5,7 @@
     "module": "es2015",
     "baseUrl": "",
     "target": "es5",
-    "types": [
-      "knockout"
-    ]
+    "types": ["knockout"]
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
-  ]
+  "exclude": ["test.ts", "**/*.spec.ts"]
 }

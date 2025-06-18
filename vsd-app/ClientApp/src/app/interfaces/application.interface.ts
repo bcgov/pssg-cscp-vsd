@@ -1,5 +1,5 @@
-import { Address } from "./address.interface";
-import { Courtfile } from "./files.interface";
+import { Address } from './address.interface';
+import { Courtfile } from './files.interface';
 
 export interface Application {
   ApplicationType: number;
@@ -36,11 +36,11 @@ export interface PersonalInformation {
   iHaveOtherNames: string;
   indigenousStatus: number;
   leaveVoicemail: number;
-  maritalStatus: number;
+  maritalStatus?: number;
   name: NameBlock;
-  firstName: string;
+  firstName?: string;
   middleName: string;
-  lastName: string;
+  lastName?: string;
   fullName: string;
   occupation: string;
   permissionToContactViaMethod: boolean;

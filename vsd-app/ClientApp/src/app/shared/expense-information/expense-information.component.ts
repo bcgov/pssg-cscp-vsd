@@ -1,14 +1,14 @@
-import { FormBase } from "../form-base";
-import { OnInit, Component, Input, OnDestroy } from "@angular/core";
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDatepickerInputEvent } from "@angular/material";
-import { FormGroup, ControlContainer, FormControl, AbstractControl, Validators, FormArray } from "@angular/forms";
-import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { MY_FORMATS, ApplicationType, CRMBoolean } from "../enums-list";
-import { SummaryOfBenefitsDialog } from "../../summary-of-benefits/summary-of-benefits.component";
+import { FormBase } from '../form-base';
+import { OnInit, Component, Input, OnDestroy } from '@angular/core';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatDatepickerInputEvent } from '@angular/material';
+import { FormGroup, ControlContainer, FormControl, AbstractControl, Validators, FormArray } from '@angular/forms';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MY_FORMATS, ApplicationType, CRMBoolean } from '../enums-list';
+import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
 import * as moment from 'moment';
-import { Subscription } from "rxjs";
-import { AddressHelper } from "../address/address.helper";
-import { iLookupData } from "../../interfaces/lookup-data.interface";
+import { Subscription } from 'rxjs';
+import { AddressHelper } from '../address/address.helper';
+import { iLookupData } from '../../interfaces/lookup-data.interface';
 
 @Component({
   selector: 'app-expense-information',
@@ -19,8 +19,8 @@ import { iLookupData } from "../../interfaces/lookup-data.interface";
     // application's root module. We provide it at the component level here, due to limitations of
     // our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-  ],
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ]
 })
 export class ExpenseInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
@@ -29,7 +29,6 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   ApplicationType = ApplicationType;
 
   BENEFITS: string[];
-  ADDITIONAL_BENEFITS: string[];
   OTHER_BENEFITS: string[];
   header: string;
 
@@ -45,21 +44,20 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   loseWagesSubscription: Subscription;
   missedWorkDueToDeathOfVictimSubscription: Subscription;
 
-  constructor(
-    private controlContainer: ControlContainer,
-    private matDialog: MatDialog,
-  ) {
+  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog) {
     super();
   }
 
   ngOnInit() {
     this.form = <FormGroup>this.controlContainer.control;
-    setTimeout(() => { this.form.markAsTouched(); }, 0);
+    setTimeout(() => {
+      this.form.markAsTouched();
+    }, 0);
     // console.log("expense info component");
     // console.log(this.form);
 
     if (this.formType === ApplicationType.Victim_Application) {
-      this.header = "Loss";
+      this.header = 'Loss';
       this.BENEFITS = [
         'haveMedicalExpenses',
         'haveDentalExpenses',
@@ -75,7 +73,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveCrimeSceneCleaningExpenses',
         'haveOtherExpenses'
       ];
-      this.ADDITIONAL_BENEFITS = [
+      this.OTHER_BENEFITS = [
         'haveDisabilityPlanBenefits',
         'haveEmploymentInsuranceBenefits',
         'haveIncomeAssistanceBenefits',
@@ -87,7 +85,6 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
       ];
     }
     if (this.formType === ApplicationType.IFM_Application) {
-
       setTimeout(() => {
         let didMissWorkControl = this.form.get('missedWorkDueToDeathOfVictim');
         let mayContactEmployer = this.form.get('mayContactEmployer').value === CRMBoolean.True;
@@ -95,8 +92,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         if (this.form.parent.get('crimeInformation.victimDeceasedFromCrime').value == CRMBoolean.True) {
           didMissWorkControl.setValidators([Validators.required]);
           this.mayContactEmployerChange(mayContactEmployer);
-        }
-        else {
+        } else {
           didMissWorkControl.clearValidators();
           didMissWorkControl.setErrors(null);
           this.mayContactEmployerChange(false);
@@ -116,8 +112,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
           if (value === CRMBoolean.True) {
             didYouLoseWagesControl.setValidators([Validators.required]);
             // minimumOtherBenefitsSelected.setValidators([Validators.required]);
-          }
-          else {
+          } else {
             didYouLoseWagesControl.clearValidators();
             didYouLoseWagesControl.setErrors(null);
             didYouLoseWagesControl.patchValue('');
@@ -147,8 +142,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
               // let employersEmployerPhoneNumber = employerGroup.controls['employerPhoneNumber'] as FormControl;
               // this.setControlValidators(employersEmployerPhoneNumber, [Validators.required]);
             }
-          }
-          else {
+          } else {
             daysMissedStartControl.patchValue('');
             this.clearControlValidators(daysMissedStartControl);
             daysMissedEndControl.patchValue('');
@@ -182,17 +176,14 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
           daysMissedStartControl.updateValueAndValidity();
           daysMissedEndControl.updateValueAndValidity();
         });
-
       }, 0);
 
-      this.header = "Benefits";
+      this.header = 'Benefits';
       this.BENEFITS = [
         'haveCounsellingExpenses',
         'haveCounsellingTransportation',
         'havePrescriptionDrugExpenses',
-        'haveCrimeSceneCleaningExpenses'
-      ];
-      this.ADDITIONAL_BENEFITS = [
+        'haveCrimeSceneCleaningExpenses',
         'haveVocationalServicesExpenses',
         'haveIncomeSupportExpenses',
         'haveChildcareExpenses',
@@ -211,19 +202,16 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         'haveCanadaPensionPlanBenefits',
         'haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits',
         'haveCivilActionBenefits',
-        'haveOtherBenefits',
+        'haveOtherBenefits'
       ];
     }
     if (this.formType === ApplicationType.Witness_Application) {
-      this.header = "Benefits";
+      this.header = 'Benefits';
       this.BENEFITS = [
         'haveCounsellingExpenses',
         'haveCounsellingTransportation',
-        'havePrescriptionDrugExpenses'
-      ];
-      this.ADDITIONAL_BENEFITS = [
-        'haveCrimeSceneCleaningExpenses',
-        'haveOtherExpenses'
+        'havePrescriptionDrugExpenses',
+        'haveCrimeSceneCleaningExpenses'
       ];
     }
   }
@@ -250,7 +238,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
 
   daysWorkMissedEndChange() {
     let endDate = moment(this.form.get('daysWorkMissedEnd').value);
-    this.showCurrentlyOffWork = endDate.isSame(new Date(), "day");
+    this.showCurrentlyOffWork = endDate.isSame(new Date(), 'day');
   }
 
   changeGroupValidity(values: any): void {
@@ -264,44 +252,17 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
 
     //determine if one of the checkboxes is true
     let oneChecked = false;
-    x.forEach(c => {
+    x.forEach((c) => {
       // TODO: This should always return if not null because truthy. Second if should never trigger?
-      if (oneChecked)
-        return;
+      if (oneChecked) return;
       if (c instanceof FormControl) {
-        if (c.value === true)
-          oneChecked = true;
+        if (c.value === true) oneChecked = true;
       }
     });
     // fake a 'true' as a string
     expenseMinimumMet = oneChecked ? 'yes' : '';
     this.form.patchValue({
       minimumExpensesSelected: expenseMinimumMet
-    });
-  }
-
-  changeAdditionalBenefitGroupValidity(values: any): void {
-    let minimumBenefitsMet = '';
-    let x: AbstractControl[] = [];
-    this.ADDITIONAL_BENEFITS.forEach((benefit) => {
-      x.push(this.form.get(benefit));
-    });
-    let oneChecked = false;
-    x.forEach(c => {
-      if (oneChecked)
-        return;
-
-      if (c instanceof FormControl) {
-        if (c.value === true)
-          oneChecked = true;
-      }
-    });
-
-    // fake a 'true' as a string
-    minimumBenefitsMet = oneChecked ? 'yes' : '';
-
-    this.form.patchValue({
-      minimumAdditionalBenefitsSelected: minimumBenefitsMet
     });
   }
 
@@ -316,13 +277,11 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
 
     //determine if one of the checkboxes is true
     let oneChecked = false;
-    x.forEach(c => {
+    x.forEach((c) => {
       // TODO: This should always return if not null because truthy. Second if should never trigger?
-      if (oneChecked)
-        return;
+      if (oneChecked) return;
       if (c instanceof FormControl) {
-        if (c.value === true)
-          oneChecked = true;
+        if (c.value === true) oneChecked = true;
       }
     });
     // fake a 'true' as a string
@@ -343,8 +302,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
         this.setControlValidators(nameControl, [Validators.required]);
         this.setControlValidators(phoneControl, [Validators.required]);
         this.addressHelper.setAddressAsRequired(thisEmployer, 'employerAddress');
-      }
-      else {
+      } else {
         this.clearControlValidators(nameControl);
         this.clearControlValidators(phoneControl);
         this.addressHelper.clearAddressValidatorsAndErrors(thisEmployer, 'employerAddress');
@@ -375,16 +333,21 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   setEmployerPhoneValidators(employer: AbstractControl) {
     let phoneMinLength = 10;
     let phoneMaxLength = 15;
-    if (employer.get('employerAddress.country').value === 'Canada' || employer.get('employerAddress.country').value === 'United States of America') {
+    if (
+      employer.get('employerAddress.country').value === 'Canada' ||
+      employer.get('employerAddress.country').value === 'United States of America'
+    ) {
       phoneMinLength = 10;
-    }
-    else {
+    } else {
       phoneMinLength = 8;
     }
 
     let phoneControl = employer.get('employerPhoneNumber');
     let faxControl = employer.get('employerFax');
-    this.setControlValidators(phoneControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
+    this.setControlValidators(phoneControl, [
+      Validators.minLength(phoneMinLength),
+      Validators.maxLength(phoneMaxLength)
+    ]);
     this.setControlValidators(faxControl, [Validators.minLength(phoneMinLength), Validators.maxLength(phoneMaxLength)]);
     phoneControl.patchValue(phoneControl.value);
     faxControl.patchValue(faxControl.value);

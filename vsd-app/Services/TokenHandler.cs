@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Gov.Cscp.VictimServices.Public.Services
 {
@@ -9,13 +9,15 @@ namespace Gov.Cscp.VictimServices.Public.Services
     {
         private readonly ICOASTAuthService _coastAuthService;
 
-        public TokenHandler(
-            ICOASTAuthService coastAuthService)
+        public TokenHandler(ICOASTAuthService coastAuthService)
         {
             _coastAuthService = coastAuthService;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken
+        )
         {
             var accessToken = await _coastAuthService.GetToken();
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

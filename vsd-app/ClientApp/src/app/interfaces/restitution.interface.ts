@@ -1,5 +1,5 @@
-import { IOptionSetVal } from "../shared/enums-list";
-import { Address } from "./address.interface";
+import { IOptionSetVal } from '../shared/enums-list';
+import { Address } from './address.interface';
 
 export interface iRestitutionApplication {
   ApplicationType: IOptionSetVal;

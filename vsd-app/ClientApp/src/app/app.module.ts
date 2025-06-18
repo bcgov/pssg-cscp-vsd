@@ -68,7 +68,7 @@ import { JusticeApplicationDataService } from './services/justice-application-da
 import { LookupService } from './services/lookup.service';
 import { MedicalInformationComponent } from './shared/medical-information/medical-information.component';
 import { NgBusyModule } from 'ng-busy';
-import { NgxMaskModule } from 'ngx-mask'
+import { NgxMaskModule } from 'ngx-mask';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PersonalInformationComponent } from './shared/personal-information/personal-information.component';
 import { PhonePipe } from './pipes/phone.pipe';
@@ -124,7 +124,7 @@ import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
     ToolTipTriggerComponent,
     VictimApplicationComponent,
     VictimInformationComponent,
-    WitnessApplicationComponent,
+    WitnessApplicationComponent
   ],
   imports: [
     AppRoutingModule,
@@ -174,7 +174,7 @@ import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
     BsDatepickerModule.forRoot(),
     NgxMaskModule.forRoot(),
     TooltipModule.forRoot(),
-    TypeaheadModule.forRoot(),
+    TypeaheadModule.forRoot()
   ],
   exports: [
     AppRoutingModule,
@@ -218,7 +218,7 @@ import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
     MatToolbarModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    TooltipModule,
+    TooltipModule
   ],
   providers: [
     AEMService,
@@ -228,7 +228,7 @@ import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
     LookupService,
     StateService,
     HeaderTitleService,
-    Title,
+    Title
   ],
   entryComponents: [
     CancelApplicationDialog,
@@ -237,8 +237,8 @@ import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
     GSTWarningDialog,
     MessageDialog,
     SignPadDialog,
-    SummaryOfBenefitsDialog,
+    SummaryOfBenefitsDialog
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

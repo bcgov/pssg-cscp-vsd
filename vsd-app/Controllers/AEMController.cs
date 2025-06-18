@@ -1,14 +1,14 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using Gov.Cscp.VictimServices.Public.Models;
 using Gov.Cscp.VictimServices.Public.Services;
 using Gov.Cscp.VictimServices.Public.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using System.Xml;
-using System;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
@@ -31,7 +31,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error($"API call to 'GetVictimApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
+                    _logger.Error(
+                        $"API call to 'GetVictimApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                    );
                     return BadRequest(ModelState);
                 }
 
@@ -56,7 +58,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error($"API call to 'GetIFMApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
+                    _logger.Error(
+                        $"API call to 'GetIFMApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                    );
                     return BadRequest(ModelState);
                 }
 
@@ -81,7 +85,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error($"API call to 'GetWitnessApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
+                    _logger.Error(
+                        $"API call to 'GetWitnessApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                    );
                     return BadRequest(ModelState);
                 }
 
@@ -106,7 +112,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error($"API call to 'GetAuthorizationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
+                    _logger.Error(
+                        $"API call to 'GetAuthorizationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                    );
                     return BadRequest(ModelState);
                 }
 
@@ -131,7 +139,9 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error($"API call to 'GetInvoicePDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD");
+                    _logger.Error(
+                        $"API call to 'GetInvoicePDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                    );
                     return BadRequest(ModelState);
                 }
 
@@ -157,7 +167,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 Indent = true,
                 OmitXmlDeclaration = false,
-                Encoding = encoding
+                Encoding = encoding,
             };
 
             string xml = "";
@@ -186,7 +196,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 Indent = true,
                 OmitXmlDeclaration = false,
-                Encoding = encoding
+                Encoding = encoding,
             };
 
             string xml = "";
@@ -237,11 +247,20 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(xml);
             var encoded = System.Convert.ToBase64String(plainTextBytes);
 
-            string requestJson = "{\"aem_app\":\"" + aem_app + "\"," +
-            "\"aem_form\":\"" + aem_form + "\"," +
-            "\"document_format\":\"" + document_format + "\"," +
-            "\"aem_xml_data\":\"" + encoded + "\"" +
-            "}";
+            string requestJson =
+                "{\"aem_app\":\""
+                + aem_app
+                + "\","
+                + "\"aem_form\":\""
+                + aem_form
+                + "\","
+                + "\"document_format\":\""
+                + document_format
+                + "\","
+                + "\"aem_xml_data\":\""
+                + encoded
+                + "\""
+                + "}";
 
             return requestJson;
         }
