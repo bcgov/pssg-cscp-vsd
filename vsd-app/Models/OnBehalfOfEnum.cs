@@ -6,8 +6,6 @@ namespace Gov.Cscp.VictimServices.Public.Models
     {
         ThirdParty = 100000001,
         Self = 100000002,
-        LegalRepGuardian = 100000003
- 
-        
+        LegalRepGuardian = 100000003,
     }
 }
