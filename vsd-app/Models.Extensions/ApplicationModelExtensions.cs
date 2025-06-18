@@ -1023,6 +1023,11 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 application.Application.vsd_authorizationsignature = model.AuthorizationInformation.signature;
             }
 
+            if (model.RepresentativeInformation.completingOnBehalfOf == (int)OnBehalfOfEnum.LegalRepGuardian && model.RepresentativeInformation.relationshipToPerson == "Third party applying on behalf of an incapable adult")
+            {
+                application.Application.vsd_cvap_onbehalfofdeclaration = (int)OnBehalfOfEnum.ThirdParty;
+            }
+
             if (model.DeclarationInformation != null)
             {
                 application.Application.vsd_applicantssignature = model.DeclarationInformation.signature;
