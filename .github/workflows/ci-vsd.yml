@@ -149,7 +149,7 @@ jobs:
           scanners: "vuln,secret"
           vuln-type: "library"
           severity: "CRITICAL,HIGH" # only applies to vuln scanner
-          exit-code: "0" # Will fail CI if CRITICAL or HIGH vulns or secrets are found
+          exit-code: "1" # Will fail CI if CRITICAL or HIGH vulns or secrets are found
           ignore-unfixed: true
           format: "sarif"
           output: "trivy-results-vsd.sarif"
