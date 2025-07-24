@@ -67,7 +67,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "8.x"
+          node-version: "22.x"
+          # app uses node 8, due to code ql version issue, scanning with 22, however application has to be updated to latest version.
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
@@ -82,19 +83,19 @@ jobs:
 
       # ---- Build Angular UI ----
       - name: Install Angular Dependencies
-        working-directory: vsu-app/ClientApp
+        working-directory: vsd-app/ClientApp
         run: npm ci
 
       - name: Build Angular Application
-        working-directory: vsu-app/ClientApp
+        working-directory: vsd-app/ClientApp
         run: npm run build -- --configuration production
 
       # ---- Build .NET API ----
       - name: Restore .NET Dependencies
-        run: dotnet restore vsu-app/vsu-app.csproj
+        run: dotnet restore vsd-app/vsd-app.csproj
 
       - name: Build .NET Application
-        run: dotnet build vsu-app/vsu-app.csproj --no-restore --configuration Release
+        run: dotnet build vsd-app/vsd-app.csproj --no-restore --configuration Release
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
