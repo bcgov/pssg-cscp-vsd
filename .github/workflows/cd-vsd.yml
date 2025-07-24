@@ -1,163 +1,119 @@
-name: cd-vsd-app
+# ======================================================================================
+#  Last Updated: 2025-07-23
+#
+#  Description:
+#  This is the main CD workflow for the Application.
+#  It orchestrates the build and deployment process for the API and UI services.
+#
+#  Triggers:
+#  1. Automatic (`workflow_run`): Triggers automatically after the 'CI job'
+#     workflow completes successfully on the 'development' branch.
+#  2. Manual (`workflow_dispatch`): Allows for manual deployments to the 'development'
+#     branch. Requires a 7-character commit SHA.
+#
+#  Git Event Payload testing:
+#      - name: Dump push event
+#        run: cat $GITHUB_EVENT_PATH
+#
+#  act workflow_dispatch -W .github/workflows/cd-vsd.yml --dryrun --env GITHUB_REPOSITORY="bcgov/pssg-cscp-vsd" --bind
+# ======================================================================================
 
+name: CD VSD
+
+# --- TRIGGERS -----------------------------------------------------------------------
 on:
+  # Triggers this workflow after the CI workflow completes on the development branch
+  workflow_run:
+    workflows: ["CI VSD"]
+    types:
+      - completed
+
+  # manual trigger
   workflow_dispatch:
-  push:
-    paths:
-      - 'vsd-app/**'
-      - 'vsd-interfaces/**'
-      - '.github/workflows/cd-vsd.yml'
+    inputs:
+      short_merge_commit_sha:
+        description: "Short (7 char) merge commit SHA"
+        required: true
 
-env:
-  APP_NAME: vsd
-  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
-  IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
-
+# --- JOBS ---------------------------------------------------------------------------
 jobs:
-  build-vsd-api:
+  # ------------------------------------------------------------------------------------
+  #  Purpose: determine the correct 7-character commit SHA
+  #           to be used for the build. It handles both manual and push triggers.
+  #  Outputs:
+  #    - short_sha: The validated 7-character commit SHA.
+  # ------------------------------------------------------------------------------------
+  prepare-build-params:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'bcgov'
-    env:
-      IMAGE_NAME: api
-      VSD_API_DOCKERFILE_PATH: ./vsd-app/Dockerfile
-
+    # This job will only run if the triggering CI workflow was successful
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    outputs:
+      short_sha: ${{ steps.determine-sha-from-workflow-run.outputs.short_sha || steps.validate-manual-sha.outputs.short_sha }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx tooling
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log into OpenShift Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.IMAGE_REGISTRY }}
-          username: ${{ secrets.OCP4_USERNAME }}
-          password: ${{ secrets.OCP4_PASSWORD }}
-
-      - name: Pull image
-        run: docker pull ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev || true
-
-      - name: Bump version
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: ${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}=v
-          fetch_all_tags: true
-
-      - name: Create version env var
-        run: echo "BUILD_VERSION=$(echo '${{ steps.tag_version.outputs.new_tag }}' | awk -F-v '{print $NF}')" >> $GITHUB_ENV
- 
-
-      - name: Build and push vsd-app
-        uses: docker/build-push-action@v6
-        with:
-          build-args: |
-            BUILD_ID="${{ env.BUILD_ID }}"
-            BUILD_VERSION=${{ env.BUILD_VERSION }}
-          cache-from: |
-            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}
-          file: ${{ env.VSD_API_DOCKERFILE_PATH }}
-          push: true
-          tags: |
-            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev
-
-      - name: Save image as tarball for Trivy
+      # This step handles the automated trigger from the CI workflow
+      - name: Extract Commit SHA from CI Workflow
+        id: determine-sha-from-workflow-run
+        if: github.event_name == 'workflow_run'
         run: |
-          docker save "$IMAGE_REGISTRY/$APP_NAME-$IMAGE_NAME:dev" -o "$APP_NAME-$IMAGE_NAME.tar"
+          # The workflow_run event provides the exact commit SHA from the completed CI run.
+          COMMIT_SHA="${{ github.event.workflow_run.head_sha }}"
+          echo "Triggering commit from CI workflow: $COMMIT_SHA"
+          echo "short_sha=$(echo $COMMIT_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
 
-      - name: Install Trivy
+      # This step handles the manual trigger
+      - name: Validate Manual Trigger SHA
+        id: validate-manual-sha
+        if: github.event_name == 'workflow_dispatch'
         run: |
-          wget -qO- https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bash
-          echo "$(pwd)/bin" >> $GITHUB_PATH
+          SHORT_SHA="${{ github.event.inputs.short_merge_commit_sha }}"
+          if [[ ! "$SHORT_SHA" =~ ^[a-fA-F0-9]{7}$ ]]; then
+            echo "::error::SHA must be exactly 7 hexadecimal characters. Received: '$SHORT_SHA'"
+            exit 1
+          fi
+          echo "short_sha=$SHORT_SHA" >> $GITHUB_OUTPUT
 
-      - name: Trivy scan for vsd api image
-        continue-on-error: true
-        run: |
-          trivy image --input "$APP_NAME-$IMAGE_NAME.tar" \
-            --severity HIGH,CRITICAL \
-            --ignore-unfixed \
-            --exit-code 1 \
-            --format sarif \
-            --output trivy-$APP_NAME-$IMAGE_NAME-image-scan.sarif
+  # ------------------------------------------------------------------------------------
+  #  Job: build-and-deploy
+  #  Purpose: Calls the reusable build workflow to build, publish, and scan the image.
+  # ------------------------------------------------------------------------------------
+  build-and-deploy-ui:
+    needs: prepare-build-params
+    permissions:
+      contents: read
+      packages: write
+      id-token: write # Required for environment protection
+      security-events: write
+    uses: ./.github/workflows/build-template.yml
+    with:
+      EVENT_NAME: ${{ github.event_name }}
+      IMAGE_CONTEXT: ./
+      IMAGE_FILE: ./vsd-app/ClientApp/Dockerfile
+      IMAGE_NAME: vsd-ui
+      REGISTRY: ${{ vars.OCP4_REGISTRY }}
+      BRANCH: ${{ github.ref_name }}
+      # Use the output from pr job
+      COMMIT_SHA: ${{ needs.prepare-build-params.outputs.short_sha }}
+    secrets:
+      REGISTRY_USER: ${{ secrets.OCP4_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.OCP4_PASSWORD }}
 
-      - name: Upload scan results
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: trivy-${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-image-scan.sarif
-          category: trivy-built-image-scan-results
-
-
-
-  build-vsd-ui:
-    runs-on: ubuntu-latest
-    if: github.repository_owner == 'bcgov'
-    env:
-      IMAGE_NAME: ui
-      VSD_UI_DOCKERFILE_PATH: ./vsd-app/ClientApp/Dockerfile
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx tooling
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log into OpenShift Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.IMAGE_REGISTRY }}
-          username: ${{ secrets.OCP4_USERNAME }}
-          password: ${{ secrets.OCP4_PASSWORD }}
-
-      - name: Pull image
-        run: docker pull ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev || true
-         
-      - name: Bump version
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: ${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}=v
-          fetch_all_tags: true
-
-      - name: Create version env var
-        run: echo "BUILD_VERSION=$(echo '${{ steps.tag_version.outputs.new_tag }}' | awk -F-v '{print $NF}')" >> $GITHUB_ENV       
-
-      - name: Build and push vsd-app
-        uses: docker/build-push-action@v6
-        with:
-          build-args: |
-            BUILD_ID="${{ env.BUILD_ID }}"
-            BUILD_VERSION=${{ env.BUILD_VERSION }}
-          cache-from: |
-            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}
-          file: ${{ env.VSD_UI_DOCKERFILE_PATH }}
-          push: true
-          tags: |
-            ${{ env.IMAGE_REGISTRY }}/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}:dev
-
-      - name: Save image as tarball for Trivy
-        run: |
-          docker save "$IMAGE_REGISTRY/$APP_NAME-$IMAGE_NAME:dev" -o "$APP_NAME-$IMAGE_NAME.tar"
-
-
-      - name: Install Trivy
-        run: |
-          wget -qO- https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bash
-          echo "$(pwd)/bin" >> $GITHUB_PATH
-
-      - name: Trivy scan for vsd ui image
-        continue-on-error: true
-        run: |
-          trivy image --input "$APP_NAME-$IMAGE_NAME.tar"  \
-            --severity HIGH,CRITICAL \
-            --ignore-unfixed \
-            --exit-code 1 \
-            --format sarif \
-            --output trivy-$APP_NAME-$IMAGE_NAME-image-scan.sarif
-
-      - name: Upload scan results
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: trivy-${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-image-scan.sarif
-          category: trivy-built-image-scan-results
+  build-and-deploy-api:
+    needs: prepare-build-params
+    permissions:
+      contents: read
+      packages: write
+      id-token: write # Required for environment protection
+      security-events: write
+    uses: ./.github/workflows/build-template.yml
+    with:
+      EVENT_NAME: ${{ github.event_name }}
+      IMAGE_CONTEXT: ./
+      IMAGE_FILE: ./vsd-app/Dockerfile
+      IMAGE_NAME: vsd-api
+      REGISTRY: ${{ vars.OCP4_REGISTRY }}
+      BRANCH: ${{ github.ref_name }}
+      # Use the output from pr job
+      COMMIT_SHA: ${{ needs.prepare-build-params.outputs.short_sha }}
+    secrets:
+      REGISTRY_USER: ${{ secrets.OCP4_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.OCP4_PASSWORD }}

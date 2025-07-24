@@ -1,0 +1,149 @@
+# ======================================================================================
+#  Last Updated: 2025-07-24
+#
+#  Description:
+#  Reusable workflow for building, publishing, and scanning the App Docker image.
+#  It is designed to be called by other workflows.
+# ======================================================================================
+
+name: build-template
+# --- INPUTS AND SECRETS -------------------------------------------------------------
+on:
+  workflow_call:
+    inputs:
+      # The event that triggered the caller workflow (e.g., 'push', 'workflow_dispatch').
+      # This is critical for the conditional environment logic.
+      EVENT_NAME:
+        required: true
+        type: string
+      # Build context path for the Docker image.
+      IMAGE_CONTEXT:
+        required: true
+        type: string
+      # Optional additional build contexts for Docker.
+      BUILD_CONTEXT:
+        required: false
+        type: string
+        default: ""
+      # Path to the Dockerfile.
+      IMAGE_FILE:
+        required: true
+        type: string
+      # Name of the image to be published.
+      IMAGE_NAME:
+        required: true
+        type: string
+      # URL of the container registry.
+      REGISTRY:
+        required: true
+        type: string
+      # The branch name, used for tagging.
+      BRANCH:
+        required: false
+        type: string
+      # The 7-character commit SHA, used for tagging.
+      COMMIT_SHA:
+        required: false
+        type: string
+
+    secrets:
+      REGISTRY_USER:
+        required: true
+      REGISTRY_PASSWORD:
+        required: true
+
+# --- JOBS ---------------------------------------------------------------------------
+jobs:
+  # ------------------------------------------------------------------------------------
+  #  Job: build-and-publish
+  #  Purpose: A single job that handles the entire lifecycle: build, publish, and scan.
+  # ------------------------------------------------------------------------------------
+  build-and-publish:
+    # This is the core of the conditional logic. It dynamically selects the environment:
+    # - If triggered by a manual dispatch, it uses the 'manual-deploy' environment,
+    #   which has protection rules (e.g., required reviewers).
+    # - Otherwise, it uses the 'ci-cd-deploy' environment, which has no protection rules.
+    permissions:
+      security-events: write
+    environment: ${{ inputs.EVENT_NAME == 'workflow_dispatch' && 'manual-deploy' || 'ci-cd-deploy' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          # Checks out the specific commit from the branch for a consistent and reliable build.
+          ref: ${{ inputs.BRANCH }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Extract Docker Image Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}
+          # Creates two tags for the image: one with the specific commit SHA
+          # and another with the branch name for easier reference.
+          tags: |
+            type=raw,value=${{ inputs.COMMIT_SHA }}
+            type=raw,value=${{ inputs.BRANCH }}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ inputs.IMAGE_CONTEXT }}
+          build-contexts: ${{ inputs.BUILD_CONTEXT }}
+          # Pass the image name and version (commit SHA) as build arguments.
+          build-args: |
+            BUILD_IMAGE_NAME=${{ inputs.IMAGE_NAME }}
+            BUILD_VERSION=${{ steps.meta.outputs.version }}
+          file: ${{ inputs.IMAGE_FILE }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          no-cache: true
+
+      # STEP: Print a summary of vulnerabilities in the built image (does not fail build)
+      - name: Trivy Image Scan (Table Summary)
+        uses: aquasecurity/trivy-action@0.32.0
+        with:
+          scan-type: "image"
+          image-ref: "${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ steps.meta.outputs.version }}"
+          scanners: "vuln,secret"
+          format: "table"
+          severity: "CRITICAL,HIGH"
+          exit-code: "0"
+          ignore-unfixed: true
+
+      # STEP: Main vulnerability scan on the built image (for GitHub Security tab, fails build if needed)
+      - name: Scan Image for Vulnerabilities
+        uses: aquasecurity/trivy-action@0.32.0
+        with:
+          scan-type: "image"
+          image-ref: "${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ steps.meta.outputs.version }}"
+          scanners: "vuln,secret"
+          format: "sarif"
+          output: "trivy-image-results-${{ inputs.IMAGE_NAME }}.sarif"
+          severity: "CRITICAL,HIGH"
+          exit-code: "1"
+          ignore-unfixed: true
+          limit-severities-for-sarif: true # non severity sometimes fails the the job, so ignoring them intentionally.
+
+      - name: Upload Vulnerability Scan Results
+        uses: github/codeql-action/upload-sarif@v3
+        # This ensures results are uploaded even if a previous step fails.
+        if: always()
+        with:
+          sarif_file: "trivy-image-results-${{ inputs.IMAGE_NAME }}.sarif"

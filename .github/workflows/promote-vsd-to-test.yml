@@ -1,0 +1,98 @@
+# ======================================================================================
+#  Last Updated: 2025-07-24
+#
+#  Description:
+#  Promotes an image by re-tagging it within the OpenShift ImageStream.
+#  This in-cluster promotion guarantees image digest is preserved.
+#
+# ======================================================================================
+
+name: Promote VSD to Test
+
+# --- TRIGGERS -----------------------------------------------------------------------
+on:
+  # This workflow is triggered manually, requiring explicit user action.
+  workflow_dispatch:
+    inputs:
+      source_tag:
+        description: "The source tag to promote (e.g., dev, or a specific version tag)"
+        required: false
+        default: "development"
+
+# --- ENVIRONMENT VARIABLES (Preserving original structure) -------------------------
+
+# --- ENVIRONMENT VARIABLES (Preserving original structure) -------------------------
+env:
+  IMAGE_REGISTRY: ${{ vars.OCP4_REGISTRY }}
+  NAMESPACE: ${{ secrets.OCP4_NAMESPACE }}
+  SOURCE_TAG: ${{ github.event.inputs.source_tag }}
+  TARGET_TAG: "test"
+  BACKUP_TAG: "test-backup"
+
+# --- JOBS ---------------------------------------------------------------------------
+jobs:
+  promote-images:
+    name: Promote ${{ matrix.image_name }} to Test
+    environment: promote-environment
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image_name: ["vsd-ui", "vsd-api"]
+
+    env:
+      IMAGE_NAME: ${{ matrix.image_name }}
+      IMAGE_REGISTRY: ${{ vars.OCP4_REGISTRY }}
+      NAMESPACE: ${{ secrets.OCP4_NAMESPACE }}
+      SOURCE_TAG: ${{ github.event.inputs.source_tag }}
+      TARGET_TAG: "test"
+      BACKUP_TAG: "test-backup"
+
+    steps:
+      - name: Install OpenShift CLI
+        run: |
+          curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+          tar -xzf openshift-client-linux.tar.gz
+          sudo mv oc /usr/local/bin/
+
+      - name: Login to OpenShift
+        run: |
+          oc login --token="${{ secrets.OCP4_PASSWORD }}" --server="${{ secrets.OPENSHIFT_SERVER }}"
+
+      - name: Backup Current 'test' Image
+        run: |
+          if oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} &>/dev/null; then
+            echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}'..."
+            oc tag ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }}
+            echo "Backup successful."
+          else
+            echo "No existing '${{ env.TARGET_TAG }}' tag found. Skipping backup."
+          fi
+
+      - name: Promote Source Image to 'test'
+        run: |
+          echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' for image '${{ env.IMAGE_NAME }}' using 'oc tag'..."
+          oc tag ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }}
+          echo "Promotion successful."
+
+      - name: Validate Promotion by Comparing Image Digests
+        run: |
+          echo "Validating promotion for image '${{ env.IMAGE_NAME }}'..."
+          sleep 5
+
+          SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.dockerImageReference}' | sed 's/.*@//')
+          TEST_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.dockerImageReference}' | sed 's/.*@//')
+
+          echo "Source Digest: $SOURCE_SHA"
+          echo "Test Digest:   $TEST_SHA"
+
+          if [[ -z "$SOURCE_SHA" ]]; then
+            echo "::error::Could not find source digest for tag '${{ env.SOURCE_TAG }}' for image '${{ env.IMAGE_NAME }}'."
+            exit 1
+          fi
+
+          if [[ "$SOURCE_SHA" == "$TEST_SHA" ]]; then
+            echo "Validation successful! Digests match perfectly."
+          else
+            echo "::error::Image digests do not match after promotion for image '${{ env.IMAGE_NAME }}'."
+            exit 1
+          fi
