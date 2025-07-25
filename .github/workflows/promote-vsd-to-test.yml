@@ -1,5 +1,5 @@
 # ======================================================================================
-#  Last Updated: 2025-07-24
+#  Last Updated: 2025-07-25
 #
 #  Description:
 #  Promotes an image by re-tagging it within the OpenShift ImageStream.
@@ -15,11 +15,9 @@ on:
   workflow_dispatch:
     inputs:
       source_tag:
-        description: "The source tag to promote (e.g., dev, or a specific version tag)"
+        description: "The source tag to promote (e.g., development, or a specific shortsha tag)"
         required: false
         default: "development"
-
-# --- ENVIRONMENT VARIABLES (Preserving original structure) -------------------------
 
 # --- ENVIRONMENT VARIABLES (Preserving original structure) -------------------------
 env:
@@ -41,11 +39,6 @@ jobs:
 
     env:
       IMAGE_NAME: ${{ matrix.image_name }}
-      IMAGE_REGISTRY: ${{ vars.OCP4_REGISTRY }}
-      NAMESPACE: ${{ secrets.OCP4_NAMESPACE }}
-      SOURCE_TAG: ${{ github.event.inputs.source_tag }}
-      TARGET_TAG: "test"
-      BACKUP_TAG: "test-backup"
 
     steps:
       - name: Install OpenShift CLI
@@ -58,20 +51,30 @@ jobs:
         run: |
           oc login --token="${{ secrets.OCP4_PASSWORD }}" --server="${{ secrets.OPENSHIFT_SERVER }}"
 
-      - name: Backup Current 'test' Image
-        run: |
-          if oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} &>/dev/null; then
-            echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}'..."
-            oc tag ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }}
-            echo "Backup successful."
-          else
-            echo "No existing '${{ env.TARGET_TAG }}' tag found. Skipping backup."
-          fi
 
-      - name: Promote Source Image to 'test'
+      - name: Get source digest
+        id: get_source_digest
         run: |
-          echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' for image '${{ env.IMAGE_NAME }}' using 'oc tag'..."
-          oc tag ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} ${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }}
+          SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+          echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+
+      - name: Get target digest (for backup)
+        id: get_target_digest
+        run: |
+          TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+          echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+
+      - name: Backup Current Target Image (by digest)
+        if: steps.get_target_digest.outputs.target_digest != ''
+        run: |
+          echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+          oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }}:${{ env.BACKUP_TAG }} --reference
+          echo "Backup successful."
+          
+      - name: Promote source to target (by digest)
+        run: |
+          echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+          oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
           echo "Promotion successful."
 
       - name: Validate Promotion by Comparing Image Digests
@@ -80,17 +83,17 @@ jobs:
           sleep 5
 
           SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.dockerImageReference}' | sed 's/.*@//')
-          TEST_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.dockerImageReference}' | sed 's/.*@//')
+          TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.dockerImageReference}' | sed 's/.*@//')
 
           echo "Source Digest: $SOURCE_SHA"
-          echo "Test Digest:   $TEST_SHA"
+          echo "Target Digest: $TARGET_SHA"
 
           if [[ -z "$SOURCE_SHA" ]]; then
             echo "::error::Could not find source digest for tag '${{ env.SOURCE_TAG }}' for image '${{ env.IMAGE_NAME }}'."
             exit 1
           fi
 
-          if [[ "$SOURCE_SHA" == "$TEST_SHA" ]]; then
+          if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
             echo "Validation successful! Digests match perfectly."
           else
             echo "::error::Image digests do not match after promotion for image '${{ env.IMAGE_NAME }}'."
