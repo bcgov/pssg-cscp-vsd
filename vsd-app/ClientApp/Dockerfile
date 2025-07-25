@@ -40,7 +40,8 @@
 # ##################################################################################################
 
 # --- Build Stage ---
-FROM node:8.9.4 AS build
+FROM node:22-alpine AS build
+# upgraded from 8.9.4
 
 # Build args for traceability
 ARG BUILD_IMAGE_NAME
@@ -53,7 +54,8 @@ RUN npm install
 RUN npm run build -- --base-href /cvapwebform --prod
 
 # --- Runtime Stage ---
-FROM caddy:latest AS final
+FROM caddy:2.10.0-alpine AS final
+RUN apk update && apk upgrade --no-cache
 
 # Build args for traceability
 ARG BUILD_IMAGE_NAME
