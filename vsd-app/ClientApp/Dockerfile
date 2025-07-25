@@ -43,12 +43,17 @@
 FROM node:22-alpine AS build
 # upgraded from 8.9.4
 
+# Install python3, make, and g++ for node-gyp/node-sass
+#RUN apk add --no-cache python3 make g++
+# Update needed for package.json to replace node-sass with sass (Dart Sass), once that is done,
+# this python install is not required in Dockerfile.
+
 # Build args for traceability
 ARG BUILD_IMAGE_NAME
 ARG BUILD_VERSION
 
-COPY ./vsd-app/ClientApp ./vsd-app/ClientApp
 WORKDIR /vsd-app/ClientApp
+COPY ./vsd-app/ClientApp ./vsd-app/ClientApp
 
 RUN npm install
 RUN npm run build -- --base-href /cvapwebform --prod
