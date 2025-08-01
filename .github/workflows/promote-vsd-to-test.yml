@@ -31,7 +31,6 @@ env:
 jobs:
   promote-images:
     name: Promote ${{ matrix.image_name }} to Test
-    environment: promote-environment
     runs-on: ubuntu-latest
     strategy:
       matrix:
