@@ -32,16 +32,17 @@ on:
   workflow_dispatch:
     inputs:
       short_merge_commit_sha:
-        description: "Short (7 char) merge commit SHA"
-        required: true
+        description: "Optional: Short merge commit SHA"
+        required: false
 
 # --- JOBS ---------------------------------------------------------------------------
 jobs:
   # ------------------------------------------------------------------------------------
-  #  Purpose: determine the correct 7-character commit SHA
-  #           to be used for the build. It handles both manual and push triggers.
+  #  Purpose: Determine the correct tag to be used for the build.
+  #           - For CI triggers: uses the 7-character commit SHA.
+  #           - For manual triggers: uses the provided SHA, or 'manual' if none is provided.
   #  Outputs:
-  #    - short_sha: The validated 7-character commit SHA.
+  #    - short_sha: The validated 7-character commit SHA or 'manual' for manual runs without SHA.
   # ------------------------------------------------------------------------------------
   prepare-build-params:
     runs-on: ubuntu-latest
@@ -66,7 +67,9 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: |
           SHORT_SHA="${{ github.event.inputs.short_merge_commit_sha }}"
-          if [[ ! "$SHORT_SHA" =~ ^[a-fA-F0-9]{7}$ ]]; then
+          if [[ -z "$SHORT_SHA" ]]; then
+            SHORT_SHA="manual"
+          elif [[ ! "$SHORT_SHA" =~ ^[a-fA-F0-9]{7}$ ]]; then
             echo "::error::SHA must be exactly 7 hexadecimal characters. Received: '$SHORT_SHA'"
             exit 1
           fi

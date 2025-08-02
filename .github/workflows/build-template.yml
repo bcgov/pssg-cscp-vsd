@@ -59,13 +59,8 @@ jobs:
   #  Purpose: A single job that handles the entire lifecycle: build, publish, and scan.
   # ------------------------------------------------------------------------------------
   build-and-publish:
-    # This is the core of the conditional logic. It dynamically selects the environment:
-    # - If triggered by a manual dispatch, it uses the 'manual-deploy' environment,
-    #   which has protection rules (e.g., required reviewers).
-    # - Otherwise, it uses the 'ci-cd-deploy' environment, which has no protection rules.
     permissions:
       security-events: write
-    environment: ${{ inputs.EVENT_NAME == 'workflow_dispatch' && 'manual-deploy' || 'ci-cd-deploy' }}
     runs-on: ubuntu-latest
 
     steps:
