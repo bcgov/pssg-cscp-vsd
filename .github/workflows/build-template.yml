@@ -142,4 +142,4 @@ jobs:
         if: always()
         with:
           sarif_file: "trivy-image-results-${{ inputs.IMAGE_NAME }}.sarif"
-          category: "trivy-image-scan"
+          category: "trivy-scan"

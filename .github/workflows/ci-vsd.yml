@@ -97,10 +97,15 @@ jobs:
       - name: Build .NET Application
         run: dotnet build vsd-app/vsd-app.csproj --no-restore --configuration Release
 
-      - name: Perform CodeQL Analysis
+      - name: Perform CodeQL Analysis (C#)
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:multi/vsd-app"
+          category: "/language:csharp"
+
+      - name: Perform CodeQL Analysis (JS/TS)
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"
 
   # ------------------------------------------------------------------------------------
   #  Job: trivy_scan
