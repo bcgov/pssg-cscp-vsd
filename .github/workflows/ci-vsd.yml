@@ -107,6 +107,18 @@ jobs:
         with:
           category: "/language:javascript-typescript"
 
+      - name: SonarCloud Scan
+        continue-on-error: true
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=bcgov_pssg-cscp-vsd
+            -Dsonar.organization=bcgov-sonarcloud
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   # ------------------------------------------------------------------------------------
   #  Job: trivy_scan
   #  Purpose: Use Trivy to scan both the source and built image for vulnerabilities.
