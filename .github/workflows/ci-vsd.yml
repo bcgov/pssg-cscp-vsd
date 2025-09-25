@@ -83,7 +83,7 @@ jobs:
       # ---- Build Angular UI ----
       - name: Install Angular Dependencies
         working-directory: vsd-app/ClientApp
-        run: npm ci --legacy-peer-deps
+        run: npm ci --legacy-peer-deps --ignore-scripts
 
       - name: Build Angular Application
         working-directory: vsd-app/ClientApp

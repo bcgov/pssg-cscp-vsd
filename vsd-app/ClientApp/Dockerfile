@@ -52,7 +52,7 @@ ARG BUILD_VERSION
 WORKDIR /app
 COPY ./vsd-app/ClientApp .
 
-RUN npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps --ignore-scripts
 RUN npm run build -- --base-href /cvapwebform --prod
 
 # --- Runtime Stage ---
