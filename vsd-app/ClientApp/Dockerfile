@@ -40,22 +40,19 @@
 # ##################################################################################################
 
 # --- Build Stage ---
-FROM node:22-alpine AS build
+FROM node:16-alpine AS build
 # upgraded from 8.9.4
 
-# Install python3, make, and g++ for node-gyp/node-sass
-#RUN apk add --no-cache python3 make g++
-# Update needed for package.json to replace node-sass with sass (Dart Sass), once that is done,
-# this python install is not required in Dockerfile.
+# Python/build tools no longer needed since we replaced node-sass with dart-sass
 
 # Build args for traceability
 ARG BUILD_IMAGE_NAME
 ARG BUILD_VERSION
 
-WORKDIR /vsd-app/ClientApp
-COPY ./vsd-app/ClientApp ./vsd-app/ClientApp
+WORKDIR /app
+COPY ./vsd-app/ClientApp .
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN npm run build -- --base-href /cvapwebform --prod
 
 # --- Runtime Stage ---
@@ -74,7 +71,7 @@ ENV BUILD_IMAGE_NAME=${BUILD_IMAGE_NAME}
 ENV BUILD_VERSION=${BUILD_VERSION}
 
 COPY ./vsd-app/ClientApp/Caddyfile /etc/caddy/Caddyfile
-COPY --from=build /vsd-app/ClientApp/dist/ /site
+COPY --from=build /app/dist/ /site
 
 # Add version files
 RUN echo "${BUILD_IMAGE_NAME}" > /site/build_image_name.txt && echo "${BUILD_VERSION}" > /site/version.txt
