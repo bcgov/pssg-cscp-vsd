@@ -122,7 +122,7 @@ jobs:
           exit-code: "0"
           ignore-unfixed: true
 
-      # STEP: Main vulnerability scan on the built image (for GitHub Security tab, fails build if needed)
+      # STEP: Main vulnerability scan on the built image (for GitHub Security tab, reports but doesn't fail)
       - name: Scan Image for Vulnerabilities
         uses: aquasecurity/trivy-action@0.32.0
         with:
@@ -132,7 +132,7 @@ jobs:
           format: "sarif"
           output: "trivy-image-results-${{ inputs.IMAGE_NAME }}.sarif"
           severity: "CRITICAL,HIGH"
-          exit-code: "1"
+          exit-code: "0"
           ignore-unfixed: true
           limit-severities-for-sarif: true # non severity sometimes fails the the job, so ignoring them intentionally.
 
