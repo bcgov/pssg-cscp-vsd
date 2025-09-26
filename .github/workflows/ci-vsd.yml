@@ -108,7 +108,7 @@ jobs:
 
       - name: SonarCloud Scan
         continue-on-error: true
-        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
         with:
           projectBaseDir: .
           args: >
