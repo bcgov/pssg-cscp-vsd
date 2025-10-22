@@ -546,6 +546,11 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   checkVendorStatus(source: string) {
+    this.form.get('invoiceDetails.vendorNumber').setValue(this.form.get('invoiceDetails.vendorNumber').value.trim());
+    this.form.get('invoiceDetails.vendorPostalCode').setValue(this.form.get('invoiceDetails.vendorPostalCode').value.trim());
+    this.form.get('invoiceDetails.counsellorRegistrationNumber').setValue(this.form.get('invoiceDetails.counsellorRegistrationNumber').value.trim());
+    this.form.get('invoiceDetails.counsellorLastName').setValue(this.form.get('invoiceDetails.counsellorLastName').value.trim());
+
     let vendorNumber = this.form.get('invoiceDetails.vendorNumber').value;
     let vendorPostalCode = this.form.get('invoiceDetails.vendorPostalCode').value;
     let counsellorNumber = this.form.get('invoiceDetails.counsellorRegistrationNumber').value;
