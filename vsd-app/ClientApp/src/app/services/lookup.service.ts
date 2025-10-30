@@ -87,12 +87,6 @@ export class LookupService {
       .pipe(retry(3), catchError(this.handleError));
   }
 
-  getRestitutionRelationships(): Observable<any> {
-    return this.http
-      .get<any>(`${this.apiPath}/restitution_relationships`, { headers: this.headers })
-      .pipe(retry(3), catchError(this.handleError));
-  }
-
   getPoliceDetachments(): Observable<any> {
     return this.http
       .get<any>(`${this.apiPath}/police_detachments`, { headers: this.headers })
@@ -108,6 +102,7 @@ export class LookupService {
   get headers(): HttpHeaders {
     return new HttpHeaders({ 'Content-Type': 'application/json' });
   }
+
   protected handleError(err): Observable<never> {
     let errorMessage = '';
     if (err.error instanceof ErrorEvent) {

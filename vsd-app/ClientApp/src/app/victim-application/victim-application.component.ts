@@ -617,11 +617,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('otherLastName').patchValue('');
     ret.get('personalInformation').get('dateOfNameChange').patchValue('');
     ret.get('personalInformation').get('gender').patchValue(null);
+    ret.get('personalInformation').get('otherGender').patchValue('');
+    ret.get('personalInformation').get('pronouns').patchValue(null);
+    ret.get('personalInformation').get('otherPronouns').patchValue('');
+    ret.get('personalInformation').get('raceEthnicity').patchValue(null);
+    ret.get('personalInformation').get('otherRaceEthnicity').patchValue('');
+    ret.get('personalInformation').get('indigenousStatus').patchValue(0);
     ret.get('personalInformation').get('birthDate').patchValue('');
     ret.get('personalInformation').get('maritalStatus').patchValue(0);
     ret.get('personalInformation').get('sin').patchValue('');
     ret.get('personalInformation').get('occupation').patchValue('');
-    ret.get('personalInformation').get('indigenousStatus').patchValue(0);
     ret.get('personalInformation').get('permissionToContactViaMethod').patchValue(false);
     ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
     ret.get('personalInformation').get('leaveVoicemail').patchValue(0);

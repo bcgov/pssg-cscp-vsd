@@ -33,8 +33,13 @@ export interface PersonalInformation {
   dateOfNameChange?: Date;
   email: string;
   gender: number;
-  iHaveOtherNames: string;
+  otherGender: string;
+  pronouns: number;
+  otherPronouns: string;
+  raceEthnicity: number;
+  otherRaceEthnicity: string;
   indigenousStatus: number;
+  iHaveOtherNames: string;
   leaveVoicemail: number;
   maritalStatus?: number;
   name: NameBlock;
@@ -256,6 +261,11 @@ export interface VictimInformation {
   email?: string;
   firstName: string;
   gender: number;
+  otherGender: string;
+  pronouns: number;
+  otherPronouns: string;
+  raceEthnicity: number;
+  otherRaceEthnicity: string;
   iHaveOtherNames?: string;
   lastName: string;
   middleName?: string;

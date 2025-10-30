@@ -87,6 +87,10 @@ import { VictimInformationComponent } from './shared/victim-information/victim-i
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
 import { HeaderTitleService } from './services/titile.service';
 import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
+import { PronounSelectorComponent } from './shared/components/pronoun-selector/pronoun-selector.component';
+import { GenderSelectorComponent } from './shared/components/gender-selector/gender-selector.component';
+import { RaceSelectorComponent } from './shared/components/race-selector/race-selector.component';
+import { FeatureEnabledDirective } from './shared/directives/feature-enabled.directive';
 
 @NgModule({
   declarations: [
@@ -104,19 +108,23 @@ import { MessageDialog } from './shared/dialogs/message-dialog/message.dialog';
     DeclarationInformationComponent,
     EmploymentInformationComponent,
     ExpenseInformationComponent,
+    FeatureEnabledDirective,
     FieldComponent,
     FileUploaderComponent,
+    GenderSelectorComponent,
     GSTWarningDialog,
-    MessageDialog,
     HomeComponent,
     IfmApplicationComponent,
     IntroductionComponent,
     InvoiceInstructionsDialog,
     MedicalInformationComponent,
+    MessageDialog,
     NotFoundComponent,
     PersonalInformationComponent,
     PhonePipe,
+    PronounSelectorComponent,
     QuickExitComponent,
+    RaceSelectorComponent,
     RepresentativeInformationComponent,
     SignPadDialog,
     SubmitInvoiceComponent,

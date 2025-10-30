@@ -51,6 +51,13 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
 
                 application.Application.vsd_applicantsgendercode = model.PersonalInformation.gender;
+                application.Application.vsd_genderidentitytext = model.PersonalInformation.otherGender;
+                application.Application.vsd_pronouns = model.PersonalInformation.pronouns;
+                application.Application.vsd_pronountext = model.PersonalInformation.otherPronouns;
+                application.Application.vsd_primaryraceethnicity = model.PersonalInformation.raceEthnicity;
+                application.Application.vsd_primaryraceethnicitytext = model.PersonalInformation.otherRaceEthnicity;
+                application.Application.vsd_indigenous = model.PersonalInformation.indigenousStatus;
+
                 if (model.PersonalInformation.birthDate.HasValue)
                 {
                     application.Application.vsd_applicantsbirthdate = model.PersonalInformation.birthDate.Value;
@@ -72,8 +79,6 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         + " "
                         + application.Application.vsd_applicantssocialinsurancenumber.Substring(6);
                 }
-
-                application.Application.vsd_indigenous = model.PersonalInformation.indigenousStatus;
 
                 application.Application.vsd_applicantsprimaryphonenumber = model.PersonalInformation.phoneNumber;
                 if (model.PersonalInformation.leaveVoicemail > 0)
@@ -207,6 +212,13 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
 
                 application.Application.vsd_cvap_victimgendercode = model.VictimInformation.gender;
+                application.Application.vsd_victimgendertext = model.VictimInformation.otherGender;
+                application.Application.vsd_victimpronouns = model.VictimInformation.pronouns;
+                application.Application.vsd_victimpronountext = model.VictimInformation.otherPronouns;
+                application.Application.vsd_victimprimaryraceethnicity = model.VictimInformation.raceEthnicity;
+                application.Application.vsd_victimprimaryraceethnicitytext = model.VictimInformation.otherRaceEthnicity;
+                application.Application.vsd_victimindigenous = model.VictimInformation.indigenousStatus;
+
                 if (model.VictimInformation.birthDate.HasValue)
                 {
                     application.Application.vsd_cvap_victimbirthdate = model.VictimInformation.birthDate.Value;

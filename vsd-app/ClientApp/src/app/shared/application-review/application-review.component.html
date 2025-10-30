@@ -73,9 +73,25 @@
                     <th>Relationship to Victim</th>
                     <td>{{ valueOrEmpty('personalInformation.relationshipToVictimOther') }}</td>
                 </tr>
-                <tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="false">
                     <th>Gender</th>
                     <td>{{ enumHelper.Gender[valueForEnum('personalInformation.gender')] }} </td>
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                    <th>Gender</th>
+                    <td>{{ enumHelper.Gender_V2[valueForEnum('personalInformation.gender')] }} </td>
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                    <th>Other Gender</th>
+                    <td>{{ valueOrEmpty('personalInformation.otherGender') }} </td>
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                    <th>Pronouns</th>
+                    <td>{{ enumHelper.Pronouns_V2[valueForEnum('personalInformation.pronouns')] }} </td>
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                    <th>Other Pronouns</th>
+                    <td>{{ valueOrEmpty('personalInformation.otherPronouns') }} </td>
                 </tr>
                 <tr>
                     <th>Birth Date</th>
@@ -88,6 +104,14 @@
                 <tr>
                     <th>Social Insurance Number (SIN)</th>
                     <td>{{ valueOrEmpty('personalInformation.sin') }}</td>
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                    <th>Race/Ethnicity</th>
+                    <td>{{ enumHelper.RaceEthnicity_V2[valueForEnum('personalInformation.raceEthnicity')] }}
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                  <th>Other Race/Ethnicity</th>
+                  <td>{{ valueOrEmpty('personalInformation.otherRaceEthnicity') }} </td>
                 </tr>
                 <tr>
                     <th>Do you identify as an Indigenous person?</th>
@@ -214,9 +238,25 @@
                     <th>Social Insurance Number (SIN)</th>
                     <td>{{ valueOrEmpty('victimInformation.sin') }}</td>
                 </tr>
-                <tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="false">
                     <th>Gender</th>
                     <td>{{ enumHelper.Gender[valueForEnum('victimInformation.gender')] }} </td>
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                    <th>Gender</th>
+                    <td>{{ enumHelper.Gender_V2[valueForEnum('victimInformation.gender')] }} </td>
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                    <th>Other Gender</th>
+                    <td>{{ valueOrEmpty('victimInformation.otherGender') }} </td>
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                    <th>Pronouns</th>
+                    <td>{{ enumHelper.Pronouns_V2[valueForEnum('victimInformation.pronouns')] }} </td>
+                </tr>
+                <tr featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="true">
+                    <th>Other Pronouns</th>
+                    <td>{{ valueOrEmpty('victimInformation.otherPronouns') }} </td>
                 </tr>
                 <tr>
                     <th>Marital Status</th>

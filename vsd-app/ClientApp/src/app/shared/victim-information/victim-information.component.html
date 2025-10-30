@@ -56,7 +56,7 @@
 
     <h3>Other Details</h3>
 
-    <app-field label="Gender" [required]="false" [valid]="isFieldValid('gender')" errorMessage="Please select your gender">
+    <app-field label="Gender" [required]="false" [valid]="isFieldValid('gender')" errorMessage="Please select your gender" featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="false">
         <label class="inline-label">
             <input type="radio" [value]="100000000" name="gender" formControlName="gender">
             <span>M <app-tool-tip [trigger]="genderMToolTip"></app-tool-tip></span>
@@ -70,10 +70,23 @@
             <span>X <app-tool-tip [trigger]="genderXToolTip"></app-tool-tip></span>
         </label>
     </app-field>
-
     <ng-template #genderMToolTip>Persons whose current gender is male. This includes cisgender and transgender persons who are male.</ng-template>
     <ng-template #genderFToolTip>Persons whose current gender is female. This includes cisgender and transgender persons who are female.</ng-template>
     <ng-template #genderXToolTip>Persons whose current gender is not exclusively male or female. It includes people who are unsure of their gender, do not have one gender, have no gender, are gender fluid, or are Two-Spirit.</ng-template>
+
+    <app-gender-selector
+      [form]="form"
+      genderFormControlName="gender"
+      otherGenderFormControlName="otherGender"
+      featureEnabled="useUpdatedComplianceFields"
+      [featureEnabledIf]="true"></app-gender-selector>
+
+    <app-pronoun-selector
+      [form]="form"
+      pronounFormControlName="pronouns"
+      otherPronounFormControlName="otherPronouns"
+      featureEnabled="useUpdatedComplianceFields"
+      [featureEnabledIf]="true"></app-pronoun-selector>
 
     <div class="row">
         <div class="col-md-6">

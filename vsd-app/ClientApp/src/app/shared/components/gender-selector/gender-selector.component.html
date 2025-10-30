@@ -1,0 +1,37 @@
+<div [formGroup]="form">
+  <div class="row">
+    <app-field
+      class="col-md-12"
+      label="Gender"
+      [required]="false"
+      errorMessage="Please select your gender"
+      [disabled]="isDisabled">
+      <ng-container *ngFor="let gender of genderList">
+        <label class="inline-label">
+          <input
+            type="radio"
+            [value]="gender.val"
+            [name]="genderFormControlName"
+            [formControlName]="genderFormControlName" />
+          <span>
+            {{ gender.name }}
+            <app-tool-tip *ngIf="gender.tooltip" [tooltip]="gender.tooltip"></app-tool-tip>
+          </span>
+        </label>
+      </ng-container>
+    </app-field>
+  </div>
+  <div class="row">
+    <app-field
+      class="col-md-12"
+      *ngIf="showOtherGender"
+      label="Other Gender"
+      [required]="false"
+      errorMessage="Please enter your gender"
+      [disabled]="isDisabled">
+      <label class="inline-label">
+        <input type="text" [name]="otherGenderFormControlName" [formControlName]="otherGenderFormControlName" />
+      </label>
+    </app-field>
+  </div>
+</div>

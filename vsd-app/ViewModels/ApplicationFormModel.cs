@@ -37,13 +37,18 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string otherLastName { get; set; }
         public DateTime? dateOfNameChange { get; set; }
         public int? gender { get; set; }
+        public string otherGender { get; set; }
+        public int? pronouns { get; set; }
+        public string otherPronouns { get; set; }
+        public int? raceEthnicity { get; set; }
+        public string otherRaceEthnicity { get; set; }
+        public int? indigenousStatus { get; set; }
         public string relationshipToVictim { get; set; }
         public string relationshipToVictimOther { get; set; }
         public DateTime? birthDate { get; set; }
         public int? maritalStatus { get; set; }
         public string sin { get; set; }
         public string occupation { get; set; }
-        public int? indigenousStatus { get; set; }
         public int preferredMethodOfContact { get; set; }
         public bool permissionToContactViaMethod { get; set; }
         public string agreeToCvapCommunicationExchange { get; set; }
@@ -324,6 +329,12 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string otherLastName { get; set; }
         public DateTime? dateOfNameChange { get; set; }
         public int? gender { get; set; }
+        public string otherGender { get; set; }
+        public int? pronouns { get; set; }
+        public string otherPronouns { get; set; }
+        public int? raceEthnicity { get; set; }
+        public string otherRaceEthnicity { get; set; }
+        public int? indigenousStatus { get; set; }
         public DateTime? birthDate { get; set; }
         public int? maritalStatus { get; set; }
         public string sin { get; set; }

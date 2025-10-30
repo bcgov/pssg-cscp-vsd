@@ -1,6 +1,7 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { POSTAL_CODE } from '../regex.constants';
 import { EmailValidator } from '../validators/email.validator';
+import { race } from 'rxjs';
 
 /**
  * Helper class for setting up victim information form.
@@ -28,6 +29,11 @@ export class VictimInfoHelper {
       dateOfNameChange: [''],
 
       gender: [null],
+      otherGender: [''],
+      pronouns: [null],
+      otherPronouns: [''],
+      raceEthnicity: [null],
+      otherRaceEthnicity: [''],
       maritalStatus: [null, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
 
       victimSameContactInfo: [''],
@@ -72,6 +78,11 @@ export class VictimInfoHelper {
       birthDate: [null],
 
       gender: [null],
+      otherGender: [''],
+      pronouns: [null],
+      otherPronouns: [''],
+      raceEthnicity: [null],
+      otherRaceEthnicity: [''],
       maritalStatus: [null],
 
       victimSameContactInfo: [''],
@@ -118,6 +129,11 @@ export class VictimInfoHelper {
       birthDate: [null, [Validators.required]],
 
       gender: [null],
+      otherGender: [''],
+      pronouns: [null],
+      otherPronouns: [''],
+      raceEthnicity: [null],
+      otherRaceEthnicity: [''],
       maritalStatus: [null, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
 
       victimSameContactInfo: [''],

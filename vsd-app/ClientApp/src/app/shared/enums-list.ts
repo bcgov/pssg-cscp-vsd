@@ -184,7 +184,7 @@ export class EnumHelper {
   };
 
   public IndigenousStatus = {
-    BLANK: <IOptionSetVal>{ val: 0, name: '--' },
+    BLANK: <IOptionSetVal>{ val: 0, name: 'Select...' },
     First_Nations: <IOptionSetVal>{ val: 100000000, name: 'First Nations' },
     Metis: <IOptionSetVal>{ val: 100000001, name: 'Métis' },
     Inuit: <IOptionSetVal>{ val: 100000002, name: 'Inuit' },
@@ -198,6 +198,51 @@ export class EnumHelper {
     Primary_Only: <IOptionSetVal>{ val: 100000001, name: 'Primary only' },
     Altrernate_Only: <IOptionSetVal>{ val: 100000002, name: 'Alternate only' },
     No_Voicemail: <IOptionSetVal>{ val: 100000003, name: 'No Voicemail' }
+  };
+
+  public Gender_V2 = {
+    Man_Boy: {
+      val: 100000000,
+      name: 'Man/Boy (M)',
+      tooltip: 'Persons whose current gender is male. This includes cisgender and transgender persons who are male.'
+    },
+    Non_Binary: {
+      val: 100000002,
+      name: 'Non-Binary (X)',
+      tooltip:
+        'Persons whose current gender is not exclusively male or female. It includes people who are unsure of their gender, do not have one gender, have no gender, are gender fluid, or are Two-Spirit.'
+    },
+    Woman_Girl: {
+      val: 100000001,
+      name: 'Woman/Girl (F)',
+      tooltip: 'Persons whose current gender is female. This includes cisgender and transgender persons who are female.'
+    },
+    Prefer_Not_To_Answer: { val: 100000003, name: 'Prefer not to answer (U)' },
+    Prefer_To_Self_Describe: { val: 100000004, name: 'Prefer to self-describe' }
+  };
+
+  public Pronouns_V2 = {
+    He_Him_His: { val: 100000001, name: 'He/Him/His' },
+    She_Her_Hers: { val: 100000000, name: 'She/Her/Hers' },
+    They_Them_Theirs: { val: 100000002, name: 'They/Them/Theirs' },
+    Other: { val: 100000003, name: 'Other' }
+  };
+
+  public RaceEthnicity_V2 = {
+    Black: { val: 100000000, name: 'Black' },
+    Chinese: { val: 100000001, name: 'Chinese' },
+    Japanese: { val: 100000002, name: 'Japanese' },
+    Korean: { val: 100000003, name: 'Korean' },
+    Filipino: { val: 100000004, name: 'Filipino' },
+    Southeast_Asian: { val: 100000005, name: 'Southeast Asian' },
+    Latin_American: { val: 100000006, name: 'Latin American' },
+    Arab: { val: 100000007, name: 'Arab' },
+    West_Asian: { val: 100000008, name: 'West Asian' },
+    South_Asian: { val: 100000009, name: 'South Asian' },
+    White: { val: 100000010, name: 'White' },
+    Other: { val: 100000011, name: 'Other' },
+    Multiple: { val: 100000012, name: 'Multiple' },
+    Indigenous: { val: 100000013, name: 'Indigenous' }
   };
 }
 
