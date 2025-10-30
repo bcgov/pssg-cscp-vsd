@@ -79,7 +79,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Offender[] additionalOffenders { get; set; }
 
         public Racafinformation racafInformation { get; set; }
-        public int wasReportMadeToPolice { get; set; }
+        public int? wasReportMadeToPolice { get; set; }
         public int? overOneYearFromCrime { get; set; }
         public string crimeDetails { get; set; }
         public string crimeInjuries { get; set; }
@@ -87,7 +87,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string noPoliceReportIdentification { get; set; }
         public bool moreThanOneOffender { get; set; }
         public int haveYouSuedOffender { get; set; }
-        public int offenderBeenCharged { get; set; }
+        public int? offenderBeenCharged { get; set; }
         public int? intendToSueOffender { get; set; }
         public string offenderFirstName { get; set; }
         public string offenderLastName { get; set; }

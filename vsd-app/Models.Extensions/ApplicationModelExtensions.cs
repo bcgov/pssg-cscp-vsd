@@ -1,8 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration.Provider;
 using System.Linq;
+using System.Xml.Serialization;
 using Gov.Cscp.VictimServices.Public.Infrastructure;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
+using Gov.Cscp.VictimServices.Public.Models;
 using Gov.Cscp.VictimServices.Public.ViewModels;
+using static System.Net.Mime.MediaTypeNames;
+using Application = Gov.Cscp.VictimServices.Public.JsonObjects.Application;
+using VSDAddress = Gov.Cscp.VictimServices.Public.ViewModels.Address;
+using VSDCourtfile = Gov.Cscp.VictimServices.Public.ViewModels.Courtfile;
 
 namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 {
@@ -1096,6 +1104,502 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             {
                 application.ProviderCollection = tempCombinedCollection;
             }
+        }
+
+        public static ApplicationFormModel ToApplicationFormModel(this ApplicationDynamicsModel dynamics)
+        {
+            if (dynamics == null)
+                return null;
+
+            var app = dynamics.Application;
+
+            var model = new ApplicationFormModel
+            {
+                ApplicationDate = DateTime.Now, // or derive from Dynamics if available
+                PersonalInformation = MapPersonalInformation(app),
+                MedicalInformation = MapToMedicalInformation(app, dynamics.ProviderCollection),
+                CrimeInformation = MapCrimeInformation(
+                    app,
+                    dynamics.CourtInfoCollection,
+                    dynamics.PoliceFileNumberCollection,
+                    dynamics.ProviderCollection
+                ),
+                RepresentativeInformation = MapRepresentativeInformation(app, dynamics.ProviderCollection),
+                DeclarationInformation = MapDeclarationInformation(app),
+                AuthorizationInformation = MapAuthorizationInformation(app, dynamics.ProviderCollection),
+                VictimInformation = MapVictimInformation(app),
+                ExpenseInformation = MapToExpenseInformation(app),
+                EmploymentIncomeInformation = MapEmploymentIncomeInformation(app, dynamics.ProviderCollection),
+
+                // Add other sections here as needed
+            };
+
+            return model;
+        }
+
+        private static Employmentincomeinformation MapEmploymentIncomeInformation(
+            Application app,
+            Providercollection[] providercollection
+        )
+        {
+            var employers = providercollection?.Where(p => p.vsd_relationship1 == "Employer");
+            return new Employmentincomeinformation
+            {
+                wereYouEmployedAtTimeOfCrime = app.vsd_cvap_ifmemployedduringcrime,
+                wereYouAtWorkAtTimeOfIncident = app.vsd_cvap_ifmatworkduringcrime,
+                //haveYouAppliedForWorkersCompensation
+                workersCompensationClaimNumber = app.vsd_cvap_ifmwcbclaimnumber,
+                didYouMissWorkDueToCrime = app.vsd_cvap_ifmmissedwork,
+                daysWorkMissedStart = app.vsd_cvap_ifmmissedworkstart,
+                daysWorkMissedEnd = app.vsd_cvap_ifmmissedworkend,
+                areYouStillOffWork = app.vsd_cvap_ifmareyoustilloffwork,
+                didYouLoseWages = app.vsd_cvap_ifmlostwages,
+                areYouSelfEmployed = app.vsd_cvap_ifmselfemployed,
+
+                mayContactEmployer = app.vsd_cvap_ifmcontactemployer,
+                employers = employers
+                    .Select(f => new Employer
+                    {
+                        employerName = f.vsd_companyname,
+                        employerPhoneNumber = f.vsd_phonenumber,
+                        employerFirstName = f.vsd_firstname,
+                        employerLastName = f.vsd_lastname,
+                        employerEmail = f.vsd_email,
+                        employerFax = f.vsd_fax,
+                        employerAddress = new VSDAddress
+                        {
+                            line1 = f?.vsd_addressline1,
+                            line2 = f.vsd_addressline2,
+                            city = f.vsd_city,
+                            province = f.vsd_province,
+                            country = f.vsd_country,
+                            postalCode = f.vsd_postalcode,
+                        },
+                    })
+                    .ToArray(),
+            };
+        }
+
+        private static Personalinformation MapPersonalInformation(Application app)
+        {
+            if (app == null)
+                return null;
+
+            return new Personalinformation
+            {
+                firstName = app.vsd_applicantsfirstname,
+                middleName = app.vsd_applicantsmiddlename,
+                lastName = app.vsd_applicantslastname,
+                otherFirstName = app.vsd_otherfirstname,
+                otherLastName = app.vsd_otherlastname,
+                dateOfNameChange = app.vsd_dateofnamechange,
+                relationshipToVictim = app.vsd_cvap_relationshiptovictim,
+                relationshipToVictimOther = app.vsd_relationshipother1,
+                gender = app.vsd_applicantsgendercode,
+                birthDate = app.vsd_applicantsbirthdate,
+                maritalStatus = app.vsd_applicantsmaritalstatus,
+                occupation = app.vsd_applicantsoccupation,
+                sin = app.vsd_applicantssocialinsurancenumber,
+                indigenousStatus = app.vsd_indigenous,
+                preferredMethodOfContact = app.vsd_applicantspreferredmethodofcontact,
+                leaveVoicemail = app.vsd_voicemailoption,
+                phoneNumber = app.vsd_applicantsprimaryphonenumber,
+                alternatePhoneNumber = app.vsd_applicantsalternatephonenumber,
+                email = app.vsd_applicantsemail,
+                primaryAddress = new VSDAddress
+                {
+                    line1 = app.vsd_applicantsprimaryaddressline1,
+                    line2 = app.vsd_applicantsprimaryaddressline2,
+                    city = app.vsd_applicantsprimarycity,
+                    province = app.vsd_applicantsprimaryprovince,
+                    postalCode = app.vsd_applicantsprimarypostalcode,
+                    country = app.vsd_applicantsprimarycountry,
+                },
+                alternateAddress = new VSDAddress
+                {
+                    line1 = app.vsd_applicantsalternateaddressline1,
+                    line2 = app.vsd_applicantsalternateaddressline2,
+                    city = app.vsd_applicantsalternatecity,
+                    province = app.vsd_applicantsalternateprovince,
+                    postalCode = app.vsd_applicantsalternatepostalcode,
+                    country = app.vsd_applicantsalternatecountry,
+                },
+            };
+        }
+
+        private static Crimeinformation MapCrimeInformation(
+            Application app,
+            Courtinfocollection[] courts,
+            Policefilenumbercollection[] policeFiles,
+            Providercollection[] providercollection
+        )
+        {
+            if (app == null)
+                return null;
+
+            var n = courts.Length;
+
+            var offender = providercollection.FirstOrDefault(p => p.vsd_relationship1 == "Accused");
+
+            return new Crimeinformation
+            {
+                typeOfCrime = app.vsd_cvap_typeofcrime,
+                unsureOfCrimeDates = app.vsd_cvap_unsureofspecificcrimedates,
+                crimePeriodStart = app.vsd_cvap_crimestartdate,
+                crimePeriodEnd = app.vsd_cvap_crimeenddate,
+                whyDidYouNotApplySooner = app.vsd_cvap_reasontoapplylate,
+                crimeDetails = app.vsd_cvap_crimedetails,
+                crimeInjuries = app.vsd_cvap_injuries,
+                wasReportMadeToPolice = app.vsd_cvap_reporttopolice,
+                victimDeceasedFromCrime = app.vsd_cvap_victimdeceased,
+                dateOfDeath = app.vsd_cvap_victimdateofdeath,
+                offenderFirstName = offender?.vsd_firstname,
+                offenderLastName = offender?.vsd_lastname,
+                offenderMiddleName = offender?.vsd_middlename,
+                offenderRelationship = offender?.vsd_relationship2,
+                haveYouSuedOffender = app.vsd_cvap_isoffendersued ?? 0,
+                intendToSueOffender = app.vsd_cvap_intentiontosueoffender,
+                overOneYearFromCrime = app.vsd_cvap_overoneyear,
+                noPoliceReportIdentification = app.vsd_cvap_crimereportedto,
+                offenderBeenCharged = app.vsd_cvap_isoffendercharged,
+                racafInformation = new Racafinformation
+                {
+                    applyToCourtForMoneyFromOffender = app.vsd_racaf_appliedforrestitution,
+                    expensesRequested = app.vsd_racaf_requestedexpenses,
+                    expensesAwarded = app.vsd_racaf_expensesawarded?.ToString(),
+                    expensesReceived = app.vsd_racaf_amountreceived?.ToString(),
+                    signName = app.vsd_racaf_fullname,
+                    signature = app.vsd_racaf_signature,
+                    willBeTakingLegalAction = app.vsd_racaf_legalactiontaken,
+                    lawyerOrFirmName = app.vsd_racaf_lawyerorfirmname,
+                    lawyerAddress = new VSDAddress
+                    {
+                        line1 = app.vsd_racaf_lawyeraddressline1,
+                        line2 = app.vsd_racaf_lawyeraddressline2,
+                        city = app.vsd_racaf_lawyercity,
+                        postalCode = app.vsd_racaf_lawyerpostalcode,
+                        province = app.vsd_racaf_lawyerprovince,
+                        country = app.vsd_racaf_lawyercountry,
+                    },
+                },
+                // Map police and court arrays if provided
+                courtFiles = courts
+                    ?.Select(c => new VSDCourtfile
+                    {
+                        courtFileNumber = c.vsd_courtfilenumber,
+                        courtLocation = c.vsd_courtlocation,
+                    })
+                    .ToArray(),
+                policeReports = policeFiles
+                    ?.Select(p => new Policereport
+                    {
+                        policeFileNumber = p.vsd_policefilenumber,
+                        reportStartDate = p.vsd_policereportingstartdate,
+                        reportEndDate = p.vsd_policereportingenddate,
+                        investigatingOfficer = p.vsd_investigatingpoliceofficername,
+                    })
+                    .ToArray(),
+            };
+        }
+
+        private static Representativeinformation MapRepresentativeInformation(
+            Application app,
+            Providercollection[] providers
+        )
+        {
+            if (providers == null || providers.Length == 0)
+                return null;
+
+            var first = providers.Last();
+
+            return new Representativeinformation
+            {
+                representativeFirstName = first.vsd_firstname,
+                representativeLastName = first.vsd_lastname,
+                representativeMiddleName = first.vsd_middlename,
+                representativePreferredMethodOfContact = first.vsd_preferredmethodofcontact,
+                representativeAlternatePhoneNumber = first.vsd_alternatephonenumber,
+                representativeEmail = first.vsd_email,
+                representativePhoneNumber = first.vsd_phonenumber,
+                relationshipToPerson = first.vsd_relationship1,
+                completingOnBehalfOf = app.vsd_cvap_onbehalfofdeclaration,
+                representativeAddress = new VSDAddress
+                {
+                    line1 = first.vsd_addressline1,
+                    city = first.vsd_city,
+                    postalCode = first.vsd_postalcode,
+                    province = first.vsd_province,
+                    country = first.vsd_country,
+                },
+            };
+        }
+
+        private static Declarationinformation MapDeclarationInformation(Application app) =>
+            new Declarationinformation
+            {
+                declaredAndSigned = app.vsd_racaf_signature,
+                signature = app.vsd_racaf_signature,
+            };
+
+        private static Authorizationinformation MapAuthorizationInformation(
+            Application app,
+            Providercollection[] providercollection
+        )
+        {
+            var authorizedPerson = providercollection.Where(p => p.vsd_relationship1 == "Authorized Person");
+
+            return new Authorizationinformation
+            {
+                signature = app.vsd_authorizationsignature,
+                authorizedPerson = authorizedPerson
+                    .Select(p => new AuthorizedPerson
+                    {
+                        authorizedPersonFirstName = p.vsd_firstname,
+                        authorizedPersonLastName = p.vsd_lastname,
+                        authorizedPersonAgencyName = p.vsd_companyname,
+                        authorizedPersonPhoneNumber = p.vsd_phonenumber,
+                        authorizedPersonEmail = p.vsd_email,
+                        authorizedPersonAgencyAddress = new VSDAddress
+                        {
+                            line1 = p.vsd_addressline1,
+                            line2 = p.vsd_addressline2,
+                            city = p.vsd_city,
+                            province = p.vsd_province,
+                            country = p.vsd_country,
+                            postalCode = p.vsd_postalcode,
+                        },
+                        authorizedPersonRelationship = p.vsd_relationship2,
+                        authorizedPersonRelationshipOther =
+                            p.vsd_relationship2 == "Other" ? p.vsd_relationship2other : null,
+                    })
+                    .ToArray(),
+            };
+        }
+
+        private static VictimInformation MapVictimInformation(Application app)
+        {
+            if (app == null)
+                return null;
+
+            return new VictimInformation
+            {
+                firstName = app.vsd_cvap_victimfirstname,
+                middleName = app.vsd_cvap_victimmiddlename,
+                lastName = app.vsd_cvap_victimlastname,
+                birthDate = app.vsd_cvap_victimbirthdate,
+                gender = app.vsd_cvap_victimgendercode,
+                maritalStatus = app.vsd_cvap_victimmaritalstatus,
+                sin = app.vsd_cvap_victimsocialinsurancenumber,
+                occupation = app.vsd_cvap_victimoccupation,
+                phoneNumber = app.vsd_cvap_victimprimaryphonenumber,
+                alternatePhoneNumber = app.vsd_cvap_victimalternatephonenumber,
+                email = app.vsd_cvap_victimemailaddress,
+                primaryAddress = new VSDAddress
+                {
+                    line1 = app.vsd_cvap_victimaddressline1,
+                    line2 = app.vsd_cvap_victimaddressline2,
+                    city = app.vsd_cvap_victimcity,
+                    postalCode = app.vsd_cvap_victimpostalcode,
+                    province = app.vsd_cvap_victimprovince,
+                    country = app.vsd_cvap_victimcountry,
+                },
+            };
+        }
+
+        private static Medicalinformation MapToMedicalInformation(
+            Application application,
+            Providercollection[] providercollection
+        )
+        {
+            if (application == null)
+                return null;
+
+            var familyDoctor = providercollection?.FirstOrDefault(p => p.vsd_relationship1 == "Family Doctor");
+
+            var modelMedical = new Medicalinformation
+            {
+                personalHealthNumber = application.vsd_applicantspersonalhealthnumber,
+                haveMedicalCoverageProvince = application.vsd_applicantsmspprovince,
+                haveMedicalCoverageProvinceOther = application.vsd_applicantsmspprovinceother,
+                doYouHaveOtherHealthCoverage = application.vsd_cvap_otherhealthcoverage,
+                otherHealthCoverageProviderName = application.vsd_applicantsextendedhealthprovidername,
+                otherHealthCoverageExtendedPlanNumber = application.vsd_applicantsextendedhealthnumber,
+                treatedAtHospitalName = application.vsd_cvap_treatmenthospitalname,
+                treatedAtHospitalDate = application.vsd_cvap_treatmentdate,
+                familyDoctorClinic = familyDoctor?.vsd_companyname,
+                familyDoctorFirstName = familyDoctor?.vsd_firstname,
+                familyDoctorLastName = familyDoctor?.vsd_lastname,
+                familyDoctorEmail = familyDoctor?.vsd_email,
+                familyDoctorPhoneNumber = familyDoctor?.vsd_phonenumber,
+                familyDoctorFax = familyDoctor?.vsd_fax,
+                familyDoctorAddress = new VSDAddress
+                {
+                    line1 = familyDoctor?.vsd_addressline1,
+                    line2 = familyDoctor?.vsd_addressline2,
+                    city = familyDoctor?.vsd_city,
+                    province = familyDoctor?.vsd_province,
+                    country = familyDoctor?.vsd_country,
+                    postalCode = familyDoctor?.vsd_postalcode,
+                },
+            };
+
+            // Check if hospital name indicates it was outside BC (optional)
+            if (
+                !string.IsNullOrEmpty(application.vsd_cvap_treatmenthospitalname)
+                && application.vsd_cvap_treatmenthospitalname == application.vsd_cvap_treatmenthospitalname
+            ) // adjust your condition if needed
+            {
+                modelMedical.treatedOutsideBcHospitalName = application.vsd_cvap_treatmenthospitalname;
+                modelMedical.treatedOutsideBc = true;
+            }
+
+            if (providercollection != null && providercollection.Any())
+            {
+                modelMedical.otherTreatments = providercollection
+                    .Where(p => p.vsd_relationship1 == "Counsellor")
+                    .Select(p => new Othertreatment
+                    {
+                        providerCompany = p.vsd_companyname,
+                        providerFirstName = p.vsd_firstname,
+                        providerLastName = p.vsd_lastname,
+                        providerPhoneNumber = p.vsd_phonenumber,
+                        providerFax = p.vsd_fax,
+                        providerEmail = p.vsd_email,
+                        providerType = p.vsd_relationship1,
+                        providerTypeText = p.vsd_relationship1other,
+                        providerAddress = new VSDAddress
+                        {
+                            line1 = p.vsd_addressline1,
+                            line2 = p.vsd_addressline2,
+                            city = p.vsd_city,
+                            province = p.vsd_province,
+                            country = p.vsd_country,
+                            postalCode = p.vsd_postalcode,
+                        },
+                    })
+                    .ToArray();
+            }
+
+            return modelMedical;
+        }
+
+        private static Expenseinformation MapToExpenseInformation(Application application)
+        {
+            if (application == null || string.IsNullOrEmpty(application.vsd_cvap_benefitsrequested))
+                return new Expenseinformation(); // empty model
+
+            var expenseInfo = new Expenseinformation();
+            var codes = application.vsd_cvap_benefitsrequested?.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            var otherCodes = application.vsd_cvap_otherbenefits?.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var code in codes)
+            {
+                switch (code.Trim())
+                {
+                    case "100000000":
+                        expenseInfo.haveMedicalExpenses = true;
+                        break;
+                    case "100000001":
+                        expenseInfo.haveDentalExpenses = true;
+                        break;
+                    case "100000002":
+                        expenseInfo.havePrescriptionDrugExpenses = true;
+                        break;
+                    case "100000003":
+                        expenseInfo.haveCounsellingExpenses = true;
+                        break;
+                    case "100000025":
+                        expenseInfo.haveCounsellingTransportation = true;
+                        break;
+                    case "100000004":
+                        expenseInfo.haveLostEmploymentIncomeExpenses = true;
+                        break;
+                    case "100000005":
+                        expenseInfo.havePersonalPropertyLostExpenses = true;
+                        break;
+                    case "100000006":
+                        expenseInfo.haveProtectiveMeasureExpenses = true;
+                        break;
+                    case "100000018":
+                        expenseInfo.haveMovingExpenses = true;
+                        break;
+                    case "100000023":
+                        expenseInfo.haveProtectiveMovingExpenses = true;
+                        break;
+                    case "100000024":
+                        expenseInfo.haveTransportationToObtainBenefits = true;
+                        break;
+                    case "100000007":
+                        expenseInfo.haveDisabilityExpenses = true;
+                        break;
+                    case "100000008":
+                        expenseInfo.haveCrimeSceneCleaningExpenses = true;
+                        break;
+                    case "100000009":
+                        expenseInfo.haveOtherExpenses = true;
+                        break;
+
+                    case "100000011":
+                        expenseInfo.haveVocationalServicesExpenses = true;
+                        break;
+                    case "100000010":
+                        expenseInfo.haveIncomeSupportExpenses = true;
+                        break;
+                    case "100000013":
+                        expenseInfo.haveChildcareExpenses = true;
+                        break;
+                    case "100000026":
+                        expenseInfo.haveLegalProceedingExpenses = true;
+                        break;
+                    case "100000020":
+                        expenseInfo.haveFuneralExpenses = true;
+                        break;
+                    case "100000021":
+                        expenseInfo.haveBereavementLeaveExpenses = true;
+                        break;
+                    case "100000022":
+                        expenseInfo.haveLostOfParentalGuidanceExpenses = true;
+                        break;
+                    case "100000014":
+                        expenseInfo.haveHomeMakerExpenses = true;
+                        break;
+                }
+            }
+            if (otherCodes != null)
+            {
+                foreach (var othercode in otherCodes)
+                {
+                    switch (othercode.Trim())
+                    {
+                        case "100000007":
+                            expenseInfo.haveLifeInsuranceBenefits = true;
+                            break;
+                        case "100000000":
+                            expenseInfo.haveDisabilityPlanBenefits = true;
+                            break;
+                        case "100000001":
+                            expenseInfo.haveEmploymentInsuranceBenefits = true;
+                            break;
+                        case "100000002":
+                            expenseInfo.haveIncomeAssistanceBenefits = true;
+                            break;
+                        case "100000003":
+                            expenseInfo.haveCanadaPensionPlanBenefits = true;
+                            break;
+                        case "100000004":
+                            expenseInfo.haveAboriginalAffairsAndNorthernDevelopmentCanadaBenefits = true;
+                            break;
+                        case "100000005":
+                            expenseInfo.haveCivilActionBenefits = true;
+                            break;
+                        case "100000006":
+                            expenseInfo.haveOtherBenefits = true;
+                            break;
+                    }
+                }
+            }
+
+            return expenseInfo;
         }
     }
 }
