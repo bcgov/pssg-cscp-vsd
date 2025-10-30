@@ -1,0 +1,43 @@
+<div [formGroup]="form">
+  <div class="row">
+    <app-field
+      label="Primary Race/Ethnicity"
+      class="col-md-12"
+      [required]="false"
+      [disabled]="isDisabled"
+      errorMessage="Please select an option">
+      <select class="form-control" [formControlName]="raceEthnicityFormControlName">
+        <option *ngFor="let enum of raceEthnicityList" [value]="enum.val">{{ enum.name }}</option>
+      </select>
+    </app-field>
+  </div>
+  <div class="row">
+    <app-field
+      label="Indigenous"
+      class="col-md-12"
+      *ngIf="isPersonIndigenous"
+      [required]="false"
+      [disabled]="isDisabled"
+      errorMessage="Please select an option">
+      <select class="form-control" [formControlName]="indigenousStatusFormControlName">
+        <option *ngFor="let enum of indigenousStatusList" [value]="enum.val">{{ enum.name }}</option>
+      </select>
+    </app-field>
+  </div>
+  <div class="row">
+    <app-field
+      label="Other Race/Ethnicity"
+      class="col-md-12"
+      *ngIf="showOtherRaceEthnicity"
+      [required]="false"
+      errorMessage="Please enter your gender"
+      [disabled]="isDisabled">
+      <label class="inline-label">
+        <input
+          type="text"
+          [name]="otherRaceEthnicityFormControlName"
+          [formControlName]="otherRaceEthnicityFormControlName" />
+      </label>
+    </app-field>
+  </div>
+</div>

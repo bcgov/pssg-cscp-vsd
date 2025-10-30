@@ -26,18 +26,6 @@ export class JusticeApplicationDataService {
     return this.http.post(this.apiPath + 'submitcounsellorinvoice', counsellorInvoice, { headers: this.headers });
   }
 
-  public submitRestitutionApplication(restitution: any) {
-    return this.http.post(this.apiPath + 'submitrestitution', restitution, { headers: this.headers });
-  }
-
-  // public submitVictimRestitutionApplication(victimRestitution: VictimRestitution) {
-  //   return this.http.post(this.apiPath + 'submitvictimrestitution', victimRestitution, { headers: this.headers });
-  // }
-
-  // public submitOffenderRestitutionApplication(offenderRestitution: OffenderRestitution) {
-  //   return this.http.post(this.apiPath + 'submitoffenderrestitution', offenderRestitution, { headers: this.headers });
-  // }
-
   public validateVendor(vendorNumber, vendorPostalCode) {
     return this.http.get<string>(`${this.apiPath}validate_vendor/${vendorNumber}/${vendorPostalCode}`, {
       headers: this.headers

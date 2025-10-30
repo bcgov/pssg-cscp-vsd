@@ -17,10 +17,15 @@ export class PersonalInfoHelper {
       dateOfNameChange: [''],
 
       gender: [null],
+      otherGender: [''],
+      pronouns: [null],
+      otherPronouns: [''],
+      raceEthnicity: [null],
+      otherRaceEthnicity: [''],
+      indigenousStatus: [null],
       birthDate: ['', [Validators.required]],
       sin: ['', [Validators.minLength(9), Validators.maxLength(9)]],
       occupation: [''],
-      indigenousStatus: [0, [Validators.required, Validators.min(100000000), Validators.max(100000004)]],
 
       preferredMethodOfContact: [0, [Validators.required, Validators.min(1), Validators.max(100000002)]], // Phone = 2, Email = 1, Mail = 4, Alternate Mail = 100000002
 

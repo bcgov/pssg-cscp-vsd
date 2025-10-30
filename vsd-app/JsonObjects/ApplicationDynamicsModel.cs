@@ -38,12 +38,17 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_relationshipother1 { get; set; }
 
         public int? vsd_applicantsgendercode { get; set; }
+        public string? vsd_genderidentitytext { get; set; }
+        public int? vsd_pronouns { get; set; }
+        public string? vsd_pronountext { get; set; }
+        public int? vsd_primaryraceethnicity { get; set; }
+        public string? vsd_primaryraceethnicitytext { get; set; }
+        public int? vsd_indigenous { get; set; }
         public DateTime? vsd_applicantsbirthdate { get; set; }
         public int? vsd_applicantsmaritalstatus { get; set; }
 
         public string vsd_applicantsoccupation { get; set; }
         public string vsd_applicantssocialinsurancenumber { get; set; }
-        public int? vsd_indigenous { get; set; }
 
         public string vsd_applicantsprimaryphonenumber { get; set; }
         public int? vsd_voicemailoption { get; set; }
@@ -74,6 +79,12 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
         public string vsd_cvap_victimotherlastname { get; set; }
         public DateTime? vsd_cvap_victimdateofnamechange { get; set; }
         public int? vsd_cvap_victimgendercode { get; set; }
+        public string? vsd_victimgendertext { get; set; }
+        public int? vsd_victimpronouns { get; set; }
+        public string? vsd_victimpronountext { get; set; }
+        public int? vsd_victimprimaryraceethnicity { get; set; }
+        public string? vsd_victimprimaryraceethnicitytext { get; set; }
+        public int? vsd_victimindigenous { get; set; }
         public DateTime? vsd_cvap_victimbirthdate { get; set; }
         public string vsd_cvap_victimsocialinsurancenumber { get; set; }
         public string vsd_cvap_victimoccupation { get; set; }
