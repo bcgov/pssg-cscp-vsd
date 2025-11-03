@@ -27,9 +27,12 @@ namespace Gov.Cscp.VictimServices.Public
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IWebHostEnvironment CurrentEnvironment { get; set; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            CurrentEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -79,7 +82,11 @@ namespace Gov.Cscp.VictimServices.Public
                     opts.Filters.Add(typeof(CspReportOnlyAttribute));
                     opts.Filters.Add(new CspScriptSrcReportOnlyAttribute { None = true });
 
-                    opts.Filters.Add(new AllowAnonymousFilter()); // Allow anonymous for dev
+                    // if (CurrentEnvironment.IsDevelopment())
+                    // {
+                    // Allow anonymous
+                    opts.Filters.Add(new AllowAnonymousFilter());
+                    // }
                 })
                 .AddNewtonsoftJson(opts =>
                 {
@@ -112,7 +119,7 @@ namespace Gov.Cscp.VictimServices.Public
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             var log = loggerFactory.CreateLogger("Startup");
 
@@ -122,7 +129,7 @@ namespace Gov.Cscp.VictimServices.Public
             {
                 app.UsePathBase(pathBase);
             }
-            if (!env.IsProduction())
+            if (!CurrentEnvironment.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -139,7 +146,7 @@ namespace Gov.Cscp.VictimServices.Public
                 {
                     ctx.Response.Headers.Append(
                         "Content-Security-Policy",
-                        "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://apis.google.com https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com https://code.jquery.com https://stackpath.bootstrapcdn.com https://fonts.googleapis.com"
+                        "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://apis.google.com https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com https://code.jquery.com https://stackpath.bootstrapcdn.com https://fonts.googleapis.com; connect-src 'self' https://stackpath.bootstrapcdn.com"
                     );
                     ctx.Response.Headers.Append(
                         "Strict-Transport-Security",
@@ -151,7 +158,7 @@ namespace Gov.Cscp.VictimServices.Public
             app.UseXContentTypeOptions();
             app.UseXfo(xfo => xfo.Deny());
 
-            if (!env.IsDevelopment()) // when running locally we can't have a strict CSP
+            if (!CurrentEnvironment.IsDevelopment()) // when running locally we can't have a strict CSP
             {
                 // Content-Security-Policy header
                 app.UseCsp(opts =>
