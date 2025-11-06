@@ -275,6 +275,37 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
+                if (pdfType == "invoice")
+                {
+                    var invoiceEndpoint = $"vsd_invoices({applicationId})";
+                    DynamicsResult invoiceResult = await _dynamicsResultService.Get(invoiceEndpoint);
+                    var invoiceJson = invoiceResult.result.ToString();
+                    CounsellorInvoiceFormDynamicsModel invoiceDynamics = new CounsellorInvoiceFormDynamicsModel();
+                    invoiceDynamics = System.Text.Json.JsonSerializer.Deserialize<CounsellorInvoiceFormDynamicsModel>(
+                        invoiceJson
+                    );
+
+                    var lineItemEndpoint = $"vsd_invoicelinedetails?$filter=_vsd_invoiceid_value eq {applicationId}";
+                    DynamicsResult lineItemResult = await _dynamicsResultService.Get(lineItemEndpoint);
+                    var lineItemJson = lineItemResult.result.ToString();
+                    invoiceDynamics.InvoiceLineItems = System
+                        .Text.Json.JsonSerializer.Deserialize<DynamicsCollection<LineItemDynamicsModel>>(lineItemJson)
+                        .Value;
+
+                    var invoice = invoiceDynamics.ToFormModel();
+
+                    string invoice_xml = getInvoiceXML(invoice);
+                    string invoice_requestJson = getAEMJSON(invoice_xml, pdfType);
+
+                    AEMResult invoice_aemResult = await _aemResultService.Post(invoice_requestJson);
+                    byte[] invoice_pdfBytes = Convert.FromBase64String(invoice_aemResult.responseMessage);
+
+                    return File(
+                        invoice_pdfBytes,
+                        "application/pdf",
+                        $"Invoice-{invoice.InvoiceDetails.vendorNumber}.pdf"
+                    );
+                }
                 var endpoint = $"vsd_applications({applicationId})";
                 DynamicsResult result = await _dynamicsResultService.Get(endpoint);
                 var json = result.result.ToString();
@@ -311,7 +342,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 
                 AEMResult aemResult = await _aemResultService.Post(requestJson);
                 byte[] pdfBytes = Convert.FromBase64String(aemResult.responseMessage);
-                return File(pdfBytes, "application/pdf", "VictimApplication.pdf");
+                return File(pdfBytes, "application/pdf", $"{char.ToUpper(pdfType[0]) + pdfType[1..]}Application.pdf");
             }
             catch (Exception e)
             {

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
 using Gov.Cscp.VictimServices.Public.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 {
@@ -63,6 +65,55 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 }
             }
 
+            return outputModel;
+        }
+
+        public static CounsellorInvoiceFormModel ToFormModel(this CounsellorInvoiceFormDynamicsModel dynamicsModel)
+        {
+            CounsellorInvoiceFormModel outputModel = new CounsellorInvoiceFormModel();
+            if (dynamicsModel == null)
+                return outputModel;
+
+            Invoicedetails invoiceDetails = new Invoicedetails();
+
+            invoiceDetails.vendorNumber = dynamicsModel.vsd_payeenumber;
+            invoiceDetails.vendorPostalCode = dynamicsModel.vsd_emailaddress;
+
+            invoiceDetails.counsellorRegistrationNumber = dynamicsModel.vsd_cvap_counsellorregistrationnumber;
+            invoiceDetails.counsellorLastName = dynamicsModel.vsd_cvap_nameofcounsellortext;
+
+            invoiceDetails.claimNumber = dynamicsModel.vsd_claimnumbertext;
+            invoiceDetails.claimantsFirstName = dynamicsModel.vsd_claimantnametext;
+            invoiceDetails.claimantsLastName = dynamicsModel.vsd_claimantlastnametext;
+            invoiceDetails.claimantsFullName =
+                $"{dynamicsModel.vsd_claimantnametext} {dynamicsModel.vsd_claimantlastnametext}";
+
+            invoiceDetails.invoiceNumber = dynamicsModel.vsd_payeeinvoicenumber;
+            invoiceDetails.invoiceDate = DateTime.Parse(dynamicsModel.vsd_invoicedate);
+
+            invoiceDetails.submitterFullName = dynamicsModel.vsd_signature;
+            invoiceDetails.submitterEmailAddress = dynamicsModel.vsd_cvap_counselloremailtext;
+
+            if (dynamicsModel.InvoiceLineItems != null && dynamicsModel.InvoiceLineItems.Length > 0)
+            {
+                List<Lineitem> lineItems = new List<Lineitem>();
+                foreach (var item in dynamicsModel.InvoiceLineItems)
+                {
+                    var counsellingTypeEnum = (CounsellingTypeEnum?)item.vsd_cvap_counsellingtype;
+                    lineItems.Add(
+                        new Lineitem
+                        {
+                            counsellingTypeName =
+                                counsellingTypeEnum != null ? counsellingTypeEnum.GetDescription() : null,
+                            sessionHours = item.vsd_cvap_sessionduration,
+                            missedSession = item.vsd_missedsession,
+                            sessionDate = item.vsd_cvap_sessiondate,
+                        }
+                    );
+                }
+                invoiceDetails.lineItems = lineItems.ToArray();
+            }
+            outputModel.InvoiceDetails = invoiceDetails;
             return outputModel;
         }
     }
