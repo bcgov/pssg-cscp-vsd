@@ -129,16 +129,6 @@ namespace Gov.Cscp.VictimServices.Public
         {
             ConfigureLogging(env);
 
-            app.UseSerilogRequestLogging(options =>
-            {
-                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-                {
-                    diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
-                    diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
-                    diagnosticContext.Set("UserAgent", httpContext.Request.Headers["User-Agent"].ToString());
-                };
-            });
-
             string pathBase = Configuration["BASE_PATH"];
 
             if (!string.IsNullOrEmpty(pathBase))
@@ -153,6 +143,16 @@ namespace Gov.Cscp.VictimServices.Public
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseSerilogRequestLogging(options =>
+            {
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
+                    diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
+                    diagnosticContext.Set("UserAgent", httpContext.Request.Headers["User-Agent"].ToString());
+                };
+            });
 
             // health checks
             app.UseHealthChecks("/hc");
@@ -252,7 +252,6 @@ namespace Gov.Cscp.VictimServices.Public
                 .Enrich.WithProperty("environment", env.EnvironmentName)
                 .Enrich.WithEnvironmentUserName()
                 .Enrich.WithCorrelationId()
-                .Enrich.WithCorrelationIdHeader()
                 .Enrich.WithSpan()
                 .Enrich.WithProperty(
                     "version",
