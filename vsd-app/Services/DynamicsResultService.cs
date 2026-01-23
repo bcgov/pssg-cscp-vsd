@@ -67,9 +67,8 @@ namespace Gov.Cscp.VictimServices.Public.Services
             {
                 _logger.Information(
                     new RequestFailedException($"Received a fail response from {endpointUrl}. Source = VSD"),
-                    $"COAST resturned IsSuccess = False. \nSource = VSD. \nError is:\n{result.result}\n\nJSON sent:{requestJson}",
-                    result.result,
-                    requestJson
+                    $"COAST resturned IsSuccess = False. \nSource = VSD. \nError is:\n{result.result}\n\n",
+                    result.result
                 );
             }
 
@@ -77,9 +76,8 @@ namespace Gov.Cscp.VictimServices.Public.Services
             {
                 _logger.Error(
                     new RequestFailedException($"Error calling API function {endpointUrl}. Source = VSD"),
-                    $"Error calling API function {endpointUrl}. \nSource = VSD. \nError is:\n{result.result}\n\nJSON sent:{requestJson}",
-                    result.result,
-                    requestJson
+                    $"Error calling API function {endpointUrl}. \nSource = VSD. \nError is:\n{result.result}\n\n",
+                    result.result
                 );
             }
 
