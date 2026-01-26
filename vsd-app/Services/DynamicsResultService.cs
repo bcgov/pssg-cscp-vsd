@@ -76,8 +76,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
             {
                 _logger.Error(
                     new RequestFailedException($"Error calling API function {endpointUrl}. Source = VSD"),
-                    $"Error calling API function {endpointUrl}. \nSource = VSD. \nError is:\n{result.result}\n\n",
-                    result.result
+                    $"Error calling API function {endpointUrl}. \nSource = VSD."
                 );
             }
 
