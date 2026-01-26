@@ -33,9 +33,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error(
-                        $"API call to 'SaveApplication' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
-                    );
+                    _logger.Error($"API call to 'SaveApplication' made with invalid model state. Source = VSD");
                     return BadRequest(ModelState);
                 }
 
@@ -54,7 +52,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected error while saving application. Source = VSD", model);
+                _logger.Error(e, "Unexpected error while saving application. Source = VSD");
                 return BadRequest();
             }
             finally { }
@@ -67,9 +65,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error(
-                        $"API call to 'SubmitCounsellorInvoice' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
-                    );
+                    _logger.Error($"API call to 'SubmitCounsellorInvoice' made with invalid model state. Source = VSD");
                     return BadRequest(ModelState);
                 }
 
@@ -88,7 +84,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected error while submitting counsellor invoice. Source = VSD", model);
+                _logger.Error(e, "Unexpected error while submitting counsellor invoice. Source = VSD");
                 return BadRequest();
             }
             finally { }

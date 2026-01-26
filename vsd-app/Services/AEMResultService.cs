@@ -63,9 +63,8 @@ namespace Gov.Cscp.VictimServices.Public.Services
             else
             {
                 _logger.Error(
-                    new RequestFailedException($"Error calling API function {endpointUrl}. Source = VSD"),
-                    $"Error calling API function {endpointUrl}. Source = VSD. Error is:\n{result}\n\n",
-                    result
+                    new RequestFailedException("Error calling Dynamics endpoint. Source = VSD"),
+                    "Error calling Dynamics endpoint. Source = VSD."
                 );
             }
 
