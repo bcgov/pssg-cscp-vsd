@@ -146,6 +146,29 @@ namespace Gov.Cscp.VictimServices.Public
 
             app.UseSerilogRequestLogging(options =>
             {
+                // Reduce log level for specific endpoints
+                options.GetLevel = (httpContext, elapsed, ex) =>
+                {
+                    if (ex != null)
+                        return Serilog.Events.LogEventLevel.Error;
+
+                    var path = httpContext.Request.Path.ToString();
+
+                    // health checks and lookup endpoints
+                    var logIgnoreEndpoints = new[] { "/hc", "/api/lookup" };
+
+                    // Suppress logging for ignored endpoints
+                    if (Array.Exists(logIgnoreEndpoints, e => path.StartsWith(e, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return Serilog.Events.LogEventLevel.Verbose; // Below minimum level
+                    }
+
+                    // log warnings for requests that take longer than 1 second
+                    return elapsed > 1000
+                        ? Serilog.Events.LogEventLevel.Warning
+                        : Serilog.Events.LogEventLevel.Information;
+                };
+
                 options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
                 {
                     diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
