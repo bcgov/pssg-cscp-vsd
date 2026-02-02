@@ -2,7 +2,7 @@ import { FormBase } from '../form-base';
 import { OnInit, Component, Input } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { FormGroup, ControlContainer } from '@angular/forms';
+import { UntypedFormGroup, ControlContainer } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType } from '../enums-list';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
@@ -24,7 +24,7 @@ import { LookupService } from '../../services/lookup.service';
 export class DeclarationInformationComponent extends FormBase implements OnInit {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   eligible_name: string;
   cvapEmail: string = '';
@@ -38,7 +38,7 @@ export class DeclarationInformationComponent extends FormBase implements OnInit 
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);

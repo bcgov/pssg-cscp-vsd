@@ -1,10 +1,10 @@
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
 import { ApplicationType } from '../enums-list';
 import { POSTAL_CODE } from '../regex.constants';
 
 export class EmploymentInfoHelper {
   postalRegex = POSTAL_CODE;
-  public setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
+  public setupFormGroup(fb: UntypedFormBuilder, form_type: ApplicationType): UntypedFormGroup {
     let group = {
       wereYouEmployedAtTimeOfCrime: [''], //, Validators.required],
       wereYouAtWorkAtTimeOfIncident: [''],
@@ -27,7 +27,7 @@ export class EmploymentInfoHelper {
     return fb.group(group);
   }
 
-  createEmployerInfo(fb: FormBuilder): FormGroup {
+  createEmployerInfo(fb: UntypedFormBuilder): UntypedFormGroup {
     return fb.group({
       employerName: [''],
       employerPhoneNumber: [''],

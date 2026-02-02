@@ -3,7 +3,7 @@ import { OnInit, Component, Input } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { FormGroup, ControlContainer, FormArray } from '@angular/forms';
+import { UntypedFormGroup, ControlContainer, UntypedFormArray } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType, EnumHelper, OnBehalfOf, CRMBoolean, CRMMultiBoolean } from '../enums-list';
 import { AddressHelper } from '../address/address.helper';
@@ -23,18 +23,18 @@ import { AddressHelper } from '../address/address.helper';
 export class ApplicationReviewComponent extends FormBase implements OnInit {
   @Input() formType: number;
   @Input() parentStepper: MatStepper;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   CRMBoolean = CRMBoolean;
   CRMMultiBoolean = CRMMultiBoolean;
   OnBehalfOf = OnBehalfOf;
   enumHelper = new EnumHelper();
 
-  courtFiles: FormArray;
-  crimeLocations: FormArray;
-  policeReports: FormArray;
-  otherMedicalTreatments: FormArray;
-  employers: FormArray;
+  courtFiles: UntypedFormArray;
+  crimeLocations: UntypedFormArray;
+  policeReports: UntypedFormArray;
+  otherMedicalTreatments: UntypedFormArray;
+  employers: UntypedFormArray;
 
   addressHelper = new AddressHelper();
 
@@ -45,20 +45,20 @@ export class ApplicationReviewComponent extends FormBase implements OnInit {
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);
-    this.crimeLocations = this.form.get('crimeInformation.crimeLocations') as FormArray;
-    this.courtFiles = this.form.get('crimeInformation.courtFiles') as FormArray;
-    this.policeReports = this.form.get('crimeInformation.policeReports') as FormArray;
-    this.otherMedicalTreatments = this.form.get('medicalInformation.otherTreatments') as FormArray;
+    this.crimeLocations = this.form.get('crimeInformation.crimeLocations') as UntypedFormArray;
+    this.courtFiles = this.form.get('crimeInformation.courtFiles') as UntypedFormArray;
+    this.policeReports = this.form.get('crimeInformation.policeReports') as UntypedFormArray;
+    this.otherMedicalTreatments = this.form.get('medicalInformation.otherTreatments') as UntypedFormArray;
     if (this.formType === ApplicationType.Victim_Application) {
-      this.employers = this.form.get('employmentIncomeInformation.employers') as FormArray;
+      this.employers = this.form.get('employmentIncomeInformation.employers') as UntypedFormArray;
       this.pages = VictimApplicationPages;
     }
     if (this.formType === ApplicationType.IFM_Application) {
-      this.employers = this.form.get('expenseInformation.employers') as FormArray;
+      this.employers = this.form.get('expenseInformation.employers') as UntypedFormArray;
       this.pages = IFMApplicationPages;
     }
     if (this.formType === ApplicationType.Witness_Application) {

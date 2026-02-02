@@ -2,7 +2,7 @@ import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FormGroup, FormBuilder, ControlContainer, AbstractControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, ControlContainer, AbstractControl, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType } from '../enums-list';
 import { Subscription } from 'rxjs';
@@ -20,7 +20,7 @@ import { iLookupData } from '../../interfaces/lookup-data.interface';
 export class VictimInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
@@ -35,12 +35,12 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
   addressSubscription: Subscription;
   contactInfoSubscription: Subscription;
 
-  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog, private fb: FormBuilder) {
+  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog, private fb: UntypedFormBuilder) {
     super();
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);

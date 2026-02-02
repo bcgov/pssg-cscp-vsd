@@ -1,7 +1,7 @@
 import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { FormGroup, Validators, FormBuilder, ControlContainer } from '@angular/forms';
+import { UntypedFormGroup, Validators, UntypedFormBuilder, ControlContainer } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType } from '../enums-list';
 import { COUNTRIES_ADDRESS } from '../address/country-list';
@@ -28,7 +28,7 @@ import { LookupService } from '../../services/lookup.service';
 export class RepresentativeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   provinceList: string[];
   relationshipList: string[];
@@ -51,7 +51,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
   constructor(
     private controlContainer: ControlContainer,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     public lookupService: LookupService
   ) {
@@ -61,7 +61,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
       this.setRequiredFields(this.form.get('completingOnBehalfOf').value);

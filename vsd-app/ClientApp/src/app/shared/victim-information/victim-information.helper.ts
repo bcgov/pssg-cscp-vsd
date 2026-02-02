@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { POSTAL_CODE } from '../regex.constants';
 import { EmailValidator } from '../validators/email.validator';
 import { race } from 'rxjs';
@@ -17,7 +17,7 @@ export class VictimInfoHelper {
    * @return {*}  {FormGroup}
    * @memberof VictimInfoHelper
    */
-  public setupFormGroupForVictimApplication(fb: FormBuilder): FormGroup {
+  public setupFormGroupForVictimApplication(fb: UntypedFormBuilder): UntypedFormGroup {
     let group = {
       firstName: ['', Validators.required],
       middleName: [''],
@@ -64,7 +64,7 @@ export class VictimInfoHelper {
    * @return {*}  {FormGroup}
    * @memberof VictimInfoHelper
    */
-  public setupFormGroupForWitnessApplication(fb: FormBuilder): FormGroup {
+  public setupFormGroupForWitnessApplication(fb: UntypedFormBuilder): UntypedFormGroup {
     let group = {
       firstName: [''],
       middleName: [''],
@@ -113,7 +113,7 @@ export class VictimInfoHelper {
    * @return {*}  {FormGroup}
    * @memberof VictimInfoHelper
    */
-  public setupFormGroupForIfmApplication(fb: FormBuilder): FormGroup {
+  public setupFormGroupForIfmApplication(fb: UntypedFormBuilder): UntypedFormGroup {
     let group = {
       firstName: ['', Validators.required],
       middleName: [''],

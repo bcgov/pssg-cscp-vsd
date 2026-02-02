@@ -3,12 +3,12 @@ import { FormBase } from '../form-base';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
-  FormArray,
-  FormGroup,
+  UntypedFormArray,
+  UntypedFormGroup,
   Validators,
-  FormBuilder,
+  UntypedFormBuilder,
   ControlContainer,
-  FormControl,
+  UntypedFormControl,
   AbstractControl
 } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -36,13 +36,13 @@ import { config } from '../../../config';
 export class MedicalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   CRMBoolean = CRMBoolean;
 
-  familyDoctorClinicItem: FormControl;
+  familyDoctorClinicItem: UntypedFormControl;
 
-  otherTreatmentItems: FormArray;
+  otherTreatmentItems: UntypedFormArray;
   showAddProvider: boolean = true;
   showRemoveProvider: boolean = false;
 
@@ -63,12 +63,12 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
   wereYouTreatedAtHospitalSubscription: Subscription;
   treatedOutsideBcSubscription: Subscription;
 
-  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog, private fb: FormBuilder) {
+  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog, private fb: UntypedFormBuilder) {
     super();
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);
@@ -155,7 +155,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
 
   addProvider(): void {
     // add a medical treatment provider to the list
-    this.otherTreatmentItems = this.form.get('otherTreatments') as FormArray;
+    this.otherTreatmentItems = this.form.get('otherTreatments') as UntypedFormArray;
     let thisTreatment = this.createTreatmentItem();
     this.otherTreatmentItems.push(thisTreatment);
     this.showAddProvider = this.otherTreatmentItems.length < 5;
@@ -163,7 +163,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
   }
   clearProviders(): void {
     // remove all providers
-    this.otherTreatmentItems = this.form.get('otherTreatments') as FormArray;
+    this.otherTreatmentItems = this.form.get('otherTreatments') as UntypedFormArray;
     while (this.otherTreatmentItems.length > 0) {
       this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
     }
@@ -171,13 +171,13 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
 
   removeProvider(index: number): void {
     // when the user clicks to remove the medical provider this removes the provider at the index clicked
-    this.otherTreatmentItems = this.form.get('otherTreatments') as FormArray;
+    this.otherTreatmentItems = this.form.get('otherTreatments') as UntypedFormArray;
     this.otherTreatmentItems.removeAt(index);
     this.showAddProvider = this.otherTreatmentItems.length < 5;
     this.showRemoveProvider = this.otherTreatmentItems.length > 1;
   }
 
-  createTreatmentItem(): FormGroup {
+  createTreatmentItem(): UntypedFormGroup {
     let group = {
       providerCompany: [''],
       providerEmail: ['', [Validators.email]],
@@ -206,13 +206,13 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
   }
 
   addDoctor(): void {
-    this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as FormControl;
+    this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as UntypedFormControl;
     this.familyDoctorClinicItem.setValidators([Validators.required]);
     this.familyDoctorClinicItem.updateValueAndValidity();
   }
 
   clearDoctor(): void {
-    this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as FormControl;
+    this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as UntypedFormControl;
     this.familyDoctorClinicItem.clearValidators();
     this.familyDoctorClinicItem.updateValueAndValidity();
 

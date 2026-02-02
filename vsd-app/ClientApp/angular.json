@@ -103,7 +103,6 @@
       }
     }
   },
-  "defaultProject": "vsd_public_app",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

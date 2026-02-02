@@ -2,7 +2,7 @@ import { FormBase } from '../form-base';
 import { OnInit, Component, Input } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FormGroup, ControlContainer } from '@angular/forms';
+import { UntypedFormGroup, ControlContainer } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType } from '../enums-list';
 import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
@@ -22,7 +22,7 @@ import { LookupService } from '../../services/lookup.service';
 })
 export class IntroductionComponent extends FormBase implements OnInit {
   @Input() formType: number;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   applicant: string = '';
 
@@ -42,7 +42,7 @@ export class IntroductionComponent extends FormBase implements OnInit {
     var ua = window.navigator.userAgent;
     this.isIE = /MSIE|Trident/.test(ua);
 
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);

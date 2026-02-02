@@ -23,7 +23,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
 import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
 import { FormBase } from '../shared/form-base';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormArray } from '@angular/forms';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { LookupService } from '../services/lookup.service';
 import { MY_FORMATS } from '../shared/enums-list';
@@ -61,7 +61,7 @@ const moment = _rollupMoment || _moment;
 export class WitnessApplicationComponent extends FormBase implements OnInit {
   FORM_TYPE: ApplicationType = ApplicationType.Witness_Application;
   busy: Promise<any>;
-  form: FormGroup;
+  form: UntypedFormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
   submitting: boolean = false;
@@ -96,7 +96,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
@@ -334,7 +334,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     this.form.markAsTouched();
   }
 
-  private buildApplicationForm(): FormGroup {
+  private buildApplicationForm(): UntypedFormGroup {
     return this.fb.group({
       introduction: this.fb.group({
         understoodInformation: [null, Validators.requiredTrue]

@@ -2,7 +2,7 @@ import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, AbstractControl } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup, Validators, UntypedFormBuilder, ControlContainer, AbstractControl } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType, CRMBoolean } from '../enums-list';
 import * as moment from 'moment';
@@ -28,7 +28,7 @@ import { iLookupData } from '../../interfaces/lookup-data.interface';
 export class EmploymentInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   postalRegex = POSTAL_CODE;
 
@@ -38,7 +38,7 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
   minEndDate: Date;
   CRMBoolean = CRMBoolean;
 
-  employers: FormArray;
+  employers: UntypedFormArray;
 
   employmentInfoHelper = new EmploymentInfoHelper();
   addressHelper = new AddressHelper();
@@ -52,12 +52,12 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
   selfEmployedSubscription: Subscription;
   sinSubscription: Subscription;
 
-  constructor(private controlContainer: ControlContainer, private fb: FormBuilder) {
+  constructor(private controlContainer: ControlContainer, private fb: UntypedFormBuilder) {
     super();
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
 
     //wrapping this in a timeout fixes "Expression Changed after it was checked" errors... not ideal, but whatever
     setTimeout(() => {
@@ -189,10 +189,10 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     });
 
     this.selfEmployedSubscription = this.form.get('areYouSelfEmployed').valueChanges.subscribe((value) => {
-      let currentEmployers = this.form.get('employers') as FormArray;
+      let currentEmployers = this.form.get('employers') as UntypedFormArray;
 
       for (let i = 0; i < currentEmployers.length; ++i) {
-        let thisEmployer = currentEmployers.controls[i] as FormGroup;
+        let thisEmployer = currentEmployers.controls[i] as UntypedFormGroup;
         let control = thisEmployer.get('contactable');
 
         if (value === CRMBoolean.True) {
@@ -207,8 +207,8 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
   }
 
   contactableChange(val: boolean, index: number) {
-    let currentEmployers = this.form.get('employers') as FormArray;
-    let thisEmployer = currentEmployers.controls[index] as FormGroup;
+    let currentEmployers = this.form.get('employers') as UntypedFormArray;
+    let thisEmployer = currentEmployers.controls[index] as UntypedFormGroup;
 
     if (thisEmployer) {
       let nameControl = thisEmployer.get('employerName');
@@ -243,21 +243,21 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     return this.countryList[country][properyName];
   }
   showEmployers() {
-    this.employers = this.form.get('employers') as FormArray;
+    this.employers = this.form.get('employers') as UntypedFormArray;
     if (this.employers.length == 0) {
       this.employers.push(this.employmentInfoHelper.createEmployerInfo(this.fb));
     }
   }
   addEmployer() {
-    this.employers = this.form.get('employers') as FormArray;
+    this.employers = this.form.get('employers') as UntypedFormArray;
     this.employers.push(this.employmentInfoHelper.createEmployerInfo(this.fb));
   }
   removeEmployer(i: number) {
-    this.employers = this.form.get('employers') as FormArray;
+    this.employers = this.form.get('employers') as UntypedFormArray;
     this.employers.removeAt(i);
   }
   removeAllEmployers() {
-    this.employers = this.form.get('employers') as FormArray;
+    this.employers = this.form.get('employers') as UntypedFormArray;
     while (this.employers.length !== 0) {
       this.employers.removeAt(0);
     }

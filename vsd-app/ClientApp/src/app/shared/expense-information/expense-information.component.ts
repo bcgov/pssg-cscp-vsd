@@ -3,7 +3,7 @@ import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
-import { FormGroup, ControlContainer, FormControl, AbstractControl, Validators, FormArray } from '@angular/forms';
+import { UntypedFormGroup, ControlContainer, UntypedFormControl, AbstractControl, Validators, UntypedFormArray } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType, CRMBoolean } from '../enums-list';
 import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
@@ -27,7 +27,7 @@ import { iLookupData } from '../../interfaces/lookup-data.interface';
 export class ExpenseInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
 
   BENEFITS: string[];
@@ -51,7 +51,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);
@@ -131,14 +131,14 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
           let sinControl = this.form.get('sin');
           let daysMissedStartControl = this.form.get('daysWorkMissedStart');
           let daysMissedEndControl = this.form.get('daysWorkMissedEnd');
-          let employers = this.form.get('employers') as FormArray;
+          let employers = this.form.get('employers') as UntypedFormArray;
           if (value === CRMBoolean.True) {
             this.setControlValidators(daysMissedStartControl, [Validators.required]);
             this.setControlValidators(daysMissedEndControl, [Validators.required]);
             this.setControlValidators(sinControl, [Validators.required]);
 
             for (let i = 0; i < employers.length; ++i) {
-              let employerGroup = employers.controls[i] as FormGroup;
+              let employerGroup = employers.controls[i] as UntypedFormGroup;
               // let employersEmployerName = employerGroup.controls['employerName'] as FormControl;
               // this.setControlValidators(employersEmployerName, [Validators.required]);
               // let employersEmployerPhoneNumber = employerGroup.controls['employerPhoneNumber'] as FormControl;
@@ -153,7 +153,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
             this.form.get('mayContactEmployer').patchValue('');
 
             for (let i = 0; i < employers.length; ++i) {
-              let employerGroup = employers.controls[i] as FormGroup;
+              let employerGroup = employers.controls[i] as UntypedFormGroup;
               // let employersEmployerName = employerGroup.controls['employerName'] as FormControl;
               // this.clearControlValidators(employersEmployerName);
 
@@ -257,7 +257,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     x.forEach((c) => {
       // TODO: This should always return if not null because truthy. Second if should never trigger?
       if (oneChecked) return;
-      if (c instanceof FormControl) {
+      if (c instanceof UntypedFormControl) {
         if (c.value === true) oneChecked = true;
       }
     });
@@ -282,7 +282,7 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
     x.forEach((c) => {
       // TODO: This should always return if not null because truthy. Second if should never trigger?
       if (oneChecked) return;
-      if (c instanceof FormControl) {
+      if (c instanceof UntypedFormControl) {
         if (c.value === true) oneChecked = true;
       }
     });
@@ -294,8 +294,8 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   }
 
   mayContactEmployerChange(val: boolean) {
-    let currentEmployers = this.form.get('employers') as FormArray;
-    let thisEmployer = currentEmployers.controls[0] as FormGroup;
+    let currentEmployers = this.form.get('employers') as UntypedFormArray;
+    let thisEmployer = currentEmployers.controls[0] as UntypedFormGroup;
 
     if (thisEmployer) {
       let nameControl = thisEmployer.get('employerName');

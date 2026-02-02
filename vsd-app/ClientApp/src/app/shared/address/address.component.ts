@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, Validators, UntypedFormControl } from '@angular/forms';
 import { COUNTRIES_ADDRESS } from './country-list';
 import { POSTAL_CODE, ZIP_CODE } from '../regex.constants';
 import { CitiesSearchResponse, iCity, iCountry, iLookupData, iProvince } from '../../interfaces/lookup-data.interface';
@@ -37,7 +37,7 @@ export class AddressComponent implements OnInit {
 
   apiUrl = 'api/Lookup';
 
-  @Input() group = FormGroup;
+  @Input() group = UntypedFormGroup;
   @Input() showChildrenAsRequired: boolean = true;
   @Input() isDisabled: boolean = false;
   @Input() lookupData: iLookupData;
@@ -220,10 +220,10 @@ export class AddressComponent implements OnInit {
   }
 
   onCountryChange(event) {
-    let provinceControl = this.group['controls']['province'] as FormControl;
+    let provinceControl = this.group['controls']['province'] as UntypedFormControl;
     provinceControl.patchValue('');
     this.selectedProvince = { vsd_name: '', _vsd_countryid_value: '', vsd_code: '', vsd_provinceid: '' };
-    let cityControl = this.group['controls']['city'] as FormControl;
+    let cityControl = this.group['controls']['city'] as UntypedFormControl;
     cityControl.patchValue('');
 
     let selection = event.target.value.toLowerCase();
@@ -246,7 +246,7 @@ export class AddressComponent implements OnInit {
       provinceControl.patchValue('');
       this.setProvinceValidators();
 
-      let postalControl = this.group['controls']['postalCode'] as FormControl;
+      let postalControl = this.group['controls']['postalCode'] as UntypedFormControl;
       postalControl.patchValue('');
 
       this.setProvinceAndPostalType(this.selectedCountry.vsd_name);
@@ -260,7 +260,7 @@ export class AddressComponent implements OnInit {
   }
 
   onProvinceChange(event) {
-    let cityControl = this.group['controls']['city'] as FormControl;
+    let cityControl = this.group['controls']['city'] as UntypedFormControl;
     cityControl.patchValue('');
     let selection = event.target.value.toLowerCase();
     this.selectedProvince = this.lookupData.provinces.filter((c) => c.vsd_name.toLowerCase() == selection)[0];
@@ -322,7 +322,7 @@ export class AddressComponent implements OnInit {
   }
 
   setProvinceAndPostalType(country: string) {
-    let postalControl = this.group['controls']['postalCode'] as FormControl;
+    let postalControl = this.group['controls']['postalCode'] as UntypedFormControl;
     if (country.toLowerCase() === 'canada') {
       if (this.showChildrenAsRequired) {
         postalControl.setValidators([Validators.required, Validators.pattern(this.postalRegex)]);
@@ -349,7 +349,7 @@ export class AddressComponent implements OnInit {
   }
 
   setProvinceValidators() {
-    let provinceControl = this.group['controls']['province'] as FormControl;
+    let provinceControl = this.group['controls']['province'] as UntypedFormControl;
     if (this.provinceList.length == 0) {
       provinceControl.setErrors(null);
       provinceControl.disable();
@@ -361,8 +361,8 @@ export class AddressComponent implements OnInit {
   }
 
   setCityValidators() {
-    let provinceControl = this.group['controls']['province'] as FormControl;
-    let cityControl = this.group['controls']['city'] as FormControl;
+    let provinceControl = this.group['controls']['province'] as UntypedFormControl;
+    let cityControl = this.group['controls']['city'] as UntypedFormControl;
 
     if ((provinceControl.valid && this.cityList.length == 0) || provinceControl.disabled) {
       cityControl.setErrors(null);

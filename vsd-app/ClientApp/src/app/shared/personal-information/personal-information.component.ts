@@ -1,7 +1,7 @@
 import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { FormGroup, ControlContainer, AbstractControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, ControlContainer, AbstractControl, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType } from '../enums-list';
 import { POSTAL_CODE } from '../regex.constants';
@@ -25,7 +25,7 @@ import { iLookupData } from '../../interfaces/lookup-data.interface';
 export class PersonalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   postalRegex = POSTAL_CODE;
 
@@ -66,7 +66,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);

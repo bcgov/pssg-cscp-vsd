@@ -4,7 +4,7 @@ import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/materia
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType, EnumHelper, CRMBoolean } from '../enums-list';
-import { FormGroup, ControlContainer, FormBuilder, FormArray, Validators, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, ControlContainer, UntypedFormBuilder, UntypedFormArray, Validators, AbstractControl } from '@angular/forms';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
 import { POSTAL_CODE } from '../regex.constants';
 import { AuthInfoHelper } from './authorization-information.helper';
@@ -27,11 +27,11 @@ import { Subscription } from 'rxjs';
 export class AuthorizationInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   enumHelper = new EnumHelper();
 
-  authorizedPersons: FormArray;
+  authorizedPersons: UntypedFormArray;
   showAddAuthorizationInformation: boolean = true;
   showRemoveAuthorization: boolean = true;
   postalRegex = POSTAL_CODE;
@@ -46,14 +46,14 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
   constructor(
     private controlContainer: ControlContainer,
     private matDialog: MatDialog,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public lookupService: LookupService
   ) {
     super();
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);
@@ -74,7 +74,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
       if (useValidation) {
         authorizedPersonAuthorizesDiscussion.setValidators([Validators.required]);
         authorizedPersonSignature.setValidators([Validators.required]);
-        this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
+        this.authorizedPersons = this.form.get('authorizedPerson') as UntypedFormArray;
         if (this.authorizedPersons.length === 0) {
           this.addAuthorizationInformation(true);
         }
@@ -107,8 +107,8 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
 
   addAuthorizationInformation(makeAuthorizedSignatureRequired: boolean = false): void {
     let options = { onlySelf: true, emitEvent: false };
-    this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
-    let authPerson: FormGroup = this.authInfoHelper.createAuthorizedPerson(this.fb);
+    this.authorizedPersons = this.form.get('authorizedPerson') as UntypedFormArray;
+    let authPerson: UntypedFormGroup = this.authInfoHelper.createAuthorizedPerson(this.fb);
 
     this.authorizedPersons.push(authPerson);
     this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
@@ -122,7 +122,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
     }
   }
   clearAuthorizationInformation(): void {
-    this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
+    this.authorizedPersons = this.form.get('authorizedPerson') as UntypedFormArray;
     while (this.authorizedPersons.length > 0) {
       this.authorizedPersons.removeAt(this.authorizedPersons.length - 1);
     }
@@ -133,7 +133,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
     authorizedPersonSignature.updateValueAndValidity();
   }
   removeAuthorizationInformation(index: number): void {
-    this.authorizedPersons = this.form.get('authorizedPerson') as FormArray;
+    this.authorizedPersons = this.form.get('authorizedPerson') as UntypedFormArray;
     this.authorizedPersons.removeAt(index);
     this.showAddAuthorizationInformation = this.authorizedPersons.length < 3;
     this.showRemoveAuthorization = this.authorizedPersons.length > 1;

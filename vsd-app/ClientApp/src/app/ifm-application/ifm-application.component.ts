@@ -1,11 +1,11 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatStepper, MatVerticalStepper } from '@angular/material/stepper';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as _moment from 'moment';
@@ -57,9 +57,9 @@ const moment = _rollupMoment || _moment;
   ]
 })
 export class IfmApplicationComponent extends FormBase implements OnInit {
-  @ViewChild('stepper') ifmStepper: MatVerticalStepper;
+  @ViewChild('stepper') ifmStepper: MatStepper;
   FORM_TYPE = ApplicationType.IFM_Application;
-  form: FormGroup;
+  form: UntypedFormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
   submitting: boolean = false;
@@ -96,7 +96,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
@@ -412,7 +412,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     this.form.markAsTouched();
   }
 
-  private buildApplicationForm(FORM: ApplicationType = this.FORM_TYPE): FormGroup {
+  private buildApplicationForm(FORM: ApplicationType = this.FORM_TYPE): UntypedFormGroup {
     let group = {
       introduction: this.fb.group({
         understoodInformation: [null, Validators.requiredTrue]
@@ -613,9 +613,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     ret.get('personalInformation').get('agreeToCvapCommunicationExchange').patchValue('');
     ret.get('personalInformation').get('leaveVoicemail').patchValue(0);
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
-    let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
+    let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as UntypedFormArray;
     let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
-    let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
+    let policeReports = ret.get('crimeInformation').get('policeReports') as UntypedFormArray;
 
     for (let i = 0; i < crimeLocationsLength - 1; ++i) {
       crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
@@ -639,7 +639,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       .patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
-    let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
+    let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as UntypedFormArray;
 
     for (let i = 0; i < authorizedPersonsLength; ++i) {
       authorizedPersons.push(this.authInfoHelper.createAuthorizedPerson(this.fb));
@@ -687,9 +687,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
     ret.get('victimInformation').patchValue(currentForm.get('victimInformation').value);
     let crimeLocationsLength = currentForm.get('crimeInformation').get('crimeLocations').value.length;
-    let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as FormArray;
+    let crimeLocations = ret.get('crimeInformation').get('crimeLocations') as UntypedFormArray;
     let policeReportsLength = currentForm.get('crimeInformation').get('policeReports').value.length;
-    let policeReports = ret.get('crimeInformation').get('policeReports') as FormArray;
+    let policeReports = ret.get('crimeInformation').get('policeReports') as UntypedFormArray;
 
     for (let i = 0; i < crimeLocationsLength - 1; ++i) {
       crimeLocations.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
@@ -709,7 +709,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       .patchValue(this.crimeInfoHelper.createRACAFInformation(this.fb).value);
 
     let authorizedPersonsLength = currentForm.get('authorizationInformation').get('authorizedPerson').value.length;
-    let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as FormArray;
+    let authorizedPersons = ret.get('authorizationInformation').get('authorizedPerson') as UntypedFormArray;
 
     for (let i = 0; i < authorizedPersonsLength; ++i) {
       authorizedPersons.push(this.authInfoHelper.createAuthorizedPerson(this.fb));
