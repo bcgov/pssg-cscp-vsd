@@ -234,15 +234,6 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     HeaderTitleService,
     Title
   ],
-  entryComponents: [
-    CancelApplicationDialog,
-    CancelDialog,
-    InvoiceInstructionsDialog,
-    GSTWarningDialog,
-    MessageDialog,
-    SignPadDialog,
-    SummaryOfBenefitsDialog
-  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

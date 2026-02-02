@@ -89,7 +89,7 @@
     <p *ngIf="formType === ApplicationType.Victim_Application">Therefore, if you are applying for benefits (e.g. income support) that may also be covered by another program (e.g. EI), you will need to apply to that other program in order for CVAP to determine your eligibility for the benefit requested. Applying to another program will not prevent you from being able to apply to CVAP as well. Please contact us if you have any questions.</p>
     <p *ngIf="formType === ApplicationType.IFM_Application">Therefore, if you are applying for benefits (e.g. income support) that may also be covered by another program (e.g. CPP survivor's pension), you will need to apply to that other program in order for CVAP to determine your eligibility for the benefit requested. Applying to another program will not prevent you from being able to apply to CVAP as well. Please contact us if you have any questions.</p>
     <p *ngIf="formType === ApplicationType.Witness_Application">Therefore, if you are applying for benefits (e.g. prescription drugs) that may also be covered by another program (e.g. extended health coverage), you will need to apply to that other program in order for CVAP to determine your eligibility for the benefit requested. Applying to another program will not prevent you from being able to apply to CVAP as well. Please contact us if you have any questions.</p>
-    <p>View full <a [routerLink]="" (click)="showSummaryOfBenefits()">summary of benefits</a></p>
+    <p>View full <a [routerLink]="[]" (click)="showSummaryOfBenefits()">summary of benefits</a></p>
   </div>
 
   <h2>Instructions</h2>
@@ -105,7 +105,7 @@
     <li>Police Officers contact (if known)</li>
     <li *ngIf="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application">Employment information (if requesting benefits for lost employment income)</li>
     <li>Info about the deceased (if it was a fatality)</li>
-    <li>What benefits you are claiming (View <a [routerLink]="" (click)="showSummaryOfBenefits()">Summary of Benefits</a>)</li>
+    <li>What benefits you are claiming (View <a [routerLink]="[]" (click)="showSummaryOfBenefits()">Summary of Benefits</a>)</li>
     <li>Victim Service Worker's information (if available)</li>
     <li>Court File Number (if known)</li>
     <li>Date of crime</li>
