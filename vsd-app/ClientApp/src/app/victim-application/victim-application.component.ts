@@ -1,46 +1,44 @@
-import { AEMService } from '../services/aem.service';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatStepper, MatVerticalStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
+import { config } from '../../config';
 import {
   Application,
-  Introduction,
-  PersonalInformation,
-  CrimeInformation,
-  MedicalInformation,
-  ExpenseInformation,
-  EmploymentIncomeInformation,
-  RepresentativeInformation,
-  DeclarationInformation,
   AuthorizationInformation,
-  DocumentCollectioninformation
+  CrimeInformation,
+  DeclarationInformation,
+  DocumentCollectioninformation,
+  EmploymentIncomeInformation,
+  ExpenseInformation,
+  Introduction,
+  MedicalInformation,
+  PersonalInformation,
+  RepresentativeInformation
 } from '../interfaces/application.interface';
-import { ApplicationType, OnBehalfOf } from '../shared/enums-list';
-import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
-import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
-import { EmploymentInfoHelper } from '../shared/employment-information/employment-information.helper';
-import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
-import { FormBase } from '../shared/form-base';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { iLookupData } from '../interfaces/lookup-data.interface';
+import { AEMService } from '../services/aem.service';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { LookupService } from '../services/lookup.service';
-import { MY_FORMATS } from '../shared/enums-list';
-import { MatSnackBar, MatDialog } from '@angular/material';
-import { MatStepper, MatVerticalStepper } from '@angular/material/stepper';
+import { StateService } from '../services/state.service';
+import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
+import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
+import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
+import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
+import { EmploymentInfoHelper } from '../shared/employment-information/employment-information.helper';
+import { ApplicationType, MY_FORMATS, OnBehalfOf } from '../shared/enums-list';
+import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
+import { FormBase } from '../shared/form-base';
 import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { StateService } from '../services/state.service';
-import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
-import { config } from '../../config';
-import { iLookupData } from '../interfaces/lookup-data.interface';
-import { window } from 'ngx-bootstrap';
-import * as _ from 'lodash';
+import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 
 @Component({
   selector: 'app-victim-application',
@@ -53,7 +51,7 @@ import * as _ from 'lodash';
   ]
 })
 export class VictimApplicationComponent extends FormBase implements OnInit {
-  @ViewChild('stepper') victimStepper: MatVerticalStepper;
+  @ViewChild('stepper', { static: false }) victimStepper: MatVerticalStepper;
   FORM_TYPE = ApplicationType.Victim_Application;
   busy: Promise<any>;
   showValidationMessage: boolean;

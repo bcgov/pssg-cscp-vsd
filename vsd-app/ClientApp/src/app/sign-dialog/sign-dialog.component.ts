@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { SignaturePad } from 'angular2-signaturepad/signature-pad';
+import { SignaturePad } from 'angular2-signaturepad';
 
 @Component({
   selector: 'app-sign-dialog',
@@ -14,7 +14,7 @@ export class SignPadDialog implements OnInit {
   CRM_HEIGHT = 125;
   CRM_WIDTH = 300;
 
-  @ViewChild(SignaturePad) signaturePad: SignaturePad;
+  @ViewChild(SignaturePad, { static: false }) signaturePad: SignaturePad;
 
   signaturePadOptions: Object = {
     // passed through to szimek/signature_pad constructor

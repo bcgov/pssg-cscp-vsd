@@ -1,5 +1,5 @@
-import { Component, ViewChild, ElementRef, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, ControlContainer } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ControlContainer, FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { config } from '../../../config';
 
@@ -9,7 +9,7 @@ import { config } from '../../../config';
   styleUrls: ['./file-uploader.component.scss']
 })
 export class FileUploaderComponent implements OnInit {
-  @ViewChild('files') myInputVariable: ElementRef;
+  @ViewChild('files', { static: false }) myInputVariable: ElementRef;
   @Input() formType: number;
   @Input() documents: FormArray;
   public form: FormGroup;
