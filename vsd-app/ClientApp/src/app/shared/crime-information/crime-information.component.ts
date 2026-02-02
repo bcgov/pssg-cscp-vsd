@@ -1,13 +1,8 @@
 import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
-import {
-  MatDialogConfig,
-  MatDialog,
-  DateAdapter,
-  MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS,
-  MatDatepickerInputEvent
-} from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormControl } from '@angular/forms';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';

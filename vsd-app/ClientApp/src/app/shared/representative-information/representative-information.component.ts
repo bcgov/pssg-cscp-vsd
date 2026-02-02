@@ -1,6 +1,6 @@
 import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { FormGroup, Validators, FormBuilder, ControlContainer } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType } from '../enums-list';

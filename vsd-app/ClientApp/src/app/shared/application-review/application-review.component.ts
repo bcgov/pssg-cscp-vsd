@@ -1,6 +1,8 @@
 import { FormBase } from '../form-base';
 import { OnInit, Component, Input } from '@angular/core';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog, MatStepper } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 import { FormGroup, ControlContainer, FormArray } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType, EnumHelper, OnBehalfOf, CRMBoolean, CRMMultiBoolean } from '../enums-list';

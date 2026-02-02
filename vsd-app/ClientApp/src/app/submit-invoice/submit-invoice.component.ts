@@ -9,7 +9,8 @@ import { GSTWarningDialog } from '../shared/dialogs/gst-warning/gst-warning.dial
 import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { MY_FORMATS } from '../shared/enums-list';
-import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { POSTAL_CODE } from '../shared/regex.constants';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';

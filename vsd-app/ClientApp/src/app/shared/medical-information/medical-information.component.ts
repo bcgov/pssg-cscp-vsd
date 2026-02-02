@@ -1,6 +1,7 @@
 import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
-import { MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
   FormArray,
   FormGroup,
