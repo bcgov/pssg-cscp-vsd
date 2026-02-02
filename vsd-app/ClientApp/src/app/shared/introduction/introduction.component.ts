@@ -1,7 +1,7 @@
 import { FormBase } from '../form-base';
 import { OnInit, Component, Input } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UntypedFormGroup, ControlContainer } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType } from '../enums-list';

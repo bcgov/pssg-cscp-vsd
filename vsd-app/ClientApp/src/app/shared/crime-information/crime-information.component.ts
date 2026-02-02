@@ -2,7 +2,7 @@ import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialogConfig as MatDialogConfig, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UntypedFormArray, UntypedFormGroup, Validators, UntypedFormBuilder, ControlContainer, UntypedFormControl } from '@angular/forms';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';

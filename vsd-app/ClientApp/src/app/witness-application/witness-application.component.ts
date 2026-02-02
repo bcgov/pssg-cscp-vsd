@@ -27,8 +27,8 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators, FormArray } from '@an
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { LookupService } from '../services/lookup.service';
 import { MY_FORMATS } from '../shared/enums-list';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
