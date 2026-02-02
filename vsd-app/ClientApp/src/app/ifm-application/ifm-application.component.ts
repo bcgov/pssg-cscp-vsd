@@ -56,7 +56,7 @@ const moment = _rollupMoment || _moment;
   ]
 })
 export class IfmApplicationComponent extends FormBase implements OnInit {
-  @ViewChild('stepper', { static: false }) ifmStepper: MatVerticalStepper;
+  @ViewChild('stepper') ifmStepper: MatVerticalStepper;
   FORM_TYPE = ApplicationType.IFM_Application;
   form: FormGroup;
   formFullyValidated: boolean;

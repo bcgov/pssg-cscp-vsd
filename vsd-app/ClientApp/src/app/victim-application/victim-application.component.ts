@@ -51,7 +51,7 @@ import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benef
   ]
 })
 export class VictimApplicationComponent extends FormBase implements OnInit {
-  @ViewChild('stepper', { static: false }) victimStepper: MatVerticalStepper;
+  @ViewChild('stepper') victimStepper: MatVerticalStepper;
   FORM_TYPE = ApplicationType.Victim_Application;
   busy: Promise<any>;
   showValidationMessage: boolean;

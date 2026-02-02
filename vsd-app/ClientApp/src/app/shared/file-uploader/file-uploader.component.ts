@@ -9,7 +9,7 @@ import { config } from '../../../config';
   styleUrls: ['./file-uploader.component.scss']
 })
 export class FileUploaderComponent implements OnInit {
-  @ViewChild('files', { static: false }) myInputVariable: ElementRef;
+  @ViewChild('files') myInputVariable: ElementRef;
   @Input() formType: number;
   @Input() documents: FormArray;
   public form: FormGroup;
