@@ -17,7 +17,11 @@ export class FileUploaderComponent implements OnInit {
   MAX_FILE_SIZE = 2 * 1024 * 1024; //2MB
   MAX_TOTAL_FILE_SIZE = 3.5 * 1024 * 1024; //3.5MB
 
-  constructor(private fb: UntypedFormBuilder, private controlContainer: ControlContainer, public snackBar: MatSnackBar) {}
+  constructor(
+    private fb: UntypedFormBuilder,
+    private controlContainer: ControlContainer,
+    public snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
     this.form = <UntypedFormGroup>this.controlContainer.control;

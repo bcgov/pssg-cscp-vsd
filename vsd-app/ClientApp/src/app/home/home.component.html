@@ -91,27 +91,16 @@
 
               <ng-template #onBehalfOfToolTip>This option should also be chosen when completing the application in consultation with a victim service worker or support person.</ng-template>
               <ng-template #legalRepresentativeTooltip>If the person does not have a legal representative and is physically or mentally incapable of making the application, <strong>a third party</strong> may complete the application on their behalf. <strong>NOTE:</strong> This does not include victim service or other support workers who are providing assistance to a capable person.</ng-template>
-              <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
-                <app-field label="Did the crime occur in BC" [required]="true">
-                  <table style="width: 100%" class="out-of-line">
-                    <tr>
-                      <td class="lead-cell">
-                        <label class="inline-label">
-                          <input type="radio" [value]="true" name="wasCrimeInBC" formControlName="wasCrimeInBC">
-                          <span>Yes</span>
-                        </label>
-                        <label class="inline-label">
-                          <input type="radio" [value]="false" name="wasCrimeInBC" formControlName="wasCrimeInBC">
-                          <span>No</span>
-                        </label>
-                      </td>
-                      <td class="error-cell was-in-bc-warning" *ngIf="form.get('wasCrimeInBC').value === false">
-                        CVAP only accepts applications for crimes that have occurred in BC. Please click <a href="https://www.victimsfirst.gc.ca/serv/spt-spt.html" target="_blank">here</a> to apply to your provincial assistance program or call CVAP toll free at 1-866-660-3888 if you have any questions.
-                      </td>
-                    </tr>
-                  </table>
-                </app-field>
-              </section>
+              <div style="display: flex; flex-direction: column;">
+              <mat-label>Did the crime occur in BC?</mat-label>
+              <mat-radio-group formControlName="wasCrimeInBC">
+                <mat-radio-button [value]="true">Yes</mat-radio-button>
+                <mat-radio-button [value]="false">No</mat-radio-button>
+              </mat-radio-group>
+              </div>
+              <div class="error-cell was-in-bc-warning" *ngIf="form.get('wasCrimeInBC').value === false">
+                CVAP only accepts applications for crimes that have occurred in BC. Please click <a href="https://www.victimsfirst.gc.ca/serv/spt-spt.html" target="_blank">here</a> to apply to your provincial assistance program or call CVAP toll free at 1-866-660-3888 if you have any questions.
+              </div>
 
               <div *ngIf="showValidationMessage" class="error-summary">
                 <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
