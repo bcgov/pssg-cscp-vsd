@@ -36,14 +36,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgBusyModule } from 'ng-busy';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { CookieService } from 'ngx-cookie-service';
-import { FileDropModule } from 'ngx-file-drop';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxFileDropModule } from 'ngx-file-drop';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
@@ -84,7 +83,6 @@ import { PersonalInformationComponent } from './shared/personal-information/pers
 import { RepresentativeInformationComponent } from './shared/representative-information/representative-information.component';
 import { ToolTipTriggerComponent } from './shared/tool-tip/tool-tip.component';
 import { VictimInformationComponent } from './shared/victim-information/victim-information.component';
-import { SignPadDialog } from './sign-dialog/sign-dialog.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
 import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefits.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
@@ -136,7 +134,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     BrowserAnimationsModule,
     BrowserModule,
     CdkTableModule,
-    FileDropModule,
+    NgxFileDropModule,
     FormsModule,
     HttpClientModule,
     MatAutocompleteModule,
@@ -171,14 +169,11 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    NgBusyModule,
     ReactiveFormsModule,
     AngularSignaturePadModule,
-    SignPadDialog,
-    AlertModule.forRoot(),
+    AlertModule,
     BsDatepickerModule.forRoot(),
-    NgxMaskModule.forRoot(),
-    TooltipModule.forRoot(),
+    TooltipModule,
     TypeaheadModule.forRoot()
   ],
   exports: [
@@ -187,7 +182,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     BrowserAnimationsModule,
     BrowserModule,
     CdkTableModule,
-    FileDropModule,
+    NgxFileDropModule,
     FormsModule,
     HttpClientModule,
     MatAutocompleteModule,
@@ -223,18 +218,17 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     MatToolbarModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    SignPadDialog,
     TooltipModule
   ],
   providers: [
     AEMService,
     CookieService,
-    CrimeInformationComponent,
     JusticeApplicationDataService,
     LookupService,
     StateService,
     HeaderTitleService,
-    Title
+    Title,
+    provideEnvironmentNgxMask()
   ],
   bootstrap: [AppComponent]
 })
