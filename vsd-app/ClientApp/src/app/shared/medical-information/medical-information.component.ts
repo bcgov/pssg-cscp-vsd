@@ -1,25 +1,24 @@
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { FormBase } from '../form-base';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
-  UntypedFormArray,
-  UntypedFormGroup,
-  Validators,
-  UntypedFormBuilder,
+  AbstractControl,
   ControlContainer,
+  UntypedFormArray,
+  UntypedFormBuilder,
   UntypedFormControl,
-  AbstractControl
+  UntypedFormGroup,
+  Validators
 } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType, CRMBoolean } from '../enums-list';
-import { COUNTRIES_ADDRESS } from '../address/country-list';
-import { HOSPITALS } from '../hospital-list';
-import { POSTAL_CODE } from '../regex.constants';
-import { AddressHelper } from '../address/address.helper';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { config } from '../../../config';
+import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { AddressHelper } from '../address/address.helper';
+import { ApplicationType, CRMBoolean, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
+import { HOSPITALS } from '../hospital-list';
+import { POSTAL_CODE } from '../regex.constants';
 
 @Component({
   selector: 'app-medical-information',
@@ -63,7 +62,11 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
   wereYouTreatedAtHospitalSubscription: Subscription;
   treatedOutsideBcSubscription: Subscription;
 
-  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog, private fb: UntypedFormBuilder) {
+  constructor(
+    private controlContainer: ControlContainer,
+    private matDialog: MatDialog,
+    private fb: UntypedFormBuilder
+  ) {
     super();
   }
 

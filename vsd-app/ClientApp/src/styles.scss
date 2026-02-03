@@ -1,16 +1,96 @@
 /* You can add global styles to this file, and also import other style files */
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
 
 @import 'mygovbc-bootstrap-theme/dist/mygovbc-bootstrap-theme.min.css';
 
-@include mat-core();
+@include mat.core();
 
-$primary: mat-palette($mat-black, 400);
-$accent: mat-palette($mat-indigo, 500, A200, A400);
-$warn: mat-palette($mat-red, 500);
+// Define the palettes
+$primary: mat.define-palette(mat.$gray-palette, 400);
+$accent: mat.define-palette(mat.$indigo-palette, 500, A200, A400);
+$warn: mat.define-palette(mat.$red-palette, 500);
 
-$theme: mat-light-theme($primary, $accent, $warn);
-@include angular-material-theme($theme);
+// Create the theme object with proper structure
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn
+    )
+  )
+);
+
+// Include theme styles for core and all components
+@include mat.all-component-themes($theme);
+
+// Material Dialog styling - MDC components
+.mat-mdc-dialog-container {
+  .mdc-dialog__surface {
+    background-color: #ffffff;
+    border-radius: 4px;
+  }
+
+  .mat-mdc-dialog-title,
+  [mat-dialog-title] {
+    background-color: #ffffff;
+    margin: 0;
+    padding: 24px 24px 20px 24px;
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 0;
+    }
+  }
+
+  .mat-mdc-dialog-content,
+  [mat-dialog-content] {
+    background-color: #ffffff;
+    padding: 0 24px;
+    margin: 0;
+    max-height: 80vh;
+    overflow-y: auto;
+
+    p:first-child {
+      margin-top: 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .mat-mdc-dialog-actions,
+  [mat-dialog-actions] {
+    background-color: #ffffff;
+    padding: 16px 24px 24px 24px;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+
+    button {
+      margin: 0;
+    }
+
+    .float-right {
+      margin-left: auto;
+    }
+  }
+}
+
+// Special handling for mat-dialog-content at root level
+mat-dialog-content {
+  display: block;
+  background-color: #ffffff;
+  padding: 24px;
+  margin: 0;
+  max-height: 80vh;
+  overflow-y: auto;
+}
 
 .ctx-home {
   background: #f2f2f2;

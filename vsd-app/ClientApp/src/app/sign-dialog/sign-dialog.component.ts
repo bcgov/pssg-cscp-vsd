@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { SignaturePad } from 'angular2-signaturepad';
 
 @Component({
@@ -23,7 +23,7 @@ export class SignPadDialog implements OnInit {
     canvasWidth: 600,
     canvasHeight: 200,
     penColor: '#000',
-    backgroundColor: 'rgba(255, 255, 255, 0)'
+    backgroundColor: 'rgb(255, 255, 255)'
   };
 
   constructor(public dialogRef: MatDialogRef<SignPadDialog>) {}

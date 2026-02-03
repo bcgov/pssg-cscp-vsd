@@ -1,16 +1,23 @@
-import { FormBase } from '../form-base';
-import { Input, Component, OnInit, OnDestroy } from '@angular/core';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  ControlContainer,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators
+} from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType, EnumHelper, CRMBoolean } from '../enums-list';
-import { UntypedFormGroup, ControlContainer, UntypedFormBuilder, UntypedFormArray, Validators, AbstractControl } from '@angular/forms';
-import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
-import { POSTAL_CODE } from '../regex.constants';
-import { AuthInfoHelper } from './authorization-information.helper';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { LookupService } from '../../services/lookup.service';
-import { Subscription } from 'rxjs';
+import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { ApplicationType, CRMBoolean, EnumHelper, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
+import { POSTAL_CODE } from '../regex.constants';
+import { AuthInfoHelper } from './authorization-information.helper';
 
 @Component({
   selector: 'app-authorization-information',

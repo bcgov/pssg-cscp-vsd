@@ -1,19 +1,25 @@
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { FormBase } from '../form-base';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { MatLegacyDialogConfig as MatDialogConfig, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { UntypedFormArray, UntypedFormGroup, Validators, UntypedFormBuilder, ControlContainer, UntypedFormControl } from '@angular/forms';
-import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  ControlContainer,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators
+} from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType, CRMBoolean, CRMMultiBoolean } from '../enums-list';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import * as moment from 'moment';
-import { CrimeInfoHelper } from './crime-information.helper';
-import { config } from '../../../config';
 import { Subscription } from 'rxjs';
-import { AddressHelper } from '../address/address.helper';
+import { config } from '../../../config';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { LookupService } from '../../services/lookup.service';
+import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { AddressHelper } from '../address/address.helper';
+import { ApplicationType, CRMBoolean, CRMMultiBoolean, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
+import { CrimeInfoHelper } from './crime-information.helper';
 
 @Component({
   selector: 'app-crime-information',

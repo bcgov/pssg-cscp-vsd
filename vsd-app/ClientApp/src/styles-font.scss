@@ -2,14 +2,30 @@
 
 /* Controls Survey styles */
 
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
 @import 'mygovbc-bootstrap-theme/dist/mygovbc-bootstrap-theme.min.css';
-@include mat-core();
-$primary: mat-palette($mat-grey, 400);
-$accent: mat-palette($mat-indigo, 500, A200, A400);
-$warn: mat-palette($mat-red, 500);
-$theme: mat-light-theme($primary, $accent, $warn);
-@include angular-material-theme($theme);
+
+@include mat.core();
+
+// Define the palettes
+$primary: mat.define-palette(mat.$gray-palette, 400);
+$accent: mat.define-palette(mat.$indigo-palette, 500, A200, A400);
+$warn: mat.define-palette(mat.$red-palette, 500);
+
+// Create the theme object with proper structure
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn
+    )
+  )
+);
+
+// Include theme styles for all components
+@include mat.all-component-themes($theme);
+
 body {
   color: #494949;
   background: #f2f2f2;

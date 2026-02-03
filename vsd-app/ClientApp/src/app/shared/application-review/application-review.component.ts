@@ -1,12 +1,11 @@
-import { FormBase } from '../form-base';
-import { OnInit, Component, Input } from '@angular/core';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { MatStepper } from '@angular/material/stepper';
-import { UntypedFormGroup, ControlContainer, UntypedFormArray } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { ControlContainer, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType, EnumHelper, OnBehalfOf, CRMBoolean, CRMMultiBoolean } from '../enums-list';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatStepper } from '@angular/material/stepper';
 import { AddressHelper } from '../address/address.helper';
+import { ApplicationType, CRMBoolean, CRMMultiBoolean, EnumHelper, MY_FORMATS, OnBehalfOf } from '../enums-list';
+import { FormBase } from '../form-base';
 
 @Component({
   selector: 'app-application-review',

@@ -1,16 +1,22 @@
-import { FormBase } from '../form-base';
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { UntypedFormGroup, ControlContainer, UntypedFormControl, AbstractControl, Validators, UntypedFormArray } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  ControlContainer,
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators
+} from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType, CRMBoolean } from '../enums-list';
-import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-import { AddressHelper } from '../address/address.helper';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
+import { AddressHelper } from '../address/address.helper';
+import { ApplicationType, CRMBoolean, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
 
 @Component({
   selector: 'app-expense-information',

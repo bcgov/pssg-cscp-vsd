@@ -1,13 +1,13 @@
-import { FormBase } from '../form-base';
-import { OnInit, Component, Input } from '@angular/core';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
-import { UntypedFormGroup, ControlContainer } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { ControlContainer, UntypedFormGroup } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType } from '../enums-list';
-import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { LookupService } from '../../services/lookup.service';
+import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { ApplicationType, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
 
 @Component({
   selector: 'app-declaration-information',

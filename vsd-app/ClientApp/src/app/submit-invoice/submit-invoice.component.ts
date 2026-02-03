@@ -1,26 +1,25 @@
-import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
-import { Component, OnInit, HostListener } from '@angular/core';
-import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { EnumHelper } from '../shared/enums-list';
-import { FormBase } from '../shared/form-base';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { Subject } from 'rxjs';
+import { DocumentCollectioninformation } from '../interfaces/application.interface';
+import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { AEMService } from '../services/aem.service';
+import { JusticeApplicationDataService } from '../services/justice-application-data.service';
+import { LookupService } from '../services/lookup.service';
+import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { GSTWarningDialog } from '../shared/dialogs/gst-warning/gst-warning.dialog';
 import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
-import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { MY_FORMATS } from '../shared/enums-list';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MessageDialog } from '../shared/dialogs/message-dialog/message.dialog';
+import { EnumHelper, MY_FORMATS } from '../shared/enums-list';
+import { FormBase } from '../shared/form-base';
 import { POSTAL_CODE } from '../shared/regex.constants';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
-import { Subject } from 'rxjs';
-import * as _ from 'lodash';
-import { AEMService } from '../services/aem.service';
-import * as moment from 'moment';
-import { DocumentCollectioninformation } from '../interfaces/application.interface';
-import { MessageDialog } from '../shared/dialogs/message-dialog/message.dialog';
-import { LookupService } from '../services/lookup.service';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -548,9 +547,15 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   checkVendorStatus(source: string) {
     this.form.get('invoiceDetails.vendorNumber').setValue(this.form.get('invoiceDetails.vendorNumber').value.trim());
-    this.form.get('invoiceDetails.vendorPostalCode').setValue(this.form.get('invoiceDetails.vendorPostalCode').value.trim());
-    this.form.get('invoiceDetails.counsellorRegistrationNumber').setValue(this.form.get('invoiceDetails.counsellorRegistrationNumber').value.trim());
-    this.form.get('invoiceDetails.counsellorLastName').setValue(this.form.get('invoiceDetails.counsellorLastName').value.trim());
+    this.form
+      .get('invoiceDetails.vendorPostalCode')
+      .setValue(this.form.get('invoiceDetails.vendorPostalCode').value.trim());
+    this.form
+      .get('invoiceDetails.counsellorRegistrationNumber')
+      .setValue(this.form.get('invoiceDetails.counsellorRegistrationNumber').value.trim());
+    this.form
+      .get('invoiceDetails.counsellorLastName')
+      .setValue(this.form.get('invoiceDetails.counsellorLastName').value.trim());
 
     let vendorNumber = this.form.get('invoiceDetails.vendorNumber').value;
     let vendorPostalCode = this.form.get('invoiceDetails.vendorPostalCode').value;
