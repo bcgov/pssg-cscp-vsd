@@ -72,6 +72,7 @@ export class DeclarationInformationComponent extends FormBase implements OnInit 
     const dialogRef = this.matDialog.open(SignPadDialog, dialogConfig);
     dialogRef.afterClosed().subscribe(
       (data) => {
+        debugger;
         var patchObject = {};
         patchObject[control] = data;
         this.form.patchValue(patchObject);

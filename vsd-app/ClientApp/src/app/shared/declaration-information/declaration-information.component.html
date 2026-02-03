@@ -21,7 +21,7 @@
                 <p>Click this box to sign</p>
             </div>
             <div *ngIf="hasSignature('signature')" class="signature-preview">
-                <img src="{{ valueOrEmpty('signature') }}" />
+                <img [src]="valueOrEmpty('signature')" alt="Digital signature" />
                 <a class="redo" (click)="showSignPad('signature')">Redo Signature</a>
             </div>
         </app-field>

@@ -5,7 +5,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.config.js",
-    "startwatch": "ng serve --watch --host 0.0.0.0 --proxy-config proxy.config.js",
     "build": "ng build --base-href /cvapwebform/",
     "builduat": "ng build --base-href /uat/cvapwebform/",
     "buildprod": "ng build --base-href /cvapwebform/",
@@ -34,7 +33,7 @@
     "@ngrx/store": "^13.2.0",
     "@nguniversal/module-map-ngfactory-loader": "^8.2.6",
     "angular-url-encode": "^1.0.0",
-    "angular2-signaturepad": "^3.0.4",
+    "@almothafar/angular-signature-pad": "^6.0.0",
     "aspnet-prerendering": "^3.0.1",
     "bootstrap": ">=4.1.2",
     "core-js": "^2.4.1",

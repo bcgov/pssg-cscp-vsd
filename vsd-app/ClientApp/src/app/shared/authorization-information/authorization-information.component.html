@@ -44,7 +44,7 @@
         <p>Click this box to sign</p>
       </div>
       <div *ngIf="hasSignature('signature')" class="signature-preview">
-        <img src="{{ valueOrEmpty('signature') }}" />
+        <img [src]="valueOrEmpty('signature')" alt="Digital signature" />
         <a class="redo" (click)="showSignPad('signature')">Redo Signature</a>
       </div>
     </app-field>
@@ -145,7 +145,7 @@
           <p>Click this box to sign</p>
         </div>
         <div *ngIf="hasSignature('authorizedPersonSignature')" class="signature-preview">
-          <img src="{{ valueOrEmpty('authorizedPersonSignature') }}" />
+          <img [src]="valueOrEmpty('authorizedPersonSignature')" alt="Digital signature" />
           <a class="redo" (click)="showSignPad('authorizedPersonSignature')">Redo Signature</a>
         </div>
       </app-field>

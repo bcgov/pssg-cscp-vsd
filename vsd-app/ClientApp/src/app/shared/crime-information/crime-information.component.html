@@ -493,7 +493,7 @@
                             <div class="signature-trigger" (click)="showSignPad('racafInformation', 'signature')" *ngIf="!hasSignature('racafInformation.signature')">
                             </div>
                             <div *ngIf="hasSignature('racafInformation.signature')" class="signature-preview">
-                                <img src="{{ valueOrEmpty('racafInformation.signature') }}" />
+                                <img [src]="valueOrEmpty('racafInformation.signature')" alt="Digital signature" />
                                 <a class="redo" (click)="showSignPad('racafInformation', 'signature')">Redo Signature</a>
                             </div>
                         </app-field>

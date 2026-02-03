@@ -1,3 +1,4 @@
+import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
 import { CdkTableModule } from '@angular/cdk/table';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -35,7 +36,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SignaturePadModule } from 'angular2-signaturepad';
 import { NgBusyModule } from 'ng-busy';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -124,7 +124,6 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     QuickExitComponent,
     RaceSelectorComponent,
     RepresentativeInformationComponent,
-    SignPadDialog,
     SubmitInvoiceComponent,
     SummaryOfBenefitsDialog,
     ToolTipTriggerComponent,
@@ -174,7 +173,8 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     MatTooltipModule,
     NgBusyModule,
     ReactiveFormsModule,
-    SignaturePadModule,
+    AngularSignaturePadModule,
+    SignPadDialog,
     AlertModule.forRoot(),
     BsDatepickerModule.forRoot(),
     NgxMaskModule.forRoot(),
@@ -183,6 +183,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
   ],
   exports: [
     AppRoutingModule,
+    AngularSignaturePadModule,
     BrowserAnimationsModule,
     BrowserModule,
     CdkTableModule,
@@ -222,6 +223,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     MatToolbarModule,
     MatTooltipModule,
     ReactiveFormsModule,
+    SignPadDialog,
     TooltipModule
   ],
   providers: [

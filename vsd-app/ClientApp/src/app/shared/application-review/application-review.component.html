@@ -500,7 +500,7 @@
                 </tr>
                 <tr>
                     <th>Applicant's Signature</th>
-                    <td><img class="review-signature" *ngIf="valueOrEmpty('crimeInformation.racafInformation.signature', '') != ''" src="{{ valueOrEmpty('crimeInformation.racafInformation.signature', '') }}" /></td>
+                    <td><img class="review-signature" *ngIf="valueOrEmpty('crimeInformation.racafInformation.signature', '') != ''" [src]="valueOrEmpty('crimeInformation.racafInformation.signature', '')" alt="Digital signature" /></td>
                 </tr>
             </tbody>
         </table>
@@ -1246,7 +1246,7 @@
                 <tr>
                     <th>Applicant's Signature</th>
                     <td>
-                        <img class="review-signature" *ngIf="valueOrEmpty('declarationInformation.signature', '') != ''" src="{{ valueOrEmpty('declarationInformation.signature', '') }}" />
+                        <img class="review-signature" *ngIf="valueOrEmpty('declarationInformation.signature', '') != ''" [src]="valueOrEmpty('declarationInformation.signature', '')" alt="Digital signature" />
                     </td>
                 </tr>
             </tbody>
@@ -1279,7 +1279,7 @@
             <tbody>
                 <tr>
                     <th>Applicant's Signature</th>
-                    <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.signature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.signature', '') }}" /></td>
+                    <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.signature', '') != ''" [src]="valueOrEmpty('authorizationInformation.signature', '')" alt="Digital signature" /></td>
                 </tr>
                 <tr>
                     <th>Optional authorization given?</th>
@@ -1340,7 +1340,7 @@
                 <tbody>
                     <tr>
                         <th>Applicant's Signature</th>
-                        <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') != ''" src="{{ valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') }}" />
+                        <td><img class="review-signature" *ngIf="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '') != ''" [src]="valueOrEmpty('authorizationInformation.authorizedPersonSignature', '')" alt="Digital signature" />
                         </td>
                     </tr>
                 </tbody>
