@@ -53,7 +53,6 @@ export class SignPadDialog implements OnInit {
       const signatureData = resizedCanvas.toDataURL();
 
       this.signatureData = signatureData;
-      console.log('Signature data:', signatureData);
       this.dialogRef.close(signatureData);
     } else {
       this.dialogRef.close();
