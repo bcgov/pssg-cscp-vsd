@@ -1,13 +1,11 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, isDevMode, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { isDevMode } from '@angular/core';
-import 'rxjs/add/operator/filter';
-import { HeaderTitleService } from './services/titile.service';
-import { LookupService } from './services/lookup.service';
-import { ConfigService } from './services/config.service';
-import { Configuration } from './interfaces/configuration.interface';
 import * as moment from 'moment-timezone';
 import { environment } from '../environments/environment';
+import { Configuration } from './interfaces/configuration.interface';
+import { ConfigService } from './services/config.service';
+import { LookupService } from './services/lookup.service';
+import { HeaderTitleService } from './services/titile.service';
 
 @Component({
   selector: 'app-root',

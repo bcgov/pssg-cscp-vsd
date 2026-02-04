@@ -53,18 +53,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "vsd_public_app:build"
+            "buildTarget": "vsd_public_app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "vsd_public_app:build:production"
+              "buildTarget": "vsd_public_app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "vsd_public_app:build"
+            "buildTarget": "vsd_public_app:build"
           }
         },
         "test": {
