@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApplicationType } from '../shared/enums-list';
 import { BenefitLists } from './benefit-list';
 @Component({
-  selector: 'app-summary-of-benefits-dialog',
-  templateUrl: './summary-of-benefits.component.html',
-  styleUrls: ['./summary-of-benefits.component.scss']
+    selector: 'app-summary-of-benefits-dialog',
+    templateUrl: './summary-of-benefits.component.html',
+    styleUrls: ['./summary-of-benefits.component.scss'],
+    standalone: false
 })
 export class SummaryOfBenefitsDialog implements OnInit {
   benefitList: any;

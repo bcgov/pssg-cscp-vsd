@@ -19,16 +19,17 @@ import { ApplicationType, CRMBoolean, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 
 @Component({
-  selector: 'app-expense-information',
-  templateUrl: './expense-information.component.html',
-  styleUrls: ['./expense-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-expense-information',
+    templateUrl: './expense-information.component.html',
+    styleUrls: ['./expense-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class ExpenseInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;

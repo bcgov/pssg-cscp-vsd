@@ -43,14 +43,15 @@ import { VictimInfoHelper } from '../shared/victim-information/victim-informatio
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 
 @Component({
-  selector: 'app-ifm-application',
-  templateUrl: './ifm-application.component.html',
-  styleUrls: ['./ifm-application.component.scss'],
-  providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
-  ]
+    selector: 'app-ifm-application',
+    templateUrl: './ifm-application.component.html',
+    styleUrls: ['./ifm-application.component.scss'],
+    providers: [
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
+    ],
+    standalone: false
 })
 export class IfmApplicationComponent extends FormBase implements OnInit {
   @ViewChild('stepper') ifmStepper: MatStepper;

@@ -15,9 +15,10 @@ import { takeUntil } from 'rxjs/operators';
  * @implements {OnDestroy}
  */
 @Component({
-  selector: 'app-gender-selector',
-  templateUrl: './gender-selector.component.html',
-  styleUrls: ['./gender-selector.component.scss']
+    selector: 'app-gender-selector',
+    templateUrl: './gender-selector.component.html',
+    styleUrls: ['./gender-selector.component.scss'],
+    standalone: false
 })
 export class GenderSelectorComponent extends FormBase implements OnInit, OnDestroy {
   @Input() form: UntypedFormGroup;

@@ -6,9 +6,10 @@ import { Router, NavigationExtras } from '@angular/router';
 import { FormBase } from '../shared/form-base';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    standalone: false
 })
 export class HomeComponent extends FormBase implements OnInit {
   window = window;

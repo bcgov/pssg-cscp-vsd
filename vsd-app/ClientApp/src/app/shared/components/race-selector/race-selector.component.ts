@@ -15,9 +15,10 @@ import { takeUntil } from 'rxjs/operators';
  * @implements {OnDestroy}
  */
 @Component({
-  selector: 'app-race-selector',
-  templateUrl: './race-selector.component.html',
-  styleUrls: ['./race-selector.component.scss']
+    selector: 'app-race-selector',
+    templateUrl: './race-selector.component.html',
+    styleUrls: ['./race-selector.component.scss'],
+    standalone: false
 })
 export class RaceSelectorComponent extends FormBase implements OnInit, OnDestroy {
   @Input() form: UntypedFormGroup;

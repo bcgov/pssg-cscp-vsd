@@ -14,16 +14,17 @@ import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { LookupService } from '../../services/lookup.service';
 
 @Component({
-  selector: 'app-representative-information',
-  templateUrl: './representative-information.component.html',
-  styleUrls: ['./representative-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-representative-information',
+    templateUrl: './representative-information.component.html',
+    styleUrls: ['./representative-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class RepresentativeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;

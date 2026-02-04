@@ -8,12 +8,11 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA, OnInit, ViewChild 
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-sign-dialog',
-  templateUrl: './sign-dialog.component.html',
-  styleUrls: ['./sign-dialog.component.scss'],
-  standalone: true,
-  imports: [CommonModule, AngularSignaturePadModule, MatDialogModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    selector: 'app-sign-dialog',
+    templateUrl: './sign-dialog.component.html',
+    styleUrls: ['./sign-dialog.component.scss'],
+    imports: [CommonModule, AngularSignaturePadModule, MatDialogModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class SignPadDialog implements OnInit {
   public signatureImage: any;

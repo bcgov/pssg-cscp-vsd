@@ -20,16 +20,17 @@ import { POSTAL_CODE } from '../regex.constants';
 import { AuthInfoHelper } from './authorization-information.helper';
 
 @Component({
-  selector: 'app-authorization-information',
-  templateUrl: './authorization-information.component.html',
-  styleUrls: ['./authorization-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-authorization-information',
+    templateUrl: './authorization-information.component.html',
+    styleUrls: ['./authorization-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class AuthorizationInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;

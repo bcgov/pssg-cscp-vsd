@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { LookupService } from '../services/lookup.service';
 
 @Component({
-  selector: 'application-cancelled',
-  templateUrl: './application-cancelled.component.html',
-  styleUrls: ['./application-cancelled.component.scss']
+    selector: 'application-cancelled',
+    templateUrl: './application-cancelled.component.html',
+    styleUrls: ['./application-cancelled.component.scss'],
+    standalone: false
 })
 export class ApplicationCancelledComponent implements OnInit {
   applicationType: string;

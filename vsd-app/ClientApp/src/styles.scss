@@ -3,7 +3,8 @@
 
 @import 'mygovbc-bootstrap-theme/dist/mygovbc-bootstrap-theme.min.css';
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 // Define the palettes
 $primary: mat.m2-define-palette(mat.$m2-gray-palette, 400);

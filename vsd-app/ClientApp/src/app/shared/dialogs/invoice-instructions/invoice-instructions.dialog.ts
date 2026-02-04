@@ -3,8 +3,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LookupService } from '../../../services/lookup.service';
 
 @Component({
-  selector: 'app-invoice-instructions.dialog',
-  templateUrl: 'invoice-instructions.dialog.html'
+    selector: 'app-invoice-instructions.dialog',
+    templateUrl: 'invoice-instructions.dialog.html',
+    standalone: false
 })
 export class InvoiceInstructionsDialog implements OnInit {
   cvapEmail: string = '';

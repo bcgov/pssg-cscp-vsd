@@ -11,16 +11,17 @@ import { Subscription } from 'rxjs';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
 
 @Component({
-  selector: 'app-personal-information',
-  templateUrl: './personal-information.component.html',
-  styleUrls: ['./personal-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-personal-information',
+    templateUrl: './personal-information.component.html',
+    styleUrls: ['./personal-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class PersonalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;

@@ -22,13 +22,14 @@ import { POSTAL_CODE } from '../shared/regex.constants';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 
 @Component({
-  selector: 'app-submit-invoice',
-  templateUrl: './submit-invoice.component.html',
-  styleUrls: ['./submit-invoice.component.scss'],
-  providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-submit-invoice',
+    templateUrl: './submit-invoice.component.html',
+    styleUrls: ['./submit-invoice.component.scss'],
+    providers: [
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class SubmitInvoiceComponent extends FormBase implements OnInit {
   postalRegex = POSTAL_CODE;

@@ -3,27 +3,22 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { DOCUMENT } from '@angular/common';
 
 @Component({
-  selector: 'app-quick-exit',
-  templateUrl: './quick-exit.component.html',
-  styleUrls: ['./quick-exit.component.scss'],
-  animations: [
-    trigger('openClose', [
-      state(
-        'open',
-        style({
-          transform: 'translateX(0)'
-        })
-      ),
-      state(
-        'closed',
-        style({
-          transform: 'translateX(-240px)'
-        })
-      ),
-      transition('open => closed', [animate('1s')]),
-      transition('closed => open', [animate('0.5s')])
-    ])
-  ]
+    selector: 'app-quick-exit',
+    templateUrl: './quick-exit.component.html',
+    styleUrls: ['./quick-exit.component.scss'],
+    animations: [
+        trigger('openClose', [
+            state('open', style({
+                transform: 'translateX(0)'
+            })),
+            state('closed', style({
+                transform: 'translateX(-240px)'
+            })),
+            transition('open => closed', [animate('1s')]),
+            transition('closed => open', [animate('0.5s')])
+        ])
+    ],
+    standalone: false
 })
 export class QuickExitComponent implements OnInit {
   isOpen = true;

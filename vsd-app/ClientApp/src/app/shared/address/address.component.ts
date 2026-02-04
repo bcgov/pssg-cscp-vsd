@@ -10,8 +10,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry, catchError, map, switchMap, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-address',
-  templateUrl: './address.component.html'
+    selector: 'app-address',
+    templateUrl: './address.component.html',
+    standalone: false
 })
 export class AddressComponent implements OnInit {
   countryList: iCountry[] = config.preferred_countries;

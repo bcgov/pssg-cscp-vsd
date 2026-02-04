@@ -21,16 +21,17 @@ import { HOSPITALS } from '../hospital-list';
 import { POSTAL_CODE } from '../regex.constants';
 
 @Component({
-  selector: 'app-medical-information',
-  templateUrl: './medical-information.component.html',
-  styleUrls: ['./medical-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-medical-information',
+    templateUrl: './medical-information.component.html',
+    styleUrls: ['./medical-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class MedicalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
