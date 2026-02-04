@@ -27,6 +27,12 @@ $theme: mat.m2-define-light-theme(
 // Include theme styles for all components
 @include mat.all-component-themes($theme);
 
+// Override mygovbc-bootstrap-theme's html font-size: 10px
+// This was breaking Material dialogs and other Material components that use rem units
+html {
+  font-size: 16px !important;
+}
+
 body {
   color: #494949;
   background: #f2f2f2;
@@ -125,30 +131,31 @@ html {
 }
 
 p {
-  font-weight: Regular;
-  font-size: 14px #494949;
+  font-weight: 400;
+  font-size: 14px;
+  color: #494949;
 }
 
 h1 {
-  font-weight: Semi-bold;
+  font-weight: 600;
   font-size: 36px;
   color: #494949;
 }
 
 h2 {
-  font-weight: Semi-bold;
+  font-weight: 600;
   font-size: 24px;
   color: #494949;
 }
 
 h3 {
-  font-weight: Semi-bold;
+  font-weight: 600;
   font-size: 20px;
   color: #494949;
 }
 
 h4 {
-  font-weight: Semi-bold;
+  font-weight: 600;
   font-size: 16px;
   color: #494949;
 }

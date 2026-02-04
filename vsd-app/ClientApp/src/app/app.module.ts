@@ -59,7 +59,6 @@ import { HeaderTitleService } from './services/titile.service';
 import { AddressComponent } from './shared/address/address.component';
 import { ApplicationReviewComponent } from './shared/application-review/application-review.component';
 import { AuthorizationInformationComponent } from './shared/authorization-information/authorization-information.component';
-import { CancelApplicationDialog } from './shared/cancel-dialog/cancel-dialog.component';
 import { GenderSelectorComponent } from './shared/components/gender-selector/gender-selector.component';
 import { PronounSelectorComponent } from './shared/components/pronoun-selector/pronoun-selector.component';
 import { RaceSelectorComponent } from './shared/components/race-selector/race-selector.component';
@@ -95,7 +94,6 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     ApplicationSuccessComponent,
     AuthorizationInformationComponent,
     BreadcrumbComponent,
-    CancelApplicationDialog,
     CancelDialog,
     CrimeInformationComponent,
     DateFieldComponent,
