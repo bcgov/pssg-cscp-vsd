@@ -36,7 +36,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AlertModule } from 'ngx-bootstrap/alert';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -213,7 +212,6 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     MatTooltipModule,
     ReactiveFormsModule,
     AngularSignaturePadModule,
-    AlertModule,
     BsDatepickerModule.forRoot(),
     TooltipModule,
     TypeaheadModule.forRoot()
