@@ -40,7 +40,7 @@
 # ##################################################################################################
 
 # --- Build Stage ---
-FROM node:16-alpine AS build
+FROM node:22-alpine AS build
 # upgraded from 8.9.4
 
 # Python/build tools no longer needed since we replaced node-sass with dart-sass
@@ -53,7 +53,7 @@ WORKDIR /app
 COPY ./vsd-app/ClientApp .
 
 RUN npm install --legacy-peer-deps --ignore-scripts
-RUN npm run build -- --base-href /cvapwebform --prod
+RUN npm run build -- --base-href /cvapwebform/ --configuration production
 
 # --- Runtime Stage ---
 FROM caddy:2.10.0-alpine AS final

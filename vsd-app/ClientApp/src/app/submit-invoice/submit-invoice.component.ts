@@ -1,34 +1,35 @@
-import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
-import { Component, OnInit, HostListener } from '@angular/core';
-import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { EnumHelper } from '../shared/enums-list';
-import { FormBase } from '../shared/form-base';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import * as _ from 'lodash';
+import moment from 'moment';
+import { Subject } from 'rxjs';
+import { DocumentCollectioninformation } from '../interfaces/application.interface';
+import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { AEMService } from '../services/aem.service';
+import { JusticeApplicationDataService } from '../services/justice-application-data.service';
+import { LookupService } from '../services/lookup.service';
+import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { GSTWarningDialog } from '../shared/dialogs/gst-warning/gst-warning.dialog';
 import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
-import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { MY_FORMATS } from '../shared/enums-list';
-import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MessageDialog } from '../shared/dialogs/message-dialog/message.dialog';
+import { EnumHelper, MY_FORMATS } from '../shared/enums-list';
+import { FormBase } from '../shared/form-base';
 import { POSTAL_CODE } from '../shared/regex.constants';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
-import { Subject } from 'rxjs';
-import * as _ from 'lodash';
-import { AEMService } from '../services/aem.service';
-import * as moment from 'moment';
-import { DocumentCollectioninformation } from '../interfaces/application.interface';
-import { MessageDialog } from '../shared/dialogs/message-dialog/message.dialog';
-import { LookupService } from '../services/lookup.service';
 
 @Component({
-  selector: 'app-submit-invoice',
-  templateUrl: './submit-invoice.component.html',
-  styleUrls: ['./submit-invoice.component.scss'],
-  providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-submit-invoice',
+    templateUrl: './submit-invoice.component.html',
+    styleUrls: ['./submit-invoice.component.scss'],
+    providers: [
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class SubmitInvoiceComponent extends FormBase implements OnInit {
   postalRegex = POSTAL_CODE;
@@ -36,14 +37,14 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   submitting: boolean = false;
   hasDuplicateLineItem: boolean = false;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   enumHelper = new EnumHelper();
 
   formFullyValidated: boolean;
   formSubmitted: boolean = false;
 
-  lineItems: FormArray;
-  lineItemsControls: FormArray;
+  lineItems: UntypedFormArray;
+  lineItemsControls: UntypedFormArray;
 
   showRemoveLine: boolean = false;
 
@@ -74,7 +75,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public snackBar: MatSnackBar,
     private dialog: MatDialog,
     private aemService: AEMService,
@@ -89,8 +90,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.isIE = /MSIE|Trident/.test(ua);
 
     this.form = this.buildInvoiceForm();
-    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
-    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
+    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
 
     if (this.lookupService.cvapEmail) {
       this.cvapEmail = this.lookupService.cvapEmail;
@@ -106,8 +107,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   resetForm() {
     this.form.reset();
     this.form = this.buildInvoiceForm();
-    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
-    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
+    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
     this.formFullyValidated = false;
     this.formSubmitted = false;
     this.showFormPanel = true;
@@ -229,7 +230,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   calculateAllTotals(): void {
     let invoiceSubTotal = 0.0;
-    let invoiceItems = <FormArray>this.form.get('invoiceDetails.lineItems');
+    let invoiceItems = <UntypedFormArray>this.form.get('invoiceDetails.lineItems');
     invoiceItems.controls.forEach((item) => {
       let sessionHours = item.get('sessionHours').value || 0;
       invoiceSubTotal += sessionHours;
@@ -238,7 +239,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.invoiceGrandTotal = invoiceSubTotal;
   }
 
-  createLineItem(sessionHours: string = ''): FormGroup {
+  createLineItem(sessionHours: string = ''): UntypedFormGroup {
     return this.fb.group({
       counsellingType: [0, [Validators.required, Validators.min(100000000)]], // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
       missedSession: [false],
@@ -249,13 +250,13 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   addLineItem(): void {
-    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
     this.lineItems.push(this.createLineItem());
     this.showRemoveLine = this.lineItems.length > 1;
   }
 
   removeLineItem(index: number): void {
-    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
     this.lineItems.removeAt(index);
     this.showRemoveLine = this.lineItems.length > 1;
     this.checkForDuplicateLineItems();
@@ -274,7 +275,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     });
   }
 
-  isControlValid(formControl: FormGroup, field: string) {
+  isControlValid(formControl: UntypedFormGroup, field: string) {
     let formField = formControl;
     if (formField == null) return true;
 
@@ -497,11 +498,11 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.validateAllFormFields(this.form.get('invoiceDetails'));
   }
 
-  private cloneInvoice(formCopy: FormGroup) {
+  private cloneInvoice(formCopy: UntypedFormGroup) {
     this.form.reset();
     this.form = this.buildInvoiceForm();
-    this.lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
-    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as FormArray;
+    this.lineItems = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
+    this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
 
     this.form
       .get('invoiceDetails.counsellorRegistrationNumber')
@@ -519,7 +520,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       .patchValue(formCopy.get('invoiceDetails.submitterEmailAddress').value);
   }
 
-  private buildInvoiceForm(): FormGroup {
+  private buildInvoiceForm(): UntypedFormGroup {
     return this.fb.group({
       invoiceDetails: this.fb.group({
         counsellorRegistrationNumber: ['', [Validators.required]],
@@ -547,9 +548,15 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   checkVendorStatus(source: string) {
     this.form.get('invoiceDetails.vendorNumber').setValue(this.form.get('invoiceDetails.vendorNumber').value.trim());
-    this.form.get('invoiceDetails.vendorPostalCode').setValue(this.form.get('invoiceDetails.vendorPostalCode').value.trim());
-    this.form.get('invoiceDetails.counsellorRegistrationNumber').setValue(this.form.get('invoiceDetails.counsellorRegistrationNumber').value.trim());
-    this.form.get('invoiceDetails.counsellorLastName').setValue(this.form.get('invoiceDetails.counsellorLastName').value.trim());
+    this.form
+      .get('invoiceDetails.vendorPostalCode')
+      .setValue(this.form.get('invoiceDetails.vendorPostalCode').value.trim());
+    this.form
+      .get('invoiceDetails.counsellorRegistrationNumber')
+      .setValue(this.form.get('invoiceDetails.counsellorRegistrationNumber').value.trim());
+    this.form
+      .get('invoiceDetails.counsellorLastName')
+      .setValue(this.form.get('invoiceDetails.counsellorLastName').value.trim());
 
     let vendorNumber = this.form.get('invoiceDetails.vendorNumber').value;
     let vendorPostalCode = this.form.get('invoiceDetails.vendorPostalCode').value;
@@ -626,11 +633,11 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   checkForDuplicateLineItems() {
-    let lineItems = this.form.get('invoiceDetails.lineItems') as FormArray;
+    let lineItems = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
 
     let data = [];
     for (let i = 0; i < lineItems.length; ++i) {
-      let item = this.lineItems.at(i) as FormGroup;
+      let item = this.lineItems.at(i) as UntypedFormGroup;
       data.push({ type: item.get('counsellingType').value, date: item.get('sessionDate').value.toString() });
     }
 

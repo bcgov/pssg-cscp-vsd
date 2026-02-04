@@ -1,16 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~@angular/material/theming';
+@use '@angular/material' as mat;
 
-@import '~mygovbc-bootstrap-theme/dist/mygovbc-bootstrap-theme.min.css';
+@include mat.elevation-classes();
+@include mat.app-background();
 
-@include mat-core();
+// Define the palettes
+$primary: mat.m2-define-palette(mat.$m2-gray-palette, 400);
+$accent: mat.m2-define-palette(mat.$m2-indigo-palette, 500, A200, A400);
+$warn: mat.m2-define-palette(mat.$m2-red-palette, 500);
 
-$primary: mat-palette($mat-black, 400);
-$accent: mat-palette($mat-indigo, 500, A200, A400);
-$warn: mat-palette($mat-red, 500);
+// Create the theme object with proper structure
+$theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn
+    )
+  )
+);
 
-$theme: mat-light-theme($primary, $accent, $warn);
-@include angular-material-theme($theme);
+// Include theme styles for core and all components
+@include mat.all-component-themes($theme);
 
 .ctx-home {
   background: #f2f2f2;

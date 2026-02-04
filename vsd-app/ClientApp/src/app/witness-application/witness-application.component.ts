@@ -1,66 +1,63 @@
-import { AEMService } from '../services/aem.service';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
+import { config } from '../../config';
 import {
   Application,
-  Introduction,
-  PersonalInformation,
-  CrimeInformation,
-  MedicalInformation,
-  ExpenseInformation,
-  EmploymentIncomeInformation,
-  RepresentativeInformation,
-  DeclarationInformation,
   AuthorizationInformation,
-  VictimInformation,
-  DocumentCollectioninformation
+  CrimeInformation,
+  DeclarationInformation,
+  DocumentCollectioninformation,
+  EmploymentIncomeInformation,
+  ExpenseInformation,
+  Introduction,
+  MedicalInformation,
+  PersonalInformation,
+  RepresentativeInformation,
+  VictimInformation
 } from '../interfaces/application.interface';
-import { ApplicationType, OnBehalfOf } from '../shared/enums-list';
-import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
-import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
-import { Component, HostListener, OnInit } from '@angular/core';
-import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
-import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
-import { FormBase } from '../shared/form-base';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { iLookupData } from '../interfaces/lookup-data.interface';
+import { AEMService } from '../services/aem.service';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { LookupService } from '../services/lookup.service';
-import { MY_FORMATS } from '../shared/enums-list';
-import { MatSnackBar, MatDialog } from '@angular/material';
-import { MatStepper } from '@angular/material/stepper';
+import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
+import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
+import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
+import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
+import { ApplicationType, MY_FORMATS, OnBehalfOf } from '../shared/enums-list';
+import { ExpenseInfoHelper } from '../shared/expense-information/expense-information.helper';
+import { FormBase } from '../shared/form-base';
 import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
-import { config } from '../../config';
-import { defaultFormat as _rollupMoment } from 'moment';
-import { iLookupData } from '../interfaces/lookup-data.interface';
-import * as _ from 'lodash';
-import * as _moment from 'moment';
-
-const moment = _rollupMoment || _moment;
+import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 
 @Component({
-  selector: 'app-witness-application',
-  templateUrl: './witness-application.component.html',
-  styleUrls: ['./witness-application.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
-  ]
+    selector: 'app-witness-application',
+    templateUrl: './witness-application.component.html',
+    styleUrls: ['./witness-application.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
+    ],
+    standalone: false
 })
 export class WitnessApplicationComponent extends FormBase implements OnInit {
   FORM_TYPE: ApplicationType = ApplicationType.Witness_Application;
   busy: Promise<any>;
-  form: FormGroup;
+  form: UntypedFormGroup;
   formFullyValidated: boolean;
   showValidationMessage: boolean;
   submitting: boolean = false;
@@ -95,7 +92,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
@@ -333,7 +330,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     this.form.markAsTouched();
   }
 
-  private buildApplicationForm(): FormGroup {
+  private buildApplicationForm(): UntypedFormGroup {
     return this.fb.group({
       introduction: this.fb.group({
         understoodInformation: [null, Validators.requiredTrue]

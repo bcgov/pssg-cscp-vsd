@@ -1,12 +1,12 @@
 import { POSTAL_CODE, ZIP_CODE } from '../regex.constants';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Address } from '../../interfaces/address.interface';
 
 export class AddressHelper {
   postalRegex = POSTAL_CODE;
   zipRegex = ZIP_CODE;
 
-  public clearAddressValidatorsAndErrors(form: FormGroup, field: string) {
+  public clearAddressValidatorsAndErrors(form: UntypedFormGroup, field: string) {
     let options = { onlySelf: false, emitEvent: true };
     let addressControls = [
       form.get(field + '.country'),
@@ -37,7 +37,7 @@ export class AddressHelper {
     postalControl.updateValueAndValidity(options);
   }
 
-  public markAsTouched(form: FormGroup, field: string) {
+  public markAsTouched(form: UntypedFormGroup, field: string) {
     let addressControls = [
       form.get(field + '.country'),
       form.get(field + '.province'),
@@ -53,7 +53,7 @@ export class AddressHelper {
     postalControl.markAsTouched();
   }
 
-  public setAddressAsRequired(form: FormGroup, field: string) {
+  public setAddressAsRequired(form: UntypedFormGroup, field: string) {
     let options = { onlySelf: false, emitEvent: true };
     let addressControls = [
       form.get(field + '.country'),
@@ -87,7 +87,7 @@ export class AddressHelper {
     return false;
   }
 
-  public clearAddress(form: FormGroup, field: string) {
+  public clearAddress(form: UntypedFormGroup, field: string) {
     let addressControls = [
       form.get(field + '.city'),
       form.get(field + '.line1'),

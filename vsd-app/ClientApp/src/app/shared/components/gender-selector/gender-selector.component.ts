@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormBase } from '../../form-base';
 import { EnumHelper } from '../../enums-list';
 import { Subject } from 'rxjs';
@@ -15,12 +15,13 @@ import { takeUntil } from 'rxjs/operators';
  * @implements {OnDestroy}
  */
 @Component({
-  selector: 'app-gender-selector',
-  templateUrl: './gender-selector.component.html',
-  styleUrls: ['./gender-selector.component.scss']
+    selector: 'app-gender-selector',
+    templateUrl: './gender-selector.component.html',
+    styleUrls: ['./gender-selector.component.scss'],
+    standalone: false
 })
 export class GenderSelectorComponent extends FormBase implements OnInit, OnDestroy {
-  @Input() form: FormGroup;
+  @Input() form: UntypedFormGroup;
   @Input() isDisabled: boolean;
   @Input() genderFormControlName: string;
   @Input() otherGenderFormControlName: string;

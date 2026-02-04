@@ -4,9 +4,11 @@
       <app-field label="Country" [required]="showChildrenAsRequired && countryList.length > 0" [valid]="isSubFieldValid('country', isDisabled)" errorMessage="Please select your country">
         <select class="form-control" formControlName="country" (change)="onCountryChange($event)">
           <option value="">Choose a country</option>
-          <option *ngFor="let item of countryList" [value]="item.vsd_name">
-            {{ item.vsd_name }}
-          </option>
+          @for (item of countryList; track item) {
+            <option [value]="item.vsd_name">
+              {{ item.vsd_name }}
+            </option>
+          }
         </select>
       </app-field>
     </div>
@@ -14,9 +16,11 @@
       <app-field label="{{ provinceType }}" [required]="showChildrenAsRequired && provinceList.length > 0" [valid]="isSubFieldValid('province', isDisabled || isProvinceDisabled)" errorMessage="Please select your {{provinceType.toLowerCase()}}">
         <select class="form-control" formControlName="province" (change)="onProvinceChange($event)">
           <option value="">Choose a {{ provinceType }}</option>
-          <option *ngFor="let item of provinceList" [value]="item.vsd_name">
-            {{ item.vsd_name }}
-          </option>
+          @for (item of provinceList; track item) {
+            <option [value]="item.vsd_name">
+              {{ item.vsd_name }}
+            </option>
+          }
         </select>
       </app-field>
     </div>
@@ -40,9 +44,11 @@
       <app-field label="City" [required]="showChildrenAsRequired && cityList.length > 0" [valid]="isSubFieldValid('city', isDisabled || isCityDisabled)" errorMessage="Please select your city">
         <select class="form-control" formControlName="city">
           <option value="">Choose a city</option>
-          <option *ngFor="let item of cityList" [value]="item.vsd_name">
-            {{ item.vsd_name }}
-          </option>
+          @for (item of cityList; track item) {
+            <option [value]="item.vsd_name">
+              {{ item.vsd_name }}
+            </option>
+          }
         </select>
         <!-- <input formControlName="city" typeaheadOptionField="vsd_name" [typeahead]="suggestions$" [typeaheadAsync]="true" class="form-control"> -->
       </app-field>

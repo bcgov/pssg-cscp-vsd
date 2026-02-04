@@ -1,10 +1,11 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-cancel',
-  templateUrl: 'cancel.dialog.html',
-  styleUrls: ['./cancel.dialog.scss']
+    selector: 'app-cancel',
+    templateUrl: 'cancel.dialog.html',
+    styleUrls: ['./cancel.dialog.scss'],
+    standalone: false
 })
 export class CancelDialog {
   type: string = 'Application';

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router, NavigationExtras } from '@angular/router';
 import { FormBase } from '../shared/form-base';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    standalone: false
 })
 export class HomeComponent extends FormBase implements OnInit {
   window = window;
@@ -20,7 +21,7 @@ export class HomeComponent extends FormBase implements OnInit {
 
   isLocalHost: boolean = false;
   isIE: boolean = false;
-  constructor(private titleService: Title, private fb: FormBuilder, private router: Router) {
+  constructor(private titleService: Title, private fb: UntypedFormBuilder, private router: Router) {
     super();
   }
 

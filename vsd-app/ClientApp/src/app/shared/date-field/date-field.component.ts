@@ -1,11 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
-  selector: 'app-date-field',
-  templateUrl: './date-field.component.html',
-  styleUrls: ['./date-field.component.scss']
+    selector: 'app-date-field',
+    templateUrl: './date-field.component.html',
+    styleUrls: ['./date-field.component.scss'],
+    standalone: false
 })
 export class DateFieldComponent implements OnInit {
   @Input() control: AbstractControl;

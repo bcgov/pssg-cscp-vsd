@@ -1,26 +1,31 @@
-import { Component, ViewChild, ElementRef, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, ControlContainer } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ControlContainer, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { config } from '../../../config';
 
 @Component({
-  selector: 'app-file-uploader',
-  templateUrl: './file-uploader.component.html',
-  styleUrls: ['./file-uploader.component.scss']
+    selector: 'app-file-uploader',
+    templateUrl: './file-uploader.component.html',
+    styleUrls: ['./file-uploader.component.scss'],
+    standalone: false
 })
 export class FileUploaderComponent implements OnInit {
   @ViewChild('files') myInputVariable: ElementRef;
   @Input() formType: number;
-  @Input() documents: FormArray;
-  public form: FormGroup;
+  @Input() documents: UntypedFormArray;
+  public form: UntypedFormGroup;
 
   MAX_FILE_SIZE = 2 * 1024 * 1024; //2MB
   MAX_TOTAL_FILE_SIZE = 3.5 * 1024 * 1024; //3.5MB
 
-  constructor(private fb: FormBuilder, private controlContainer: ControlContainer, public snackBar: MatSnackBar) {}
+  constructor(
+    private fb: UntypedFormBuilder,
+    private controlContainer: ControlContainer,
+    public snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
   }
 
   fakeBrowseClick(): void {

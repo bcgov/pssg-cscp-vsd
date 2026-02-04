@@ -4,20 +4,19 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "removeComments": true,
+    "esModuleInterop": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": [
-      "es2017",
-      "dom"
-    ],
-    "module": "es2015",
-    "baseUrl": "./"
+    "module": "es2020",
+    "baseUrl": "./",
+    "skipLibCheck": true,
+    "useDefineForClassFields": false
   },
   "exclude": [
     "node_modules"

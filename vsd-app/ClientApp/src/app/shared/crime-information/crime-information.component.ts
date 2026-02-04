@@ -1,44 +1,46 @@
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { FormBase } from '../form-base';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
-  MatDialogConfig,
-  MatDialog,
-  DateAdapter,
-  MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS,
-  MatDatepickerInputEvent
-} from '@angular/material';
-import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, FormControl } from '@angular/forms';
-import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+  ControlContainer,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators
+} from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType, CRMBoolean, CRMMultiBoolean } from '../enums-list';
-import * as moment from 'moment';
-import { CrimeInfoHelper } from './crime-information.helper';
-import { config } from '../../../config';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import moment from 'moment';
 import { Subscription } from 'rxjs';
-import { AddressHelper } from '../address/address.helper';
+import { config } from '../../../config';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { LookupService } from '../../services/lookup.service';
+import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { AddressHelper } from '../address/address.helper';
+import { ApplicationType, CRMBoolean, CRMMultiBoolean, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
+import { CrimeInfoHelper } from './crime-information.helper';
 
 @Component({
-  selector: 'app-crime-information',
-  templateUrl: './crime-information.component.html',
-  styleUrls: ['./crime-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-crime-information',
+    templateUrl: './crime-information.component.html',
+    styleUrls: ['./crime-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class CrimeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   CRMBoolean = CRMBoolean;
   CRMMultiBoolean = CRMMultiBoolean;
-  crimeLocationItems: FormArray;
+  crimeLocationItems: UntypedFormArray;
   showAddCrimeLocation: boolean = true;
   showRemoveCrimeLocation: boolean = false;
   showCrimeDateWarning: boolean = false;
@@ -51,22 +53,22 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   haveYouSuedOffenderSubscription: Subscription;
   intendToSueOffenderSubscription: Subscription;
 
-  applyToCourtForMoneyFromOffender: FormControl;
-  willBeTakingLegalAction: FormControl;
-  signName: FormControl;
-  signature: FormControl;
-  thisCourtFileLocation: FormControl;
+  applyToCourtForMoneyFromOffender: UntypedFormControl;
+  willBeTakingLegalAction: UntypedFormControl;
+  signName: UntypedFormControl;
+  signature: UntypedFormControl;
+  thisCourtFileLocation: UntypedFormControl;
 
-  CourtFileGroup: FormGroup;
+  CourtFileGroup: UntypedFormGroup;
 
-  courtLocationItems: FormArray;
-  policeReportItems: FormArray;
+  courtLocationItems: UntypedFormArray;
+  policeReportItems: UntypedFormArray;
 
   showAddPoliceReport: boolean = true;
   showRemovePoliceReport: boolean = false;
   showAddMoreOffenders: boolean = false;
 
-  courtFileItems: FormArray;
+  courtFileItems: UntypedFormArray;
   showAddCourtInfo: boolean = true;
   showRemoveCourtInfo: boolean = false;
 
@@ -92,21 +94,21 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   constructor(
     private controlContainer: ControlContainer,
     private matDialog: MatDialog,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public lookupService: LookupService
   ) {
     super();
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);
 
     // console.log("crime info component");
     // console.log(this.form);
-    this.policeReportItems = this.form.get('policeReports') as FormArray;
+    this.policeReportItems = this.form.get('policeReports') as UntypedFormArray;
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
 
     if (this.formType === ApplicationType.IFM_Application) {
@@ -115,7 +117,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     }
 
     for (let i = 0; i < this.policeReportItems.length; ++i) {
-      let thisReport = this.policeReportItems.at(i) as FormGroup;
+      let thisReport = this.policeReportItems.at(i) as UntypedFormGroup;
       this.policeReportMinDates.push(thisReport.get('reportStartDate').value);
     }
 
@@ -128,7 +130,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       this.showCrimeDateWarning = false;
     }
 
-    this.courtFileItems = this.form.get('courtFiles') as FormArray;
+    this.courtFileItems = this.form.get('courtFiles') as UntypedFormArray;
     this.showRemoveCourtInfo = this.courtFileItems.length > 1;
 
     this.wasReportMadeToPoliceSubscription = this.form.get('wasReportMadeToPolice').valueChanges.subscribe((value) => {
@@ -253,21 +255,21 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   addCrimeLocation(): void {
-    this.crimeLocationItems = this.form.get('crimeLocations') as FormArray;
+    this.crimeLocationItems = this.form.get('crimeLocations') as UntypedFormArray;
     this.crimeLocationItems.push(this.crimeInfoHelper.createCrimeLocationItem(this.fb));
     this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
     this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
   }
 
   removeCrimeLocation(index: number): void {
-    this.crimeLocationItems = this.form.get('crimeLocations') as FormArray;
+    this.crimeLocationItems = this.form.get('crimeLocations') as UntypedFormArray;
     this.crimeLocationItems.removeAt(index);
     this.showAddCrimeLocation = this.crimeLocationItems.length < 5;
     this.showRemoveCrimeLocation = this.crimeLocationItems.length > 1;
   }
 
   addPoliceReport(): void {
-    this.policeReportItems = this.form.get('policeReports') as FormArray;
+    this.policeReportItems = this.form.get('policeReports') as UntypedFormArray;
     this.policeReportItems.push(this.crimeInfoHelper.createPoliceReport(this.fb));
     this.showAddPoliceReport = this.policeReportItems.length < 5;
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
@@ -276,7 +278,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   removePoliceReport(index: number): void {
-    this.policeReportItems = this.form.get('policeReports') as FormArray;
+    this.policeReportItems = this.form.get('policeReports') as UntypedFormArray;
     this.policeReportItems.removeAt(index);
     this.showAddPoliceReport = this.policeReportItems.length < 5;
     this.showRemovePoliceReport = this.policeReportItems.length > 1;
@@ -284,7 +286,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   removeAllPoliceReports() {
-    this.policeReportItems = this.form.get('policeReports') as FormArray;
+    this.policeReportItems = this.form.get('policeReports') as UntypedFormArray;
     while (this.policeReportItems.length !== 0) {
       this.policeReportItems.removeAt(0);
     }
@@ -292,36 +294,36 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   offenderBeenChargedYes(): void {
-    this.courtLocationItems = this.form.get('courtFiles') as FormArray;
+    this.courtLocationItems = this.form.get('courtFiles') as UntypedFormArray;
     if (this.courtLocationItems.length == 0) {
       this.addCourtInfo();
     }
 
     for (let i = 0; i < this.courtLocationItems.length; ++i) {
-      this.CourtFileGroup = this.courtLocationItems.controls[i] as FormGroup;
-      this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as FormControl;
+      this.CourtFileGroup = this.courtLocationItems.controls[i] as UntypedFormGroup;
+      this.thisCourtFileLocation = this.CourtFileGroup.controls['courtLocation'] as UntypedFormControl;
       this.setControlValidators(this.thisCourtFileLocation, [Validators.required]);
     }
   }
 
   offenderBeenChargedNo(): void {
-    this.courtLocationItems = this.form.get('courtFiles') as FormArray;
+    this.courtLocationItems = this.form.get('courtFiles') as UntypedFormArray;
     while (this.courtLocationItems.length !== 0) {
       this.courtLocationItems.removeAt(0);
     }
   }
 
   applyToCourtOrLegalYes(): void {
-    this.signName = this.form.get('racafInformation.signName') as FormControl;
-    this.signature = this.form.get('racafInformation.signature') as FormControl;
+    this.signName = this.form.get('racafInformation.signName') as UntypedFormControl;
+    this.signature = this.form.get('racafInformation.signature') as UntypedFormControl;
     this.setControlValidators(this.signName, [Validators.required]);
     this.setControlValidators(this.signature, [Validators.required]);
   }
 
   applyToCourtNo(): void {
     let willBeTakingLegal = this.form.get('racafInformation.willBeTakingLegalAction').value;
-    this.signName = this.form.get('racafInformation.signName') as FormControl;
-    this.signature = this.form.get('racafInformation.signature') as FormControl;
+    this.signName = this.form.get('racafInformation.signName') as UntypedFormControl;
+    this.signature = this.form.get('racafInformation.signature') as UntypedFormControl;
     if (willBeTakingLegal === 100000000) {
       this.setControlValidators(this.signName, [Validators.required]);
       this.setControlValidators(this.signature, [Validators.required]);
@@ -335,8 +337,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
 
   legalChangesNo(): void {
     let applyToCourt = this.form.get('racafInformation.applyToCourtForMoneyFromOffender').value;
-    this.signature = this.form.get('racafInformation.signature') as FormControl;
-    this.signName = this.form.get('racafInformation.signName') as FormControl;
+    this.signature = this.form.get('racafInformation.signature') as UntypedFormControl;
+    this.signName = this.form.get('racafInformation.signName') as UntypedFormControl;
     if (applyToCourt === 100000000) {
       this.setControlValidators(this.signName, [Validators.required]);
       this.setControlValidators(this.signature, [Validators.required]);
@@ -356,21 +358,21 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   suedOrIntendToSueYes(): void {
-    this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
+    this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as UntypedFormControl;
     this.applyToCourtForMoneyFromOffender = this.form.get(
       'racafInformation.applyToCourtForMoneyFromOffender'
-    ) as FormControl;
+    ) as UntypedFormControl;
     this.setControlValidators(this.willBeTakingLegalAction, [Validators.required]);
     this.setControlValidators(this.applyToCourtForMoneyFromOffender, [Validators.required]);
   }
 
   suedNo(): void {
-    let intendToSue = this.form.get('intendToSueOffender') as FormControl;
+    let intendToSue = this.form.get('intendToSueOffender') as UntypedFormControl;
     this.setControlValidators(intendToSue, [Validators.required]);
-    this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
+    this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as UntypedFormControl;
     this.applyToCourtForMoneyFromOffender = this.form.get(
       'racafInformation.applyToCourtForMoneyFromOffender'
-    ) as FormControl;
+    ) as UntypedFormControl;
     if (intendToSue.value === CRMMultiBoolean.True || intendToSue.value === CRMMultiBoolean.Undecided) {
       this.setControlValidators(this.willBeTakingLegalAction, [Validators.required]);
       this.setControlValidators(this.applyToCourtForMoneyFromOffender, [Validators.required]);
@@ -391,10 +393,10 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   intendToSueNo(): void {
-    this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as FormControl;
+    this.willBeTakingLegalAction = this.form.get('racafInformation.willBeTakingLegalAction') as UntypedFormControl;
     this.applyToCourtForMoneyFromOffender = this.form.get(
       'racafInformation.applyToCourtForMoneyFromOffender'
-    ) as FormControl;
+    ) as UntypedFormControl;
     this.clearControlValidators(this.willBeTakingLegalAction);
     this.clearControlValidators(this.applyToCourtForMoneyFromOffender);
     this.willBeTakingLegalAction.patchValue('');
@@ -402,14 +404,14 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   addCourtInfo(): void {
-    this.courtFileItems = this.form.get('courtFiles') as FormArray;
+    this.courtFileItems = this.form.get('courtFiles') as UntypedFormArray;
     this.courtFileItems.push(this.crimeInfoHelper.createCourtInfoItem(this.fb));
     this.showAddCourtInfo = this.courtFileItems.length < 3;
     this.showRemoveCourtInfo = this.courtFileItems.length > 1;
   }
 
   removeCourtInfo(index: number): void {
-    this.courtFileItems = this.form.get('courtFiles') as FormArray;
+    this.courtFileItems = this.form.get('courtFiles') as UntypedFormArray;
     this.courtFileItems.removeAt(index);
     this.showAddCourtInfo = this.courtFileItems.length < 3;
     this.showRemoveCourtInfo = this.courtFileItems.length > 1;
@@ -507,8 +509,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   reportStartChange(index: number) {
-    this.policeReportItems = this.form.get('policeReports') as FormArray;
-    let thisReport = this.policeReportItems.at(index) as FormGroup;
+    this.policeReportItems = this.form.get('policeReports') as UntypedFormArray;
+    let thisReport = this.policeReportItems.at(index) as UntypedFormGroup;
     let endDate = moment(thisReport.get('reportEndDate').value);
 
     this.policeReportMinDates[index] = thisReport.get('reportStartDate').value;
@@ -521,8 +523,8 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   clearReportEndDate(index: number) {
-    this.policeReportItems = this.form.get('policeReports') as FormArray;
-    let thisReport = this.policeReportItems.at(index) as FormGroup;
+    this.policeReportItems = this.form.get('policeReports') as UntypedFormArray;
+    let thisReport = this.policeReportItems.at(index) as UntypedFormGroup;
     let thisEndDateControl = thisReport.get('reportEndDate');
 
     if (thisReport.get('policeReportedMultipleTimes').value) {
@@ -559,7 +561,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     this.form.get('showAddMoreOffenders').patchValue(val);
 
     if (val == false) {
-      let additionalOffenders = this.form.get('additionalOffenders') as FormArray;
+      let additionalOffenders = this.form.get('additionalOffenders') as UntypedFormArray;
       while (additionalOffenders.length > 0) {
         additionalOffenders.removeAt(0);
       }
@@ -567,7 +569,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   addOffender() {
-    let additionalOffenders = this.form.get('additionalOffenders') as FormArray;
+    let additionalOffenders = this.form.get('additionalOffenders') as UntypedFormArray;
     if (additionalOffenders.length < 5) {
       additionalOffenders.push(this.crimeInfoHelper.createAdditionalOffender(this.fb));
     }
@@ -576,7 +578,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   }
 
   removeOffender(index: number) {
-    let additionalOffenders = this.form.get('additionalOffenders') as FormArray;
+    let additionalOffenders = this.form.get('additionalOffenders') as UntypedFormArray;
     additionalOffenders.removeAt(index);
 
     if (additionalOffenders.length < 5) this.showAddMoreOffenders = true;

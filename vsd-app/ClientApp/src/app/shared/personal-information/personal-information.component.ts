@@ -1,7 +1,7 @@
 import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
-import { FormGroup, ControlContainer, AbstractControl, Validators } from '@angular/forms';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { UntypedFormGroup, ControlContainer, AbstractControl, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType } from '../enums-list';
 import { POSTAL_CODE } from '../regex.constants';
@@ -11,21 +11,22 @@ import { Subscription } from 'rxjs';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
 
 @Component({
-  selector: 'app-personal-information',
-  templateUrl: './personal-information.component.html',
-  styleUrls: ['./personal-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-personal-information',
+    templateUrl: './personal-information.component.html',
+    styleUrls: ['./personal-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class PersonalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   postalRegex = POSTAL_CODE;
 
@@ -66,7 +67,7 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);

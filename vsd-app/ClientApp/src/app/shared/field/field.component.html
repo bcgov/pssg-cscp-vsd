@@ -1,15 +1,27 @@
 <section class="app-field" [ngClass]="!valid ? 'app-field with-error' : 'app-field'" [class.field-disabled]="disabled">
-  <span *ngIf="leadingText">{{leadingText}} <p></p> </span>
-  <label *ngIf="label">{{label}}<span *ngIf="tooltipReference" class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='tooltipReference'> <i class='fa fa-info-circle'> </i></span><span *ngIf="required" class="error-states red-asterisk"> *</span></label>
-  <br *ngIf="label">
-  <table style="width: 100%">
-    <tr>
-      <td>
-        <ng-content></ng-content>
-      </td>
-    </tr>
-  </table>
-  <div *ngIf="!valid" class="error-states error-container">
-    {{errorMessage}}
-  </div>
-</section>
+  @if (leadingText) {
+    <span>{{leadingText}} <p></p> </span>
+  }
+  @if (label) {
+    <label>{{label}}@if (tooltipReference) {
+      <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='tooltipReference'> <i class='fa fa-info-circle'> </i></span>
+      }@if (required) {
+      <span class="error-states red-asterisk"> *</span>
+    }</label>
+  }
+  @if (label) {
+    <br>
+    }
+    <table style="width: 100%">
+      <tr>
+        <td>
+          <ng-content></ng-content>
+        </td>
+      </tr>
+    </table>
+    @if (!valid) {
+      <div class="error-states error-container">
+        {{errorMessage}}
+      </div>
+    }
+  </section>

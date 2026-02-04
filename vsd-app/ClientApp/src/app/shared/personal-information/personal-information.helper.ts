@@ -1,11 +1,11 @@
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
 import { ApplicationType } from '../enums-list';
 import { POSTAL_CODE } from '../regex.constants';
 import { EmailValidator } from '../validators/email.validator';
 
 export class PersonalInfoHelper {
   postalRegex = POSTAL_CODE;
-  public setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
+  public setupFormGroup(fb: UntypedFormBuilder, form_type: ApplicationType): UntypedFormGroup {
     let group = {
       firstName: ['', Validators.required],
       middleName: [''],

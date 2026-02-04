@@ -1,7 +1,8 @@
 import { Pipe } from '@angular/core';
 
 @Pipe({
-  name: 'phone'
+    name: 'phone',
+    standalone: false
 })
 export class PhonePipe {
   transform(rawNum: string) {

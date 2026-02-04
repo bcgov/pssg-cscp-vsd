@@ -5,18 +5,20 @@
     <span class="ml-3 accepted-file-types">Accepted file types: pdf, png, jpeg, doc, docx</span>
   </div>
 </div>
-<div class="row mt-2" *ngFor="let fileItem of documents['controls']; let i=index">
-  <div class="col">
-    <div [formGroup]="fileItem">
-      <mat-chip-list>
-        <app-field label="File Description">
-          <input class="form-control" type="text" formControlName="subject">
-        </app-field>
-        <mat-chip class="remove-chip" [selectable]="true" [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
-          {{fileItem.controls.filename.value}}
-          <i class="fa fa-times-circle remove-icon"></i>
-        </mat-chip>
-      </mat-chip-list>
+@for (fileItem of documents['controls']; track fileItem; let i = $index) {
+  <div class="row mt-2">
+    <div class="col">
+      <div [formGroup]="fileItem">
+        <mat-chip-list>
+          <app-field label="File Description">
+            <input class="form-control" type="text" formControlName="subject">
+          </app-field>
+          <mat-chip class="remove-chip" [selectable]="true" [removable]="true" (removed)="removeItem(i)" (click)="removeItem(i)">
+            {{fileItem.controls.filename.value}}
+            <i class="fa fa-times-circle remove-icon"></i>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
     </div>
   </div>
-</div>
+}

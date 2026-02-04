@@ -6,30 +6,35 @@
   <h2>Before you apply</h2>
   <h3>Who may use this application?</h3>
 
-  <div *ngIf="formType === ApplicationType.Victim_Application">
-    <p>This application form is designed for a <strong>Victim</strong> of violent crime. Under the <em>Crime Victim Assistance Act</em>, a victim is a person who is injured, physically or psychologically, as a result of an eligible criminal offence committed in British Columbia.</p>
-    <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/ifm-application">Immediate Family Members</a>.</p>
-    <p>If the victim is deceased, please see the application for <a routerLink="/ifm-application">Immediate Family Members</a>.</p>
-  </div>
-  <div *ngIf="formType === ApplicationType.IFM_Application">
-    <p>
-      This application package is designed for an <strong>Immediate Family Member</strong> of an injured or deceased victim of violent crime. Under the Crime Victim Assistance Act, an Immediate Family Member is a person who, at the time of the eligible offence that resulted in the death or injury of a victim, was a spouse, child, grandchild, sibling, step sibling, half sibling, parent or grandparent of the victim.
-    </p>
-
-    <p>
-      Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Immediate Family Member. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Immediate Family Member that was in effect at that time will apply.
-      <app-tool-tip [trigger]="changestotheCrimeVictim"></app-tool-tip>
-    </p>
-    <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/victim-application">Victims</a>.</p>
-  </div>
-  <div *ngIf="formType === ApplicationType.Witness_Application">
-    <p>This application package is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who witnesses in close proximity a prescribed, or the immediate aftermath of a prescribed offence, that causes a life-threatening injury to, or the death of, the victim.</p>
-    <p>If this definition does not apply to you, please see the application forms for <a routerLink="/ifm-application">Immediate Family Members</a> or <a routerLink="/victim-application">Victims</a>.</p>
-    <p>
-      Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Witness. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Witness that was in effect at that time will apply.
-      <app-tool-tip [trigger]="witnessTooltip"></app-tool-tip>
-    </p>
-  </div>
+  @if (formType === ApplicationType.Victim_Application) {
+    <div>
+      <p>This application form is designed for a <strong>Victim</strong> of violent crime. Under the <em>Crime Victim Assistance Act</em>, a victim is a person who is injured, physically or psychologically, as a result of an eligible criminal offence committed in British Columbia.</p>
+      <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/ifm-application">Immediate Family Members</a>.</p>
+      <p>If the victim is deceased, please see the application for <a routerLink="/ifm-application">Immediate Family Members</a>.</p>
+    </div>
+  }
+  @if (formType === ApplicationType.IFM_Application) {
+    <div>
+      <p>
+        This application package is designed for an <strong>Immediate Family Member</strong> of an injured or deceased victim of violent crime. Under the Crime Victim Assistance Act, an Immediate Family Member is a person who, at the time of the eligible offence that resulted in the death or injury of a victim, was a spouse, child, grandchild, sibling, step sibling, half sibling, parent or grandparent of the victim.
+      </p>
+      <p>
+        Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Immediate Family Member. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Immediate Family Member that was in effect at that time will apply.
+        <app-tool-tip [trigger]="changestotheCrimeVictim"></app-tool-tip>
+      </p>
+      <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/victim-application">Victims</a>.</p>
+    </div>
+  }
+  @if (formType === ApplicationType.Witness_Application) {
+    <div>
+      <p>This application package is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who witnesses in close proximity a prescribed, or the immediate aftermath of a prescribed offence, that causes a life-threatening injury to, or the death of, the victim.</p>
+      <p>If this definition does not apply to you, please see the application forms for <a routerLink="/ifm-application">Immediate Family Members</a> or <a routerLink="/victim-application">Victims</a>.</p>
+      <p>
+        Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Witness. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Witness that was in effect at that time will apply.
+        <app-tool-tip [trigger]="witnessTooltip"></app-tool-tip>
+      </p>
+    </div>
+  }
 
   <div class="attention">
     <h3>Note</h3>
@@ -40,9 +45,11 @@
 
   <h3>What types of benefits does the Crime Victim Assistance Program provide?</h3>
 
-  <p>Benefits that may be available to {{applicant}}<span *ngIf="formType === ApplicationType.Victim_Application"> of violent crime</span> include:</p>
+  <p>Benefits that may be available to {{applicant}}@if (formType === ApplicationType.Victim_Application) {
+    <span> of violent crime</span>
+  } include:</p>
   <ul class="list">
-    <ng-container *ngIf="formType === ApplicationType.Victim_Application">
+    @if (formType === ApplicationType.Victim_Application) {
       <li>medical and dental expenses</li>
       <li>prescription drug expenses</li>
       <li>counselling</li>
@@ -50,25 +57,24 @@
       <li>repair or replacement costs of damaged or destroyed property that a person was wearing at the time of the crime (e.g., eyeglasses, clothing)</li>
       <li>protective measures (e.g., moving expenses)</li>
       <li>disability benefits, services or equipment</li>
-    </ng-container>
+    }
 
-    <ng-container *ngIf="formType === ApplicationType.IFM_Application">
+    @if (formType === ApplicationType.IFM_Application) {
       <li>counselling</li>
       <li>prescription drug expenses</li>
       <li>transportation and related expenses</li>
       <li>funeral expenses</li>
       <li>bereavement leave</li>
       <li>income support</li>
-
       <li>loss of parental guidance</li>
-    </ng-container>
+    }
 
-    <ng-container *ngIf="formType === ApplicationType.Witness_Application">
+    @if (formType === ApplicationType.Witness_Application) {
       <li>counselling</li>
       <li>prescription drug expenses</li>
       <li>transportation and related expenses</li>
       <li>crime scene cleaning</li>
-    </ng-container>
+    }
   </ul>
 
   <h3>The Crime Victim Assistance Program will NOT cover:</h3>
@@ -86,10 +92,16 @@
       The Crime Victim Assistance Program (CVAP) will only provide benefits that are not covered by other programs<br />
       (e.g., EI, CPP, ICBC, extended health coverage, personal insurance).
     </p>
-    <p *ngIf="formType === ApplicationType.Victim_Application">Therefore, if you are applying for benefits (e.g. income support) that may also be covered by another program (e.g. EI), you will need to apply to that other program in order for CVAP to determine your eligibility for the benefit requested. Applying to another program will not prevent you from being able to apply to CVAP as well. Please contact us if you have any questions.</p>
-    <p *ngIf="formType === ApplicationType.IFM_Application">Therefore, if you are applying for benefits (e.g. income support) that may also be covered by another program (e.g. CPP survivor's pension), you will need to apply to that other program in order for CVAP to determine your eligibility for the benefit requested. Applying to another program will not prevent you from being able to apply to CVAP as well. Please contact us if you have any questions.</p>
-    <p *ngIf="formType === ApplicationType.Witness_Application">Therefore, if you are applying for benefits (e.g. prescription drugs) that may also be covered by another program (e.g. extended health coverage), you will need to apply to that other program in order for CVAP to determine your eligibility for the benefit requested. Applying to another program will not prevent you from being able to apply to CVAP as well. Please contact us if you have any questions.</p>
-    <p>View full <a [routerLink]="" (click)="showSummaryOfBenefits()">summary of benefits</a></p>
+    @if (formType === ApplicationType.Victim_Application) {
+      <p>Therefore, if you are applying for benefits (e.g. income support) that may also be covered by another program (e.g. EI), you will need to apply to that other program in order for CVAP to determine your eligibility for the benefit requested. Applying to another program will not prevent you from being able to apply to CVAP as well. Please contact us if you have any questions.</p>
+    }
+    @if (formType === ApplicationType.IFM_Application) {
+      <p>Therefore, if you are applying for benefits (e.g. income support) that may also be covered by another program (e.g. CPP survivor's pension), you will need to apply to that other program in order for CVAP to determine your eligibility for the benefit requested. Applying to another program will not prevent you from being able to apply to CVAP as well. Please contact us if you have any questions.</p>
+    }
+    @if (formType === ApplicationType.Witness_Application) {
+      <p>Therefore, if you are applying for benefits (e.g. prescription drugs) that may also be covered by another program (e.g. extended health coverage), you will need to apply to that other program in order for CVAP to determine your eligibility for the benefit requested. Applying to another program will not prevent you from being able to apply to CVAP as well. Please contact us if you have any questions.</p>
+    }
+    <p>View full <a [routerLink]="[]" (click)="showSummaryOfBenefits()">summary of benefits</a></p>
   </div>
 
   <h2>Instructions</h2>
@@ -103,15 +115,21 @@
     <li>All information pertaining to the incident</li>
     <li>Your own health information (PHN)</li>
     <li>Police Officers contact (if known)</li>
-    <li *ngIf="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application">Employment information (if requesting benefits for lost employment income)</li>
+    @if (formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application) {
+      <li>Employment information (if requesting benefits for lost employment income)</li>
+    }
     <li>Info about the deceased (if it was a fatality)</li>
-    <li>What benefits you are claiming (View <a [routerLink]="" (click)="showSummaryOfBenefits()">Summary of Benefits</a>)</li>
+    <li>What benefits you are claiming (View <a [routerLink]="[]" (click)="showSummaryOfBenefits()">Summary of Benefits</a>)</li>
     <li>Victim Service Worker's information (if available)</li>
     <li>Court File Number (if known)</li>
     <li>Date of crime</li>
     <li>Date reported to police</li>
-    <li *ngIf="formType === ApplicationType.Victim_Application">Date of hospital visit (if applicable)</li>
-    <li *ngIf="formType === ApplicationType.Victim_Application">Name of hospital (if applicable)</li>
+    @if (formType === ApplicationType.Victim_Application) {
+      <li>Date of hospital visit (if applicable)</li>
+    }
+    @if (formType === ApplicationType.Victim_Application) {
+      <li>Name of hospital (if applicable)</li>
+    }
     <li>Date of any health care professional (ie., doctor, psychiatrist) visit</li>
     <li>Name of any health care professional (if applicable)</li>
   </ul>

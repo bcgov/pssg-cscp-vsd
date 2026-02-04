@@ -1,25 +1,27 @@
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { FormBase } from '../form-base';
-import { MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
-import { FormGroup, FormBuilder, ControlContainer, AbstractControl, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ControlContainer, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType } from '../enums-list';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { ApplicationType, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
 
 @Component({
-  selector: 'app-victim-information',
-  templateUrl: './victim-information.component.html',
-  styleUrls: ['./victim-information.component.scss'],
-  providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-victim-information',
+    templateUrl: './victim-information.component.html',
+    styleUrls: ['./victim-information.component.scss'],
+    providers: [
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class VictimInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
@@ -34,12 +36,16 @@ export class VictimInformationComponent extends FormBase implements OnInit, OnDe
   addressSubscription: Subscription;
   contactInfoSubscription: Subscription;
 
-  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog, private fb: FormBuilder) {
+  constructor(
+    private controlContainer: ControlContainer,
+    private matDialog: MatDialog,
+    private fb: UntypedFormBuilder
+  ) {
     super();
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);

@@ -1,10 +1,10 @@
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
 import { ApplicationType } from '../enums-list';
 import { POSTAL_CODE } from '../regex.constants';
 
 export class ExpenseInfoHelper {
   postalRegex = POSTAL_CODE;
-  public setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
+  public setupFormGroup(fb: UntypedFormBuilder, form_type: ApplicationType): UntypedFormGroup {
     //Victim Application
     let group: any = {
       haveMedicalExpenses: [false],
@@ -91,7 +91,7 @@ export class ExpenseInfoHelper {
     return fb.group(group);
   }
 
-  createEmployerItem(fb: FormBuilder): FormGroup {
+  createEmployerItem(fb: UntypedFormBuilder): UntypedFormGroup {
     return fb.group({
       employerName: [''],
       employerPhoneNumber: [''],

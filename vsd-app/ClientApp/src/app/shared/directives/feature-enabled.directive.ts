@@ -3,7 +3,8 @@ import { ConfigService } from '../../services/config.service';
 import { FeatureFlagConfiguration } from '../../interfaces/configuration.interface';
 
 @Directive({
-  selector: '[featureEnabled]'
+    selector: '[featureEnabled]',
+    standalone: false
 })
 export class FeatureEnabledDirective implements OnInit {
   /**

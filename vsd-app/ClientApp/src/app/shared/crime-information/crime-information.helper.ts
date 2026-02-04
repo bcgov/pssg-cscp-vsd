@@ -1,10 +1,10 @@
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
 import { ApplicationType } from '../enums-list';
 import { POSTAL_CODE } from '../regex.constants';
 
 export class CrimeInfoHelper {
   postalRegex = POSTAL_CODE;
-  public setupFormGroup(fb: FormBuilder, form_type: ApplicationType): FormGroup {
+  public setupFormGroup(fb: UntypedFormBuilder, form_type: ApplicationType): UntypedFormGroup {
     let group = {
       typeOfCrime: ['', Validators.required],
 
@@ -51,7 +51,7 @@ export class CrimeInfoHelper {
     return fb.group(group);
   }
 
-  createRACAFInformation(fb: FormBuilder): FormGroup {
+  createRACAFInformation(fb: UntypedFormBuilder): UntypedFormGroup {
     return fb.group({
       applyToCourtForMoneyFromOffender: [''],
       expensesRequested: [''],
@@ -73,13 +73,13 @@ export class CrimeInfoHelper {
     });
   }
 
-  createCrimeLocationItem(fb: FormBuilder): FormGroup {
+  createCrimeLocationItem(fb: UntypedFormBuilder): UntypedFormGroup {
     return fb.group({
       location: ['', Validators.required]
     });
   }
 
-  createPoliceReport(fb: FormBuilder): FormGroup {
+  createPoliceReport(fb: UntypedFormBuilder): UntypedFormGroup {
     return fb.group({
       policeDetachment: [null, [Validators.required]],
       policeDetachmentOther: [''],
@@ -91,14 +91,14 @@ export class CrimeInfoHelper {
     });
   }
 
-  createCourtInfoItem(fb: FormBuilder): FormGroup {
+  createCourtInfoItem(fb: UntypedFormBuilder): UntypedFormGroup {
     return fb.group({
       courtFileNumber: [''],
       courtLocation: ['', [Validators.required]]
     });
   }
 
-  createAdditionalOffender(fb: FormBuilder): FormGroup {
+  createAdditionalOffender(fb: UntypedFormBuilder): UntypedFormGroup {
     return fb.group({
       firstName: [''],
       middleName: [''],

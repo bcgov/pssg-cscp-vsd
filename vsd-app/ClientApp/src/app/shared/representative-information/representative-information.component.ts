@@ -1,7 +1,7 @@
 import { OnInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormBase } from '../form-base';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
-import { FormGroup, Validators, FormBuilder, ControlContainer } from '@angular/forms';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { UntypedFormGroup, Validators, UntypedFormBuilder, ControlContainer } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS, ApplicationType } from '../enums-list';
 import { COUNTRIES_ADDRESS } from '../address/country-list';
@@ -14,21 +14,22 @@ import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { LookupService } from '../../services/lookup.service';
 
 @Component({
-  selector: 'app-representative-information',
-  templateUrl: './representative-information.component.html',
-  styleUrls: ['./representative-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-representative-information',
+    templateUrl: './representative-information.component.html',
+    styleUrls: ['./representative-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class RepresentativeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   provinceList: string[];
   relationshipList: string[];
@@ -51,7 +52,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
   constructor(
     private controlContainer: ControlContainer,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     public lookupService: LookupService
   ) {
@@ -61,7 +62,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
       this.setRequiredFields(this.form.get('completingOnBehalfOf').value);

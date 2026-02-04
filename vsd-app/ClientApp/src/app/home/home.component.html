@@ -1,5 +1,5 @@
 <div class="form-wrapper" style="position: relative;">
-  <div [ngBusy]="busy">
+  <div>
     <div>
       <div class="row">
         <div class="col-md-7 col-sm-12">
@@ -7,10 +7,12 @@
           <div class="page-header">
             <h1>Crime Victim Assistance Program Application</h1>
           </div>
-          <div *ngIf="isIE" class="alert alert-danger">
-            <p>It looks like you are using an unsupported browser.</p>
-            <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
-          </div>
+          @if (isIE) {
+            <div class="alert alert-danger">
+              <p>It looks like you are using an unsupported browser.</p>
+              <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
+            </div>
+          }
           <p><strong>We recommend Google Chrome for best results.</strong></p>
           <p>The Crime Victim Assistance Program (CVAP) provides benefits to <strong>Victims of violent crime</strong> in accordance with the <em>Crime Victim Assistance Act</em> and its regulations.</p>
           <p>The program may also provide benefits to <strong>Immediate Family Members</strong> of an injured or deceased victim of crime, as well as certain <strong>Witnesses</strong>.</p>
@@ -34,114 +36,124 @@
               </select>
             </app-field>
 
-            <div *ngIf="selectedApplicationType !== 0">
-              <div *ngIf="selectedApplicationType === 100000002" class="attention">
-                <p>
-                  This application package is designed for a <strong>Victim</strong> of violent crime. Under the <em>Crime Victim Assistance Act</em>, a victim is a person who is injured, physically or psychologically, as a result of an eligible criminal offence committed in British Columbia.
-                </p>
-              </div>
-
-              <div *ngIf="selectedApplicationType === 100000001" class="attention">
-                <p>
-                  This application package is designed for an <strong>Immediate Family Member</strong> of an injured or deceased victim of violent crime. Under the Crime Victim Assistance Act, an Immediate Family Member is a person who, at the time of the eligible offence that resulted in the death or injury of a victim, was a spouse, child, grandchild, sibling, step sibling, half sibling, parent or grandparent of the victim.
-                </p>
-                <br>
-                <p>
-                  Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Immediate Family Member. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Immediate Family Member that was in effect at that time will apply.
-                  <app-tool-tip [trigger]="changestotheCrimeVictim"></app-tool-tip>
-                </p>
-              </div>
-
-              <div *ngIf="selectedApplicationType === 100000000" class="attention">
-                <p>
-                  This application package is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who witnesses in close proximity a prescribed, or the immediate aftermath of a prescribed offence, that causes a life-threatening injury to, or the death of, the victim.
-                </p>
-                <br>
-                <p>
-                  Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Witness. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Witness that was in effect at that time will apply.
-                  <app-tool-tip [trigger]="witnessTooltip"></app-tool-tip>
-                </p>
-              </div>
-
-              <section class="radio-list per-line">
-                <app-field label="I am:" [required]="true">
-                  <label>
-                    <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                    Completing this application for myself <app-tool-tip [trigger]="onBehalfOfToolTip"></app-tool-tip>
-                  </label>
-                  <label *ngIf="selectedApplicationType === 1">
-                    <!--This will never happen, but kept here in case they want it back-->
-                    <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                    A Victim Service Worker or other person helping a victim complete this application
-                  </label>
-                  <label>
-                    <input type="radio" [value]="100000002" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                    A parent completing this application for my minor child (under 19 years of age)
-                  </label>
-                  <label>
-                    <input type="radio" [value]="100000003" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
-                    A legal representative or legal guardian completing this application on behalf of someone else, or
-                    <br/>
-                    <div style="padding-left: 20px">a third party completing on behalf of an incapable adult.
-                      <app-tool-tip [trigger]="legalRepresentativeTooltip"></app-tool-tip>
+            @if (selectedApplicationType !== 0) {
+              <div>
+                @if (selectedApplicationType === 100000002) {
+                  <div class="attention">
+                    <p>
+                      This application package is designed for a <strong>Victim</strong> of violent crime. Under the <em>Crime Victim Assistance Act</em>, a victim is a person who is injured, physically or psychologically, as a result of an eligible criminal offence committed in British Columbia.
+                    </p>
+                  </div>
+                }
+                @if (selectedApplicationType === 100000001) {
+                  <div class="attention">
+                    <p>
+                      This application package is designed for an <strong>Immediate Family Member</strong> of an injured or deceased victim of violent crime. Under the Crime Victim Assistance Act, an Immediate Family Member is a person who, at the time of the eligible offence that resulted in the death or injury of a victim, was a spouse, child, grandchild, sibling, step sibling, half sibling, parent or grandparent of the victim.
+                    </p>
+                    <br>
+                      <p>
+                        Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Immediate Family Member. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Immediate Family Member that was in effect at that time will apply.
+                        <app-tool-tip [trigger]="changestotheCrimeVictim"></app-tool-tip>
+                      </p>
                     </div>
-                  </label>
-                </app-field>
-              </section>
-
-              <ng-template #onBehalfOfToolTip>This option should also be chosen when completing the application in consultation with a victim service worker or support person.</ng-template>
-              <ng-template #legalRepresentativeTooltip>If the person does not have a legal representative and is physically or mentally incapable of making the application, <strong>a third party</strong> may complete the application on their behalf. <strong>NOTE:</strong> This does not include victim service or other support workers who are providing assistance to a capable person.</ng-template>
-              <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
-                <app-field label="Did the crime occur in BC" [required]="true">
-                  <table style="width: 100%" class="out-of-line">
-                    <tr>
-                      <td class="lead-cell">
-                        <label class="inline-label">
-                          <input type="radio" [value]="true" name="wasCrimeInBC" formControlName="wasCrimeInBC">
-                          <span>Yes</span>
+                  }
+                  @if (selectedApplicationType === 100000000) {
+                    <div class="attention">
+                      <p>
+                        This application package is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who witnesses in close proximity a prescribed, or the immediate aftermath of a prescribed offence, that causes a life-threatening injury to, or the death of, the victim.
+                      </p>
+                      <br>
+                        <p>
+                          Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Witness. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Witness that was in effect at that time will apply.
+                          <app-tool-tip [trigger]="witnessTooltip"></app-tool-tip>
+                        </p>
+                      </div>
+                    }
+                    <section class="radio-list per-line">
+                      <app-field label="I am:" [required]="true">
+                        <label>
+                          <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                          Completing this application for myself <app-tool-tip [trigger]="onBehalfOfToolTip"></app-tool-tip>
                         </label>
-                        <label class="inline-label">
-                          <input type="radio" [value]="false" name="wasCrimeInBC" formControlName="wasCrimeInBC">
-                          <span>No</span>
+                        @if (selectedApplicationType === 1) {
+                          <label>
+                            <!--This will never happen, but kept here in case they want it back-->
+                            <input type="radio" [value]="100000001" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                            A Victim Service Worker or other person helping a victim complete this application
+                          </label>
+                        }
+                        <label>
+                          <input type="radio" [value]="100000002" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                          A parent completing this application for my minor child (under 19 years of age)
                         </label>
-                      </td>
-                      <td class="error-cell was-in-bc-warning" *ngIf="form.get('wasCrimeInBC').value === false">
-                        CVAP only accepts applications for crimes that have occurred in BC. Please click <a href="https://www.victimsfirst.gc.ca/serv/spt-spt.html" target="_blank">here</a> to apply to your provincial assistance program or call CVAP toll free at 1-866-660-3888 if you have any questions.
-                      </td>
-                    </tr>
-                  </table>
-                </app-field>
-              </section>
-
-              <div *ngIf="showValidationMessage" class="error-summary">
-                <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
-                <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
+                        <label>
+                          <input type="radio" [value]="100000003" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
+                          A legal representative or legal guardian completing this application on behalf of someone else, or
+                          <br/>
+                          <div style="padding-left: 20px">a third party completing on behalf of an incapable adult.
+                            <app-tool-tip [trigger]="legalRepresentativeTooltip"></app-tool-tip>
+                          </div>
+                        </label>
+                      </app-field>
+                    </section>
+                    <ng-template #onBehalfOfToolTip>This option should also be chosen when completing the application in consultation with a victim service worker or support person.</ng-template>
+                    <ng-template #legalRepresentativeTooltip>If the person does not have a legal representative and is physically or mentally incapable of making the application, <strong>a third party</strong> may complete the application on their behalf. <strong>NOTE:</strong> This does not include victim service or other support workers who are providing assistance to a capable person.</ng-template>
+                    <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
+                      <app-field label="Did the crime occur in BC" [required]="true">
+                        <table style="width: 100%" class="out-of-line">
+                          <tr>
+                            <td class="lead-cell">
+                              <label class="inline-label">
+                                <input type="radio" [value]="true" name="wasCrimeInBC" formControlName="wasCrimeInBC">
+                                <span>Yes</span>
+                              </label>
+                              <label class="inline-label">
+                                <input type="radio" [value]="false" name="wasCrimeInBC" formControlName="wasCrimeInBC">
+                                <span>No</span>
+                              </label>
+                            </td>
+                            @if (form.get('wasCrimeInBC').value === false) {
+                              <td class="error-cell was-in-bc-warning">
+                                CVAP only accepts applications for crimes that have occurred in BC. Please click <a href="https://www.victimsfirst.gc.ca/serv/spt-spt.html" target="_blank">here</a> to apply to your provincial assistance program or call CVAP toll free at 1-866-660-3888 if you have any questions.
+                              </td>
+                            }
+                          </tr>
+                        </table>
+                      </app-field>
+                    </section>
+                    @if (showValidationMessage) {
+                      <div class="error-summary">
+                        <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+                        <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
+                      </div>
+                    }
+                    <section class="button-container mt-3">
+                      <button [disabled]="form.get('wasCrimeInBC').value === false" (click)="markAsTouched(); gotoApplication();" class="btn btn-primary pull-right">CONTINUE TO {{ selectedApplicationName }} <i class="fas fa-chevron-right"></i></button>
+                    </section>
+                  </div>
+                }
               </div>
-
-              <section class="button-container mt-3">
-                <button [disabled]="form.get('wasCrimeInBC').value === false" (click)="markAsTouched(); gotoApplication();" class="btn btn-primary pull-right">CONTINUE TO {{ selectedApplicationName }} <i class="fas fa-chevron-right"></i></button>
-              </section>
             </div>
           </div>
+
+          <!-- for dev - easy navigation -->
+          @if (isLocalHost) {
+            <div class="row">
+              <div class="col-12">
+                <label style="display: block; padding-top: 80px;">These only show when running locally - quick links to other forms</label>
+                <button [routerLink]="'/victim-restitution'" class="btn btn-primary mr-2">Victim Restitution</button>
+                <button [routerLink]="'/offender-restitution'" class="btn btn-primary mr-2">Offender Restitution</button>
+                <button [routerLink]="'/submit-invoice'" class="btn btn-primary mr-2">Submit Invoice</button>
+              </div>
+            </div>
+          }
+
         </div>
       </div>
-
-      <!-- for dev - easy navigation -->
-      <div *ngIf="isLocalHost" class="row">
-        <div class="col-12">
-          <label style="display: block; padding-top: 80px;">These only show when running locally - quick links to other forms</label>
-          <button [routerLink]="'/victim-restitution'" class="btn btn-primary mr-2">Victim Restitution</button>
-          <button [routerLink]="'/offender-restitution'" class="btn btn-primary mr-2">Offender Restitution</button>
-          <button [routerLink]="'/submit-invoice'" class="btn btn-primary mr-2">Submit Invoice</button>
-        </div>
-      </div>
-
     </div>
-  </div>
-</div>
-<ng-template #changestotheCrimeVictim>
-  For offences that occurred before January 1, 2024, an Immediate Family Member is defined as a person who, at the time of the eligible offence that resulted in the death or injury of a victim, was a spouse, child, sibling, step sibling,half sibling, parent of the victim or, <strong>if financially dependent on the victim, a grandparent or grandchild of the victim.</strong>
-</ng-template>
-<ng-template #witnessTooltip>
-  For offences that occurred before January 1, 2024, a Witness is defined as a person who is not related to the victim but <strong>has a strong emotional attachment to the victim</strong> and witnesses in close proximity an eligible offence that causes a life-threatening injury or death to the victim <strong>or</strong> witnesses the immediate aftermath of an eligible offence that caused the death of the victim.
-</ng-template>
+    <ng-template #changestotheCrimeVictim>
+      For offences that occurred before January 1, 2024, an Immediate Family Member is defined as a person who, at the time of the eligible offence that resulted in the death or injury of a victim, was a spouse, child, sibling, step sibling,half sibling, parent of the victim or, <strong>if financially dependent on the victim, a grandparent or grandchild of the victim.</strong>
+    </ng-template>
+    <ng-template #witnessTooltip>
+      For offences that occurred before January 1, 2024, a Witness is defined as a person who is not related to the victim but <strong>has a strong emotional attachment to the victim</strong> and witnesses in close proximity an eligible offence that causes a life-threatening injury or death to the victim <strong>or</strong> witnesses the immediate aftermath of an eligible offence that caused the death of the victim.
+    </ng-template>

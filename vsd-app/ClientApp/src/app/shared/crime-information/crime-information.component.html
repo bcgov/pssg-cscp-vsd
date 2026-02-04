@@ -1,507 +1,557 @@
 <div [formGroup]="form">
-    <div class="page-header">
-        <h1>Crime Information</h1>
+  <div class="page-header">
+    <h1>Crime Information</h1>
+  </div>
+  <section>
+    <h2 class="blue-header">Crime Occurence</h2>
+
+    <h3>Crime Type</h3>
+
+    <app-field label="Please indicate the type of crime that occurred (e.g. assault)" [required]="true" [valid]="isFieldValid('typeOfCrime')" errorMessage="Please enter the type of crime">
+      <input class="form-control standard" type="text" formControlName="typeOfCrime" maxlength="100">
+    </app-field>
+
+    <h3>Crime Date(s)</h3>
+    <p>Please provide the date or dates of crime.</p>
+
+    <app-field label="Did the crime occur over multiple days?" errorMessage="Please make a selection" [showChevrons]="false">
+      <label class="inline-label">
+        <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur" (change)="whenDidCrimeOccurChange($event)">
+        <span>Yes</span>
+      </label>
+      <label class="inline-label">
+        <input type="radio" [value]="false" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur" (change)="whenDidCrimeOccurChange($event)">
+        <span>No</span>
+      </label>
+    </app-field>
+
+    <app-field errorMessage="Please make a selection" [showChevrons]="false">
+      <label class="inline-label">
+        <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates" (change)="unsureOfCrimeDateChange($event)">
+        If you are unsure of the exact crime date(s), please check this box and provide the approximate dates (e.g. Jan 1, 2020 -Jan. 5, 2020)
+      </label>
+    </app-field>
+
+
+    <app-field label="Date(s) of crime" [required]="true" [valid]="form.get('whenDidCrimeOccur').value === true||form.get('unsureOfCrimeDates').value === true?isMyControlValid(form.get('crimePeriodStart')) && isMyControlValid(form.get('crimePeriodEnd')):isMyControlValid(form.get('crimePeriodStart'))" errorMessage="Please enter a valid crime date">
+      <div class="date-container">
+        <div class="start-date-container">
+          <app-date-field [control]="form.get('crimePeriodStart')" [max]="todaysDate" (change)="crimePeriodStartChange()"></app-date-field>
+        </div>
+        <div class="end-date-container">
+          @if (form.get('whenDidCrimeOccur').value === true || form.get('unsureOfCrimeDates').value === true) {
+            <span class="end-date-span">
+              <span class="tick-span"> - </span>
+              <app-date-field [control]="form.get('crimePeriodEnd')" class="full-width" [min]="crimePeriodStartDate" [max]="todaysDate" (change)="validateCrimePeriodWithinOneYear()"></app-date-field>
+            </span>
+          }
+        </div>
+      </div>
+    </app-field>
+
+
+    @if (showCrimeDateWarning) {
+      <section>
+        <div class="alert alert-dismissible alert-danger">
+          <span>You have entered a crime date that pre-dates your entered date of birth, please check the date(s) are accurate.</span>
+          @if (formType === ApplicationType.IFM_Application) {
+            <span> Note: Immediate Family Members that were not born at the time of the offence are ineligible for benefits.</span>
+          }
+        </div>
+      </section>
+    }
+
+    @if (showWhyDidYouNotApplySooner) {
+      <section>
+        <app-field label="Please briefly explain why you did not apply sooner (does not apply to victims of sexual assault and minors)" [tooltipReference]="fileWithinYearTemplate">
+          <textarea class="form-control standard" formControlName="whyDidYouNotApplySooner" maxlength="750"></textarea>
+        </app-field>
+        <ng-template #fileWithinYearTemplate><strong>One-Year Time Limit</strong><br />Applications to CVAP must be submitted within one year of the date of the incident. An explanation is required to determine if the time limit can be extended. The one year time limit does not apply if the applicant is a minor (under 19 years old) or if the application is from a victim of sexual offence.</ng-template>
+      </section>
+    }
+
+    <section>
+      <h3>Crime Location(s)</h3>
+      <app-field [required]="true">
+        Please provide the <strong>city/town</strong> in BC where the crime took place. If the crime occured over a period of time in more than one location, please enter one location per box <span class="error-states ng-star-inserted">*</span>
+        <div class="crime-location-information">
+          @for (item of form.get('crimeLocations')['controls']; track item; let i = $index) {
+            <div class="location-listing" formArrayName="crimeLocations">
+              <div [formGroupName]="i" class="crime-location">
+                <app-field [valid]="isArrayFieldValid('crimeLocations', 'location', i)" errorMessage="Please enter at least one location">
+                  <select class="form-control standard" formControlName="location">
+                    <option value="">Choose a location</option>
+                    @for (item of cityList; track item) {
+                      <option [value]="item">
+                        {{ item }}
+                      </option>
+                    }
+                  </select>
+                  @if (showRemoveCrimeLocation) {
+                    <a href="javascript:void(0);" (click)="removeCrimeLocation(i)" class="remove-location-button">
+                      <i class="fas fa-trash-alt"></i> Remove Location
+                    </a>
+                  }
+                </app-field>
+              </div>
+            </div>
+          }
+          @if (showAddCrimeLocation) {
+            <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCrimeLocation()">Add Location</a>
+          }
+        </div>
+      </app-field>
+    </section>
+
+    <section>
+      <h3>Crime Details</h3>
+
+      @if (formType != ApplicationType.Victim_Application) {
+        <div>
+          <app-field label="Is the Victim deceased as a result of the crime?" [valid]="isFieldValid('victimDeceasedFromCrime')" [required]="true" errorMessage="Please make a selection">
+            <label class="inline-label">
+              <input type="radio" [value]="CRMBoolean.True" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
+              <span>Yes</span>
+            </label>
+            <label class="inline-label">
+              <input type="radio" [value]="CRMBoolean.False" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
+              <span>No</span>
+            </label>
+          </app-field>
+          @if (form.get('victimDeceasedFromCrime').value === CRMBoolean.True) {
+            <app-field label="Date of Death" [valid]="isMyControlValid(form.get('dateOfDeath'))" errorMessage="Please enter a valid date">
+              <div class="half-width">
+                <app-date-field [control]="form.get('dateOfDeath')" [max]="todaysDate"></app-date-field>
+              </div>
+            </app-field>
+          }
+        </div>
+      }
+
+
+      <app-field [required]="true" [valid]="isFieldValid('crimeDetails')" label="To the best of your ability, please describe the offence. (Maximum 750 characters)" errorMessage="Please provide details of crime">
+        <textarea class="form-control bigger" formControlName="crimeDetails" maxlength="750"></textarea>
+      </app-field>
+
+      <app-field [required]="true" [valid]="isFieldValid('crimeInjuries')" [label]="crimeInjuriesLabel" errorMessage="Please provide details of injuries">
+        <textarea class="form-control standard" formControlName="crimeInjuries" maxlength="750"></textarea>
+      </app-field>
+
+      <p>If you have any additional information, please upload it below. <strong>File size limit:</strong> one file cannot exceed 2MB and all files uploaded to application cannot exceed 3.5MB</p>
+
+      <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')"></app-file-uploader>
+    </section>
+  </section>
+
+  <section>
+    <h2 class="blue-header">Police Involvement</h2>
+
+    <app-field label="Was a report made to the police?" [required]="true" [valid]="isFieldValid('wasReportMadeToPolice')" errorMessage="Please make a selection" [showChevrons]="false">
+      <label class="inline-label">
+        <input type="radio" [value]="CRMMultiBoolean.True" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+        <span>Yes</span>
+      </label>
+      <label class="inline-label">
+        <input type="radio" [value]="CRMMultiBoolean.False" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+        <span>No</span>
+      </label>
+      <label class="inline-label">
+        <input type="radio" [value]="CRMMultiBoolean.Undecided" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
+        <span>Unknown</span>
+      </label>
+    </app-field>
+
+    @if (form.get('wasReportMadeToPolice').value === CRMMultiBoolean.False || form.get('wasReportMadeToPolice').value === CRMMultiBoolean.Undecided) {
+      <section>
+        <app-field label="Please identify who you may have disclosed this incident to (e.g. doctor, social worker, counsellor, relative)" [required]="true" [valid]="isFieldValid('noPoliceReportIdentification')" errorMessage="Please enter who you may have disclosed this incident to">
+          <input class="form-control standard" type="text" formControlName="noPoliceReportIdentification">
+        </app-field>
+      </section>
+    }
+
+    @if (form.get('wasReportMadeToPolice').value === CRMMultiBoolean.True) {
+      <section>
+        <table class="table table-striped police-file-table">
+          <thead>
+            <th scope="col" class="police-file-header">Police Force<span class="error-states">*</span>
+            <app-tool-tip [trigger]="policeForceInfo"></app-tool-tip>
+          </th>
+          <th scope="col" class="police-file-header">Police File Number</th>
+          <th scope="col" class="police-file-header">Name of Investigating Officer</th>
+          <th scope="col" class="police-file-header">Unsure of Date Reported <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip>
+        </th>
+        <th scope="col" class="police-file-header">Date Crime Reported</th>
+        <th scope="col" class="police-file-header"></th>
+        <th></th>
+      </thead>
+      <tbody>
+        @for (item of form.get('policeReports')['controls']; track item; let i = $index) {
+          <tr formArrayName="policeReports">
+            <ng-container [formGroupName]="i">
+              <td>
+                <div [class.with-error]="!isMyControlValid(item.get('policeDetachment'))">
+                  <select class="form-control standard" formControlName="policeDetachment" (change)="policeForceSelected(i)" [required]="true">
+                    <option [ngValue]="null">Select</option>
+                    @for (policeForce of policeForceList; track policeForce) {
+                      <option [value]="policeForce">{{policeForce}}</option>
+                    }
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  @if (item.get('policeDetachment').value == 'Other') {
+                    <input class="form-control mt-2" type="text" formControlName="policeDetachmentOther">
+                  }
+                </div>
+              </td>
+              <td>
+                <input class="form-control" type="text" formControlName="policeFileNumber">
+              </td>
+              <td>
+                <input class="form-control" type="text" formControlName="investigatingOfficer">
+              </td>
+              <td>
+                <input type="checkbox" [value]="true" name="policeReportedMultipleTimes" formControlName="policeReportedMultipleTimes" (click)="clearReportEndDate(i);">
+              </td>
+              <td>
+                <input type="text" [max]="today" (dateChange)="reportStartChange(i, $event)" class="form-control date-picker" formControlName="reportStartDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportStartDatePicker" (focus)="reportStartDatePicker.open()" (click)="reportStartDatePicker.open()" readonly>
+                <mat-datepicker #reportStartDatePicker></mat-datepicker>
+              </td>
+              <td>
+                @if (item.controls.policeReportedMultipleTimes.value === true) {
+                  <span>
+                    <input type="text" [max]="today" [min]="policeReportMinDates[i]" class="form-control date-picker" [class.input-error]="!isMyControlValid(item.get('reportEndDate'))" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
+                    <mat-datepicker #reportEndDatePicker></mat-datepicker>
+                  </span>
+                }
+              </td>
+              <td>
+                @if (showRemovePoliceReport) {
+                  <a href="javascript:void(0);" (click)="removePoliceReport(i)" class="remove-police-report-link">
+                    <i class="fas fa-trash-alt"></i>&nbsp;Remove
+                  </a>
+                }
+              </td>
+            </ng-container>
+          </tr>
+        }
+      </tbody>
+    </table>
+    @if (showAddPoliceReport) {
+      <a href="javascript:void(0);" class="btn btn-secondary" (click)="addPoliceReport()">Add Police File Number</a>
+    }
+  </section>
+}
+
+<section>
+  <h2 class="blue-header">Accused & Court Information</h2>
+  <h3>Name of the Accused <span>(if known)</span></h3>
+
+  <app-field>
+    <label>
+      <input type="checkbox" [value]="true" name="moreThanOneOffender" formControlName="moreThanOneOffender" (change)="moreThanOneOffenderChange($event.target.checked)">
+      Check this box if there is more than one Accused.
+    </label>
+  </app-field>
+
+  <div class="row">
+    <div class="col-4">
+      <app-field label="First Name">
+        <input class="form-control" type="text" formControlName="offenderFirstName">
+      </app-field>
     </div>
-    <section>
-        <h2 class="blue-header">Crime Occurence</h2>
+    <div class="col-4">
+      <app-field label="Middle Name">
+        <input class="form-control" type="text" formControlName="offenderMiddleName">
+      </app-field>
+    </div>
+    <div class="col-4">
+      <app-field label="Last Name">
+        <input class="form-control" type="text" formControlName="offenderLastName">
+      </app-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <app-field label="Relationship to the Accused" [tooltipReference]="relationshipToAccusedToolTip">
+        <select class="form-control" formControlName="offenderRelationship">
+          <option value="">Select...</option>
+          <option value="Intimate Partner Relationship">Intimate Partner Relationship</option>
+          <option value="Other Family Relationship">Other Family Relationship</option>
+          <option value="Acquaintance">Acquaintance</option>
+          <option value="Stranger">Stranger</option>
+          <option value="Other Victim-Accused Relationship">Other Victim-Accused Relationship</option>
+        </select>
+      </app-field>
+    </div>
+    <div class="col-8">
+    </div>
+  </div>
 
-        <h3>Crime Type</h3>
+  @for (item of form.get('additionalOffenders')['controls']; track item; let i = $index) {
+    <div formArrayName="additionalOffenders">
+      <div [formGroupName]="i" class="additional-offender-info">
+        <div class="row">
+          <div class="col-md-4">
+            <app-field label="First Name">
+              <input class="form-control" type="text" formControlName="firstName">
+            </app-field>
+          </div>
+          <div class="col-md-4">
+            <app-field label="Middle Name">
+              <input class="form-control" type="text" formControlName="middleName">
+            </app-field>
+          </div>
+          <div class="col-md-4">
+            <app-field label="Last Name">
+              <input class="form-control" type="text" formControlName="lastName">
+            </app-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <app-field label="Relationship to the Accused" [tooltipReference]="relationshipToAccusedToolTip">
+              <select class="form-control" formControlName="relationship">
+                <option value="">Select...</option>
+                <option value="Intimate Partner Relationship">Intimate Partner Relationship</option>
+                <option value="Other Family Relationship">Other Family Relationship</option>
+                <option value="Acquaintance">Acquaintance</option>
+                <option value="Stranger">Stranger</option>
+                <option value="Other Victim-Accused Relationship">Other Victim-Accused Relationship</option>
+              </select>
+            </app-field>
+          </div>
+          <div class="col">
+            <div class="remove-button">
+              <br>
+                <i class="fas fa-times-circle text-danger center-clear-btn" (click)="removeOffender(i)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
 
-        <app-field label="Please indicate the type of crime that occurred (e.g. assault)" [required]="true" [valid]="isFieldValid('typeOfCrime')" errorMessage="Please enter the type of crime">
-            <input class="form-control standard" type="text" formControlName="typeOfCrime" maxlength="100">
+    @if (form.get('showAddMoreOffenders').value === true;) {
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <a href="javascript:void(0);" class="btn btn-secondary" (click)="addOffender()">Add an Accused</a>
+        </div>
+      </div>
+    }
+
+    <div class="row">
+      <div class="col-6">
+        <app-field label="Has any of the Person(s) Responsible been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
+          <label class="inline-label">
+            <input type="radio" [value]="CRMMultiBoolean.True" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+            <span>Yes</span>
+          </label>
+          <label class="inline-label">
+            <input type="radio" [value]="CRMMultiBoolean.False" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+            <span>No</span>
+          </label>
+          <label class="inline-label">
+            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="offenderBeenCharged" formControlName="offenderBeenCharged">
+            <span>Unknown</span>
+          </label>
         </app-field>
+      </div>
+      <div class="col-6">
+      </div>
+    </div>
 
-        <h3>Crime Date(s)</h3>
-        <p>Please provide the date or dates of crime.</p>
-
-        <app-field label="Did the crime occur over multiple days?" errorMessage="Please make a selection" [showChevrons]="false">
-            <label class="inline-label">
-                <input type="radio" [value]="true" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur" (change)="whenDidCrimeOccurChange($event)">
-                <span>Yes</span>
-            </label>
-            <label class="inline-label">
-                <input type="radio" [value]="false" name="whenDidCrimeOccur" formControlName="whenDidCrimeOccur" (change)="whenDidCrimeOccurChange($event)">
-                <span>No</span>
-            </label>
-        </app-field>
-
-        <app-field errorMessage="Please make a selection" [showChevrons]="false">
-            <label class="inline-label">
-                <input type="checkbox" [value]="true" name="unsureOfCrimeDates" formControlName="unsureOfCrimeDates" (change)="unsureOfCrimeDateChange($event)">
-                If you are unsure of the exact crime date(s), please check this box and provide the approximate dates (e.g. Jan 1, 2020 -Jan. 5, 2020)
-            </label>
-        </app-field>
-
-
-        <app-field label="Date(s) of crime" [required]="true" [valid]="form.get('whenDidCrimeOccur').value === true||form.get('unsureOfCrimeDates').value === true?isMyControlValid(form.get('crimePeriodStart')) && isMyControlValid(form.get('crimePeriodEnd')):isMyControlValid(form.get('crimePeriodStart'))" errorMessage="Please enter a valid crime date">
-            <div class="date-container">
-                <div class="start-date-container">
-                    <app-date-field [control]="form.get('crimePeriodStart')" [max]="todaysDate" (change)="crimePeriodStartChange()"></app-date-field>
+    @if (form.get('offenderBeenCharged').value === CRMMultiBoolean.True) {
+      <div>
+        <h3>Court Information</h3>
+        <div class="court-information">
+          @for (item of form.get('courtFiles')['controls']; track item; let i = $index) {
+            <div class="court-listing" formArrayName="courtFiles">
+              <div [formGroupName]="i" class="row court-files">
+                <div class="col">
+                  <app-field label="Court File Number (if known)" [tooltipReference]="courtFileNumber">
+                    <input class="form-control" type="text" formControlName="courtFileNumber">
+                  </app-field>
                 </div>
-                <div class="end-date-container">
-                    <span *ngIf="form.get('whenDidCrimeOccur').value === true || form.get('unsureOfCrimeDates').value === true" class="end-date-span">
-                        <span class="tick-span"> - </span>
-                        <app-date-field [control]="form.get('crimePeriodEnd')" class="full-width" [min]="crimePeriodStartDate" [max]="todaysDate" (change)="validateCrimePeriodWithinOneYear()"></app-date-field>
-                    </span>
+                <div class="col">
+                  <app-field label="Court Location" [required]="true" [valid]="isMyControlValid(item.get('courtLocation'))" errorMessage="Please enter a court location">
+                    <select class="form-control" formControlName="courtLocation">
+                      <option value="">Choose a court</option>
+                      @for (item of courtList; track item) {
+                        <option [value]="item">
+                          {{ item }}
+                        </option>
+                      }
+                    </select>
+                  </app-field>
                 </div>
-            </div>
-        </app-field>
-
-
-        <section *ngIf="showCrimeDateWarning">
-            <div class="alert alert-dismissible alert-danger">
-                <span>You have entered a crime date that pre-dates your entered date of birth, please check the date(s) are accurate.</span>
-                <span *ngIf="formType === ApplicationType.IFM_Application"> Note: Immediate Family Members that were not born at the time of the offence are ineligible for benefits.</span>
-            </div>
-        </section>
-
-        <section *ngIf="showWhyDidYouNotApplySooner">
-            <app-field label="Please briefly explain why you did not apply sooner (does not apply to victims of sexual assault and minors)" [tooltipReference]="fileWithinYearTemplate">
-                <textarea class="form-control standard" formControlName="whyDidYouNotApplySooner" maxlength="750"></textarea>
-            </app-field>
-            <ng-template #fileWithinYearTemplate><strong>One-Year Time Limit</strong><br />Applications to CVAP must be submitted within one year of the date of the incident. An explanation is required to determine if the time limit can be extended. The one year time limit does not apply if the applicant is a minor (under 19 years old) or if the application is from a victim of sexual offence.</ng-template>
-        </section>
-
-        <section>
-            <h3>Crime Location(s)</h3>
-            <app-field [required]="true">
-                Please provide the <strong>city/town</strong> in BC where the crime took place. If the crime occured over a period of time in more than one location, please enter one location per box <span class="error-states ng-star-inserted">*</span>
-                <div class="crime-location-information">
-                    <div class="location-listing" formArrayName="crimeLocations" *ngFor="let item of form.get('crimeLocations')['controls']; let i = index;">
-                        <div [formGroupName]="i" class="crime-location">
-                            <app-field [valid]="isArrayFieldValid('crimeLocations', 'location', i)" errorMessage="Please enter at least one location">
-                                <select class="form-control standard" formControlName="location">
-                                    <option value="">Choose a location</option>
-                                    <option *ngFor="let item of cityList" [value]="item">
-                                        {{ item }}
-                                    </option>
-                                </select>
-                                <a href="javascript:void(0);" (click)="removeCrimeLocation(i)" *ngIf="showRemoveCrimeLocation" class="remove-location-button">
-                                    <i class="fas fa-trash-alt"></i> Remove Location
-                                </a>
-                            </app-field>
-                        </div>
-                    </div>
-                    <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCrimeLocation()" *ngIf="showAddCrimeLocation">Add Location</a>
-                </div>
-            </app-field>
-        </section>
-
-        <section>
-            <h3>Crime Details</h3>
-
-            <div *ngIf="formType != ApplicationType.Victim_Application">
-                <app-field label="Is the Victim deceased as a result of the crime?" [valid]="isFieldValid('victimDeceasedFromCrime')" [required]="true" errorMessage="Please make a selection">
-                    <label class="inline-label">
-                        <input type="radio" [value]="CRMBoolean.True" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
-                        <span>Yes</span>
-                    </label>
-                    <label class="inline-label">
-                        <input type="radio" [value]="CRMBoolean.False" name="victimDeceasedFromCrime" formControlName="victimDeceasedFromCrime">
-                        <span>No</span>
-                    </label>
-                </app-field>
-
-                <app-field label="Date of Death" *ngIf="form.get('victimDeceasedFromCrime').value === CRMBoolean.True" [valid]="isMyControlValid(form.get('dateOfDeath'))" errorMessage="Please enter a valid date">
-                    <div class="half-width">
-                        <app-date-field [control]="form.get('dateOfDeath')" [max]="todaysDate"></app-date-field>
-                    </div>
-                </app-field>
-            </div>
-
-
-            <app-field [required]="true" [valid]="isFieldValid('crimeDetails')" label="To the best of your ability, please describe the offence. (Maximum 750 characters)" errorMessage="Please provide details of crime">
-                <textarea class="form-control bigger" formControlName="crimeDetails" maxlength="750"></textarea>
-            </app-field>
-
-            <app-field [required]="true" [valid]="isFieldValid('crimeInjuries')" [label]="crimeInjuriesLabel" errorMessage="Please provide details of injuries">
-                <textarea class="form-control standard" formControlName="crimeInjuries" maxlength="750"></textarea>
-            </app-field>
-
-            <p>If you have any additional information, please upload it below. <strong>File size limit:</strong> one file cannot exceed 2MB and all files uploaded to application cannot exceed 3.5MB</p>
-
-            <app-file-uploader [formGroup]="form" [formType]="formType" [documents]="form.get('documents')"></app-file-uploader>
-        </section>
-    </section>
-
-    <section>
-        <h2 class="blue-header">Police Involvement</h2>
-
-        <app-field label="Was a report made to the police?" [required]="true" [valid]="isFieldValid('wasReportMadeToPolice')" errorMessage="Please make a selection" [showChevrons]="false">
-            <label class="inline-label">
-                <input type="radio" [value]="CRMMultiBoolean.True" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
-                <span>Yes</span>
-            </label>
-            <label class="inline-label">
-                <input type="radio" [value]="CRMMultiBoolean.False" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
-                <span>No</span>
-            </label>
-            <label class="inline-label">
-                <input type="radio" [value]="CRMMultiBoolean.Undecided" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
-                <span>Unknown</span>
-            </label>
-        </app-field>
-
-        <section *ngIf="form.get('wasReportMadeToPolice').value === CRMMultiBoolean.False || form.get('wasReportMadeToPolice').value === CRMMultiBoolean.Undecided">
-            <app-field label="Please identify who you may have disclosed this incident to (e.g. doctor, social worker, counsellor, relative)" [required]="true" [valid]="isFieldValid('noPoliceReportIdentification')" errorMessage="Please enter who you may have disclosed this incident to">
-                <input class="form-control standard" type="text" formControlName="noPoliceReportIdentification">
-            </app-field>
-        </section>
-
-        <section *ngIf="form.get('wasReportMadeToPolice').value === CRMMultiBoolean.True">
-            <table class="table table-striped police-file-table">
-                <thead>
-                    <th scope="col" class="police-file-header">Police Force<span class="error-states">*</span>
-                        <app-tool-tip [trigger]="policeForceInfo"></app-tool-tip>
-                    </th>
-                    <th scope="col" class="police-file-header">Police File Number</th>
-                    <th scope="col" class="police-file-header">Name of Investigating Officer</th>
-                    <th scope="col" class="police-file-header">Unsure of Date Reported <app-tool-tip [trigger]="estimateDateRange"></app-tool-tip>
-                    </th>
-                    <th scope="col" class="police-file-header">Date Crime Reported</th>
-                    <th scope="col" class="police-file-header"></th>
-                    <th></th>
-                </thead>
-                <tbody>
-                    <tr formArrayName="policeReports" *ngFor="let item of form.get('policeReports')['controls']; let i=index">
-                        <ng-container [formGroupName]="i">
-                            <td>
-                                <div [class.with-error]="!isMyControlValid(item.get('policeDetachment'))">
-                                    <select class="form-control standard" formControlName="policeDetachment" (change)="policeForceSelected(i)" [required]="true">
-                                        <option [ngValue]="null">Select</option>
-                                        <option *ngFor="let policeForce of policeForceList" [value]="policeForce">{{policeForce}}</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <input class="form-control mt-2" *ngIf="item.get('policeDetachment').value == 'Other'" type="text" formControlName="policeDetachmentOther">
-                                </div>
-                            </td>
-                            <td>
-                                <input class="form-control" type="text" formControlName="policeFileNumber">
-                            </td>
-                            <td>
-                                <input class="form-control" type="text" formControlName="investigatingOfficer">
-                            </td>
-                            <td>
-                                <input type="checkbox" [value]="true" name="policeReportedMultipleTimes" formControlName="policeReportedMultipleTimes" (click)="clearReportEndDate(i);">
-                            </td>
-                            <td>
-                                <input type="text" [max]="today" (dateChange)="reportStartChange(i, $event)" class="form-control date-picker" formControlName="reportStartDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportStartDatePicker" (focus)="reportStartDatePicker.open()" (click)="reportStartDatePicker.open()" readonly>
-                                <mat-datepicker #reportStartDatePicker></mat-datepicker>
-                            </td>
-                            <td>
-                                <span *ngIf="item.controls.policeReportedMultipleTimes.value === true">
-                                    <input type="text" [max]="today" [min]="policeReportMinDates[i]" class="form-control date-picker" [class.input-error]="!isMyControlValid(item.get('reportEndDate'))" formControlName="reportEndDate" placeholder="yyyy-mm-dd" [matDatepicker]="reportEndDatePicker" (focus)="reportEndDatePicker.open()" (click)="reportEndDatePicker.open()" readonly>
-                                    <mat-datepicker #reportEndDatePicker></mat-datepicker>
-                                </span>
-                            </td>
-                            <td>
-                                <a href="javascript:void(0);" (click)="removePoliceReport(i)" *ngIf="showRemovePoliceReport" class="remove-police-report-link">
-                                    <i class="fas fa-trash-alt"></i>&nbsp;Remove
-                                </a>
-                            </td>
-                        </ng-container>
-                    </tr>
-                </tbody>
-            </table>
-
-            <a href="javascript:void(0);" class="btn btn-secondary" (click)="addPoliceReport()" *ngIf="showAddPoliceReport">Add Police File Number</a>
-        </section>
-
-        <section>
-            <h2 class="blue-header">Accused & Court Information</h2>
-            <h3>Name of the Accused <span>(if known)</span></h3>
-
-            <app-field>
-                <label>
-                    <input type="checkbox" [value]="true" name="moreThanOneOffender" formControlName="moreThanOneOffender" (change)="moreThanOneOffenderChange($event.target.checked)">
-                    Check this box if there is more than one Accused.
-                </label>
-            </app-field>
-
-            <div class="row">
-                <div class="col-4">
-                    <app-field label="First Name">
-                        <input class="form-control" type="text" formControlName="offenderFirstName">
-                    </app-field>
-                </div>
-                <div class="col-4">
-                    <app-field label="Middle Name">
-                        <input class="form-control" type="text" formControlName="offenderMiddleName">
-                    </app-field>
-                </div>
-                <div class="col-4">
-                    <app-field label="Last Name">
-                        <input class="form-control" type="text" formControlName="offenderLastName">
-                    </app-field>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4">
-                    <app-field label="Relationship to the Accused" [tooltipReference]="relationshipToAccusedToolTip">
-                        <select class="form-control" formControlName="offenderRelationship">
-                            <option value="">Select...</option>
-                            <option value="Intimate Partner Relationship">Intimate Partner Relationship</option>
-                            <option value="Other Family Relationship">Other Family Relationship</option>
-                            <option value="Acquaintance">Acquaintance</option>
-                            <option value="Stranger">Stranger</option>
-                            <option value="Other Victim-Accused Relationship">Other Victim-Accused Relationship</option>
-                        </select>
-                    </app-field>
-                </div>
-                <div class="col-8">
-                </div>
-            </div>
-
-            <div formArrayName="additionalOffenders" *ngFor="let item of form.get('additionalOffenders')['controls']; let i = index;">
-                <div [formGroupName]="i" class="additional-offender-info">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <app-field label="First Name">
-                                <input class="form-control" type="text" formControlName="firstName">
-                            </app-field>
-                        </div>
-                        <div class="col-md-4">
-                            <app-field label="Middle Name">
-                                <input class="form-control" type="text" formControlName="middleName">
-                            </app-field>
-                        </div>
-                        <div class="col-md-4">
-                            <app-field label="Last Name">
-                                <input class="form-control" type="text" formControlName="lastName">
-                            </app-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <app-field label="Relationship to the Accused" [tooltipReference]="relationshipToAccusedToolTip">
-                                <select class="form-control" formControlName="relationship">
-                                    <option value="">Select...</option>
-                                    <option value="Intimate Partner Relationship">Intimate Partner Relationship</option>
-                                    <option value="Other Family Relationship">Other Family Relationship</option>
-                                    <option value="Acquaintance">Acquaintance</option>
-                                    <option value="Stranger">Stranger</option>
-                                    <option value="Other Victim-Accused Relationship">Other Victim-Accused Relationship</option>
-                                </select>
-                            </app-field>
-                        </div>
-                        <div class="col">
-                            <div class="remove-button">
-                                <br>
-                                <i class="fas fa-times-circle text-danger center-clear-btn" (click)="removeOffender(i)"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-4" *ngIf="form.get('showAddMoreOffenders').value === true;">
-                <div class="col-md-12">
-                    <a href="javascript:void(0);" class="btn btn-secondary" (click)="addOffender()">Add an Accused</a>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-6">
-                    <app-field label="Has any of the Person(s) Responsible been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.True" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-                            <span>Yes</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.False" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-                            <span>No</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="offenderBeenCharged" formControlName="offenderBeenCharged">
-                            <span>Unknown</span>
-                        </label>
-                    </app-field>
-                </div>
-                <div class="col-6">
-                </div>
-            </div>
-
-            <div *ngIf="form.get('offenderBeenCharged').value === CRMMultiBoolean.True">
-                <h3>Court Information</h3>
-                <div class="court-information">
-                    <div class="court-listing" formArrayName="courtFiles" *ngFor="let item of form.get('courtFiles')['controls']; let i = index;">
-                        <div [formGroupName]="i" class="row court-files">
-                            <div class="col">
-                                <app-field label="Court File Number (if known)" [tooltipReference]="courtFileNumber">
-                                    <input class="form-control" type="text" formControlName="courtFileNumber">
-                                </app-field>
-                            </div>
-                            <div class="col">
-                                <app-field label="Court Location" [required]="true" [valid]="isMyControlValid(item.get('courtLocation'))" errorMessage="Please enter a court location">
-                                    <select class="form-control" formControlName="courtLocation">
-                                        <option value="">Choose a court</option>
-                                        <option *ngFor="let item of courtList" [value]="item">
-                                            {{ item }}
-                                        </option>
-                                    </select>
-                                </app-field>
-                            </div>
-                            <div class="col-2" *ngIf="showRemoveCourtInfo">
-                                <br />
-                                <a href="javascript:void(0);" (click)="removeCourtInfo(i)" *ngIf="showRemoveCourtInfo" required>
-                                    <i class="fas fa-trash-alt"></i> Remove
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <ng-template #courtFileNumber><strong>Court File Number</strong><br />This information is needed by CVAP to access court records about the incident.</ng-template>
-                    <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()" *ngIf="showAddCourtInfo">Add Additional Court Information</a>
-                </div>
-            </div>
-
-            <app-field label="Have you sued any of the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('haveYouSuedOffender')" errorMessage="Please make a selection">
-                <label class="inline-label">
-                    <input type="radio" [value]="CRMBoolean.True" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
-                    <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                    <input type="radio" [value]="CRMBoolean.False" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
-                    <span>No</span>
-                </label>
-            </app-field>
-            <section *ngIf="form.get('haveYouSuedOffender').value === CRMBoolean.False">
-                <app-field label="Do you intend to sue any of the Person(s) Responsible or seek restitution through criminal proceedings?" [required]="true" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
-                    <label class="inline-label">
-                        <input type="radio" [value]="CRMMultiBoolean.True" name="intendToSueOffender" formControlName="intendToSueOffender">
-                        <span>Yes</span>
-                    </label>
-                    <label class="inline-label">
-                        <input type="radio" [value]="CRMMultiBoolean.False" name="intendToSueOffender" formControlName="intendToSueOffender">
-                        <span>No</span>
-                    </label>
-                    <label class="inline-label">
-                        <input type="radio" [value]="CRMMultiBoolean.Undecided" name="intendToSueOffender" formControlName="intendToSueOffender">
-                        <span>Unsure</span>
-                    </label>
-                </app-field>
-            </section>
-
-            <section *ngIf="form.get('haveYouSuedOffender').value === CRMBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided">
-
-                <div formGroupName="racafInformation">
-                    <h2 class="blue-header">Restitution and Civil Action</h2>
-
-                    <p><strong>Please note:</strong></p>
-                    <p>You are not required to take legal action (a civil action or lawsuit) against anyone responsible for injury or loss. However, if you have taken legal action or intend to do so, we need to know this.</p>
-                    <p>Signing this form does not mean that you agree with the decision on the claim, and does not affect your right to request a reconsideration or reassessment of that decision.</p>
-                    <hr />
-
-                    <h3>Restitution</h3>
-                    <p><strong>Restitution</strong> refers to money that an offender is ordered to pay a victim, to help cover the victim’s monetary loss. Restitution is ordered by a judge in a criminal court as part of the offender’s sentence.</p>
+                @if (showRemoveCourtInfo) {
+                  <div class="col-2">
                     <br />
+                    @if (showRemoveCourtInfo) {
+                      <a href="javascript:void(0);" (click)="removeCourtInfo(i)" required>
+                        <i class="fas fa-trash-alt"></i> Remove
+                      </a>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          <ng-template #courtFileNumber><strong>Court File Number</strong><br />This information is needed by CVAP to access court records about the incident.</ng-template>
+          @if (showAddCourtInfo) {
+            <a href="javascript:void(0);" class="btn btn-secondary" (click)="addCourtInfo()">Add Additional Court Information</a>
+          }
+        </div>
+      </div>
+    }
 
-                    <app-field label="Did you apply to the court for money from the offender?" [required]="form.get('haveYouSuedOffender').value === CRMBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.applyToCourtForMoneyFromOffender')" errorMessage="Please make a selection">
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.True" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange()">
-                            <span>Yes</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.False" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange()">
-                            <span>No</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange()">
-                            <span>Not Applicable (No trial/conviction)</span>
-                        </label>
-                    </app-field>
+    <app-field label="Have you sued any of the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('haveYouSuedOffender')" errorMessage="Please make a selection">
+      <label class="inline-label">
+        <input type="radio" [value]="CRMBoolean.True" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
+        <span>Yes</span>
+      </label>
+      <label class="inline-label">
+        <input type="radio" [value]="CRMBoolean.False" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
+        <span>No</span>
+      </label>
+    </app-field>
+    @if (form.get('haveYouSuedOffender').value === CRMBoolean.False) {
+      <section>
+        <app-field label="Do you intend to sue any of the Person(s) Responsible or seek restitution through criminal proceedings?" [required]="true" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
+          <label class="inline-label">
+            <input type="radio" [value]="CRMMultiBoolean.True" name="intendToSueOffender" formControlName="intendToSueOffender">
+            <span>Yes</span>
+          </label>
+          <label class="inline-label">
+            <input type="radio" [value]="CRMMultiBoolean.False" name="intendToSueOffender" formControlName="intendToSueOffender">
+            <span>No</span>
+          </label>
+          <label class="inline-label">
+            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="intendToSueOffender" formControlName="intendToSueOffender">
+            <span>Unsure</span>
+          </label>
+        </app-field>
+      </section>
+    }
 
-                    <ng-container *ngIf="form.get('racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <app-field label="What expenses did you ask to be covered?" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesRequested'))" errorMessage="Please enter the requested expenses">
-                                    <input class="form-control" type="text" formControlName="expensesRequested" />
-                                </app-field>
-                            </div>
-                            <div class="col-md-6">
-                                <app-field label="Amount awarded by the judge" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesAwarded'))" errorMessage="Please enter the expenses awarded">
-                                    <input class="form-control" type="text" prefix="$" mask="separator.2" thousandSeparator="," separatorLimit="10000000" formControlName="expensesAwarded" />
-                                </app-field>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <app-field label="Amount Received" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesReceived'))" errorMessage="Please enter the amount received">
-                                    <input class="form-control" type="text" prefix="$" mask="separator.2" thousandSeparator="," separatorLimit="10000000" formControlName="expensesReceived" />
-                                </app-field>
-                            </div>
-                        </div>
-                    </ng-container>
-
-                    <h3>Civil Action</h3>
-                    <p><strong>Civil action</strong> refers to taking legal action against, or suing, a person or party responsible for the claimant’s injury or loss.</p>
-
-                    <app-field label="Have you taken, or will you be taking, legal action?" [required]="form.get('haveYouSuedOffender').value === CRMMultiBoolean.False || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.willBeTakingLegalAction')" errorMessage="Please make a selection">
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.True" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
-                            <span>Yes</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.False" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
-                            <span>No</span>
-                        </label>
-                        <label class="inline-label">
-                            <input type="radio" [value]="CRMMultiBoolean.Undecided" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
-                            <span>Unsure</span>
-                        </label>
-                    </app-field>
-
-                    <span *ngIf="form.get('racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True">
-                        <app-field label="Do you have a lawyer?">
-                            <label class="inline-label">
-                                <input type="radio" [value]="CRMBoolean.True" name="haveLawyer" formControlName="haveLawyer" (change)="haveLawyerChange(true)">
-                                <span>Yes</span>
-                            </label>
-                            <label class="inline-label">
-                                <input type="radio" [value]="CRMBoolean.False" name="haveLawyer" formControlName="haveLawyer" (change)="haveLawyerChange(false)">
-                                <span>No</span>
-                            </label>
-                        </app-field>
-                    </span>
-
-                    <section *ngIf="form.get('racafInformation.haveLawyer').value === CRMBoolean.True">
-                        <h3>Lawyer Information</h3>
-                        <p>Please provide the name and address of your lawyer or law firm: </p>
-
-                        <app-field label="Lawyer or Law Firm Name">
-                            <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
-                        </app-field>
-
-                        <app-address [group]="form.get('racafInformation.lawyerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
-                    </section>
-                    <section *ngIf="form.get('racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True || form.get('racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True">
-                        <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
-                        <div class="terms" [class.with-error]="!form.get('racafInformation.signName').valid && form.get('racafInformation.signName').touched">
-                            <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following: <span class="error-states ng-star-inserted">*</span></p>
-                            <ol class="list">
-                                <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
-                                <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
-                                <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
-                                <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
-                            </ol>
-                        </div>
-
-                        <app-field label="Signature" [required]="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
-                            <div class="signature-trigger" (click)="showSignPad('racafInformation', 'signature')" *ngIf="!hasSignature('racafInformation.signature')">
-                            </div>
-                            <div *ngIf="hasSignature('racafInformation.signature')" class="signature-preview">
-                                <img src="{{ valueOrEmpty('racafInformation.signature') }}" />
-                                <a class="redo" (click)="showSignPad('racafInformation', 'signature')">Redo Signature</a>
-                            </div>
-                        </app-field>
-                    </section>
-                </div>
+    @if (form.get('haveYouSuedOffender').value === CRMBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided) {
+      <section>
+        <div formGroupName="racafInformation">
+          <h2 class="blue-header">Restitution and Civil Action</h2>
+          <p><strong>Please note:</strong></p>
+          <p>You are not required to take legal action (a civil action or lawsuit) against anyone responsible for injury or loss. However, if you have taken legal action or intend to do so, we need to know this.</p>
+          <p>Signing this form does not mean that you agree with the decision on the claim, and does not affect your right to request a reconsideration or reassessment of that decision.</p>
+          <hr />
+          <h3>Restitution</h3>
+          <p><strong>Restitution</strong> refers to money that an offender is ordered to pay a victim, to help cover the victim’s monetary loss. Restitution is ordered by a judge in a criminal court as part of the offender’s sentence.</p>
+          <br />
+          <app-field label="Did you apply to the court for money from the offender?" [required]="form.get('haveYouSuedOffender').value === CRMBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.applyToCourtForMoneyFromOffender')" errorMessage="Please make a selection">
+            <label class="inline-label">
+              <input type="radio" [value]="CRMMultiBoolean.True" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange()">
+              <span>Yes</span>
+            </label>
+            <label class="inline-label">
+              <input type="radio" [value]="CRMMultiBoolean.False" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange()">
+              <span>No</span>
+            </label>
+            <label class="inline-label">
+              <input type="radio" [value]="CRMMultiBoolean.Undecided" name="applyToCourtForMoneyFromOffender" formControlName="applyToCourtForMoneyFromOffender" (change)="applyToCourtForMoneyFromOffenderChange()">
+              <span>Not Applicable (No trial/conviction)</span>
+            </label>
+          </app-field>
+          @if (form.get('racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True) {
+            <div class="row">
+              <div class="col-md-6">
+                <app-field label="What expenses did you ask to be covered?" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesRequested'))" errorMessage="Please enter the requested expenses">
+                  <input class="form-control" type="text" formControlName="expensesRequested" />
+                </app-field>
+              </div>
+              <div class="col-md-6">
+                <app-field label="Amount awarded by the judge" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesAwarded'))" errorMessage="Please enter the expenses awarded">
+                  <input class="form-control" type="text" prefix="$" mask="separator.2" thousandSeparator="," separatorLimit="10000000" formControlName="expensesAwarded" />
+                </app-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <app-field label="Amount Received" [required]="true" [valid]="isMyControlValid(form.get('racafInformation.expensesReceived'))" errorMessage="Please enter the amount received">
+                  <input class="form-control" type="text" prefix="$" mask="separator.2" thousandSeparator="," separatorLimit="10000000" formControlName="expensesReceived" />
+                </app-field>
+              </div>
+            </div>
+          }
+          <h3>Civil Action</h3>
+          <p><strong>Civil action</strong> refers to taking legal action against, or suing, a person or party responsible for the claimant’s injury or loss.</p>
+          <app-field label="Have you taken, or will you be taking, legal action?" [required]="form.get('haveYouSuedOffender').value === CRMMultiBoolean.False || form.get('intendToSueOffender').value === CRMMultiBoolean.True || form.get('intendToSueOffender').value === CRMMultiBoolean.Undecided" [valid]="isFieldValid('racafInformation.willBeTakingLegalAction')" errorMessage="Please make a selection">
+            <label class="inline-label">
+              <input type="radio" [value]="CRMMultiBoolean.True" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+              <span>Yes</span>
+            </label>
+            <label class="inline-label">
+              <input type="radio" [value]="CRMMultiBoolean.False" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+              <span>No</span>
+            </label>
+            <label class="inline-label">
+              <input type="radio" [value]="CRMMultiBoolean.Undecided" name="willBeTakingLegalAction" formControlName="willBeTakingLegalAction">
+              <span>Unsure</span>
+            </label>
+          </app-field>
+          @if (form.get('racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True) {
+            <span>
+              <app-field label="Do you have a lawyer?">
+                <label class="inline-label">
+                  <input type="radio" [value]="CRMBoolean.True" name="haveLawyer" formControlName="haveLawyer" (change)="haveLawyerChange(true)">
+                  <span>Yes</span>
+                </label>
+                <label class="inline-label">
+                  <input type="radio" [value]="CRMBoolean.False" name="haveLawyer" formControlName="haveLawyer" (change)="haveLawyerChange(false)">
+                  <span>No</span>
+                </label>
+              </app-field>
+            </span>
+          }
+          @if (form.get('racafInformation.haveLawyer').value === CRMBoolean.True) {
+            <section>
+              <h3>Lawyer Information</h3>
+              <p>Please provide the name and address of your lawyer or law firm: </p>
+              <app-field label="Lawyer or Law Firm Name">
+                <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
+              </app-field>
+              <app-address [group]="form.get('racafInformation.lawyerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
             </section>
-        </section>
-    </section>
+          }
+          @if (form.get('racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True || form.get('racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True) {
+            <section>
+              <p>Declaration of Understanding: Please read the information below, print your name where indicated, and sign and date the bottom of the form.</p>
+              <div class="terms" [class.with-error]="!form.get('racafInformation.signName').valid && form.get('racafInformation.signName').touched">
+                <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, understand the following: <span class="error-states ng-star-inserted">*</span></p>
+                <ol class="list">
+                  <li>If I start legal action (a civil action) against the person or party responsible for injury or loss, I must notify the Crime Victim Assistance Program (CVAP) within 10 days from the date that notice is served on that person or party.</li>
+                  <li>Before entering into an agreement to receive money from a civil action, I must contact CVAP.</li>
+                  <li>If I am awarded money from either a civil action or a restitution order, I must notify CVAP. I may be required to repay CVAP all or part of the amount that CVAP paid in benefits on claim.</li>
+                  <li>If I choose not to take legal action, CVAP may take legal action on behalf. CVAP will consult with me before starting legal action on behalf.</li>
+                </ol>
+              </div>
+              <app-field label="Signature" [required]="form.get('racafInformation.willBeTakingLegalAction').value===100000000 || form.get('racafInformation.applyToCourtForMoneyFromOffender').value===100000000" [valid]="isFieldValid('racafInformation.signature')" errorMessage="Please provide your digital signature">
+                @if (!hasSignature('racafInformation.signature')) {
+                  <div class="signature-trigger" (click)="showSignPad('racafInformation', 'signature')">
+                  </div>
+                }
+                @if (hasSignature('racafInformation.signature')) {
+                  <div class="signature-preview">
+                    <img [src]="valueOrEmpty('racafInformation.signature')" alt="Digital signature" />
+                    <a class="redo" (click)="showSignPad('racafInformation', 'signature')">Redo Signature</a>
+                  </div>
+                }
+              </app-field>
+            </section>
+          }
+        </div>
+      </section>
+    }
+  </section>
+</section>
 </div>
 
 <!-- Tool tips -->
@@ -509,58 +559,58 @@
 <ng-template #policeForceInfo>If police force not found or out of province, please select the "other" option at the bottom of the list.</ng-template>
 
 <ng-template #relationshipToAccusedToolTip>
-        <table class="table relationship-table">
-            <thead>
-                <tr>
-                    <th>Classification</th>
-                    <th class="description-column">Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        Intimate Partner Relationship
-                    </td>
-                    <td>
-                        Refers to current and former spouses (legally married, separated, divorced and common-law), and dating partners.
-                    </td>
-                </tr>
+  <table class="table relationship-table">
+    <thead>
+      <tr>
+        <th>Classification</th>
+        <th class="description-column">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          Intimate Partner Relationship
+        </td>
+        <td>
+          Refers to current and former spouses (legally married, separated, divorced and common-law), and dating partners.
+        </td>
+      </tr>
 
-                <tr>
-                    <td>
-                        Other Family Relationship
-                    </td>
-                    <td>
-                        Refers to parents (biological, step, adoptive and foster), children (biological, step, adopted and foster), siblings (biological, step, half, adopted and foster) and extended family members (e.g., grandparents, uncles, aunts, cousins and in-laws).
-                    </td>
-                </tr>
+      <tr>
+        <td>
+          Other Family Relationship
+        </td>
+        <td>
+          Refers to parents (biological, step, adoptive and foster), children (biological, step, adopted and foster), siblings (biological, step, half, adopted and foster) and extended family members (e.g., grandparents, uncles, aunts, cousins and in-laws).
+        </td>
+      </tr>
 
-                <tr>
-                    <td>
-                        Acquaintance
-                    </td>
-                    <td>
-                        Refers to friends, neighbours, authority figures, business relationships, casual acquaintances.
-                    </td>
-                </tr>
+      <tr>
+        <td>
+          Acquaintance
+        </td>
+        <td>
+          Refers to friends, neighbours, authority figures, business relationships, casual acquaintances.
+        </td>
+      </tr>
 
-                <tr>
-                    <td>
-                        Stranger
-                    </td>
-                    <td>
-                        Refers to individuals who do not know one another.
-                    </td>
-                </tr>
+      <tr>
+        <td>
+          Stranger
+        </td>
+        <td>
+          Refers to individuals who do not know one another.
+        </td>
+      </tr>
 
-                <tr>
-                    <td>
-                        Other Victim-Accused Relationship
-                    </td>
-                    <td>
-                        Refers to relationships that are other than the above categories, or is unknown.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+      <tr>
+        <td>
+          Other Victim-Accused Relationship
+        </td>
+        <td>
+          Refers to relationships that are other than the above categories, or is unknown.
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </ng-template>

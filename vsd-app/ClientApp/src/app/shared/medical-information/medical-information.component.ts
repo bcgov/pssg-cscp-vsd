@@ -1,47 +1,48 @@
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { FormBase } from '../form-base';
-import { MatDialog, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
-  FormArray,
-  FormGroup,
-  Validators,
-  FormBuilder,
+  AbstractControl,
   ControlContainer,
-  FormControl,
-  AbstractControl
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators
 } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType, CRMBoolean } from '../enums-list';
-import { COUNTRIES_ADDRESS } from '../address/country-list';
-import { HOSPITALS } from '../hospital-list';
-import { POSTAL_CODE } from '../regex.constants';
-import { AddressHelper } from '../address/address.helper';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { config } from '../../../config';
+import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { AddressHelper } from '../address/address.helper';
+import { ApplicationType, CRMBoolean, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
+import { HOSPITALS } from '../hospital-list';
+import { POSTAL_CODE } from '../regex.constants';
 
 @Component({
-  selector: 'app-medical-information',
-  templateUrl: './medical-information.component.html',
-  styleUrls: ['./medical-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-medical-information',
+    templateUrl: './medical-information.component.html',
+    styleUrls: ['./medical-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class MedicalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   CRMBoolean = CRMBoolean;
 
-  familyDoctorClinicItem: FormControl;
+  familyDoctorClinicItem: UntypedFormControl;
 
-  otherTreatmentItems: FormArray;
+  otherTreatmentItems: UntypedFormArray;
   showAddProvider: boolean = true;
   showRemoveProvider: boolean = false;
 
@@ -62,12 +63,16 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
   wereYouTreatedAtHospitalSubscription: Subscription;
   treatedOutsideBcSubscription: Subscription;
 
-  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog, private fb: FormBuilder) {
+  constructor(
+    private controlContainer: ControlContainer,
+    private matDialog: MatDialog,
+    private fb: UntypedFormBuilder
+  ) {
     super();
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);
@@ -154,7 +159,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
 
   addProvider(): void {
     // add a medical treatment provider to the list
-    this.otherTreatmentItems = this.form.get('otherTreatments') as FormArray;
+    this.otherTreatmentItems = this.form.get('otherTreatments') as UntypedFormArray;
     let thisTreatment = this.createTreatmentItem();
     this.otherTreatmentItems.push(thisTreatment);
     this.showAddProvider = this.otherTreatmentItems.length < 5;
@@ -162,7 +167,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
   }
   clearProviders(): void {
     // remove all providers
-    this.otherTreatmentItems = this.form.get('otherTreatments') as FormArray;
+    this.otherTreatmentItems = this.form.get('otherTreatments') as UntypedFormArray;
     while (this.otherTreatmentItems.length > 0) {
       this.otherTreatmentItems.removeAt(this.otherTreatmentItems.length - 1);
     }
@@ -170,13 +175,13 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
 
   removeProvider(index: number): void {
     // when the user clicks to remove the medical provider this removes the provider at the index clicked
-    this.otherTreatmentItems = this.form.get('otherTreatments') as FormArray;
+    this.otherTreatmentItems = this.form.get('otherTreatments') as UntypedFormArray;
     this.otherTreatmentItems.removeAt(index);
     this.showAddProvider = this.otherTreatmentItems.length < 5;
     this.showRemoveProvider = this.otherTreatmentItems.length > 1;
   }
 
-  createTreatmentItem(): FormGroup {
+  createTreatmentItem(): UntypedFormGroup {
     let group = {
       providerCompany: [''],
       providerEmail: ['', [Validators.email]],
@@ -205,13 +210,13 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
   }
 
   addDoctor(): void {
-    this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as FormControl;
+    this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as UntypedFormControl;
     this.familyDoctorClinicItem.setValidators([Validators.required]);
     this.familyDoctorClinicItem.updateValueAndValidity();
   }
 
   clearDoctor(): void {
-    this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as FormControl;
+    this.familyDoctorClinicItem = this.form.get('familyDoctorClinic') as UntypedFormControl;
     this.familyDoctorClinicItem.clearValidators();
     this.familyDoctorClinicItem.updateValueAndValidity();
 

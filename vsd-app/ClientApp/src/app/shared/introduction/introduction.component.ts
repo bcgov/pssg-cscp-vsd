@@ -1,27 +1,29 @@
-import { FormBase } from '../form-base';
-import { OnInit, Component, Input } from '@angular/core';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDialog } from '@angular/material';
-import { FormGroup, ControlContainer } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { ControlContainer, UntypedFormGroup } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType } from '../enums-list';
-import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import { LookupService } from '../../services/lookup.service';
+import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
+import { ApplicationType, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
 
 @Component({
-  selector: 'app-introduction',
-  templateUrl: './introduction.component.html',
-  styleUrls: ['./introduction.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-introduction',
+    templateUrl: './introduction.component.html',
+    styleUrls: ['./introduction.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class IntroductionComponent extends FormBase implements OnInit {
   @Input() formType: number;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   applicant: string = '';
 
@@ -41,7 +43,7 @@ export class IntroductionComponent extends FormBase implements OnInit {
     var ua = window.navigator.userAgent;
     this.isIE = /MSIE|Trident/.test(ua);
 
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);

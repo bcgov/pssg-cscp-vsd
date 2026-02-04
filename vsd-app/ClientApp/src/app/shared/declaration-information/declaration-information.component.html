@@ -1,29 +1,33 @@
 <div [formGroup]="form">
-    <div class="page-header">
-        <h1>Declaration</h1>
-    </div>
-    <h2 class="blue-header">Information Collection Notice</h2>
-    <p>The Crime Victim Assistance Program collects personal information for the purpose of providing victim services and determining eligibility for benefits in accordance with sections 26(a) and (c) of the <i>Freedom of Information and Protection of Privacy Act</i> (FoIPPA), and the <i>Crime Victim Assistance Act</i>. Personal information may also be collected as per section 26(e) of FoIPPA in order to evaluate the program to better serve applicants.</p>
-    <p>Should you have any questions about the collection, use, or disclosure of personal information, please contact the Crime Victim Assistance Program at <a [href]="'mailto: ' + cvapEmail">{{cvapEmail}}</a> or by phone at (604) 660-3888 and toll free at 1-800-660-3888 or at PO Box 5550, Stn Terminal, Vancouver, BC, V6B1H1.</p>
-    <section>
-        <h2 class="blue-header">Declaration & Signature</h2>
-        <p>By signing this section you declare that the information you have provided on this application is true and correct.</p>
-        <p>It is an offence to provide false or misleading information on this application and may lead to prosecution. If it is discovered at a later time that false or misleading information has been provided on this application form, you may be required to repay to CVAP any benefits received.</p>
-        <app-field [required]="true" [valid]="isFieldValid('declaredAndSigned')" errorMessage="Please check this box to indicate that you accept Declaration">
-            <label>
-                <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
-                I submit this application in support of a claim for benefits available to {{eligible_name}} under the <em>Crime Victim Assistance Act</em>, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
-            </label>
-        </app-field>
+  <div class="page-header">
+    <h1>Declaration</h1>
+  </div>
+  <h2 class="blue-header">Information Collection Notice</h2>
+  <p>The Crime Victim Assistance Program collects personal information for the purpose of providing victim services and determining eligibility for benefits in accordance with sections 26(a) and (c) of the <i>Freedom of Information and Protection of Privacy Act</i> (FoIPPA), and the <i>Crime Victim Assistance Act</i>. Personal information may also be collected as per section 26(e) of FoIPPA in order to evaluate the program to better serve applicants.</p>
+  <p>Should you have any questions about the collection, use, or disclosure of personal information, please contact the Crime Victim Assistance Program at <a [href]="'mailto: ' + cvapEmail">{{cvapEmail}}</a> or by phone at (604) 660-3888 and toll free at 1-800-660-3888 or at PO Box 5550, Stn Terminal, Vancouver, BC, V6B1H1.</p>
+  <section>
+    <h2 class="blue-header">Declaration & Signature</h2>
+    <p>By signing this section you declare that the information you have provided on this application is true and correct.</p>
+    <p>It is an offence to provide false or misleading information on this application and may lead to prosecution. If it is discovered at a later time that false or misleading information has been provided on this application form, you may be required to repay to CVAP any benefits received.</p>
+    <app-field [required]="true" [valid]="isFieldValid('declaredAndSigned')" errorMessage="Please check this box to indicate that you accept Declaration">
+      <label>
+        <input type="checkbox" [value]="true" name="declaredAndSigned" formControlName="declaredAndSigned">
+        I submit this application in support of a claim for benefits available to {{eligible_name}} under the <em>Crime Victim Assistance Act</em>, and declare the information provided in this application for benefits is true and correct. <span class="error-states">*</span>
+      </label>
+    </app-field>
 
-        <app-field label="Signature" [required]="true" [valid]="isFieldValid('signature')" errorMessage="Please provide your digital signature">
-            <div class="signature-trigger" (click)="showSignPad('signature')" *ngIf="!hasSignature('signature')">
-                <p>Click this box to sign</p>
-            </div>
-            <div *ngIf="hasSignature('signature')" class="signature-preview">
-                <img src="{{ valueOrEmpty('signature') }}" />
-                <a class="redo" (click)="showSignPad('signature')">Redo Signature</a>
-            </div>
-        </app-field>
-    </section>
+    <app-field label="Signature" [required]="true" [valid]="isFieldValid('signature')" errorMessage="Please provide your digital signature">
+      @if (!hasSignature('signature')) {
+        <div class="signature-trigger" (click)="showSignPad('signature')">
+          <p>Click this box to sign</p>
+        </div>
+      }
+      @if (hasSignature('signature')) {
+        <div class="signature-preview">
+          <img [src]="valueOrEmpty('signature')" alt="Digital signature" />
+          <a class="redo" (click)="showSignPad('signature')">Redo Signature</a>
+        </div>
+      }
+    </app-field>
+  </section>
 </div>

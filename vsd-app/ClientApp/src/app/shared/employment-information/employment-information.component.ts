@@ -1,33 +1,41 @@
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { FormBase } from '../form-base';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepickerInputEvent } from '@angular/material';
-import { FormArray, FormGroup, Validators, FormBuilder, ControlContainer, AbstractControl } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  ControlContainer,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators
+} from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType, CRMBoolean } from '../enums-list';
-import * as moment from 'moment';
-import { POSTAL_CODE } from '../regex.constants';
-import { COUNTRIES_ADDRESS_2 } from '../address/country-list';
-import { EmploymentInfoHelper } from './employment-information.helper';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import moment from 'moment';
 import { Subscription } from 'rxjs';
-import { AddressHelper } from '../address/address.helper';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { AddressHelper } from '../address/address.helper';
+import { COUNTRIES_ADDRESS_2 } from '../address/country-list';
+import { CRMBoolean, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
+import { POSTAL_CODE } from '../regex.constants';
+import { EmploymentInfoHelper } from './employment-information.helper';
 
 @Component({
-  selector: 'app-employment-information',
-  templateUrl: './employment-information.component.html',
-  styleUrls: ['./employment-information.component.scss'],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+    selector: 'app-employment-information',
+    templateUrl: './employment-information.component.html',
+    styleUrls: ['./employment-information.component.scss'],
+    providers: [
+        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+        // application's root module. We provide it at the component level here, due to limitations of
+        // our example generation script.
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    ],
+    standalone: false
 })
 export class EmploymentInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   @Input() lookupData: iLookupData;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   postalRegex = POSTAL_CODE;
 
@@ -37,7 +45,7 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
   minEndDate: Date;
   CRMBoolean = CRMBoolean;
 
-  employers: FormArray;
+  employers: UntypedFormArray;
 
   employmentInfoHelper = new EmploymentInfoHelper();
   addressHelper = new AddressHelper();
@@ -51,12 +59,12 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
   selfEmployedSubscription: Subscription;
   sinSubscription: Subscription;
 
-  constructor(private controlContainer: ControlContainer, private fb: FormBuilder) {
+  constructor(private controlContainer: ControlContainer, private fb: UntypedFormBuilder) {
     super();
   }
 
   ngOnInit() {
-    this.form = <FormGroup>this.controlContainer.control;
+    this.form = <UntypedFormGroup>this.controlContainer.control;
 
     //wrapping this in a timeout fixes "Expression Changed after it was checked" errors... not ideal, but whatever
     setTimeout(() => {
@@ -188,10 +196,10 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     });
 
     this.selfEmployedSubscription = this.form.get('areYouSelfEmployed').valueChanges.subscribe((value) => {
-      let currentEmployers = this.form.get('employers') as FormArray;
+      let currentEmployers = this.form.get('employers') as UntypedFormArray;
 
       for (let i = 0; i < currentEmployers.length; ++i) {
-        let thisEmployer = currentEmployers.controls[i] as FormGroup;
+        let thisEmployer = currentEmployers.controls[i] as UntypedFormGroup;
         let control = thisEmployer.get('contactable');
 
         if (value === CRMBoolean.True) {
@@ -206,8 +214,8 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
   }
 
   contactableChange(val: boolean, index: number) {
-    let currentEmployers = this.form.get('employers') as FormArray;
-    let thisEmployer = currentEmployers.controls[index] as FormGroup;
+    let currentEmployers = this.form.get('employers') as UntypedFormArray;
+    let thisEmployer = currentEmployers.controls[index] as UntypedFormGroup;
 
     if (thisEmployer) {
       let nameControl = thisEmployer.get('employerName');
@@ -242,21 +250,21 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
     return this.countryList[country][properyName];
   }
   showEmployers() {
-    this.employers = this.form.get('employers') as FormArray;
+    this.employers = this.form.get('employers') as UntypedFormArray;
     if (this.employers.length == 0) {
       this.employers.push(this.employmentInfoHelper.createEmployerInfo(this.fb));
     }
   }
   addEmployer() {
-    this.employers = this.form.get('employers') as FormArray;
+    this.employers = this.form.get('employers') as UntypedFormArray;
     this.employers.push(this.employmentInfoHelper.createEmployerInfo(this.fb));
   }
   removeEmployer(i: number) {
-    this.employers = this.form.get('employers') as FormArray;
+    this.employers = this.form.get('employers') as UntypedFormArray;
     this.employers.removeAt(i);
   }
   removeAllEmployers() {
-    this.employers = this.form.get('employers') as FormArray;
+    this.employers = this.form.get('employers') as UntypedFormArray;
     while (this.employers.length !== 0) {
       this.employers.removeAt(0);
     }
