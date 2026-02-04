@@ -1,6 +1,6 @@
 import { Component, isDevMode, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { environment } from '../environments/environment';
 import { Configuration } from './interfaces/configuration.interface';
 import { ConfigService } from './services/config.service';

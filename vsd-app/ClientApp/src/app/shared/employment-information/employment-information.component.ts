@@ -1,17 +1,23 @@
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { FormBase } from '../form-base';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { UntypedFormArray, UntypedFormGroup, Validators, UntypedFormBuilder, ControlContainer, AbstractControl } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  ControlContainer,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators
+} from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType, CRMBoolean } from '../enums-list';
-import * as moment from 'moment';
-import { POSTAL_CODE } from '../regex.constants';
-import { COUNTRIES_ADDRESS_2 } from '../address/country-list';
-import { EmploymentInfoHelper } from './employment-information.helper';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import moment from 'moment';
 import { Subscription } from 'rxjs';
-import { AddressHelper } from '../address/address.helper';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { AddressHelper } from '../address/address.helper';
+import { COUNTRIES_ADDRESS_2 } from '../address/country-list';
+import { CRMBoolean, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
+import { POSTAL_CODE } from '../regex.constants';
+import { EmploymentInfoHelper } from './employment-information.helper';
 
 @Component({
   selector: 'app-employment-information',

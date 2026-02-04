@@ -8,8 +8,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import * as _moment from 'moment';
-import { defaultFormat as _rollupMoment } from 'moment';
 import { config } from '../../config';
 import {
   Application,
@@ -43,8 +41,6 @@ import { PersonalInfoHelper } from '../shared/personal-information/personal-info
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
-
-const moment = _rollupMoment || _moment;
 
 @Component({
   selector: 'app-ifm-application',

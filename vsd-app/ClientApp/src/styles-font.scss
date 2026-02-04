@@ -8,12 +8,12 @@
 @include mat.core();
 
 // Define the palettes
-$primary: mat.define-palette(mat.$gray-palette, 400);
-$accent: mat.define-palette(mat.$indigo-palette, 500, A200, A400);
-$warn: mat.define-palette(mat.$red-palette, 500);
+$primary: mat.m2-define-palette(mat.$m2-gray-palette, 400);
+$accent: mat.m2-define-palette(mat.$m2-indigo-palette, 500, A200, A400);
+$warn: mat.m2-define-palette(mat.$m2-red-palette, 500);
 
 // Create the theme object with proper structure
-$theme: mat.define-light-theme(
+$theme: mat.m2-define-light-theme(
   (
     color: (
       primary: $primary,

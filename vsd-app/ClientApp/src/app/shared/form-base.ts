@@ -1,8 +1,14 @@
-import { EnumHelper } from './enums-list';
+import {
+  AbstractControl,
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
+  ValidationErrors,
+  ValidatorFn
+} from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ValidatorFn, ValidationErrors, AbstractControl, UntypedFormControl, UntypedFormGroup, UntypedFormArray } from '@angular/forms';
-import * as _ from 'lodash';
-import * as _moment from 'moment';
+import moment from 'moment';
+import { EnumHelper } from './enums-list';
 
 export class FormBase {
   form: UntypedFormGroup;
@@ -388,7 +394,7 @@ export class FormBase {
       var control = this.valueOrEmpty(values[i]);
 
       if (control !== '--') {
-        let formattedDate = _moment(control).format('MMM Do, Y');
+        let formattedDate = moment(control).format('MMM Do, Y');
         output.push(formattedDate);
       }
     }
@@ -703,7 +709,10 @@ export class FormBase {
     control.updateValueAndValidity(options);
   }
 
-  clearControlValidators(control: AbstractControl | UntypedFormControl, options = { onlySelf: false, emitEvent: true }) {
+  clearControlValidators(
+    control: AbstractControl | UntypedFormControl,
+    options = { onlySelf: false, emitEvent: true }
+  ) {
     control.setErrors(null, options);
     control.clearValidators();
     control.updateValueAndValidity(options);

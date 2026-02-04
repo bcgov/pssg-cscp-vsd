@@ -1,6 +1,6 @@
 import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
 import { CdkTableModule } from '@angular/cdk/table';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -40,7 +40,6 @@ import { AlertModule } from 'ngx-bootstrap/alert';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { CookieService } from 'ngx-cookie-service';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { AppRoutingModule } from './app-routing.module';
@@ -129,6 +128,50 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     VictimInformationComponent,
     WitnessApplicationComponent
   ],
+  exports: [
+    AppRoutingModule,
+    AngularSignaturePadModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    CdkTableModule,
+    NgxFileDropModule,
+    FormsModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
+    MatSliderModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatStepperModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+    TooltipModule
+  ],
+  bootstrap: [AppComponent],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -136,7 +179,6 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     CdkTableModule,
     NgxFileDropModule,
     FormsModule,
-    HttpClientModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -176,60 +218,15 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     TooltipModule,
     TypeaheadModule.forRoot()
   ],
-  exports: [
-    AppRoutingModule,
-    AngularSignaturePadModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    CdkTableModule,
-    NgxFileDropModule,
-    FormsModule,
-    HttpClientModule,
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSlideToggleModule,
-    MatSliderModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatStepperModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    ReactiveFormsModule,
-    TooltipModule
-  ],
   providers: [
     AEMService,
-    CookieService,
     JusticeApplicationDataService,
     LookupService,
     StateService,
     HeaderTitleService,
     Title,
-    provideEnvironmentNgxMask()
-  ],
-  bootstrap: [AppComponent]
+    provideEnvironmentNgxMask(),
+    provideHttpClient(withInterceptorsFromDi())
+  ]
 })
 export class AppModule {}
