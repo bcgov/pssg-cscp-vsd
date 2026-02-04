@@ -1,7 +1,9 @@
 <div class="form-wrapper" style="position: relative;" [class.dark-overlay]="submitting">
-  <div class="loading-indicator" *ngIf="submitting">
-    <mat-spinner mode="indeterminate"></mat-spinner>
-  </div>
+  @if (submitting) {
+    <div class="loading-indicator">
+      <mat-spinner mode="indeterminate"></mat-spinner>
+    </div>
+  }
   <div class="row" [formGroup]="form">
     <div class="col-lg-3 col-sm-12 application-gutter" [class.hidden]="showPrintView">
       <h3>Immediate Family Member Application</h3>
@@ -48,61 +50,93 @@
     <div class="col-lg-7 col-sm-12">
       <form [formGroup]="form">
 
-        <div *ngIf="isIE" class="alert alert-danger warning-message">
-          <p>It looks like you are using an unsupported browser.</p>
-          <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
-        </div>
+        @if (isIE) {
+          <div class="alert alert-danger warning-message">
+            <p>It looks like you are using an unsupported browser.</p>
+            <p>For best results, we recommend you use Chrome, Firefox, Edge, or Safari.</p>
+          </div>
+        }
 
-        <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction" *ngIf="this.currentFormStep == 0 || showPrintView"></app-introduction>
-
-        <div class="pagebreak"> </div>
-        <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 1 || showPrintView"></app-personal-information>
-
-        <div class="pagebreak"> </div>
-        <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 2 || showPrintView"></app-victim-information>
+        @if (this.currentFormStep == 0 || showPrintView) {
+          <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction"></app-introduction>
+        }
 
         <div class="pagebreak"> </div>
-        <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 3 || showPrintView"></app-crime-information>
+        @if (this.currentFormStep == 1 || showPrintView) {
+          <app-personal-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="personalInformation" [lookupData]="lookupData"></app-personal-information>
+        }
 
         <div class="pagebreak"> </div>
-        <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 4 || showPrintView"></app-medical-information>
+        @if (this.currentFormStep == 2 || showPrintView) {
+          <app-victim-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="victimInformation" [lookupData]="lookupData"></app-victim-information>
+        }
 
         <div class="pagebreak"> </div>
-        <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 5 || showPrintView"></app-expense-information>
+        @if (this.currentFormStep == 3 || showPrintView) {
+          <app-crime-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="crimeInformation" [lookupData]="lookupData"></app-crime-information>
+        }
 
         <div class="pagebreak"> </div>
-        <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 6 || showPrintView"></app-representative-information>
+        @if (this.currentFormStep == 4 || showPrintView) {
+          <app-medical-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="medicalInformation" [lookupData]="lookupData"></app-medical-information>
+        }
 
         <div class="pagebreak"> </div>
-        <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 7 || showPrintView"></app-declaration-information>
+        @if (this.currentFormStep == 5 || showPrintView) {
+          <app-expense-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="expenseInformation" [lookupData]="lookupData"></app-expense-information>
+        }
 
         <div class="pagebreak"> </div>
-        <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" [lookupData]="lookupData" *ngIf="this.currentFormStep == 8 || showPrintView"></app-authorization-information>
+        @if (this.currentFormStep == 6 || showPrintView) {
+          <app-representative-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="representativeInformation" [lookupData]="lookupData"></app-representative-information>
+        }
 
         <div class="pagebreak"> </div>
-        <app-application-review [formGroup]="form" [formType]="FORM_TYPE" [parentStepper]="stepper" *ngIf="this.currentFormStep == 9 || showPrintView"></app-application-review>
+        @if (this.currentFormStep == 7 || showPrintView) {
+          <app-declaration-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="declarationInformation" [lookupData]="lookupData"></app-declaration-information>
+        }
 
-        <div *ngIf="showValidationMessage" class="error-summary">
-          <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
-          <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
-        </div>
+        <div class="pagebreak"> </div>
+        @if (this.currentFormStep == 8 || showPrintView) {
+          <app-authorization-information [formGroup]="form" [formType]="FORM_TYPE" formGroupName="authorizationInformation" [lookupData]="lookupData"></app-authorization-information>
+        }
 
-        <section class="button-container" *ngIf="!showPrintView">
-          <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
-          <span class="right-buttons">
-            <!-- [class.disabled]="!didLoad" -->
-            <button (click)="gotoNextStep(stepper);" class="btn btn-primary" *ngIf="stepper.selectedIndex < 9">CONTINUE <i class="fas fa-chevron-right"></i></button>
-            <div class="left-buttons download-grid" [class.disabled-wrapper]="submitting" *ngIf="stepper.selectedIndex == 9">
-              <button (click)="printApplication();" class="btn btn-primary print-button" [class.is-disabled]="submitting">PRINT PDF</button>
-              <button (click)="downloadPDF();" class="btn btn-primary print-button" [class.is-disabled]="submitting">DOWNLOAD PDF</button>
-            </div>
-            <div class="submit-grid" [class.disabled-wrapper]="submitting" *ngIf="stepper.selectedIndex == 9">
-              <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary btn-submit" [class.is-disabled]="submitting">SUBMIT IFM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
-              <div><button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary btn-submit" [class.is-disabled]="submitting">SUBMIT AND START NEW VICTIM APPLICATION <i class="fas fa-chevron-right"></i></button> <app-tool-tip [trigger]="VictimToolTip"></app-tool-tip></div>
-              <div><button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary btn-submit" [class.is-disabled]="submitting">SUBMIT AND START NEW IFM APPLICATION <i class="fas fa-chevron-right"></i></button> <app-tool-tip [trigger]="IFMToolTip"></app-tool-tip></div>
-            </div>
-          </span>
-        </section>
+        <div class="pagebreak"> </div>
+        @if (this.currentFormStep == 9 || showPrintView) {
+          <app-application-review [formGroup]="form" [formType]="FORM_TYPE" [parentStepper]="stepper"></app-application-review>
+        }
+
+        @if (showValidationMessage) {
+          <div class="error-summary">
+            <i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i>
+            <span>There are errors with some fields on this page. Please scroll up to review and fix the errors (marked in red) before continuing.</span>
+          </div>
+        }
+
+        @if (!showPrintView) {
+          <section class="button-container">
+            <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
+            <span class="right-buttons">
+              <!-- [class.disabled]="!didLoad" -->
+              @if (stepper.selectedIndex < 9) {
+                <button (click)="gotoNextStep(stepper);" class="btn btn-primary">CONTINUE <i class="fas fa-chevron-right"></i></button>
+              }
+              @if (stepper.selectedIndex == 9) {
+                <div class="left-buttons download-grid" [class.disabled-wrapper]="submitting">
+                  <button (click)="printApplication();" class="btn btn-primary print-button" [class.is-disabled]="submitting">PRINT PDF</button>
+                  <button (click)="downloadPDF();" class="btn btn-primary print-button" [class.is-disabled]="submitting">DOWNLOAD PDF</button>
+                </div>
+              }
+              @if (stepper.selectedIndex == 9) {
+                <div class="submit-grid" [class.disabled-wrapper]="submitting">
+                  <button (click)="markAsTouched(); submitApplication();" class="btn btn-primary btn-submit" [class.is-disabled]="submitting">SUBMIT IFM APPLICATION AND EXIT <i class="fas fa-chevron-right"></i></button>
+                  <div><button (click)="markAsTouched(); submitApplicationAndClone('VICTIM');" class="btn btn-primary btn-submit" [class.is-disabled]="submitting">SUBMIT AND START NEW VICTIM APPLICATION <i class="fas fa-chevron-right"></i></button> <app-tool-tip [trigger]="VictimToolTip"></app-tool-tip></div>
+                  <div><button (click)="markAsTouched(); submitApplicationAndClone('IFM');" class="btn btn-primary btn-submit" [class.is-disabled]="submitting">SUBMIT AND START NEW IFM APPLICATION <i class="fas fa-chevron-right"></i></button> <app-tool-tip [trigger]="IFMToolTip"></app-tool-tip></div>
+                </div>
+              }
+            </span>
+          </section>
+        }
       </form>
     </div>
   </div>

@@ -1,61 +1,64 @@
 <div [formGroup]="form">
-    <div class="page-header">
-        <h1>{{header}} Information & Addresses</h1>
-    </div>
-    <h2 class="blue-header">{{header}} Information</h2>
-    <h3>Applicant Name</h3>
+  <div class="page-header">
+    <h1>{{header}} Information & Addresses</h1>
+  </div>
+  <h2 class="blue-header">{{header}} Information</h2>
+  <h3>Applicant Name</h3>
 
-    <div class="row">
+  <div class="row">
+    <div class="col-md-4">
+      <app-field label="First Name" [required]="true" [valid]="isFieldValid('firstName')" errorMessage="Please enter your first name">
+        <input class="form-control" type="text" formControlName="firstName" maxlength="100">
+      </app-field>
+    </div>
+    <div class="col-md-4">
+      <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('middleName')" errorMessage="Please enter your middle name">
+        <input class="form-control" type="text" formControlName="middleName" maxlength="100">
+      </app-field>
+    </div>
+    <div class="col-md-4">
+      <app-field label="Last Name" [required]="true" [valid]="isFieldValid('lastName')" errorMessage="Please enter your last name">
+        <input class="form-control" type="text" formControlName="lastName" maxlength="100">
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <label class="inline-label">
+        <input type="checkbox" style="margin-right: 10px;" formControlName="iHaveOtherNames" [value]="true" (change)="iHaveOtherNamesChange($event.target.checked)">
+        <span>I also go by other names (e.g. nickname, maiden name, alias)</span>
+      </label>
+    </div>
+  </div>
+
+  @if (form.get('iHaveOtherNames').value === true) {
+    <div>
+      <div class="row">
         <div class="col-md-4">
-            <app-field label="First Name" [required]="true" [valid]="isFieldValid('firstName')" errorMessage="Please enter your first name">
-                <input class="form-control" type="text" formControlName="firstName" maxlength="100">
-            </app-field>
+          <app-field label="Other First Name" [required]="false" [valid]="isMyControlValid(form.get('otherFirstName'))" errorMessage="Please enter your other first name">
+            <input class="form-control" type="text" formControlName="otherFirstName" maxlength="100">
+          </app-field>
         </div>
         <div class="col-md-4">
-            <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('middleName')" errorMessage="Please enter your middle name">
-                <input class="form-control" type="text" formControlName="middleName" maxlength="100">
-            </app-field>
+          <app-field label="Other Last Name" [required]="false" [valid]="isMyControlValid(form.get('otherLastName'))" errorMessage="Please enter your other last name">
+            <input class="form-control" type="text" formControlName="otherLastName" maxlength="100">
+          </app-field>
         </div>
         <div class="col-md-4">
-            <app-field label="Last Name" [required]="true" [valid]="isFieldValid('lastName')" errorMessage="Please enter your last name">
-                <input class="form-control" type="text" formControlName="lastName" maxlength="100">
-            </app-field>
+          <app-field label="Date of Name Change" [required]="false" [valid]="isMyControlValid(form.get('dateOfNameChange'))" errorMessage="Please enter the date of name change">
+            <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" [max]="todaysDate" [min]="oldestHuman" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
+            <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
+          </app-field>
         </div>
+      </div>
     </div>
+  }
 
-    <div class="row">
-        <div class="col-12">
-            <label class="inline-label">
-                <input type="checkbox" style="margin-right: 10px;" formControlName="iHaveOtherNames" [value]="true" (change)="iHaveOtherNamesChange($event.target.checked)">
-                <span>I also go by other names (e.g. nickname, maiden name, alias)</span>
-            </label>
-        </div>
-    </div>
+  <h3>Other Details</h3>
 
-    <div *ngIf="form.get('iHaveOtherNames').value === true">
-        <div class="row">
-            <div class="col-md-4">
-                <app-field label="Other First Name" [required]="false" [valid]="isMyControlValid(form.get('otherFirstName'))" errorMessage="Please enter your other first name">
-                    <input class="form-control" type="text" formControlName="otherFirstName" maxlength="100">
-                </app-field>
-            </div>
-            <div class="col-md-4">
-                <app-field label="Other Last Name" [required]="false" [valid]="isMyControlValid(form.get('otherLastName'))" errorMessage="Please enter your other last name">
-                    <input class="form-control" type="text" formControlName="otherLastName" maxlength="100">
-                </app-field>
-            </div>
-            <div class="col-md-4">
-                <app-field label="Date of Name Change" [required]="false" [valid]="isMyControlValid(form.get('dateOfNameChange'))" errorMessage="Please enter the date of name change">
-                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" [max]="todaysDate" [min]="oldestHuman" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
-                    <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
-                </app-field>
-            </div>
-        </div>
-    </div>
-
-    <h3>Other Details</h3>
-
-    <div *ngIf="formType === ApplicationType.IFM_Application">
+  @if (formType === ApplicationType.IFM_Application) {
+    <div>
       <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictim')" errorMessage="Please select a relationship">
         <label class="inline-label">
           <input type="radio" [value]="'Spouse'" name="relationshipToVictim" formControlName="relationshipToVictim">
@@ -85,242 +88,255 @@
           <input type="radio" [value]="'Other'" name="relationshipToVictim" formControlName="relationshipToVictim">
           <span>Other</span>
         </label>
-        <label class="inline-label" *ngIf="form.get('relationshipToVictim').value === 'Other'">
-          <span>Please specify</span>
-          <input type="text" name="relationshipToVictimOther" formControlName="relationshipToVictimOther">
+        @if (form.get('relationshipToVictim').value === 'Other') {
+          <label class="inline-label">
+            <span>Please specify</span>
+            <input type="text" name="relationshipToVictimOther" formControlName="relationshipToVictimOther">
+          </label>
+        }
+      </app-field>
+    </div>
+  }
+
+  @if (formType === ApplicationType.Witness_Application) {
+    <div>
+      <div class="row">
+        <div class="col-md-6">
+          <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictimOther')" errorMessage="Please specify">
+            <input class="form-control" type="text" formControlName="relationshipToVictimOther">
+          </app-field>
+        </div>
+      </div>
+    </div>
+  }
+
+  <app-field label="Gender" [required]="false" [valid]="isFieldValid('gender')" errorMessage="Please select your gender" featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="false">
+    <label class="inline-label">
+      <input type="radio" [value]="100000000" name="gender" formControlName="gender">
+      <span>M <app-tool-tip [trigger]="genderMToolTip"></app-tool-tip></span>
+    </label>
+    <label class="inline-label">
+      <input type="radio" [value]="100000001" name="gender" formControlName="gender">
+      <span>F <app-tool-tip [trigger]="genderFToolTip"></app-tool-tip></span>
+    </label>
+    <label class="inline-label">
+      <input type="radio" [value]="100000002" name="gender" formControlName="gender">
+      <span>X <app-tool-tip [trigger]="genderXToolTip"></app-tool-tip></span>
+    </label>
+  </app-field>
+  <ng-template #genderMToolTip>Persons whose current gender is male. This includes cisgender and transgender persons who are male.</ng-template>
+  <ng-template #genderFToolTip>Persons whose current gender is female. This includes cisgender and transgender persons who are female.</ng-template>
+  <ng-template #genderXToolTip>Persons whose current gender is not exclusively male or female. It includes people who are unsure of their gender, do not have one gender, have no gender, are gender fluid, or are Two-Spirit.</ng-template>
+
+  <app-gender-selector
+    [form]="form"
+    genderFormControlName="gender"
+    otherGenderFormControlName="otherGender"
+    featureEnabled="useUpdatedComplianceFields"
+  [featureEnabledIf]="true"></app-gender-selector>
+
+  <app-pronoun-selector
+    [form]="form"
+    pronounFormControlName="pronouns"
+    otherPronounFormControlName="otherPronouns"
+    featureEnabled="useUpdatedComplianceFields"
+  [featureEnabledIf]="true"></app-pronoun-selector>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Birthdate" [required]="true" [valid]="isMyControlValid(form.get('birthDate'))" errorMessage="Please enter your birth date">
+        <app-date-field [control]="form.get('birthDate')" [max]="todaysDate"></app-date-field>
+      </app-field>
+    </div>
+    @if (formType === ApplicationType.Victim_Application) {
+      <div class="col-md-6">
+        <app-field label="Marital Status" [required]="true" [valid]="isFieldValid('maritalStatus')" errorMessage="Please select your marital status">
+          <select class="form-control" formControlName="maritalStatus">
+            <option value="0">Select...</option>
+            <option value="100000000">Married</option>
+            <option value="100000001">Common Law</option>
+            <option value="100000002">Widowed</option>
+            <option value="100000003">Divorced</option>
+            <option value="100000004">Separated</option>
+            <option value="100000005">Single</option>
+            <option value="100000006">Prefer not to answer</option>
+          </select>
+        </app-field>
+      </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Occupation" [required]="false" [valid]="isFieldValid('occupation')" errorMessage="Please enter your occupation">
+        <input class="form-control" type="text" formControlName="occupation" maxlength="100">
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter a valid SIN">
+        <input class="form-control" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
+        <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />text to be provided by CVAP</ng-template>
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row" featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="false">
+    <div class="col-md-6">
+      <app-field label="Do you identify as an Indigenous person?" [required]="true" [valid]="isMyControlValid(form.get('indigenousStatus'))" errorMessage="Please select an option">
+        <select class="form-control" formControlName="indigenousStatus">
+          <option value="0">Select...</option>
+          <option value="100000000">First Nations</option>
+          <option value="100000001">Métis</option>
+          <option value="100000002">Inuit</option>
+          <option value="100000003">Prefer Not to Answer</option>
+          <option value="100000004">Not Applicable</option>
+        </select>
+      </app-field>
+    </div>
+  </div>
+
+  <app-race-selector
+    [form]="form"
+    raceEthnicityFormControlName="raceEthnicity"
+    otherRaceEthnicityFormControlName="otherRaceEthnicity"
+    indigenousStatusFormControlName="indigenousStatus"
+    featureEnabled="useUpdatedComplianceFields"
+  [featureEnabledIf]="true" ></app-race-selector>
+
+  <div class="attention">
+    <p>Please note that your answers to questions about demographic information (e.g., gender, Indigenous identity) allow the Community Safety and Victim Services branch to better understand who accesses our programs so we may continue to improve service delivery. Your response is voluntary and the information you provide does not impact your ability to access these services.</p>
+  </div>
+
+  <h2 class="blue-header">Contact Information</h2>
+
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2' || leaveVoicemail.value === '100000000' || leaveVoicemail.value === '100000001'" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number" [tooltipReference]="primaryPhoneToolTip">
+        @if (form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America') {
+          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" (input)="setVoicemailValidators()">
+        } @else {
+          <input class="form-control" type="text" formControlName="phoneNumber" digitOnly (input)="setVoicemailValidators()">
+        }
+        <ng-template #primaryPhoneToolTip>If you are applying with a phone number that is from outside of Canada, complete the Mailing Address section below before entering your phone number.</ng-template>
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="Alternate Phone Number (inc. area code)" [required]="leaveVoicemail.value === '100000000' || leaveVoicemail.value === '100000002'" [valid]="isFieldValid('alternatePhoneNumber')" errorMessage="Please enter your phone number">
+        @if (form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America') {
+          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber" (input)="setVoicemailValidators()">
+        } @else {
+          <input class="form-control" type="text" formControlName="alternatePhoneNumber" digitOnly (input)="setVoicemailValidators()">
+        }
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <app-field label="I authorize CVAP to leave a voicemail on this phone #" [required]="isVoiceMailRequired" [valid]="isMyControlValid(form.get('leaveVoicemail'))" errorMessage="Please select an option">
+        <select class="form-control" formControlName="leaveVoicemail">
+          <option value="0">Select...</option>
+          <option value="100000000">Primary and Alternate</option>
+          <option value="100000001">Primary only</option>
+          <option value="100000002">Alternate only</option>
+          <option value="100000003">No Voicemail</option>
+        </select>
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
+        <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
+      </app-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm your email address">
+        <input class="form-control" type="text" (blur)="trimEmail(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-field [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('agreeToCvapCommunicationExchange')" errorMessage="Please check agreement">
+        <label class="inline-label inline-checkbox-label">
+          <input type="checkbox" style="margin-right: 10px;" formControlName="agreeToCvapCommunicationExchange" [value]="true" (change)="canEmailChange($event.target.checked)">
+          <span>I agree that the Crime Victim Assistance Program can communicate with me about my application and exchange documents via my email address.@if (preferredMethodOfContact.value === '1') {
+            <span class="error-states">*</span>
+          }</span>
         </label>
       </app-field>
     </div>
+  </div>
 
-    <div *ngIf="formType === ApplicationType.Witness_Application">
-        <div class="row">
-            <div class="col-md-6">
-                <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictimOther')" errorMessage="Please specify">
-                    <input class="form-control" type="text" formControlName="relationshipToVictimOther">
-                </app-field>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-12">
+      <h3>Primary Mailing Address <app-tool-tip [trigger]="primaryAddressTemplate"></app-tool-tip>
+    </h3>
+    <ng-template #primaryAddressTemplate>Once your claim is processed you will receive a written decision, please provide a mailing address for written correspondences. If your mailing address changes please contact CVAP to update.</ng-template>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <label class="inline-label inline-checkbox-label">
+      <input type="checkbox" style="margin-right: 10px;" formControlName="doNotLiveAtAddress" [value]="true" (change)="doNotLiveAtAddressChange($event.target.checked)">
+      <span class="mr-0">I do not live at the following address.</span>
+    </label>
+  </div>
+  @if (form.get('doNotLiveAtAddress').value === true) {
+    <div class="col-md-6">
+      <app-field label="Please indicate the recipient." [required]="false" [valid]="isFieldValid('mailRecipient')" errorMessage="Please enter a valid recipient">
+        <input class="form-control" type="text" formControlName="mailRecipient" maxlength="100">
+      </app-field>
     </div>
+  }
+</div>
 
-    <app-field label="Gender" [required]="false" [valid]="isFieldValid('gender')" errorMessage="Please select your gender" featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="false">
-        <label class="inline-label">
-            <input type="radio" [value]="100000000" name="gender" formControlName="gender">
-            <span>M <app-tool-tip [trigger]="genderMToolTip"></app-tool-tip></span>
-        </label>
-        <label class="inline-label">
-            <input type="radio" [value]="100000001" name="gender" formControlName="gender">
-            <span>F <app-tool-tip [trigger]="genderFToolTip"></app-tool-tip></span>
-        </label>
-        <label class="inline-label">
-            <input type="radio" [value]="100000002" name="gender" formControlName="gender">
-            <span>X <app-tool-tip [trigger]="genderXToolTip"></app-tool-tip></span>
-        </label>
+<div class="attention">
+  <p>When entering an address, throughout this application, if the Country, Province/State or City is not in the dropdown list, use the "Other" option and enter this information in the Mailing Address Line 2.</p>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true"></app-address>
+  </div>
+</div>
+
+<div class="row mt-3 mb-3">
+  <div class="col-md-6">
+    <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('preferredMethodOfContact')" errorMessage="Please select your preferred method of contact" [tooltipReference]="preferredMethodOfContactTemplate" class="no-app-field-botton-margin app-field-bold">
+      <select class="form-control" formControlName="preferredMethodOfContact">
+        <option value="0">Select...</option>
+        <option value="2">Phone Call</option>
+        <option value="1">Email</option>
+        <option value="4">Mail</option>
+      </select>
     </app-field>
-    <ng-template #genderMToolTip>Persons whose current gender is male. This includes cisgender and transgender persons who are male.</ng-template>
-    <ng-template #genderFToolTip>Persons whose current gender is female. This includes cisgender and transgender persons who are female.</ng-template>
-    <ng-template #genderXToolTip>Persons whose current gender is not exclusively male or female. It includes people who are unsure of their gender, do not have one gender, have no gender, are gender fluid, or are Two-Spirit.</ng-template>
+    <ng-template #preferredMethodOfContactTemplate>Should the program have any questions, what is your preferred method of contact?</ng-template>
+  </div>
+</div>
 
-    <app-gender-selector
-      [form]="form"
-      genderFormControlName="gender"
-      otherGenderFormControlName="otherGender"
-      featureEnabled="useUpdatedComplianceFields"
-      [featureEnabledIf]="true"></app-gender-selector>
+<div class="row">
+  <div class="col-12">
+    <label class="inline-label">
+      <input type="checkbox" style="margin-right: 10px;" formControlName="permissionToContactViaMethod" [value]="true">
+      <span>I give permission to be contacted via this method. </span>
+    </label>
+  </div>
+</div>
 
-    <app-pronoun-selector
-      [form]="form"
-      pronounFormControlName="pronouns"
-      otherPronounFormControlName="otherPronouns"
-      featureEnabled="useUpdatedComplianceFields"
-      [featureEnabledIf]="true"></app-pronoun-selector>
-
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Birthdate" [required]="true" [valid]="isMyControlValid(form.get('birthDate'))" errorMessage="Please enter your birth date">
-                <app-date-field [control]="form.get('birthDate')" [max]="todaysDate"></app-date-field>
-            </app-field>
-        </div>
-        <div class="col-md-6" *ngIf="formType === ApplicationType.Victim_Application">
-            <app-field label="Marital Status" [required]="true" [valid]="isFieldValid('maritalStatus')" errorMessage="Please select your marital status">
-                <select class="form-control" formControlName="maritalStatus">
-                    <option value="0">Select...</option>
-                    <option value="100000000">Married</option>
-                    <option value="100000001">Common Law</option>
-                    <option value="100000002">Widowed</option>
-                    <option value="100000003">Divorced</option>
-                    <option value="100000004">Separated</option>
-                    <option value="100000005">Single</option>
-                    <option value="100000006">Prefer not to answer</option>
-                </select>
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Occupation" [required]="false" [valid]="isFieldValid('occupation')" errorMessage="Please enter your occupation">
-                <input class="form-control" type="text" formControlName="occupation" maxlength="100">
-            </app-field>
-        </div>
-        <div class="col-md-6">
-            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter a valid SIN">
-                <input class="form-control" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
-                <ng-template #sinTemplate><strong>Social Insurance Number (SIN)</strong><br />text to be provided by CVAP</ng-template>
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row" featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="false">
-        <div class="col-md-6">
-            <app-field label="Do you identify as an Indigenous person?" [required]="true" [valid]="isMyControlValid(form.get('indigenousStatus'))" errorMessage="Please select an option">
-                <select class="form-control" formControlName="indigenousStatus">
-                    <option value="0">Select...</option>
-                    <option value="100000000">First Nations</option>
-                    <option value="100000001">Métis</option>
-                    <option value="100000002">Inuit</option>
-                    <option value="100000003">Prefer Not to Answer</option>
-                    <option value="100000004">Not Applicable</option>
-                </select>
-            </app-field>
-        </div>
-    </div>
-
-      <app-race-selector
-      [form]="form"
-      raceEthnicityFormControlName="raceEthnicity"
-      otherRaceEthnicityFormControlName="otherRaceEthnicity"
-      indigenousStatusFormControlName="indigenousStatus"
-      featureEnabled="useUpdatedComplianceFields"
-      [featureEnabledIf]="true" ></app-race-selector>
-
-    <div class="attention">
-        <p>Please note that your answers to questions about demographic information (e.g., gender, Indigenous identity) allow the Community Safety and Victim Services branch to better understand who accesses our programs so we may continue to improve service delivery. Your response is voluntary and the information you provide does not impact your ability to access these services.</p>
-    </div>
-
-    <h2 class="blue-header">Contact Information</h2>
-
-
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2' || leaveVoicemail.value === '100000000' || leaveVoicemail.value === '100000001'" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number" [tooltipReference]="primaryPhoneToolTip">
-                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else phone_no_mask" (input)="setVoicemailValidators()">
-                <ng-template #phone_no_mask>
-                    <input class="form-control" type="text" formControlName="phoneNumber" digitOnly (input)="setVoicemailValidators()">
-                </ng-template>
-                <ng-template #primaryPhoneToolTip>If you are applying with a phone number that is from outside of Canada, complete the Mailing Address section below before entering your phone number.</ng-template>
-            </app-field>
-        </div>
-        <div class="col-md-6">
-            <app-field label="Alternate Phone Number (inc. area code)" [required]="leaveVoicemail.value === '100000000' || leaveVoicemail.value === '100000002'" [valid]="isFieldValid('alternatePhoneNumber')" errorMessage="Please enter your phone number">
-                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else alt_phone_no_mask" (input)="setVoicemailValidators()">
-                <ng-template #alt_phone_no_mask>
-                    <input class="form-control" type="text" formControlName="alternatePhoneNumber" digitOnly (input)="setVoicemailValidators()">
-                </ng-template>
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-6">
-            <app-field label="I authorize CVAP to leave a voicemail on this phone #" [required]="isVoiceMailRequired" [valid]="isMyControlValid(form.get('leaveVoicemail'))" errorMessage="Please select an option">
-                <select class="form-control" formControlName="leaveVoicemail">
-                    <option value="0">Select...</option>
-                    <option value="100000000">Primary and Alternate</option>
-                    <option value="100000001">Primary only</option>
-                    <option value="100000002">Alternate only</option>
-                    <option value="100000003">No Voicemail</option>
-                </select>
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
-                <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
-            </app-field>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm your email address">
-                <input class="form-control" type="text" (blur)="trimEmail(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <app-field [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('agreeToCvapCommunicationExchange')" errorMessage="Please check agreement">
-                <label class="inline-label inline-checkbox-label">
-                    <input type="checkbox" style="margin-right: 10px;" formControlName="agreeToCvapCommunicationExchange" [value]="true" (change)="canEmailChange($event.target.checked)">
-                    <span>I agree that the Crime Victim Assistance Program can communicate with me about my application and exchange documents via my email address.<span *ngIf="preferredMethodOfContact.value === '1'" class="error-states">*</span></span>
-                </label>
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <h3>Primary Mailing Address <app-tool-tip [trigger]="primaryAddressTemplate"></app-tool-tip>
-            </h3>
-            <ng-template #primaryAddressTemplate>Once your claim is processed you will receive a written decision, please provide a mailing address for written correspondences. If your mailing address changes please contact CVAP to update.</ng-template>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <label class="inline-label inline-checkbox-label">
-                <input type="checkbox" style="margin-right: 10px;" formControlName="doNotLiveAtAddress" [value]="true" (change)="doNotLiveAtAddressChange($event.target.checked)">
-                <span class="mr-0">I do not live at the following address.</span>
-            </label>
-        </div>
-        <div class="col-md-6" *ngIf="form.get('doNotLiveAtAddress').value === true">
-            <app-field label="Please indicate the recipient." [required]="false" [valid]="isFieldValid('mailRecipient')" errorMessage="Please enter a valid recipient">
-                <input class="form-control" type="text" formControlName="mailRecipient" maxlength="100">
-            </app-field>
-        </div>
-    </div>
-
-    <div class="attention">
-        <p>When entering an address, throughout this application, if the Country, Province/State or City is not in the dropdown list, use the "Other" option and enter this information in the Mailing Address Line 2.</p>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true"></app-address>
-        </div>
-    </div>
-
-    <div class="row mt-3 mb-3">
-        <div class="col-md-6">
-            <app-field label="Preferred Method of Contact" [required]="true" [valid]="isFieldValid('preferredMethodOfContact')" errorMessage="Please select your preferred method of contact" [tooltipReference]="preferredMethodOfContactTemplate" class="no-app-field-botton-margin app-field-bold">
-                <select class="form-control" formControlName="preferredMethodOfContact">
-                    <option value="0">Select...</option>
-                    <option value="2">Phone Call</option>
-                    <option value="1">Email</option>
-                    <option value="4">Mail</option>
-                </select>
-            </app-field>
-            <ng-template #preferredMethodOfContactTemplate>Should the program have any questions, what is your preferred method of contact?</ng-template>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <label class="inline-label">
-                <input type="checkbox" style="margin-right: 10px;" formControlName="permissionToContactViaMethod" [value]="true">
-                <span>I give permission to be contacted via this method. </span>
-            </label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <h3>
-                Alternate Mailing Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip> (Optional)
-            </h3>
-            <ng-template #altAddressTemplate>Please provide an alternate address that we may forward correspondences to when mail is returned from the primary address. e.g. an address of an immediate family member or trusted person.</ng-template>
-            <app-address [group]="form.get('alternateAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
-        </div>
-    </div>
+<div class="row">
+  <div class="col-12">
+    <h3>
+      Alternate Mailing Address <app-tool-tip [trigger]="altAddressTemplate"></app-tool-tip> (Optional)
+    </h3>
+    <ng-template #altAddressTemplate>Please provide an alternate address that we may forward correspondences to when mail is returned from the primary address. e.g. an address of an immediate family member or trusted person.</ng-template>
+    <app-address [group]="form.get('alternateAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="alternateAddressIsRequired"></app-address>
+  </div>
+</div>
 </div>

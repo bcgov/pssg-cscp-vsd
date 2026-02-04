@@ -1,43 +1,53 @@
 <mat-dialog-content class="dialog-content">
   <div class="summary-of-benefits">
     <a (click)="closeMe()" class="float-right close-link">Close Window</a>
-    <div *ngIf="formType == ApplicationType.Victim_Application">
-      <h1>Summary of Benefits Available to Victims</h1>
-      <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
-    </div>
-    <div *ngIf="formType == ApplicationType.IFM_Application">
-      <h1>Summary of Benefits Available to Immediate Family Members</h1>
-      <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
-    </div>
-    <div *ngIf="formType == ApplicationType.Witness_Application">
-      <h1>Summary of Benefits Available to Witnesses</h1>
-      <p>The Crime Victim Assistance Program (CVAP) helps victims, immediate family members of victims, and witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries. <strong>This summary focuses on benefits available to witnesses.</strong></p>
-      <p>In this context, “witness” means a person who is psychologically harmed from witnessing a life-threatening or fatal crime against someone with whom they have a strong emotional attachment.</p>
-    </div>
+    @if (formType == ApplicationType.Victim_Application) {
+      <div>
+        <h1>Summary of Benefits Available to Victims</h1>
+        <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
+      </div>
+    }
+    @if (formType == ApplicationType.IFM_Application) {
+      <div>
+        <h1>Summary of Benefits Available to Immediate Family Members</h1>
+        <p>The Crime Victim Assistance Program helps Victims, Immediate Family Members of victims, and Witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries.</p>
+      </div>
+    }
+    @if (formType == ApplicationType.Witness_Application) {
+      <div>
+        <h1>Summary of Benefits Available to Witnesses</h1>
+        <p>The Crime Victim Assistance Program (CVAP) helps victims, immediate family members of victims, and witnesses affected by violent crime. Benefits provided by CVAP offset financial loss and assist in recovery from injuries. <strong>This summary focuses on benefits available to witnesses.</strong></p>
+        <p>In this context, “witness” means a person who is psychologically harmed from witnessing a life-threatening or fatal crime against someone with whom they have a strong emotional attachment.</p>
+      </div>
+    }
     <div class="benefits-container">
-      <section *ngFor="let item of benefitList;">
-        <div class="row">
-          <div class="col-12 benefit-title">
-            <h4>{{ item.title }}</h4>
+      @for (item of benefitList; track item) {
+        <section>
+          <div class="row">
+            <div class="col-12 benefit-title">
+              <h4>{{ item.title }}</h4>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-6 benefit-target">
-            <p>
-              <strong>For:</strong><br />
-              {{ item.target }}
-            </p>
+          <div class="row">
+            <div class="col-6 benefit-target">
+              <p>
+                <strong>For:</strong><br />
+                {{ item.target }}
+              </p>
+            </div>
+            <div class="col-6 benefit-examples">
+              <p><strong>Examples:</strong></p>
+              <ul class="list">
+                @for (example of item.examples; track example) {
+                  <li>
+                    {{ example }}
+                  </li>
+                }
+              </ul>
+            </div>
           </div>
-          <div class="col-6 benefit-examples">
-            <p><strong>Examples:</strong></p>
-            <ul class="list">
-              <li *ngFor="let example of item.examples;">
-                {{ example }}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
+        </section>
+      }
     </div>
   </div>
 </mat-dialog-content>

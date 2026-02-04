@@ -2,7 +2,9 @@
   <div class="day-container">
     <select class="form-control day-drop-down" (change)="output()" [(ngModel)]="day" [class.is-disabled]="disabled">
       <option [value]="0">Day</option>
-      <option *ngFor="let item of dayList" [value]="item">{{item}}</option>
+      @for (item of dayList; track item) {
+        <option [value]="item">{{item}}</option>
+      }
     </select>
   </div>
   <div class="month-container">
@@ -25,7 +27,9 @@
   <div class="year-container">
     <select class="form-control year-drop-down" (change)="output()" [(ngModel)]="year" [class.is-disabled]="disabled">
       <option [value]="0">Year</option>
-      <option *ngFor="let item of yearList" [value]="item">{{item}}</option>
+      @for (item of yearList; track item) {
+        <option [value]="item">{{item}}</option>
+      }
     </select>
   </div>
 </div>

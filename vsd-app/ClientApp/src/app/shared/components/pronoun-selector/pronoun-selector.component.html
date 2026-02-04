@@ -6,29 +6,32 @@
       [required]="false"
       errorMessage="Please select your pronouns"
       [disabled]="isDisabled">
-      <span *ngFor="let pronoun of pronounList">
-        <label class="inline-label">
-          <input
-            type="radio"
-            [value]="pronoun.val"
-            [name]="pronounFormControlName"
-            [formControlName]="pronounFormControlName" />
-          <span>{{ pronoun.name }}</span>
-        </label>
-      </span>
-    </app-field>
+      @for (pronoun of pronounList; track pronoun) {
+        <span>
+          <label class="inline-label">
+            <input
+              type="radio"
+              [value]="pronoun.val"
+              [name]="pronounFormControlName"
+              [formControlName]="pronounFormControlName" />
+              <span>{{ pronoun.name }}</span>
+            </label>
+          </span>
+        }
+      </app-field>
+    </div>
+    <div class="row">
+      @if (showOtherPronoun) {
+        <app-field
+          class="col-md-12"
+          label="Other Pronouns"
+          [required]="false"
+          errorMessage="Please enter your pronouns"
+          [disabled]="isDisabled">
+          <label class="inline-label">
+            <input type="text" [name]="otherPronounFormControlName" [formControlName]="otherPronounFormControlName" />
+          </label>
+        </app-field>
+      }
+    </div>
   </div>
-  <div class="row">
-    <app-field
-      class="col-md-12"
-      *ngIf="showOtherPronoun"
-      label="Other Pronouns"
-      [required]="false"
-      errorMessage="Please enter your pronouns"
-      [disabled]="isDisabled">
-      <label class="inline-label">
-        <input type="text" [name]="otherPronounFormControlName" [formControlName]="otherPronounFormControlName" />
-      </label>
-    </app-field>
-  </div>
-</div>

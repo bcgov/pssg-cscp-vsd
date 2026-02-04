@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, DOCUMENT } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { DOCUMENT } from '@angular/common';
+
 
 @Component({
     selector: 'app-quick-exit',

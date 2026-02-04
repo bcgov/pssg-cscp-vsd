@@ -3,7 +3,7 @@ import {
   NgSignaturePadOptions,
   SignaturePadComponent
 } from '@almothafar/angular-signature-pad';
-import { CommonModule } from '@angular/common';
+
 import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA, OnInit, ViewChild } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
@@ -11,7 +11,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
     selector: 'app-sign-dialog',
     templateUrl: './sign-dialog.component.html',
     styleUrls: ['./sign-dialog.component.scss'],
-    imports: [CommonModule, AngularSignaturePadModule, MatDialogModule],
+    imports: [AngularSignaturePadModule, MatDialogModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class SignPadDialog implements OnInit {

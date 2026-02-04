@@ -1,194 +1,200 @@
 <div [formGroup]="form">
-    <div class="page-header">
-        <h1>Victim Information</h1>
+  <div class="page-header">
+    <h1>Victim Information</h1>
+  </div>
+  <h2 class="blue-header">Victim Information, if known</h2>
+
+  <h3>Victim Name</h3>
+
+  <div class="row">
+    <div class="col-4">
+      <app-field label="First Name" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('firstName')">
+        <input class="form-control" type="text" formControlName="firstName" maxlength="100">
+      </app-field>
     </div>
-    <h2 class="blue-header">Victim Information, if known</h2>
+    <div class="col-4">
+      <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('middleName')">
+        <input class="form-control" type="text" formControlName="middleName" maxlength="100" onformchange="">
+      </app-field>
+    </div>
+    <div class="col-4">
+      <app-field label="Last Name" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('lastName')">
+        <input class="form-control" type="text" formControlName="lastName" maxlength="100">
+      </app-field>
+    </div>
+  </div>
 
-    <h3>Victim Name</h3>
+  <div class="row">
+    <div class="col-12">
+      <label class="inline-label">
+        <input type="checkbox" style="margin-right: 10px;" formControlName="iHaveOtherNames" [value]="true" (change)="iHaveOtherNamesChange($event.target.checked)">
+        <span>They also go by other names (e.g. nickname, maiden name, alias)</span>
+      </label>
+    </div>
+  </div>
 
+  @if (form.get('iHaveOtherNames').value === true) {
+    <div>
+      <div class="row">
+        <div class="col-md-4">
+          <app-field label="Other First Name" [required]="false" [valid]="isMyControlValid(form.get('otherFirstName'))" errorMessage="Please enter your other first name">
+            <input class="form-control" type="text" formControlName="otherFirstName" maxlength="100">
+          </app-field>
+        </div>
+        <div class="col-md-4">
+          <app-field label="Other Last Name" [required]="false" [valid]="isMyControlValid(form.get('otherLastName'))" errorMessage="Please enter your other last name">
+            <input class="form-control" type="text" formControlName="otherLastName" maxlength="100">
+          </app-field>
+        </div>
+        <div class="col-md-4">
+          <app-field label="Date of Name Change" [required]="false" [valid]="isMyControlValid(form.get('dateOfNameChange'))" errorMessage="Please enter the date of name change">
+            <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" [max]="todaysDate" [min]="oldestHuman" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
+            <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
+          </app-field>
+        </div>
+      </div>
+    </div>
+  }
+
+  <h3>Other Details</h3>
+
+  <app-field label="Gender" [required]="false" [valid]="isFieldValid('gender')" errorMessage="Please select your gender" featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="false">
+    <label class="inline-label">
+      <input type="radio" [value]="100000000" name="gender" formControlName="gender">
+      <span>M <app-tool-tip [trigger]="genderMToolTip"></app-tool-tip></span>
+    </label>
+    <label class="inline-label">
+      <input type="radio" [value]="100000001" name="gender" formControlName="gender">
+      <span>F <app-tool-tip [trigger]="genderFToolTip"></app-tool-tip></span>
+    </label>
+    <label class="inline-label">
+      <input type="radio" [value]="100000002" name="gender" formControlName="gender">
+      <span>X <app-tool-tip [trigger]="genderXToolTip"></app-tool-tip></span>
+    </label>
+  </app-field>
+  <ng-template #genderMToolTip>Persons whose current gender is male. This includes cisgender and transgender persons who are male.</ng-template>
+  <ng-template #genderFToolTip>Persons whose current gender is female. This includes cisgender and transgender persons who are female.</ng-template>
+  <ng-template #genderXToolTip>Persons whose current gender is not exclusively male or female. It includes people who are unsure of their gender, do not have one gender, have no gender, are gender fluid, or are Two-Spirit.</ng-template>
+
+  <app-gender-selector
+    [form]="form"
+    genderFormControlName="gender"
+    otherGenderFormControlName="otherGender"
+    featureEnabled="useUpdatedComplianceFields"
+  [featureEnabledIf]="true"></app-gender-selector>
+
+  <app-pronoun-selector
+    [form]="form"
+    pronounFormControlName="pronouns"
+    otherPronounFormControlName="otherPronouns"
+    featureEnabled="useUpdatedComplianceFields"
+  [featureEnabledIf]="true"></app-pronoun-selector>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Birthdate" [required]="formType === ApplicationType.IFM_Application" [valid]="isMyControlValid(form.get('birthDate'))" errorMessage="Please enter your birth date">
+        <app-date-field [control]="form.get('birthDate')" [max]="todaysDate"></app-date-field>
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="Marital Status" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('maritalStatus')">
+        <select class="form-control" formControlName="maritalStatus">
+          <option value="0">Select...</option>
+          <option value="100000000">Married</option>
+          <option value="100000001">Common Law</option>
+          <option value="100000002">Widowed</option>
+          <option value="100000003">Divorced</option>
+          <option value="100000004">Separated</option>
+          <option value="100000005">Single</option>
+          <option value="100000006">Prefer not to answer</option>
+        </select>
+      </app-field>
+    </div>
+  </div>
+
+  @if (formType === ApplicationType.IFM_Application) {
     <div class="row">
-        <div class="col-4">
-            <app-field label="First Name" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('firstName')">
-                <input class="form-control" type="text" formControlName="firstName" maxlength="100">
-            </app-field>
-        </div>
-        <div class="col-4">
-            <app-field label="Middle Name" [required]="false" [valid]="isFieldValid('middleName')">
-                <input class="form-control" type="text" formControlName="middleName" maxlength="100" onformchange="">
-            </app-field>
-        </div>
-        <div class="col-4">
-            <app-field label="Last Name" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('lastName')">
-                <input class="form-control" type="text" formControlName="lastName" maxlength="100">
-            </app-field>
-        </div>
+      <div class="col-md-6">
+        <app-field label="Occupation" [required]="false" [valid]="isFieldValid('occupation')" errorMessage="Please enter your occupation">
+          <input class="form-control" type="text" formControlName="occupation" maxlength="100">
+        </app-field>
+      </div>
+      <div class="col-md-6">
+        <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter your SIN">
+          <input class="form-control sin-input" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
+          <ng-template #victimSinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
+        </app-field>
+      </div>
     </div>
+  }
 
-    <div class="row">
-        <div class="col-12">
-            <label class="inline-label">
-                <input type="checkbox" style="margin-right: 10px;" formControlName="iHaveOtherNames" [value]="true" (change)="iHaveOtherNamesChange($event.target.checked)">
-                <span>They also go by other names (e.g. nickname, maiden name, alias)</span>
-            </label>
-        </div>
-    </div>
-
-    <div *ngIf="form.get('iHaveOtherNames').value === true">
-        <div class="row">
-            <div class="col-md-4">
-                <app-field label="Other First Name" [required]="false" [valid]="isMyControlValid(form.get('otherFirstName'))" errorMessage="Please enter your other first name">
-                    <input class="form-control" type="text" formControlName="otherFirstName" maxlength="100">
-                </app-field>
-            </div>
-            <div class="col-md-4">
-                <app-field label="Other Last Name" [required]="false" [valid]="isMyControlValid(form.get('otherLastName'))" errorMessage="Please enter your other last name">
-                    <input class="form-control" type="text" formControlName="otherLastName" maxlength="100">
-                </app-field>
-            </div>
-            <div class="col-md-4">
-                <app-field label="Date of Name Change" [required]="false" [valid]="isMyControlValid(form.get('dateOfNameChange'))" errorMessage="Please enter the date of name change">
-                    <input type="text" class="form-control date-picker" formControlName="dateOfNameChange" placeholder="yyyy-mm-dd" [matDatepicker]="dateOfNameChangePicker" [max]="todaysDate" [min]="oldestHuman" (focus)="dateOfNameChangePicker.open()" (click)="dateOfNameChangePicker.open()" readonly>
-                    <mat-datepicker #dateOfNameChangePicker></mat-datepicker>
-                </app-field>
-            </div>
-        </div>
-    </div>
-
-    <h3>Other Details</h3>
-
-    <app-field label="Gender" [required]="false" [valid]="isFieldValid('gender')" errorMessage="Please select your gender" featureEnabled="useUpdatedComplianceFields" [featureEnabledIf]="false">
+  <h2 class="blue-header">Victim's Contact Information, if known</h2>
+  <div class="row">
+    <div class="col-12">
+      <app-field label="Is the applicant's phone number(s) and email address the same or to be used for the victim?">
         <label class="inline-label">
-            <input type="radio" [value]="100000000" name="gender" formControlName="gender">
-            <span>M <app-tool-tip [trigger]="genderMToolTip"></app-tool-tip></span>
+          <input type="radio" [value]="true" formControlName="victimSameContactInfo">
+          <span>Yes</span>
         </label>
         <label class="inline-label">
-            <input type="radio" [value]="100000001" name="gender" formControlName="gender">
-            <span>F <app-tool-tip [trigger]="genderFToolTip"></app-tool-tip></span>
+          <input type="radio" [value]="false" formControlName="victimSameContactInfo">
+          <span>No</span>
+        </label>
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('phoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
+        @if (form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America') {
+          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber">
+        } @else {
+          <input class="form-control" type="text" formControlName="phoneNumber" digitOnly>
+        }
+      </app-field>
+    </div>
+    <div class="col-md-6">
+      <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('alternatePhoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
+        @if (form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America') {
+          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber">
+        } @else {
+          <input class="form-control" type="text" formControlName="alternatePhoneNumber" digitOnly>
+        }
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('email', form.get('victimSameContactInfo').value)" errorMessage="Please enter your email address">
+        <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
+      </app-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('confirmEmail', form.get('victimSameContactInfo').value)" errorMessage="Please confirm email address">
+        <input class="form-control" type="text" (blur)="trimEmail(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
+      </app-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h3>Most Recent Mailing Address</h3>
+      <app-field label="Is victim's mailing address the same as the applicant's primary mailing address?" [required]="false" [valid]="isFieldValid('mostRecentMailingAddressSameAsPersonal')" errorMessage="Please make a selection" [showChevrons]="false">
+        <label class="inline-label">
+          <input type="radio" [value]="true" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
+          <span>Yes</span>
         </label>
         <label class="inline-label">
-            <input type="radio" [value]="100000002" name="gender" formControlName="gender">
-            <span>X <app-tool-tip [trigger]="genderXToolTip"></app-tool-tip></span>
+          <input type="radio" [value]="false" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
+          <span>No</span>
         </label>
-    </app-field>
-    <ng-template #genderMToolTip>Persons whose current gender is male. This includes cisgender and transgender persons who are male.</ng-template>
-    <ng-template #genderFToolTip>Persons whose current gender is female. This includes cisgender and transgender persons who are female.</ng-template>
-    <ng-template #genderXToolTip>Persons whose current gender is not exclusively male or female. It includes people who are unsure of their gender, do not have one gender, have no gender, are gender fluid, or are Two-Spirit.</ng-template>
-
-    <app-gender-selector
-      [form]="form"
-      genderFormControlName="gender"
-      otherGenderFormControlName="otherGender"
-      featureEnabled="useUpdatedComplianceFields"
-      [featureEnabledIf]="true"></app-gender-selector>
-
-    <app-pronoun-selector
-      [form]="form"
-      pronounFormControlName="pronouns"
-      otherPronounFormControlName="otherPronouns"
-      featureEnabled="useUpdatedComplianceFields"
-      [featureEnabledIf]="true"></app-pronoun-selector>
-
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Birthdate" [required]="formType === ApplicationType.IFM_Application" [valid]="isMyControlValid(form.get('birthDate'))" errorMessage="Please enter your birth date">
-                <app-date-field [control]="form.get('birthDate')" [max]="todaysDate"></app-date-field>
-            </app-field>
-        </div>
-        <div class="col-md-6">
-            <app-field label="Marital Status" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('maritalStatus')">
-                <select class="form-control" formControlName="maritalStatus">
-                    <option value="0">Select...</option>
-                    <option value="100000000">Married</option>
-                    <option value="100000001">Common Law</option>
-                    <option value="100000002">Widowed</option>
-                    <option value="100000003">Divorced</option>
-                    <option value="100000004">Separated</option>
-                    <option value="100000005">Single</option>
-                    <option value="100000006">Prefer not to answer</option>
-                </select>
-            </app-field>
-        </div>
+      </app-field>
     </div>
+  </div>
 
-    <div *ngIf="formType === ApplicationType.IFM_Application" class="row">
-        <div class="col-md-6">
-            <app-field label="Occupation" [required]="false" [valid]="isFieldValid('occupation')" errorMessage="Please enter your occupation">
-                <input class="form-control" type="text" formControlName="occupation" maxlength="100">
-            </app-field>
-        </div>
-        <div class="col-md-6">
-            <app-field label="Social Insurance Number (SIN)" [required]="false" [valid]="isFieldValid('sin')" errorMessage="Please enter your SIN">
-                <input class="form-control sin-input" mask='000 000 000' maxlength="11" type="text" formControlName="sin">
-                <ng-template #victimSinTemplate><strong>Social Insurance Number (SIN)</strong><br />Lorem ipsum...</ng-template>
-            </app-field>
-        </div>
-    </div>
-
-    <h2 class="blue-header">Victim's Contact Information, if known</h2>
-    <div class="row">
-        <div class="col-12">
-            <app-field label="Is the applicant's phone number(s) and email address the same or to be used for the victim?">
-                <label class="inline-label">
-                    <input type="radio" [value]="true" formControlName="victimSameContactInfo">
-                    <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                    <input type="radio" [value]="false" formControlName="victimSameContactInfo">
-                    <span>No</span>
-                </label>
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Primary Phone Number (inc. area code)" [required]="phoneIsRequired" [valid]="isFieldValid('phoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
-                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else phone_no_mask">
-                <ng-template #phone_no_mask>
-                    <input class="form-control" type="text" formControlName="phoneNumber" digitOnly>
-                </ng-template>
-            </app-field>
-        </div>
-        <div class="col-md-6">
-            <app-field label="Alternate Phone Number (inc. area code)" [required]="false" [valid]="isFieldValid('alternatePhoneNumber', form.get('victimSameContactInfo').value)" errorMessage="Please enter your phone number">
-                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="alternatePhoneNumber" *ngIf="form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America'; else alt_phone_no_mask">
-                <ng-template #alt_phone_no_mask>
-                    <input class="form-control" type="text" formControlName="alternatePhoneNumber" digitOnly>
-                </ng-template>
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Email Address" [required]="emailIsRequired" [valid]="isFieldValid('email', form.get('victimSameContactInfo').value)" errorMessage="Please enter your email address">
-                <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
-            </app-field>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <app-field label="Confirm Email Address" [required]="emailIsRequired" [valid]="isFieldValid('confirmEmail', form.get('victimSameContactInfo').value)" errorMessage="Please confirm email address">
-                <input class="form-control" type="text" (blur)="trimEmail(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
-            </app-field>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <h3>Most Recent Mailing Address</h3>
-            <app-field label="Is victim's mailing address the same as the applicant's primary mailing address?" [required]="false" [valid]="isFieldValid('mostRecentMailingAddressSameAsPersonal')" errorMessage="Please make a selection" [showChevrons]="false">
-                <label class="inline-label">
-                    <input type="radio" [value]="true" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
-                    <span>Yes</span>
-                </label>
-                <label class="inline-label">
-                    <input type="radio" [value]="false" name="mostRecentMailingAddressSameAsPersonal" formControlName="mostRecentMailingAddressSameAsPersonal">
-                    <span>No</span>
-                </label>
-            </app-field>
-        </div>
-    </div>
-
-    <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="addressIsRequired" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
+  <app-address [group]="form.get('primaryAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="addressIsRequired" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
 </div>

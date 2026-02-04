@@ -40,13 +40,17 @@
 
     <ng-template #victimIsAMinor>If the victim is a minor (12-18 years) <strong>and</strong> seeking medical benefits, the victim's name and signature is required on this page.</ng-template>
     <app-field label="Signature" [required]="true" [valid]="isFieldValid('signature')" errorMessage="Please provide your digital signature" [tooltipReference]="formType === ApplicationType.Victim_Application ? victimIsAMinor : ''">
-      <div class="signature-trigger" (click)="showSignPad('signature')" *ngIf="!hasSignature('signature')">
-        <p>Click this box to sign</p>
-      </div>
-      <div *ngIf="hasSignature('signature')" class="signature-preview">
-        <img [src]="valueOrEmpty('signature')" alt="Digital signature" />
-        <a class="redo" (click)="showSignPad('signature')">Redo Signature</a>
-      </div>
+      @if (!hasSignature('signature')) {
+        <div class="signature-trigger" (click)="showSignPad('signature')">
+          <p>Click this box to sign</p>
+        </div>
+      }
+      @if (hasSignature('signature')) {
+        <div class="signature-preview">
+          <img [src]="valueOrEmpty('signature')" alt="Digital signature" />
+          <a class="redo" (click)="showSignPad('signature')">Redo Signature</a>
+        </div>
+      }
     </app-field>
 
     <h2 class="blue-header">Release of Information - Optional</h2>
@@ -61,96 +65,108 @@
       </label>
     </app-field>
 
-    <section *ngIf="form.get('allowCvapStaffSharing').value === CRMBoolean.True">
-      <div class="authorizedPerson" formArrayName="authorizedPerson" *ngFor="let item of form.get('authorizedPerson')['controls']; let i = index;">
-        <div [formGroupName]="i" class="authorizedPers">
-          <a href="javascript:void(0);" (click)="removeAuthorizationInformation(i)" class="float-right" *ngIf="showRemoveAuthorization"><i class="fas fa-trash-alt"></i> Delete Authorization</a>
-          <h3>Authorized Person {{ i + 1 }}</h3>
-          <div class="row">
-            <div class="col-md-6">
-              <app-field label="Is this a person or an agency?" [required]="true" [valid]="isMyControlValid(item.get('providerType'))" errorMessage="Please select one">
-                <select class="form-control half-width" formControlName="providerType" (change)="setAuthPersonAgencyAndNameValidators(item)">
-                  <option value="">Select...</option>
-                  <option value="Person">Person</option>
-                  <option value="Agency">Agency</option>
-                </select>
-              </app-field>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6" *ngIf="item.get('providerType').value === 'Agency'">
-              <app-field label="Agency Name" [required]="item.get('providerType').value === 'Agency'" [valid]="isMyControlValid(item.get('authorizedPersonAgencyName'))" errorMessage="Please enter an agency">
-                <input class="form-control" type="text" formControlName="authorizedPersonAgencyName">
-              </app-field>
-            </div>
-            <div class="col-md-6">
-              <app-field label="Email Address" [valid]="isMyControlValid(item.get('authorizedPersonEmail'))" errorMessage="Please enter an email address">
-                <input class="form-control" type="text" (blur)="trimEmail(item.get('authorizedPersonEmail'))" formControlName="authorizedPersonEmail" maxlength="100">
-              </app-field>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <app-field label="First Name" [required]="item.get('providerType').value === 'Person'" [valid]="isMyControlValid(item.get('authorizedPersonFirstName'))" errorMessage="Please enter first name">
-                <input class="form-control" type="text" formControlName="authorizedPersonFirstName">
-              </app-field>
-            </div>
-            <div class="col-md-6">
-              <app-field label="Last Name" [required]="item.get('providerType').value === 'Person'" [valid]="isMyControlValid(item.get('authorizedPersonLastName'))" errorMessage="Please enter last name">
-                <input class="form-control" type="text" formControlName="authorizedPersonLastName">
-              </app-field>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <app-field label="Relationship to Applicant" [required]="item.get('providerType').value === 'Person'" errorMessage="Please select a relationship" [valid]="isMyControlValid(item.get('authorizedPersonRelationship'))">
-                <select class="form-control" formControlName="authorizedPersonRelationship">
-                  <option value="">Select...</option>
-                  <option *ngFor="let item of relationshipList" [value]="item">{{ item }}</option>
-                </select>
-              </app-field>
-
-              <div>
-                <input class="form-control mt-2 mb-3" *ngIf="item.get('authorizedPersonRelationship').value == 'Other'" type="text" formControlName="authorizedPersonRelationshipOther">
+    @if (form.get('allowCvapStaffSharing').value === CRMBoolean.True) {
+      <section>
+        @for (item of form.get('authorizedPerson')['controls']; track item; let i = $index) {
+          <div class="authorizedPerson" formArrayName="authorizedPerson">
+            <div [formGroupName]="i" class="authorizedPers">
+              @if (showRemoveAuthorization) {
+                <a href="javascript:void(0);" (click)="removeAuthorizationInformation(i)" class="float-right"><i class="fas fa-trash-alt"></i> Delete Authorization</a>
+              }
+              <h3>Authorized Person {{ i + 1 }}</h3>
+              <div class="row">
+                <div class="col-md-6">
+                  <app-field label="Is this a person or an agency?" [required]="true" [valid]="isMyControlValid(item.get('providerType'))" errorMessage="Please select one">
+                    <select class="form-control half-width" formControlName="providerType" (change)="setAuthPersonAgencyAndNameValidators(item)">
+                      <option value="">Select...</option>
+                      <option value="Person">Person</option>
+                      <option value="Agency">Agency</option>
+                    </select>
+                  </app-field>
+                </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <app-field label="Phone Number (incl. area code)" [valid]="isMyControlValid(item.get('authorizedPersonPhoneNumber'))" errorMessage="Please enter a valid phone number">
-                <input class="form-control" mask='(000) 000 0000' type="text" formControlName="authorizedPersonPhoneNumber" *ngIf="item.get('authorizedPersonAgencyAddress.country').value === 'Canada' || item.get('authorizedPersonAgencyAddress.country').value === 'United States of America'; else phone_no_mask">
-                <ng-template #phone_no_mask>
-                  <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber" digitOnly>
-                </ng-template>
-              </app-field>
+              <div class="row">
+                @if (item.get('providerType').value === 'Agency') {
+                  <div class="col-md-6">
+                    <app-field label="Agency Name" [required]="item.get('providerType').value === 'Agency'" [valid]="isMyControlValid(item.get('authorizedPersonAgencyName'))" errorMessage="Please enter an agency">
+                      <input class="form-control" type="text" formControlName="authorizedPersonAgencyName">
+                    </app-field>
+                  </div>
+                }
+                <div class="col-md-6">
+                  <app-field label="Email Address" [valid]="isMyControlValid(item.get('authorizedPersonEmail'))" errorMessage="Please enter an email address">
+                    <input class="form-control" type="text" (blur)="trimEmail(item.get('authorizedPersonEmail'))" formControlName="authorizedPersonEmail" maxlength="100">
+                  </app-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <app-field label="First Name" [required]="item.get('providerType').value === 'Person'" [valid]="isMyControlValid(item.get('authorizedPersonFirstName'))" errorMessage="Please enter first name">
+                    <input class="form-control" type="text" formControlName="authorizedPersonFirstName">
+                  </app-field>
+                </div>
+                <div class="col-md-6">
+                  <app-field label="Last Name" [required]="item.get('providerType').value === 'Person'" [valid]="isMyControlValid(item.get('authorizedPersonLastName'))" errorMessage="Please enter last name">
+                    <input class="form-control" type="text" formControlName="authorizedPersonLastName">
+                  </app-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <app-field label="Relationship to Applicant" [required]="item.get('providerType').value === 'Person'" errorMessage="Please select a relationship" [valid]="isMyControlValid(item.get('authorizedPersonRelationship'))">
+                    <select class="form-control" formControlName="authorizedPersonRelationship">
+                      <option value="">Select...</option>
+                      @for (item of relationshipList; track item) {
+                        <option [value]="item">{{ item }}</option>
+                      }
+                    </select>
+                  </app-field>
+                  <div>
+                    @if (item.get('authorizedPersonRelationship').value == 'Other') {
+                      <input class="form-control mt-2 mb-3" type="text" formControlName="authorizedPersonRelationshipOther">
+                    }
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <app-field label="Phone Number (incl. area code)" [valid]="isMyControlValid(item.get('authorizedPersonPhoneNumber'))" errorMessage="Please enter a valid phone number">
+                    @if (item.get('authorizedPersonAgencyAddress.country').value === 'Canada' || item.get('authorizedPersonAgencyAddress.country').value === 'United States of America') {
+                      <input class="form-control" mask='(000) 000 0000' type="text" formControlName="authorizedPersonPhoneNumber">
+                    } @else {
+                      <input class="form-control" type="text" formControlName="authorizedPersonPhoneNumber" digitOnly>
+                    }
+                  </app-field>
+                </div>
+              </div>
+              <app-address (change)="setAuthPersonPhoneValidators(item)" [group]="item.get('authorizedPersonAgencyAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
             </div>
           </div>
-
-          <app-address (change)="setAuthPersonPhoneValidators(item)" [group]="item.get('authorizedPersonAgencyAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
-
-        </div>
-      </div>
-
-      <a href="javascript:void(0);" class="btn btn-secondary add-auth-btn" (click)="addAuthorizationInformation(false)" *ngIf="showAddAuthorizationInformation">Add an Authorization</a>
-
-      <app-field [valid]="isFieldValid('authorizedPersonAuthorizesDiscussion')" errorMessage="Please check this box to indicate that you accept Declaration" [required]="true">
-        <label>
-          <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion" [required]="true">
-          I hereby give my consent to the Crime Victim Assistance Program staff to discuss my claim (e.g. status and benefit eligibility) with the above person(s) or agency for the purpose of assisting me in the application process.
-          <br>
-          The Crime Victim Assistance Program may provide or share my financial, medical, and employment information with this authorized contact. <span class="error-states ng-star-inserted">*</span>
-        </label>
-      </app-field>
-
-      <app-field label="Signature" [required]="true" [valid]="isFieldValid('authorizedPersonSignature')" errorMessage="Please provide your digital signature">
-        <div class="signature-trigger" (click)="showSignPad('authorizedPersonSignature')" *ngIf="!hasSignature('authorizedPersonSignature')">
-          <p>Click this box to sign</p>
-        </div>
-        <div *ngIf="hasSignature('authorizedPersonSignature')" class="signature-preview">
-          <img [src]="valueOrEmpty('authorizedPersonSignature')" alt="Digital signature" />
-          <a class="redo" (click)="showSignPad('authorizedPersonSignature')">Redo Signature</a>
-        </div>
-      </app-field>
-
+        }
+        @if (showAddAuthorizationInformation) {
+          <a href="javascript:void(0);" class="btn btn-secondary add-auth-btn" (click)="addAuthorizationInformation(false)">Add an Authorization</a>
+        }
+        <app-field [valid]="isFieldValid('authorizedPersonAuthorizesDiscussion')" errorMessage="Please check this box to indicate that you accept Declaration" [required]="true">
+          <label>
+            <input type="checkbox" [value]="true" name="authorizedPersonAuthorizesDiscussion" formControlName="authorizedPersonAuthorizesDiscussion" [required]="true">
+            I hereby give my consent to the Crime Victim Assistance Program staff to discuss my claim (e.g. status and benefit eligibility) with the above person(s) or agency for the purpose of assisting me in the application process.
+            <br>
+              The Crime Victim Assistance Program may provide or share my financial, medical, and employment information with this authorized contact. <span class="error-states ng-star-inserted">*</span>
+            </label>
+          </app-field>
+          <app-field label="Signature" [required]="true" [valid]="isFieldValid('authorizedPersonSignature')" errorMessage="Please provide your digital signature">
+            @if (!hasSignature('authorizedPersonSignature')) {
+              <div class="signature-trigger" (click)="showSignPad('authorizedPersonSignature')">
+                <p>Click this box to sign</p>
+              </div>
+            }
+            @if (hasSignature('authorizedPersonSignature')) {
+              <div class="signature-preview">
+                <img [src]="valueOrEmpty('authorizedPersonSignature')" alt="Digital signature" />
+                <a class="redo" (click)="showSignPad('authorizedPersonSignature')">Redo Signature</a>
+              </div>
+            }
+          </app-field>
+        </section>
+      }
     </section>
-  </section>
-</div>
+  </div>
 
