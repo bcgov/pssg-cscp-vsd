@@ -24,14 +24,14 @@
 
   <section>
     <h2 class="blue-header">Standard Authorization & Signature</h2>
-    <app-field [required]="true" [valid]="isFieldValid('approvedAuthorityNotification')" errorMessage="Please check this box to indicate that you accept Declaration">
+    <app-field [required]="true" [valid]="isFieldValid('approvedAuthorityNotification')" errorMessage="Please select whether you understand that the Crime Victim Assistance Program may notify the above authorities that you have submitted an application for benefits pursuant to the Crime Victim Assistance Act">
       <label>
         <input type="checkbox" [value]="true" name="approvedAuthorityNotification" formControlName="approvedAuthorityNotification">
         I understand that the Crime Victim Assistance Program may notify the above authorities that I have submitted an application for benefits pursuant to the <em>Crime Victim Assistance Act</em>. <span class="error-states">*</span>
       </label>
     </app-field>
 
-    <app-field [required]="true" [valid]="isFieldValid('readAndUnderstoodTermsAndConditions')" errorMessage="Please check this box to indicate that you accept Declaration">
+    <app-field [required]="true" [valid]="isFieldValid('readAndUnderstoodTermsAndConditions')" errorMessage="Please select whether you have read and understood the above information">
       <label>
         <input type="checkbox" [value]="true" name="readAndUnderstoodTermsAndConditions" formControlName="readAndUnderstoodTermsAndConditions">
         I have read and understood the above information <span class="error-states">*</span>

@@ -4,10 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { config } from '../../../config';
 
 @Component({
-    selector: 'app-file-uploader',
-    templateUrl: './file-uploader.component.html',
-    styleUrls: ['./file-uploader.component.scss'],
-    standalone: false
+  selector: 'app-file-uploader',
+  templateUrl: './file-uploader.component.html',
+  styleUrls: ['./file-uploader.component.scss'],
+  standalone: false
 })
 export class FileUploaderComponent implements OnInit {
   @ViewChild('files') myInputVariable: ElementRef;
@@ -53,7 +53,11 @@ export class FileUploaderComponent implements OnInit {
 
       let file_extenstion = files.item(i).name.trim().split('.').pop();
       if (!config.accepted_file_extensions[file_extenstion]) {
-        this.snackBar.open('Unsupported file type', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
+        this.snackBar.open(
+          'You have attempted to upload an unsupported file type. Only the following file types are supported: pdf, png, jpeg, doc, docx',
+          'Fail',
+          { duration: 3500, panelClass: ['red-snackbar'] }
+        );
         continue;
       }
 

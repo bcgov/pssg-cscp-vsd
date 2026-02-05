@@ -21,8 +21,11 @@ export class FormBase {
 
   isFieldValid(field: string, disabled: boolean = false) {
     if (disabled === true) return true;
+
     let formField = this.form.get(field);
+
     if (!formField || formField.value === null) return true;
+
     if (field === 'personalInformation.sin' || field === 'victimInformation.sin' || field === 'sin') {
       let validator = formField.validator({} as AbstractControl);
       let isRequired = validator && validator.required ? true : false;

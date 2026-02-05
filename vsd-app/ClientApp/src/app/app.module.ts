@@ -40,7 +40,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { NgxFileDropModule } from 'ngx-file-drop';
-import { provideEnvironmentNgxMask } from 'ngx-mask';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
@@ -209,6 +209,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     MatToolbarModule,
     MatTooltipModule,
     ReactiveFormsModule,
+    NgxMaskDirective,
     AngularSignaturePadModule,
     BsDatepickerModule.forRoot(),
     TooltipModule,
@@ -221,7 +222,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     StateService,
     HeaderTitleService,
     Title,
-    provideEnvironmentNgxMask(),
+    provideNgxMask(),
     provideHttpClient(withInterceptorsFromDi())
   ]
 })

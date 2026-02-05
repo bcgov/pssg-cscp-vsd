@@ -83,12 +83,12 @@
                   <h3>Counsellor Information</h3>
                   <div class="row">
                     <div class="col-md-6">
-                      <app-field label="Counsellor Registration Number" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorRegistrationNumber')" errorMessage="Please enter the registration number">
+                      <app-field label="Counsellor Registration Number" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorRegistrationNumber')" errorMessage="Please enter the counsellor's registration number">
                         <input class="form-control" type="text" formControlName="counsellorRegistrationNumber" maxlength="100" (change)="checkVendorStatus('counsellor')" [class.input-valid]="isCounsellorValid && didValidateCounsellor" [class.input-invalid]="!isCounsellorValid && didValidateCounsellor">
                       </app-field>
                     </div>
                     <div class="col-md-6">
-                      <app-field label="Counsellor Last Name" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorLastName')" errorMessage="Please enter the last name">
+                      <app-field label="Counsellor Last Name" [required]="true" [valid]="isFieldValid('invoiceDetails.counsellorLastName')" errorMessage="Please enter the counsellor's last name">
                         <input class="form-control" type="text" formControlName="counsellorLastName" maxlength="100" (change)="checkVendorStatus('counsellor')" [class.input-valid]="isCounsellorValid && didValidateCounsellor" [class.input-invalid]="!isCounsellorValid && didValidateCounsellor">
                       </app-field>
                     </div>
@@ -143,7 +143,7 @@
                         <div class="item-listing" formArrayName="lineItems">
                           <div [formGroupName]="i" class="invoice-item row no-gutter">
                             <div class="col-3">
-                              <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Enter session date">
+                              <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Please enter the session date">
                                 <input type="text" [max]="today" class="form-control date-picker" [matDatepicker]="sessionDate_i" placeholder="yyyy-mm-dd" formControlName="sessionDate" (click)="sessionDate_i.open()" (change)="checkForDuplicateLineItems()" (dateChange)="checkForDuplicateLineItems()">
                                 <span style="display: none;">
                                   <mat-datepicker-toggle matSuffix [for]="sessionDate_i"></mat-datepicker-toggle>
@@ -152,7 +152,7 @@
                               </app-field>
                             </div>
                             <div class="col-3">
-                              <app-field label="Counselling Type" [required]="true" [valid]="isControlValid(item, 'counsellingType')" errorMessage="Select type">
+                              <app-field label="Counselling Type" [required]="true" [valid]="isControlValid(item, 'counsellingType')" errorMessage="Please select the type of counselling">
                                 <select class="form-control fixed-select" formControlName="counsellingType" (change)="checkForDuplicateLineItems()">
                                   <option value="0">Select...</option>
                                   <option value="100000000">Counselling Session</option>
@@ -162,7 +162,7 @@
                               </app-field>
                             </div>
                             <div class="col-2">
-                              <app-field label="Hours" [required]="true" [valid]="isControlValid(item, 'sessionHours')" errorMessage="Enter hours" [tooltipReference]="sessionDateInfo">
+                              <app-field label="Hours" [required]="true" [valid]="isControlValid(item, 'sessionHours')" errorMessage="Please enter the number of hours" [tooltipReference]="sessionDateInfo">
                                 <select class="form-control fixed-select" formControlName="sessionHours">
                                   <option [ngValue]="0">Select...</option>
                                   <option [ngValue]="0.5">0.50</option>

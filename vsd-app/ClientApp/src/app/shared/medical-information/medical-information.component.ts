@@ -21,17 +21,17 @@ import { HOSPITALS } from '../hospital-list';
 import { POSTAL_CODE } from '../regex.constants';
 
 @Component({
-    selector: 'app-medical-information',
-    templateUrl: './medical-information.component.html',
-    styleUrls: ['./medical-information.component.scss'],
-    providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-    ],
-    standalone: false
+  selector: 'app-medical-information',
+  templateUrl: './medical-information.component.html',
+  styleUrls: ['./medical-information.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
+  standalone: false
 })
 export class MedicalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
@@ -51,8 +51,6 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
   postalRegex = POSTAL_CODE;
 
   today = new Date();
-
-  otherTreatmentLabel: string = '';
 
   addressHelper = new AddressHelper();
 
@@ -76,16 +74,6 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
     setTimeout(() => {
       this.form.markAsTouched();
     }, 0);
-    // console.log("medical info component");
-    // console.log(this.form);
-
-    if (this.formType === ApplicationType.Victim_Application) {
-      this.otherTreatmentLabel =
-        'Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?';
-    } else {
-      this.otherTreatmentLabel =
-        'Do you have a counsellor/therapist who has been treating you as a result of the incident?';
-    }
 
     if (this.formType === ApplicationType.Victim_Application) {
       this.wereYouTreatedAtHospitalSubscription = this.form
@@ -306,5 +294,17 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
     ]);
     phoneControl.patchValue(phoneControl.value);
     faxControl.patchValue(faxControl.value);
+  }
+
+  getOtherTreatmentLabel(): string {
+    return this.formType === ApplicationType.Victim_Application
+      ? 'Have you seen any other doctors, specialists, or counsellors who have been treating you for injuries resulting from the incident?'
+      : 'Do you have a counsellor/therapist who has been treating you as a result of the incident?';
+  }
+
+  getOtherTreatmentErrorMessage(): string {
+    return this.formType === ApplicationType.Victim_Application
+      ? 'Please select whether you have seen any other doctors, specialists, or counsellors'
+      : 'Please select whether you have a counsellor/therapist';
   }
 }

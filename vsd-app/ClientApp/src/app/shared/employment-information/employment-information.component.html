@@ -14,7 +14,7 @@
       <p>This section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
       <section>
         <h2 class="blue-header">Income Loss Information</h2>
-        <app-field label="Were you employed when the crime occured?" [required]="true" [valid]="isFieldValid('wereYouEmployedAtTimeOfCrime')" errorMessage="Please select an option">
+        <app-field label="Were you employed when the crime occured?" [required]="true" [valid]="isFieldValid('wereYouEmployedAtTimeOfCrime')" errorMessage="Please select whether you were employed when the crime occurred">
           <label class="inline-label">
             <input type="radio" [value]="CRMBoolean.True" name="wereYouEmployedAtTimeOfCrime" formControlName="wereYouEmployedAtTimeOfCrime">
             <span>Yes</span>
@@ -26,7 +26,7 @@
         </app-field>
         @if (form.get('wereYouEmployedAtTimeOfCrime').value === CRMBoolean.True) {
           <div>
-            <app-field label="Were you at work at the time of the incident?" [required]="form.get('wereYouEmployedAtTimeOfCrime').value === CRMBoolean.True" [valid]="isFieldValid('wereYouAtWorkAtTimeOfIncident')" errorMessage="Please select an option">
+            <app-field label="Were you at work at the time of the incident?" [required]="form.get('wereYouEmployedAtTimeOfCrime').value === CRMBoolean.True" [valid]="isFieldValid('wereYouAtWorkAtTimeOfIncident')" errorMessage="Please select whether you were at work">
               <label class="inline-label">
                 <input type="radio" [value]="CRMBoolean.True" name="wereYouAtWorkAtTimeOfIncident" formControlName="wereYouAtWorkAtTimeOfIncident">
                 <span>Yes</span>
@@ -62,7 +62,7 @@
           </div>
         }
         <div>
-          <app-field label="As a result of any crime-related injuries, did you miss work?" [required]="true" [valid]="isFieldValid('didYouMissWorkDueToCrime')" errorMessage="Please select an option">
+          <app-field label="As a result of any crime-related injuries, did you miss work?" [required]="true" [valid]="isFieldValid('didYouMissWorkDueToCrime')" errorMessage="Please select whether you missed work">
             <label class="inline-label">
               <input type="radio" [value]="CRMBoolean.True" name="didYouMissWorkDueToCrime" formControlName="didYouMissWorkDueToCrime">
               <span>Yes</span>
@@ -75,7 +75,7 @@
         </div>
         @if (form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True) {
           <div>
-            <app-field label="Are you currently off work?" [tooltipReference]="stillOfWorkTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('areYouStillOffWork')" errorMessage="Please select an option">
+            <app-field label="Are you currently off work?" [tooltipReference]="stillOfWorkTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('areYouStillOffWork')" errorMessage="Please select whether you are currently off work">
               <label class="inline-label">
                 <input type="radio" [value]="CRMBoolean.True" name="areYouStillOffWork" formControlName="areYouStillOffWork">
                 <span>Yes</span>
@@ -115,7 +115,7 @@
             </app-field>
           </div>
           <div>
-            <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('didYouLoseWages')" errorMessage="Please select an option">
+            <app-field label="As a result of any crime-related injuries, did you lose wages?" [tooltipReference]="lostWagesTemplate" [required]="form.get('didYouMissWorkDueToCrime').value === CRMBoolean.True" [valid]="isFieldValid('didYouLoseWages')" errorMessage="Please select whether you lost wages">
               <label class="inline-label">
                 <input type="radio" [value]="CRMBoolean.True" name="didYouLoseWages" formControlName="didYouLoseWages">
                 <span>Yes</span>
@@ -142,7 +142,7 @@
           <h2 class="blue-header">Employer Information</h2>
           <p>If you are claiming for lost wages or income, we will need to verify your employment</p>
           <div>
-            <app-field label="Are you self employed?" [required]="form.get('didYouLoseWages').value === CRMBoolean.True" [valid]="isFieldValid('areYouSelfEmployed')" errorMessage="Please select an option">
+            <app-field label="Are you self employed?" [required]="form.get('didYouLoseWages').value === CRMBoolean.True" [valid]="isFieldValid('areYouSelfEmployed')" errorMessage="Please select whether you are self employed">
               <label class="inline-label">
                 <input type="radio" [value]="CRMBoolean.True" name="areYouSelfEmployed" formControlName="areYouSelfEmployed">
                 <span>Yes</span>
@@ -158,7 +158,7 @@
               <div [formGroupName]="i" class="employer">
                 @if (form.get('areYouSelfEmployed').value !== CRMBoolean.True) {
                   <div>
-                    <app-field label="If you are requesting benefits for lost wages, may we contact your employer?" [required]="form.get('areYouSelfEmployed').value !== CRMBoolean.True" [valid]="isMyControlValid(item.get('contactable'))" errorMessage="Please select an option">
+                    <app-field label="If you are requesting benefits for lost wages, may we contact your employer?" [required]="form.get('areYouSelfEmployed').value !== CRMBoolean.True" [valid]="isMyControlValid(item.get('contactable'))" errorMessage="Please select whether we can contact your employer">
                       <label class="inline-label">
                         <input type="radio" [value]="CRMBoolean.True" formControlName="contactable" (change)="contactableChange(true, i)">
                         <span>Yes</span>

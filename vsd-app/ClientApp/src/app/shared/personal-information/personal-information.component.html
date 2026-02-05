@@ -59,7 +59,7 @@
 
   @if (formType === ApplicationType.IFM_Application) {
     <div>
-      <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictim')" errorMessage="Please select a relationship">
+      <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictim')" errorMessage="Please specify your relationship to the victim">
         <label class="inline-label">
           <input type="radio" [value]="'Spouse'" name="relationshipToVictim" formControlName="relationshipToVictim">
           <span>Spouse</span>
@@ -102,7 +102,7 @@
     <div>
       <div class="row">
         <div class="col-md-6">
-          <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictimOther')" errorMessage="Please specify">
+          <app-field label="Relationship to Victim" [required]="true" [valid]="isFieldValid('relationshipToVictimOther')" errorMessage="Please specify your relationship to the victim">
             <input class="form-control" type="text" formControlName="relationshipToVictimOther">
           </app-field>
         </div>
@@ -214,7 +214,7 @@
     <div class="col-md-6">
       <app-field label="Primary Phone Number (inc. area code)" [required]="preferredMethodOfContact.value==='2' || leaveVoicemail.value === '100000000' || leaveVoicemail.value === '100000001'" [valid]="isFieldValid('phoneNumber')" errorMessage="Please enter your phone number" [tooltipReference]="primaryPhoneToolTip">
         @if (form.get('primaryAddress.country').value === 'Canada' || form.get('primaryAddress.country').value === 'United States of America') {
-          <input class="form-control" mask='(000) 000 0000' type="text" formControlName="phoneNumber" (input)="setVoicemailValidators()">
+          <input class="form-control" [mask]="'(000) 000 0000'" type="text" formControlName="phoneNumber" (input)="setVoicemailValidators()">
         } @else {
           <input class="form-control" type="text" formControlName="phoneNumber" digitOnly (input)="setVoicemailValidators()">
         }
@@ -234,7 +234,7 @@
 
   <div class="row">
     <div class="col-6">
-      <app-field label="I authorize CVAP to leave a voicemail on this phone #" [required]="isVoiceMailRequired" [valid]="isMyControlValid(form.get('leaveVoicemail'))" errorMessage="Please select an option">
+      <app-field label="I authorize CVAP to leave a voicemail on this phone #" [required]="isVoiceMailRequired" [valid]="isMyControlValid(form.get('leaveVoicemail'))" errorMessage="Please indicate if you authorize CVAP to leave a voicemail">
         <select class="form-control" formControlName="leaveVoicemail">
           <option value="0">Select...</option>
           <option value="100000000">Primary and Alternate</option>
@@ -248,14 +248,14 @@
 
   <div class="row">
     <div class="col-md-6">
-      <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('email')" errorMessage="Please enter your email address">
-        <input class="form-control" type="text" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
+      <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('email')" errorMessage="Please enter a valid email address">
+        <input class="form-control" type="email" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
       </app-field>
     </div>
   </div>
   <div class="row">
     <div class="col-md-6">
-      <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('confirmEmail')" errorMessage="Please confirm your email address">
+      <app-field label="Confirm Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('confirmEmail')" errorMessage="Email addresses do not match, please confirm your email address">
         <input class="form-control" type="text" (blur)="trimEmail(form.get('confirmEmail'))" formControlName="confirmEmail" maxlength="100">
       </app-field>
     </div>
@@ -263,7 +263,7 @@
 
   <div class="row">
     <div class="col-12">
-      <app-field [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('agreeToCvapCommunicationExchange')" errorMessage="Please check agreement">
+      <app-field [required]="preferredMethodOfContact.value === '1'" [valid]="isFieldValid('agreeToCvapCommunicationExchange')" errorMessage="Please confirm if you agree that the CVAP may communicate with you by email">
         <label class="inline-label inline-checkbox-label">
           <input type="checkbox" style="margin-right: 10px;" formControlName="agreeToCvapCommunicationExchange" [value]="true" (change)="canEmailChange($event.target.checked)">
           <span>I agree that the Crime Victim Assistance Program can communicate with me about my application and exchange documents via my email address.@if (preferredMethodOfContact.value === '1') {
