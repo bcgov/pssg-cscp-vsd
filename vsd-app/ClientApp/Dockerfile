@@ -53,7 +53,7 @@ WORKDIR /app
 COPY ./vsd-app/ClientApp .
 
 RUN npm install --legacy-peer-deps --ignore-scripts
-RUN npm run buildprod
+RUN npm run build --configuration=production
 
 # --- Runtime Stage ---
 FROM caddy:2.10.0-alpine AS final
