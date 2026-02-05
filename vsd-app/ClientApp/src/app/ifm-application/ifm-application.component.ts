@@ -43,15 +43,15 @@ import { VictimInfoHelper } from '../shared/victim-information/victim-informatio
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 
 @Component({
-    selector: 'app-ifm-application',
-    templateUrl: './ifm-application.component.html',
-    styleUrls: ['./ifm-application.component.scss'],
-    providers: [
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-        { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
-    ],
-    standalone: false
+  selector: 'app-ifm-application',
+  templateUrl: './ifm-application.component.html',
+  styleUrls: ['./ifm-application.component.scss'],
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
+  ],
+  standalone: false
 })
 export class IfmApplicationComponent extends FormBase implements OnInit {
   @ViewChild('stepper') ifmStepper: MatStepper;
@@ -235,7 +235,13 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
         if (formParts != null) {
           formValid = formParts.valid;
-          // console.log(formParts);
+
+          // if form has sin field, validate it specifically
+          const sinControl = formParts.get('sin');
+          if (sinControl != null) {
+            const isRequired = sinControl.hasValidator(Validators.required);
+            formValid = formValid && this.validateSIN(sinControl.value, isRequired);
+          }
         }
 
         if (formValid) {
