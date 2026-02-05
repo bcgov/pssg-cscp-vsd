@@ -8,7 +8,7 @@
 
   <div class="row">
     <div class="col-4">
-      <app-field label="First Name" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('firstName')">
+      <app-field label="First Name" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('firstName')" errorMessage="Please provide the victim first name">
         <input class="form-control" type="text" formControlName="firstName" maxlength="100">
       </app-field>
     </div>
@@ -18,7 +18,7 @@
       </app-field>
     </div>
     <div class="col-4">
-      <app-field label="Last Name" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('lastName')">
+      <app-field label="Last Name" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('lastName')" errorMessage="Please provide the victim last name">
         <input class="form-control" type="text" formControlName="lastName" maxlength="100">
       </app-field>
     </div>
@@ -92,12 +92,12 @@
 
   <div class="row">
     <div class="col-md-6">
-      <app-field label="Birthdate" [required]="formType === ApplicationType.IFM_Application" [valid]="isMyControlValid(form.get('birthDate'))" errorMessage="Please enter your birth date">
+      <app-field label="Birthdate" [required]="formType === ApplicationType.IFM_Application" [valid]="isMyControlValid(form.get('birthDate'))" errorMessage="Please provide the victim birthday">
         <app-date-field [control]="form.get('birthDate')" [max]="todaysDate"></app-date-field>
       </app-field>
     </div>
     <div class="col-md-6">
-      <app-field label="Marital Status" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isFieldValid('maritalStatus')">
+      <app-field label="Marital Status" [required]="formType === ApplicationType.Victim_Application || formType === ApplicationType.IFM_Application" [valid]="isMyControlValid(form.get('maritalStatus'))" errorMessage="Please provide the victim marital status">
         <select class="form-control" formControlName="maritalStatus">
           <option value="0">Select...</option>
           <option value="100000000">Married</option>

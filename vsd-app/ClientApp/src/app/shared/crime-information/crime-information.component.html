@@ -146,7 +146,7 @@
   <section>
     <h2 class="blue-header">Police Involvement</h2>
 
-    <app-field label="Was a report made to the police?" [required]="true" [valid]="isFieldValid('wasReportMadeToPolice')" errorMessage="Please make a selection" [showChevrons]="false">
+    <app-field label="Was a report made to the police?" [required]="true" [valid]="isFieldValid('wasReportMadeToPolice')" errorMessage="Please select whether a report was made to the police" [showChevrons]="false">
       <label class="inline-label">
         <input type="radio" [value]="CRMMultiBoolean.True" name="wasReportMadeToPolice" formControlName="wasReportMadeToPolice">
         <span>Yes</span>
@@ -342,7 +342,7 @@
 
     <div class="row">
       <div class="col-6">
-        <app-field label="Has any of the Person(s) Responsible been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please make a selection">
+        <app-field label="Has any of the Person(s) Responsible been charged?" [required]="true" [valid]="isFieldValid('offenderBeenCharged')" errorMessage="Please select whether the person(s) responsible have been charged">
           <label class="inline-label">
             <input type="radio" [value]="CRMMultiBoolean.True" name="offenderBeenCharged" formControlName="offenderBeenCharged">
             <span>Yes</span>
@@ -406,7 +406,7 @@
       </div>
     }
 
-    <app-field label="Have you sued any of the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('haveYouSuedOffender')" errorMessage="Please make a selection">
+    <app-field label="Have you sued any of the Person(s) Responsible?" [required]="true" [valid]="isFieldValid('haveYouSuedOffender')" errorMessage="Please select whether you have sued any of the person(s) responsible">
       <label class="inline-label">
         <input type="radio" [value]="CRMBoolean.True" name="haveYouSuedOffender" formControlName="haveYouSuedOffender">
         <span>Yes</span>
@@ -418,7 +418,7 @@
     </app-field>
     @if (form.get('haveYouSuedOffender').value === CRMBoolean.False) {
       <section>
-        <app-field label="Do you intend to sue any of the Person(s) Responsible or seek restitution through criminal proceedings?" [required]="true" [valid]="isFieldValid('intendToSueOffender')" errorMessage="Please make a selection">
+        <app-field label="Do you intend to sue any of the Person(s) Responsible or seek restitution through criminal proceedings?" [required]="true" [valid]="isMyControlValid(form.get('intendToSueOffender'))" errorMessage="Please select whether you intend to sue any of the person(s) responsible">
           <label class="inline-label">
             <input type="radio" [value]="CRMMultiBoolean.True" name="intendToSueOffender" formControlName="intendToSueOffender">
             <span>Yes</span>

@@ -1,7 +1,6 @@
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { POSTAL_CODE } from '../regex.constants';
 import { EmailValidator } from '../validators/email.validator';
-import { race } from 'rxjs';
 
 /**
  * Helper class for setting up victim information form.
@@ -83,7 +82,7 @@ export class VictimInfoHelper {
       otherPronouns: [''],
       raceEthnicity: [null],
       otherRaceEthnicity: [''],
-      maritalStatus: [null],
+      maritalStatus: [null, [Validators.required, Validators.min(100000000), Validators.max(100000006)]],
 
       victimSameContactInfo: [''],
       phoneNumber: [''],

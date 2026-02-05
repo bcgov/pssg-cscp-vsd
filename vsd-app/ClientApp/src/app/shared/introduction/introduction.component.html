@@ -142,7 +142,7 @@
   <br /><br />
 
   <section>
-    <app-field [valid]="isMyControlValid(form.get('understoodInformation'))" errorMessage="Please confirm">
+    <app-field [valid]="isMyControlValid(form.get('understoodInformation'))" errorMessage="Please confirm that you have read and understand the above information">
       <label class="inline-label">
         <input type="checkbox" style="margin-right: 10px;" formControlName="understoodInformation" [value]="true">
         <span>I have read and understood all the above information. <span class="error-states ng-star-inserted">*</span></span>
