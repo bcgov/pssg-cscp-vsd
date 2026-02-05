@@ -126,6 +126,11 @@
             <td>{{ getOptionSetNameFromVal(enumHelper.IndigenousStatus, valueOrEmpty('personalInformation.indigenousStatus')) }}</td>
           </tr>
           <tr>
+            <th>Preferred Method of Contact</th>
+            <td>{{ enumHelper.ApplicantPreferredMethodOfContact[valueForEnum('personalInformation.preferredMethodOfContact')] }}
+            </td>
+          </tr>
+          <tr>
             <th>Primary Phone Number</th>
             <td>{{ valueOrEmpty('personalInformation.phoneNumber') | phone}} </td>
           </tr>
@@ -150,12 +155,7 @@
               <th>Marital Status</th>
               <td>{{ enumHelper.MaritalStatus[valueForEnum('personalInformation.maritalStatus')] }} </td>
             </tr>
-          }
-          <tr>
-            <th>Preferred Method of Contact</th>
-            <td>{{ enumHelper.ApplicantPreferredMethodOfContact[valueForEnum('personalInformation.preferredMethodOfContact')] }}
-            </td>
-          </tr>
+          }          
         </tbody>
       </table>
 
