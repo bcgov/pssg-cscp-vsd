@@ -1,9 +1,12 @@
 const PROXY_CONFIG = [
   {
-    context: ['/api'],
+    context: ['/api', '/cvapwebform/api'],
     target: 'http://localhost:5000',
     secure: false,
-    logLevel: 'error'
+    logLevel: 'error',
+    pathRewrite: {
+      '^/cvapwebform': ''
+    }
   }
 ];
 
