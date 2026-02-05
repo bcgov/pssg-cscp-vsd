@@ -4,7 +4,8 @@ import {
   UntypedFormControl,
   UntypedFormGroup,
   ValidationErrors,
-  ValidatorFn
+  ValidatorFn,
+  Validators
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import moment from 'moment';
@@ -513,7 +514,13 @@ export class FormBase {
 
         if (formParts != null) {
           formValid = formParts.valid;
-          // console.log(_.cloneDeep(formParts));
+
+          // if form has sin field, validate it specifically
+          const sinControl = formParts.get('sin');
+          if (sinControl != null) {
+            const isRequired = sinControl.hasValidator(Validators.required);
+            formValid = formValid && this.validateSIN(sinControl.value, isRequired);
+          }
         } else {
           alert('That was a null form. Nothing to validate');
         }

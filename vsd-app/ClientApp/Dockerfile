@@ -71,7 +71,7 @@ ENV BUILD_IMAGE_NAME=${BUILD_IMAGE_NAME}
 ENV BUILD_VERSION=${BUILD_VERSION}
 
 COPY ./vsd-app/ClientApp/Caddyfile /etc/caddy/Caddyfile
-COPY --from=build /app/dist/ /site
+COPY --from=build /app/dist/browser/ /site
 
 # Add version files
 RUN echo "${BUILD_IMAGE_NAME}" > /site/build_image_name.txt && echo "${BUILD_VERSION}" > /site/version.txt

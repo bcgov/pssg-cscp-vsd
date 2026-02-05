@@ -41,18 +41,18 @@ import { VictimInfoHelper } from '../shared/victim-information/victim-informatio
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 
 @Component({
-    selector: 'app-witness-application',
-    templateUrl: './witness-application.component.html',
-    styleUrls: ['./witness-application.component.scss'],
-    providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-        { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
-    ],
-    standalone: false
+  selector: 'app-witness-application',
+  templateUrl: './witness-application.component.html',
+  styleUrls: ['./witness-application.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
+  ],
+  standalone: false
 })
 export class WitnessApplicationComponent extends FormBase implements OnInit {
   FORM_TYPE: ApplicationType = ApplicationType.Witness_Application;
@@ -227,6 +227,13 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
         if (formParts != null) {
           formValid = formParts.valid;
+
+          // if form has sin field, validate it specifically
+          const sinControl = formParts.get('sin');
+          if (sinControl != null) {
+            const isRequired = sinControl.hasValidator(Validators.required);
+            formValid = formValid && this.validateSIN(sinControl.value, isRequired);
+          }
         }
 
         if (formValid) {

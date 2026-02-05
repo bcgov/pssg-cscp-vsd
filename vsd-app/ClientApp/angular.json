@@ -13,9 +13,7 @@
           "options": {
             "aot": true,
             "optimization": false,
-            "outputPath": {
-              "base": "dist/"
-            },
+            "outputPath": "dist/",
             "baseHref": "/cvapwebform/",
             "index": "src/index.html",
             "tsConfig": "src/tsconfig.app.json",
