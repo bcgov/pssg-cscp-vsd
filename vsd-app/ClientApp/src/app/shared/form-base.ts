@@ -1,5 +1,7 @@
 import {
   AbstractControl,
+  FormArray,
+  FormGroup,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
@@ -726,5 +728,20 @@ export class FormBase {
     control.setErrors(null, options);
     control.clearValidators();
     control.updateValueAndValidity(options);
+  }
+
+  // recursively checks if all required fields are filled out touched
+  // this is used to determine if the validation message should be shown
+  protected hasInvalidTouchedControls(control: AbstractControl): boolean {
+    if (control instanceof FormGroup) {
+      // check all controls in the FormGroup
+      return Object.keys(control.controls).some((key) => this.hasInvalidTouchedControls(control.get(key)));
+    } else if (control instanceof FormArray) {
+      // check all controls in the FormArray
+      return control.controls.some((ctrl) => this.hasInvalidTouchedControls(ctrl));
+    } else {
+      // it's a FormControl - check if it's invalid and touched
+      return control.invalid && control.touched;
+    }
   }
 }
