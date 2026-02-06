@@ -266,7 +266,7 @@
     <section>
       <p>The following section provides information regarding employment information. This information is necessary if you are requesting benefits for lost employment income.</p>
       <h2 class="blue-header">Income Loss Information</h2>
-      <app-field label="Have you missed work as a result of the death of the victim?" [valid]="isFieldValid('missedWorkDueToDeathOfVictim')" [required]="true" errorMessage="Please select an option">
+      <app-field label="Have you missed work as a result of the death of the victim?" [formControl]="form.get('missedWorkDueToDeathOfVictim')" [valid]="isFieldValid('missedWorkDueToDeathOfVictim')" errorMessage="Please select an option">
         <label class="inline-label">
           <input type="radio" [value]="CRMBoolean.True" name="missedWorkDueToDeathOfVictim" formControlName="missedWorkDueToDeathOfVictim">
           <span>Yes</span>
