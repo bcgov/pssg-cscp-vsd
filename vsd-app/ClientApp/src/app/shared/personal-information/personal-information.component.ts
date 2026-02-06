@@ -1,27 +1,27 @@
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { FormBase } from '../form-base';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { UntypedFormGroup, ControlContainer, AbstractControl, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ControlContainer, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType } from '../enums-list';
-import { POSTAL_CODE } from '../regex.constants';
-import { AddressHelper } from '../address/address.helper';
-import { EmailValidator } from '../validators/email.validator';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Subscription } from 'rxjs';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { AddressHelper } from '../address/address.helper';
+import { ApplicationType, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
+import { POSTAL_CODE } from '../regex.constants';
+import { EmailValidator } from '../validators/email.validator';
 
 @Component({
-    selector: 'app-personal-information',
-    templateUrl: './personal-information.component.html',
-    styleUrls: ['./personal-information.component.scss'],
-    providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-    ],
-    standalone: false
+  selector: 'app-personal-information',
+  templateUrl: './personal-information.component.html',
+  styleUrls: ['./personal-information.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
+  standalone: false
 })
 export class PersonalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
@@ -37,13 +37,14 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
   phoneIsRequired: boolean = false;
   isVoiceMailRequired: boolean = false;
-  emailIsRequired: boolean = false;
+
   addressIsRequired: boolean = false;
   alternateAddressIsRequired: boolean = false;
 
   addressHelper = new AddressHelper();
 
   preferredMethodOfContactSubscription: Subscription;
+  agreeToCvapCommunicationExchangeSubscription: Subscription;
   sinSubscription: Subscription;
   leaveVoicemailSubscription: Subscription;
   addressSubscription: Subscription;
@@ -83,7 +84,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
       this.addressSubscription = this.form.get('primaryAddress').valueChanges.subscribe((value) => {
         this.copyPersonalAddressToRepresentativeAddress(this.form.parent);
         this.setPhoneValidators();
-        this.setEmailValidators();
       });
 
       this.phoneSubscription = this.form.get('phoneNumber').valueChanges.subscribe((value) => {
@@ -128,6 +128,10 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     this.preferredMethodOfContactSubscription = this.form
       .get('preferredMethodOfContact')
       .valueChanges.subscribe((value) => this.preferredMethodOfContactChange(value));
+
+    this.agreeToCvapCommunicationExchangeSubscription = this.form
+      .get('agreeToCvapCommunicationExchange')
+      .valueChanges.subscribe(() => this.setEmailValidators());
 
     if (this.formType == ApplicationType.Victim_Application || this.formType == ApplicationType.IFM_Application) {
       this.sinSubscription = this.form.get('sin').valueChanges.subscribe((value) => {
@@ -194,6 +198,8 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
   ngOnDestroy() {
     if (this.preferredMethodOfContactSubscription) this.preferredMethodOfContactSubscription.unsubscribe();
+    if (this.agreeToCvapCommunicationExchangeSubscription)
+      this.agreeToCvapCommunicationExchangeSubscription.unsubscribe();
     if (this.leaveVoicemailSubscription) this.leaveVoicemailSubscription.unsubscribe();
     if (this.sinSubscription) this.sinSubscription.unsubscribe();
     if (this.addressSubscription) this.addressSubscription.unsubscribe();
@@ -206,8 +212,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
   preferredMethodOfContactChange(value) {
     let phoneControl = this.form.get('phoneNumber');
     let altPhoneControl = this.form.get('alternatePhoneNumber');
-    let emailControl = this.form.get('email');
-    let emailConfirmControl = this.form.get('confirmEmail');
     let agreeToCVAPEmailControl = this.form.get('agreeToCvapCommunicationExchange');
 
     this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'primaryAddress');
@@ -219,8 +223,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
       Validators.minLength(this.phoneMinLength),
       Validators.maxLength(this.phoneMaxLength)
     ]);
-    this.setControlValidators(emailControl, [Validators.email]);
-    this.setControlValidators(emailConfirmControl, [Validators.email, EmailValidator('email')]);
     this.clearControlValidators(agreeToCVAPEmailControl);
 
     let contactMethod = parseInt(value);
@@ -232,20 +234,15 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         Validators.maxLength(this.phoneMaxLength)
       ]);
       this.phoneIsRequired = true;
-      this.emailIsRequired = false;
       this.addressIsRequired = false;
     } else if (contactMethod == 1) {
-      //Email
-      this.setControlValidators(emailControl, [Validators.required, Validators.email]);
-      this.setControlValidators(emailConfirmControl, [Validators.required, Validators.email, EmailValidator('email')]);
+      this.setEmailValidators();
       this.setControlValidators(agreeToCVAPEmailControl, [Validators.requiredTrue]);
       this.phoneIsRequired = false;
-      this.emailIsRequired = true;
       this.addressIsRequired = false;
     } else if (contactMethod == 4) {
       //Mail
       this.phoneIsRequired = false;
-      this.emailIsRequired = false;
       this.addressIsRequired = true;
       this.alternateAddressIsRequired = false;
     }
@@ -278,14 +275,24 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
         Validators.maxLength(this.phoneMaxLength)
       ]);
     }
+  }
 
-    if (agreeToCVAPEmailControl.value == true) {
+  // determines and sets email fields validators based on preferred method of contact and agree to CVAP communication exchange
+  private setEmailValidators() {
+    const preferredMethodControl = this.form.get('preferredMethodOfContact');
+    const agreeToCvapCommunicationExchangeControl = this.form.get('agreeToCvapCommunicationExchange');
+
+    const emailControl = this.form.get('email');
+    const emailConfirmControl = this.form.get('confirmEmail');
+
+    if (preferredMethodControl.value == 1 || agreeToCvapCommunicationExchangeControl.value === true) {
       this.setControlValidators(emailControl, [Validators.required, Validators.email]);
       this.setControlValidators(emailConfirmControl, [Validators.required, Validators.email, EmailValidator('email')]);
+      return;
+    } else {
+      this.setControlValidators(emailControl, [Validators.email]);
+      this.setControlValidators(emailConfirmControl, [Validators.email, EmailValidator('email')]);
     }
-
-    //verify that email is marked as required per "Other" address rule
-    this.setEmailValidators();
   }
 
   iHaveOtherNamesChange(val: boolean) {
@@ -382,16 +389,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
       this.isVoiceMailRequired = false;
       this.clearControlValidators(voicemailControl, options);
     }
-  }
-
-  setEmailValidators() {
-    //email was already required - so we don't need to do anything right now
-    if (this.emailIsRequired) {
-      return;
-    }
-    let address = this.form.get('primaryAddress');
-    let emailControl = this.form.get('email');
-    this.setControlValidators(emailControl, [Validators.email]);
   }
 
   doNotLiveAtAddressChange(val: boolean) {
