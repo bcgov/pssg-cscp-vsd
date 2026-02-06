@@ -171,8 +171,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
     Promise.all(promise_array).then((res) => {
       this.didLoad = true;
-      // console.log("Lookup data");
-      // console.log(this.lookupData);
     });
 
     if (completeOnBehalfOf) {
@@ -180,6 +178,12 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
         completingOnBehalfOf: parseInt(completeOnBehalfOf)
       });
     }
+
+    this.form.valueChanges.subscribe(() => {
+      const currentFormGroupName = this.getFormGroupName(this.ifmStepper.selectedIndex);
+      const currentFormGroup = this.form.get(currentFormGroupName);
+      this.showValidationMessage = this.hasInvalidTouchedControls(currentFormGroup);
+    });
   }
 
   verifyCancellation(): void {
@@ -223,13 +227,11 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   gotoNextStep(stepper: MatStepper): void {
     if (stepper != null) {
-      var desiredFormIndex = stepper.selectedIndex;
-      var formGroupName = this.getFormGroupName(desiredFormIndex);
-      // console.log(`Form for validation is ${formGroupName}.`);
+      var formGroupName = this.getFormGroupName(stepper.selectedIndex);
 
       this.formFullyValidated = this.form.valid;
 
-      if (desiredFormIndex >= 0 && desiredFormIndex < 9) {
+      if (stepper.selectedIndex >= 0 && stepper.selectedIndex < 9) {
         var formParts = this.form.get(formGroupName);
         var formValid = true;
 
