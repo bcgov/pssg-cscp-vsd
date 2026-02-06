@@ -1,4 +1,4 @@
-import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApplicationType } from '../enums-list';
 import { POSTAL_CODE } from '../regex.constants';
 

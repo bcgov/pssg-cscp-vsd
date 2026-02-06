@@ -3,11 +3,14 @@
     <span>{{leadingText}} <p></p> </span>
   }
   @if (label) {
-    <label>{{label}}@if (tooltipReference) {
-      <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='tooltipReference'> <i class='fa fa-info-circle'> </i></span>
-      }@if (required) {
-      <span class="error-states red-asterisk"> *</span>
-    }</label>
+    <label>{{label}} @if (tooltipReference) {
+        <span class='tooltip-icon' data-placement="right" data-animation="true" data-show="true" [tooltip]='tooltipReference'> <i class='fa fa-info-circle'> </i></span>
+      }
+
+      @if (isRequired) {
+        <span class="error-states red-asterisk"> *</span>
+      }
+    </label>
   }
   @if (label) {
     <br>

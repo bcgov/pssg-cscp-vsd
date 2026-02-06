@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { Subscription } from 'rxjs';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
-import { Router, NavigationExtras } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { NavigationExtras, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { FormBase } from '../shared/form-base';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss'],
-    standalone: false
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
+  standalone: false
 })
 export class HomeComponent extends FormBase implements OnInit {
   window = window;
@@ -19,7 +19,6 @@ export class HomeComponent extends FormBase implements OnInit {
   public selectedApplicationName: string;
   showValidationMessage: boolean;
 
-  isLocalHost: boolean = false;
   isIE: boolean = false;
   constructor(private titleService: Title, private fb: UntypedFormBuilder, private router: Router) {
     super();
@@ -29,10 +28,6 @@ export class HomeComponent extends FormBase implements OnInit {
     var ua = window.navigator.userAgent;
     this.isIE = /MSIE|Trident/.test(ua);
 
-    if (window.location.origin === 'http://localhost:5000') {
-      this.isLocalHost = true;
-    }
-
     this.titleService.setTitle('Home - Crime Victim Assistance Program');
 
     this.form = this.fb.group({
@@ -40,24 +35,24 @@ export class HomeComponent extends FormBase implements OnInit {
       completingOnBehalfOf: ['', Validators.required],
       wasCrimeInBC: ['', Validators.required]
     });
+
+    this.form.valueChanges.subscribe(() => {
+      this.showValidationMessage = this.hasInvalidTouchedControls(this.form);
+    });
   }
 
-  updateForm(event) {
+  applicationTypeChanged(event) {
     var selection = parseInt(event.target.value.toLowerCase());
 
     this.selectedApplicationType = selection;
     this.selectedApplicationName = this.getApplicationName(selection).toUpperCase();
 
     this.form.get('completingOnBehalfOf').setValue('');
+    this.form.get('completingOnBehalfOf').markAsUntouched();
     this.form.get('wasCrimeInBC').setValue('');
-  }
+    this.form.get('wasCrimeInBC').markAsUntouched();
 
-  canProceedWithApplication(): boolean {
-    let applicationType = parseInt(this.form.get('applicationType').value) > 0;
-    let behalfOf = parseInt(this.form.get('completingOnBehalfOf').value) > 0;
-    let isInBc = this.form.get('wasCrimeInBC').value === true;
-
-    return applicationType && behalfOf && isInBc;
+    this.showValidationMessage = false;
   }
 
   getApplicationName(applicationNumber: number): string {
@@ -72,12 +67,9 @@ export class HomeComponent extends FormBase implements OnInit {
     return '';
   }
 
-  // marking the form as touched makes the validation messages show
-  markAsTouched() {
-    this.form.markAsTouched();
-  }
-
   gotoApplication(): void {
+    this.form.markAllAsTouched();
+
     if (this.form.valid && this.form.get('wasCrimeInBC').value === true) {
       this.showValidationMessage = false;
       let applicationType = parseInt(this.form.get('applicationType').value);
@@ -97,7 +89,6 @@ export class HomeComponent extends FormBase implements OnInit {
           break;
       }
 
-      // console.log(applicationType);
       let navigationExtras: NavigationExtras = {
         queryParams: { ob: behalfOf }
       };
@@ -105,7 +96,6 @@ export class HomeComponent extends FormBase implements OnInit {
       this.router.navigate([routeUrl], navigationExtras);
     } else {
       this.showValidationMessage = true;
-      // console.log("form not validated");
     }
   }
 }

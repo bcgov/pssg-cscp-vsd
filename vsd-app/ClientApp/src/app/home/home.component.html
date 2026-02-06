@@ -27,7 +27,7 @@
           </div>
 
           <div [formGroup]="form">
-            <app-field label="Please select the application form that applies to you." (change)="updateForm($event)" [required]="true">
+            <app-field label="Please select the application form that applies to you." (change)="applicationTypeChanged($event)" [required]="true">
               <select class="form-control" style="width: 350px;" formControlName="applicationType">
                 <option value="0">Select...</option>
                 <option value="100000002">Victim Application</option>
@@ -70,7 +70,8 @@
                       </div>
                     }
                     <section class="radio-list per-line">
-                      <app-field label="I am:" [required]="true">
+
+                      <app-field label="I am:" [required]="true" [valid]="isFieldValid('completingOnBehalfOf')" errorMessage="Please indicate who is completing this application">
                         <label>
                           <input type="radio" [value]="100000000" name="completingOnBehalfOf" formControlName="completingOnBehalfOf">
                           Completing this application for myself <app-tool-tip [trigger]="onBehalfOfToolTip"></app-tool-tip>
@@ -94,12 +95,12 @@
                             <app-tool-tip [trigger]="legalRepresentativeTooltip"></app-tool-tip>
                           </div>
                         </label>
-                      </app-field>
+                      </app-field>                      
                     </section>
                     <ng-template #onBehalfOfToolTip>This option should also be chosen when completing the application in consultation with a victim service worker or support person.</ng-template>
                     <ng-template #legalRepresentativeTooltip>If the person does not have a legal representative and is physically or mentally incapable of making the application, <strong>a third party</strong> may complete the application on their behalf. <strong>NOTE:</strong> This does not include victim service or other support workers who are providing assistance to a capable person.</ng-template>
                     <section [ngClass]="form.get('wasCrimeInBC').value === false ? 'out-of-line danger-cell' : 'out-of-line'">
-                      <app-field label="Did the crime occur in BC" [required]="true">
+                      <app-field label="Did the crime occur in BC" [required]="true" [valid]="isFieldValid('wasCrimeInBC')" errorMessage="Please indicate if the crime occurred in BC">
                         <table style="width: 100%" class="out-of-line">
                           <tr>
                             <td class="lead-cell">
@@ -135,19 +136,6 @@
               </div>
             </div>
           </div>
-
-          <!-- for dev - easy navigation -->
-          @if (isLocalHost) {
-            <div class="row">
-              <div class="col-12">
-                <label style="display: block; padding-top: 80px;">These only show when running locally - quick links to other forms</label>
-                <button [routerLink]="'/victim-restitution'" class="btn btn-primary mr-2">Victim Restitution</button>
-                <button [routerLink]="'/offender-restitution'" class="btn btn-primary mr-2">Offender Restitution</button>
-                <button [routerLink]="'/submit-invoice'" class="btn btn-primary mr-2">Submit Invoice</button>
-              </div>
-            </div>
-          }
-
         </div>
       </div>
     </div>

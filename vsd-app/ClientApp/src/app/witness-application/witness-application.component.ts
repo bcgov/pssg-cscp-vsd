@@ -173,6 +173,12 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
         completingOnBehalfOf: parseInt(completeOnBehalfOf)
       });
     }
+
+    this.form.valueChanges.subscribe(() => {
+      const currentFormGroupName = this.getFormGroupName(this.currentFormStep);
+      const currentFormGroup = this.form.get(currentFormGroupName);
+      this.showValidationMessage = this.hasInvalidTouchedControls(currentFormGroup);
+    });
   }
 
   verifyCancellation(): void {

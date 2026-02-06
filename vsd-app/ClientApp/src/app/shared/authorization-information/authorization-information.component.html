@@ -10,6 +10,11 @@
 
   <div [class.with-error]="!form.get('signName').valid && form.get('signName').touched">
     <p>I, <input class="form-control standard" type="text" formControlName="signName" placeholder="Please type your full name">, hereby authorize: <span class="error-states ng-star-inserted">*</span></p>
+    @if (!form.get('signName').valid && form.get('signName').touched) {
+      <div class="error-states error-container" style="margin-left: 16px">
+        Please enter your full name
+      </div>
+    }
     <ol class="list punctuated">
       <li><span>The doctor, dentist, optometrist, chiropractor, or other health care professional who treated my injuries (physical and/or psychological), to obtain medical or other reports regarding my injuries, treatment or information relevant to this application.</span></li>
       <li><span>The police or other law enforcement authorities, to obtain copies of police reports, statements, incident reports or other information relevant to this application;</span></li>

@@ -197,6 +197,11 @@
                     }
                     <option value="Other">Other</option>
                   </select>
+                  @if (!isMyControlValid(item.get('policeDetachment'))) {
+                    <div class="error-states error-container" style="margin: 8px 0 0 8px;">
+                      Please select a police force
+                    </div>
+                  }
                 </div>
                 <div>
                   @if (item.get('policeDetachment').value == 'Other') {
