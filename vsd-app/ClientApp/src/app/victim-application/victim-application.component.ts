@@ -89,6 +89,18 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     police_detachments: []
   };
 
+  private steps: Array<string> = [
+    'introduction',
+    'personalInformation',
+    'crimeInformation',
+    'medicalInformation',
+    'expenseInformation',
+    'employmentIncomeInformation',
+    'representativeInformation',
+    'declarationInformation',
+    'authorizationInformation'
+  ];
+
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: UntypedFormBuilder,
@@ -177,6 +189,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         completingOnBehalfOf: parseInt(completeOnBehalfOf)
       });
     }
+
+    this.form.valueChanges.subscribe(() => {
+      const currentFormGroupName = this.steps[this.victimStepper.selectedIndex];
+      const currentFormGroup = this.form.get(currentFormGroupName);
+      this.showValidationMessage = this.hasInvalidTouchedControls(currentFormGroup);
+    });
   }
 
   buildApplicationForm(FORM: ApplicationType = this.FORM_TYPE): UntypedFormGroup {
@@ -231,26 +249,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   gotoNextStep(stepper: MatStepper, emptyPage?: boolean): void {
     // when a user clicks the continue button we move them to the next part of the form
-    let elements: Array<string> = [
-      'introduction',
-      'personalInformation',
-      'crimeInformation',
-      'medicalInformation',
-      'expenseInformation',
-      'employmentIncomeInformation',
-      'representativeInformation',
-      'declarationInformation',
-      'authorizationInformation'
-    ];
-
     if (stepper != null) {
-      // the stepper indexes match our form indexes
-      const desiredFormIndex: number = stepper.selectedIndex;
       // get the text value of the form index
-      const formGroupName = elements[desiredFormIndex];
+      const formGroupName = this.steps[stepper.selectedIndex];
       // console.log(`Form for validation is ${formGroupName}.`);
       // be sure that the stepper is in range
-      if (desiredFormIndex >= 0 && desiredFormIndex < elements.length) {
+      if (stepper.selectedIndex >= 0 && stepper.selectedIndex < this.steps.length) {
         // collect the matching form group from the form
         const formParts = this.form.get(formGroupName);
         // TODO: how do we know this is true?
