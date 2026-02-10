@@ -106,7 +106,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Ajië", 22)]
-		Aji = 100000022,
+		Ajie = 100000022,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Akan", 23)]
@@ -282,7 +282,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Arbëresh", 66)]
-		ArbResh = 100000066,
+		Arberesh = 100000066,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Archi", 67)]
@@ -322,7 +322,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Asháninka", 76)]
-		AshNinka = 100000076,
+		Ashaninka = 100000076,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Assamese", 77)]
@@ -383,6 +383,10 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Aymara", 91)]
 		Aymara = 100000091,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Äynu", 92)]
+		Aynu = 100000092,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Azerbaijani", 93)]
@@ -949,6 +953,10 @@ namespace Database.Model
 		Hakka = 100000232,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Hän", 234)]
+		Han = 100000233,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Harari", 235)]
 		Harari = 100000234,
 		
@@ -971,10 +979,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Hindi", 240)]
 		Hindi = 100000239,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Hän", 234)]
-		HN = 100000233,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Huambisa", 241)]
@@ -1009,16 +1013,16 @@ namespace Database.Model
 		Inuktitut = 100000247,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Iñupiaq", 249)]
+		Inupiaq = 100000248,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Irish (Gaelic)", 250)]
 		IrishGaelic = 100000249,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Italian", 251)]
 		Italian = 100000250,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Iñupiaq", 249)]
-		IUpiaq = 100000248,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Japanese", 252)]
@@ -1273,6 +1277,10 @@ namespace Database.Model
 		Manx = 100000313,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Māori", 315)]
+		Maori = 100000314,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Marathi", 316)]
 		Marathi = 100000315,
 		
@@ -1311,10 +1319,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Montagnais", 325)]
 		Montagnais = 100000324,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Māori", 315)]
-		MOri = 100000314,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Nahuatl", 326)]
@@ -1485,6 +1489,38 @@ namespace Database.Model
 		SaamiInari = 100000366,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sámi (Kildin)", 368)]
+		SamiKildin = 100000367,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sámi (Lule)", 369)]
+		SamiLule = 100000368,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sámi (North)", 370)]
+		SamiNorth = 100000369,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sámi (Pite)", 371)]
+		SamiPite = 100000370,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sámi (Skolt)", 372)]
+		SamiSkolt = 100000371,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sámi (South)", 373)]
+		SamiSouth = 100000372,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sámi (Ter)", 374)]
+		SamiTer = 100000373,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sámi (Ume)", 375)]
+		SamiUme = 100000374,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Samoan", 376)]
 		Samoan = 100000375,
 		
@@ -1577,38 +1613,6 @@ namespace Database.Model
 		Slovenian = 100000397,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sámi (Kildin)", 368)]
-		SMiKildin = 100000367,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sámi (Lule)", 369)]
-		SMiLule = 100000368,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sámi (North)", 370)]
-		SMiNorth = 100000369,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sámi (Pite)", 371)]
-		SMiPite = 100000370,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sámi (Skolt)", 372)]
-		SMiSkolt = 100000371,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sámi (South)", 373)]
-		SMiSouth = 100000372,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sámi (Ter)", 374)]
-		SMiTer = 100000373,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sámi (Ume)", 375)]
-		SMiUme = 100000374,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Somali", 399)]
 		Somali = 100000398,
 		
@@ -1686,7 +1690,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Tai Nüa", 418)]
-		TaiNA = 100000417,
+		TaiNua = 100000417,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Taiwanese", 419)]
@@ -1841,12 +1845,12 @@ namespace Database.Model
 		Vietnamese = 100000455,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Votic", 458)]
-		Votic = 100000457,
+		[OptionSetMetadataAttribute("Võro", 457)]
+		Voro = 100000456,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Võro", 457)]
-		VRo = 100000456,
+		[OptionSetMetadataAttribute("Votic", 458)]
+		Votic = 100000457,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Walloon", 459)]
@@ -1897,10 +1901,6 @@ namespace Database.Model
 		Yindjibarndi = 100000469,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Äynu", 92)]
-		Ynu = 100000092,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Yolngu", 471)]
 		Yolngu = 100000470,
 		
@@ -1917,12 +1917,12 @@ namespace Database.Model
 		Zhuang = 100000473,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Zuñi", 476)]
-		ZuI = 100000475,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Zulu", 475)]
 		Zulu = 100000474,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Zuñi", 476)]
+		Zuni = 100000475,
 	}
 }
 #pragma warning restore CS1591

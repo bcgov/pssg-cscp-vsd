@@ -89,7 +89,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("FedEx", 2)]
-		Fedex = 3,
+		FedEx = 3,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Full Load", 5)]
@@ -284,16 +284,24 @@ namespace Database.Model
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Female", 1)]
-		Female = 2,
+		[OptionSetMetadataAttribute("Man/Boy (M)", 0)]
+		ManBoyM = 1,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Male", 0)]
-		Male = 1,
+		[OptionSetMetadataAttribute("Non-Binary (X)", 1, "#0000ff")]
+		NonBinaryX = 100000000,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("X", 2, "#0000ff")]
-		X = 100000000,
+		[OptionSetMetadataAttribute("Prefer not to answer (U)", 3, "#0000ff")]
+		PreferNotToAnswerU = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Prefer to self-describe", 4, "#0000ff")]
+		PreferToSelfDescribe = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Woman/Girl (F)", 2)]
+		WomanGirlF = 2,
 	}
 	
 	/// <summary>
@@ -737,6 +745,23 @@ namespace Database.Model
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Contact_Vsd_IIpsOkayToLeaveVoiceMailOther
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("No", 1, "#0000ff")]
+		No = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Other", 2, "#0000ff")]
+		Other = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Yes", 0, "#0000ff")]
+		Yes = 100000000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum Contact_Vsd_IiPspHoNeType
 	{
 		
@@ -775,20 +800,20 @@ namespace Database.Model
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("He/Him", 1, "#0000ff")]
-		HeHim = 100000001,
+		[OptionSetMetadataAttribute("He/Him/His", 1, "#0000ff")]
+		HeHimHis = 100000001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Other", 3, "#0000ff")]
 		Other = 100000003,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("She/Her", 0, "#0000ff")]
-		SheHer = 100000000,
+		[OptionSetMetadataAttribute("She/Her/Hers", 0, "#0000ff")]
+		SheHerHers = 100000000,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("They/Them", 2, "#0000ff")]
-		TheyThem = 100000002,
+		[OptionSetMetadataAttribute("They/Them/Theirs", 2, "#0000ff")]
+		TheyThemTheirs = 100000002,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -881,7 +906,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Métis", 1, "#0000ff")]
-		MTis = 100000001,
+		Metis = 100000001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Not Applicable", 4, "#0000ff")]
@@ -979,6 +1004,27 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Primary", 0, "#0000ff")]
 		Primary = 100000000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Vsd_Contact_Vsd_Cvap_Affiliation_MultiSelect
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("BCACC - RCC", 0, "#0000ff")]
+		BcaccRcc = 865490000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("BCCSW - RSW / RCSW", 2, "#0000ff")]
+		BccswRswRcsw = 865490002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CCPA - CCC", 1, "#0000ff")]
+		CcpaCcc = 865490001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Other", 3, "#0000ff")]
+		Other = 865490003,
 	}
 	
 	/// <summary>
@@ -1298,6 +1344,7 @@ namespace Database.Model
 			public const string Vsd_Contact_Vsd_Contract_ContactLookup2 = "Vsd_Contact_Vsd_Contract_ContactLookup2";
 			public const string Vsd_Contact_Vsd_Contract_Customer = "Vsd_Contact_Vsd_Contract_Customer";
 			public const string Vsd_Contact_Vsd_Entitlement = "Vsd_Contact_Vsd_Entitlement";
+			public const string Vsd_Contact_Vsd_Invoice = "Vsd_Contact_Vsd_Invoice";
 			public const string Vsd_Contact_Vsd_Invoice_Customer = "Vsd_Contact_Vsd_Invoice_Customer";
 			public const string Vsd_Contact_Vsd_Invoice_Payee = "Vsd_Contact_Vsd_Invoice_Payee";
 			public const string Vsd_Contact_Vsd_Payment_Payee = "Vsd_Contact_Vsd_Payment_Payee";
@@ -1318,10 +1365,14 @@ namespace Database.Model
 			public const string Vsd_CSuCaseCount = "vsd_csucasecount";
 			public const string Vsd_CSuCaseCount_Date = "vsd_csucasecount_date";
 			public const string Vsd_CSuCaseCount_State = "vsd_csucasecount_state";
+			public const string Vsd_Cvap_Affiliation_MultiSelect = "vsd_cvap_affiliation_multiselect";
+			public const string Vsd_Cvap_Affiliation_MultiSelectName = "vsd_cvap_affiliation_multiselectname";
 			public const string Vsd_Cvap_CounsellingStatus = "vsd_cvap_counsellingstatus";
 			public const string Vsd_Cvap_CounsellingStatusName = "vsd_cvap_counsellingstatusname";
 			public const string Vsd_Cvap_CounsellorRegistrationDate = "vsd_cvap_counsellorregistrationdate";
 			public const string Vsd_Cvap_CounsellorRenewalDueDate = "vsd_cvap_counsellorrenewalduedate";
+			public const string Vsd_Cvap_GstApplied = "vsd_cvap_gstapplied";
+			public const string Vsd_Cvap_GstAppliedName = "vsd_cvap_gstappliedname";
 			public const string Vsd_Cvap_Justin = "vsd_cvap_justin";
 			public const string Vsd_Cvap_JustinName = "vsd_cvap_justinname";
 			public const string Vsd_CvapCaseCount = "vsd_cvapcasecount";
@@ -1336,6 +1387,7 @@ namespace Database.Model
 			public const string Vsd_EmploymentStatus = "vsd_employmentstatus";
 			public const string Vsd_EmploymentStatusName = "vsd_employmentstatusname";
 			public const string Vsd_ExecutiveContact_Account = "Vsd_ExecutiveContact_Account";
+			public const string Vsd_GenderIdentityText = "vsd_genderidentitytext";
 			public const string Vsd_HasPortalAccess = "vsd_hasportalaccess";
 			public const string Vsd_HasPortalAccessName = "vsd_hasportalaccessname";
 			public const string Vsd_HomePhoneExtension = "vsd_homephoneextension";
@@ -1352,8 +1404,12 @@ namespace Database.Model
 			public const string Vsd_IiPsEngagementOnBehalfOfClient = "vsd_iipsengagementonbehalfofclient";
 			public const string Vsd_IiPsEngagementOnBehalfOfClientName = "vsd_iipsengagementonbehalfofclientname";
 			public const string Vsd_IIpsNotes = "vsd_iipsnotes";
+			public const string Vsd_IIpsOkayToLeaveVoiceMailOther = "vsd_iipsokaytoleavevoicemailother";
+			public const string Vsd_IIpsOkayToLeaveVoiceMailOtherName = "vsd_iipsokaytoleavevoicemailothername";
 			public const string Vsd_IIpsOkayToSendTextMessages = "vsd_iipsokaytosendtextmessages";
 			public const string Vsd_IIpsOkayToSendTextMessagesName = "vsd_iipsokaytosendtextmessagesname";
+			public const string Vsd_IIpsOkayToSendTextMessagesOther = "vsd_iipsokaytosendtextmessagesother";
+			public const string Vsd_IIpsOkayToSendTextMessagesOtherName = "vsd_iipsokaytosendtextmessagesothername";
 			public const string Vsd_IiPspHoNeType = "vsd_iipsphonetype";
 			public const string Vsd_IiPspHoNeTypeName = "vsd_iipsphonetypename";
 			public const string Vsd_IiPspRiMaryContactIdentity = "vsd_iipsprimarycontactidentity";
@@ -1389,6 +1445,9 @@ namespace Database.Model
 			public const string Vsd_PreferredContactMethodsName = "vsd_preferredcontactmethodsname";
 			public const string Vsd_PreferredFirstName = "vsd_preferredfirstname";
 			public const string Vsd_PreferredLastName = "vsd_preferredlastname";
+			public const string Vsd_PrimaryRaceEthnicity = "vsd_primaryraceethnicity";
+			public const string Vsd_PrimaryRaceEthnicityName = "vsd_primaryraceethnicityname";
+			public const string Vsd_PrimaryRaceEthnicityText = "vsd_primaryraceethnicitytext";
 			public const string Vsd_Rest_AWOl = "vsd_rest_awol";
 			public const string Vsd_Rest_AWOlName = "vsd_rest_awolname";
 			public const string Vsd_Rest_AWOlStartDate = "vsd_rest_awolstartdate";
@@ -5811,6 +5870,7 @@ namespace Database.Model
 		/// Shows the ID of the stage.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -6108,6 +6168,7 @@ namespace Database.Model
 		/// For internal use only.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -6536,6 +6597,38 @@ namespace Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cvap_affiliation_multiselect")]
+		public virtual System.Collections.Generic.IEnumerable<Vsd_Contact_Vsd_Cvap_Affiliation_MultiSelect> Vsd_Cvap_Affiliation_MultiSelect
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return EntityOptionSetEnum.GetMultiEnum<Vsd_Contact_Vsd_Cvap_Affiliation_MultiSelect>(this, "vsd_cvap_affiliation_multiselect");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_cvap_affiliation_multiselect", EntityOptionSetEnum.GetMultiEnum(this, "vsd_cvap_affiliation_multiselect", value));
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cvap_affiliation_multiselectname")]
+		public string Vsd_Cvap_Affiliation_MultiSelectName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_cvap_affiliation_multiselect"))
+				{
+					return this.FormattedValues["vsd_cvap_affiliation_multiselect"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cvap_counsellingstatus")]
 		public virtual Contact_Vsd_Cvap_CounsellingStatus? Vsd_Cvap_CounsellingStatus
 		{
@@ -6595,6 +6688,38 @@ namespace Database.Model
 			set
 			{
 				this.SetAttributeValue("vsd_cvap_counsellorrenewalduedate", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cvap_gstapplied")]
+		public virtual Vsd_YesNo? Vsd_Cvap_GstApplied
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((Vsd_YesNo?)(EntityOptionSetEnum.GetEnum(this, "vsd_cvap_gstapplied")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_cvap_gstapplied", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cvap_gstappliedname")]
+		public string Vsd_Cvap_GstAppliedName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_cvap_gstapplied"))
+				{
+					return this.FormattedValues["vsd_cvap_gstapplied"];
+				}
+				else
+				{
+					return default(string);
+				}
 			}
 		}
 		
@@ -6792,6 +6917,21 @@ namespace Database.Model
 				{
 					return default(string);
 				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_genderidentitytext")]
+		public string Vsd_GenderIdentityText
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_genderidentitytext");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_genderidentitytext", value);
 			}
 		}
 		
@@ -7050,6 +7190,38 @@ namespace Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_iipsokaytoleavevoicemailother")]
+		public virtual Contact_Vsd_IIpsOkayToLeaveVoiceMailOther? Vsd_IIpsOkayToLeaveVoiceMailOther
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((Contact_Vsd_IIpsOkayToLeaveVoiceMailOther?)(EntityOptionSetEnum.GetEnum(this, "vsd_iipsokaytoleavevoicemailother")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_iipsokaytoleavevoicemailother", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_iipsokaytoleavevoicemailothername")]
+		public string Vsd_IIpsOkayToLeaveVoiceMailOtherName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_iipsokaytoleavevoicemailother"))
+				{
+					return this.FormattedValues["vsd_iipsokaytoleavevoicemailother"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_iipsokaytosendtextmessages")]
 		public System.Nullable<bool> Vsd_IIpsOkayToSendTextMessages
 		{
@@ -7074,6 +7246,38 @@ namespace Database.Model
 				if (this.FormattedValues.Contains("vsd_iipsokaytosendtextmessages"))
 				{
 					return this.FormattedValues["vsd_iipsokaytosendtextmessages"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_iipsokaytosendtextmessagesother")]
+		public System.Nullable<bool> Vsd_IIpsOkayToSendTextMessagesOther
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("vsd_iipsokaytosendtextmessagesother");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_iipsokaytosendtextmessagesother", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_iipsokaytosendtextmessagesothername")]
+		public string Vsd_IIpsOkayToSendTextMessagesOtherName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_iipsokaytosendtextmessagesother"))
+				{
+					return this.FormattedValues["vsd_iipsokaytosendtextmessagesother"];
 				}
 				else
 				{
@@ -7656,6 +7860,53 @@ namespace Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_primaryraceethnicity")]
+		public virtual Vsd_RaceEthnicity? Vsd_PrimaryRaceEthnicity
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((Vsd_RaceEthnicity?)(EntityOptionSetEnum.GetEnum(this, "vsd_primaryraceethnicity")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_primaryraceethnicity", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_primaryraceethnicityname")]
+		public string Vsd_PrimaryRaceEthnicityName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_primaryraceethnicity"))
+				{
+					return this.FormattedValues["vsd_primaryraceethnicity"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_primaryraceethnicitytext")]
+		public string Vsd_PrimaryRaceEthnicityText
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_primaryraceethnicitytext");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_primaryraceethnicitytext", value);
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_rest_awol")]
 		public virtual Vsd_YesNo? Vsd_Rest_AWOl
 		{
@@ -7907,6 +8158,7 @@ namespace Database.Model
 		}
 		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_rest_disbursementchequeinstructions")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string Vsd_Rest_DisbursementChequeInstructions
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -8068,6 +8320,7 @@ namespace Database.Model
 		}
 		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_rest_frequencyofupdates")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public virtual Vsd_RestFrequencyOfUpdates? Vsd_Rest_FrequencyOfUpdates
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -8700,6 +8953,7 @@ namespace Database.Model
 		}
 		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_rest_reportingenddate")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.DateTime> Vsd_Rest_ReportingEndDate
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -9718,6 +9972,24 @@ namespace Database.Model
 			set
 			{
 				this.SetRelatedEntities<Database.Model.Vsd_Entitlement>("vsd_contact_vsd_entitlement", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N vsd_contact_vsd_invoice
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_contact_vsd_invoice")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Invoice> Vsd_Contact_Vsd_Invoice
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_Invoice>("vsd_contact_vsd_invoice", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_Invoice>("vsd_contact_vsd_invoice", null, value);
 			}
 		}
 		

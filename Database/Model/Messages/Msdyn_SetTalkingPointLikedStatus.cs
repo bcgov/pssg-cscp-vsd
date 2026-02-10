@@ -120,7 +120,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["IsSuccessFull"] = value;
+				this.Results["IsSuccessfull"] = value;
 			}
 		}
 	}

@@ -17,10 +17,6 @@ namespace Database.Model
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("--", 0, "#0000ff")]
-		_ = 100000000,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("100 Mile House", 1)]
 		_100MileHouse = 100000001,
 		
@@ -310,11 +306,11 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Baie-d’Urfé", 73)]
-		BaieDUrf = 100000073,
+		BaieDUrfe_100000073 = 100000073,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Baie-D\'Urfe", 75)]
-		BaieDUrfe = 100000075,
+		BaieDUrfe_100000075 = 100000075,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Baie-Saint-Paul", 76)]
@@ -405,10 +401,6 @@ namespace Database.Model
 		BayRoberts = 100000094,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Bécancour", 111)]
-		BCancour = 100000111,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Beachburg", 97)]
 		Beachburg = 100000097,
 		
@@ -446,11 +438,11 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Beaupré", 106)]
-		Beaupr = 100000106,
+		Beaupre = 100000106,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Beauséjour", 107)]
-		BeausJour = 100000107,
+		Beausejour = 100000107,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Beaverdell", 109)]
@@ -465,6 +457,10 @@ namespace Database.Model
 		BeaverRiver = 100000108,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Bécancour", 111)]
+		Becancour = 100000111,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Beckwith", 112)]
 		Beckwith = 100000112,
 		
@@ -474,7 +470,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Behchokò", 114)]
-		Behchok = 100000114,
+		Behchoko = 100000114,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Belcarra", 115)]
@@ -702,7 +698,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Brébeuf", 171)]
-		BrBeuf = 100000171,
+		Brebeuf = 100000171,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Brenda-Waskada", 172)]
@@ -942,7 +938,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Cap Santé", 226)]
-		CapSant = 100000226,
+		CapSante = 100000226,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Caraquet", 232)]
@@ -1129,6 +1125,14 @@ namespace Database.Model
 		Chase = 100000277,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Châteauguay", 278)]
+		Chateauguay = 100000278,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Château-Richer", 279)]
+		ChateauRicher = 100000279,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Chatham", 280)]
 		Chatham = 100000280,
 		
@@ -1187,14 +1191,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Christina Lake", 294)]
 		ChristinaLake = 100000294,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Châteauguay", 278)]
-		ChTeauguay = 100000278,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Château-Richer", 279)]
-		ChTeauRicher = 100000279,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Church Point", 295)]
@@ -1381,6 +1377,14 @@ namespace Database.Model
 		CoteauDuLac = 100000341,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Côte Saint-Luc", 340)]
+		CoteSaintLuc_100000340 = 100000340,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Côte-Saint-Luc", 342)]
+		CoteSaintLuc_100000342 = 100000342,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Courtenay", 343)]
 		Courtenay = 100000343,
 		
@@ -1439,14 +1443,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Crowsnest Pass", 357)]
 		CrowsnestPass = 100000357,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Côte Saint-Luc", 340)]
-		CTeSaintLuc_100000340 = 100000340,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Côte-Saint-Luc", 342)]
-		CTeSaintLuc_100000342 = 100000342,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Cultus Lake", 358)]
@@ -1513,6 +1509,14 @@ namespace Database.Model
 		DeerLake = 100000374,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Dégelis", 375)]
+		Degelis = 100000375,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Déléage", 376)]
+		Deleage = 100000376,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Delisle", 377)]
 		Delisle = 100000377,
 		
@@ -1573,10 +1577,6 @@ namespace Database.Model
 		Devon = 100000390,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Dégelis", 375)]
-		DGelis = 100000375,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Didsbury", 391)]
 		Didsbury = 100000391,
 		
@@ -1595,10 +1595,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Disraeli", 395)]
 		Disraeli = 100000395,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Déléage", 376)]
-		DLAge = 100000376,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Dog Creek", 396)]
@@ -2098,7 +2094,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("French River / Rivière des Français", 519)]
-		FrenchRiverRiviReDesFranAis = 100000519,
+		FrenchRiverRiviereDesFrancais = 100000519,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Frontenac", 522)]
@@ -2158,7 +2154,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Gaspé", 535)]
-		Gasp = 100000535,
+		Gaspe = 100000535,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Gatineau", 536)]
@@ -2298,11 +2294,11 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Grande-Rivière", 575)]
-		GrandeRiviRe = 100000575,
+		GrandeRiviere = 100000575,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Grande-Vallée", 576)]
-		GrandeVallE = 100000576,
+		GrandeVallee = 100000576,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Grand Falls", 568)]
@@ -2490,7 +2486,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Harbour Main-Chapel\'s Cove-Lakeview", 618)]
-		HarbourMainChapelSCoveLakeview = 100000618,
+		HarbourMainChapelsCoveLakeview = 100000618,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Hardwicke", 619)]
@@ -2549,16 +2545,16 @@ namespace Database.Model
 		Hazelton = 100000632,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Hébertville", 635)]
-		HBertville = 100000635,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Headingley", 633)]
 		Headingley = 100000633,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Hearst", 634)]
 		Hearst = 100000634,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Hébertville", 635)]
+		Hebertville = 100000635,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Hedley", 636)]
@@ -2585,8 +2581,16 @@ namespace Database.Model
 		Hensall = 100000641,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Hérbertville", 642)]
+		Herbertville = 100000642,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Heriot Bay", 643)]
 		HeriotBay = 100000643,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Hérouxville", 644)]
+		Herouxville = 100000644,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Highlands", 648)]
@@ -2677,14 +2681,6 @@ namespace Database.Model
 		Howick = 100000666,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Hérbertville", 642)]
-		HRbertville = 100000642,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Hérouxville", 644)]
-		HRouxville = 100000644,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Hudson", 667)]
 		Hudson = 100000667,
 		
@@ -2702,7 +2698,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Hudson\'s Hope", 671)]
-		HudsonSHope = 100000671,
+		HudsonsHope = 100000671,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Hull", 672)]
@@ -2750,7 +2746,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Ile-à-la-Crosse", 683)]
-		IleLaCrosse = 100000683,
+		IleALaCrosse = 100000683,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Indian Head", 684)]
@@ -3010,7 +3006,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lac-des-Écorces", 771)]
-		LacDesCorces = 100000771,
+		LacDesEcorces = 100000771,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lac-Drolet", 772)]
@@ -3034,7 +3030,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lac-Mégantic", 775)]
-		LacMGantic = 100000775,
+		LacMegantic = 100000775,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lac-Nominingue", 776)]
@@ -3054,7 +3050,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lac-Supérieur", 779)]
-		LacSupRieur = 100000779,
+		LacSuperieur = 100000779,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Ladner", 780)]
@@ -3062,7 +3058,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("La Doré", 749)]
-		LaDor = 100000749,
+		LaDore = 100000749,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Ladysmith", 781)]
@@ -3129,16 +3125,16 @@ namespace Database.Model
 		LambtonShores = 100000792,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Lamèque", 793)]
+		Lameque = 100000793,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("La Minerve", 754)]
 		LaMinerve = 100000754,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lamont", 794)]
 		Lamont = 100000794,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Lamèque", 793)]
-		LamQue = 100000793,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lanark Highlands", 795)]
@@ -3202,11 +3198,11 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("La Pêche", 755)]
-		LaPChe = 100000755,
+		LaPeche = 100000755,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("La Pocatière", 756)]
-		LaPocatiRe = 100000756,
+		LaPocatiere = 100000756,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lappe", 809)]
@@ -3218,7 +3214,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("La Présentation", 758)]
-		LaPrSentation = 100000758,
+		LaPresentation = 100000758,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("La Ronge", 759)]
@@ -3294,7 +3290,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lebel-sur-Quévillon", 823)]
-		LebelSurQuVillon = 100000823,
+		LebelSurQuevillon = 100000823,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Leduc", 824)]
@@ -3325,16 +3321,20 @@ namespace Database.Model
 		LEpiphanie = 100000744,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Les Éboulements", 833)]
-		LesBoulements = 100000833,
+		[OptionSetMetadataAttribute("Léry", 830)]
+		Lery = 100000830,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Les Cèdres", 831)]
-		LesCDres = 100000831,
+		LesCedres = 100000831,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Les Coteaux", 832)]
 		LesCoteaux = 100000832,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Les Éboulements", 833)]
+		LesEboulements = 100000833,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Les Escoumins", 834)]
@@ -3342,15 +3342,19 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Les Îles-de-la-Madeleine", 835)]
-		LesLesDeLaMadeleine = 100000835,
+		LesIlesDeLaMadeleine = 100000835,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Les Méchins", 836)]
-		LesMChins = 100000836,
+		LesMechins = 100000836,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lethbridge", 837)]
 		Lethbridge = 100000837,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Lévis", 838)]
+		Levis = 100000838,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lewisporte", 839)]
@@ -3359,6 +3363,10 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Likely", 840)]
 		Likely = 100000840,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("L’Île-Perrot", 745)]
+		LIlePerrot = 100000745,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lillooet", 841)]
@@ -3389,12 +3397,12 @@ namespace Database.Model
 		LIsletSurMer = 100000746,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Listuguj", 847)]
-		Listuguj = 100000847,
+		[OptionSetMetadataAttribute("L’ Îsle-Verte", 740)]
+		LIsleVerte = 100000740,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("L’Île-Perrot", 745)]
-		LLePerrot = 100000745,
+		[OptionSetMetadataAttribute("Listuguj", 847)]
+		Listuguj = 100000847,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lloydminster", 848)]
@@ -3461,14 +3469,6 @@ namespace Database.Model
 		Loyalist = 100000863,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Léry", 830)]
-		LRy = 100000830,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("L’ Îsle-Verte", 740)]
-		LSleVerte = 100000740,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lucan Biddulph", 864)]
 		LucanBiddulph = 100000864,
 		
@@ -3491,10 +3491,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lunenburg", 869)]
 		Lunenburg = 100000869,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Lévis", 838)]
-		LVis = 100000838,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Lynn Valley", 870)]
@@ -3674,7 +3670,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Maskinongé", 914)]
-		Maskinong = 100000914,
+		Maskinonge = 100000914,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Masset", 915)]
@@ -3803,6 +3799,10 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Messines", 946)]
 		Messines = 100000946,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Métabetchouan-Lac-à-la-Croix", 947)]
+		MetabetchouanLacALaCroix = 100000947,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Metchosin", 948)]
@@ -3941,16 +3941,16 @@ namespace Database.Model
 		MontOrford = 100000981,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Montreal", 982)]
+		Montreal = 100000982,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Montréal-Est", 983)]
-		MontrAlEst = 100000983,
+		MontrealEst = 100000983,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Montréal-Ouest", 984)]
-		MontrAlOuest = 100000984,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Montreal", 982)]
-		Montreal = 100000982,
+		MontrealOuest = 100000984,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Montrose", 985)]
@@ -3962,7 +3962,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Mont-Saint-Grégoire", 987)]
-		MontSaintGrGoire = 100000987,
+		MontSaintGregoire = 100000987,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Mont-Saint-Hilaire", 988)]
@@ -4039,10 +4039,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Mount Pearl Park", 1005)]
 		MountPearlPark = 100001005,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Métabetchouan-Lac-à-la-Croix", 947)]
-		MTabetchouanLacLaCroix = 100000947,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Mulmur", 1007)]
@@ -4354,7 +4350,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Notre-Dame-de-l\'Île-Perrot", 1084)]
-		NotreDameDeLLePerrot = 100001084,
+		NotreDameDeLIlePerrot = 100001084,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Notre-Dame-de-Lourdes", 1085)]
@@ -4646,7 +4642,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Percé", 1157)]
-		Perc = 100001156,
+		Perce = 100001156,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Perry", 1158)]
@@ -4774,7 +4770,11 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Pohénégamook", 1189)]
-		PohNGamook = 100001188,
+		Pohenegamook = 100001188,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Pointe-à-la-Croix", 1192)]
+		PointeALaCroix = 100001191,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Pointe-aux-Outardes", 1193)]
@@ -4799,10 +4799,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Point Edward", 1190)]
 		PointEdward = 100001189,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Pointe-à-la-Croix", 1192)]
-		PointeLaCroix = 100001191,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Pointe-Lebel", 1197)]
@@ -4902,7 +4898,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Portugal Cove-St. Philip\'s", 1221)]
-		PortugalCoveStPhilipS = 100001220,
+		PortugalCoveStPhilips = 100001220,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Potton", 1222)]
@@ -4949,6 +4945,10 @@ namespace Database.Model
 		Prescott = 100001231,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Prévost", 1233)]
+		Prevost = 100001232,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Price", 1234)]
 		Price = 100001233,
 		
@@ -4991,10 +4991,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Provost", 1244)]
 		Provost = 100001243,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Prévost", 1233)]
-		PrVost = 100001232,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Puslinch", 1245)]
@@ -5189,32 +5185,32 @@ namespace Database.Model
 		Riverview = 100001291,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Rivière-Beaudette", 1293)]
+		RiviereBeaudette = 100001292,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Rivière-Blanche", 1294)]
+		RiviereBlanche = 100001293,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Rivière-Bleue", 1295)]
+		RiviereBleue = 100001294,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Rivière-du-Loup", 1296)]
+		RiviereDuLoup = 100001295,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Rivière-Héva", 1297)]
+		RiviereHeva = 100001296,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Riviere-Ouelle", 1298)]
 		RiviereOuelle = 100001297,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Rivière-Beaudette", 1293)]
-		RiviReBeaudette = 100001292,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Rivière-Blanche", 1294)]
-		RiviReBlanche = 100001293,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Rivière-Bleue", 1295)]
-		RiviReBleue = 100001294,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Rivière-du-Loup", 1296)]
-		RiviReDuLoup = 100001295,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Rivière-Héva", 1297)]
-		RiviReHVa = 100001296,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Rivière-Rouge", 1299)]
-		RiviReRouge = 100001298,
+		RiviereRouge = 100001298,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Roberts Creek", 1300)]
@@ -5254,7 +5250,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Rosemère", 1309)]
-		RosemRe = 100001308,
+		Rosemere = 100001308,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Rosetown", 1310)]
@@ -5342,7 +5338,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sacré-Coeur-Saguenay", 1331)]
-		SacrCoeurSaguenay = 100001330,
+		SacreCoeurSaguenay = 100001330,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sagamok", 1332)]
@@ -5362,7 +5358,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Aimé-des-Lacs", 1346)]
-		SaintAimDesLacs = 100001345,
+		SaintAimeDesLacs = 100001345,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Alban", 1347)]
@@ -5414,15 +5410,15 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-André", 1359)]
-		SaintAndr = 100001358,
+		SaintAndre = 100001358,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-André-Avellin", 1360)]
-		SaintAndrAvellin = 100001359,
+		SaintAndreAvellin = 100001359,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-André-d\'Argenteuil", 1361)]
-		SaintAndrDArgenteuil = 100001360,
+		SaintAndreDArgenteuil = 100001360,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint Andrews", 1334)]
@@ -5462,7 +5458,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Arsène", 1370)]
-		SaintArsNe = 100001369,
+		SaintArsene = 100001369,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Aubert", 1371)]
@@ -5474,11 +5470,11 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Barnabé", 1373)]
-		SaintBarnab = 100001372,
+		SaintBarnabe = 100001372,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Barthélemy", 1374)]
-		SaintBarthLemy = 100001373,
+		SaintBarthelemy = 100001373,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Basile", 1375)]
@@ -5490,7 +5486,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Benoît-Labre", 1377)]
-		SaintBenoTLabre = 100001376,
+		SaintBenoitLabre = 100001376,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Bernard", 1378)]
@@ -5533,12 +5529,16 @@ namespace Database.Model
 		SaintCasimir = 100001386,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Césaire", 1388)]
+		SaintCesaire = 100001387,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Charles", 1389)]
 		SaintCharles = 100001388,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Charles-Borromée", 1390)]
-		SaintCharlesBorromE = 100001389,
+		SaintCharlesBorromee = 100001389,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Charles-de-Bellechasse", 1391)]
@@ -5565,24 +5565,20 @@ namespace Database.Model
 		SaintClet = 100001395,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Côme", 1398)]
-		SaintCMe = 100001397,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Côme--Linière", 1399)]
-		SaintCMeLiniRe = 100001398,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Colomban", 1397)]
 		SaintColomban = 100001396,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Constant", 1400)]
-		SaintConstant = 100001399,
+		[OptionSetMetadataAttribute("Saint-Côme", 1398)]
+		SaintCome = 100001397,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Césaire", 1388)]
-		SaintCSaire = 100001387,
+		[OptionSetMetadataAttribute("Saint-Côme--Linière", 1399)]
+		SaintComeLiniere = 100001398,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Constant", 1400)]
+		SaintConstant = 100001399,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Cuthbert", 1401)]
@@ -5637,20 +5633,12 @@ namespace Database.Model
 		SaintDonat = 100001411,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Édouard", 1439)]
-		SaintDouard = 100001438,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Édouard-de-Lotbinière", 1440)]
-		SaintDouardDeLotbiniRe = 100001439,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Adèle", 1413)]
-		SainteAdLe = 100001412,
+		SainteAdele = 100001412,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Agathe-de-Lotbinière", 1414)]
-		SainteAgatheDeLotbiniRe = 100001413,
+		SainteAgatheDeLotbiniere = 100001413,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Agathe-des-Monts", 1415)]
@@ -5658,23 +5646,23 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Angèle-de-Monnoir", 1416)]
-		SainteAngLeDeMonnoir = 100001415,
+		SainteAngeleDeMonnoir = 100001415,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Anne-de-Beaupré", 1417)]
-		SainteAnneDeBeaupr = 100001416,
+		SainteAnneDeBeaupre = 100001416,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Anne-de-Bellevue", 1418)]
 		SainteAnneDeBellevue = 100001417,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sainte-Anne-de-la-Pocatière", 1420)]
-		SainteAnneDeLaPocatiRe = 100001419,
+		[OptionSetMetadataAttribute("Sainte-Anne-de-la-Pérade", 1419)]
+		SainteAnneDeLaPerade = 100001418,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sainte-Anne-de-la-Pérade", 1419)]
-		SainteAnneDeLaPRade = 100001418,
+		[OptionSetMetadataAttribute("Sainte-Anne-de-la-Pocatière", 1420)]
+		SainteAnneDeLaPocatiere = 100001419,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Anne-de-Sabrevois", 1421)]
@@ -5706,7 +5694,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Béatrix", 1428)]
-		SainteBAtrix = 100001427,
+		SainteBeatrix = 100001427,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Brigide-d\'Iberville", 1429)]
@@ -5730,7 +5718,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Cécile-de-Milton", 1434)]
-		SainteCCileDeMilton = 100001433,
+		SainteCecileDeMilton = 100001433,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Claire", 1435)]
@@ -5749,24 +5737,40 @@ namespace Database.Model
 		SainteCroix = 100001437,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Édouard", 1439)]
+		SaintEdouard = 100001438,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Édouard-de-Lotbinière", 1440)]
+		SaintEdouardDeLotbiniere = 100001439,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sainte-Élisabeth", 1441)]
+		SainteElisabeth = 100001440,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sainte-Émélie-de-l\'Énergie", 1442)]
+		SainteEmelieDeLEnergie = 100001441,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Félicité", 1443)]
-		SainteFLicit = 100001442,
+		SainteFelicite = 100001442,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Geneviève-de-Batiscan", 1444)]
-		SainteGeneviVeDeBatiscan = 100001443,
+		SainteGenevieveDeBatiscan = 100001443,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Geneviève-de-Berthier", 1445)]
-		SainteGeneviVeDeBerthier = 100001444,
+		SainteGenevieveDeBerthier = 100001444,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Hélène-de-Bagot", 1446)]
-		SainteHLNeDeBagot = 100001445,
+		SainteHeleneDeBagot = 100001445,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Hénédine", 1447)]
-		SainteHNDine = 100001446,
+		SainteHenedine = 100001446,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Jeanne-d\'Arc", 1448)]
@@ -5785,8 +5789,8 @@ namespace Database.Model
 		SainteJustine = 100001450,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sainte-Élisabeth", 1441)]
-		SainteLisabeth = 100001440,
+		[OptionSetMetadataAttribute("Saint-Élie-de-Caxton", 1452)]
+		SaintElieDeCaxton = 100001451,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Luce", 1453)]
@@ -5798,7 +5802,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Elzéar", 1455)]
-		SaintElzAr = 100001454,
+		SaintElzear = 100001454,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Madeleine", 1456)]
@@ -5826,7 +5830,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Marie-Salomé", 1462)]
-		SainteMarieSalom = 100001461,
+		SainteMarieSalome = 100001461,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Marthe", 1463)]
@@ -5842,15 +5846,15 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Mélanie", 1466)]
-		SainteMLanie = 100001465,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Sainte-Émélie-de-l\'Énergie", 1442)]
-		SainteMLieDeLNergie = 100001441,
+		SainteMelanie = 100001465,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Pétronille", 1467)]
-		SaintePTronille = 100001466,
+		SaintePetronille = 100001466,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Éphrem-de-Beauce", 1468)]
+		SaintEphremDeBeauce = 100001467,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Sabine", 1469)]
@@ -5866,19 +5870,23 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Thècle", 1472)]
-		SainteThCle = 100001471,
+		SainteThecle = 100001471,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Thérèse", 1473)]
-		SainteThRSe = 100001472,
+		SainteTherese = 100001472,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Thérèse-de-Gaspé", 1474)]
-		SainteThRSeDeGasp = 100001473,
+		SainteThereseDeGaspe = 100001473,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Étienne-des-Grès", 1475)]
+		SaintEtienneDesGres = 100001474,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Eugène", 1476)]
-		SaintEugNe = 100001475,
+		SaintEugene = 100001475,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sainte-Ursule", 1477)]
@@ -5898,7 +5906,19 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Faustin--Lac-Carré", 1481)]
-		SaintFaustinLacCarr = 100001480,
+		SaintFaustinLacCarre = 100001480,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Félicien", 1482)]
+		SaintFelicien = 100001481,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Félix-de-Kingsey", 1483)]
+		SaintFelixDeKingsey = 100001482,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Félix-de-Valois", 1484)]
+		SaintFelixDeValois = 100001483,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Ferdinand", 1485)]
@@ -5906,39 +5926,27 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Ferréol-les-Neiges", 1486)]
-		SaintFerrOlLesNeiges = 100001485,
+		SaintFerreolLesNeiges = 100001485,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Flavien", 1487)]
 		SaintFlavien = 100001486,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Félicien", 1482)]
-		SaintFLicien = 100001481,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Félix-de-Kingsey", 1483)]
-		SaintFLixDeKingsey = 100001482,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Félix-de-Valois", 1484)]
-		SaintFLixDeValois = 100001483,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-François-de-la-Rivière-du-Sud", 1488)]
-		SaintFranOisDeLaRiviReDuSud = 100001487,
+		SaintFrancoisDeLaRiviereDuSud = 100001487,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-François-du-Lac", 1489)]
-		SaintFranOisDuLac = 100001488,
+		SaintFrancoisDuLac = 100001488,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-François-Xavier-de-Brompton", 1490)]
-		SaintFranOisXavierDeBrompton = 100001489,
+		SaintFrancoisXavierDeBrompton = 100001489,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Frédéric", 1491)]
-		SaintFrDRic = 100001490,
+		SaintFrederic = 100001490,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Fulgence", 1492)]
@@ -5962,11 +5970,11 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Gédéon", 1497)]
-		SaintGDOn = 100001496,
+		SaintGedeon = 100001496,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Gédéon-de-Beauce", 1498)]
-		SaintGDOnDeBeauce = 100001497,
+		SaintGedeonDeBeauce = 100001497,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint George", 1336)]
@@ -6010,15 +6018,15 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Honoré", 1508)]
-		SaintHonor = 100001507,
+		SaintHonore = 100001507,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Honoré-de-Shenley", 1509)]
-		SaintHonorDeShenley = 100001508,
+		SaintHonoreDeShenley = 100001508,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Hubert-de-Rivière-du-Loup", 1510)]
-		SaintHubertDeRiviReDuLoup = 100001509,
+		SaintHubertDeRiviereDuLoup = 100001509,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Hugues", 1511)]
@@ -6058,7 +6066,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Jean-de-l\'Île-d\'Orléans", 1519)]
-		SaintJeanDeLLeDOrlAns = 100001518,
+		SaintJeanDeLIleDOrleans = 100001518,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Jean-de-Matha", 1520)]
@@ -6071,6 +6079,10 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Jean-sur-Richelieu", 1522)]
 		SaintJeanSurRichelieu = 100001521,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Jérôme", 1523)]
+		SaintJerome = 100001522,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Joachim", 1524)]
@@ -6105,10 +6117,6 @@ namespace Database.Model
 		SaintJosephDuLac = 100001529,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Jérôme", 1523)]
-		SaintJRMe = 100001522,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Jude", 1531)]
 		SaintJude = 100001530,
 		
@@ -6126,7 +6134,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Laurent-de-l\'Île-d\'Orléans", 1535)]
-		SaintLaurentDeLLeDOrlAns = 100001534,
+		SaintLaurentDeLIleDOrleans = 100001534,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint Lawrence", 1339)]
@@ -6141,12 +6149,24 @@ namespace Database.Model
 		SaintLazareDeBellechasse = 100001536,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Liboire", 1542)]
-		SaintLiboire = 100001541,
+		[OptionSetMetadataAttribute("Saint-Léonard", 1538)]
+		SaintLeonard = 100001537,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Élie-de-Caxton", 1452)]
-		SaintLieDeCaxton = 100001451,
+		[OptionSetMetadataAttribute("Saint-Léonard-d\'Aston", 1539)]
+		SaintLeonardDAston = 100001538,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Léonard-de-Portneuf", 1540)]
+		SaintLeonardDePortneuf = 100001539,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Léon-de-Standon", 1541)]
+		SaintLeonDeStandon = 100001540,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Liboire", 1542)]
+		SaintLiboire = 100001541,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Liguori", 1543)]
@@ -6155,22 +6175,6 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Lin--Laurentides", 1544)]
 		SaintLinLaurentides = 100001543,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Léonard", 1538)]
-		SaintLOnard = 100001537,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Léonard-d\'Aston", 1539)]
-		SaintLOnardDAston = 100001538,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Léonard-de-Portneuf", 1540)]
-		SaintLOnardDePortneuf = 100001539,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Léon-de-Standon", 1541)]
-		SaintLOnDeStandon = 100001540,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Louis", 1545)]
@@ -6202,7 +6206,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Marc-des-Carrières", 1552)]
-		SaintMarcDesCarriRes = 100001551,
+		SaintMarcDesCarrieres = 100001551,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Marc-sur-Richelieu", 1553)]
@@ -6302,7 +6306,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Pacôme", 1574)]
-		SaintPacMe = 100001573,
+		SaintPacome = 100001573,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Pamphile", 1575)]
@@ -6330,7 +6334,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Paul-de-l\'Île-aux-Noix", 1581)]
-		SaintPaulDeLLeAuxNoix = 100001580,
+		SaintPaulDeLIleAuxNoix = 100001580,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Paulin", 1582)]
@@ -6341,16 +6345,12 @@ namespace Database.Model
 		SaintPhilippe = 100001582,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Éphrem-de-Beauce", 1468)]
-		SaintPhremDeBeauce = 100001467,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Pie", 1584)]
 		SaintPie = 100001583,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Pierre-de-l\'Île-d\'Orléans", 1585)]
-		SaintPierreDeLLeDOrlAns = 100001584,
+		SaintPierreDeLIleDOrleans = 100001584,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Pierre-les-Becquets", 1586)]
@@ -6378,19 +6378,19 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Raphaël", 1592)]
-		SaintRaphaL = 100001591,
+		SaintRaphael = 100001591,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Raymond", 1593)]
 		SaintRaymond = 100001592,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-René-de-Matane", 1595)]
-		SaintRenDeMatane = 100001594,
+		[OptionSetMetadataAttribute("Saint-Rémi", 1594)]
+		SaintRemi = 100001593,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Rémi", 1594)]
-		SaintRMi = 100001593,
+		[OptionSetMetadataAttribute("Saint-René-de-Matane", 1595)]
+		SaintReneDeMatane = 100001594,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Robert", 1596)]
@@ -6413,12 +6413,12 @@ namespace Database.Model
 		SaintSauveur = 100001599,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Simon", 1602)]
-		SaintSimon = 100001601,
+		[OptionSetMetadataAttribute("Saint-Siméon", 1601)]
+		SaintSimeon = 100001600,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Siméon", 1601)]
-		SaintSimOn = 100001600,
+		[OptionSetMetadataAttribute("Saint-Simon", 1602)]
+		SaintSimon = 100001601,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Stanislas", 1603)]
@@ -6442,15 +6442,11 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Théodore-d\'Acton", 1607)]
-		SaintThOdoreDActon = 100001606,
+		SaintTheodoreDActon = 100001606,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Thomas", 1608)]
 		SaintThomas = 100001607,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Étienne-des-Grès", 1475)]
-		SaintTienneDesGrS = 100001474,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Tite", 1609)]
@@ -6473,16 +6469,16 @@ namespace Database.Model
 		SaintUrbainPremier = 100001612,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Saint-Vallier", 1616)]
-		SaintVallier = 100001615,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Valère", 1614)]
-		SaintValRe = 100001613,
+		SaintValere = 100001613,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Valérien-de-Milton", 1615)]
-		SaintValRienDeMilton = 100001614,
+		SaintValerienDeMilton = 100001614,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Saint-Vallier", 1616)]
+		SaintVallier = 100001615,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Victor", 1617)]
@@ -6498,7 +6494,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Zénon", 1620)]
-		SaintZNon = 100001619,
+		SaintZenon = 100001619,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Saint-Zotique", 1621)]
@@ -6614,7 +6610,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sept-Îles", 1649)]
-		SeptLes = 100001648,
+		SeptIles = 100001648,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Severn", 1650)]
@@ -6882,7 +6878,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("St. Alban\'s", 1716)]
-		StAlbanS = 100001715,
+		StAlbans = 100001715,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("St. Albert", 1717)]
@@ -6962,7 +6958,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("St. François Xavier", 1723)]
-		StFranOisXavier = 100001722,
+		StFrancoisXavier = 100001722,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("St. George", 1724)]
@@ -6970,7 +6966,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("St. George\'s", 1725)]
-		StGeorgeS = 100001724,
+		StGeorges = 100001724,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Stirling-Rawdon", 1749)]
@@ -6986,7 +6982,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("St. John\'s", 1728)]
-		StJohnS = 100001727,
+		StJohns = 100001727,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("St. Joseph", 1729)]
@@ -7138,7 +7134,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Taché", 1780)]
-		Tach = 100001779,
+		Tache = 100001779,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Tahsis", 1781)]
@@ -7191,6 +7187,14 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Telkwa", 1793)]
 		Telkwa = 100001792,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Témiscaming", 1794)]
+		Temiscaming = 100001793,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Témiscouata-sur-le-Lac", 1795)]
+		TemiscouataSurLeLac = 100001794,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Temiskaming Shores", 1796)]
@@ -7289,14 +7293,6 @@ namespace Database.Model
 		Tisdale = 100001818,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Témiscaming", 1794)]
-		TMiscaming = 100001793,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Témiscouata-sur-le-Lac", 1795)]
-		TMiscouataSurLeLac = 100001794,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Toefeild", 1820)]
 		Toefeild = 100001819,
 		
@@ -7338,7 +7334,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Trécesson", 1830)]
-		TrCesson = 100001829,
+		Trecesson = 100001829,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Trent Hills", 1831)]
@@ -7351,6 +7347,10 @@ namespace Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Trenton", 1833)]
 		Trenton = 100001832,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Très-Saint-Sacrement", 1834)]
+		TresSaintSacrement = 100001833,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Tring-Jonction", 1835)]
@@ -7370,11 +7370,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Trois-Rivières", 1839)]
-		TroisRiviRes = 100001838,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Très-Saint-Sacrement", 1834)]
-		TrSSaintSacrement = 100001833,
+		TroisRivieres = 100001838,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Truro", 1840)]
@@ -7445,6 +7441,10 @@ namespace Database.Model
 		Unity = 100001855,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("--", 0, "#0000ff")]
+		UnknownLabel100000000 = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Upham", 1857)]
 		Upham = 100001856,
 		
@@ -7502,7 +7502,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Vallée-Jonction", 1871)]
-		VallEJonction = 100001870,
+		ValleeJonction = 100001870,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Valleyview", 1872)]
@@ -7562,11 +7562,11 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Venise-en-Québec", 1886)]
-		VeniseEnQuBec = 100001885,
+		VeniseEnQuebec = 100001885,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Verchères", 1887)]
-		VerchRes = 100001886,
+		Vercheres = 100001886,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Vermilion", 1888)]

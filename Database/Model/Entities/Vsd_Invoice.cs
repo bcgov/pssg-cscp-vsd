@@ -121,8 +121,48 @@ namespace Database.Model
 		_10 = 100000009,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("11", 10, "#0000ff")]
+		_11 = 100000010,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("12", 11, "#0000ff")]
+		_12 = 100000011,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("13", 12, "#0000ff")]
+		_13 = 100000012,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("14", 13, "#0000ff")]
+		_14 = 100000013,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("15", 14, "#0000ff")]
+		_15 = 100000014,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("16", 15, "#0000ff")]
+		_16 = 100000015,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("17", 16, "#0000ff")]
+		_17 = 100000016,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("18", 17, "#0000ff")]
+		_18 = 100000017,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19", 18, "#0000ff")]
+		_19 = 100000018,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("2", 1, "#0000ff")]
 		_2 = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("20", 19, "#0000ff")]
+		_20 = 100000019,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("3", 2, "#0000ff")]
@@ -324,6 +364,9 @@ namespace Database.Model
 			public const string VersionNumber = "versionnumber";
 			public const string Vsd_Account_Vsd_Invoice_Customer = "vsd_account_vsd_invoice_Customer";
 			public const string Vsd_Account_Vsd_Invoice_Payee = "vsd_account_vsd_invoice_Payee";
+			public const string Vsd_AffiliationId = "vsd_affiliationid";
+			public const string Vsd_AffiliationIdName = "vsd_affiliationidname";
+			public const string Vsd_AffiliationIdYomiName = "vsd_affiliationidyominame";
 			public const string Vsd_AuthorizationDate = "vsd_authorizationdate";
 			public const string Vsd_BankReconciled = "vsd_bankreconciled";
 			public const string Vsd_BankReconciledName = "vsd_bankreconciledname";
@@ -334,6 +377,7 @@ namespace Database.Model
 			public const string Vsd_ClaimantLastNameText = "vsd_claimantlastnametext";
 			public const string Vsd_ClaimantNameText = "vsd_claimantnametext";
 			public const string Vsd_ClaimNumberText = "vsd_claimnumbertext";
+			public const string Vsd_Contact_Vsd_Invoice = "vsd_contact_vsd_invoice";
 			public const string Vsd_Contact_Vsd_Invoice_Customer = "vsd_contact_vsd_invoice_Customer";
 			public const string Vsd_Contact_Vsd_Invoice_Payee = "vsd_contact_vsd_invoice_Payee";
 			public const string Vsd_ContractId = "vsd_contractid";
@@ -912,6 +956,7 @@ namespace Database.Model
 		/// Contains the id of the stage where the entity is located.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -1053,6 +1098,7 @@ namespace Database.Model
 		/// A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -1095,6 +1141,58 @@ namespace Database.Model
 			get
 			{
 				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for Contact associated with Invoice.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_affiliationid")]
+		public Microsoft.Xrm.Sdk.EntityReference Vsd_AffiliationId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("vsd_affiliationid");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_affiliationid", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_affiliationidname")]
+		public string Vsd_AffiliationIdName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_affiliationid"))
+				{
+					return this.FormattedValues["vsd_affiliationid"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_affiliationidyominame")]
+		public string Vsd_AffiliationIdYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_affiliationid"))
+				{
+					return this.FormattedValues["vsd_affiliationid"];
+				}
+				else
+				{
+					return default(string);
+				}
 			}
 		}
 		
@@ -3547,6 +3645,25 @@ namespace Database.Model
 			set
 			{
 				this.SetRelatedEntity<Database.Model.Account>("vsd_account_vsd_invoice_Payee", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 vsd_contact_vsd_invoice
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_affiliationid")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_contact_vsd_invoice")]
+		public Database.Model.Contact Vsd_Contact_Vsd_Invoice
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<Database.Model.Contact>("vsd_contact_vsd_invoice", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<Database.Model.Contact>("vsd_contact_vsd_invoice", null, value);
 			}
 		}
 		

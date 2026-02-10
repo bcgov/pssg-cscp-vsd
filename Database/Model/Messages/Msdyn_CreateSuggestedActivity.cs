@@ -144,7 +144,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["FailedRecordCount"] = value;
+				this.Results["failedRecordCount"] = value;
 			}
 		}
 		
@@ -163,7 +163,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Id"] = value;
+				this.Results["id"] = value;
 			}
 		}
 	}

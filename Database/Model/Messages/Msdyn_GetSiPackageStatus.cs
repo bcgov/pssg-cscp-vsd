@@ -80,7 +80,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["SiPackageStatus"] = value;
+				this.Results["SIPackageStatus"] = value;
 			}
 		}
 	}

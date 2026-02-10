@@ -56,7 +56,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Status"] = value;
+				this.Results["status"] = value;
 			}
 		}
 	}

@@ -60,7 +60,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["ArePreviewScenarioEnabled"] = value;
+				this.Results["arePreviewScenarioEnabled"] = value;
 			}
 		}
 		
@@ -79,7 +79,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["IsDataModelV2Enabled"] = value;
+				this.Results["isdatamodelv2enabled"] = value;
 			}
 		}
 		
@@ -98,7 +98,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["IsPaiEnabled"] = value;
+				this.Results["ispaienabled"] = value;
 			}
 		}
 		
@@ -117,7 +117,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["PaiGaStatus"] = value;
+				this.Results["paigastatus"] = value;
 			}
 		}
 		
@@ -136,7 +136,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Templates"] = value;
+				this.Results["templates"] = value;
 			}
 		}
 	}

@@ -20,7 +20,7 @@ namespace Database.Model
 		public static class Fields
 		{
 			public const string DocumentId = "DocumentId";
-			public const string Filename = "Filename";
+			public const string FileName = "FileName";
 			public const string Body = "Body";
 			public const string RegardingObjectId = "RegardingObjectId";
 			public const string RegardingObjectName = "RegardingObjectName";
@@ -51,7 +51,7 @@ namespace Database.Model
 			}
 		}
 		
-		public string Filename
+		public string FileName
 		{
 			get
 			{
@@ -206,7 +206,7 @@ namespace Database.Model
 		public Vsd_UploadDocumentToSharePointRequest()
 		{
 			this.RequestName = "vsd_UploadDocumentToSharePoint";
-			this.Filename = default(string);
+			this.FileName = default(string);
 			this.Body = default(string);
 			this.RegardingObjectId = default(string);
 			this.RegardingObjectName = default(string);

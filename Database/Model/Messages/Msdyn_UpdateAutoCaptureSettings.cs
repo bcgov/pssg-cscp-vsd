@@ -161,7 +161,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["SettingStatus"] = value;
+				this.Results["settingstatus"] = value;
 			}
 		}
 	}

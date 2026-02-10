@@ -122,7 +122,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["CountOfPhrases"] = value;
+				this.Results["countOfPhrases"] = value;
 			}
 		}
 		
@@ -141,7 +141,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Phrases"] = value;
+				this.Results["phrases"] = value;
 			}
 		}
 	}

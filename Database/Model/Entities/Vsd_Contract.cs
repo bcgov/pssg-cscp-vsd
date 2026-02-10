@@ -124,6 +124,19 @@ namespace Database.Model
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Vsd_Contract_Vsd_Cpu_MemberOfHeAbc
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Member", 0, "#0000ff")]
+		Member = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Non-Member", 1, "#0000ff")]
+		NonMember = 100000001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum Vsd_Contract_Vsd_PGoExclusionCode
 	{
 		
@@ -237,6 +250,8 @@ namespace Database.Model
 			public const string Vsd_Cpu_InsuranceOptionsName = "vsd_cpu_insuranceoptionsname";
 			public const string Vsd_Cpu_MemberOfCSSea = "vsd_cpu_memberofcssea";
 			public const string Vsd_Cpu_MemberOfCSSeaName = "vsd_cpu_memberofcsseaname";
+			public const string Vsd_Cpu_MemberOfHeAbc = "vsd_cpu_memberofheabc";
+			public const string Vsd_Cpu_MemberOfHeAbcName = "vsd_cpu_memberofheabcname";
 			public const string Vsd_Cpu_ProgramStaffSubcontracted = "vsd_cpu_programstaffsubcontracted";
 			public const string Vsd_Cpu_ProgramStaffSubcontractedName = "vsd_cpu_programstaffsubcontractedname";
 			public const string Vsd_Cpu_SpecificUnion = "vsd_cpu_specificunion";
@@ -1587,6 +1602,38 @@ namespace Database.Model
 				if (this.FormattedValues.Contains("vsd_cpu_memberofcssea"))
 				{
 					return this.FormattedValues["vsd_cpu_memberofcssea"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cpu_memberofheabc")]
+		public virtual Vsd_Contract_Vsd_Cpu_MemberOfHeAbc? Vsd_Cpu_MemberOfHeAbc
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((Vsd_Contract_Vsd_Cpu_MemberOfHeAbc?)(EntityOptionSetEnum.GetEnum(this, "vsd_cpu_memberofheabc")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_cpu_memberofheabc", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cpu_memberofheabcname")]
+		public string Vsd_Cpu_MemberOfHeAbcName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_cpu_memberofheabc"))
+				{
+					return this.FormattedValues["vsd_cpu_memberofheabc"];
 				}
 				else
 				{

@@ -48,6 +48,10 @@ namespace Database.Model
 		Denied = 2,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 9, "#0000ff")]
+		Inactive = 100000007,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Paid", 5, "#0000ff")]
 		Paid = 100000004,
 		

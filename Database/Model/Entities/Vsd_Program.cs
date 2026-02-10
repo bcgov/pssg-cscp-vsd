@@ -1729,6 +1729,7 @@ namespace Database.Model
 		/// This field is used on the CAP program application.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cpu_programevaluationeffortsdescription")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public virtual Vsd_YesNo? Vsd_Cpu_ProgramEvaluationEffortsDescription
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -2915,6 +2916,7 @@ namespace Database.Model
 		}
 		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_programmodels")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public virtual System.Collections.Generic.IEnumerable<Vsd_Program_Vsd_ProgramModels> Vsd_ProgramModels
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]

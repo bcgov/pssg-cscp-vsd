@@ -228,7 +228,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Id"] = value;
+				this.Results["id"] = value;
 			}
 		}
 	}

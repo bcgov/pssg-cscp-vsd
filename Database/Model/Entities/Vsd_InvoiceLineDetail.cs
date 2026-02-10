@@ -682,6 +682,7 @@ namespace Database.Model
 		/// Contains the id of the stage where the entity is located.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -823,6 +824,7 @@ namespace Database.Model
 		/// A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]

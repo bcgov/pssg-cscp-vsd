@@ -33,16 +33,28 @@ namespace Database.Model
 		_205DirectAwardNoticeOfIntent = 100000003,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("400 - Select Vendor from Pre-Qualification List", 4, "#0000ff")]
+		[OptionSetMetadataAttribute("208 - Shared Cost Arrangement (Financial Assistance)", 4, "#0000ff")]
+		_208SharedCostArrangementFinancialAssistance = 100000007,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("209 - Shared Cost Arrangement (Competitive Selection Process Not Appropriate)", 5, "#0000ff")]
+		_209SharedCostArrangementCompetitiveSelectionProcessNotAppropriate = 100000008,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("400 - Select Vendor from Pre-Qualification List", 6, "#0000ff")]
 		_400SelectVendorFromPreQualificationList = 100000004,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("401 - Competition Among Vendors on a Pre-Qualification List", 5, "#0000ff")]
+		[OptionSetMetadataAttribute("401 - Competition Among Vendors on a Pre-Qualification List", 7, "#0000ff")]
 		_401CompetitionAmongVendorsOnAPreQualificationList = 100000005,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("500 - Purchase from a Corporate Supply Arrangement", 6, "#0000ff")]
+		[OptionSetMetadataAttribute("500 - Purchase from a Corporate Supply Arrangement", 8, "#0000ff")]
 		_500PurchaseFromACorporateSupplyArrangement = 100000006,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("600 - Continuing Agreement", 9, "#0000ff")]
+		_600ContinuingAgreement = 100000009,
 	}
 }
 #pragma warning restore CS1591

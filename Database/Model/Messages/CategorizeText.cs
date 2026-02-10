@@ -122,7 +122,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Categories"] = value;
+				this.Results["categories"] = value;
 			}
 		}
 		
@@ -141,7 +141,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["OriginalText"] = value;
+				this.Results["originalText"] = value;
 			}
 		}
 	}

@@ -122,7 +122,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Language"] = value;
+				this.Results["language"] = value;
 			}
 		}
 		
@@ -141,7 +141,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Score"] = value;
+				this.Results["score"] = value;
 			}
 		}
 	}

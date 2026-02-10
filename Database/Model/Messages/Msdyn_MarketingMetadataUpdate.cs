@@ -56,7 +56,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["ResultCode"] = value;
+				this.Results["resultCode"] = value;
 			}
 		}
 	}

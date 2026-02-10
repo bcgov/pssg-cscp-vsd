@@ -98,7 +98,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["RiErrorStatusCode"] = value;
+				this.Results["RIErrorStatusCode"] = value;
 			}
 		}
 		
@@ -117,7 +117,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["RiErrorStatusMessage"] = value;
+				this.Results["RIErrorStatusMessage"] = value;
 			}
 		}
 		
@@ -136,7 +136,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["RiProvisioningStatus"] = value;
+				this.Results["RIProvisioningStatus"] = value;
 			}
 		}
 	}

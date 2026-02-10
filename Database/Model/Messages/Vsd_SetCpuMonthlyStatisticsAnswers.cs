@@ -19,13 +19,34 @@ namespace Database.Model
 		
 		public static class Fields
 		{
+			public const string StatusCode = "StatusCode";
 			public const string BusinessBcEId = "BusinessBcEId";
 			public const string UserBcEId = "UserBcEId";
 			public const string AnswerCollection = "AnswerCollection";
+			public const string DataCollectionId = "DataCollectionId";
 			public const string Target = "Target";
 		}
 		
 		public const string ActionLogicalName = "vsd_SetCPUMonthlyStatisticsAnswers";
+		
+		public int StatusCode
+		{
+			get
+			{
+				if (this.Parameters.Contains("StatusCode"))
+				{
+					return ((int)(this.Parameters["StatusCode"]));
+				}
+				else
+				{
+					return default(int);
+				}
+			}
+			set
+			{
+				this.Parameters["StatusCode"] = value;
+			}
+		}
 		
 		public string BusinessBcEId
 		{
@@ -81,6 +102,25 @@ namespace Database.Model
 			set
 			{
 				this.Parameters["AnswerCollection"] = value;
+			}
+		}
+		
+		public string DataCollectionId
+		{
+			get
+			{
+				if (this.Parameters.Contains("DataCollectionId"))
+				{
+					return ((string)(this.Parameters["DataCollectionId"]));
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+			set
+			{
+				this.Parameters["DataCollectionId"] = value;
 			}
 		}
 		

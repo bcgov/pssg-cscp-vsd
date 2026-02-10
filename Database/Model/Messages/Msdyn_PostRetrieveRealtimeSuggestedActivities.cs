@@ -102,7 +102,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["RetrievedRealtimeSuggestedActivitiesCount"] = value;
+				this.Results["RetrievedRealTimeSuggestedActivitiesCount"] = value;
 			}
 		}
 	}

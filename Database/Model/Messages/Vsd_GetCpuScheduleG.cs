@@ -132,7 +132,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["BusinessBcEId"] = value;
+				this.Results["Businessbceid"] = value;
 			}
 		}
 		
@@ -303,7 +303,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["UserBcEId"] = value;
+				this.Results["Userbceid"] = value;
 			}
 		}
 	}

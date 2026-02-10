@@ -221,12 +221,12 @@ namespace Database.Model
 		CostaRica = 100000039,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Croatia", 53)]
-		Croatia = 100000041,
+		[OptionSetMetadataAttribute("Côte d\'Ivoire", 52)]
+		CoteDIvoire = 100000040,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Côte d\'Ivoire", 52)]
-		CTeDIvoire = 100000040,
+		[OptionSetMetadataAttribute("Croatia", 53)]
+		Croatia = 100000041,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Cuba", 54)]
