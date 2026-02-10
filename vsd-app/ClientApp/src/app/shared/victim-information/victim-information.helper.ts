@@ -1,6 +1,6 @@
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { POSTAL_CODE } from '../regex.constants';
-import { EmailValidator } from '../validators/email.validator';
+import { EmailMatchingValidator, EmailValidator } from '../validators/email.validator';
 
 /**
  * Helper class for setting up victim information form.
@@ -39,7 +39,7 @@ export class VictimInfoHelper {
       phoneNumber: [''],
       alternatePhoneNumber: [''],
       email: [''],
-      confirmEmail: ['', [Validators.email, EmailValidator('email')]],
+      confirmEmail: ['', [EmailValidator(), EmailMatchingValidator('email')]],
 
       mostRecentMailingAddressSameAsPersonal: [''],
 
@@ -88,7 +88,7 @@ export class VictimInfoHelper {
       phoneNumber: [''],
       alternatePhoneNumber: [''],
       email: [''],
-      confirmEmail: ['', [Validators.email, EmailValidator('email')]],
+      confirmEmail: ['', [EmailValidator(), EmailMatchingValidator('email')]],
 
       mostRecentMailingAddressSameAsPersonal: [''],
 
@@ -139,7 +139,7 @@ export class VictimInfoHelper {
       phoneNumber: [''],
       alternatePhoneNumber: [''],
       email: [''],
-      confirmEmail: ['', [Validators.email, EmailValidator('email')]],
+      confirmEmail: ['', [EmailValidator(), EmailMatchingValidator('email')]],
 
       mostRecentMailingAddressSameAsPersonal: [''],
 

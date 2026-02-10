@@ -19,6 +19,7 @@ import { ApplicationType, CRMBoolean, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 import { HOSPITALS } from '../hospital-list';
 import { POSTAL_CODE } from '../regex.constants';
+import { EmailValidator } from '../validators/email.validator';
 
 @Component({
   selector: 'app-medical-information',
@@ -172,7 +173,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
   createTreatmentItem(): UntypedFormGroup {
     let group = {
       providerCompany: [''],
-      providerEmail: ['', [Validators.email]],
+      providerEmail: ['', [EmailValidator()]],
       providerFirstName: [''],
       providerLastName: [''],
       providerPhoneNumber: [''],

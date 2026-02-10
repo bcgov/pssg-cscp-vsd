@@ -8,7 +8,7 @@ import { AddressHelper } from '../address/address.helper';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 import { POSTAL_CODE } from '../regex.constants';
-import { EmailValidator } from '../validators/email.validator';
+import { EmailMatchingValidator, EmailValidator } from '../validators/email.validator';
 
 @Component({
   selector: 'app-personal-information',
@@ -284,12 +284,16 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     const emailConfirmControl = this.form.get('confirmEmail');
 
     if (preferredMethodControl.value == 1 || agreeToCvapCommunicationExchangeControl.value === true) {
-      this.setControlValidators(emailControl, [Validators.required, Validators.email]);
-      this.setControlValidators(emailConfirmControl, [Validators.required, Validators.email, EmailValidator('email')]);
+      this.setControlValidators(emailControl, [Validators.required, EmailValidator()]);
+      this.setControlValidators(emailConfirmControl, [
+        Validators.required,
+        EmailValidator(),
+        EmailMatchingValidator('email')
+      ]);
       return;
     } else {
-      this.setControlValidators(emailControl, [Validators.email]);
-      this.setControlValidators(emailConfirmControl, [Validators.email, EmailValidator('email')]);
+      this.setControlValidators(emailControl, [EmailValidator()]);
+      this.setControlValidators(emailConfirmControl, [EmailValidator(), EmailMatchingValidator('email')]);
     }
   }
 
