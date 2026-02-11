@@ -19,6 +19,7 @@ import { MessageDialog } from '../shared/dialogs/message-dialog/message.dialog';
 import { EnumHelper, MY_FORMATS } from '../shared/enums-list';
 import { FormBase } from '../shared/form-base';
 import { POSTAL_CODE } from '../shared/regex.constants';
+import { EmailValidator } from '../shared/validators/email.validator';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
 
 @Component({
@@ -544,7 +545,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         lineItems: this.fb.array([this.createLineItem()], Validators.minLength(1)),
 
         submitterFullName: ['', Validators.required],
-        submitterEmailAddress: ['', [Validators.required, Validators.email]],
+        submitterEmailAddress: ['', [Validators.required, EmailValidator()]],
         declaredAndSigned: ['', Validators.required]
       })
     });

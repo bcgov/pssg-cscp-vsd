@@ -1,6 +1,7 @@
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApplicationType } from '../enums-list';
 import { POSTAL_CODE } from '../regex.constants';
+import { EmailValidator } from '../validators/email.validator';
 
 export class ExpenseInfoHelper {
   postalRegex = POSTAL_CODE;
@@ -96,7 +97,7 @@ export class ExpenseInfoHelper {
       employerName: [''],
       employerPhoneNumber: [''],
       employerFax: [''],
-      employerEmail: ['', [Validators.email]],
+      employerEmail: ['', [EmailValidator()]],
       employerFirstName: [''],
       employerLastName: [''],
       employerAddress: fb.group({

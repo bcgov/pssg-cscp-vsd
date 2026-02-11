@@ -1,30 +1,30 @@
-import { OnInit, Component, Input, OnDestroy } from '@angular/core';
-import { FormBase } from '../form-base';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
-import { UntypedFormGroup, Validators, UntypedFormBuilder, ControlContainer } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ControlContainer, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS, ApplicationType } from '../enums-list';
-import { COUNTRIES_ADDRESS } from '../address/country-list';
-import { AddressHelper } from '../address/address.helper';
-import { EmailValidator } from '../validators/email.validator';
-import { RepresentativeInfoHelper } from './representative-information.helper';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { LookupService } from '../../services/lookup.service';
+import { AddressHelper } from '../address/address.helper';
+import { COUNTRIES_ADDRESS } from '../address/country-list';
+import { ApplicationType, MY_FORMATS } from '../enums-list';
+import { FormBase } from '../form-base';
+import { EmailMatchingValidator, EmailValidator } from '../validators/email.validator';
+import { RepresentativeInfoHelper } from './representative-information.helper';
 
 @Component({
-    selector: 'app-representative-information',
-    templateUrl: './representative-information.component.html',
-    styleUrls: ['./representative-information.component.scss'],
-    providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-    ],
-    standalone: false
+  selector: 'app-representative-information',
+  templateUrl: './representative-information.component.html',
+  styleUrls: ['./representative-information.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
+  standalone: false
 })
 export class RepresentativeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
@@ -200,9 +200,9 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
 
     phoneControl.setValidators([Validators.minLength(8), Validators.maxLength(15)]);
     phoneControl.setErrors(null, options);
-    emailControl.setValidators([Validators.email]);
+    emailControl.setValidators([EmailValidator()]);
     emailControl.setErrors(null, options);
-    emailConfirmControl.setValidators([Validators.email, EmailValidator('representativeEmail')]);
+    emailConfirmControl.setValidators([EmailValidator(), EmailMatchingValidator('representativeEmail')]);
     emailConfirmControl.setErrors(null, options);
 
     if (contactMethod === 100000001) {
@@ -212,8 +212,12 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
       this.representativeEmailIsRequired = false;
     } else if (contactMethod === 100000000) {
       //Email
-      emailControl.setValidators([Validators.required, Validators.email]);
-      emailConfirmControl.setValidators([Validators.required, Validators.email, EmailValidator('representativeEmail')]);
+      emailControl.setValidators([Validators.required, EmailValidator()]);
+      emailConfirmControl.setValidators([
+        Validators.required,
+        EmailValidator(),
+        EmailMatchingValidator('representativeEmail')
+      ]);
       this.representativePhoneIsRequired = false;
       this.representativeEmailIsRequired = true;
     } else if (contactMethod === 100000002) {

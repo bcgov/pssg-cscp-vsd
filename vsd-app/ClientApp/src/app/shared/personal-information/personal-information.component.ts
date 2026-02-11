@@ -8,7 +8,7 @@ import { AddressHelper } from '../address/address.helper';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 import { POSTAL_CODE } from '../regex.constants';
-import { EmailValidator } from '../validators/email.validator';
+import { EmailMatchingValidator, EmailValidator } from '../validators/email.validator';
 
 @Component({
   selector: 'app-personal-information',
@@ -35,10 +35,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());
 
-  phoneIsRequired: boolean = false;
-  isVoiceMailRequired: boolean = false;
-
-  addressIsRequired: boolean = false;
   alternateAddressIsRequired: boolean = false;
 
   addressHelper = new AddressHelper();
@@ -212,39 +208,41 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
   preferredMethodOfContactChange(value) {
     let phoneControl = this.form.get('phoneNumber');
     let altPhoneControl = this.form.get('alternatePhoneNumber');
+    let leaveVoicemailControl = this.form.get('leaveVoicemail');
     let agreeToCVAPEmailControl = this.form.get('agreeToCvapCommunicationExchange');
 
     this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'primaryAddress');
     this.addressHelper.clearAddressValidatorsAndErrors(this.form, 'alternateAddress');
     this.addressHelper.setAddressAsRequired(this.form, 'primaryAddress');
-    // this.addressHelper.markAsTouched(this.form, 'primaryAddress');
 
     this.setControlValidators(phoneControl, [
       Validators.minLength(this.phoneMinLength),
       Validators.maxLength(this.phoneMaxLength)
     ]);
     this.clearControlValidators(agreeToCVAPEmailControl);
+    this.clearControlValidators(leaveVoicemailControl);
 
     let contactMethod = parseInt(value);
-    if (contactMethod == 2) {
-      //phone call
-      this.setControlValidators(phoneControl, [
-        Validators.required,
-        Validators.minLength(this.phoneMinLength),
-        Validators.maxLength(this.phoneMaxLength)
-      ]);
-      this.phoneIsRequired = true;
-      this.addressIsRequired = false;
-    } else if (contactMethod == 1) {
-      this.setEmailValidators();
-      this.setControlValidators(agreeToCVAPEmailControl, [Validators.requiredTrue]);
-      this.phoneIsRequired = false;
-      this.addressIsRequired = false;
-    } else if (contactMethod == 4) {
-      //Mail
-      this.phoneIsRequired = false;
-      this.addressIsRequired = true;
-      this.alternateAddressIsRequired = false;
+    switch (contactMethod) {
+      case 1: // email
+        this.setEmailValidators();
+        this.setControlValidators(agreeToCVAPEmailControl, [Validators.requiredTrue]);
+        break;
+      case 2: // phone call
+        this.setControlValidators(phoneControl, [
+          Validators.required,
+          Validators.minLength(this.phoneMinLength),
+          Validators.maxLength(this.phoneMaxLength)
+        ]);
+        this.setControlValidators(leaveVoicemailControl, [
+          Validators.required,
+          Validators.min(100000000),
+          Validators.max(100000003)
+        ]);
+        break;
+      case 4: // mail
+        this.alternateAddressIsRequired = true;
+        break;
     }
 
     let voicemailOption = parseInt(this.form.get('leaveVoicemail').value);
@@ -286,12 +284,16 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     const emailConfirmControl = this.form.get('confirmEmail');
 
     if (preferredMethodControl.value == 1 || agreeToCvapCommunicationExchangeControl.value === true) {
-      this.setControlValidators(emailControl, [Validators.required, Validators.email]);
-      this.setControlValidators(emailConfirmControl, [Validators.required, Validators.email, EmailValidator('email')]);
+      this.setControlValidators(emailControl, [Validators.required, EmailValidator()]);
+      this.setControlValidators(emailConfirmControl, [
+        Validators.required,
+        EmailValidator(),
+        EmailMatchingValidator('email')
+      ]);
       return;
     } else {
-      this.setControlValidators(emailControl, [Validators.email]);
-      this.setControlValidators(emailConfirmControl, [Validators.email, EmailValidator('email')]);
+      this.setControlValidators(emailControl, [EmailValidator()]);
+      this.setControlValidators(emailConfirmControl, [EmailValidator(), EmailMatchingValidator('email')]);
     }
   }
 
@@ -316,8 +318,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     } else {
       this.phoneMinLength = 8;
     }
-
-    // let contactMethod = this.form.get('preferredMethodOfContact').value;
     let phoneControl = this.form.get('phoneNumber');
     let altPhoneControl = this.form.get('alternatePhoneNumber');
     //setup phone control validators based on preferredMethodOfContact
@@ -371,24 +371,6 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
 
     phoneControl.patchValue(phoneControl.value);
     altPhoneControl.patchValue(altPhoneControl.value);
-  }
-
-  setVoicemailValidators() {
-    let phoneVal = this.form.get('phoneNumber').value;
-    let altPhoneVal = this.form.get('alternatePhoneNumber').value;
-    let voicemailControl = this.form.get('leaveVoicemail');
-    let options = { onlySelf: true, emitEvent: false };
-    if (phoneVal || altPhoneVal) {
-      this.isVoiceMailRequired = true;
-      this.setControlValidators(
-        voicemailControl,
-        [Validators.required, Validators.min(1), Validators.max(100000003)],
-        options
-      );
-    } else {
-      this.isVoiceMailRequired = false;
-      this.clearControlValidators(voicemailControl, options);
-    }
   }
 
   doNotLiveAtAddressChange(val: boolean) {

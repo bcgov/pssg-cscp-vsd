@@ -1,7 +1,7 @@
-import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApplicationType } from '../enums-list';
 import { POSTAL_CODE } from '../regex.constants';
-import { EmailValidator } from '../validators/email.validator';
+import { EmailMatchingValidator, EmailValidator } from '../validators/email.validator';
 
 export class PersonalInfoHelper {
   postalRegex = POSTAL_CODE;
@@ -36,8 +36,8 @@ export class PersonalInfoHelper {
       leaveVoicemail: [0],
       alternatePhoneNumber: [''],
 
-      email: ['', [Validators.email]],
-      confirmEmail: ['', [Validators.email, EmailValidator('email')]],
+      email: ['', [EmailValidator()]],
+      confirmEmail: ['', [EmailValidator(), EmailMatchingValidator('email')]],
 
       doNotLiveAtAddress: [false],
       mailRecipient: [''],

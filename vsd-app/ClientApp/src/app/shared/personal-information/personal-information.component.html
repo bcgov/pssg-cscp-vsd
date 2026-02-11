@@ -256,7 +256,7 @@
 
   <div class="row">
     <div class="col-6">
-      <app-field label="I authorize CVAP to leave a voicemail on this phone #" [required]="isVoiceMailRequired" [valid]="isMyControlValid(form.get('leaveVoicemail'))" errorMessage="Please indicate if you authorize CVAP to leave a voicemail">
+      <app-field label="I authorize CVAP to leave a voicemail on this phone #" [formControl]="form.get('leaveVoicemail')" [valid]="isMyControlValid(form.get('leaveVoicemail'))" errorMessage="Please indicate if you authorize CVAP to leave a voicemail">
         <select class="form-control" formControlName="leaveVoicemail">
           <option value="0">Select...</option>
           <option value="100000000">Primary and Alternate</option>
