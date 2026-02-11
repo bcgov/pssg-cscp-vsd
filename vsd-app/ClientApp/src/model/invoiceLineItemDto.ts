@@ -11,7 +11,11 @@ export interface InvoiceLineItemDto {
   /** @nullable */
   attendingSupportPerson?: string;
   counsellingType: CounsellingType;
+  /** @nullable */
+  counsellingTypeName?: string;
   missedSession?: boolean;
+  /** @nullable */
+  sessionAmount?: number;
   sessionDate: string;
   sessionHours: number;
 }

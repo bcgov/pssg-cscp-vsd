@@ -9,21 +9,25 @@ import type { InvoiceLineItemDto } from './invoiceLineItemDto';
 
 export interface InvoiceDetailsDto {
   /** @minLength 1 */
-  claimantFirstName: string;
+  claimantsFirstName: string;
+  /** @nullable */
+  claimantsFullName?: string;
   /** @minLength 1 */
-  claimantLastName: string;
+  claimantsLastName: string;
   /** @minLength 1 */
   claimNumber: string;
   /** @minLength 1 */
-  counselorLastName: string;
+  counsellorLastName: string;
   /** @minLength 1 */
-  counselorNumber: string;
+  counsellorRegistrationNumber: string;
+  declaredAndSigned?: boolean;
   exemptFromGst?: boolean;
-  invoicedAte: string;
-  /** @nullable */
-  invoiceLineItems?: InvoiceLineItemDto[];
+  gstApplicable?: boolean;
+  invoiceDate: string;
   /** @minLength 1 */
   invoiceNumber: string;
+  /** @nullable */
+  lineItems?: InvoiceLineItemDto[];
   /** @minLength 1 */
   submitterEmailAddress: string;
   /** @minLength 1 */

@@ -14,13 +14,13 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
             {
                 VendorNumber = model.InvoiceDetails.VendorNumber ?? string.Empty,
                 VendorPostalCode = model.InvoiceDetails.VendorPostalCode ?? string.Empty,
-                CounselorNumber = model.InvoiceDetails.CounselorNumber ?? string.Empty,
-                CounselorLastName = model.InvoiceDetails.CounselorLastName ?? string.Empty,
+                CounselorNumber = model.InvoiceDetails.CounsellorRegistrationNumber ?? string.Empty,
+                CounselorLastName = model.InvoiceDetails.CounsellorLastName ?? string.Empty,
                 ClaimNumber = model.InvoiceDetails.ClaimNumber ?? string.Empty,
-                ClaimantFirstName = model.InvoiceDetails.ClaimantFirstName ?? string.Empty,
-                ClaimantLastName = model.InvoiceDetails.ClaimantLastName ?? string.Empty,
+                ClaimantFirstName = model.InvoiceDetails.ClaimantsFirstName ?? string.Empty,
+                ClaimantLastName = model.InvoiceDetails.ClaimantsLastName ?? string.Empty,
                 InvoiceNumber = model.InvoiceDetails.InvoiceNumber ?? string.Empty,
-                InvoicedAte = model.InvoiceDetails.InvoicedAte,
+                InvoicedAte = model.InvoiceDetails.InvoiceDate,
                 ExemptFromGst = model.InvoiceDetails.ExemptFromGst,
                 SubmitterFullName = model.InvoiceDetails.SubmitterFullName ?? string.Empty,
                 SubmitterEmailAddress = model.InvoiceDetails.SubmitterEmailAddress ?? string.Empty,
@@ -28,13 +28,15 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 DocumentCollection = new EntityCollection(),
             };
 
-            if (model.InvoiceDetails.InvoiceLineItems?.Any() == true)
+            if (model.InvoiceDetails.LineItems?.Any() == true)
             {
-                foreach (var lineItem in model.InvoiceDetails.InvoiceLineItems)
+                foreach (var lineItem in model.InvoiceDetails.LineItems)
                 {
                     var invoiceLineDetail = new Vsd_InvoiceLineDetail
                     {
-                        Vsd_Cvap_CounsellingType = lineItem.CounsellingType.ToDynamicsEnum(),
+                        Vsd_Cvap_CounsellingType = Enum.Parse<Vsd_InvoiceLineDetail_Vsd_Cvap_CounsellingType>(
+                            lineItem.CounsellingType.ToString()
+                        ), //.ToDynamicsEnum(), use later when enum replaced with name values
                         Vsd_Cvap_SessionDate = lineItem.SessionDate,
                         Vsd_Cvap_SessionDuration = lineItem.SessionHours,
                         Vsd_MissedSession = lineItem.MissedSession,
@@ -51,7 +53,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                 {
                     // Use "activitymimeattachment" as the logical name (from Documentcollection.odatatype)
                     var entity = new Entity("activitymimeattachment");
-                    entity["filename"] = doc.FileName;
+                    entity["filename"] = doc.Filename;
                     entity["body"] = doc.Body;
                     entity["subject"] = doc.Subject ?? string.Empty;
                     request.DocumentCollection.Entities.Add(entity);

@@ -12,31 +12,40 @@ public class InvoiceDetailsDto
     public string VendorPostalCode { get; set; }
 
     [Required]
-    public string CounselorNumber { get; set; }
+    public string CounsellorRegistrationNumber { get; set; }
 
     [Required]
-    public string CounselorLastName { get; set; }
+    public string CounsellorLastName { get; set; }
 
     [Required]
     public string ClaimNumber { get; set; }
 
     [Required]
-    public string ClaimantFirstName { get; set; }
+    public string ClaimantsFirstName { get; set; }
 
     [Required]
-    public string ClaimantLastName { get; set; }
+    public string ClaimantsLastName { get; set; }
+
+    public string ClaimantsFullName { get; set; }
 
     [Required]
     public string InvoiceNumber { get; set; }
 
     [Required]
-    public DateTime InvoicedAte { get; set; }
+    public DateTime InvoiceDate { get; set; }
+
     public bool ExemptFromGst { get; set; }
+
+    // TODO: how are these two fields used? Are they both needed?
+    public bool GstApplicable { get; set; }
 
     [Required]
     public string SubmitterFullName { get; set; }
 
     [Required, EmailAddress]
     public string SubmitterEmailAddress { get; set; }
-    public InvoiceLineItemDto[] InvoiceLineItems { get; set; }
+
+    public InvoiceLineItemDto[] LineItems { get; set; }
+
+    public bool DeclaredAndSigned { get; set; }
 }
