@@ -8,28 +8,28 @@
 import type { InvoiceLineItemDto } from './invoiceLineItemDto';
 
 export interface InvoiceDetailsDto {
-  /** @nullable */
-  claimantFirstName?: string;
-  /** @nullable */
-  claimantLastName?: string;
-  /** @nullable */
-  claimNumber?: string;
-  /** @nullable */
-  counselorLastName?: string;
-  /** @nullable */
-  counselorNumber?: string;
+  /** @minLength 1 */
+  claimantFirstName: string;
+  /** @minLength 1 */
+  claimantLastName: string;
+  /** @minLength 1 */
+  claimNumber: string;
+  /** @minLength 1 */
+  counselorLastName: string;
+  /** @minLength 1 */
+  counselorNumber: string;
   exemptFromGst?: boolean;
-  invoicedAte?: string;
+  invoicedAte: string;
   /** @nullable */
   invoiceLineItems?: InvoiceLineItemDto[];
-  /** @nullable */
-  invoiceNumber?: string;
-  /** @nullable */
-  submitterEmailAddress?: string;
-  /** @nullable */
-  submitterFullName?: string;
-  /** @nullable */
-  vendorNumber?: string;
-  /** @nullable */
-  vendorPostalCode?: string;
+  /** @minLength 1 */
+  invoiceNumber: string;
+  /** @minLength 1 */
+  submitterEmailAddress: string;
+  /** @minLength 1 */
+  submitterFullName: string;
+  /** @minLength 1 */
+  vendorNumber: string;
+  /** @minLength 1 */
+  vendorPostalCode: string;
 }

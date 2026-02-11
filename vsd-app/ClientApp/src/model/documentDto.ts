@@ -7,10 +7,10 @@
  */
 
 export interface DocumentDto {
-  /** @nullable */
-  body?: string;
-  /** @nullable */
-  fileName?: string;
-  /** @nullable */
-  subject?: string;
+  /** @minLength 1 */
+  body: string;
+  /** @minLength 1 */
+  fileName: string;
+  /** @minLength 1 */
+  subject: string;
 }

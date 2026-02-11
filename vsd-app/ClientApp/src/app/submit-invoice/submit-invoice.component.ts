@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -241,6 +241,17 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     });
 
     this.invoiceGrandTotal = invoiceSubTotal;
+  }
+
+  // TODO: move this to a shared utility class
+  private createFormFromDto<T>(dto: Partial<T>, validators?: { [K in keyof T]?: any[] }): FormGroup {
+    const group: any = {};
+
+    Object.keys(dto).forEach((key) => {
+      group[key] = [dto[key] || '', validators?.[key] || []];
+    });
+
+    return this.fb.group(group);
   }
 
   createLineItem(sessionHours: string = ''): UntypedFormGroup {

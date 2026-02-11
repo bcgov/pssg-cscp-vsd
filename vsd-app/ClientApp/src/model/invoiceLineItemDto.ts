@@ -10,9 +10,8 @@ import type { CounsellingType } from './counsellingType';
 export interface InvoiceLineItemDto {
   /** @nullable */
   attendingSupportPerson?: string;
-  counsellingType?: CounsellingType;
+  counsellingType: CounsellingType;
   missedSession?: boolean;
-  sessionDate?: string;
-  /** @nullable */
-  sessionHours?: number;
+  sessionDate: string;
+  sessionHours: number;
 }
