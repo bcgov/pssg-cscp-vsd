@@ -58,7 +58,7 @@ namespace Database.Model
 		public static class Fields
 		{
 			public const string Body = "Body";
-			public const string Filename = "Filename";
+			public const string FileName = "FileName";
 			public const string FileSize = "FileSize";
 			public const string IsSuccess = "IsSuccess";
 			public const string MimeType = "MimeType";
@@ -91,7 +91,7 @@ namespace Database.Model
 			}
 		}
 		
-		public string Filename
+		public string FileName
 		{
 			get
 			{
@@ -106,7 +106,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Filename"] = value;
+				this.Results["FileName"] = value;
 			}
 		}
 		

@@ -26,7 +26,7 @@ namespace Database.Model
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("F - Kwìkwèxwelhp Healing Village (Min)", 13, "#0000ff")]
-		FKwKwXwelhpHealingVillageMin = 100000012,
+		FKwikwexwelhpHealingVillageMin = 100000012,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("F - Matsqui Institution (Med)", 14, "#0000ff")]

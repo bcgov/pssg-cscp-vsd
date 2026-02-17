@@ -143,7 +143,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["IsParentCaseFound"] = value;
+				this.Results["isParentCaseFound"] = value;
 			}
 		}
 		

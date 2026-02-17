@@ -81,7 +81,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Uri"] = value;
+				this.Results["uri"] = value;
 			}
 		}
 	}

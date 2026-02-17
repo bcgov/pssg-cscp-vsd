@@ -102,7 +102,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["TimelineWallRecords"] = value;
+				this.Results["TimeLineWallRecords"] = value;
 			}
 		}
 	}

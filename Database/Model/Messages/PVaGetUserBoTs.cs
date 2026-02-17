@@ -81,7 +81,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["BoTs"] = value;
+				this.Results["Bots"] = value;
 			}
 		}
 	}

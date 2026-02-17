@@ -123,7 +123,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["DocumentsCores"] = value;
+				this.Results["documentScores"] = value;
 			}
 		}
 		
@@ -142,7 +142,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Sentences"] = value;
+				this.Results["sentences"] = value;
 			}
 		}
 		
@@ -161,7 +161,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Sentiment"] = value;
+				this.Results["sentiment"] = value;
 			}
 		}
 	}

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Database;
 using Gov.Cscp.VictimServices.Public.Services;
 using Manager;
@@ -86,6 +87,10 @@ namespace Gov.Cscp.VictimServices.Public
 
                     // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
                     opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                })
+                .AddJsonOptions(opts =>
+                {
+                    opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
 
             // setup key ring to persist in storage.

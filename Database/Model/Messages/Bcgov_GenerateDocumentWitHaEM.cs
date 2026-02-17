@@ -80,7 +80,7 @@ namespace Database.Model
 		{
 			public const string Body = "Body";
 			public const string FileLength = "FileLength";
-			public const string Filename = "Filename";
+			public const string FileName = "FileName";
 			public const string IsSuccess = "IsSuccess";
 			public const string MimeType = "MimeType";
 			public const string Result = "Result";
@@ -131,7 +131,7 @@ namespace Database.Model
 			}
 		}
 		
-		public string Filename
+		public string FileName
 		{
 			get
 			{
@@ -146,7 +146,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Filename"] = value;
+				this.Results["FileName"] = value;
 			}
 		}
 		

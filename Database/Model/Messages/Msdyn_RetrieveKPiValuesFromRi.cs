@@ -102,7 +102,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["KPiValues"] = value;
+				this.Results["KpiValues"] = value;
 			}
 		}
 	}

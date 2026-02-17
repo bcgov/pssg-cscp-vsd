@@ -123,7 +123,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["ExchangedAta"] = value;
+				this.Results["ExchangeData"] = value;
 			}
 		}
 	}

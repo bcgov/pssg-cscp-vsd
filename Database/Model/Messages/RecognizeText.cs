@@ -102,7 +102,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["CountOfPages"] = value;
+				this.Results["countOfPages"] = value;
 			}
 		}
 		
@@ -121,7 +121,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Pages"] = value;
+				this.Results["pages"] = value;
 			}
 		}
 	}

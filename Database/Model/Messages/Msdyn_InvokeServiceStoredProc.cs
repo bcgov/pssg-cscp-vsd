@@ -123,7 +123,7 @@ namespace Database.Model
 			}
 			set
 			{
-				this.Results["Output"] = value;
+				this.Results["output"] = value;
 			}
 		}
 	}

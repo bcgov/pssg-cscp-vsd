@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Application } from '../interfaces/application.interface';
-import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { InvoiceDto } from '../../model';
+import { Application } from '../interfaces/application.interface';
 
 @Injectable()
 export class AEMService {
@@ -41,7 +41,7 @@ export class AEMService {
       .pipe(retry(3), catchError(this.handleError));
   }
 
-  public getInvoicePDF(invoice: CounsellorInvoice) {
+  public getInvoicePDF(invoice: InvoiceDto) {
     return this.http
       .post(this.apiPath + '/invoice', invoice, { headers: this.headers })
       .pipe(retry(3), catchError(this.handleError));

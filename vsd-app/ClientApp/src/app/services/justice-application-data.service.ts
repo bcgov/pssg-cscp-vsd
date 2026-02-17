@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Application } from '../interfaces/application.interface';
-import { CounsellorInvoice } from '../interfaces/counsellor-invoice.interface';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Application } from '../interfaces/application.interface';
 
 @Injectable()
 export class JusticeApplicationDataService {
@@ -20,10 +19,6 @@ export class JusticeApplicationDataService {
 
   public submitApplication(application: Application) {
     return this.http.post(this.apiPath + 'saveapplication', application, { headers: this.headers });
-  }
-
-  public submitCounsellorInvoice(counsellorInvoice: CounsellorInvoice) {
-    return this.http.post(this.apiPath + 'submitcounsellorinvoice', counsellorInvoice, { headers: this.headers });
   }
 
   public validateVendor(vendorNumber, vendorPostalCode) {
