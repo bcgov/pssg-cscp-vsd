@@ -142,7 +142,7 @@
                       @for (item of form.get('invoiceDetails.lineItems')['controls']; track item; let i = $index) {
                         <div class="item-listing" formArrayName="lineItems">
                           <div [formGroupName]="i" class="invoice-item row no-gutter">
-                            <div class="col-3">
+                            <div class="col-2">
                               <app-field label="Session Date" [required]="true" [valid]="isControlValid(item, 'sessionDate')" errorMessage="Please enter the session date">
                                 <input type="text" [max]="today" class="form-control date-picker" [matDatepicker]="sessionDate_i" placeholder="yyyy-mm-dd" formControlName="sessionDate" (click)="sessionDate_i.open()" (change)="checkForDuplicateLineItems()" (dateChange)="checkForDuplicateLineItems()">
                                 <span style="display: none;">
@@ -151,7 +151,7 @@
                                 <mat-datepicker #sessionDate_i></mat-datepicker>
                               </app-field>
                             </div>
-                            <div class="col-3">
+                            <div class="col-2">
                               <app-field label="Counselling Type" [required]="true" [valid]="isControlValid(item, 'counsellingType')" errorMessage="Please select the type of counselling">
                                 <select class="form-control fixed-select" formControlName="counsellingType" (change)="checkForDuplicateLineItems()">
                                   <option value="0">Select...</option>
@@ -176,12 +176,15 @@
                               </app-field>
                               <input class="form-control number-field" type="hidden" formControlName="sessionAmount" [value]="calculateRow(item)" readonly>
                             </div>
-                            <div class="col-3">
-                              <app-field label=" " [showChevrons]="false">
-                                <label class="inline-label">
-                                  <span>Missed Session</span><input type="checkbox" [value]="true" formControlName="missedSession">
-                                </label>
+                            <div class="col-2">
+                              <app-field label="Missed Session" [showChevrons]="false">                                
+                                  <input type="checkbox" [value]="true" formControlName="missedSession">
                               </app-field>
+                            </div>
+                            <div class="col-4">
+                              <app-field label="Support Person attending Session">
+                                <input class="form-control" type="text" formControlName="attendingSupportPerson" maxlength="100">
+                              </app-field>                              
                             </div>
                             <ng-template #sessionDateInfo>
                               <h3>Line Item: Hours</h3>
@@ -392,15 +395,18 @@
                       <th>COUNSELLING TYPE</th>
                       <th>HOURS</th>
                       <th>MISSED SESSION</th>
+                      <th>SUPPORT PERSON ATTENDING</th>
                     </tr>
                   </thead>
                   <tbody>
                     @for (item of lineItemsControls.controls; track item; let i = $index) {
                       <tr>
-                        <td style="width: 25%">{{ datesOrEmpty([item.get('sessionDate')]) }}</td>
+                        <tr>
+                        <td style="width: 15%">{{ datesOrEmpty([item.get('sessionDate')]) }}</td>
                         <td style="width: 30%">{{ enumHelper.InvoiceCounsellingType[valueForEnum(item.get('counsellingType'))] }}</td>
-                        <td style="width: 30%">{{ item.get('sessionHours').value }}</td>
+                        <td style="width: 10%">{{ item.get('sessionHours').value }}</td>
                         <td style="width: 15%; min-width: 132px;"><span [innerHTML]="checkmarkFromControl(item.get('missedSession'))"></span></td>
+                        <td style="width: 30%">{{ valueOrEmpty(item.get('attendingSupportPerson')) }}</td>
                       </tr>
                     }
                   </tbody>

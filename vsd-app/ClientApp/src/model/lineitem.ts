@@ -8,6 +8,8 @@
 
 export interface Lineitem {
   /** @nullable */
+  attendingSupportPerson?: string;
+  /** @nullable */
   counsellingType?: number;
   /** @nullable */
   counsellingTypeName?: string;

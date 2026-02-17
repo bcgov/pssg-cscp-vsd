@@ -251,7 +251,8 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       missedSession: [false],
       sessionDate: ['', Validators.required],
       sessionHours: [0, [Validators.required, Validators.min(0.5)]],
-      sessionAmount: [0] // used for row calculation, not required for submission - could probably subscribe to value changes on controls that need it
+      sessionAmount: [0], // used for row calculation, not required for submission - could probably subscribe to value changes on controls that need it
+      attendingSupportPerson: ['']
     });
   }
 

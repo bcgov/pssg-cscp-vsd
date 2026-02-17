@@ -40,7 +40,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         Vsd_Cvap_SessionDate = lineItem.SessionDate,
                         Vsd_Cvap_SessionDuration = lineItem.SessionHours,
                         Vsd_MissedSession = lineItem.MissedSession,
-                        // TODO: lineItem.AttendingSupportPerson
+                        Vsd_AttendingSupportPerson = lineItem.AttendingSupportPerson,
                     };
 
                     request.InvoiceLineItems.Entities.Add(invoiceLineDetail);

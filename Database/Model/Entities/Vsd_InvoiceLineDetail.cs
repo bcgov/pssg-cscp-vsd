@@ -180,6 +180,7 @@ namespace Database.Model
 			public const string Vsd_AmountCalculated_Base = "vsd_amountcalculated_base";
 			public const string Vsd_AmountSimple = "vsd_amountsimple";
 			public const string Vsd_AmountSimple_Base = "vsd_amountsimple_base";
+			public const string Vsd_AttendingSupportPerson = "vsd_attendingsupportperson";
 			public const string Vsd_CaseId = "vsd_caseid";
 			public const string Vsd_CaseiDnaMe = "vsd_caseidname";
 			public const string Vsd_ChildCareProviderLastName = "vsd_childcareproviderlastname";
@@ -924,6 +925,21 @@ namespace Database.Model
 			get
 			{
 				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("vsd_amountsimple_base");
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_attendingsupportperson")]
+		public string Vsd_AttendingSupportPerson
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_attendingsupportperson");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_attendingsupportperson", value);
 			}
 		}
 		
