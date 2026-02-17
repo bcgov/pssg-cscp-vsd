@@ -160,7 +160,7 @@
         </section>
 
         <h3>Other Treatment Information</h3>
-        <app-field [label]="getOtherTreatmentLabel()" [valid]="isFieldValid('hadOtherTreatments')" [required]="true" errorMessage="Please select an option">
+        <app-field [label]="getOtherTreatmentLabel()" [valid]="isFieldValid('hadOtherTreatments')" [required]="true" errorMessage="Please select whether you have seen any other doctors, specialists, or counsellors">
             <label class="inline-label">
                 <input type="radio" (click)="addProvider()" [value]="true" name="hadOtherTreatments" formControlName="hadOtherTreatments">
                 <span>Yes</span>
