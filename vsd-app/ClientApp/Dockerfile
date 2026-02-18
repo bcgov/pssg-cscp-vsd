@@ -55,8 +55,12 @@ COPY ./vsd-app/ClientApp .
 RUN npm install --legacy-peer-deps --ignore-scripts
 RUN npm run build --configuration=production
 
+FROM caddy:2-builder AS builder
+RUN xcaddy build \
+    --with github.com/caddyserver/replace-response
+
 # --- Runtime Stage ---
-FROM caddy:2.10.0-alpine AS final
+FROM caddy:2 as final
 RUN apk update && apk upgrade --no-cache
 
 # Build args for traceability
