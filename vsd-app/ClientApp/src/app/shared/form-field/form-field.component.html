@@ -8,7 +8,8 @@
       [formControl]="control"
       [id]="id"
       [name]="id"
-      [class.is-invalid]="hasError"      
+      [class.is-invalid]="hasError"
+      class="form-control"
     >
       <option value="" *ngIf="placeholder">
         {{ placeholder }}
@@ -25,7 +26,8 @@
       [name]="id"
       [placeholder]="placeholder"
       [mask]="mask"
-      [class.is-invalid]="hasError"      
+      [class.is-invalid]="hasError"
+      class="form-control"
       (blur)="onBlur()"
     />
   }
