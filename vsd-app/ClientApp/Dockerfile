@@ -74,6 +74,7 @@ RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 ENV BUILD_IMAGE_NAME=${BUILD_IMAGE_NAME}
 ENV BUILD_VERSION=${BUILD_VERSION}
 
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 COPY ./vsd-app/ClientApp/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/dist/browser/ /site
 
