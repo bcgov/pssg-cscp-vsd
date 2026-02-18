@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
+/** @deprecated This component is deprecated and will be removed in a future release. Please use FormFieldComponent instead. */
 @Component({
   selector: 'app-field',
   templateUrl: './field.component.html',

@@ -1,0 +1,36 @@
+<div class="app-field">
+  <label *ngIf="label" [for]="id">
+    {{ label }}<span *ngIf="isRequired" style="color: #d93e45"> *</span>
+  </label>
+
+  @if (controlType === "select") {
+    <select
+      [formControl]="control"
+      [id]="id"
+      [name]="id"
+      [class.is-invalid]="hasError"      
+    >
+      <option value="" *ngIf="placeholder">
+        {{ placeholder }}
+      </option>
+      <option *ngFor="let option of options" [ngValue]="option.value">
+        {{ option.label }}
+      </option>
+    </select>
+  } @else {
+    <input
+      [formControl]="control"
+      [type]="type"
+      [id]="id"
+      [name]="id"
+      [placeholder]="placeholder"
+      [mask]="mask"
+      [class.is-invalid]="hasError"      
+      (blur)="onBlur()"
+    />
+  }
+
+  <div class="error-states error-container" [style.display]="hasError ? 'block' : 'none'">
+    {{ error }}
+  </div>  
+</div>
