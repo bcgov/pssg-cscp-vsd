@@ -123,10 +123,12 @@
                         <input class="form-control" type="text" formControlName="familyDoctorClinic">
                     </app-field>
                 </div>
-                <div class="col-md-6">
-                    <app-field label="Email Address" [valid]="isMyControlValid(form.get('familyDoctorEmail'))" errorMessage="Please enter a valid email address">
-                        <input class="form-control" type="text" formControlName="familyDoctorEmail" maxlength="100">
-                    </app-field>
+                <div class="col-md-6">                    
+                    <app-form-field 
+                        label="Email Address" 
+                        [control]="form.get('familyDoctorEmail')" 
+                        inputType="email">
+                    </app-form-field>
                 </div>
             </div>
             <div class="row">
@@ -184,9 +186,11 @@
                             </app-field>
                         </div>
                         <div class="col-md-6">
-                            <app-field label="Email Address" [valid]="isMyControlValid(item.get('providerEmail'))" errorMessage="Please enter a valid email address">
-                                <input type="text" class="form-control" formControlName="providerEmail" maxlength="100">
-                            </app-field>
+                            <app-form-field 
+                                label="Email Address" 
+                                [control]="item.get('providerEmail')" 
+                                inputType="email">
+                            </app-form-field>
                         </div>
                     </div>
                     <div class="row">

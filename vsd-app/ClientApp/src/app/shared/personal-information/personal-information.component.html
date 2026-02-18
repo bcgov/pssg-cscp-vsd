@@ -269,10 +269,13 @@
   </div>
 
   <div class="row">
-    <div class="col-md-6">
-      <app-field label="Email Address" [required]="preferredMethodOfContact.value === '1' || form.get('agreeToCvapCommunicationExchange').value === true" [valid]="isFieldValid('email')" errorMessage="Please enter a valid email address">
-        <input class="form-control" type="email" (blur)="trimEmail(form.get('email'))" formControlName="email" maxlength="100">
-      </app-field>
+    <div class="col-md-6">      
+      <app-form-field 
+        label="Email Address" 
+        [control]="form.get('email')" 
+        inputType="email"
+        errorMessage="Please provide your email address">
+      </app-form-field>
     </div>
   </div>
   <div class="row">

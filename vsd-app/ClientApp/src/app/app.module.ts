@@ -74,6 +74,7 @@ import { EmploymentInformationComponent } from './shared/employment-information/
 import { ExpenseInformationComponent } from './shared/expense-information/expense-information.component';
 import { FieldComponent } from './shared/field/field.component';
 import { FileUploaderComponent } from './shared/file-uploader/file-uploader.component';
+import { FormFieldComponent } from './shared/form-field/form-field.component';
 import { IntroductionComponent } from './shared/introduction/introduction.component';
 import { MedicalInformationComponent } from './shared/medical-information/medical-information.component';
 import { PersonalInformationComponent } from './shared/personal-information/personal-information.component';
@@ -102,6 +103,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     ExpenseInformationComponent,
     FeatureEnabledDirective,
     FieldComponent,
+    FormFieldComponent,
     FileUploaderComponent,
     GenderSelectorComponent,
     GSTWarningDialog,

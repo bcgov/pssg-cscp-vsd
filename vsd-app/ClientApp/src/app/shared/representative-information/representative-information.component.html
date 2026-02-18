@@ -135,10 +135,13 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
-          <app-field label="Email Address" [required]="representativeEmailIsRequired" [valid]="isFieldValid('representativeEmail', form.get('applicantSameContactInfo').value)" errorMessage="Please enter a valid email address">
-            <input class="form-control" type="text" (blur)="trimEmail(form.get('representativeEmail'))" formControlName="representativeEmail" maxlength="100">
-          </app-field>
+        <div class="col-md-6">          
+          <app-form-field 
+            label="Email Address" 
+            [control]="form.get('representativeEmail')" 
+            inputType="email"
+            errorMessage="Please provide your email address">
+          </app-form-field>
         </div>
       </div>
       <div class="row">
