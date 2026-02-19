@@ -39,6 +39,7 @@ import { FormBase } from '../shared/form-base';
 import { MedicalInfoHelper } from '../shared/medical-information/medical-information.helper';
 import { PersonalInfoHelper } from '../shared/personal-information/personal-information.helper';
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
+import { ServiceNotAvailableComponent } from '../shared/service-not-available.component';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 
@@ -123,55 +124,82 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
     promise_array.push(
       new Promise<void>((resolve, reject) => {
-        this.lookupService.getCountries().subscribe((res) => {
-          this.lookupData.countries = res.value;
-          if (this.lookupData.countries) {
-            this.lookupData.countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+        this.lookupService.getCountries().subscribe(
+          (res) => {
+            this.lookupData.countries = res.value;
+            if (this.lookupData.countries) {
+              this.lookupData.countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+            }
+            resolve();
+          },
+          (err) => {
+            reject(err);
           }
-          resolve();
-        });
+        );
       })
     );
 
     promise_array.push(
       new Promise<void>((resolve, reject) => {
-        this.lookupService.getProvinces().subscribe((res) => {
-          this.lookupData.provinces = res.value;
-          if (this.lookupData.provinces) {
-            this.lookupData.provinces.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+        this.lookupService.getProvinces().subscribe(
+          (res) => {
+            this.lookupData.provinces = res.value;
+            if (this.lookupData.provinces) {
+              this.lookupData.provinces.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+            }
+            resolve();
+          },
+          (err) => {
+            reject(err);
           }
-          resolve();
-        });
+        );
       })
     );
 
     promise_array.push(
       new Promise<void>((resolve, reject) => {
-        this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
-          this.lookupData.cities = res.value;
-          if (this.lookupData.cities) {
-            this.lookupData.cities.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+        this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe(
+          (res) => {
+            this.lookupData.cities = res.value;
+            if (this.lookupData.cities) {
+              this.lookupData.cities.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+            }
+            resolve();
+          },
+          (err) => {
+            reject(err);
           }
-          resolve();
-        });
+        );
       })
     );
 
     promise_array.push(
       new Promise<void>((resolve, reject) => {
-        this.lookupService.getRepresentativeRelationships().subscribe((res) => {
-          this.lookupData.representativeRelationships = res.value;
-          if (this.lookupData.representativeRelationships) {
-            this.lookupData.representativeRelationships.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+        this.lookupService.getRepresentativeRelationships().subscribe(
+          (res) => {
+            this.lookupData.representativeRelationships = res.value;
+            if (this.lookupData.representativeRelationships) {
+              this.lookupData.representativeRelationships.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+            }
+            resolve();
+          },
+          (err) => {
+            reject(err);
           }
-          resolve();
-        });
+        );
       })
     );
 
-    Promise.all(promise_array).then((res) => {
-      this.didLoad = true;
-    });
+    Promise.all(promise_array)
+      .then((res) => {
+        this.didLoad = true;
+      })
+      .catch((err) => {
+        this.snackBar.openFromComponent(ServiceNotAvailableComponent, {
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      });
 
     if (completeOnBehalfOf) {
       this.form.get('representativeInformation').patchValue({
