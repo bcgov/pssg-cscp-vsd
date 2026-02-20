@@ -280,55 +280,55 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     }
   }
 
-  submitApplication() {
-    this.submitting = true;
-    if (this.form.valid) {
+  private submit(form: Application): Promise<void> {
+    return new Promise((resolve, reject) => {
       this.getApplicationPDFs()
         .then((pdfs: DocumentCollectioninformation[]) => {
-          let form = this.harvestForm();
           form.ApplicationPDFs = pdfs;
-          this.justiceDataService.submitApplication(form).subscribe(
-            (data) => {
-              if (data['IsSuccess'] == true) {
-                this.router.navigate(['/application-success']);
+          this.justiceDataService.submitApplication(form).subscribe({
+            next: (data) => {
+              if (data['IsSuccess']) {
+                resolve();
               } else {
-                this.submitting = false;
-                this.snackBar.open('Error submitting application', 'Fail', {
-                  duration: 3500,
-                  panelClass: ['red-snackbar']
-                });
-                console.log('Error submitting application');
-                if (this.isIE) {
-                  alert('Encountered an error. Please use another browser as this may resolve the problem.');
-                }
+                reject();
               }
             },
-            (error) => {
-              this.submitting = false;
-              this.snackBar.open('Error submitting application', 'Fail', {
-                duration: 3500,
-                panelClass: ['red-snackbar']
-              });
-              console.log('Error submitting application');
-              if (this.isIE) {
-                alert('Encountered an error. Please use another browser as this may resolve the problem.');
-              }
+            error: (error) => {
+              reject();
             }
-          );
+          });
         })
         .catch((err) => {
+          reject();
+        });
+    });
+  }
+
+  private submitErrorHandler() {
+    this.snackBar.openFromComponent(ServiceNotAvailableComponent, {
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
+    });
+  }
+
+  submitApplication() {
+    this.markAsTouched();
+
+    if (this.form.valid) {
+      this.submitting = true;
+      let form = this.harvestForm();
+      this.submit(form)
+        .then(() => {
+          this.router.navigate(['/application-success']);
+        })
+        .catch(() => {
+          this.submitErrorHandler();
+        })
+        .finally(() => {
           this.submitting = false;
-          this.snackBar.open('Error submitting application. ', 'Fail', {
-            duration: 3500,
-            panelClass: ['red-snackbar']
-          });
-          console.log('Error submitting application. Problem getting AEM pdfs...');
-          console.log(err);
         });
     } else {
       this.submitting = false;
-      console.log('form not validated');
-      this.markAsTouched();
     }
   }
 

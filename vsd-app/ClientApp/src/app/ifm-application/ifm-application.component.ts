@@ -311,9 +311,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   }
 
   private submitErrorHandler() {
-    this.snackBar.open('Error submitting application.', 'Close', {
-      duration: 3500,
-      panelClass: ['red-snackbar']
+    this.snackBar.openFromComponent(ServiceNotAvailableComponent, {
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
     });
   }
 

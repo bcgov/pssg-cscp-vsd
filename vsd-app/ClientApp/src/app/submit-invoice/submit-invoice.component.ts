@@ -6,7 +6,6 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as _ from 'lodash';
 import moment from 'moment';
-import { Subject } from 'rxjs';
 import { InvoicesService } from '../../api/invoices/invoices.service';
 import { DocumentDto, InvoiceDto } from '../../model';
 import { AEMService } from '../services/aem.service';
@@ -21,6 +20,7 @@ import { FormBase } from '../shared/form-base';
 import { POSTAL_CODE } from '../shared/regex.constants';
 import { EmailValidator } from '../shared/validators/email.validator';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
+import { ServiceNotAvailableComponent } from '../shared/service-not-available.component';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -301,30 +301,43 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     }
   }
 
+  private submit(formData: InvoiceDto): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.getInvoicePDF(formData)
+        .then((pdfs: DocumentDto[]) => {
+          formData.documentCollection = pdfs;
+          this.invoiceService.postApiInvoices(formData).subscribe({
+            next: (data) => {
+              if (data['success']) {
+                resolve();
+              } else {
+                reject();
+              }
+            },
+            error: (error) => {
+              reject();
+            }
+          });
+        })
+        .catch((err) => {
+          reject();
+        });
+    });
+  }
+
+  private submitErrorHandler() {
+    this.snackBar.openFromComponent(ServiceNotAvailableComponent, {
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
+    });
+  }
+
   submitInvoiceAndClose() {
-    this.submitInvoice().subscribe((success: boolean) => {
-      if (success) {
-        this.invoiceSuccess();
-      }
-    });
-  }
-
-  submitAndCreateNew() {
-    this.submitInvoice().subscribe((success: boolean) => {
-      if (success) {
-        this.invoiceEdit();
-        this.cloneInvoice(_.cloneDeep(this.form));
-      }
-    });
-  }
-
-  submitInvoice(): Subject<boolean> {
-    const submitResult = new Subject<boolean>();
-
     this.markAsTouched();
 
     if (this.form.invalid) {
       this.formFullyValidated = false;
+      return;
     }
 
     if (this.hasDuplicateLineItem) {
@@ -343,47 +356,54 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     };
     formData.invoiceDetails.exemptFromGst = !formData.invoiceDetails.gstApplicable;
 
-    this.getInvoicePDF(formData)
-      .then((pdfs: DocumentDto[]) => {
-        formData.documentCollection = pdfs;
-
-        this.invoiceService.postApiInvoices(formData).subscribe(
-          (data) => {
-            submitResult.next(true);
-
-            this.submitting = false;
-            if (data['success'] == true) {
-              submitResult.next(true);
-            } else {
-              this.snackBar.open('Error submitting invoice. ' + data['message'], 'Fail', {
-                duration: 3500,
-                panelClass: ['red-snackbar']
-              });
-              console.log('Error submitting invoice. ' + data['message']);
-              if (this.isIE) {
-                alert('Encountered an error. Please use another browser as this may resolve the problem.');
-              }
-            }
-          },
-          (error) => {
-            submitResult.next(false);
-
-            this.submitting = false;
-            this.snackBar.open('Error submitting invoice', 'Fail', { duration: 3500, panelClass: ['red-snackbar'] });
-            console.log('Error submitting invoice');
-            if (this.isIE) {
-              alert('Encountered an error. Please use another browser as this may resolve the problem.');
-            }
-          },
-          () => {}
-        );
+    this.submit(formData)
+      .then(() => {
+        this.invoiceSuccess();
       })
-      .catch((err) => {
+      .catch(() => {
+        this.submitErrorHandler();
+      })
+      .finally(() => {
         this.submitting = false;
-        console.log(err);
       });
+  }
 
-    return submitResult;
+  submitAndCreateNew() {
+    this.markAsTouched();
+
+    if (this.form.invalid) {
+      this.formFullyValidated = false;
+      return;
+    }
+
+    if (this.hasDuplicateLineItem) {
+      this.dialog.open(MessageDialog, {
+        autoFocus: false,
+        data: { title: DUPLICATE_LINE_ITEMS_TITLE, message: DUPLICATE_LINE_ITEMS_MESSAGE }
+      });
+      return;
+    }
+
+    this.submitting = true;
+    this.formFullyValidated = true;
+
+    let formClone = _.cloneDeep(this.form);
+    const formData = <InvoiceDto>{
+      invoiceDetails: this.form.get('invoiceDetails').value
+    };
+    formData.invoiceDetails.exemptFromGst = !formData.invoiceDetails.gstApplicable;
+
+    this.submit(formData)
+      .then(() => {
+        this.invoiceEdit();
+        this.cloneInvoice(formClone);
+      })
+      .catch(() => {
+        this.submitErrorHandler();
+      })
+      .finally(() => {
+        this.submitting = false;
+      });
   }
 
   getInvoicePDF(invoice: InvoiceDto) {
