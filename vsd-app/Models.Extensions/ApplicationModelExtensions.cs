@@ -370,7 +370,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                             ++documentIndex;
                         }
 
-                        for (int i = 0; i < model.EmploymentIncomeInformation.documents.Length; ++i)
+                        for (int i = 0; i < model.EmploymentIncomeInformation?.documents.Length; ++i)
                         {
                             Documentcollection tempDocumentCollection = new Documentcollection();
                             tempDocumentCollection.body = model.EmploymentIncomeInformation.documents[i].body;

@@ -316,7 +316,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
         this.cloneInvoice(_.cloneDeep(this.form));
       }
     });
-    // .unsubscribe();
   }
 
   submitInvoice(): Subject<boolean> {
