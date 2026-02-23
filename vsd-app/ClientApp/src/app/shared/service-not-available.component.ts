@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-service-not-available',
   template: `
     <div class="service-error-message">
-      <p>The Victim Safety Unit application is currently down. Please retry later or contact the Victim Safety Unit.</p>
+      <p>The Crime Victim Assistance Program (CVAP) application is currently down. Please retry later.</p>
     </div>
   `,
   styles: [

@@ -473,8 +473,40 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     this.showPrintView = false;
   }
 
+  private submit(form: Application): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.getApplicationPDFs()
+        .then((pdfs: DocumentCollectioninformation[]) => {
+          form.ApplicationPDFs = pdfs;
+          this.justiceDataService.submitApplication(form).subscribe({
+            next: (data) => {
+              if (data['IsSuccess']) {
+                resolve();
+              } else {
+                reject();
+              }
+            },
+            error: (error) => {
+              reject();
+            }
+          });
+        })
+        .catch((err) => {
+          reject();
+        });
+    });
+  }
+
+  private submitErrorHandler() {
+    this.snackBar.openFromComponent(ServiceNotAvailableComponent, {
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
+    });
+  }
+
   submitApplication() {
-    this.submitting = true;
+    this.markAsTouched();
+
     if (
       this.form.valid ||
       (this.form.controls.personalInformation.valid && // It's OK if this.form.controls.employmentIncomeInformation.valid is not valid
@@ -486,121 +518,53 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
         this.form.controls.personalInformation.valid &&
         this.form.controls.representativeInformation.valid)
     ) {
-      this.getApplicationPDFs()
-        .then((pdfs: DocumentCollectioninformation[]) => {
-          let form = this.harvestForm();
-          form.ApplicationPDFs = pdfs;
-          this.justiceDataService.submitApplication(form).subscribe(
-            (data) => {
-              if (data['IsSuccess'] == true) {
-                this.router.navigate(['/application-success']);
-              } else {
-                this.submitting = false;
-                this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', {
-                  duration: 3500,
-                  panelClass: ['red-snackbar']
-                });
-                console.log('Error submitting application. ' + data['message']);
-                if (this.isIE) {
-                  alert('Encountered an error. Please use another browser as this may resolve the problem.');
-                }
-              }
-            },
-            (error) => {
-              this.submitting = false;
-              this.snackBar.open('Error submitting application', 'Fail', {
-                duration: 3500,
-                panelClass: ['red-snackbar']
-              });
-              console.log('Error submitting application');
-              if (this.isIE) {
-                alert('Encountered an error. Please use another browser as this may resolve the problem.');
-              }
-            }
-          );
+      this.submitting = true;
+      let form = this.harvestForm();
+      this.submit(form)
+        .then(() => {
+          this.router.navigate(['/application-success']);
         })
-        .catch((err) => {
+        .catch(() => {
+          this.submitErrorHandler();
+        })
+        .finally(() => {
           this.submitting = false;
-          this.snackBar.open('Error submitting application. ', 'Fail', {
-            duration: 3500,
-            panelClass: ['red-snackbar']
-          });
-          console.log('Error submitting application. Problem getting AEM pdfs...');
-          console.log(err);
         });
     } else {
       this.submitting = false;
-      console.log('form not validated');
-      this.markAsTouched();
     }
   }
 
   submitApplicationAndClone(type: string) {
-    this.submitting = true;
+    this.markAsTouched();
+
     if (this.form.valid) {
-      let thisForm = _.cloneDeep(this.form);
-      this.getApplicationPDFs()
-        .then((pdfs: DocumentCollectioninformation[]) => {
-          let form = this.harvestForm();
-          form.ApplicationPDFs = pdfs;
-          this.justiceDataService.submitApplication(form).subscribe(
-            (data) => {
-              if (data['IsSuccess'] == true) {
-                if (type === 'VICTIM') {
-                  this.submitting = false;
-                  let victimForm = this.cloneFormToVictim(thisForm);
-                  this.victimStepper.reset();
-
-                  this.form = victimForm;
-                } else if (type === 'IFM') {
-                  this.submitting = false;
-                  let ifmForm = this.cloneFormToIFM(thisForm);
-
-                  this.state.cloning = true;
-                  this.state.data = ifmForm;
-
-                  this.router.navigate(['/ifm-application']);
-                } else {
-                  this.router.navigate(['/application-success']);
-                }
-              } else {
-                this.submitting = false;
-                this.snackBar.open('Error submitting application. ' + data['message'], 'Fail', {
-                  duration: 3500,
-                  panelClass: ['red-snackbar']
-                });
-                console.log('Error submitting application. ' + data['message']);
-                if (this.isIE) {
-                  alert('Encountered an error. Please use another browser as this may resolve the problem.');
-                }
-              }
-            },
-            (error) => {
-              this.submitting = false;
-              this.snackBar.open('Error submitting application', 'Fail', {
-                duration: 3500,
-                panelClass: ['red-snackbar']
-              });
-              console.log('Error submitting application');
-              if (this.isIE) {
-                alert('Encountered an error. Please use another browser as this may resolve the problem.');
-              }
-            }
-          );
+      this.submitting = true;
+      let formClone = _.cloneDeep(this.form);
+      let form = this.harvestForm();
+      this.submit(form)
+        .then(() => {
+          if (type === 'VICTIM') {
+            let victimForm = this.cloneFormToVictim(formClone);
+            this.victimStepper.reset();
+            this.form = victimForm;
+          } else if (type === 'IFM') {
+            let ifmForm = this.cloneFormToIFM(formClone);
+            this.state.cloning = true;
+            this.state.data = ifmForm;
+            this.router.navigate(['/ifm-application']);
+          } else {
+            this.router.navigate(['/application-success']);
+          }
         })
-        .catch((err) => {
+        .catch(() => {
+          this.submitErrorHandler();
+        })
+        .finally(() => {
           this.submitting = false;
-          this.snackBar.open('Error submitting application. ', 'Fail', {
-            duration: 3500,
-            panelClass: ['red-snackbar']
-          });
-          console.log('Error submitting application. Problem getting AEM pdfs...');
-          console.log(err);
         });
     } else {
       this.submitting = false;
-      console.log('form not validated');
-      this.markAsTouched();
     }
   }
 
