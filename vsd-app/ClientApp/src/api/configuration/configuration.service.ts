@@ -47,7 +47,7 @@ export class ConfigurationService {
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
   getApiConfiguration<TData = void>(options?: HttpClientOptions): Observable<TData> {
-    return this.http.get<TData>(`/api/Configuration`, options);
+    return this.http.get<TData>(`/cvapwebform/api/Configuration`, options);
   }
 }
 
