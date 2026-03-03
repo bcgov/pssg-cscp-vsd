@@ -18,9 +18,9 @@ import { MessageDialog } from '../shared/dialogs/message-dialog/message.dialog';
 import { EnumHelper, MY_FORMATS } from '../shared/enums-list';
 import { FormBase } from '../shared/form-base';
 import { POSTAL_CODE } from '../shared/regex.constants';
+import { ServiceNotAvailableComponent } from '../shared/service-not-available.component';
 import { EmailValidator } from '../shared/validators/email.validator';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
-import { ServiceNotAvailableComponent } from '../shared/service-not-available.component';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -636,6 +636,10 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     } else {
       this.hasDuplicateLineItem = false;
     }
+  }
+
+  showSupportPersonField(lineItem: UntypedFormGroup): boolean {
+    return lineItem.get('counsellingType').value == 100000002;
   }
 }
 
