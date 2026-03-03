@@ -54,7 +54,7 @@ export class AemService {
     applicationFormModel: ApplicationFormModel,
     options?: HttpClientOptions
   ): Observable<TData> {
-    return this.http.post<TData>(`/api/AEM/victim`, applicationFormModel, options);
+    return this.http.post<TData>(`/cvapwebform/api/AEM/victim`, applicationFormModel, options);
   }
   postApiAEMIfm<TData = void>(
     applicationFormModel: ApplicationFormModel,
@@ -72,7 +72,7 @@ export class AemService {
     applicationFormModel: ApplicationFormModel,
     options?: HttpClientOptions
   ): Observable<TData> {
-    return this.http.post<TData>(`/api/AEM/ifm`, applicationFormModel, options);
+    return this.http.post<TData>(`/cvapwebform/api/AEM/ifm`, applicationFormModel, options);
   }
   postApiAEMWitness<TData = void>(
     applicationFormModel: ApplicationFormModel,
@@ -90,7 +90,7 @@ export class AemService {
     applicationFormModel: ApplicationFormModel,
     options?: HttpClientOptions
   ): Observable<TData> {
-    return this.http.post<TData>(`/api/AEM/witness`, applicationFormModel, options);
+    return this.http.post<TData>(`/cvapwebform/api/AEM/witness`, applicationFormModel, options);
   }
   postApiAEMAuthorization<TData = void>(
     applicationFormModel: ApplicationFormModel,
@@ -108,7 +108,7 @@ export class AemService {
     applicationFormModel: ApplicationFormModel,
     options?: HttpClientOptions
   ): Observable<TData> {
-    return this.http.post<TData>(`/api/AEM/authorization`, applicationFormModel, options);
+    return this.http.post<TData>(`/cvapwebform/api/AEM/authorization`, applicationFormModel, options);
   }
   postApiAEMInvoice<TData = void>(
     counsellorInvoiceFormModel: CounsellorInvoiceFormModel,
@@ -126,7 +126,7 @@ export class AemService {
     counsellorInvoiceFormModel: CounsellorInvoiceFormModel,
     options?: HttpClientOptions
   ): Observable<TData> {
-    return this.http.post<TData>(`/api/AEM/invoice`, counsellorInvoiceFormModel, options);
+    return this.http.post<TData>(`/cvapwebform/api/AEM/invoice`, counsellorInvoiceFormModel, options);
   }
   getApiAEMGeneratePdfTypeApplicationId<TData = void>(
     pdfType: string,
@@ -148,7 +148,7 @@ export class AemService {
     applicationId: string,
     options?: HttpClientOptions
   ): Observable<TData> {
-    return this.http.get<TData>(`/api/AEM/generate/${pdfType}/${applicationId}`, options);
+    return this.http.get<TData>(`/cvapwebform/api/AEM/generate/${pdfType}/${applicationId}`, options);
   }
 }
 

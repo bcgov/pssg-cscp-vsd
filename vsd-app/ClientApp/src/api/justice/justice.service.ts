@@ -54,7 +54,7 @@ export class JusticeService {
     applicationFormModel: ApplicationFormModel,
     options?: HttpClientOptions
   ): Observable<TData> {
-    return this.http.post<TData>(`/api/Justice/saveapplication`, applicationFormModel, options);
+    return this.http.post<TData>(`/cvapwebform/api/Justice/saveapplication`, applicationFormModel, options);
   }
   postApiJusticeSubmitcounsellorinvoice<TData = void>(
     counsellorInvoiceFormModel: CounsellorInvoiceFormModel,
@@ -72,7 +72,11 @@ export class JusticeService {
     counsellorInvoiceFormModel: CounsellorInvoiceFormModel,
     options?: HttpClientOptions
   ): Observable<TData> {
-    return this.http.post<TData>(`/api/Justice/submitcounsellorinvoice`, counsellorInvoiceFormModel, options);
+    return this.http.post<TData>(
+      `/cvapwebform/api/Justice/submitcounsellorinvoice`,
+      counsellorInvoiceFormModel,
+      options
+    );
   }
   getApiJusticeValidateVendorVendorNumberVendorPostalCode<TData = void>(
     vendorNumber: string,
@@ -94,7 +98,10 @@ export class JusticeService {
     vendorPostalCode: string,
     options?: HttpClientOptions
   ): Observable<TData> {
-    return this.http.get<TData>(`/api/Justice/validate_vendor/${vendorNumber}/${vendorPostalCode}`, options);
+    return this.http.get<TData>(
+      `/cvapwebform/api/Justice/validate_vendor/${vendorNumber}/${vendorPostalCode}`,
+      options
+    );
   }
   getApiJusticeValidateVendorAndCounsellorVendorNumberVendorPostalCodeCounsellorNumberCounsellorLastName<TData = void>(
     vendorNumber: string,
@@ -125,7 +132,7 @@ export class JusticeService {
     options?: HttpClientOptions
   ): Observable<TData> {
     return this.http.get<TData>(
-      `/api/Justice/validate_vendor_and_counsellor/${vendorNumber}/${vendorPostalCode}/${counsellorNumber}/${counsellorLastName}`,
+      `/cvapwebform/api/Justice/validate_vendor_and_counsellor/${vendorNumber}/${vendorPostalCode}/${counsellorNumber}/${counsellorLastName}`,
       options
     );
   }

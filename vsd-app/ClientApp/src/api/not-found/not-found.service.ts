@@ -51,7 +51,7 @@ export class NotFoundService {
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
   get404<TData = void>(params?: Get404Params, options?: HttpClientOptions): Observable<TData> {
-    return this.http.get<TData>(`/404`, {
+    return this.http.get<TData>(`/cvapwebform/404`, {
       ...options,
       params: { ...params, ...options?.params }
     });

@@ -47,7 +47,7 @@ export class PaymentService {
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
   postApiPaymentSend<TData = void>(options?: HttpClientOptions): Observable<TData> {
-    return this.http.post<TData>(`/api/Payment/send`, undefined, options);
+    return this.http.post<TData>(`/cvapwebform/api/Payment/send`, undefined, options);
   }
 }
 

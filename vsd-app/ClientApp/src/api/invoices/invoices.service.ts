@@ -51,7 +51,7 @@ export class InvoicesService {
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
   postApiInvoices<TData = void>(invoiceDto: InvoiceDto, options?: HttpClientOptions): Observable<TData> {
-    return this.http.post<TData>(`/api/Invoices`, invoiceDto, options);
+    return this.http.post<TData>(`/cvapwebform/api/Invoices`, invoiceDto, options);
   }
 }
 

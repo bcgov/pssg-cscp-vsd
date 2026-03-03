@@ -47,7 +47,7 @@ export class PaymentScheduleService {
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
   postApiPaymentScheduleScheduleCvap<TData = void>(options?: HttpClientOptions): Observable<TData> {
-    return this.http.post<TData>(`/api/PaymentSchedule/schedule-cvap`, undefined, options);
+    return this.http.post<TData>(`/cvapwebform/api/PaymentSchedule/schedule-cvap`, undefined, options);
   }
 }
 
