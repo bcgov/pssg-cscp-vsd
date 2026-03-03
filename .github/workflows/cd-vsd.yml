@@ -27,6 +27,8 @@ on:
     workflows: ["CI VSD"]
     types:
       - completed
+    branches:
+      - development
 
   # manual trigger
   workflow_dispatch:
@@ -47,7 +49,7 @@ jobs:
   prepare-build-params:
     runs-on: ubuntu-latest
     # This job will only run if the triggering CI workflow was successful
-    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'development')
     outputs:
       short_sha: ${{ steps.determine-sha-from-workflow-run.outputs.short_sha || steps.validate-manual-sha.outputs.short_sha }}
     steps:
