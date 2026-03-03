@@ -246,7 +246,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   createLineItem(sessionHours: string = ''): UntypedFormGroup {
-    return this.fb.group({
+    const lineItemGroup = this.fb.group({
       counsellingType: [0, [Validators.required, Validators.min(100000000)]], // Counselling Session: 100000000  Court Support Counselling: 100000001  Psycho-educational sessions: 100000002    --- VALIDATE THESE NUMBERS ARE CORRECT
       missedSession: [false],
       sessionDate: ['', Validators.required],
@@ -254,6 +254,20 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       sessionAmount: [0], // used for row calculation, not required for submission - could probably subscribe to value changes on controls that need it
       attendingSupportPerson: ['']
     });
+
+    lineItemGroup.get('attendingSupportPerson').disable();
+
+    lineItemGroup.get('counsellingType').valueChanges.subscribe((counsellingType) => {
+      const attendingSupportPersonControl = lineItemGroup.get('attendingSupportPerson');
+      if (counsellingType === '100000002') {
+        attendingSupportPersonControl.enable();
+      } else {
+        attendingSupportPersonControl.disable();
+        attendingSupportPersonControl.setValue('');
+      }
+    });
+
+    return lineItemGroup;
   }
 
   addLineItem(): void {
@@ -636,10 +650,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     } else {
       this.hasDuplicateLineItem = false;
     }
-  }
-
-  showSupportPersonField(lineItem: UntypedFormGroup): boolean {
-    return lineItem.get('counsellingType').value == 100000002;
   }
 }
 

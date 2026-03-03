@@ -22,7 +22,6 @@ export class FormFieldComponent {
   @Input() control?: FormControl;
   @Input() mask: string = '';
   @Input() required: boolean = false;
-  @Input() disabled: boolean = false;
   @Input() errorMessage: string = 'This field is required';
   @Input() trimOnBlur: boolean = true;
   @Input() options?: Option[];
