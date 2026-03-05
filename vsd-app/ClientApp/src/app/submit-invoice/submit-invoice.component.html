@@ -181,10 +181,13 @@
                                   <input type="checkbox" [value]="true" formControlName="missedSession">
                               </app-field>
                             </div>
-                            <div class="col-4">
-                              <app-field label="Support Person attending Session">
-                                <input class="form-control" type="text" formControlName="attendingSupportPerson" maxlength="100">
-                              </app-field>                              
+                            <div class="col-3">                              
+                                <app-form-field
+                                  label="Support Person attending Session"
+                                  [control]="item.get('attendingSupportPerson')"
+                                  type="text"
+                                  maxlength="100"
+                                ></app-form-field>
                             </div>
                             <ng-template #sessionDateInfo>
                               <h3>Line Item: Hours</h3>
