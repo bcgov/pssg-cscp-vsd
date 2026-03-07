@@ -412,6 +412,7 @@ namespace Database.Model
 			public const string Vsd_Cvap_OnHoldComments = "vsd_cvap_onholdcomments";
 			public const string Vsd_Cvap_PaymentType = "vsd_cvap_paymenttype";
 			public const string Vsd_Cvap_PaymentTypeName = "vsd_cvap_paymenttypename";
+			public const string Vsd_Cvap_Session = "vsd_cvap_session";
 			public const string Vsd_Cvap_StartOfServiceProvided = "vsd_cvap_startofserviceprovided";
 			public const string Vsd_Cvap_SToBid = "vsd_cvap_stobid";
 			public const string Vsd_Cvap_SToBidName = "vsd_cvap_stobidname";
@@ -1881,6 +1882,21 @@ namespace Database.Model
 				{
 					return default(string);
 				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cvap_session")]
+		public string Vsd_Cvap_Session
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_cvap_session");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_cvap_session", value);
 			}
 		}
 		

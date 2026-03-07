@@ -149,6 +149,10 @@ namespace Database.Model
 		Denied = 100000003,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 7, "#0000ff")]
+		Inactive = 100000009,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Paid", 3, "#0000ff")]
 		Paid = 100000006,
 		
@@ -165,11 +169,11 @@ namespace Database.Model
 		Suspended = 100000007,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Terminated", 7, "#0000ff")]
+		[OptionSetMetadataAttribute("Terminated", 8, "#0000ff")]
 		Terminated = 100000008,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Withdrawn", 8, "#0000ff")]
+		[OptionSetMetadataAttribute("Withdrawn", 9, "#0000ff")]
 		Withdrawn = 100000004,
 	}
 	

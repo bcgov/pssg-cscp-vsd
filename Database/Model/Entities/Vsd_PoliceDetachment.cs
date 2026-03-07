@@ -13,10 +13,10 @@ namespace Database.Model
 	
 	
 	/// <summary>
-	/// Status of the Province/State
+	/// Status of the Police Detachment
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum Vsd_Province_StateCode
+	public enum Vsd_PoliceDetachment_StateCode
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -29,10 +29,10 @@ namespace Database.Model
 	}
 	
 	/// <summary>
-	/// Reason for the status of the Province/State
+	/// Reason for the status of the Police Detachment
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum Vsd_Province_StatusCode
+	public enum Vsd_PoliceDetachment_StatusCode
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -45,35 +45,15 @@ namespace Database.Model
 	}
 	
 	/// <summary>
-	/// The type of tax used in the province.
+	/// Contains a list of Police detachments in the province.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum Vsd_Province_Vsd_TaxType
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("GST", 0, "#0000ff")]
-		Gst = 100000000,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("GST/PST", 2, "#0000ff")]
-		GstPst = 100000002,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("HST", 1, "#0000ff")]
-		Hst = 100000001,
-	}
-	
-	/// <summary>
-	/// Province Look-up entity for application forms.
-	/// </summary>
-	[System.Runtime.Serialization.DataContractAttribute()]
-	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("vsd_province")]
-	public partial class Vsd_Province : Microsoft.Xrm.Sdk.Entity
+	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("vsd_policedetachment")]
+	public partial class Vsd_PoliceDetachment : Microsoft.Xrm.Sdk.Entity
 	{
 		
 		/// <summary>
-		/// Available fields, a the time of codegen, for the vsd_province entity
+		/// Available fields, a the time of codegen, for the vsd_policedetachment entity
 		/// </summary>
 		public partial class Fields
 		{
@@ -84,12 +64,11 @@ namespace Database.Model
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string CreatedOnBehalfByName = "createdonbehalfbyname";
 			public const string CreatedOnBehalfByYomiName = "createdonbehalfbyyominame";
-			public const string ExchangerAte = "exchangerate";
 			public const string ImportSequenceNumber = "importsequencenumber";
-			public const string Lk_Vsd_Province_CreatedBy = "lk_vsd_province_createdby";
-			public const string Lk_Vsd_Province_CreatedOnBehalfBy = "lk_vsd_province_createdonbehalfby";
-			public const string Lk_Vsd_Province_ModifiedBy = "lk_vsd_province_modifiedby";
-			public const string Lk_Vsd_Province_ModifiedOnBehalfBy = "lk_vsd_province_modifiedonbehalfby";
+			public const string Lk_Vsd_PoliceDetachment_CreatedBy = "lk_vsd_policedetachment_createdby";
+			public const string Lk_Vsd_PoliceDetachment_CreatedOnBehalfBy = "lk_vsd_policedetachment_createdonbehalfby";
+			public const string Lk_Vsd_PoliceDetachment_ModifiedBy = "lk_vsd_policedetachment_modifiedby";
+			public const string Lk_Vsd_PoliceDetachment_ModifiedOnBehalfBy = "lk_vsd_policedetachment_modifiedonbehalfby";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedByName = "modifiedbyname";
 			public const string ModifiedByYomiName = "modifiedbyyominame";
@@ -105,41 +84,48 @@ namespace Database.Model
 			public const string StatusCode = "statuscode";
 			public const string StatusCodename = "statuscodename";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
-			public const string TransactionCurrency_Vsd_Province = "TransactionCurrency_vsd_province";
-			public const string TransactionCurrencyId = "transactioncurrencyid";
-			public const string TransactionCurrencyIdName = "transactioncurrencyidname";
 			public const string UtcConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
-			public const string Vsd_Code = "vsd_code";
-			public const string Vsd_CountryId = "vsd_countryid";
-			public const string Vsd_CountryIdName = "vsd_countryidname";
+			public const string Vsd_BusinessFax = "vsd_businessfax";
+			public const string Vsd_CityId = "vsd_cityid";
+			public const string Vsd_CityIdName = "vsd_cityidname";
+			public const string Vsd_Comments = "vsd_comments";
+			public const string Vsd_Country = "vsd_country";
+			public const string Vsd_Email = "vsd_email";
+			public const string Vsd_Internal_City = "vsd_internal_city";
+			public const string Vsd_Internal_CityName = "vsd_internal_cityname";
+			public const string Vsd_Internal_Country = "vsd_internal_country";
+			public const string Vsd_Internal_CountryName = "vsd_internal_countryname";
+			public const string Vsd_Internal_Province = "vsd_internal_province";
+			public const string Vsd_Internal_ProvinceName = "vsd_internal_provincename";
+			public const string Vsd_MainPhoneExtension = "vsd_mainphoneextension";
 			public const string Vsd_Name = "vsd_name";
-			public const string Vsd_ProvinceId = "vsd_provinceid";
-			public const string Id = "vsd_provinceid";
-			public const string Vsd_TakerAte2 = "vsd_takerate2";
-			public const string Vsd_TaxRate = "vsd_taxrate";
-			public const string Vsd_TaxType = "vsd_taxtype";
-			public const string Vsd_TaxTypeName = "vsd_taxtypename";
-			public const string Vsd_Vsd_Country_Vsd_Province = "vsd_vsd_country_vsd_province";
-			public const string Vsd_Vsd_Province_Vsd_City = "Vsd_Vsd_Province_Vsd_City";
-			public const string Vsd_Vsd_Province_Vsd_Invoice = "Vsd_Vsd_Province_Vsd_Invoice";
-			public const string Vsd_Vsd_Province_Vsd_InvoiceLineDetail_ProvinceStateId = "Vsd_Vsd_Province_Vsd_InvoiceLineDetail_ProvinceStateId";
+			public const string Vsd_PhoneNumber = "vsd_phonenumber";
+			public const string Vsd_PoliceDetachment_Tasks = "Vsd_PoliceDetachment_Tasks";
+			public const string Vsd_PoliceDetachmentId = "vsd_policedetachmentid";
+			public const string Id = "vsd_policedetachmentid";
+			public const string Vsd_PostalCode = "vsd_postalcode";
+			public const string Vsd_Province = "vsd_province";
+			public const string Vsd_Street1 = "vsd_street1";
+			public const string Vsd_Street2 = "vsd_street2";
+			public const string Vsd_Street3 = "vsd_street3";
+			public const string Vsd_Vsd_City_Vsd_PoliceDetachment = "vsd_vsd_city_vsd_policedetachment";
 		}
 		
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_Province(System.Guid id) : 
+		public Vsd_PoliceDetachment(System.Guid id) : 
 				base(EntityLogicalName, id)
 		{
 		}
 		
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_Province(string keyName, object keyValue) : 
+		public Vsd_PoliceDetachment(string keyName, object keyValue) : 
 				base(EntityLogicalName, keyName, keyValue)
 		{
 		}
 		
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_Province(Microsoft.Xrm.Sdk.KeyAttributeCollection keyAttributes) : 
+		public Vsd_PoliceDetachment(Microsoft.Xrm.Sdk.KeyAttributeCollection keyAttributes) : 
 				base(EntityLogicalName, keyAttributes)
 		{
 		}
@@ -148,22 +134,22 @@ namespace Database.Model
 		/// Default Constructor.
 		/// </summary>
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_Province() : 
+		public Vsd_PoliceDetachment() : 
 				base(EntityLogicalName)
 		{
 		}
 		
-		public const string PrimaryIdAttribute = "vsd_provinceid";
+		public const string PrimaryIdAttribute = "vsd_policedetachmentid";
 		
 		public const string PrimaryNameAttribute = "vsd_name";
 		
-		public const string EntitySchemaName = "vsd_province";
+		public const string EntitySchemaName = "vsd_policedetachment";
 		
-		public const string EntityLogicalName = "vsd_province";
+		public const string EntityLogicalName = "vsd_policedetachment";
 		
-		public const string EntityLogicalCollectionName = "vsd_provinces";
+		public const string EntityLogicalCollectionName = "vsd_policedetachments";
 		
-		public const string EntitySetName = "vsd_provinces";
+		public const string EntitySetName = "vsd_policedetachments";
 		
 		/// <summary>
 		/// Unique identifier of the user who created the record.
@@ -274,19 +260,6 @@ namespace Database.Model
 				{
 					return default(string);
 				}
-			}
-		}
-		
-		/// <summary>
-		/// Exchange rate for the currency associated with the entity with respect to the base currency.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("exchangerate")]
-		public System.Nullable<decimal> ExchangerAte
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<decimal>>("exchangerate");
 			}
 		}
 		
@@ -469,15 +442,15 @@ namespace Database.Model
 		}
 		
 		/// <summary>
-		/// Status of the Province/State
+		/// Status of the Police Detachment
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecode")]
-		public virtual Vsd_Province_StateCode? StateCode
+		public virtual Vsd_PoliceDetachment_StateCode? StateCode
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return ((Vsd_Province_StateCode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
+				return ((Vsd_PoliceDetachment_StateCode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
@@ -504,15 +477,15 @@ namespace Database.Model
 		}
 		
 		/// <summary>
-		/// Reason for the status of the Province/State
+		/// Reason for the status of the Police Detachment
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscode")]
-		public virtual Vsd_Province_StatusCode? StatusCode
+		public virtual Vsd_PoliceDetachment_StatusCode? StatusCode
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return ((Vsd_Province_StatusCode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
+				return ((Vsd_PoliceDetachment_StatusCode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
@@ -557,41 +530,6 @@ namespace Database.Model
 		}
 		
 		/// <summary>
-		/// Unique identifier of the currency associated with the entity.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("transactioncurrencyid")]
-		public Microsoft.Xrm.Sdk.EntityReference TransactionCurrencyId
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("transactioncurrencyid");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("transactioncurrencyid", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("transactioncurrencyidname")]
-		public string TransactionCurrencyIdName
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				if (this.FormattedValues.Contains("transactioncurrencyid"))
-				{
-					return this.FormattedValues["transactioncurrencyid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
-		}
-		
-		/// <summary>
 		/// Time zone code that was in use when the record was created.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("utcconversiontimezonecode")]
@@ -623,50 +561,50 @@ namespace Database.Model
 		}
 		
 		/// <summary>
-		/// The Province code for the Province.
+		/// Provide the fax number for the police detachment.
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_code")]
-		public string Vsd_Code
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_businessfax")]
+		public string Vsd_BusinessFax
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<string>("vsd_code");
+				return this.GetAttributeValue<string>("vsd_businessfax");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("vsd_code", value);
+				this.SetAttributeValue("vsd_businessfax", value);
 			}
 		}
 		
 		/// <summary>
-		/// Country Look-up entity for this Province.
+		/// Look-up for the City where the detachment exists.
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_countryid")]
-		public Microsoft.Xrm.Sdk.EntityReference Vsd_CountryId
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cityid")]
+		public Microsoft.Xrm.Sdk.EntityReference Vsd_CityId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("vsd_countryid");
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("vsd_cityid");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("vsd_countryid", value);
+				this.SetAttributeValue("vsd_cityid", value);
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_countryidname")]
-		public string Vsd_CountryIdName
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cityidname")]
+		public string Vsd_CityIdName
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				if (this.FormattedValues.Contains("vsd_countryid"))
+				if (this.FormattedValues.Contains("vsd_cityid"))
 				{
-					return this.FormattedValues["vsd_countryid"];
+					return this.FormattedValues["vsd_cityid"];
 				}
 				else
 				{
@@ -675,8 +613,164 @@ namespace Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_comments")]
+		public string Vsd_Comments
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_comments");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_comments", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_country")]
+		public string Vsd_Country
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_country");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_country", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_email")]
+		public string Vsd_Email
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_email");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_email", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_internal_city")]
+		public virtual Vsd_Temp_City? Vsd_Internal_City
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((Vsd_Temp_City?)(EntityOptionSetEnum.GetEnum(this, "vsd_internal_city")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_internal_city", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_internal_cityname")]
+		public string Vsd_Internal_CityName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_internal_city"))
+				{
+					return this.FormattedValues["vsd_internal_city"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_internal_country")]
+		public virtual Vsd_Temp_Country? Vsd_Internal_Country
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((Vsd_Temp_Country?)(EntityOptionSetEnum.GetEnum(this, "vsd_internal_country")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_internal_country", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_internal_countryname")]
+		public string Vsd_Internal_CountryName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_internal_country"))
+				{
+					return this.FormattedValues["vsd_internal_country"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_internal_province")]
+		public virtual Vsd_Temp_Province? Vsd_Internal_Province
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((Vsd_Temp_Province?)(EntityOptionSetEnum.GetEnum(this, "vsd_internal_province")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_internal_province", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_internal_provincename")]
+		public string Vsd_Internal_ProvinceName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_internal_province"))
+				{
+					return this.FormattedValues["vsd_internal_province"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_mainphoneextension")]
+		public string Vsd_MainPhoneExtension
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_mainphoneextension");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_mainphoneextension", value);
+			}
+		}
+		
 		/// <summary>
-		/// The name of the province/state.
+		/// The name of the Police Detachment.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_name")]
 		public string Vsd_Name
@@ -693,21 +787,36 @@ namespace Database.Model
 			}
 		}
 		
-		/// <summary>
-		/// Unique identifier for entity instances
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_provinceid")]
-		public System.Nullable<System.Guid> Vsd_ProvinceId
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_phonenumber")]
+		public string Vsd_PhoneNumber
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<System.Guid>>("vsd_provinceid");
+				return this.GetAttributeValue<string>("vsd_phonenumber");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("vsd_provinceid", value);
+				this.SetAttributeValue("vsd_phonenumber", value);
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for entity instances
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_policedetachmentid")]
+		public System.Nullable<System.Guid> Vsd_PoliceDetachmentId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.Guid>>("vsd_policedetachmentid");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_policedetachmentid", value);
 				if (value.HasValue)
 				{
 					base.Id = value.Value;
@@ -719,7 +828,7 @@ namespace Database.Model
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_provinceid")]
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_policedetachmentid")]
 		public override System.Guid Id
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -730,233 +839,185 @@ namespace Database.Model
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.Vsd_ProvinceId = value;
+				this.Vsd_PoliceDetachmentId = value;
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_takerate2")]
-		public System.Nullable<decimal> Vsd_TakerAte2
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_postalcode")]
+		public string Vsd_PostalCode
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<decimal>>("vsd_takerate2");
+				return this.GetAttributeValue<string>("vsd_postalcode");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("vsd_takerate2", value);
+				this.SetAttributeValue("vsd_postalcode", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_province")]
+		public string Vsd_Province
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_province");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_province", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_street1")]
+		public string Vsd_Street1
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_street1");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_street1", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_street2")]
+		public string Vsd_Street2
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_street2");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_street2", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_street3")]
+		public string Vsd_Street3
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("vsd_street3");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_street3", value);
 			}
 		}
 		
 		/// <summary>
-		/// The current tax rate.
+		/// 1:N vsd_policedetachment_Tasks
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_taxrate")]
-		public System.Nullable<decimal> Vsd_TaxRate
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_policedetachment_Tasks")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Task> Vsd_PoliceDetachment_Tasks
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<decimal>>("vsd_taxrate");
+				return this.GetRelatedEntities<Database.Model.Task>("vsd_policedetachment_Tasks", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("vsd_taxrate", value);
+				this.SetRelatedEntities<Database.Model.Task>("vsd_policedetachment_Tasks", null, value);
 			}
 		}
 		
 		/// <summary>
-		/// The type of tax used in the province.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_taxtype")]
-		public virtual Vsd_Province_Vsd_TaxType? Vsd_TaxType
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return ((Vsd_Province_Vsd_TaxType?)(EntityOptionSetEnum.GetEnum(this, "vsd_taxtype")));
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("vsd_taxtype", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_taxtypename")]
-		public string Vsd_TaxTypeName
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				if (this.FormattedValues.Contains("vsd_taxtype"))
-				{
-					return this.FormattedValues["vsd_taxtype"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
-		}
-		
-		/// <summary>
-		/// 1:N vsd_vsd_province_vsd_city
-		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_province_vsd_city")]
-		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_City> Vsd_Vsd_Province_Vsd_City
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetRelatedEntities<Database.Model.Vsd_City>("vsd_vsd_province_vsd_city", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetRelatedEntities<Database.Model.Vsd_City>("vsd_vsd_province_vsd_city", null, value);
-			}
-		}
-		
-		/// <summary>
-		/// 1:N vsd_vsd_province_vsd_invoice
-		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_province_vsd_invoice")]
-		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Invoice> Vsd_Vsd_Province_Vsd_Invoice
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetRelatedEntities<Database.Model.Vsd_Invoice>("vsd_vsd_province_vsd_invoice", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetRelatedEntities<Database.Model.Vsd_Invoice>("vsd_vsd_province_vsd_invoice", null, value);
-			}
-		}
-		
-		/// <summary>
-		/// 1:N vsd_vsd_province_vsd_invoicelinedetail_ProvinceStateId
-		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_province_vsd_invoicelinedetail_ProvinceStateId")]
-		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_InvoiceLineDetail> Vsd_Vsd_Province_Vsd_InvoiceLineDetail_ProvinceStateId
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetRelatedEntities<Database.Model.Vsd_InvoiceLineDetail>("vsd_vsd_province_vsd_invoicelinedetail_ProvinceStateId", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetRelatedEntities<Database.Model.Vsd_InvoiceLineDetail>("vsd_vsd_province_vsd_invoicelinedetail_ProvinceStateId", null, value);
-			}
-		}
-		
-		/// <summary>
-		/// N:1 lk_vsd_province_createdby
+		/// N:1 lk_vsd_policedetachment_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_province_createdby")]
-		public Database.Model.SystemUser Lk_Vsd_Province_CreatedBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_policedetachment_createdby")]
+		public Database.Model.SystemUser Lk_Vsd_PoliceDetachment_CreatedBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_province_createdby", null);
+				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_policedetachment_createdby", null);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_vsd_province_createdonbehalfby
+		/// N:1 lk_vsd_policedetachment_createdonbehalfby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_province_createdonbehalfby")]
-		public Database.Model.SystemUser Lk_Vsd_Province_CreatedOnBehalfBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_policedetachment_createdonbehalfby")]
+		public Database.Model.SystemUser Lk_Vsd_PoliceDetachment_CreatedOnBehalfBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_province_createdonbehalfby", null);
+				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_policedetachment_createdonbehalfby", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntity<Database.Model.SystemUser>("lk_vsd_province_createdonbehalfby", null, value);
+				this.SetRelatedEntity<Database.Model.SystemUser>("lk_vsd_policedetachment_createdonbehalfby", null, value);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_vsd_province_modifiedby
+		/// N:1 lk_vsd_policedetachment_modifiedby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_province_modifiedby")]
-		public Database.Model.SystemUser Lk_Vsd_Province_ModifiedBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_policedetachment_modifiedby")]
+		public Database.Model.SystemUser Lk_Vsd_PoliceDetachment_ModifiedBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_province_modifiedby", null);
+				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_policedetachment_modifiedby", null);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_vsd_province_modifiedonbehalfby
+		/// N:1 lk_vsd_policedetachment_modifiedonbehalfby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_province_modifiedonbehalfby")]
-		public Database.Model.SystemUser Lk_Vsd_Province_ModifiedOnBehalfBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_policedetachment_modifiedonbehalfby")]
+		public Database.Model.SystemUser Lk_Vsd_PoliceDetachment_ModifiedOnBehalfBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_province_modifiedonbehalfby", null);
+				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_policedetachment_modifiedonbehalfby", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntity<Database.Model.SystemUser>("lk_vsd_province_modifiedonbehalfby", null, value);
+				this.SetRelatedEntity<Database.Model.SystemUser>("lk_vsd_policedetachment_modifiedonbehalfby", null, value);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 TransactionCurrency_vsd_province
+		/// N:1 vsd_vsd_city_vsd_policedetachment
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("transactioncurrencyid")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("TransactionCurrency_vsd_province")]
-		public Database.Model.TransactionCurrency TransactionCurrency_Vsd_Province
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cityid")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_city_vsd_policedetachment")]
+		public Database.Model.Vsd_City Vsd_Vsd_City_Vsd_PoliceDetachment
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.TransactionCurrency>("TransactionCurrency_vsd_province", null);
+				return this.GetRelatedEntity<Database.Model.Vsd_City>("vsd_vsd_city_vsd_policedetachment", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntity<Database.Model.TransactionCurrency>("TransactionCurrency_vsd_province", null, value);
-			}
-		}
-		
-		/// <summary>
-		/// N:1 vsd_vsd_country_vsd_province
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_countryid")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_country_vsd_province")]
-		public Database.Model.Vsd_Country Vsd_Vsd_Country_Vsd_Province
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetRelatedEntity<Database.Model.Vsd_Country>("vsd_vsd_country_vsd_province", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetRelatedEntity<Database.Model.Vsd_Country>("vsd_vsd_country_vsd_province", null, value);
+				this.SetRelatedEntity<Database.Model.Vsd_City>("vsd_vsd_city_vsd_policedetachment", null, value);
 			}
 		}
 		
@@ -965,7 +1026,7 @@ namespace Database.Model
 		/// <param name="anonymousType">LINQ anonymous type.</param>
 		/// </summary>
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_Province(object anonymousType) : 
+		public Vsd_PoliceDetachment(object anonymousType) : 
 				this()
 		{
             foreach (var p in anonymousType.GetType().GetProperties())
@@ -983,9 +1044,9 @@ namespace Database.Model
                 {
                     case "id":
                         base.Id = (System.Guid)value;
-                        Attributes["vsd_provinceid"] = base.Id;
+                        Attributes["vsd_policedetachmentid"] = base.Id;
                         break;
-                    case "vsd_provinceid":
+                    case "vsd_policedetachmentid":
                         var id = (System.Nullable<System.Guid>) value;
                         if(id == null){ continue; }
                         base.Id = id.Value;

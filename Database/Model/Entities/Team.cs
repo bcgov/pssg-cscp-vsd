@@ -139,6 +139,7 @@ namespace Database.Model
 			public const string TransactionCurrencyIdName = "transactioncurrencyidname";
 			public const string TraversedPath = "traversedpath";
 			public const string VersionNumber = "versionnumber";
+			public const string Vsd_Team_Vsd_Court = "Vsd_Team_Vsd_Court";
 			public const string YomiName = "yominame";
 		}
 		
@@ -1201,6 +1202,24 @@ namespace Database.Model
 			set
 			{
 				this.SetRelatedEntities<Database.Model.Vsd_ScheduleG>("team_vsd_scheduleg", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N vsd_team_vsd_court
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_team_vsd_court")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Court> Vsd_Team_Vsd_Court
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_Court>("vsd_team_vsd_court", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_Court>("vsd_team_vsd_court", null, value);
 			}
 		}
 		

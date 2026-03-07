@@ -184,6 +184,7 @@ namespace Database.Model
 			public const string Vsd_Contract_Tasks = "vsd_contract_Tasks";
 			public const string Vsd_ContractDocumentId = "vsd_contractdocumentid";
 			public const string Vsd_ContractDocumentIdName = "vsd_contractdocumentidname";
+			public const string Vsd_Court_Tasks = "vsd_court_Tasks";
 			public const string Vsd_Cpu_ReportToDo = "vsd_cpu_reporttodo";
 			public const string Vsd_Cpu_ReportToDoName = "vsd_cpu_reporttodoname";
 			public const string Vsd_Document = "vsd_document";
@@ -192,6 +193,7 @@ namespace Database.Model
 			public const string Vsd_InvoiceName = "vsd_invoicename";
 			public const string Vsd_ParentCaseId = "vsd_parentcaseid";
 			public const string Vsd_ParentCaseiDnaMe = "vsd_parentcaseidname";
+			public const string Vsd_PoliceDetachment_Tasks = "vsd_policedetachment_Tasks";
 			public const string Vsd_Program_Tasks = "vsd_program_Tasks";
 			public const string Vsd_ProgramId = "vsd_programid";
 			public const string Vsd_ProgramIdName = "vsd_programidname";
@@ -2247,6 +2249,44 @@ namespace Database.Model
 			set
 			{
 				this.SetRelatedEntity<Database.Model.Vsd_Contract>("vsd_contract_Tasks", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 vsd_court_Tasks
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("regardingobjectid")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_court_Tasks")]
+		public Database.Model.Vsd_Court Vsd_Court_Tasks
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<Database.Model.Vsd_Court>("vsd_court_Tasks", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<Database.Model.Vsd_Court>("vsd_court_Tasks", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 vsd_policedetachment_Tasks
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("regardingobjectid")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_policedetachment_Tasks")]
+		public Database.Model.Vsd_PoliceDetachment Vsd_PoliceDetachment_Tasks
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<Database.Model.Vsd_PoliceDetachment>("vsd_policedetachment_Tasks", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<Database.Model.Vsd_PoliceDetachment>("vsd_policedetachment_Tasks", null, value);
 			}
 		}
 		

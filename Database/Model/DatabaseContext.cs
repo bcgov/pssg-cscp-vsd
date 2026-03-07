@@ -107,6 +107,17 @@ namespace Database.Model
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_City"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Database.Model.Vsd_City> Vsd_CitySet
+		{
+			get
+			{
+				return this.CreateQuery<Database.Model.Vsd_City>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_Config"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<Database.Model.Vsd_Config> Vsd_ConfigSet
@@ -136,6 +147,17 @@ namespace Database.Model
 			get
 			{
 				return this.CreateQuery<Database.Model.Vsd_Country>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_Court"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Database.Model.Vsd_Court> Vsd_CourtSet
+		{
+			get
+			{
+				return this.CreateQuery<Database.Model.Vsd_Court>();
 			}
 		}
 		
@@ -217,6 +239,17 @@ namespace Database.Model
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_PoliceDetachment"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Database.Model.Vsd_PoliceDetachment> Vsd_PoliceDetachmentSet
+		{
+			get
+			{
+				return this.CreateQuery<Database.Model.Vsd_PoliceDetachment>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_Program"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<Database.Model.Vsd_Program> Vsd_ProgramSet
@@ -246,6 +279,17 @@ namespace Database.Model
 			get
 			{
 				return this.CreateQuery<Database.Model.Vsd_Province>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_Relationship"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Database.Model.Vsd_Relationship> Vsd_RelationshipSet
+		{
+			get
+			{
+				return this.CreateQuery<Database.Model.Vsd_Relationship>();
 			}
 		}
 		

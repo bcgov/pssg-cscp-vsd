@@ -38,9 +38,11 @@ task|
 team|
 transactioncurrency|
 vsd_caspaymenttype|
+vsd_city|
 vsd_config|
 vsd_contract|
 vsd_country|
+vsd_court|
 vsd_cvapstob|
 vsd_entitlement|
 vsd_incomesupportparameter|
@@ -48,9 +50,11 @@ vsd_invoice|
 vsd_invoicelinedetail|
 vsd_payment|
 vsd_paymentschedule|
+vsd_policedetachment|
 vsd_program|
 vsd_programtype|
 vsd_province|
+vsd_relationship|
 vsd_scheduleg</EntitiesWhitelist>
     <EntityAttributeSpecifiedNames />
     <EntityClassNameOverrides />
