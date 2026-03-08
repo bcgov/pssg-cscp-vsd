@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { JusticeService } from '../../api/justice/justice.service';
 import {
   Application,
   AuthorizationInformation,
@@ -23,7 +24,6 @@ import {
   VictimInformation
 } from '../interfaces/application.interface';
 import { AEMService } from '../services/aem.service';
-import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
@@ -80,7 +80,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   protected readonly lookupStore = inject(LookupStore);
 
   constructor(
-    private justiceDataService: JusticeApplicationDataService,
+    private justiceService: JusticeService,
     private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -191,13 +191,9 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
       this.getApplicationPDFs()
         .then((pdfs: DocumentCollectioninformation[]) => {
           form.ApplicationPDFs = pdfs;
-          this.justiceDataService.submitApplication(form).subscribe({
+          this.justiceService.postApiJusticeSaveapplication(form as any).subscribe({
             next: (data) => {
-              if (data['IsSuccess']) {
-                resolve();
-              } else {
-                reject();
-              }
+              resolve();
             },
             error: (error) => {
               reject();

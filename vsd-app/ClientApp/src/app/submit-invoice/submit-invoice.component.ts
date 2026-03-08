@@ -7,9 +7,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as _ from 'lodash';
 import moment from 'moment';
 import { InvoicesService } from '../../api/invoices/invoices.service';
+import { JusticeService } from '../../api/justice/justice.service';
 import { DocumentDto, InvoiceDto } from '../../model';
 import { AEMService } from '../services/aem.service';
-import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { GSTWarningDialog } from '../shared/dialogs/gst-warning/gst-warning.dialog';
 import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
@@ -82,7 +82,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   }
 
   constructor(
-    private justiceDataService: JusticeApplicationDataService,
+    private justiceService: JusticeService,
     private fb: UntypedFormBuilder,
     public snackBar: MatSnackBar,
     private dialog: MatDialog,
@@ -552,22 +552,29 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     switch (source) {
       case 'vendor': {
         if (vendorNumber && vendorPostalCode) {
-          this.justiceDataService.validateVendor(vendorNumber, vendorPostalCode).subscribe((res: any) => {
-            this.didValidateVendor = true;
-            this.isVendorValid = res.IsSuccess;
-          });
+          this.justiceService
+            .getApiJusticeValidateVendorVendorNumberVendorPostalCode(vendorNumber, vendorPostalCode)
+            .subscribe((res: any) => {
+              this.didValidateVendor = true;
+              this.isVendorValid = res.success;
+            });
         } else {
           this.isVendorValid = false;
         }
 
         if (vendorNumber && vendorPostalCode && counsellorNumber && counsellorLastName) {
-          this.justiceDataService
-            .validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName)
+          this.justiceService
+            .getApiJusticeValidateVendorAndCounsellorVendorNumberVendorPostalCodeCounsellorNumberCounsellorLastName(
+              vendorNumber,
+              vendorPostalCode,
+              counsellorNumber,
+              counsellorLastName
+            )
             .subscribe((res: any) => {
               this.didValidateCounsellor = true;
-              this.isCounsellorValid = res.IsSuccess;
+              this.isCounsellorValid = res.success;
               if (this.isCounsellorValid) {
-                this.counsellor_level = res.CounsellorLevel;
+                this.counsellor_level = res.counsellorLevel;
 
                 if (this.form.get('invoiceDetails.gstApplicable').value == true) {
                   this.checkCousellorLevel();
@@ -579,13 +586,18 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       }
       case 'counsellor': {
         if (vendorNumber && vendorPostalCode && counsellorNumber && counsellorLastName) {
-          this.justiceDataService
-            .validateVendorAndCounsellor(vendorNumber, vendorPostalCode, counsellorNumber, counsellorLastName)
+          this.justiceService
+            .getApiJusticeValidateVendorAndCounsellorVendorNumberVendorPostalCodeCounsellorNumberCounsellorLastName(
+              vendorNumber,
+              vendorPostalCode,
+              counsellorNumber,
+              counsellorLastName
+            )
             .subscribe((res: any) => {
               this.didValidateCounsellor = true;
-              this.isCounsellorValid = res.IsSuccess;
+              this.isCounsellorValid = res.success;
               if (this.isCounsellorValid) {
-                this.counsellor_level = res.CounsellorLevel;
+                this.counsellor_level = res.counsellorLevel;
 
                 if (this.form.get('invoiceDetails.gstApplicable').value == true) {
                   this.checkCousellorLevel();

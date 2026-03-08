@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { JusticeService } from '../../api/justice/justice.service';
 import {
   Application,
   AuthorizationInformation,
@@ -22,7 +23,6 @@ import {
   RepresentativeInformation
 } from '../interfaces/application.interface';
 import { AEMService } from '../services/aem.service';
-import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { StateService } from '../services/state.service';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
@@ -91,7 +91,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   ];
 
   constructor(
-    private justiceDataService: JusticeApplicationDataService,
+    private justiceService: JusticeService,
     private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -382,13 +382,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       this.getApplicationPDFs()
         .then((pdfs: DocumentCollectioninformation[]) => {
           form.ApplicationPDFs = pdfs;
-          this.justiceDataService.submitApplication(form).subscribe({
+          this.justiceService.postApiJusticeSaveapplication(form as any).subscribe({
             next: (data) => {
-              if (data['IsSuccess']) {
-                resolve();
-              } else {
-                reject();
-              }
+              resolve();
             },
             error: (error) => {
               reject();
@@ -497,7 +493,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   save(): void {
-    this.justiceDataService.submitApplication(this.harvestForm()).subscribe(
+    this.justiceService.postApiJusticeSaveapplication(this.harvestForm() as any).subscribe(
       (data) => {},
       (err) => {}
     );
