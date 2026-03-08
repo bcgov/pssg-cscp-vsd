@@ -10,7 +10,6 @@ import { InvoicesService } from '../../api/invoices/invoices.service';
 import { DocumentDto, InvoiceDto } from '../../model';
 import { AEMService } from '../services/aem.service';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { LookupStore } from '../store/lookup.store';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { GSTWarningDialog } from '../shared/dialogs/gst-warning/gst-warning.dialog';
 import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
@@ -21,6 +20,7 @@ import { POSTAL_CODE } from '../shared/regex.constants';
 import { ServiceNotAvailableComponent } from '../shared/service-not-available.component';
 import { EmailValidator } from '../shared/validators/email.validator';
 import { SignPadDialog } from '../sign-dialog/sign-dialog.component';
+import { LookupStore } from '../store/lookup.store';
 
 @Component({
   selector: 'app-submit-invoice',
@@ -74,8 +74,12 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   isIE: boolean = false;
 
   protected readonly lookupStore = inject(LookupStore);
-  get cvapEmail(): string { return this.lookupStore.cvapEmail(); }
-  get cvapCounsellingEmail(): string { return this.lookupStore.cvapCounsellingEmail(); }
+  get cvapEmail(): string {
+    return this.lookupStore.cvapEmail();
+  }
+  get cvapCounsellingEmail(): string {
+    return this.lookupStore.cvapCounsellingEmail();
+  }
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,

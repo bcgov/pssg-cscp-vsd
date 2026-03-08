@@ -12,8 +12,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
-import { LookupStore } from '../../store/lookup.store';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { LookupStore } from '../../store/lookup.store';
 import { AddressHelper } from '../address/address.helper';
 import { ApplicationType, CRMBoolean, CRMMultiBoolean, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';

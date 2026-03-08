@@ -25,7 +25,6 @@ import {
 import { AEMService } from '../services/aem.service';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
 import { StateService } from '../services/state.service';
-import { LookupStore } from '../store/lookup.store';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
@@ -39,6 +38,7 @@ import { PersonalInfoHelper } from '../shared/personal-information/personal-info
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
 import { ServiceNotAvailableComponent } from '../shared/service-not-available.component';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
+import { LookupStore } from '../store/lookup.store';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 
 @Component({
@@ -79,7 +79,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   isIE: boolean = false;
   protected readonly lookupStore = inject(LookupStore);
-  get didLoad(): boolean { return this.lookupStore.isLoaded(); }
+  get didLoad(): boolean {
+    return this.lookupStore.isLoaded();
+  }
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,

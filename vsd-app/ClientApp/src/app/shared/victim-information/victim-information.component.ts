@@ -8,14 +8,14 @@ import { ApplicationType, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 
 @Component({
-    selector: 'app-victim-information',
-    templateUrl: './victim-information.component.html',
-    styleUrls: ['./victim-information.component.scss'],
-    providers: [
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-    ],
-    standalone: false
+  selector: 'app-victim-information',
+  templateUrl: './victim-information.component.html',
+  styleUrls: ['./victim-information.component.scss'],
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
+  standalone: false
 })
 export class VictimInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;

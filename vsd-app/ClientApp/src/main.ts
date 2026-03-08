@@ -12,8 +12,5 @@ if (environment.production) {
 }
 
 platformBrowser().bootstrapModule(AppModule, {
-  applicationProviders: [
-    provideZoneChangeDetection(),
-    provideAppInitializer(() => inject(LookupStore).loadAll())
-  ]
+  applicationProviders: [provideZoneChangeDetection(), provideAppInitializer(() => inject(LookupStore).loadAll())]
 });

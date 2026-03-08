@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { firstValueFrom } from 'rxjs';
 import { LookupService } from '../../api/lookup/lookup.service';
+import { config } from '../../config';
 import type {
   CityLookupDto,
   CountryLookupDto,
@@ -10,7 +11,6 @@ import type {
   ProvinceLookupDto,
   RelationshipLookupDto
 } from '../../model';
-import { config } from '../../config';
 
 export interface LookupState {
   countries: CountryLookupDto[];
@@ -83,10 +83,7 @@ export const LookupStore = signalStore(
           firstValueFrom(lookupService.getApiLookupCountries()),
           firstValueFrom(lookupService.getApiLookupProvinces()),
           firstValueFrom(
-            lookupService.getApiLookupCountryCountryIdProvinceProvinceIdCities(
-              config.canada_crm_id,
-              config.bc_crm_id
-            )
+            lookupService.getApiLookupCountryCountryIdProvinceProvinceIdCities(config.canada_crm_id, config.bc_crm_id)
           ),
           firstValueFrom(lookupService.getApiLookupRelationships()),
           firstValueFrom(lookupService.getApiLookupAuthRelationships()),

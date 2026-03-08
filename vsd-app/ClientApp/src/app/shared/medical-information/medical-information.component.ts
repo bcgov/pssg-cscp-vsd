@@ -134,7 +134,8 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
       this.setDoctorPhoneValidators();
     });
 
-    this.provinceList = this.lookupStore.provinces()
+    this.provinceList = this.lookupStore
+      .provinces()
       .filter((p) => p.countryId == config.canada_crm_id)
       .map((p) => p.name)
       .sort((a, b) => a.localeCompare(b));

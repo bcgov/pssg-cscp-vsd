@@ -29,13 +29,14 @@ export class IntroductionComponent extends FormBase implements OnInit {
 
   isIE: boolean = false;
   protected readonly lookupStore = inject(LookupStore);
-  get cvapEmail(): string { return this.lookupStore.cvapEmail(); }
-  get cvapCounsellingEmail(): string { return this.lookupStore.cvapCounsellingEmail(); }
+  get cvapEmail(): string {
+    return this.lookupStore.cvapEmail();
+  }
+  get cvapCounsellingEmail(): string {
+    return this.lookupStore.cvapCounsellingEmail();
+  }
 
-  constructor(
-    private controlContainer: ControlContainer,
-    private matDialog: MatDialog
-  ) {
+  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog) {
     super();
   }
 

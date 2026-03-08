@@ -100,12 +100,12 @@ export class AddressComponent implements OnInit {
       this.showChildrenAsRequired = true;
     }
 
-    let pref_countries = this.lookupStore.countries().filter(
-      (c) => config.preferred_countries.findIndex((pc) => pc.id == c.id) >= 0
-    );
-    let remaining_countries = this.lookupStore.countries().filter(
-      (c) => config.preferred_countries.findIndex((pc) => pc.id == c.id) < 0
-    );
+    let pref_countries = this.lookupStore
+      .countries()
+      .filter((c) => config.preferred_countries.findIndex((pc) => pc.id == c.id) >= 0);
+    let remaining_countries = this.lookupStore
+      .countries()
+      .filter((c) => config.preferred_countries.findIndex((pc) => pc.id == c.id) < 0);
 
     pref_countries.sort(function (a, b) {
       return (
@@ -135,7 +135,9 @@ export class AddressComponent implements OnInit {
     this.postalCodeSample = canada.postalCodeSample;
 
     let countryVal = this.group['controls']['country'].value.toString();
-    this.selectedCountry = this.lookupStore.countries().filter((c) => c.name.toLowerCase() == countryVal.toLowerCase())[0];
+    this.selectedCountry = this.lookupStore
+      .countries()
+      .filter((c) => c.name.toLowerCase() == countryVal.toLowerCase())[0];
     if (countryVal === 'Other') this.selectedCountry = { name: 'Other', id: '123' };
     if (!this.selectedCountry) {
       this.selectedCountry = this.lookupStore.countries().filter((p) => p.name.toLowerCase() === 'canada')[0];
@@ -158,9 +160,9 @@ export class AddressComponent implements OnInit {
     }
 
     let provinceVal = this.group['controls']['province'].value.toString();
-    this.selectedProvince = this.lookupStore.provinces().filter(
-      (c) => c.name.toLowerCase() == provinceVal.toLowerCase()
-    )[0];
+    this.selectedProvince = this.lookupStore
+      .provinces()
+      .filter((c) => c.name.toLowerCase() == provinceVal.toLowerCase())[0];
     if (this.selectedProvince.name != 'British Columbia') this.updateCityList();
     else this.setCityValidators();
     this.setProvinceValidators();

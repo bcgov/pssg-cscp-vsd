@@ -3,8 +3,8 @@ import { ControlContainer, UntypedFormGroup } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { LookupStore } from '../../store/lookup.store';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { LookupStore } from '../../store/lookup.store';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 
@@ -27,12 +27,11 @@ export class DeclarationInformationComponent extends FormBase implements OnInit 
   protected readonly lookupStore = inject(LookupStore);
   ApplicationType = ApplicationType;
   eligible_name: string;
-  get cvapEmail(): string { return this.lookupStore.cvapEmail(); }
+  get cvapEmail(): string {
+    return this.lookupStore.cvapEmail();
+  }
 
-  constructor(
-    private controlContainer: ControlContainer,
-    private matDialog: MatDialog
-  ) {
+  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog) {
     super();
   }
 

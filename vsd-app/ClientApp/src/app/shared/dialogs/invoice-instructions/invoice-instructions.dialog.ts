@@ -9,13 +9,14 @@ import { LookupStore } from '../../../store/lookup.store';
 })
 export class InvoiceInstructionsDialog implements OnInit {
   protected readonly lookupStore = inject(LookupStore);
-  get cvapEmail(): string { return this.lookupStore.cvapEmail(); }
-  get cvapCounsellingEmail(): string { return this.lookupStore.cvapCounsellingEmail(); }
+  get cvapEmail(): string {
+    return this.lookupStore.cvapEmail();
+  }
+  get cvapCounsellingEmail(): string {
+    return this.lookupStore.cvapCounsellingEmail();
+  }
 
-  constructor(
-    public dialogRef: MatDialogRef<InvoiceInstructionsDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  constructor(public dialogRef: MatDialogRef<InvoiceInstructionsDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit() {}
 
