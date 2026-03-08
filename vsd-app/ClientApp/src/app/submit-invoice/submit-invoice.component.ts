@@ -7,10 +7,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as _ from 'lodash';
 import moment from 'moment';
 import { InvoicesService } from '../../api/invoices/invoices.service';
+import { LookupService } from '../../api/lookup/lookup.service';
 import { DocumentDto, InvoiceDto } from '../../model';
 import { AEMService } from '../services/aem.service';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { LookupService } from '../services/lookup.service';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { GSTWarningDialog } from '../shared/dialogs/gst-warning/gst-warning.dialog';
 import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
@@ -96,15 +96,10 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.lineItems = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
     this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
 
-    if (this.lookupService.cvapEmail) {
-      this.cvapEmail = this.lookupService.cvapEmail;
-      this.cvapCounsellingEmail = this.lookupService.cvapCounsellingEmail;
-    } else {
-      this.lookupService.getCVAPEmails().subscribe((res) => {
-        this.cvapEmail = res.cvapEmail;
-        this.cvapCounsellingEmail = res.cvapCounsellingEmail;
-      });
-    }
+    this.lookupService.getApiLookupCvapEmails().subscribe((res) => {
+      this.cvapEmail = res.cvapEmail;
+      this.cvapCounsellingEmail = res.cvapCounsellingEmail;
+    });
 
     this.form.valueChanges.subscribe(() => {
       this.formFullyValidated = !this.hasInvalidTouchedControls(this.form);

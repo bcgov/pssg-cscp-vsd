@@ -53,7 +53,6 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
 import { AEMService } from './services/aem.service';
 import { JusticeApplicationDataService } from './services/justice-application-data.service';
-import { LookupService } from './services/lookup.service';
 import { StateService } from './services/state.service';
 import { HeaderTitleService } from './services/titile.service';
 import { AddressComponent } from './shared/address/address.component';
@@ -220,7 +219,6 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
   providers: [
     AEMService,
     JusticeApplicationDataService,
-    LookupService,
     StateService,
     HeaderTitleService,
     Title,

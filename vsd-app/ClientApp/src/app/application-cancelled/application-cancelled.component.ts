@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
-import { LookupService } from '../services/lookup.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LookupService } from '../../api/lookup/lookup.service';
 
 @Component({
-    selector: 'application-cancelled',
-    templateUrl: './application-cancelled.component.html',
-    styleUrls: ['./application-cancelled.component.scss'],
-    standalone: false
+  selector: 'application-cancelled',
+  templateUrl: './application-cancelled.component.html',
+  styleUrls: ['./application-cancelled.component.scss'],
+  standalone: false
 })
 export class ApplicationCancelledComponent implements OnInit {
   applicationType: string;
@@ -21,12 +20,8 @@ export class ApplicationCancelledComponent implements OnInit {
     // Figure out how to get route data here and display the relevant components
     //    const myData = this.route.snapshot.data['applicationType'];
     //    this.applicationType = myData;
-    if (this.lookupService.cvapEmail) {
-      this.cvapEmail = this.lookupService.cvapEmail;
-    } else {
-      this.lookupService.getCVAPEmails().subscribe((res) => {
-        this.cvapEmail = res.cvapEmail;
-      });
-    }
+    this.lookupService.getApiLookupCvapEmails().subscribe((res) => {
+      if (res) this.cvapEmail = res.cvapEmail;
+    });
   }
 }

@@ -4,14 +4,13 @@ import moment from 'moment-timezone';
 import { environment } from '../environments/environment';
 import { Configuration } from './interfaces/configuration.interface';
 import { ConfigService } from './services/config.service';
-import { LookupService } from './services/lookup.service';
 import { HeaderTitleService } from './services/titile.service';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false
 })
 export class AppComponent implements OnInit {
   title = '';
@@ -26,7 +25,6 @@ export class AppComponent implements OnInit {
     private renderer: Renderer2,
     private router: Router,
     private headerTitleService: HeaderTitleService,
-    private lookupService: LookupService,
     private configService: ConfigService
   ) {
     this.isDevMode = isDevMode();
@@ -49,13 +47,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.headerTitleService.title.subscribe((updatedTitle) => {
       this.title = updatedTitle;
-    });
-
-    this.lookupService.getCVAPEmails().subscribe((res) => {
-      if (res) {
-        this.lookupService.cvapEmail = res.cvapEmail;
-        this.lookupService.cvapCounsellingEmail = res.cvapCounsellingEmail;
-      }
     });
 
     this.configService

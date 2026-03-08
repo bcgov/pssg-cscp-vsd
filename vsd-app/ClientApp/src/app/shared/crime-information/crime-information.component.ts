@@ -12,9 +12,9 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
+import { LookupService } from '../../../api/lookup/lookup.service';
 import { config } from '../../../config';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
-import { LookupService } from '../../services/lookup.service';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
 import { AddressHelper } from '../address/address.helper';
 import { ApplicationType, CRMBoolean, CRMMultiBoolean, MY_FORMATS } from '../enums-list';
@@ -22,17 +22,17 @@ import { FormBase } from '../form-base';
 import { CrimeInfoHelper } from './crime-information.helper';
 
 @Component({
-    selector: 'app-crime-information',
-    templateUrl: './crime-information.component.html',
-    styleUrls: ['./crime-information.component.scss'],
-    providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-    ],
-    standalone: false
+  selector: 'app-crime-information',
+  templateUrl: './crime-information.component.html',
+  styleUrls: ['./crime-information.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
+  standalone: false
 })
 export class CrimeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
@@ -202,45 +202,47 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
     });
 
     if (this.lookupData.courts && this.lookupData.courts.length > 0) {
-      this.courtList = this.lookupData.courts.map((c) => c.vsd_name);
+      this.courtList = this.lookupData.courts.map((c) => c.name);
     } else {
-      this.lookupService.getCourts().subscribe((res) => {
+      this.lookupService.getApiLookupCourts().subscribe((res) => {
         this.lookupData.courts = res.value;
         if (this.lookupData.courts) {
           this.lookupData.courts.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
+            return a.name.localeCompare(b.name);
           });
         }
-        this.courtList = this.lookupData.courts.map((c) => c.vsd_name);
+        this.courtList = this.lookupData.courts.map((c) => c.name);
       });
     }
 
     if (this.lookupData.police_detachments && this.lookupData.police_detachments.length > 0) {
-      this.policeForceList = this.lookupData.police_detachments.map((pd) => pd.vsd_name);
+      this.policeForceList = this.lookupData.police_detachments.map((pd) => pd.name);
     } else {
-      this.lookupService.getPoliceDetachments().subscribe((res) => {
+      this.lookupService.getApiLookupPoliceDetachments().subscribe((res) => {
         this.lookupData.police_detachments = res.value;
         if (this.lookupData.police_detachments) {
           this.lookupData.police_detachments.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
+            return a.name.localeCompare(b.name);
           });
-          this.policeForceList = this.lookupData.police_detachments.map((pd) => pd.vsd_name);
+          this.policeForceList = this.lookupData.police_detachments.map((pd) => pd.name);
         }
       });
     }
 
     if (this.lookupData.cities && this.lookupData.cities.length > 0) {
-      this.cityList = this.lookupData.cities.map((c) => c.vsd_name);
+      this.cityList = this.lookupData.cities.map((c) => c.name);
     } else {
-      this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe((res) => {
-        this.lookupData.cities = res.value;
-        if (this.lookupData.cities) {
-          this.lookupData.cities.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
-          });
-        }
-        this.cityList = this.lookupData.cities.map((c) => c.vsd_name);
-      });
+      this.lookupService
+        .getApiLookupCountryCountryIdProvinceProvinceIdCities(config.canada_crm_id, config.bc_crm_id)
+        .subscribe((res) => {
+          this.lookupData.cities = res.value;
+          if (this.lookupData.cities) {
+            this.lookupData.cities.sort(function (a, b) {
+              return a.name.localeCompare(b.name);
+            });
+          }
+          this.cityList = this.lookupData.cities.map((c) => c.name);
+        });
     }
   }
 

@@ -5,50 +5,59 @@
  * API for the Victim Services Directory (VSD) application
  * OpenAPI spec version: v1
  */
+import {
+  HttpClient
+} from '@angular/common/http'
 import type {
-  HttpResponse as AngularHttpResponse,
   HttpContext,
   HttpEvent,
   HttpHeaders,
-  HttpParams
-} from '@angular/common/http';
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+  HttpParams,
+  HttpResponse as AngularHttpResponse
+} from '@angular/common/http'
+import {
+  Injectable
+} from '@angular/core'
+import {
+  Observable
+} from 'rxjs'
+
 
 type HttpClientOptions = {
-  headers?:
-    | HttpHeaders
-    | {
-        [header: string]: string | string[];
-      };
+  headers?: HttpHeaders | {
+      [header: string]: string | string[];
+  };
   context?: HttpContext;
   observe?: any;
-  params?:
-    | HttpParams
-    | {
-        [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
-      };
+  params?: HttpParams | {
+    [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
+  };
   reportProgress?: boolean;
   responseType?: any;
   withCredentials?: boolean;
 };
 
+
+
 @Injectable({ providedIn: 'root' })
 export class PaymentService {
-  constructor(private http: HttpClient) {}
-  postApiPaymentSend<TData = void>(
-    options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
+  constructor(
+    private http: HttpClient,
+  ) {} postApiPaymentSend<TData = void>(
+     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  postApiPaymentSend<TData = void>(
-    options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
+    postApiPaymentSend<TData = void>(
+     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  postApiPaymentSend<TData = void>(
-    options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
-  ): Observable<HttpEvent<TData>>;
-  postApiPaymentSend<TData = void>(options?: HttpClientOptions): Observable<TData> {
-    return this.http.post<TData>(`/cvapwebform/api/Payment/send`, undefined, options);
+    postApiPaymentSend<TData = void>(
+     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
+  ): Observable<HttpEvent<TData>>;postApiPaymentSend<TData = void>(
+     options?: HttpClientOptions
+  ): Observable<TData>  {
+    return this.http.post<TData>(
+      `/cvapwebform/api/Payment/send`,undefined,options
+    );
   }
-}
+};
 
-export type PostApiPaymentSendClientResult = NonNullable<void>;
+export type PostApiPaymentSendClientResult = NonNullable<void>

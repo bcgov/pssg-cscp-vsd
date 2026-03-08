@@ -3,23 +3,23 @@ import { ControlContainer, UntypedFormGroup } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { LookupService } from '../../services/lookup.service';
+import { LookupService } from '../../../api/lookup/lookup.service';
 import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 
 @Component({
-    selector: 'app-introduction',
-    templateUrl: './introduction.component.html',
-    styleUrls: ['./introduction.component.scss'],
-    providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-    ],
-    standalone: false
+  selector: 'app-introduction',
+  templateUrl: './introduction.component.html',
+  styleUrls: ['./introduction.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
+  standalone: false
 })
 export class IntroductionComponent extends FormBase implements OnInit {
   @Input() formType: number;
@@ -58,15 +58,10 @@ export class IntroductionComponent extends FormBase implements OnInit {
       this.applicant = 'Witnesses';
     }
 
-    if (this.lookupService.cvapEmail) {
-      this.cvapEmail = this.lookupService.cvapEmail;
-      this.cvapCounsellingEmail = this.lookupService.cvapCounsellingEmail;
-    } else {
-      this.lookupService.getCVAPEmails().subscribe((res) => {
-        this.cvapEmail = res.cvapEmail;
-        this.cvapCounsellingEmail = res.cvapCounsellingEmail;
-      });
-    }
+    this.lookupService.getApiLookupCvapEmails().subscribe((res) => {
+      this.cvapEmail = res.cvapEmail;
+      this.cvapCounsellingEmail = res.cvapCounsellingEmail;
+    });
   }
 
   showSummaryOfBenefits(): void {

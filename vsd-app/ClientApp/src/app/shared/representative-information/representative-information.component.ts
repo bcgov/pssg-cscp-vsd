@@ -4,8 +4,8 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { LookupService } from '../../../api/lookup/lookup.service';
 import { iLookupData } from '../../interfaces/lookup-data.interface';
-import { LookupService } from '../../services/lookup.service';
 import { AddressHelper } from '../address/address.helper';
 import { COUNTRIES_ADDRESS } from '../address/country-list';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
@@ -109,30 +109,30 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
     });
 
     if (this.lookupData.imfRepresentativeRelationships && this.lookupData.imfRepresentativeRelationships.length > 0) {
-      this.imfRelationshipList = this.lookupData.imfRepresentativeRelationships.map((r) => r.vsd_name);
+      this.imfRelationshipList = this.lookupData.imfRepresentativeRelationships.map((r) => r.name);
     } else {
-      this.lookupService.getIMFRepresentativeRelationships().subscribe((res) => {
+      this.lookupService.getApiLookupImfRepresentativeRelationships().subscribe((res) => {
         this.lookupData.imfRepresentativeRelationships = res.value;
         if (this.lookupData.imfRepresentativeRelationships) {
           this.lookupData.imfRepresentativeRelationships.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
+            return a.name.localeCompare(b.name);
           });
         }
-        this.imfRelationshipList = this.lookupData.imfRepresentativeRelationships.map((r) => r.vsd_name);
+        this.imfRelationshipList = this.lookupData.imfRepresentativeRelationships.map((r) => r.name);
       });
     }
 
     if (this.lookupData.representativeRelationships && this.lookupData.representativeRelationships.length > 0) {
-      this.relationshipList = this.lookupData.representativeRelationships.map((r) => r.vsd_name);
+      this.relationshipList = this.lookupData.representativeRelationships.map((r) => r.name);
     } else {
-      this.lookupService.getRepresentativeRelationships().subscribe((res) => {
+      this.lookupService.getApiLookupRepresentativeRelationships().subscribe((res) => {
         this.lookupData.representativeRelationships = res.value;
         if (this.lookupData.representativeRelationships) {
           this.lookupData.representativeRelationships.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
+            return a.name.localeCompare(b.name);
           });
         }
-        this.relationshipList = this.lookupData.representativeRelationships.map((r) => r.vsd_name);
+        this.relationshipList = this.lookupData.representativeRelationships.map((r) => r.name);
       });
     }
   }

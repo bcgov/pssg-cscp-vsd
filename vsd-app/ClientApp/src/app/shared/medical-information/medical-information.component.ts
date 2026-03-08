@@ -135,8 +135,8 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
     });
 
     this.provinceList = this.lookupData.provinces
-      .filter((p) => p._vsd_countryid_value == config.canada_crm_id)
-      .map((p) => p.vsd_name)
+      .filter((p) => p.countryId == config.canada_crm_id)
+      .map((p) => p.name)
       .sort((a, b) => a.localeCompare(b));
   }
 

@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { LookupService } from '../../api/lookup/lookup.service';
 import { config } from '../../config';
 import {
   Application,
@@ -25,7 +26,6 @@ import {
 import { iLookupData } from '../interfaces/lookup-data.interface';
 import { AEMService } from '../services/aem.service';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { LookupService } from '../services/lookup.service';
 import { StateService } from '../services/state.service';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
@@ -131,11 +131,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
     promise_array.push(
       new Promise<void>((resolve, reject) => {
-        this.lookupService.getCountries().subscribe(
+        this.lookupService.getApiLookupCountries().subscribe(
           (res) => {
             this.lookupData.countries = res.value;
             if (this.lookupData.countries) {
-              this.lookupData.countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+              this.lookupData.countries.sort((a, b) => a.name.localeCompare(b.name));
             }
             resolve();
           },
@@ -148,11 +148,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
     promise_array.push(
       new Promise<void>((resolve, reject) => {
-        this.lookupService.getProvinces().subscribe(
+        this.lookupService.getApiLookupProvinces().subscribe(
           (res) => {
             this.lookupData.provinces = res.value;
             if (this.lookupData.provinces) {
-              this.lookupData.provinces.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+              this.lookupData.provinces.sort((a, b) => a.name.localeCompare(b.name));
             }
             resolve();
           },
@@ -165,30 +165,30 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
     promise_array.push(
       new Promise<void>((resolve, reject) => {
-        this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe(
-          (res) => {
-            this.lookupData.cities = res.value;
-            if (this.lookupData.cities) {
-              this.lookupData.cities.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+        this.lookupService
+          .getApiLookupCountryCountryIdProvinceProvinceIdCities(config.canada_crm_id, config.bc_crm_id)
+          .subscribe(
+            (res) => {
+              this.lookupData.cities = res.value;
+              if (this.lookupData.cities) {
+                this.lookupData.cities.sort((a, b) => a.name.localeCompare(b.name));
+              }
+              resolve();
+            },
+            (err) => {
+              reject(err);
             }
-            resolve();
-          },
-          (err) => {
-            reject(err);
-          }
-        );
+          );
       })
     );
 
     promise_array.push(
       new Promise<void>((resolve, reject) => {
-        this.lookupService.getRepresentativeRelationships().subscribe(
+        this.lookupService.getApiLookupRepresentativeRelationships().subscribe(
           (res) => {
-            this.lookupData.representativeRelationships = res.value.filter(
-              (r) => r.vsd_cvap_representativerelationship_imf_only != true
-            );
+            this.lookupData.representativeRelationships = res.value;
             if (this.lookupData.representativeRelationships) {
-              this.lookupData.representativeRelationships.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
+              this.lookupData.representativeRelationships.sort((a, b) => a.name.localeCompare(b.name));
             }
             resolve();
           },

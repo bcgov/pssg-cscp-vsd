@@ -1,4 +1,5 @@
-﻿using Manager;
+﻿using Gov.Cscp.VictimServices.Public.Services;
+using Manager;
 using Manager.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Resources;
@@ -61,6 +62,8 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<IMessageRequests, MessageRequests>();
         services.AddSingleton<ICasHttpClient, CasHttpClient>();
+
+        services.AddTransient<ILookupService, LookupService>();
 
         return services;
     }
