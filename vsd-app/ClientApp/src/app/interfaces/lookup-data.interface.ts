@@ -7,7 +7,11 @@ import type {
   RelationshipLookupDto
 } from '../../model';
 
-// TODO: should be replaced with signal store
+/**
+ * @deprecated Replaced by LookupStore (@ngrx/signals).
+ * All static lookups are now pre-loaded at app initialization via LookupStore.
+ * This interface is no longer used and can be removed.
+ */
 export interface iLookupData {
   countries: CountryLookupDto[];
   provinces: ProvinceLookupDto[];

@@ -1,6 +1,7 @@
-import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { enableProdMode, inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
+import { platformBrowser } from '@angular/platform-browser';
 import { AppModule } from './app/app.module';
+import { LookupStore } from './app/store/lookup.store';
 import { environment } from './environments/environment';
 
 if (environment.production) {
@@ -10,4 +11,9 @@ if (environment.production) {
   }
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule, { applicationProviders: [provideZoneChangeDetection()], });
+platformBrowser().bootstrapModule(AppModule, {
+  applicationProviders: [
+    provideZoneChangeDetection(),
+    provideAppInitializer(() => inject(LookupStore).loadAll())
+  ]
+});

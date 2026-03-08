@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   ControlContainer,
   UntypedFormArray,
@@ -12,9 +12,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
-import { LookupService } from '../../../api/lookup/lookup.service';
-import { config } from '../../../config';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { LookupStore } from '../../store/lookup.store';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
 import { AddressHelper } from '../address/address.helper';
 import { ApplicationType, CRMBoolean, CRMMultiBoolean, MY_FORMATS } from '../enums-list';
@@ -36,7 +34,7 @@ import { CrimeInfoHelper } from './crime-information.helper';
 })
 export class CrimeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
+  protected readonly lookupStore = inject(LookupStore);
   public form: UntypedFormGroup;
   CRMBoolean = CRMBoolean;
   CRMMultiBoolean = CRMMultiBoolean;
@@ -94,8 +92,7 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
   constructor(
     private controlContainer: ControlContainer,
     private matDialog: MatDialog,
-    private fb: UntypedFormBuilder,
-    public lookupService: LookupService
+    private fb: UntypedFormBuilder
   ) {
     super();
   }
@@ -201,49 +198,11 @@ export class CrimeInformationComponent extends FormBase implements OnInit, OnDes
       }
     });
 
-    if (this.lookupData.courts && this.lookupData.courts.length > 0) {
-      this.courtList = this.lookupData.courts.map((c) => c.name);
-    } else {
-      this.lookupService.getApiLookupCourts().subscribe((res) => {
-        this.lookupData.courts = res.value;
-        if (this.lookupData.courts) {
-          this.lookupData.courts.sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
-        }
-        this.courtList = this.lookupData.courts.map((c) => c.name);
-      });
-    }
+    this.courtList = this.lookupStore.courts().map((c) => c.name);
 
-    if (this.lookupData.police_detachments && this.lookupData.police_detachments.length > 0) {
-      this.policeForceList = this.lookupData.police_detachments.map((pd) => pd.name);
-    } else {
-      this.lookupService.getApiLookupPoliceDetachments().subscribe((res) => {
-        this.lookupData.police_detachments = res.value;
-        if (this.lookupData.police_detachments) {
-          this.lookupData.police_detachments.sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
-          this.policeForceList = this.lookupData.police_detachments.map((pd) => pd.name);
-        }
-      });
-    }
+    this.policeForceList = this.lookupStore.policeDetachments().map((pd) => pd.name);
 
-    if (this.lookupData.cities && this.lookupData.cities.length > 0) {
-      this.cityList = this.lookupData.cities.map((c) => c.name);
-    } else {
-      this.lookupService
-        .getApiLookupCountryCountryIdProvinceProvinceIdCities(config.canada_crm_id, config.bc_crm_id)
-        .subscribe((res) => {
-          this.lookupData.cities = res.value;
-          if (this.lookupData.cities) {
-            this.lookupData.cities.sort(function (a, b) {
-              return a.name.localeCompare(b.name);
-            });
-          }
-          this.cityList = this.lookupData.cities.map((c) => c.name);
-        });
-    }
+    this.cityList = this.lookupStore.bcCities().map((c) => c.name);
   }
 
   ngOnDestroy() {

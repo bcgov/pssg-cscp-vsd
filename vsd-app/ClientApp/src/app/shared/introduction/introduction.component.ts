@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ControlContainer, UntypedFormGroup } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { LookupService } from '../../../api/lookup/lookup.service';
+import { LookupStore } from '../../store/lookup.store';
 import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
@@ -28,13 +28,13 @@ export class IntroductionComponent extends FormBase implements OnInit {
   applicant: string = '';
 
   isIE: boolean = false;
-  cvapEmail: string = '';
-  cvapCounsellingEmail: string = '';
+  protected readonly lookupStore = inject(LookupStore);
+  get cvapEmail(): string { return this.lookupStore.cvapEmail(); }
+  get cvapCounsellingEmail(): string { return this.lookupStore.cvapCounsellingEmail(); }
 
   constructor(
     private controlContainer: ControlContainer,
-    private matDialog: MatDialog,
-    private lookupService: LookupService
+    private matDialog: MatDialog
   ) {
     super();
   }
@@ -57,11 +57,6 @@ export class IntroductionComponent extends FormBase implements OnInit {
     } else if (this.formType === ApplicationType.Witness_Application) {
       this.applicant = 'Witnesses';
     }
-
-    this.lookupService.getApiLookupCvapEmails().subscribe((res) => {
-      this.cvapEmail = res.cvapEmail;
-      this.cvapCounsellingEmail = res.cvapCounsellingEmail;
-    });
   }
 
   showSummaryOfBenefits(): void {

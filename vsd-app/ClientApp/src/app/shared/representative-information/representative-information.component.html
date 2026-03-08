@@ -166,7 +166,7 @@
           </app-field>
         </div>
       </div>
-      <app-address (change)="setRepresentativePhoneValidators()" [group]="form.get('representativeAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="true" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
+      <app-address (change)="setRepresentativePhoneValidators()" [group]="form.get('representativeAddress')" [showChildrenAsRequired]="true" [isDisabled]="form.get('mostRecentMailingAddressSameAsPersonal').value"></app-address>
       
       @if (form.get('completingOnBehalfOf').value === 100000003) {
         <h2 class="blue-header">Proof of Legal Authority, If Applicable</h2>

@@ -7,10 +7,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as _ from 'lodash';
 import moment from 'moment';
 import { InvoicesService } from '../../api/invoices/invoices.service';
-import { LookupService } from '../../api/lookup/lookup.service';
 import { DocumentDto, InvoiceDto } from '../../model';
 import { AEMService } from '../services/aem.service';
 import { JusticeApplicationDataService } from '../services/justice-application-data.service';
+import { LookupStore } from '../store/lookup.store';
 import { CancelDialog } from '../shared/dialogs/cancel/cancel.dialog';
 import { GSTWarningDialog } from '../shared/dialogs/gst-warning/gst-warning.dialog';
 import { InvoiceInstructionsDialog } from '../shared/dialogs/invoice-instructions/invoice-instructions.dialog';
@@ -73,16 +73,16 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
 
   isIE: boolean = false;
 
-  cvapEmail: string = '';
-  cvapCounsellingEmail: string = '';
+  protected readonly lookupStore = inject(LookupStore);
+  get cvapEmail(): string { return this.lookupStore.cvapEmail(); }
+  get cvapCounsellingEmail(): string { return this.lookupStore.cvapCounsellingEmail(); }
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,
     private fb: UntypedFormBuilder,
     public snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private aemService: AEMService,
-    private lookupService: LookupService
+    private aemService: AEMService
   ) {
     super();
     this.formFullyValidated = false;
@@ -95,11 +95,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.form = this.buildInvoiceForm();
     this.lineItems = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
     this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
-
-    this.lookupService.getApiLookupCvapEmails().subscribe((res) => {
-      this.cvapEmail = res.cvapEmail;
-      this.cvapCounsellingEmail = res.cvapCounsellingEmail;
-    });
 
     this.form.valueChanges.subscribe(() => {
       this.formFullyValidated = !this.hasInvalidTouchedControls(this.form);

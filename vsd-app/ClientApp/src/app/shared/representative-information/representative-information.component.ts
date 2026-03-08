@@ -1,11 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { ControlContainer, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { LookupService } from '../../../api/lookup/lookup.service';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { LookupStore } from '../../store/lookup.store';
 import { AddressHelper } from '../address/address.helper';
 import { COUNTRIES_ADDRESS } from '../address/country-list';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
@@ -28,7 +27,7 @@ import { RepresentativeInfoHelper } from './representative-information.helper';
 })
 export class RepresentativeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
+  protected readonly lookupStore = inject(LookupStore);
   public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   provinceList: string[];
@@ -53,8 +52,7 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
   constructor(
     private controlContainer: ControlContainer,
     private fb: UntypedFormBuilder,
-    private route: ActivatedRoute,
-    public lookupService: LookupService
+    private route: ActivatedRoute
   ) {
     super();
     var canada = COUNTRIES_ADDRESS.filter((c) => c.name.toLowerCase() == 'canada')[0];
@@ -108,32 +106,12 @@ export class RepresentativeInformationComponent extends FormBase implements OnIn
       this.copyPersonalContactInfoToRepresentative(this.form.parent);
     });
 
-    if (this.lookupData.imfRepresentativeRelationships && this.lookupData.imfRepresentativeRelationships.length > 0) {
-      this.imfRelationshipList = this.lookupData.imfRepresentativeRelationships.map((r) => r.name);
-    } else {
-      this.lookupService.getApiLookupImfRepresentativeRelationships().subscribe((res) => {
-        this.lookupData.imfRepresentativeRelationships = res.value;
-        if (this.lookupData.imfRepresentativeRelationships) {
-          this.lookupData.imfRepresentativeRelationships.sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
-        }
-        this.imfRelationshipList = this.lookupData.imfRepresentativeRelationships.map((r) => r.name);
-      });
+    if (this.lookupStore.imfRepresentativeRelationships().length > 0) {
+      this.imfRelationshipList = this.lookupStore.imfRepresentativeRelationships().map((r) => r.name);
     }
 
-    if (this.lookupData.representativeRelationships && this.lookupData.representativeRelationships.length > 0) {
-      this.relationshipList = this.lookupData.representativeRelationships.map((r) => r.name);
-    } else {
-      this.lookupService.getApiLookupRepresentativeRelationships().subscribe((res) => {
-        this.lookupData.representativeRelationships = res.value;
-        if (this.lookupData.representativeRelationships) {
-          this.lookupData.representativeRelationships.sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
-        }
-        this.relationshipList = this.lookupData.representativeRelationships.map((r) => r.name);
-      });
+    if (this.lookupStore.representativeRelationships().length > 0) {
+      this.relationshipList = this.lookupStore.representativeRelationships().map((r) => r.name);
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   ControlContainer,
@@ -11,8 +11,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { LookupService } from '../../../api/lookup/lookup.service';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { LookupStore } from '../../store/lookup.store';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
 import { ApplicationType, CRMBoolean, EnumHelper, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
@@ -34,7 +33,7 @@ import { AuthInfoHelper } from './authorization-information.helper';
 })
 export class AuthorizationInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
+  protected readonly lookupStore = inject(LookupStore);
   public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   enumHelper = new EnumHelper();
@@ -54,8 +53,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
   constructor(
     private controlContainer: ControlContainer,
     private matDialog: MatDialog,
-    private fb: UntypedFormBuilder,
-    public lookupService: LookupService
+    private fb: UntypedFormBuilder
   ) {
     super();
   }
@@ -94,19 +92,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
       authorizedPersonSignature.updateValueAndValidity(options);
     });
 
-    if (this.lookupData.relationships && this.lookupData.relationships.length > 0) {
-      this.relationshipList = this.lookupData.relationships.map((r) => r.name);
-    } else {
-      this.lookupService.getApiLookupAuthRelationships().subscribe((res) => {
-        this.lookupData.relationships = res.value;
-        if (this.lookupData.relationships) {
-          this.lookupData.relationships.sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-          });
-        }
-        this.relationshipList = this.lookupData.relationships.map((r) => r.name);
-      });
-    }
+    this.relationshipList = this.lookupStore.authRelationships().map((r) => r.name);
   }
 
   ngOnDestroy() {

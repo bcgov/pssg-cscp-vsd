@@ -367,7 +367,7 @@
                       </app-field>
                     </div>
                   </div>
-                  <app-address (change)="setEmployerPhoneValidators(item)" [group]="item.get('employerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="form.get('mayContactEmployer').value === CRMBoolean.True"></app-address>
+                  <app-address (change)="setEmployerPhoneValidators(item)" [group]="item.get('employerAddress')" [showChildrenAsRequired]="form.get('mayContactEmployer').value === CRMBoolean.True"></app-address>
                 </div>
               </div>
             }

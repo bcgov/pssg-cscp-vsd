@@ -4,7 +4,6 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 
@@ -20,7 +19,6 @@ import { FormBase } from '../form-base';
 })
 export class VictimInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
   public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   todaysDate = new Date(); // for the birthdate validation

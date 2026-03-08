@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { noop, Observable, Observer, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { config } from '../../../config';
 import { CityLookupDto } from '../../../model/cityLookupDto';
 import { CountryLookupDto } from '../../../model/countryLookupDto';
 import { ProvinceLookupDto } from '../../../model/provinceLookupDto';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { LookupStore } from '../../store/lookup.store';
 import { POSTAL_CODE, ZIP_CODE } from '../regex.constants';
 import { COUNTRIES_ADDRESS } from './country-list';
 
@@ -40,10 +40,11 @@ export class AddressComponent implements OnInit {
 
   apiUrl = 'api/Lookup';
 
+  protected readonly lookupStore = inject(LookupStore);
+
   @Input() group = UntypedFormGroup;
   @Input() showChildrenAsRequired: boolean = true;
   @Input() isDisabled: boolean = false;
-  @Input() lookupData: iLookupData;
 
   constructor(public lookupService: LookupService) {
     let canada = COUNTRIES_ADDRESS.filter((c) => c.name.toLowerCase() == 'canada')[0];
@@ -91,42 +92,7 @@ export class AddressComponent implements OnInit {
     this.countryList = config.preferred_countries;
     this.provinceList = [];
 
-    let promise_array = [];
-    if (!this.lookupData.countries || this.lookupData.countries.length == 0) {
-      promise_array.push(
-        new Promise<void>((resolve, reject) => {
-          this.lookupService.getApiLookupCountries().subscribe((res) => {
-            this.lookupData.countries = res.value;
-            if (this.lookupData.countries) {
-              this.lookupData.countries.sort(function (a, b) {
-                return a.name.localeCompare(b.name);
-              });
-            }
-            resolve();
-          });
-        })
-      );
-    }
-
-    if (!this.lookupData.provinces || this.lookupData.provinces.length == 0) {
-      promise_array.push(
-        new Promise<void>((resolve, reject) => {
-          this.lookupService.getApiLookupProvinces().subscribe((res) => {
-            this.lookupData.provinces = res.value;
-            if (this.lookupData.provinces) {
-              this.lookupData.provinces.sort(function (a, b) {
-                return a.name.localeCompare(b.name);
-              });
-            }
-            resolve();
-          });
-        })
-      );
-    }
-
-    Promise.all(promise_array).then((res) => {
-      this.setupForm();
-    });
+    this.setupForm();
   }
 
   setupForm() {
@@ -134,10 +100,10 @@ export class AddressComponent implements OnInit {
       this.showChildrenAsRequired = true;
     }
 
-    let pref_countries = this.lookupData.countries.filter(
+    let pref_countries = this.lookupStore.countries().filter(
       (c) => config.preferred_countries.findIndex((pc) => pc.id == c.id) >= 0
     );
-    let remaining_countries = this.lookupData.countries.filter(
+    let remaining_countries = this.lookupStore.countries().filter(
       (c) => config.preferred_countries.findIndex((pc) => pc.id == c.id) < 0
     );
 
@@ -153,7 +119,7 @@ export class AddressComponent implements OnInit {
     remaining_countries.sort((a, b) => a.name.localeCompare(b.name));
 
     this.countryList = pref_countries.concat(remaining_countries);
-    this.cityList = this.lookupData.cities;
+    this.cityList = [...this.lookupStore.bcCities()];
     this.cityList.sort((a, b) => a.name.localeCompare(b.name));
     let other_city_index = this.getOtherIndex(this.cityList);
     if (other_city_index < 0) {
@@ -169,14 +135,14 @@ export class AddressComponent implements OnInit {
     this.postalCodeSample = canada.postalCodeSample;
 
     let countryVal = this.group['controls']['country'].value.toString();
-    this.selectedCountry = this.lookupData.countries.filter((c) => c.name.toLowerCase() == countryVal.toLowerCase())[0];
+    this.selectedCountry = this.lookupStore.countries().filter((c) => c.name.toLowerCase() == countryVal.toLowerCase())[0];
     if (countryVal === 'Other') this.selectedCountry = { name: 'Other', id: '123' };
     if (!this.selectedCountry) {
-      this.selectedCountry = this.lookupData.countries.filter((p) => p.name.toLowerCase() === 'canada')[0];
+      this.selectedCountry = this.lookupStore.countries().filter((p) => p.name.toLowerCase() === 'canada')[0];
     }
 
     if (this.selectedCountry) {
-      this.provinceList = this.lookupData.provinces.filter((p) => p.countryId === this.selectedCountry.id);
+      this.provinceList = this.lookupStore.provinces().filter((p) => p.countryId === this.selectedCountry.id);
       this.provinceList.sort((a, b) => a.name.localeCompare(b.name));
       let other_province_index = this.getOtherIndex(this.provinceList);
       if (other_province_index < 0) {
@@ -192,7 +158,7 @@ export class AddressComponent implements OnInit {
     }
 
     let provinceVal = this.group['controls']['province'].value.toString();
-    this.selectedProvince = this.lookupData.provinces.filter(
+    this.selectedProvince = this.lookupStore.provinces().filter(
       (c) => c.name.toLowerCase() == provinceVal.toLowerCase()
     )[0];
     if (this.selectedProvince.name != 'British Columbia') this.updateCityList();
@@ -216,9 +182,9 @@ export class AddressComponent implements OnInit {
     cityControl.patchValue('');
 
     let selection = event.target.value.toLowerCase();
-    this.selectedCountry = this.lookupData.countries.filter((c) => c.name.toLowerCase() == selection)[0];
+    this.selectedCountry = this.lookupStore.countries().filter((c) => c.name.toLowerCase() == selection)[0];
     if (this.selectedCountry) {
-      this.provinceList = this.lookupData.provinces.filter((p) => p.countryId === this.selectedCountry.id);
+      this.provinceList = this.lookupStore.provinces().filter((p) => p.countryId === this.selectedCountry.id);
       if (this.provinceList) {
         this.provinceList.sort((a, b) => a.name.localeCompare(b.name));
       }
@@ -250,7 +216,7 @@ export class AddressComponent implements OnInit {
     let cityControl = this.group['controls']['city'] as UntypedFormControl;
     cityControl.patchValue('');
     let selection = event.target.value.toLowerCase();
-    this.selectedProvince = this.lookupData.provinces.filter((c) => c.name.toLowerCase() == selection)[0];
+    this.selectedProvince = this.lookupStore.provinces().filter((c) => c.name.toLowerCase() == selection)[0];
     this.updateCityList();
   }
 

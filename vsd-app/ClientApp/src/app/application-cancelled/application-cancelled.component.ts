@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LookupService } from '../../api/lookup/lookup.service';
+import { LookupStore } from '../store/lookup.store';
 
 @Component({
   selector: 'application-cancelled',
@@ -10,9 +10,10 @@ import { LookupService } from '../../api/lookup/lookup.service';
 })
 export class ApplicationCancelledComponent implements OnInit {
   applicationType: string;
-  cvapEmail: string = '';
+  protected readonly lookupStore = inject(LookupStore);
+  get cvapEmail(): string { return this.lookupStore.cvapEmail(); }
 
-  constructor(private router: Router, private route: ActivatedRoute, private lookupService: LookupService) {
+  constructor(private router: Router, private route: ActivatedRoute) {
     this.router.navigateByUrl('/application-cancelled');
   }
 
@@ -20,8 +21,5 @@ export class ApplicationCancelledComponent implements OnInit {
     // Figure out how to get route data here and display the relevant components
     //    const myData = this.route.snapshot.data['applicationType'];
     //    this.applicationType = myData;
-    this.lookupService.getApiLookupCvapEmails().subscribe((res) => {
-      if (res) this.cvapEmail = res.cvapEmail;
-    });
   }
 }

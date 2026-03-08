@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   ControlContainer,
@@ -13,7 +13,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { config } from '../../../config';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
+import { LookupStore } from '../../store/lookup.store';
 import { AddressHelper } from '../address/address.helper';
 import { ApplicationType, CRMBoolean, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
@@ -36,7 +36,7 @@ import { EmailValidator } from '../validators/email.validator';
 })
 export class MedicalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
+  protected readonly lookupStore = inject(LookupStore);
   public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   CRMBoolean = CRMBoolean;
@@ -134,7 +134,7 @@ export class MedicalInformationComponent extends FormBase implements OnInit, OnD
       this.setDoctorPhoneValidators();
     });
 
-    this.provinceList = this.lookupData.provinces
+    this.provinceList = this.lookupStore.provinces()
       .filter((p) => p.countryId == config.canada_crm_id)
       .map((p) => p.name)
       .sort((a, b) => a.localeCompare(b));

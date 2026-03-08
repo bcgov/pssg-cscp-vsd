@@ -3,7 +3,6 @@ import { ControlContainer, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Subscription } from 'rxjs';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { AddressHelper } from '../address/address.helper';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
@@ -25,7 +24,6 @@ import { EmailMatchingValidator, EmailValidator } from '../validators/email.vali
 })
 export class PersonalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
   public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   postalRegex = POSTAL_CODE;

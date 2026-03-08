@@ -12,7 +12,6 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDialog } from '@angular/material/dialog';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { SummaryOfBenefitsDialog } from '../../summary-of-benefits/summary-of-benefits.component';
 import { AddressHelper } from '../address/address.helper';
 import { ApplicationType, CRMBoolean, MY_FORMATS } from '../enums-list';
@@ -33,7 +32,6 @@ import { FormBase } from '../form-base';
 })
 export class ExpenseInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
   public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
 

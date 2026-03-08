@@ -523,7 +523,7 @@
               <app-field label="Lawyer or Law Firm Name">
                 <input class="form-control standard" type="text" formControlName="lawyerOrFirmName">
               </app-field>
-              <app-address [group]="form.get('racafInformation.lawyerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="false"></app-address>
+              <app-address [group]="form.get('racafInformation.lawyerAddress')" [showChildrenAsRequired]="false"></app-address>
             </section>
           }
           @if (form.get('racafInformation.willBeTakingLegalAction').value === CRMMultiBoolean.True || form.get('racafInformation.applyToCourtForMoneyFromOffender').value === CRMMultiBoolean.True) {

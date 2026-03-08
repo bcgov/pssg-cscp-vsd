@@ -11,7 +11,6 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { AddressHelper } from '../address/address.helper';
 import { COUNTRIES_ADDRESS_2 } from '../address/country-list';
 import { CRMBoolean, MY_FORMATS } from '../enums-list';
@@ -34,7 +33,6 @@ import { EmploymentInfoHelper } from './employment-information.helper';
 })
 export class EmploymentInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
   public form: UntypedFormGroup;
 
   postalRegex = POSTAL_CODE;

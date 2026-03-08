@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { LookupService } from '../../../../api/lookup/lookup.service';
+import { LookupStore } from '../../../store/lookup.store';
 
 @Component({
   selector: 'app-invoice-instructions.dialog',
@@ -8,23 +8,16 @@ import { LookupService } from '../../../../api/lookup/lookup.service';
   standalone: false
 })
 export class InvoiceInstructionsDialog implements OnInit {
-  cvapEmail: string = '';
-  cvapCounsellingEmail: string = '';
+  protected readonly lookupStore = inject(LookupStore);
+  get cvapEmail(): string { return this.lookupStore.cvapEmail(); }
+  get cvapCounsellingEmail(): string { return this.lookupStore.cvapCounsellingEmail(); }
 
   constructor(
     public dialogRef: MatDialogRef<InvoiceInstructionsDialog>,
-    private lookupService: LookupService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  ngOnInit() {
-    this.lookupService.getApiLookupCvapEmails().subscribe((res) => {
-      if (res) {
-        this.cvapEmail = res.cvapEmail;
-        this.cvapCounsellingEmail = res.cvapCounsellingEmail;
-      }
-    });
-  }
+  ngOnInit() {}
 
   onOkayClick() {
     this.dialogRef.close();
