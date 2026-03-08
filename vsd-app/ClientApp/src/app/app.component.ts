@@ -1,10 +1,9 @@
-import { Component, isDevMode, OnInit, Renderer2 } from '@angular/core';
+import { Component, inject, isDevMode, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import moment from 'moment-timezone';
 import { environment } from '../environments/environment';
-import { Configuration } from './interfaces/configuration.interface';
-import { ConfigService } from './services/config.service';
 import { HeaderTitleService } from './services/titile.service';
+import { ConfigStore } from './store/config.store';
 
 @Component({
   selector: 'app-root',
@@ -15,18 +14,15 @@ import { HeaderTitleService } from './services/titile.service';
 export class AppComponent implements OnInit {
   title = '';
   previousUrl: string;
-  configuration: Configuration;
-  error = false;
+  protected readonly configStore = inject(ConfigStore);
+  get error(): boolean {
+    return !!this.configStore.error();
+  }
   apiPath = environment.apiRootUrl;
   public isNewUser: boolean;
   public isDevMode: boolean;
 
-  constructor(
-    private renderer: Renderer2,
-    private router: Router,
-    private headerTitleService: HeaderTitleService,
-    private configService: ConfigService
-  ) {
+  constructor(private renderer: Renderer2, private router: Router, private headerTitleService: HeaderTitleService) {
     this.isDevMode = isDevMode();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -48,37 +44,24 @@ export class AppComponent implements OnInit {
     this.headerTitleService.title.subscribe((updatedTitle) => {
       this.title = updatedTitle;
     });
-
-    this.configService
-      .load()
-      .then((configuration) => {
-        console.log('Fetched Configuration:', configuration);
-        this.configuration = configuration;
-      })
-      .catch((error) => {
-        console.error('Failed to fetch configuration:', error);
-        this.error = error;
-      });
   }
 
   isOutage() {
-    if (
-      !this.configuration ||
-      !this.configuration.outageEndDate ||
-      !this.configuration.outageStartDate ||
-      !this.configuration.outageMessage
-    ) {
+    const outageEndDate = this.configStore.outageEndDate();
+    const outageStartDate = this.configStore.outageStartDate();
+    const outageMessage = this.configStore.outageMessage();
+    if (!outageEndDate || !outageStartDate || !outageMessage) {
       return false;
     }
     const currentDate = moment().tz('America/Vancouver');
-    const outageStartDate = moment(this.configuration.outageStartDate).tz('America/Vancouver');
-    const outageEndDate = moment(this.configuration.outageEndDate).tz('America/Vancouver');
-    return currentDate.isBetween(outageStartDate, outageEndDate, null, '[]');
+    const start = moment(outageStartDate).tz('America/Vancouver');
+    const end = moment(outageEndDate).tz('America/Vancouver');
+    return currentDate.isBetween(start, end, null, '[]');
   }
 
   generateOutageDateMessage(): string {
-    const startDate = moment(this.configuration.outageStartDate).tz('America/Vancouver').format('MMMM Do YYYY, h:mm a');
-    const endDate = moment(this.configuration.outageEndDate).tz('America/Vancouver').format('MMMM Do YYYY, h:mm a');
+    const startDate = moment(this.configStore.outageStartDate()).tz('America/Vancouver').format('MMMM Do YYYY, h:mm a');
+    const endDate = moment(this.configStore.outageEndDate()).tz('America/Vancouver').format('MMMM Do YYYY, h:mm a');
     return 'The system will be down for maintenance from ' + startDate + ' to ' + endDate;
   }
 
