@@ -17,11 +17,12 @@ export class FeatureEnabledDirective implements OnInit {
    */
   @Input('featureEnabledIf') featureEnabledIf: boolean;
 
+  protected readonly configStore = inject(ConfigStore);
+
   constructor(private el: ElementRef) {}
 
   ngOnInit() {
-    const configStore = inject(ConfigStore);
-    if (configStore.featureFlags()[this.featureName] !== this.featureEnabledIf) {
+    if (this.configStore.featureFlags()[this.featureName] !== this.featureEnabledIf) {
       this.el.nativeElement.parentNode.removeChild(this.el.nativeElement);
     }
   }
