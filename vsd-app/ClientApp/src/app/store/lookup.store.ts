@@ -25,8 +25,6 @@ export interface LookupState {
   courts: LookupItemDto[];
   cvapEmail: string;
   cvapCounsellingEmail: string;
-  isLoading: boolean;
-  isLoaded: boolean;
   error: string | null;
 }
 
@@ -42,8 +40,6 @@ const initialState: LookupState = {
   courts: [],
   cvapEmail: '',
   cvapCounsellingEmail: '',
-  isLoading: false,
-  isLoaded: false,
   error: null
 };
 
@@ -65,7 +61,7 @@ export const LookupStore = signalStore(
   withState(initialState),
   withMethods((store, lookupService = inject(LookupService)) => ({
     async loadAll(): Promise<void> {
-      patchState(store, { isLoading: true, error: null });
+      patchState(store, { error: null });
 
       try {
         const [
@@ -105,13 +101,10 @@ export const LookupStore = signalStore(
           policeDetachments: sortByName(policeDetachmentsRes.value ?? []),
           courts: sortByName(courtsRes.value ?? []),
           cvapEmail: cvapEmailsRes.cvapEmail ?? '',
-          cvapCounsellingEmail: cvapEmailsRes.cvapCounsellingEmail ?? '',
-          isLoading: false,
-          isLoaded: true
+          cvapCounsellingEmail: cvapEmailsRes.cvapCounsellingEmail ?? ''
         });
       } catch (err) {
         patchState(store, {
-          isLoading: false,
           error: err instanceof Error ? err.message : 'Failed to load lookup data'
         });
         throw err;

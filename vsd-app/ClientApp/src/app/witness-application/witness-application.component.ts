@@ -78,9 +78,6 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
 
   isIE: boolean = false;
   protected readonly lookupStore = inject(LookupStore);
-  get didLoad(): boolean {
-    return this.lookupStore.isLoaded();
-  }
 
   constructor(
     private justiceDataService: JusticeApplicationDataService,

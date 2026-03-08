@@ -9,8 +9,6 @@ export interface ConfigState {
   outageEndDate: string | null;
   outageMessage: string | null;
   featureFlags: FeatureFlagConfiguration;
-  isLoading: boolean;
-  isLoaded: boolean;
   error: string | null;
 }
 
@@ -19,8 +17,6 @@ const initialState: ConfigState = {
   outageEndDate: null,
   outageMessage: null,
   featureFlags: { useUpdatedComplianceFields: false },
-  isLoading: false,
-  isLoaded: false,
   error: null
 };
 
@@ -29,20 +25,17 @@ export const ConfigStore = signalStore(
   withState(initialState),
   withMethods((store, configService = inject(ConfigurationService)) => ({
     async load(): Promise<void> {
-      patchState(store, { isLoading: true, error: null });
+      patchState(store, { error: null });
       try {
         const config = await firstValueFrom(configService.getApiConfiguration<Configuration>());
         patchState(store, {
           outageStartDate: config?.outageStartDate ?? null,
           outageEndDate: config?.outageEndDate ?? null,
           outageMessage: config?.outageMessage ?? null,
-          featureFlags: config?.featureFlags ?? { useUpdatedComplianceFields: false },
-          isLoading: false,
-          isLoaded: true
+          featureFlags: config?.featureFlags ?? { useUpdatedComplianceFields: false }
         });
       } catch (err) {
         patchState(store, {
-          isLoading: false,
           error: err instanceof Error ? err.message : 'Failed to load configuration'
         });
         throw err;

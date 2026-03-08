@@ -1,6 +1,6 @@
 import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
 import { CdkTableModule } from '@angular/cdk/table';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -41,6 +41,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
@@ -48,6 +49,7 @@ import { ApplicationSuccessComponent } from './application-success/application-s
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { HomeComponent } from './home/home.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
@@ -179,6 +181,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     FormsModule,
     MatAutocompleteModule,
     MatButtonModule,
+    NgxSpinnerModule,
     MatButtonToggleModule,
     MatCardModule,
     MatCheckboxModule,
@@ -223,7 +226,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     HeaderTitleService,
     Title,
     provideNgxMask(),
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptors([LoadingInterceptor]), withInterceptorsFromDi())
   ]
 })
 export class AppModule {}

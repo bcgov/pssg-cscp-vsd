@@ -115,8 +115,7 @@
         @if (!showPrintView) {
           <section class="button-container">
             <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
-            <span class="right-buttons">
-              <!-- [class.disabled]="!didLoad" -->
+            <span class="right-buttons">              
               @if (stepper.selectedIndex < 9) {
                 <button (click)="gotoNextStep(stepper);" class="btn btn-primary continue-btn">CONTINUE <i class="fas fa-chevron-right"></i></button>
               }

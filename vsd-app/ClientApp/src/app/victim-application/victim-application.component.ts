@@ -77,9 +77,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   isIE: boolean = false;
   protected readonly lookupStore = inject(LookupStore);
-  get didLoad(): boolean {
-    return this.lookupStore.isLoaded();
-  }
 
   private steps: Array<string> = [
     'introduction',
