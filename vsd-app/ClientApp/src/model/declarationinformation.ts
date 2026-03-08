@@ -7,8 +7,8 @@
  */
 
 export interface Declarationinformation {
-  /** @nullable */
-  declaredAndSigned?: string;
-  /** @nullable */
-  signature?: string;
+  /** @minLength 1 */
+  declaredAndSigned: string;
+  /** @minLength 1 */
+  signature: string;
 }

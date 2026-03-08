@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 namespace Gov.Cscp.VictimServices.Public.ViewModels
@@ -28,8 +29,11 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Personalinformation
     {
+        [Required]
         public string firstName { get; set; }
         public string middleName { get; set; }
+
+        [Required]
         public string lastName { get; set; }
         public string fullName { get; set; }
         public string iHaveOtherNames { get; set; }
@@ -45,16 +49,26 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int? indigenousStatus { get; set; }
         public string relationshipToVictim { get; set; }
         public string relationshipToVictimOther { get; set; }
+
+        [Required]
         public DateTime? birthDate { get; set; }
+
+        [Required]
+        [Range(100000000, 100000006)]
         public int? maritalStatus { get; set; }
         public string sin { get; set; }
         public string occupation { get; set; }
+
+        // Phone=2, Email=1, Mail=4, AlternateMail=100000002
+        [Range(1, 100000002)]
         public int preferredMethodOfContact { get; set; }
         public bool permissionToContactViaMethod { get; set; }
         public string agreeToCvapCommunicationExchange { get; set; }
         public string phoneNumber { get; set; }
         public int? leaveVoicemail { get; set; }
         public string alternatePhoneNumber { get; set; }
+
+        [EmailAddress]
         public string email { get; set; }
         public bool doNotLiveAtAddress { get; set; }
         public string mailRecipient { get; set; }
@@ -71,6 +85,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Crimelocation[] crimeLocations { get; set; }
 
         public DateTime? crimePeriodEnd { get; set; }
+
+        [Required]
         public DateTime? crimePeriodStart { get; set; }
         public DateTime? dateOfDeath { get; set; }
 
@@ -84,14 +100,27 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public Offender[] additionalOffenders { get; set; }
 
         public Racafinformation racafInformation { get; set; }
+
+        [Required]
+        [Range(100000000, 100000002)]
         public int? wasReportMadeToPolice { get; set; }
         public int? overOneYearFromCrime { get; set; }
+
+        [Required]
         public string crimeDetails { get; set; }
+
+        [Required]
         public string crimeInjuries { get; set; }
         public string crimeLocation { get; set; }
         public string noPoliceReportIdentification { get; set; }
         public bool moreThanOneOffender { get; set; }
+
+        // NotReported=100000000, Reported=100000001; [Required] not applicable on non-nullable int
+        [Range(100000000, 100000001)]
         public int haveYouSuedOffender { get; set; }
+
+        [Required]
+        [Range(100000000, 100000002)]
         public int? offenderBeenCharged { get; set; }
         public int? intendToSueOffender { get; set; }
         public string offenderFirstName { get; set; }
@@ -99,6 +128,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string offenderMiddleName { get; set; }
         public string offenderRelationship { get; set; }
         public string policeReportedMultipleTimes { get; set; }
+
+        [Required]
         public string typeOfCrime { get; set; }
         public bool unsureOfCrimeDates { get; set; }
         public int? victimDeceasedFromCrime { get; set; }
@@ -122,6 +153,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Crimelocation
     {
+        [Required]
         public string location { get; set; }
     }
 
@@ -146,10 +178,13 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Medicalinformation
     {
+        [Required]
         public string doYouHaveMedicalServicesCoverage { get; set; }
         public string personalHealthNumber { get; set; }
         public string haveMedicalCoverageProvince { get; set; }
         public string haveMedicalCoverageProvinceOther { get; set; }
+
+        [Required]
         public int? doYouHaveOtherHealthCoverage { get; set; }
         public string otherHealthCoverageProviderName { get; set; }
         public string otherHealthCoverageExtendedPlanNumber { get; set; }
@@ -158,14 +193,20 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public bool treatedOutsideBc { get; set; }
         public string treatedOutsideBcHospitalName { get; set; }
         public DateTime? treatedAtHospitalDate { get; set; }
+
+        [Required]
         public string beingTreatedByFamilyDoctor { get; set; }
         public string familyDoctorClinic { get; set; }
         public string familyDoctorFirstName { get; set; }
         public string familyDoctorLastName { get; set; }
+
+        [EmailAddress]
         public string familyDoctorEmail { get; set; }
         public string familyDoctorPhoneNumber { get; set; }
         public string familyDoctorFax { get; set; }
         public Address familyDoctorAddress { get; set; }
+
+        [Required]
         public string hadOtherTreatments { get; set; }
 
         [XmlArrayItem("element")]
@@ -174,11 +215,14 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Othertreatment
     {
+        [Required]
         public string providerType { get; set; }
         public string providerTypeText { get; set; } // Extra text for "Other" provider type
         public string providerCompany { get; set; }
         public string providerFirstName { get; set; }
         public string providerLastName { get; set; }
+
+        [EmailAddress]
         public string providerEmail { get; set; }
         public string providerPhoneNumber { get; set; }
         public string providerFax { get; set; }
@@ -262,6 +306,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string employerName { get; set; }
         public string employerPhoneNumber { get; set; }
         public string employerFax { get; set; }
+
+        [EmailAddress]
         public string employerEmail { get; set; }
         public string employerFirstName { get; set; }
         public string employerLastName { get; set; }
@@ -270,6 +316,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Representativeinformation
     {
+        [Required]
         public int? completingOnBehalfOf { get; set; }
         public string representativeFirstName { get; set; }
         public string representativeMiddleName { get; set; }
@@ -277,6 +324,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int? representativePreferredMethodOfContact { get; set; }
         public string representativePhoneNumber { get; set; }
         public string representativeAlternatePhoneNumber { get; set; }
+
+        [EmailAddress]
         public string representativeEmail { get; set; }
         public Address representativeAddress { get; set; }
 
@@ -288,15 +337,25 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
 
     public class Declarationinformation
     {
+        [Required]
         public string declaredAndSigned { get; set; }
+
+        [Required]
         public string signature { get; set; }
     }
 
     public class Authorizationinformation
     {
+        [Required]
         public string approvedAuthorityNotification { get; set; }
+
+        [Required]
         public string readAndUnderstoodTermsAndConditions { get; set; }
+
+        [Required]
         public string signName { get; set; }
+
+        [Required]
         public string signature { get; set; }
         public int? allowCvapStaffSharing { get; set; }
 
@@ -312,6 +371,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string authorizedPersonFirstName { get; set; }
         public string authorizedPersonLastName { get; set; }
         public string authorizedPersonPhoneNumber { get; set; }
+
+        [EmailAddress]
         public string authorizedPersonEmail { get; set; }
         public string authorizedPersonRelationship { get; set; }
         public string authorizedPersonRelationshipOther { get; set; }
@@ -341,6 +402,8 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public string occupation { get; set; }
         public string phoneNumber { get; set; }
         public string alternatePhoneNumber { get; set; }
+
+        [EmailAddress]
         public string email { get; set; }
         public Address primaryAddress { get; set; }
     }

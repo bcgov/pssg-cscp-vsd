@@ -13,15 +13,14 @@ export interface Personalinformation {
   alternateAddress?: Address;
   /** @nullable */
   alternatePhoneNumber?: string;
-  /** @nullable */
-  birthDate?: string;
+  birthDate: string;
   /** @nullable */
   dateOfNameChange?: string;
   doNotLiveAtAddress?: boolean;
   /** @nullable */
   email?: string;
-  /** @nullable */
-  firstName?: string;
+  /** @minLength 1 */
+  firstName: string;
   /** @nullable */
   fullName?: string;
   /** @nullable */
@@ -30,14 +29,17 @@ export interface Personalinformation {
   iHaveOtherNames?: string;
   /** @nullable */
   indigenousStatus?: number;
-  /** @nullable */
-  lastName?: string;
+  /** @minLength 1 */
+  lastName: string;
   /** @nullable */
   leaveVoicemail?: number;
   /** @nullable */
   mailRecipient?: string;
-  /** @nullable */
-  maritalStatus?: number;
+  /**
+   * @minimum 100000000
+   * @maximum 100000006
+   */
+  maritalStatus: number;
   /** @nullable */
   middleName?: string;
   /** @nullable */
@@ -55,6 +57,10 @@ export interface Personalinformation {
   permissionToContactViaMethod?: boolean;
   /** @nullable */
   phoneNumber?: string;
+  /**
+   * @minimum 1
+   * @maximum 100000002
+   */
   preferredMethodOfContact?: number;
   primaryAddress?: Address;
   /** @nullable */
