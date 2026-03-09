@@ -181,14 +181,16 @@
                                   <input type="checkbox" [value]="true" formControlName="missedSession">
                               </app-field>
                             </div>
-                            <div class="col-3">                              
+                            @if (item.get('counsellingType').value === '100000002') {
+                              <div class="col-3">                              
                                 <app-form-field
                                   label="Support Person attending Session"
                                   [control]="item.get('attendingSupportPerson')"
                                   type="text"
                                   maxlength="100"
                                 ></app-form-field>
-                            </div>
+                              </div>
+                            }
                             <ng-template #sessionDateInfo>
                               <h3>Line Item: Hours</h3>
                               <p>Every 0.25 increment in the drop down equals 15 minutes</p>

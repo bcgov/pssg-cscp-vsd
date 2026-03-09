@@ -255,16 +255,15 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
       attendingSupportPerson: ['']
     });
 
-    lineItemGroup.get('attendingSupportPerson').disable();
-
     lineItemGroup.get('counsellingType').valueChanges.subscribe((counsellingType) => {
       const attendingSupportPersonControl = lineItemGroup.get('attendingSupportPerson');
       if (counsellingType === '100000002') {
-        attendingSupportPersonControl.enable();
+        attendingSupportPersonControl.setValidators([Validators.required]);
       } else {
-        attendingSupportPersonControl.disable();
+        attendingSupportPersonControl.clearValidators();
         attendingSupportPersonControl.setValue('');
       }
+      attendingSupportPersonControl.updateValueAndValidity();
     });
 
     return lineItemGroup;
