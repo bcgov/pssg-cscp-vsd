@@ -38,8 +38,9 @@ export interface Personalinformation {
   /**
    * @minimum 100000000
    * @maximum 100000006
+   * @nullable
    */
-  maritalStatus: number;
+  maritalStatus?: number;
   /** @nullable */
   middleName?: string;
   /** @nullable */
