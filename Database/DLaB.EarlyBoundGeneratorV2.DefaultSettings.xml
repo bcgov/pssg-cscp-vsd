@@ -37,6 +37,9 @@ systemuser|
 task|
 team|
 transactioncurrency|
+vsd_application|
+vsd_applicationcourtinformation|
+vsd_applicationpolicenumber|
 vsd_caspaymenttype|
 vsd_city|
 vsd_config|
@@ -48,6 +51,7 @@ vsd_entitlement|
 vsd_incomesupportparameter|
 vsd_invoice|
 vsd_invoicelinedetail|
+vsd_participant|
 vsd_payment|
 vsd_paymentschedule|
 vsd_policedetachment|
@@ -55,7 +59,8 @@ vsd_program|
 vsd_programtype|
 vsd_province|
 vsd_relationship|
-vsd_scheduleg</EntitiesWhitelist>
+vsd_scheduleg|
+vsd_victimservicedraft</EntitiesWhitelist>
     <EntityAttributeSpecifiedNames />
     <EntityClassNameOverrides />
     <EntityPrefixesToSkip />

@@ -13,10 +13,10 @@ namespace Database.Model
 	
 	
 	/// <summary>
-	/// Status of the City
+	/// Status of the Application Police Number
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum Vsd_City_StateCode
+	public enum Vsd_ApplicationPoliceNumber_StateCode
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -29,10 +29,10 @@ namespace Database.Model
 	}
 	
 	/// <summary>
-	/// Reason for the status of the City
+	/// Reason for the status of the Application Police Number
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum Vsd_City_StatusCode
+	public enum Vsd_ApplicationPoliceNumber_StatusCode
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -45,15 +45,15 @@ namespace Database.Model
 	}
 	
 	/// <summary>
-	/// City Look-up entity for application forms.
+	/// This entity stores snapshots of applications police file numbers submitted through the portal.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("vsd_city")]
-	public partial class Vsd_City : Microsoft.Xrm.Sdk.Entity
+	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("vsd_applicationpolicenumber")]
+	public partial class Vsd_ApplicationPoliceNumber : Microsoft.Xrm.Sdk.Entity
 	{
 		
 		/// <summary>
-		/// Available fields, a the time of codegen, for the vsd_city entity
+		/// Available fields, a the time of codegen, for the vsd_applicationpolicenumber entity
 		/// </summary>
 		public partial class Fields
 		{
@@ -65,10 +65,10 @@ namespace Database.Model
 			public const string CreatedOnBehalfByName = "createdonbehalfbyname";
 			public const string CreatedOnBehalfByYomiName = "createdonbehalfbyyominame";
 			public const string ImportSequenceNumber = "importsequencenumber";
-			public const string Lk_Vsd_City_CreatedBy = "lk_vsd_city_createdby";
-			public const string Lk_Vsd_City_CreatedOnBehalfBy = "lk_vsd_city_createdonbehalfby";
-			public const string Lk_Vsd_City_ModifiedBy = "lk_vsd_city_modifiedby";
-			public const string Lk_Vsd_City_ModifiedOnBehalfBy = "lk_vsd_city_modifiedonbehalfby";
+			public const string Lk_Vsd_ApplicationPoliceNumber_CreatedBy = "lk_vsd_applicationpolicenumber_createdby";
+			public const string Lk_Vsd_ApplicationPoliceNumber_CreatedOnBehalfBy = "lk_vsd_applicationpolicenumber_createdonbehalfby";
+			public const string Lk_Vsd_ApplicationPoliceNumber_ModifiedBy = "lk_vsd_applicationpolicenumber_modifiedby";
+			public const string Lk_Vsd_ApplicationPoliceNumber_ModifiedOnBehalfBy = "lk_vsd_applicationpolicenumber_modifiedonbehalfby";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedByName = "modifiedbyname";
 			public const string ModifiedByYomiName = "modifiedbyyominame";
@@ -76,44 +76,48 @@ namespace Database.Model
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string ModifiedOnBehalfByName = "modifiedonbehalfbyname";
 			public const string ModifiedOnBehalfByYomiName = "modifiedonbehalfbyyominame";
-			public const string OrganizationId = "organizationid";
-			public const string OrganizationIdName = "organizationidname";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
+			public const string OwnerId = "ownerid";
+			public const string OwnerIdName = "owneridname";
+			public const string OwnerIdYomiName = "owneridyominame";
+			public const string OwningBusinessUnit = "owningbusinessunit";
+			public const string OwningTeam = "owningteam";
+			public const string OwningUser = "owninguser";
 			public const string StateCode = "statecode";
 			public const string StateCodename = "statecodename";
 			public const string StatusCode = "statuscode";
 			public const string StatusCodename = "statuscodename";
+			public const string Team_Vsd_ApplicationPoliceNumber = "team_vsd_applicationpolicenumber";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
+			public const string User_Vsd_ApplicationPoliceNumber = "user_vsd_applicationpolicenumber";
 			public const string UtcConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
-			public const string Vsd_CityId = "vsd_cityid";
-			public const string Id = "vsd_cityid";
-			public const string Vsd_CountryId = "vsd_countryid";
-			public const string Vsd_CountryIdName = "vsd_countryidname";
-			public const string Vsd_Name = "vsd_name";
-			public const string Vsd_StateId = "vsd_stateid";
-			public const string Vsd_StateIdName = "vsd_stateidname";
-			public const string Vsd_Vsd_Application_Vsd_City = "vsd_vsd_application_vsd_city";
-			public const string Vsd_Vsd_City_Vsd_Court_CourtLocation = "Vsd_Vsd_City_Vsd_Court_CourtLocation";
-			public const string Vsd_Vsd_City_Vsd_PoliceDetachment = "Vsd_Vsd_City_Vsd_PoliceDetachment";
-			public const string Vsd_Vsd_Country_Vsd_City = "vsd_vsd_country_vsd_city";
-			public const string Vsd_Vsd_Province_Vsd_City = "vsd_vsd_province_vsd_city";
+			public const string Vsd_ApplicationId = "vsd_applicationid";
+			public const string Vsd_ApplicationIdName = "vsd_applicationidname";
+			public const string Vsd_ApplicationPoliceNumberId = "vsd_applicationpolicenumberid";
+			public const string Id = "vsd_applicationpolicenumberid";
+			public const string Vsd_InvestigatingPoliceOfficerName = "vsd_investigatingpoliceofficername";
+			public const string Vsd_PoliceDetachment = "vsd_policedetachment";
+			public const string Vsd_PoliceFileNumber = "vsd_policefilenumber";
+			public const string Vsd_PoliceReportingEndDate = "vsd_policereportingenddate";
+			public const string Vsd_PoliceReportingStartDate = "vsd_policereportingstartdate";
+			public const string Vsd_Vsd_Application_Vsd_PoliceNumber = "vsd_vsd_application_vsd_policenumber";
 		}
 		
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_City(System.Guid id) : 
+		public Vsd_ApplicationPoliceNumber(System.Guid id) : 
 				base(EntityLogicalName, id)
 		{
 		}
 		
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_City(string keyName, object keyValue) : 
+		public Vsd_ApplicationPoliceNumber(string keyName, object keyValue) : 
 				base(EntityLogicalName, keyName, keyValue)
 		{
 		}
 		
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_City(Microsoft.Xrm.Sdk.KeyAttributeCollection keyAttributes) : 
+		public Vsd_ApplicationPoliceNumber(Microsoft.Xrm.Sdk.KeyAttributeCollection keyAttributes) : 
 				base(EntityLogicalName, keyAttributes)
 		{
 		}
@@ -122,22 +126,22 @@ namespace Database.Model
 		/// Default Constructor.
 		/// </summary>
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_City() : 
+		public Vsd_ApplicationPoliceNumber() : 
 				base(EntityLogicalName)
 		{
 		}
 		
-		public const string PrimaryIdAttribute = "vsd_cityid";
+		public const string PrimaryIdAttribute = "vsd_applicationpolicenumberid";
 		
-		public const string PrimaryNameAttribute = "vsd_name";
+		public const string PrimaryNameAttribute = "vsd_policefilenumber";
 		
-		public const string EntitySchemaName = "vsd_city";
+		public const string EntitySchemaName = "vsd_applicationpolicenumber";
 		
-		public const string EntityLogicalName = "vsd_city";
+		public const string EntityLogicalName = "vsd_applicationpolicenumber";
 		
-		public const string EntityLogicalCollectionName = "vsd_cities";
+		public const string EntityLogicalCollectionName = "vsd_applicationpolicenumbers";
 		
-		public const string EntitySetName = "vsd_cities";
+		public const string EntitySetName = "vsd_applicationpolicenumbers";
 		
 		/// <summary>
 		/// Unique identifier of the user who created the record.
@@ -382,36 +386,6 @@ namespace Database.Model
 		}
 		
 		/// <summary>
-		/// Unique identifier for the organization
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("organizationid")]
-		public Microsoft.Xrm.Sdk.EntityReference OrganizationId
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("organizationid");
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("organizationidname")]
-		public string OrganizationIdName
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				if (this.FormattedValues.Contains("organizationid"))
-				{
-					return this.FormattedValues["organizationid"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
-		}
-		
-		/// <summary>
 		/// Date and time that the record was migrated.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("overriddencreatedon")]
@@ -430,15 +404,112 @@ namespace Database.Model
 		}
 		
 		/// <summary>
-		/// Status of the City
+		/// Owner Id
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecode")]
-		public virtual Vsd_City_StateCode? StateCode
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownerid")]
+		public Microsoft.Xrm.Sdk.EntityReference OwnerId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return ((Vsd_City_StateCode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ownerid");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ownerid", value);
+			}
+		}
+		
+		/// <summary>
+		/// Name of the owner
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridname")]
+		public string OwnerIdName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ownerid"))
+				{
+					return this.FormattedValues["ownerid"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Yomi name of the owner
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridyominame")]
+		public string OwnerIdYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ownerid"))
+				{
+					return this.FormattedValues["ownerid"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for the business unit that owns the record
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunit")]
+		public Microsoft.Xrm.Sdk.EntityReference OwningBusinessUnit
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningbusinessunit");
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for the team that owns the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningteam")]
+		public Microsoft.Xrm.Sdk.EntityReference OwningTeam
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningteam");
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for the user that owns the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
+		public Microsoft.Xrm.Sdk.EntityReference OwningUser
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owninguser");
+			}
+		}
+		
+		/// <summary>
+		/// Status of the Application Police Number
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecode")]
+		public virtual Vsd_ApplicationPoliceNumber_StateCode? StateCode
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((Vsd_ApplicationPoliceNumber_StateCode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
@@ -465,15 +536,15 @@ namespace Database.Model
 		}
 		
 		/// <summary>
-		/// Reason for the status of the City
+		/// Reason for the status of the Application Police Number
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscode")]
-		public virtual Vsd_City_StatusCode? StatusCode
+		public virtual Vsd_ApplicationPoliceNumber_StatusCode? StatusCode
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return ((Vsd_City_StatusCode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
+				return ((Vsd_ApplicationPoliceNumber_StatusCode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
@@ -549,20 +620,55 @@ namespace Database.Model
 		}
 		
 		/// <summary>
-		/// Unique identifier for entity instances
+		/// The lookup to the application.
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cityid")]
-		public System.Nullable<System.Guid> Vsd_CityId
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_applicationid")]
+		public Microsoft.Xrm.Sdk.EntityReference Vsd_ApplicationId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<System.Guid>>("vsd_cityid");
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("vsd_applicationid");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("vsd_cityid", value);
+				this.SetAttributeValue("vsd_applicationid", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_applicationidname")]
+		public string Vsd_ApplicationIdName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("vsd_applicationid"))
+				{
+					return this.FormattedValues["vsd_applicationid"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for entity instances
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_applicationpolicenumberid")]
+		public System.Nullable<System.Guid> Vsd_ApplicationPoliceNumberId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.Guid>>("vsd_applicationpolicenumberid");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("vsd_applicationpolicenumberid", value);
 				if (value.HasValue)
 				{
 					base.Id = value.Value;
@@ -574,7 +680,7 @@ namespace Database.Model
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_cityid")]
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_applicationpolicenumberid")]
 		public override System.Guid Id
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -585,253 +691,210 @@ namespace Database.Model
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.Vsd_CityId = value;
+				this.Vsd_ApplicationPoliceNumberId = value;
 			}
 		}
 		
 		/// <summary>
-		/// Country Look-up entity for this City.
+		/// Provide the investigating police officer name,
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_countryid")]
-		public Microsoft.Xrm.Sdk.EntityReference Vsd_CountryId
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_investigatingpoliceofficername")]
+		public string Vsd_InvestigatingPoliceOfficerName
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("vsd_countryid");
+				return this.GetAttributeValue<string>("vsd_investigatingpoliceofficername");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("vsd_countryid", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_countryidname")]
-		public string Vsd_CountryIdName
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				if (this.FormattedValues.Contains("vsd_countryid"))
-				{
-					return this.FormattedValues["vsd_countryid"];
-				}
-				else
-				{
-					return default(string);
-				}
+				this.SetAttributeValue("vsd_investigatingpoliceofficername", value);
 			}
 		}
 		
 		/// <summary>
-		/// The name of the city.
+		/// To which police force was the report made?
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_name")]
-		public string Vsd_Name
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_policedetachment")]
+		public string Vsd_PoliceDetachment
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<string>("vsd_name");
+				return this.GetAttributeValue<string>("vsd_policedetachment");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("vsd_name", value);
+				this.SetAttributeValue("vsd_policedetachment", value);
 			}
 		}
 		
 		/// <summary>
-		/// Province/State Look-up entity for this City.
+		/// The police file number of the application.
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_stateid")]
-		public Microsoft.Xrm.Sdk.EntityReference Vsd_StateId
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_policefilenumber")]
+		public string Vsd_PoliceFileNumber
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("vsd_stateid");
+				return this.GetAttributeValue<string>("vsd_policefilenumber");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("vsd_stateid", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_stateidname")]
-		public string Vsd_StateIdName
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				if (this.FormattedValues.Contains("vsd_stateid"))
-				{
-					return this.FormattedValues["vsd_stateid"];
-				}
-				else
-				{
-					return default(string);
-				}
+				this.SetAttributeValue("vsd_policefilenumber", value);
 			}
 		}
 		
 		/// <summary>
-		/// 1:N vsd_vsd_city_vsd_court_CourtLocation
+		/// Date report was made to the police
 		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_city_vsd_court_CourtLocation")]
-		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Court> Vsd_Vsd_City_Vsd_Court_CourtLocation
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_policereportingenddate")]
+		public System.Nullable<System.DateTime> Vsd_PoliceReportingEndDate
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntities<Database.Model.Vsd_Court>("vsd_vsd_city_vsd_court_CourtLocation", null);
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("vsd_policereportingenddate");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntities<Database.Model.Vsd_Court>("vsd_vsd_city_vsd_court_CourtLocation", null, value);
+				this.SetAttributeValue("vsd_policereportingenddate", value);
 			}
 		}
 		
 		/// <summary>
-		/// 1:N vsd_vsd_city_vsd_policedetachment
+		/// Date report was made to the police
 		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_city_vsd_policedetachment")]
-		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_PoliceDetachment> Vsd_Vsd_City_Vsd_PoliceDetachment
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_policereportingstartdate")]
+		public System.Nullable<System.DateTime> Vsd_PoliceReportingStartDate
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntities<Database.Model.Vsd_PoliceDetachment>("vsd_vsd_city_vsd_policedetachment", null);
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("vsd_policereportingstartdate");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntities<Database.Model.Vsd_PoliceDetachment>("vsd_vsd_city_vsd_policedetachment", null, value);
+				this.SetAttributeValue("vsd_policereportingstartdate", value);
 			}
 		}
 		
 		/// <summary>
-		/// N:N vsd_vsd_application_vsd_city
-		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_application_vsd_city")]
-		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Application> Vsd_Vsd_Application_Vsd_City
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetRelatedEntities<Database.Model.Vsd_Application>("vsd_vsd_application_vsd_city", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetRelatedEntities<Database.Model.Vsd_Application>("vsd_vsd_application_vsd_city", null, value);
-			}
-		}
-		
-		/// <summary>
-		/// N:1 lk_vsd_city_createdby
+		/// N:1 lk_vsd_applicationpolicenumber_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_city_createdby")]
-		public Database.Model.SystemUser Lk_Vsd_City_CreatedBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_applicationpolicenumber_createdby")]
+		public Database.Model.SystemUser Lk_Vsd_ApplicationPoliceNumber_CreatedBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_city_createdby", null);
+				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_applicationpolicenumber_createdby", null);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_vsd_city_createdonbehalfby
+		/// N:1 lk_vsd_applicationpolicenumber_createdonbehalfby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_city_createdonbehalfby")]
-		public Database.Model.SystemUser Lk_Vsd_City_CreatedOnBehalfBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_applicationpolicenumber_createdonbehalfby")]
+		public Database.Model.SystemUser Lk_Vsd_ApplicationPoliceNumber_CreatedOnBehalfBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_city_createdonbehalfby", null);
+				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_applicationpolicenumber_createdonbehalfby", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntity<Database.Model.SystemUser>("lk_vsd_city_createdonbehalfby", null, value);
+				this.SetRelatedEntity<Database.Model.SystemUser>("lk_vsd_applicationpolicenumber_createdonbehalfby", null, value);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_vsd_city_modifiedby
+		/// N:1 lk_vsd_applicationpolicenumber_modifiedby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_city_modifiedby")]
-		public Database.Model.SystemUser Lk_Vsd_City_ModifiedBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_applicationpolicenumber_modifiedby")]
+		public Database.Model.SystemUser Lk_Vsd_ApplicationPoliceNumber_ModifiedBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_city_modifiedby", null);
+				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_applicationpolicenumber_modifiedby", null);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_vsd_city_modifiedonbehalfby
+		/// N:1 lk_vsd_applicationpolicenumber_modifiedonbehalfby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_city_modifiedonbehalfby")]
-		public Database.Model.SystemUser Lk_Vsd_City_ModifiedOnBehalfBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_vsd_applicationpolicenumber_modifiedonbehalfby")]
+		public Database.Model.SystemUser Lk_Vsd_ApplicationPoliceNumber_ModifiedOnBehalfBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_city_modifiedonbehalfby", null);
+				return this.GetRelatedEntity<Database.Model.SystemUser>("lk_vsd_applicationpolicenumber_modifiedonbehalfby", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntity<Database.Model.SystemUser>("lk_vsd_city_modifiedonbehalfby", null, value);
+				this.SetRelatedEntity<Database.Model.SystemUser>("lk_vsd_applicationpolicenumber_modifiedonbehalfby", null, value);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 vsd_vsd_country_vsd_city
+		/// N:1 team_vsd_applicationpolicenumber
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_countryid")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_country_vsd_city")]
-		public Database.Model.Vsd_Country Vsd_Vsd_Country_Vsd_City
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningteam")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("team_vsd_applicationpolicenumber")]
+		public Database.Model.Team Team_Vsd_ApplicationPoliceNumber
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.Vsd_Country>("vsd_vsd_country_vsd_city", null);
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetRelatedEntity<Database.Model.Vsd_Country>("vsd_vsd_country_vsd_city", null, value);
+				return this.GetRelatedEntity<Database.Model.Team>("team_vsd_applicationpolicenumber", null);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 vsd_vsd_province_vsd_city
+		/// N:1 user_vsd_applicationpolicenumber
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_stateid")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_province_vsd_city")]
-		public Database.Model.Vsd_Province Vsd_Vsd_Province_Vsd_City
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_vsd_applicationpolicenumber")]
+		public Database.Model.SystemUser User_Vsd_ApplicationPoliceNumber
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<Database.Model.Vsd_Province>("vsd_vsd_province_vsd_city", null);
+				return this.GetRelatedEntity<Database.Model.SystemUser>("user_vsd_applicationpolicenumber", null);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 vsd_vsd_application_vsd_policenumber
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_applicationid")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_application_vsd_policenumber")]
+		public Database.Model.Vsd_Application Vsd_Vsd_Application_Vsd_PoliceNumber
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<Database.Model.Vsd_Application>("vsd_vsd_application_vsd_policenumber", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntity<Database.Model.Vsd_Province>("vsd_vsd_province_vsd_city", null, value);
+				this.SetRelatedEntity<Database.Model.Vsd_Application>("vsd_vsd_application_vsd_policenumber", null, value);
 			}
 		}
 		
@@ -840,7 +903,7 @@ namespace Database.Model
 		/// <param name="anonymousType">LINQ anonymous type.</param>
 		/// </summary>
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public Vsd_City(object anonymousType) : 
+		public Vsd_ApplicationPoliceNumber(object anonymousType) : 
 				this()
 		{
             foreach (var p in anonymousType.GetType().GetProperties())
@@ -858,9 +921,9 @@ namespace Database.Model
                 {
                     case "id":
                         base.Id = (System.Guid)value;
-                        Attributes["vsd_cityid"] = base.Id;
+                        Attributes["vsd_applicationpolicenumberid"] = base.Id;
                         break;
-                    case "vsd_cityid":
+                    case "vsd_applicationpolicenumberid":
                         var id = (System.Nullable<System.Guid>) value;
                         if(id == null){ continue; }
                         base.Id = id.Value;

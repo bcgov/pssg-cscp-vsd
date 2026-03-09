@@ -133,6 +133,9 @@
     "task",
     "team",
     "transactioncurrency",
+    "vsd_application",
+    "vsd_applicationcourtinformation",
+    "vsd_applicationpolicenumber",
     "vsd_caspaymenttype",
     "vsd_city",
     "vsd_config",
@@ -144,6 +147,7 @@
     "vsd_incomesupportparameter",
     "vsd_invoice",
     "vsd_invoicelinedetail",
+    "vsd_participant",
     "vsd_payment",
     "vsd_paymentschedule",
     "vsd_policedetachment",
@@ -151,7 +155,8 @@
     "vsd_programtype",
     "vsd_province",
     "vsd_relationship",
-    "vsd_scheduleg"
+    "vsd_scheduleg",
+    "vsd_victimservicedraft"
   ],
   "entityTypesFolder": "Entities",
   "generateActions": true,

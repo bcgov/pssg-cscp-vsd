@@ -1340,6 +1340,7 @@ namespace Database.Model
 			public const string Vsd_CloneContact = "vsd_clonecontact";
 			public const string Vsd_CloneContactName = "vsd_clonecontactname";
 			public const string Vsd_ConcatenatedGlobalSearchLine2 = "vsd_concatenatedglobalsearchline2";
+			public const string Vsd_Contact_Vsd_Application_Applicant = "Vsd_Contact_Vsd_Application_Applicant";
 			public const string Vsd_Contact_Vsd_Contract_ContactLookup1 = "Vsd_Contact_Vsd_Contract_ContactLookup1";
 			public const string Vsd_Contact_Vsd_Contract_ContactLookup2 = "Vsd_Contact_Vsd_Contract_ContactLookup2";
 			public const string Vsd_Contact_Vsd_Contract_Customer = "Vsd_Contact_Vsd_Contract_Customer";
@@ -1347,6 +1348,7 @@ namespace Database.Model
 			public const string Vsd_Contact_Vsd_Invoice = "Vsd_Contact_Vsd_Invoice";
 			public const string Vsd_Contact_Vsd_Invoice_Customer = "Vsd_Contact_Vsd_Invoice_Customer";
 			public const string Vsd_Contact_Vsd_Invoice_Payee = "Vsd_Contact_Vsd_Invoice_Payee";
+			public const string Vsd_Contact_Vsd_Participant = "Vsd_Contact_Vsd_Participant";
 			public const string Vsd_Contact_Vsd_Payment_Payee = "Vsd_Contact_Vsd_Payment_Payee";
 			public const string Vsd_Contact_Vsd_PaymentSchedule_Payee = "Vsd_Contact_Vsd_PaymentSchedule_Payee";
 			public const string Vsd_Contact_Vsd_Program = "vsd_contact_vsd_program";
@@ -1354,6 +1356,7 @@ namespace Database.Model
 			public const string Vsd_Contact_Vsd_Program_ContactLookup2 = "Vsd_Contact_Vsd_Program_ContactLookup2";
 			public const string Vsd_Contact_Vsd_Program_ContactLookup3 = "Vsd_Contact_Vsd_Program_ContactLookup3";
 			public const string Vsd_Contact_Vsd_ScheduleG_Contact = "Vsd_Contact_Vsd_ScheduleG_Contact";
+			public const string Vsd_Contact_Vsd_VictimServiceDraft_Submitter = "Vsd_Contact_Vsd_VictimServiceDraft_Submitter";
 			public const string Vsd_ContactRole = "vsd_contactrole";
 			public const string Vsd_ContactRoleName = "vsd_contactrolename";
 			public const string Vsd_CounsellingStatusReason = "vsd_counsellingstatusreason";
@@ -1551,6 +1554,7 @@ namespace Database.Model
 			public const string Vsd_TransitNo = "vsd_transitno";
 			public const string Vsd_TTyTranslationRequirements = "vsd_ttytranslationrequirements";
 			public const string Vsd_TTyTranslationRequirementsName = "vsd_ttytranslationrequirementsname";
+			public const string Vsd_Victim_Vsd_Application = "Vsd_Victim_Vsd_Application";
 			public const string Vsd_VistaContactId = "vsd_vistacontactid";
 			public const string Vsd_VIstAcSNumber = "vsd_vistacsnumber";
 			public const string Vsd_VistaOffenderId = "vsd_vistaoffenderid";
@@ -9904,6 +9908,24 @@ namespace Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N vsd_contact_vsd_application_Applicant
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_contact_vsd_application_Applicant")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Application> Vsd_Contact_Vsd_Application_Applicant
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_Application>("vsd_contact_vsd_application_Applicant", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_Application>("vsd_contact_vsd_application_Applicant", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N vsd_contact_vsd_contract_ContactLookup1
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_contact_vsd_contract_ContactLookup1")]
@@ -10030,6 +10052,24 @@ namespace Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N vsd_contact_vsd_participant
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_contact_vsd_participant")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Participant> Vsd_Contact_Vsd_Participant
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_Participant>("vsd_contact_vsd_participant", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_Participant>("vsd_contact_vsd_participant", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N vsd_contact_vsd_payment_Payee
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_contact_vsd_payment_Payee")]
@@ -10138,6 +10178,24 @@ namespace Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N vsd_contact_vsd_victimservicedraft_Submitter
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_contact_vsd_victimservicedraft_Submitter")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_VictimServiceDraft> Vsd_Contact_Vsd_VictimServiceDraft_Submitter
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_VictimServiceDraft>("vsd_contact_vsd_victimservicedraft_Submitter", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_VictimServiceDraft>("vsd_contact_vsd_victimservicedraft_Submitter", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N vsd_executivecontact_account
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_executivecontact_account")]
@@ -10152,6 +10210,24 @@ namespace Database.Model
 			set
 			{
 				this.SetRelatedEntities<Database.Model.Account>("vsd_executivecontact_account", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N vsd_victim_vsd_application
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_victim_vsd_application")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Application> Vsd_Victim_Vsd_Application
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_Application>("vsd_victim_vsd_application", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_Application>("vsd_victim_vsd_application", null, value);
 			}
 		}
 		

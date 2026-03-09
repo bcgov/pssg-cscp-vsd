@@ -96,6 +96,39 @@ namespace Database.Model
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_Application"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Database.Model.Vsd_Application> Vsd_ApplicationSet
+		{
+			get
+			{
+				return this.CreateQuery<Database.Model.Vsd_Application>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_ApplicationCourtInformation"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Database.Model.Vsd_ApplicationCourtInformation> Vsd_ApplicationCourtInformationSet
+		{
+			get
+			{
+				return this.CreateQuery<Database.Model.Vsd_ApplicationCourtInformation>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_ApplicationPoliceNumber"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Database.Model.Vsd_ApplicationPoliceNumber> Vsd_ApplicationPoliceNumberSet
+		{
+			get
+			{
+				return this.CreateQuery<Database.Model.Vsd_ApplicationPoliceNumber>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_CasPaymentType"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<Database.Model.Vsd_CasPaymentType> Vsd_CasPaymentTypeSet
@@ -217,6 +250,17 @@ namespace Database.Model
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_Participant"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Database.Model.Vsd_Participant> Vsd_ParticipantSet
+		{
+			get
+			{
+				return this.CreateQuery<Database.Model.Vsd_Participant>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_Payment"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<Database.Model.Vsd_Payment> Vsd_PaymentSet
@@ -301,6 +345,17 @@ namespace Database.Model
 			get
 			{
 				return this.CreateQuery<Database.Model.Vsd_ScheduleG>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Database.Model.Vsd_VictimServiceDraft"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Database.Model.Vsd_VictimServiceDraft> Vsd_VictimServiceDraftSet
+		{
+			get
+			{
+				return this.CreateQuery<Database.Model.Vsd_VictimServiceDraft>();
 			}
 		}
 	}

@@ -217,6 +217,7 @@ namespace Database.Model
 			public const string Vsd_Tag3IdName = "vsd_tag3idname";
 			public const string Vsd_TaskTypeId = "vsd_tasktypeid";
 			public const string Vsd_TaskTypeIdName = "vsd_tasktypeidname";
+			public const string Vsd_Vsd_Application_Task_Application = "vsd_vsd_application_task_Application";
 			public const string Vsd_Vsd_Invoice_Task_Invoice = "vsd_vsd_invoice_task_Invoice";
 			public const string Vsd_Vsd_Program_Task = "vsd_vsd_program_task";
 			public const string Vsd_Vsd_ScheduleG_Task = "vsd_vsd_scheduleg_task";
@@ -2306,6 +2307,25 @@ namespace Database.Model
 			set
 			{
 				this.SetRelatedEntity<Database.Model.Vsd_Program>("vsd_program_Tasks", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 vsd_vsd_application_task_Application
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("vsd_application")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_application_task_Application")]
+		public Database.Model.Vsd_Application Vsd_Vsd_Application_Task_Application
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<Database.Model.Vsd_Application>("vsd_vsd_application_task_Application", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<Database.Model.Vsd_Application>("vsd_vsd_application_task_Application", null, value);
 			}
 		}
 		

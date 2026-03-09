@@ -120,6 +120,9 @@ namespace Database.Model
 			public const string Team_Accounts = "Team_Accounts";
 			public const string Team_Contacts = "Team_Contacts";
 			public const string Team_Task = "Team_Task";
+			public const string Team_Vsd_Application = "Team_Vsd_Application";
+			public const string Team_Vsd_ApplicationCourtInformation = "Team_Vsd_ApplicationCourtInformation";
+			public const string Team_Vsd_ApplicationPoliceNumber = "Team_Vsd_ApplicationPoliceNumber";
 			public const string Team_Vsd_Contract = "Team_Vsd_Contract";
 			public const string Team_Vsd_Entitlement = "Team_Vsd_Entitlement";
 			public const string Team_Vsd_Invoice = "Team_Vsd_Invoice";
@@ -128,6 +131,7 @@ namespace Database.Model
 			public const string Team_Vsd_PaymentSchedule = "Team_Vsd_PaymentSchedule";
 			public const string Team_Vsd_Program = "Team_Vsd_Program";
 			public const string Team_Vsd_ScheduleG = "Team_Vsd_ScheduleG";
+			public const string Team_Vsd_VictimServiceDraft = "Team_Vsd_VictimServiceDraft";
 			public const string TeamId = "teamid";
 			public const string Id = "teamid";
 			public const string TeamMembership_Association = "teammembership_association";
@@ -1062,6 +1066,60 @@ namespace Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N team_vsd_application
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("team_vsd_application")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Application> Team_Vsd_Application
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_Application>("team_vsd_application", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_Application>("team_vsd_application", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N team_vsd_applicationcourtinformation
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("team_vsd_applicationcourtinformation")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_ApplicationCourtInformation> Team_Vsd_ApplicationCourtInformation
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_ApplicationCourtInformation>("team_vsd_applicationcourtinformation", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_ApplicationCourtInformation>("team_vsd_applicationcourtinformation", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N team_vsd_applicationpolicenumber
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("team_vsd_applicationpolicenumber")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_ApplicationPoliceNumber> Team_Vsd_ApplicationPoliceNumber
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_ApplicationPoliceNumber>("team_vsd_applicationpolicenumber", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_ApplicationPoliceNumber>("team_vsd_applicationpolicenumber", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N team_vsd_contract
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("team_vsd_contract")]
@@ -1202,6 +1260,24 @@ namespace Database.Model
 			set
 			{
 				this.SetRelatedEntities<Database.Model.Vsd_ScheduleG>("team_vsd_scheduleg", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N team_vsd_victimservicedraft
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("team_vsd_victimservicedraft")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_VictimServiceDraft> Team_Vsd_VictimServiceDraft
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_VictimServiceDraft>("team_vsd_victimservicedraft", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_VictimServiceDraft>("team_vsd_victimservicedraft", null, value);
 			}
 		}
 		
