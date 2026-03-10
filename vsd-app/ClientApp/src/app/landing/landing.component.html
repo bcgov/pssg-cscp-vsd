@@ -1,0 +1,95 @@
+<div class="landing-wrapper">
+  <div class="landing-header">
+    <h1>Crime Victim Assistance Program</h1>
+    <p class="landing-subtitle">Apply for benefits under the <em>Crime Victim Assistance Act</em></p>
+  </div>
+
+  <div class="landing-intro">
+    <p>
+      The Crime Victim Assistance Program (CVAP) provides benefits to <strong>victims of violent crime</strong>,
+      their <strong>immediate family members</strong>, and certain <strong>witnesses</strong> in accordance with
+      the <em>Crime Victim Assistance Act</em> and its regulations.
+    </p>
+    <p>
+      To begin your application, choose how you would like to proceed. Signing in with your BC Services Card
+      allows your information to be pre-filled and your application to be saved. You may also complete the
+      application without signing in.
+    </p>
+  </div>
+
+  <div class="option-cards">
+
+    <!-- BC Services Card option -->
+    <div class="option-card option-card--primary">
+      <div class="option-card__icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="2" y1="10" x2="22" y2="10"></line>
+        </svg>
+      </div>
+      <div class="option-card__body">
+        <h2>Sign In with BC Services Card</h2>
+        <p>
+          Use your BC Services Card to securely verify your identity. Signing in allows your personal
+          information to be pre-filled, reducing the time needed to complete your application.
+        </p>
+        <ul class="option-card__benefits">
+          <li>Identity verified automatically</li>
+          <li>Personal information pre-filled</li>
+          <li>Faster and more accurate submission</li>
+        </ul>
+      </div>
+      <div class="option-card__action">
+        <button class="btn btn-primary btn-lg" (click)="signInWithBcServicesCard()">
+          Sign In with BC Services Card
+        </button>
+        <p class="option-card__note">
+          Don't have a BC Services Card?
+          <a href="https://id.gov.bc.ca/account/" target="_blank" rel="noopener noreferrer">Learn how to get one</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Anonymous option -->
+    <div class="option-card option-card--secondary">
+      <div class="option-card__icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+      <div class="option-card__body">
+        <h2>Continue Without Signing In</h2>
+        <p>
+          You can complete and submit your application without a BC Services Card. You will need to enter
+          all your personal information manually.
+        </p>
+        <ul class="option-card__benefits">
+          <li>No account required</li>
+          <li>Application submitted anonymously</li>
+          <li>All information entered manually</li>
+        </ul>
+      </div>
+      <div class="option-card__action">
+        <button class="btn btn-secondary btn-lg" (click)="continueAnonymously()">
+          Continue Without Signing In
+        </button>
+        <p class="option-card__note">
+          Your privacy is protected.
+          <a href="https://www2.gov.bc.ca/gov/content/home/privacy" target="_blank" rel="noopener noreferrer">Read our privacy policy</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="landing-footer-note">
+    <p>
+      <strong>Need help?</strong> A local victim service program can assist you in completing this application.
+      To locate a program near you, call VictimLink BC toll free at
+      <strong class="phone-number">1-800-563-0808</strong>.
+    </p>
+  </div>
+</div>
