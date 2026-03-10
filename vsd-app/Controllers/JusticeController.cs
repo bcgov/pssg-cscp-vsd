@@ -118,9 +118,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 }
                 else
                 {
-                    _logger.Warning(
-                        "Vendor and counsellor validation failed."
-                    );
+                    _logger.Warning("Vendor and counsellor validation failed.");
                     return Ok(new { success = false, counsellorLevel = 0 });
                 }
             }
