@@ -1,0 +1,152 @@
+@use 'sass:color';
+
+$bc-blue: #003366;
+$bc-gold: #fcba19;
+$bc-text: #494949;
+$bc-bg: #f1f1f1;
+$bc-white: #ffffff;
+$bc-border: #d6d6d6;
+$bc-error: #d8292f;
+
+.dashboard-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  border-left: 6px solid $bc-gold;
+  padding-left: 16px;
+
+  h1 {
+    color: $bc-blue;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+
+  .dashboard-subtitle {
+    color: $bc-text;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+}
+
+// ─── Buttons ────────────────────────────────────────────────────────────────
+.btn {
+  display: inline-block;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  border: 1px solid transparent;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+.btn-xs {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.btn-primary {
+  background: $bc-blue;
+  color: $bc-white;
+
+  &:hover:not(:disabled) {
+    background: color.scale($bc-blue, $lightness: -12%);
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  color: $bc-blue;
+  border-color: $bc-blue;
+
+  &:hover:not(:disabled) {
+    background: rgba($bc-blue, 0.06);
+  }
+}
+
+.btn-danger {
+  background: $bc-error;
+  color: $bc-white;
+
+  &:hover:not(:disabled) {
+    background: color.scale($bc-error, $lightness: -12%);
+  }
+}
+
+// ─── States ─────────────────────────────────────────────────────────────────
+.dashboard-loading,
+.dashboard-empty {
+  padding: 40px 0;
+  text-align: center;
+  color: $bc-text;
+  font-size: 0.95rem;
+
+  a {
+    color: $bc-blue;
+    text-decoration: underline;
+  }
+}
+
+.dashboard-error {
+  background: rgba($bc-error, 0.08);
+  color: $bc-error;
+  border: 1px solid rgba($bc-error, 0.25);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+
+  p {
+    margin: 0 0 10px;
+  }
+}
+
+// ─── Table ──────────────────────────────────────────────────────────────────
+.dashboard-table-container {
+  overflow-x: auto;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 0.9rem;
+    border-bottom: 1px solid $bc-border;
+  }
+
+  th {
+    background: $bc-bg;
+    color: $bc-blue;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  tbody tr:hover {
+    background: rgba($bc-blue, 0.03);
+  }
+
+  .col-actions {
+    width: 100px;
+    text-align: center;
+  }
+}

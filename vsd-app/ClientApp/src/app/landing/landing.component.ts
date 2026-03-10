@@ -14,9 +14,8 @@ export class LandingComponent {
   }
 
   signInWithBcServicesCard(): void {
-    // BC Services Card authentication will be implemented in a future iteration.
-    // Placeholder: navigate to the BC Services Card login URL.
-    console.log('BC Services Card authentication is not yet implemented.');
+    // TODO: Replace with BC Services Card / Keycloak authentication.
+    this.router.navigate(['/login']);
   }
 
   continueAnonymously(): void {

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Gov.Cscp.VictimServices.Public.Models;
 using Gov.Cscp.VictimServices.Public.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous] // TODO: should not be Authorize
     public class LookupController : ControllerBase
     {
         private readonly IConfiguration _configuration;

@@ -36,6 +36,7 @@ export * from './invoiceDetailsDto';
 export * from './invoiceDto';
 export * from './invoiceLineItemDto';
 export * from './lineitem';
+export * from './loginRequest';
 export * from './lookupItemDto';
 export * from './lookupItemDtoLookupResponseDto';
 export * from './medicalinformation';

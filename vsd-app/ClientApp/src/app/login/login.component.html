@@ -1,0 +1,57 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Crime Victim Assistance Program</h1>
+      <p class="login-subtitle">Sign in to continue</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="login-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          class="form-control"
+          [(ngModel)]="username"
+          required
+          autocomplete="username"
+          [disabled]="loading"
+          placeholder="Enter your username"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          class="form-control"
+          [(ngModel)]="password"
+          required
+          autocomplete="current-password"
+          [disabled]="loading"
+          placeholder="Enter your password"
+        />
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-lg btn-block"
+        [disabled]="loading || !loginForm.valid"
+      >
+        <span *ngIf="!loading">Sign In</span>
+        <span *ngIf="loading">Signing in&hellip;</span>
+      </button>
+    </form>
+
+    <p class="login-note">
+      This is a temporary login. Authentication will be handled by Keycloak in a future release.
+    </p>
+  </div>
+</div>

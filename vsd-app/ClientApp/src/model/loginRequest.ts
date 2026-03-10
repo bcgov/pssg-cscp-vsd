@@ -6,8 +6,9 @@
  * OpenAPI spec version: v1
  */
 
-export interface CreateApplicationDraftRequest {
-  draftType: number;
-  /** @nullable */
-  formData?: string;
+export interface LoginRequest {
+  /** @minLength 1 */
+  password: string;
+  /** @minLength 1 */
+  username: string;
 }
