@@ -60,6 +60,8 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<ITeamRepository, TeamRepository>();
 
+        services.AddTransient<IApplicationDraftRepository, ApplicationDraftRepository>();
+
         services.AddTransient<IMessageRequests, MessageRequests>();
         services.AddSingleton<ICasHttpClient, CasHttpClient>();
 
@@ -93,6 +95,7 @@ public static class ServiceCollectionExtensions
             typeof(ConfigurationMapper),
             typeof(CasPaymentMapper),
             typeof(CvapStobMapper),
+            typeof(ApplicationDraftMapper),
         };
         services.AddAutoMapper(cfg => cfg.ShouldUseConstructor = constructor => constructor.IsPublic, mapperTypes);
         return services;
