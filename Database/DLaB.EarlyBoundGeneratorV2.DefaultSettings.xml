@@ -37,21 +37,30 @@ systemuser|
 task|
 team|
 transactioncurrency|
+vsd_application|
+vsd_applicationcourtinformation|
+vsd_applicationpolicenumber|
 vsd_caspaymenttype|
+vsd_city|
 vsd_config|
 vsd_contract|
 vsd_country|
+vsd_court|
 vsd_cvapstob|
 vsd_entitlement|
 vsd_incomesupportparameter|
 vsd_invoice|
 vsd_invoicelinedetail|
+vsd_participant|
 vsd_payment|
 vsd_paymentschedule|
+vsd_policedetachment|
 vsd_program|
 vsd_programtype|
 vsd_province|
-vsd_scheduleg</EntitiesWhitelist>
+vsd_relationship|
+vsd_scheduleg|
+vsd_victimservicedraft</EntitiesWhitelist>
     <EntityAttributeSpecifiedNames />
     <EntityClassNameOverrides />
     <EntityPrefixesToSkip />

@@ -15,7 +15,17 @@ import type {
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import type { GetApiLookupCitiesSearchParams } from '../../model';
+import type {
+  CVAPEmailResult,
+  CityLookupDtoLookupResponseDto,
+  CitySearchResponseDto,
+  CountryLookupDtoLookupResponseDto,
+  GetApiLookupCitiesSearchParams,
+  LookupItemDtoLookupResponseDto,
+  PoliceDetachmentLookupDtoLookupResponseDto,
+  ProvinceLookupDtoLookupResponseDto,
+  RelationshipLookupDtoLookupResponseDto
+} from '../../model';
 
 type HttpClientOptions = {
   headers?:
@@ -38,67 +48,67 @@ type HttpClientOptions = {
 @Injectable({ providedIn: 'root' })
 export class LookupService {
   constructor(private http: HttpClient) {}
-  getApiLookupCvapEmails<TData = void>(
+  getApiLookupCvapEmails<TData = CVAPEmailResult>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupCvapEmails<TData = void>(
+  getApiLookupCvapEmails<TData = CVAPEmailResult>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupCvapEmails<TData = void>(
+  getApiLookupCvapEmails<TData = CVAPEmailResult>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupCvapEmails<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupCvapEmails<TData = CVAPEmailResult>(options?: HttpClientOptions): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/cvap-emails`, options);
   }
-  getApiLookupCountries<TData = void>(
+  getApiLookupCountries<TData = CountryLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupCountries<TData = void>(
+  getApiLookupCountries<TData = CountryLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupCountries<TData = void>(
+  getApiLookupCountries<TData = CountryLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupCountries<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupCountries<TData = CountryLookupDtoLookupResponseDto>(options?: HttpClientOptions): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/countries`, options);
   }
-  getApiLookupProvinces<TData = void>(
+  getApiLookupProvinces<TData = ProvinceLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupProvinces<TData = void>(
+  getApiLookupProvinces<TData = ProvinceLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupProvinces<TData = void>(
+  getApiLookupProvinces<TData = ProvinceLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupProvinces<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupProvinces<TData = ProvinceLookupDtoLookupResponseDto>(options?: HttpClientOptions): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/provinces`, options);
   }
-  getApiLookupCities<TData = void>(
+  getApiLookupCities<TData = CityLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupCities<TData = void>(
+  getApiLookupCities<TData = CityLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupCities<TData = void>(
+  getApiLookupCities<TData = CityLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupCities<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupCities<TData = CityLookupDtoLookupResponseDto>(options?: HttpClientOptions): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/cities`, options);
   }
-  getApiLookupCitiesSearch<TData = void>(
+  getApiLookupCitiesSearch<TData = CitySearchResponseDto>(
     params?: GetApiLookupCitiesSearchParams,
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupCitiesSearch<TData = void>(
+  getApiLookupCitiesSearch<TData = CitySearchResponseDto>(
     params?: GetApiLookupCitiesSearchParams,
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupCitiesSearch<TData = void>(
+  getApiLookupCitiesSearch<TData = CitySearchResponseDto>(
     params?: GetApiLookupCitiesSearchParams,
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupCitiesSearch<TData = void>(
+  getApiLookupCitiesSearch<TData = CitySearchResponseDto>(
     params?: GetApiLookupCitiesSearchParams,
     options?: HttpClientOptions
   ): Observable<TData> {
@@ -107,127 +117,142 @@ export class LookupService {
       params: { ...params, ...options?.params }
     });
   }
-  getApiLookupCountryCountryCities<TData = void>(
-    country: string,
+  getApiLookupCountryCountryIdCities<TData = CityLookupDtoLookupResponseDto>(
+    countryId: string,
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupCountryCountryCities<TData = void>(
-    country: string,
+  getApiLookupCountryCountryIdCities<TData = CityLookupDtoLookupResponseDto>(
+    countryId: string,
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupCountryCountryCities<TData = void>(
-    country: string,
+  getApiLookupCountryCountryIdCities<TData = CityLookupDtoLookupResponseDto>(
+    countryId: string,
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupCountryCountryCities<TData = void>(country: string, options?: HttpClientOptions): Observable<TData> {
-    return this.http.get<TData>(`/cvapwebform/api/Lookup/country/${country}/cities`, options);
+  getApiLookupCountryCountryIdCities<TData = CityLookupDtoLookupResponseDto>(
+    countryId: string,
+    options?: HttpClientOptions
+  ): Observable<TData> {
+    return this.http.get<TData>(`/cvapwebform/api/Lookup/country/${countryId}/cities`, options);
   }
-  getApiLookupCountryCountryIdProvinceProvinceIdCities<TData = void>(
+  getApiLookupCountryCountryIdProvinceProvinceIdCities<TData = CityLookupDtoLookupResponseDto>(
     countryId: string,
     provinceId: string,
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupCountryCountryIdProvinceProvinceIdCities<TData = void>(
+  getApiLookupCountryCountryIdProvinceProvinceIdCities<TData = CityLookupDtoLookupResponseDto>(
     countryId: string,
     provinceId: string,
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupCountryCountryIdProvinceProvinceIdCities<TData = void>(
+  getApiLookupCountryCountryIdProvinceProvinceIdCities<TData = CityLookupDtoLookupResponseDto>(
     countryId: string,
     provinceId: string,
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupCountryCountryIdProvinceProvinceIdCities<TData = void>(
+  getApiLookupCountryCountryIdProvinceProvinceIdCities<TData = CityLookupDtoLookupResponseDto>(
     countryId: string,
     provinceId: string,
     options?: HttpClientOptions
   ): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/country/${countryId}/province/${provinceId}/cities`, options);
   }
-  getApiLookupRelationships<TData = void>(
+  getApiLookupRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupRelationships<TData = void>(
+  getApiLookupRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupRelationships<TData = void>(
+  getApiLookupRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupRelationships<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
+    options?: HttpClientOptions
+  ): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/relationships`, options);
   }
-  getApiLookupAuthRelationships<TData = void>(
+  getApiLookupAuthRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupAuthRelationships<TData = void>(
+  getApiLookupAuthRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupAuthRelationships<TData = void>(
+  getApiLookupAuthRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupAuthRelationships<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupAuthRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
+    options?: HttpClientOptions
+  ): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/auth_relationships`, options);
   }
-  getApiLookupRepresentativeRelationships<TData = void>(
+  getApiLookupRepresentativeRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupRepresentativeRelationships<TData = void>(
+  getApiLookupRepresentativeRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupRepresentativeRelationships<TData = void>(
+  getApiLookupRepresentativeRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupRepresentativeRelationships<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupRepresentativeRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
+    options?: HttpClientOptions
+  ): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/representative_relationships`, options);
   }
-  getApiLookupImfRepresentativeRelationships<TData = void>(
+  getApiLookupImfRepresentativeRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupImfRepresentativeRelationships<TData = void>(
+  getApiLookupImfRepresentativeRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupImfRepresentativeRelationships<TData = void>(
+  getApiLookupImfRepresentativeRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupImfRepresentativeRelationships<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupImfRepresentativeRelationships<TData = RelationshipLookupDtoLookupResponseDto>(
+    options?: HttpClientOptions
+  ): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/imf_representative_relationships`, options);
   }
-  getApiLookupPoliceDetachments<TData = void>(
+  getApiLookupPoliceDetachments<TData = PoliceDetachmentLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupPoliceDetachments<TData = void>(
+  getApiLookupPoliceDetachments<TData = PoliceDetachmentLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupPoliceDetachments<TData = void>(
+  getApiLookupPoliceDetachments<TData = PoliceDetachmentLookupDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupPoliceDetachments<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupPoliceDetachments<TData = PoliceDetachmentLookupDtoLookupResponseDto>(
+    options?: HttpClientOptions
+  ): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/police_detachments`, options);
   }
-  getApiLookupCourts<TData = void>(
+  getApiLookupCourts<TData = LookupItemDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiLookupCourts<TData = void>(
+  getApiLookupCourts<TData = LookupItemDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiLookupCourts<TData = void>(
+  getApiLookupCourts<TData = LookupItemDtoLookupResponseDto>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiLookupCourts<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiLookupCourts<TData = LookupItemDtoLookupResponseDto>(options?: HttpClientOptions): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Lookup/courts`, options);
   }
 }
 
-export type GetApiLookupCvapEmailsClientResult = NonNullable<void>;
-export type GetApiLookupCountriesClientResult = NonNullable<void>;
-export type GetApiLookupProvincesClientResult = NonNullable<void>;
-export type GetApiLookupCitiesClientResult = NonNullable<void>;
-export type GetApiLookupCitiesSearchClientResult = NonNullable<void>;
-export type GetApiLookupCountryCountryCitiesClientResult = NonNullable<void>;
-export type GetApiLookupCountryCountryIdProvinceProvinceIdCitiesClientResult = NonNullable<void>;
-export type GetApiLookupRelationshipsClientResult = NonNullable<void>;
-export type GetApiLookupAuthRelationshipsClientResult = NonNullable<void>;
-export type GetApiLookupRepresentativeRelationshipsClientResult = NonNullable<void>;
-export type GetApiLookupImfRepresentativeRelationshipsClientResult = NonNullable<void>;
-export type GetApiLookupPoliceDetachmentsClientResult = NonNullable<void>;
-export type GetApiLookupCourtsClientResult = NonNullable<void>;
+export type GetApiLookupCvapEmailsClientResult = NonNullable<CVAPEmailResult>;
+export type GetApiLookupCountriesClientResult = NonNullable<CountryLookupDtoLookupResponseDto>;
+export type GetApiLookupProvincesClientResult = NonNullable<ProvinceLookupDtoLookupResponseDto>;
+export type GetApiLookupCitiesClientResult = NonNullable<CityLookupDtoLookupResponseDto>;
+export type GetApiLookupCitiesSearchClientResult = NonNullable<CitySearchResponseDto>;
+export type GetApiLookupCountryCountryIdCitiesClientResult = NonNullable<CityLookupDtoLookupResponseDto>;
+export type GetApiLookupCountryCountryIdProvinceProvinceIdCitiesClientResult =
+  NonNullable<CityLookupDtoLookupResponseDto>;
+export type GetApiLookupRelationshipsClientResult = NonNullable<RelationshipLookupDtoLookupResponseDto>;
+export type GetApiLookupAuthRelationshipsClientResult = NonNullable<RelationshipLookupDtoLookupResponseDto>;
+export type GetApiLookupRepresentativeRelationshipsClientResult = NonNullable<RelationshipLookupDtoLookupResponseDto>;
+export type GetApiLookupImfRepresentativeRelationshipsClientResult =
+  NonNullable<RelationshipLookupDtoLookupResponseDto>;
+export type GetApiLookupPoliceDetachmentsClientResult = NonNullable<PoliceDetachmentLookupDtoLookupResponseDto>;
+export type GetApiLookupCourtsClientResult = NonNullable<LookupItemDtoLookupResponseDto>;

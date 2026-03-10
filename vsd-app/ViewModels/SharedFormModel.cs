@@ -1,4 +1,6 @@
-﻿namespace Gov.Cscp.VictimServices.Public.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Gov.Cscp.VictimServices.Public.ViewModels
 {
     public class Address
     {
@@ -13,6 +15,8 @@
     public class Courtfile
     {
         public string courtFileNumber { get; set; }
+
+        [Required]
         public string courtLocation { get; set; }
     }
 

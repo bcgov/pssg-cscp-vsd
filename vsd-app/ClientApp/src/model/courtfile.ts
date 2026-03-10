@@ -9,6 +9,6 @@
 export interface Courtfile {
   /** @nullable */
   courtFileNumber?: string;
-  /** @nullable */
-  courtLocation?: string;
+  /** @minLength 1 */
+  courtLocation: string;
 }

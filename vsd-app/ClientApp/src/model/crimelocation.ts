@@ -7,6 +7,6 @@
  */
 
 export interface Crimelocation {
-  /** @nullable */
-  location?: string;
+  /** @minLength 1 */
+  location: string;
 }

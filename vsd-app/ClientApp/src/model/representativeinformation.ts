@@ -9,8 +9,7 @@ import type { Address } from './address';
 import type { DocumentCollectioninformation } from './documentCollectioninformation';
 
 export interface Representativeinformation {
-  /** @nullable */
-  completingOnBehalfOf?: number;
+  completingOnBehalfOf: number;
   /** @nullable */
   documents?: DocumentCollectioninformation[];
   /** @nullable */

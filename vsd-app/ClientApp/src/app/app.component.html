@@ -7,6 +7,7 @@
 
 @if (!isIE10orLower()) {
   <div class="app-outer">
+    <ngx-spinner name="loadingSpinner" type="ball-scale-multiple"></ngx-spinner>
     <header class="app-header">
       <div class="top-menu row">
         <section class="col-md-8 col-xs-12">
@@ -25,7 +26,7 @@
               class="text-center warning"
               >
               <!-- <h1 class="warning">Site Outage</h1> -->
-              <h2 class="warning"><b>{{ configuration.outageMessage }}</b></h2>
+              <h2 class="warning"><b>{{ configStore.outageMessage() }}</b></h2>
               <!-- <h2 class="warning"><b>{{ generateOutageDateMessage() }}</b></h2> -->
             </div>
           }

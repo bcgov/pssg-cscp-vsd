@@ -1,11 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ControlContainer, UntypedFormGroup } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
-import { LookupService } from '../../services/lookup.service';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { LookupStore } from '../../store/lookup.store';
 import { ApplicationType, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 
@@ -24,17 +23,15 @@ import { FormBase } from '../form-base';
 })
 export class DeclarationInformationComponent extends FormBase implements OnInit {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
   public form: UntypedFormGroup;
+  protected readonly lookupStore = inject(LookupStore);
   ApplicationType = ApplicationType;
   eligible_name: string;
-  cvapEmail: string = '';
+  get cvapEmail(): string {
+    return this.lookupStore.cvapEmail();
+  }
 
-  constructor(
-    private controlContainer: ControlContainer,
-    private matDialog: MatDialog,
-    private lookupService: LookupService
-  ) {
+  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog) {
     super();
   }
 
@@ -54,14 +51,6 @@ export class DeclarationInformationComponent extends FormBase implements OnInit 
     }
     if (this.formType === ApplicationType.Witness_Application) {
       this.eligible_name = 'Witnesses';
-    }
-
-    if (this.lookupService.cvapEmail) {
-      this.cvapEmail = this.lookupService.cvapEmail;
-    } else {
-      this.lookupService.getCVAPEmails().subscribe((res) => {
-        this.cvapEmail = res.cvapEmail;
-      });
     }
   }
 

@@ -15,7 +15,7 @@ import type {
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import type { ApplicationFormModel, CounsellorInvoiceFormModel } from '../../model';
+import type { ApplicationFormModel } from '../../model';
 
 type HttpClientOptions = {
   headers?:
@@ -55,28 +55,6 @@ export class JusticeService {
     options?: HttpClientOptions
   ): Observable<TData> {
     return this.http.post<TData>(`/cvapwebform/api/Justice/saveapplication`, applicationFormModel, options);
-  }
-  postApiJusticeSubmitcounsellorinvoice<TData = void>(
-    counsellorInvoiceFormModel: CounsellorInvoiceFormModel,
-    options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
-  ): Observable<TData>;
-  postApiJusticeSubmitcounsellorinvoice<TData = void>(
-    counsellorInvoiceFormModel: CounsellorInvoiceFormModel,
-    options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
-  ): Observable<AngularHttpResponse<TData>>;
-  postApiJusticeSubmitcounsellorinvoice<TData = void>(
-    counsellorInvoiceFormModel: CounsellorInvoiceFormModel,
-    options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
-  ): Observable<HttpEvent<TData>>;
-  postApiJusticeSubmitcounsellorinvoice<TData = void>(
-    counsellorInvoiceFormModel: CounsellorInvoiceFormModel,
-    options?: HttpClientOptions
-  ): Observable<TData> {
-    return this.http.post<TData>(
-      `/cvapwebform/api/Justice/submitcounsellorinvoice`,
-      counsellorInvoiceFormModel,
-      options
-    );
   }
   getApiJusticeValidateVendorVendorNumberVendorPostalCode<TData = void>(
     vendorNumber: string,
@@ -139,7 +117,6 @@ export class JusticeService {
 }
 
 export type PostApiJusticeSaveapplicationClientResult = NonNullable<void>;
-export type PostApiJusticeSubmitcounsellorinvoiceClientResult = NonNullable<void>;
 export type GetApiJusticeValidateVendorVendorNumberVendorPostalCodeClientResult = NonNullable<void>;
 export type GetApiJusticeValidateVendorAndCounsellorVendorNumberVendorPostalCodeCounsellorNumberCounsellorLastNameClientResult =
   NonNullable<void>;

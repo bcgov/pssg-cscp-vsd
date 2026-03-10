@@ -9,8 +9,8 @@
 export interface Policereport {
   /** @nullable */
   investigatingOfficer?: string;
-  /** @nullable */
-  policeDetachment?: string;
+  /** @minLength 1 */
+  policeDetachment: string;
   /** @nullable */
   policeDetachmentOther?: string;
   /** @nullable */

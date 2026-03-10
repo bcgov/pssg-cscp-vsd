@@ -100,6 +100,7 @@ namespace Database.Model
 			public const string TransactionCurrency_Vsd_Entitlement = "TransactionCurrency_Vsd_Entitlement";
 			public const string TransactionCurrency_Vsd_Invoice = "TransactionCurrency_Vsd_Invoice";
 			public const string TransactionCurrency_Vsd_InvoiceLineDetail = "TransactionCurrency_Vsd_InvoiceLineDetail";
+			public const string TransactionCurrency_Vsd_Participant = "TransactionCurrency_Vsd_Participant";
 			public const string TransactionCurrency_Vsd_Payment = "TransactionCurrency_Vsd_Payment";
 			public const string TransactionCurrency_Vsd_PaymentSchedule = "TransactionCurrency_Vsd_PaymentSchedule";
 			public const string TransactionCurrency_Vsd_Program = "TransactionCurrency_Vsd_Program";
@@ -846,6 +847,24 @@ namespace Database.Model
 			set
 			{
 				this.SetRelatedEntities<Database.Model.Vsd_InvoiceLineDetail>("TransactionCurrency_vsd_invoicelinedetail", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N TransactionCurrency_vsd_participant
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("TransactionCurrency_vsd_participant")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Participant> TransactionCurrency_Vsd_Participant
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_Participant>("TransactionCurrency_vsd_participant", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_Participant>("TransactionCurrency_vsd_participant", null, value);
 			}
 		}
 		

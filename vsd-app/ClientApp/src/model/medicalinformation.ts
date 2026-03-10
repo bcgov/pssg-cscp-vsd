@@ -9,12 +9,11 @@ import type { Address } from './address';
 import type { Othertreatment } from './othertreatment';
 
 export interface Medicalinformation {
-  /** @nullable */
-  beingTreatedByFamilyDoctor?: string;
-  /** @nullable */
-  doYouHaveMedicalServicesCoverage?: string;
-  /** @nullable */
-  doYouHaveOtherHealthCoverage?: number;
+  /** @minLength 1 */
+  beingTreatedByFamilyDoctor: string;
+  /** @minLength 1 */
+  doYouHaveMedicalServicesCoverage: string;
+  doYouHaveOtherHealthCoverage: number;
   familyDoctorAddress?: Address;
   /** @nullable */
   familyDoctorClinic?: string;
@@ -28,8 +27,8 @@ export interface Medicalinformation {
   familyDoctorLastName?: string;
   /** @nullable */
   familyDoctorPhoneNumber?: string;
-  /** @nullable */
-  hadOtherTreatments?: string;
+  /** @minLength 1 */
+  hadOtherTreatments: string;
   /** @nullable */
   haveMedicalCoverageProvince?: string;
   /** @nullable */

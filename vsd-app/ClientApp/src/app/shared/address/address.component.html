@@ -5,8 +5,8 @@
         <select class="form-control" formControlName="country" (change)="onCountryChange($event)">
           <option value="">Choose a country</option>
           @for (item of countryList; track item) {
-            <option [value]="item.vsd_name">
-              {{ item.vsd_name }}
+            <option [value]="item.name">
+              {{ item.name }}
             </option>
           }
         </select>
@@ -17,8 +17,8 @@
         <select class="form-control" formControlName="province" (change)="onProvinceChange($event)">
           <option value="">Choose a {{ provinceType }}</option>
           @for (item of provinceList; track item) {
-            <option [value]="item.vsd_name">
-              {{ item.vsd_name }}
+            <option [value]="item.name">
+              {{ item.name }}
             </option>
           }
         </select>
@@ -45,12 +45,12 @@
         <select class="form-control" formControlName="city">
           <option value="">Choose a city</option>
           @for (item of cityList; track item) {
-            <option [value]="item.vsd_name">
-              {{ item.vsd_name }}
+            <option [value]="item.name">
+              {{ item.name }}
             </option>
           }
         </select>
-        <!-- <input formControlName="city" typeaheadOptionField="vsd_name" [typeahead]="suggestions$" [typeaheadAsync]="true" class="form-control"> -->
+        <!-- <input formControlName="city" typeaheadOptionField="name" [typeahead]="suggestions$" [typeaheadAsync]="true" class="form-control"> -->
       </app-field>
     </div>
     <div class="col-md-6">

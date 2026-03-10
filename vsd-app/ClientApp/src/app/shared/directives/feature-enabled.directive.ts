@@ -1,10 +1,10 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
-import { ConfigService } from '../../services/config.service';
+import { Directive, ElementRef, inject, Input, OnInit } from '@angular/core';
 import { FeatureFlagConfiguration } from '../../interfaces/configuration.interface';
+import { ConfigStore } from '../../store/config.store';
 
 @Directive({
-    selector: '[featureEnabled]',
-    standalone: false
+  selector: '[featureEnabled]',
+  standalone: false
 })
 export class FeatureEnabledDirective implements OnInit {
   /**
@@ -17,13 +17,13 @@ export class FeatureEnabledDirective implements OnInit {
    */
   @Input('featureEnabledIf') featureEnabledIf: boolean;
 
-  constructor(private el: ElementRef, private configService: ConfigService) {}
+  protected readonly configStore = inject(ConfigStore);
+
+  constructor(private el: ElementRef) {}
 
   ngOnInit() {
-    this.configService.load().then((configuration) => {
-      if (configuration.featureFlags[this.featureName] !== this.featureEnabledIf) {
-        this.el.nativeElement.parentNode.removeChild(this.el.nativeElement);
-      }
-    });
+    if (this.configStore.featureFlags()[this.featureName] !== this.featureEnabledIf) {
+      this.el.nativeElement.parentNode.removeChild(this.el.nativeElement);
+    }
   }
 }

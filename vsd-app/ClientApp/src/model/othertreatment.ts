@@ -21,8 +21,8 @@ export interface Othertreatment {
   providerLastName?: string;
   /** @nullable */
   providerPhoneNumber?: string;
-  /** @nullable */
-  providerType?: string;
+  /** @minLength 1 */
+  providerType: string;
   /** @nullable */
   providerTypeText?: string;
 }

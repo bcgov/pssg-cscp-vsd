@@ -10,18 +10,18 @@ import type { AuthorizedPerson } from './authorizedPerson';
 export interface Authorizationinformation {
   /** @nullable */
   allowCvapStaffSharing?: number;
-  /** @nullable */
-  approvedAuthorityNotification?: string;
+  /** @minLength 1 */
+  approvedAuthorityNotification: string;
   /** @nullable */
   authorizedPerson?: AuthorizedPerson[];
   /** @nullable */
   authorizedPersonAuthorizesDiscussion?: string;
   /** @nullable */
   authorizedPersonSignature?: string;
-  /** @nullable */
-  readAndUnderstoodTermsAndConditions?: string;
-  /** @nullable */
-  signature?: string;
-  /** @nullable */
-  signName?: string;
+  /** @minLength 1 */
+  readAndUnderstoodTermsAndConditions: string;
+  /** @minLength 1 */
+  signature: string;
+  /** @minLength 1 */
+  signName: string;
 }

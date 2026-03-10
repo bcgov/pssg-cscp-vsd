@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { config } from '../../config';
+import { JusticeService } from '../../api/justice/justice.service';
 import {
   Application,
   AuthorizationInformation,
@@ -22,10 +22,7 @@ import {
   PersonalInformation,
   RepresentativeInformation
 } from '../interfaces/application.interface';
-import { iLookupData } from '../interfaces/lookup-data.interface';
 import { AEMService } from '../services/aem.service';
-import { JusticeApplicationDataService } from '../services/justice-application-data.service';
-import { LookupService } from '../services/lookup.service';
 import { StateService } from '../services/state.service';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
@@ -40,6 +37,7 @@ import { PersonalInfoHelper } from '../shared/personal-information/personal-info
 import { RepresentativeInfoHelper } from '../shared/representative-information/representative-information.helper';
 import { ServiceNotAvailableComponent } from '../shared/service-not-available.component';
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
+import { LookupStore } from '../store/lookup.store';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
 
 @Component({
@@ -78,17 +76,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   authInfoHelper = new AuthInfoHelper();
 
   isIE: boolean = false;
-  didLoad: boolean = false;
-
-  lookupData: iLookupData = {
-    countries: [],
-    provinces: [],
-    cities: [],
-    relationships: [],
-    representativeRelationships: [],
-    courts: [],
-    police_detachments: []
-  };
+  protected readonly lookupStore = inject(LookupStore);
 
   private steps: Array<string> = [
     'introduction',
@@ -103,14 +91,13 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   ];
 
   constructor(
-    private justiceDataService: JusticeApplicationDataService,
+    private justiceService: JusticeService,
     private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
     private matDialog: MatDialog,
     public state: StateService,
-    public lookupService: LookupService,
     private aemService: AEMService
   ) {
     super();
@@ -126,89 +113,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     } else {
       this.form = this.buildApplicationForm();
     }
-
-    let promise_array = [];
-
-    promise_array.push(
-      new Promise<void>((resolve, reject) => {
-        this.lookupService.getCountries().subscribe(
-          (res) => {
-            this.lookupData.countries = res.value;
-            if (this.lookupData.countries) {
-              this.lookupData.countries.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-            }
-            resolve();
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-      })
-    );
-
-    promise_array.push(
-      new Promise<void>((resolve, reject) => {
-        this.lookupService.getProvinces().subscribe(
-          (res) => {
-            this.lookupData.provinces = res.value;
-            if (this.lookupData.provinces) {
-              this.lookupData.provinces.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-            }
-            resolve();
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-      })
-    );
-
-    promise_array.push(
-      new Promise<void>((resolve, reject) => {
-        this.lookupService.getCitiesByProvince(config.canada_crm_id, config.bc_crm_id).subscribe(
-          (res) => {
-            this.lookupData.cities = res.value;
-            if (this.lookupData.cities) {
-              this.lookupData.cities.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-            }
-            resolve();
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-      })
-    );
-
-    promise_array.push(
-      new Promise<void>((resolve, reject) => {
-        this.lookupService.getRepresentativeRelationships().subscribe(
-          (res) => {
-            this.lookupData.representativeRelationships = res.value.filter(
-              (r) => r.vsd_cvap_representativerelationship_imf_only != true
-            );
-            if (this.lookupData.representativeRelationships) {
-              this.lookupData.representativeRelationships.sort((a, b) => a.vsd_name.localeCompare(b.vsd_name));
-            }
-            resolve();
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-      })
-    );
-
-    Promise.all(promise_array)
-      .then((res) => {
-        this.didLoad = true;
-      })
-      .catch((err) => {
-        this.snackBar.openFromComponent(ServiceNotAvailableComponent, {
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
-      });
 
     if (completeOnBehalfOf) {
       this.form.get('representativeInformation').patchValue({
@@ -478,13 +382,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       this.getApplicationPDFs()
         .then((pdfs: DocumentCollectioninformation[]) => {
           form.ApplicationPDFs = pdfs;
-          this.justiceDataService.submitApplication(form).subscribe({
+          this.justiceService.postApiJusticeSaveapplication(form as any).subscribe({
             next: (data) => {
-              if (data['IsSuccess']) {
-                resolve();
-              } else {
-                reject();
-              }
+              resolve();
             },
             error: (error) => {
               reject();
@@ -593,7 +493,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   }
 
   save(): void {
-    this.justiceDataService.submitApplication(this.harvestForm()).subscribe(
+    this.justiceService.postApiJusticeSaveapplication(this.harvestForm() as any).subscribe(
       (data) => {},
       (err) => {}
     );

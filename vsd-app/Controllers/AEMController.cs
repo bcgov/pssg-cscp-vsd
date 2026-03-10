@@ -1,16 +1,19 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Database.Model;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
 using Gov.Cscp.VictimServices.Public.Models;
 using Gov.Cscp.VictimServices.Public.Models.Extensions;
 using Gov.Cscp.VictimServices.Public.Services;
 using Gov.Cscp.VictimServices.Public.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk.Query;
 using Serilog;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
@@ -20,13 +23,13 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
     {
         private readonly IAEMResultService _aemResultService;
         private readonly ILogger _logger;
-        private readonly IDynamicsResultService _dynamicsResultService;
+        private readonly IOrganizationServiceAsync _organizationService;
 
-        public AEMController(IAEMResultService aemResultService, IDynamicsResultService dynamicsResultService)
+        public AEMController(IAEMResultService aemResultService, IOrganizationServiceAsync organizationService)
         {
-            this._aemResultService = aemResultService;
+            _aemResultService = aemResultService;
+            _organizationService = organizationService;
             _logger = Log.Logger;
-            _dynamicsResultService = dynamicsResultService;
         }
 
         [HttpPost("victim")]
@@ -275,24 +278,41 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
+                if (!Guid.TryParse(applicationId, out var entityId))
+                {
+                    _logger.Warning("GenerateVictimApplicationPDF called with invalid applicationId.");
+                    return BadRequest(new { error = $"Invalid applicationId: '{applicationId}'" });
+                }
+
                 if (pdfType == "invoice")
                 {
-                    var invoiceEndpoint = $"vsd_invoices({applicationId})";
-                    DynamicsResult invoiceResult = await _dynamicsResultService.Get(invoiceEndpoint);
-                    var invoiceJson = invoiceResult.result.ToString();
-                    CounsellorInvoiceFormDynamicsModel invoiceDynamics = new CounsellorInvoiceFormDynamicsModel();
-                    invoiceDynamics = System.Text.Json.JsonSerializer.Deserialize<CounsellorInvoiceFormDynamicsModel>(
-                        invoiceJson
+                    var invoiceEntity = await _organizationService.RetrieveAsync(
+                        Vsd_Invoice.EntityLogicalName,
+                        entityId,
+                        new ColumnSet(true)
+                    );
+                    var invoiceRecord = invoiceEntity.ToEntity<Vsd_Invoice>();
+
+                    var lineItemsQe = new QueryExpression(Vsd_InvoiceLineDetail.EntityLogicalName)
+                    {
+                        ColumnSet = new ColumnSet(true),
+                        Criteria = new FilterExpression
+                        {
+                            Conditions =
+                            {
+                                new ConditionExpression(
+                                    Vsd_InvoiceLineDetail.Fields.Vsd_InvoiceId,
+                                    ConditionOperator.Equal,
+                                    entityId
+                                ),
+                            },
+                        },
+                    };
+                    var lineItems = (await _organizationService.RetrieveMultipleAsync(lineItemsQe)).Entities.Select(e =>
+                        e.ToEntity<Vsd_InvoiceLineDetail>()
                     );
 
-                    var lineItemEndpoint = $"vsd_invoicelinedetails?$filter=_vsd_invoiceid_value eq {applicationId}";
-                    DynamicsResult lineItemResult = await _dynamicsResultService.Get(lineItemEndpoint);
-                    var lineItemJson = lineItemResult.result.ToString();
-                    invoiceDynamics.InvoiceLineItems = System
-                        .Text.Json.JsonSerializer.Deserialize<DynamicsCollection<LineItemDynamicsModel>>(lineItemJson)
-                        .Value;
-
-                    var invoice = invoiceDynamics.ToFormModel();
+                    var invoice = invoiceRecord.ToFormModel(lineItems);
 
                     string invoice_xml = getInvoiceXML(invoice);
                     string invoice_requestJson = getAEMJSON(invoice_xml, pdfType);
@@ -306,38 +326,74 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                         $"Invoice-{invoice.InvoiceDetails.vendorNumber}.pdf"
                     );
                 }
-                var endpoint = $"vsd_applications({applicationId})";
-                DynamicsResult result = await _dynamicsResultService.Get(endpoint);
-                var json = result.result.ToString();
-                ApplicationDynamicsModel dynamics = new ApplicationDynamicsModel();
-                dynamics.Application = System.Text.Json.JsonSerializer.Deserialize<Application>(json);
 
-                var participantEndpoint = $"vsd_participants?$filter=_vsd_applicationid_value eq {applicationId}";
-                DynamicsResult participantResult = await _dynamicsResultService.Get(participantEndpoint);
-                var providers = System.Text.Json.JsonSerializer.Deserialize<DynamicsCollection<Providercollection>>(
-                    participantResult.result.ToString()
+                var appEntity = await _organizationService.RetrieveAsync(
+                    Vsd_Application.EntityLogicalName,
+                    entityId,
+                    new ColumnSet(true)
                 );
-                dynamics.ProviderCollection = providers.Value;
+                var application = appEntity.ToEntity<Vsd_Application>();
 
-                var policeEndpoint =
-                    $"vsd_applicationpolicenumbers?$filter=_vsd_applicationid_value eq {applicationId}";
-                DynamicsResult policeResult = await _dynamicsResultService.Get(policeEndpoint);
-                var policeFileNumberCollection = System.Text.Json.JsonSerializer.Deserialize<
-                    DynamicsCollection<Policefilenumbercollection>
-                >(policeResult.result.ToString());
-                dynamics.PoliceFileNumberCollection = policeFileNumberCollection.Value;
+                var participantsQe = new QueryExpression(Vsd_Participant.EntityLogicalName)
+                {
+                    ColumnSet = new ColumnSet(true),
+                    Criteria = new FilterExpression
+                    {
+                        Conditions =
+                        {
+                            new ConditionExpression(
+                                Vsd_Participant.Fields.Vsd_ApplicationId,
+                                ConditionOperator.Equal,
+                                entityId
+                            ),
+                        },
+                    },
+                };
+                var participants = (await _organizationService.RetrieveMultipleAsync(participantsQe)).Entities.Select(
+                    e => e.ToEntity<Vsd_Participant>()
+                );
 
-                var courtInfomationEndpoint =
-                    $"vsd_applicationcourtinformations?$filter=_vsd_applicationid_value eq {applicationId}";
-                DynamicsResult courtInfomationResult = await _dynamicsResultService.Get(courtInfomationEndpoint);
-                var courtInfomationCollection = System.Text.Json.JsonSerializer.Deserialize<
-                    DynamicsCollection<Courtinfocollection>
-                >(courtInfomationResult.result.ToString());
-                dynamics.CourtInfoCollection = courtInfomationCollection.Value;
+                var policeQe = new QueryExpression(Vsd_ApplicationPoliceNumber.EntityLogicalName)
+                {
+                    ColumnSet = new ColumnSet(true),
+                    Criteria = new FilterExpression
+                    {
+                        Conditions =
+                        {
+                            new ConditionExpression(
+                                Vsd_ApplicationPoliceNumber.Fields.Vsd_ApplicationId,
+                                ConditionOperator.Equal,
+                                entityId
+                            ),
+                        },
+                    },
+                };
+                var policeNumbers = (await _organizationService.RetrieveMultipleAsync(policeQe)).Entities.Select(e =>
+                    e.ToEntity<Vsd_ApplicationPoliceNumber>()
+                );
 
-                var application = dynamics.ToApplicationFormModel();
+                var courtQe = new QueryExpression(Vsd_ApplicationCourtInformation.EntityLogicalName)
+                {
+                    ColumnSet = new ColumnSet(true),
+                    Criteria = new FilterExpression
+                    {
+                        Conditions =
+                        {
+                            new ConditionExpression(
+                                Vsd_ApplicationCourtInformation.Fields.Vsd_ApplicationId,
+                                ConditionOperator.Equal,
+                                entityId
+                            ),
+                        },
+                    },
+                };
+                var courtInfos = (await _organizationService.RetrieveMultipleAsync(courtQe)).Entities.Select(e =>
+                    e.ToEntity<Vsd_ApplicationCourtInformation>()
+                );
 
-                string xml = getApplicationXML(application);
+                var applicationFormModel = application.ToApplicationFormModel(courtInfos, policeNumbers, participants);
+
+                string xml = getApplicationXML(applicationFormModel);
                 string requestJson = getAEMJSON(xml, pdfType);
 
                 AEMResult aemResult = await _aemResultService.Post(requestJson);
@@ -346,16 +402,10 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected error while getting victim application PDF. Source = VSD");
-                return BadRequest();
+                _logger.Error(e, "Unexpected error while generating application PDF. Source = VSD");
+                return StatusCode(500, new { error = e.Message });
             }
             finally { }
-        }
-
-        public class DynamicsCollection<T>
-        {
-            [JsonPropertyName("value")]
-            public T[] Value { get; set; }
         }
     }
 }

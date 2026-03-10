@@ -17,30 +17,36 @@ export interface Crimeinformation {
   additionalOffenders?: Offender[];
   /** @nullable */
   courtFiles?: Courtfile[];
-  /** @nullable */
-  crimeDetails?: string;
-  /** @nullable */
-  crimeInjuries?: string;
+  /** @minLength 1 */
+  crimeDetails: string;
+  /** @minLength 1 */
+  crimeInjuries: string;
   /** @nullable */
   crimeLocation?: string;
   /** @nullable */
   crimeLocations?: Crimelocation[];
   /** @nullable */
   crimePeriodEnd?: string;
-  /** @nullable */
-  crimePeriodStart?: string;
+  crimePeriodStart: string;
   /** @nullable */
   dateOfDeath?: string;
   /** @nullable */
   documents?: DocumentCollectioninformation[];
+  /**
+   * @minimum 100000000
+   * @maximum 100000001
+   */
   haveYouSuedOffender?: number;
   /** @nullable */
   intendToSueOffender?: number;
   moreThanOneOffender?: boolean;
   /** @nullable */
   noPoliceReportIdentification?: string;
-  /** @nullable */
-  offenderBeenCharged?: number;
+  /**
+   * @minimum 100000000
+   * @maximum 100000002
+   */
+  offenderBeenCharged: number;
   /** @nullable */
   offenderFirstName?: string;
   /** @nullable */
@@ -56,13 +62,16 @@ export interface Crimeinformation {
   /** @nullable */
   policeReports?: Policereport[];
   racafInformation?: Racafinformation;
-  /** @nullable */
-  typeOfCrime?: string;
+  /** @minLength 1 */
+  typeOfCrime: string;
   unsureOfCrimeDates?: boolean;
   /** @nullable */
   victimDeceasedFromCrime?: number;
-  /** @nullable */
-  wasReportMadeToPolice?: number;
+  /**
+   * @minimum 100000000
+   * @maximum 100000002
+   */
+  wasReportMadeToPolice: number;
   /** @nullable */
   whenDidCrimeOccur?: string;
   /** @nullable */

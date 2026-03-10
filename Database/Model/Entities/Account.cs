@@ -933,6 +933,7 @@ namespace Database.Model
 			public const string Vsd_Account_Vsd_Contract_Customer = "Vsd_Account_Vsd_Contract_Customer";
 			public const string Vsd_Account_Vsd_Invoice_Customer = "Vsd_Account_Vsd_Invoice_Customer";
 			public const string Vsd_Account_Vsd_Invoice_Payee = "Vsd_Account_Vsd_Invoice_Payee";
+			public const string Vsd_Account_Vsd_Participant = "Vsd_Account_Vsd_Participant";
 			public const string Vsd_Account_Vsd_Payment_Payee = "Vsd_Account_Vsd_Payment_Payee";
 			public const string Vsd_Account_Vsd_PaymentSchedule_Payee = "Vsd_Account_Vsd_PaymentSchedule_Payee";
 			public const string Vsd_Account_Vsd_Program = "Vsd_Account_Vsd_Program";
@@ -6055,6 +6056,24 @@ namespace Database.Model
 			set
 			{
 				this.SetRelatedEntities<Database.Model.Vsd_Invoice>("vsd_account_vsd_invoice_Payee", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N vsd_account_vsd_participant
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_account_vsd_participant")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_Participant> Vsd_Account_Vsd_Participant
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_Participant>("vsd_account_vsd_participant", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_Participant>("vsd_account_vsd_participant", null, value);
 			}
 		}
 		

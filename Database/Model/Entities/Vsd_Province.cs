@@ -121,6 +121,7 @@ namespace Database.Model
 			public const string Vsd_TaxType = "vsd_taxtype";
 			public const string Vsd_TaxTypeName = "vsd_taxtypename";
 			public const string Vsd_Vsd_Country_Vsd_Province = "vsd_vsd_country_vsd_province";
+			public const string Vsd_Vsd_Province_Vsd_City = "Vsd_Vsd_Province_Vsd_City";
 			public const string Vsd_Vsd_Province_Vsd_Invoice = "Vsd_Vsd_Province_Vsd_Invoice";
 			public const string Vsd_Vsd_Province_Vsd_InvoiceLineDetail_ProvinceStateId = "Vsd_Vsd_Province_Vsd_InvoiceLineDetail_ProvinceStateId";
 		}
@@ -798,6 +799,24 @@ namespace Database.Model
 				{
 					return default(string);
 				}
+			}
+		}
+		
+		/// <summary>
+		/// 1:N vsd_vsd_province_vsd_city
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_province_vsd_city")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_City> Vsd_Vsd_Province_Vsd_City
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_City>("vsd_vsd_province_vsd_city", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_City>("vsd_vsd_province_vsd_city", null, value);
 			}
 		}
 		

@@ -224,7 +224,7 @@
                   </div>
                 </div>
                 <h3>Mailing Address</h3>
-                <app-address (change)="setEmployerPhoneValidators(item)" [group]="item.get('employerAddress')" [lookupData]="lookupData" [showChildrenAsRequired]="item.get('contactable').value === CRMBoolean.True"></app-address>
+                <app-address (change)="setEmployerPhoneValidators(item)" [group]="item.get('employerAddress')" [showChildrenAsRequired]="item.get('contactable').value === CRMBoolean.True"></app-address>
               </div>
             </div>
           }

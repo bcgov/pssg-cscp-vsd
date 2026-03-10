@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   ControlContainer,
@@ -11,30 +11,29 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
-import { LookupService } from '../../services/lookup.service';
 import { SignPadDialog } from '../../sign-dialog/sign-dialog.component';
+import { LookupStore } from '../../store/lookup.store';
 import { ApplicationType, CRMBoolean, EnumHelper, MY_FORMATS } from '../enums-list';
 import { FormBase } from '../form-base';
 import { POSTAL_CODE } from '../regex.constants';
 import { AuthInfoHelper } from './authorization-information.helper';
 
 @Component({
-    selector: 'app-authorization-information',
-    templateUrl: './authorization-information.component.html',
-    styleUrls: ['./authorization-information.component.scss'],
-    providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-    ],
-    standalone: false
+  selector: 'app-authorization-information',
+  templateUrl: './authorization-information.component.html',
+  styleUrls: ['./authorization-information.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
+  standalone: false
 })
 export class AuthorizationInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
+  protected readonly lookupStore = inject(LookupStore);
   public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   enumHelper = new EnumHelper();
@@ -54,8 +53,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
   constructor(
     private controlContainer: ControlContainer,
     private matDialog: MatDialog,
-    private fb: UntypedFormBuilder,
-    public lookupService: LookupService
+    private fb: UntypedFormBuilder
   ) {
     super();
   }
@@ -94,19 +92,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
       authorizedPersonSignature.updateValueAndValidity(options);
     });
 
-    if (this.lookupData.relationships && this.lookupData.relationships.length > 0) {
-      this.relationshipList = this.lookupData.relationships.map((r) => r.vsd_name);
-    } else {
-      this.lookupService.getOptionalAuthorizationRelationships().subscribe((res) => {
-        this.lookupData.relationships = res.value;
-        if (this.lookupData.relationships) {
-          this.lookupData.relationships.sort(function (a, b) {
-            return a.vsd_name.localeCompare(b.vsd_name);
-          });
-        }
-        this.relationshipList = this.lookupData.relationships.map((r) => r.vsd_name);
-      });
-    }
+    this.relationshipList = this.lookupStore.authRelationships().map((r) => r.name);
   }
 
   ngOnDestroy() {

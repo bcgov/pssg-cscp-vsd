@@ -90,6 +90,7 @@ namespace Database.Model
 			public const string Vsd_CountryId = "vsd_countryid";
 			public const string Id = "vsd_countryid";
 			public const string Vsd_Name = "vsd_name";
+			public const string Vsd_Vsd_Country_Vsd_City = "Vsd_Vsd_Country_Vsd_City";
 			public const string Vsd_Vsd_Country_Vsd_Province = "Vsd_Vsd_Country_Vsd_Province";
 		}
 		
@@ -615,6 +616,24 @@ namespace Database.Model
 			set
 			{
 				this.SetAttributeValue("vsd_name", value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N vsd_vsd_country_vsd_city
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("vsd_vsd_country_vsd_city")]
+		public System.Collections.Generic.IEnumerable<Database.Model.Vsd_City> Vsd_Vsd_Country_Vsd_City
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<Database.Model.Vsd_City>("vsd_vsd_country_vsd_city", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<Database.Model.Vsd_City>("vsd_vsd_country_vsd_city", null, value);
 			}
 		}
 		

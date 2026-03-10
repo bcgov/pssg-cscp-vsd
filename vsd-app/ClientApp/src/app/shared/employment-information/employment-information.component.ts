@@ -11,7 +11,6 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
-import { iLookupData } from '../../interfaces/lookup-data.interface';
 import { AddressHelper } from '../address/address.helper';
 import { COUNTRIES_ADDRESS_2 } from '../address/country-list';
 import { CRMBoolean, MY_FORMATS } from '../enums-list';
@@ -20,21 +19,20 @@ import { POSTAL_CODE } from '../regex.constants';
 import { EmploymentInfoHelper } from './employment-information.helper';
 
 @Component({
-    selector: 'app-employment-information',
-    templateUrl: './employment-information.component.html',
-    styleUrls: ['./employment-information.component.scss'],
-    providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-    ],
-    standalone: false
+  selector: 'app-employment-information',
+  templateUrl: './employment-information.component.html',
+  styleUrls: ['./employment-information.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
+  standalone: false
 })
 export class EmploymentInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  @Input() lookupData: iLookupData;
   public form: UntypedFormGroup;
 
   postalRegex = POSTAL_CODE;
