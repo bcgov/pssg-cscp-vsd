@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Gov.Cscp.VictimServices.Public.Models;
 using Manager.Contract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Resources;
 using Serilog;
@@ -14,6 +15,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
     /// partially save, and cancel in-progress CVAP forms before final submission.
     /// </summary>
     [Route("api/[controller]")]
+    [Authorize]
     public class ApplicationDraftsController : Controller
     {
         private readonly IApplicationDraftRepository _draftRepository;
