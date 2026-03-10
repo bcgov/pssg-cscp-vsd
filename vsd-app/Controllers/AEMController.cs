@@ -281,8 +281,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 if (!Guid.TryParse(applicationId, out var entityId))
                 {
                     _logger.Warning(
-                        "GenerateVictimApplicationPDF called with invalid applicationId: {ApplicationId}",
-                        applicationId
+                        "GenerateVictimApplicationPDF called with invalid applicationId."
                     );
                     return BadRequest(new { error = $"Invalid applicationId: '{applicationId}'" });
                 }

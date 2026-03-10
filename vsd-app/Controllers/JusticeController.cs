@@ -75,7 +75,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 }
                 else
                 {
-                    _logger.Warning("Vendor validation failed for vendor {VendorNumber}.", VendorNumber);
+                    _logger.Warning("Vendor validation failed for vendor.");
                     return StatusCode(500, new { success = false, counsellorLevel = 0 });
                 }
             }
@@ -119,9 +119,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 else
                 {
                     _logger.Warning(
-                        "Vendor and counsellor validation failed for vendor {VendorNumber}, counsellor {CounsellorNumber}.",
-                        VendorNumber,
-                        CounsellorNumber
+                        "Vendor and counsellor validation failed."
                     );
                     return Ok(new { success = false, counsellorLevel = 0 });
                 }
