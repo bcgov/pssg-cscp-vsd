@@ -18,6 +18,29 @@ header {
   color: #fff;
 }
 
+.sign-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+.sign-user {
+  color: #fff;
+  font-size: 14px;
+}
+
+.sign-out-btn {
+  color: #fff;
+  border-color: #fff;
+  font-size: 13px;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+}
+
 ::ng-deep .no-gutter {
   margin-right: 0;
   margin-left: 0;

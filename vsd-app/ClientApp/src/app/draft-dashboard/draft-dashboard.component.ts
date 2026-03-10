@@ -80,8 +80,4 @@ export class DraftDashboardComponent implements OnInit {
       }
     });
   }
-
-  logout(): void {
-    this.authService.logout();
-  }
 }

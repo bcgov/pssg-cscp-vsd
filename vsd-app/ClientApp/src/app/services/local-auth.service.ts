@@ -59,6 +59,6 @@ export class LocalAuthService {
   logout(): void {
     sessionStorage.removeItem(TOKEN_KEY);
     sessionStorage.removeItem(USERNAME_KEY);
-    this.router.navigate(['/login']);
+    this.router.navigate(['']);
   }
 }

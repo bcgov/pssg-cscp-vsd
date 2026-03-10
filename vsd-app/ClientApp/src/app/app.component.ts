@@ -2,6 +2,7 @@ import { Component, inject, isDevMode, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import moment from 'moment-timezone';
 import { environment } from '../environments/environment';
+import { LocalAuthService } from './services/local-auth.service';
 import { HeaderTitleService } from './services/titile.service';
 import { ConfigStore } from './store/config.store';
 
@@ -21,8 +22,14 @@ export class AppComponent implements OnInit {
   apiPath = environment.apiRootUrl;
   public isNewUser: boolean;
   public isDevMode: boolean;
+  authUsername: string | null = null;
 
-  constructor(private renderer: Renderer2, private router: Router, private headerTitleService: HeaderTitleService) {
+  constructor(
+    private renderer: Renderer2,
+    private router: Router,
+    private headerTitleService: HeaderTitleService,
+    private authService: LocalAuthService
+  ) {
     this.isDevMode = isDevMode();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -44,6 +51,16 @@ export class AppComponent implements OnInit {
     this.headerTitleService.title.subscribe((updatedTitle) => {
       this.title = updatedTitle;
     });
+  }
+
+  isLoggedIn(): boolean {
+    const loggedIn = this.authService.isLoggedIn();
+    this.authUsername = loggedIn ? this.authService.getUsername() : null;
+    return loggedIn;
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   isOutage() {
