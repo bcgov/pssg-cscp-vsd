@@ -2,9 +2,11 @@
   <div class="dashboard-header">
     <div class="dashboard-title">
       <h1>Application Drafts</h1>
-      <p class="dashboard-subtitle" *ngIf="username">Signed in as <strong>{{ username }}</strong></p>
     </div>
-
+    <div class="dashboard-actions">
+      <a class="btn btn-primary btn-sm" routerLink="/application-selector">New Application</a>
+      <a class="btn btn-primary btn-sm" routerLink="/submit-invoice">Submit Invoice</a>
+    </div>
   </div>
 
   <!-- Loading state -->

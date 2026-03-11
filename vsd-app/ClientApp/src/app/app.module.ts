@@ -48,7 +48,7 @@ import { ApplicationCancelledComponent } from './application-cancelled/applicati
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { DraftDashboardComponent } from './draft-dashboard/draft-dashboard.component';
-import { HomeComponent } from './home/home.component';
+import { ApplicationSelectorComponent } from './application-selector/application-selector.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
@@ -112,7 +112,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     FileUploaderComponent,
     GenderSelectorComponent,
     GSTWarningDialog,
-    HomeComponent,
+    ApplicationSelectorComponent,
     IfmApplicationComponent,
     LandingComponent,
     LoginComponent,

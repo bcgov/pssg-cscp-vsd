@@ -6,12 +6,12 @@ import { Subscription } from 'rxjs';
 import { FormBase } from '../shared/form-base';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  selector: 'app-application-selector',
+  templateUrl: './application-selector.component.html',
+  styleUrls: ['./application-selector.component.scss'],
   standalone: false
 })
-export class HomeComponent extends FormBase implements OnInit {
+export class ApplicationSelectorComponent extends FormBase implements OnInit {
   window = window;
   busy: Subscription;
 

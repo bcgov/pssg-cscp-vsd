@@ -4,7 +4,7 @@ import { ApplicationCancelledComponent } from './application-cancelled/applicati
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { DraftDashboardComponent } from './draft-dashboard/draft-dashboard.component';
 import { authGuard } from './guards/auth.guard';
-import { HomeComponent } from './home/home.component';
+import { ApplicationSelectorComponent } from './application-selector/application-selector.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
 import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
@@ -28,8 +28,8 @@ const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: 'home',
-    component: HomeComponent
+    path: 'application-selector',
+    component: ApplicationSelectorComponent
   },
   {
     path: 'victim-application',

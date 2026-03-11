@@ -19,6 +19,6 @@ export class LandingComponent {
   }
 
   continueAnonymously(): void {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/application-selector']);
   }
 }
