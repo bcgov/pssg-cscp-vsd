@@ -11,6 +11,14 @@ const DRAFT_TYPE_LABELS: Record<number, string> = {
   100000003: 'Family Member Application'
 };
 
+/** Maps DraftType int values to the route used to edit that type. */
+const DRAFT_TYPE_ROUTES: Record<number, string> = {
+  100000000: '/submit-invoice',
+  100000001: '/victim-application',
+  100000002: '/witness-application',
+  100000003: '/ifm-application'
+};
+
 export interface DraftSummary {
   id: string;
   name: string;
@@ -66,6 +74,13 @@ export class DraftDashboardComponent implements OnInit {
 
   getDraftTypeLabel(type: number): string {
     return DRAFT_TYPE_LABELS[type] ?? `Unknown (${type})`;
+  }
+
+  openDraft(draft: DraftSummary): void {
+    const route = DRAFT_TYPE_ROUTES[draft.draftType];
+    if (route) {
+      this.router.navigate([route], { queryParams: { draftId: draft.id } });
+    }
   }
 
   deleteDraft(draft: DraftSummary): void {

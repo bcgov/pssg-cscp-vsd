@@ -8,7 +8,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { ApplicationDraftsService } from '../../api/application-drafts/application-drafts.service';
 import { JusticeService } from '../../api/justice/justice.service';
+import { CreateApplicationDraftRequest, UpdateApplicationDraftRequest } from '../../model';
 import {
   Application,
   AuthorizationInformation,
@@ -62,6 +64,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   public currentFormStep: number = 0;
 
   saveFormData: any;
+  draftId: string | null = null;
+  saving = false;
+  draftSavedMessage = '';
 
   ApplicationType = ApplicationType;
 
@@ -92,6 +97,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   constructor(
     private justiceService: JusticeService,
+    private draftsService: ApplicationDraftsService,
     private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -118,6 +124,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       this.form.get('representativeInformation').patchValue({
         completingOnBehalfOf: parseInt(completeOnBehalfOf)
       });
+    }
+
+    // Load existing draft if draftId query param is present
+    const draftId = this.route.snapshot.queryParamMap.get('draftId');
+    if (draftId) {
+      this.loadDraft(draftId);
     }
 
     this.form.valueChanges.subscribe(() => {
@@ -497,6 +509,119 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       (data) => {},
       (err) => {}
     );
+  }
+
+  /** Save current form state as a draft via the ApplicationDrafts API. */
+  saveDraft(): void {
+    this.saving = true;
+    this.draftSavedMessage = '';
+    const formData = JSON.stringify(this.form.getRawValue());
+
+    if (this.draftId) {
+      // Update existing draft
+      const request: UpdateApplicationDraftRequest = { formData };
+      this.draftsService.putApiApplicationDraftsDraftId(this.draftId, request).subscribe({
+        next: () => {
+          this.saving = false;
+          this.draftSavedMessage = 'Draft saved.';
+          this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
+        },
+        error: (err) => {
+          this.saving = false;
+          this.snackBar.open('Failed to save draft.', 'Close', { duration: 5000 });
+          console.error('Failed to update draft', err);
+        }
+      });
+    } else {
+      // Create new draft
+      const request: CreateApplicationDraftRequest = {
+        draftType: 100000001, // VictimApplication
+        formData
+      };
+      this.draftsService.postApiApplicationDrafts<{ success: boolean; draftId: string }>(request).subscribe({
+        next: (res) => {
+          this.saving = false;
+          if (res?.draftId) {
+            this.draftId = res.draftId;
+            this.draftSavedMessage = 'Draft saved.';
+            this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
+          }
+        },
+        error: (err) => {
+          this.saving = false;
+          this.snackBar.open('Failed to save draft.', 'Close', { duration: 5000 });
+          console.error('Failed to create draft', err);
+        }
+      });
+    }
+  }
+
+  /** Load a draft by ID and restore form state. */
+  private loadDraft(draftId: string): void {
+    this.draftsService.getApiApplicationDraftsDraftId<any>(draftId).subscribe({
+      next: (draft) => {
+        if (draft?.draftData) {
+          try {
+            const savedData = JSON.parse(draft.draftData);
+            this.restoreFormData(savedData);
+            this.draftId = draftId;
+            this.snackBar.open('Draft loaded.', 'Close', { duration: 3000 });
+          } catch (e) {
+            console.error('Failed to parse draft data', e);
+            this.snackBar.open('Failed to parse draft data.', 'Close', { duration: 5000 });
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load draft', err);
+        this.snackBar.open('Failed to load draft.', 'Close', { duration: 5000 });
+      }
+    });
+  }
+
+  /** Restore saved form data onto the reactive form, handling FormArrays. */
+  private restoreFormData(savedData: any): void {
+    // Resize FormArrays to match saved data before patching
+    this.resizeFormArray('crimeInformation', 'crimeLocations', savedData, () =>
+      this.crimeInfoHelper.createCrimeLocationItem(this.fb)
+    );
+    this.resizeFormArray('crimeInformation', 'policeReports', savedData, () =>
+      this.crimeInfoHelper.createPoliceReport(this.fb)
+    );
+    this.resizeFormArray('crimeInformation', 'courtFiles', savedData, () =>
+      this.crimeInfoHelper.createCourtInfoItem(this.fb)
+    );
+    this.resizeFormArray('crimeInformation', 'additionalOffenders', savedData, () =>
+      this.crimeInfoHelper.createAdditionalOffender(this.fb)
+    );
+    this.resizeFormArray('authorizationInformation', 'authorizedPerson', savedData, () =>
+      this.authInfoHelper.createAuthorizedPerson(this.fb)
+    );
+    this.resizeFormArray('employmentIncomeInformation', 'employers', savedData, () =>
+      this.employmentInfoHelper.createEmployerInfo(this.fb)
+    );
+
+    this.form.patchValue(savedData);
+  }
+
+  /** Ensure a FormArray has the correct number of items to accept patchValue data. */
+  private resizeFormArray(groupName: string, arrayName: string, savedData: any, createFn: () => any): void {
+    const savedArray = savedData?.[groupName]?.[arrayName];
+    if (!Array.isArray(savedArray)) return;
+
+    const formGroup = this.form.get(groupName);
+    if (!formGroup) return;
+
+    const formArray = formGroup.get(arrayName) as UntypedFormArray;
+    if (!formArray) return;
+
+    // Add or remove items to match the saved length
+    while (formArray.length < savedArray.length) {
+      formArray.push(createFn());
+    }
+    while (formArray.length > savedArray.length) {
+      formArray.removeAt(formArray.length - 1);
+    }
   }
 
   markAsTouched() {

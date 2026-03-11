@@ -151,7 +151,18 @@ $bc-error: #d8292f;
   }
 
   .col-actions {
-    width: 100px;
-    text-align: center;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+}
+
+.draft-link {
+  color: $bc-blue;
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover {
+    color: color.scale($bc-blue, $lightness: -15%);
   }
 }
