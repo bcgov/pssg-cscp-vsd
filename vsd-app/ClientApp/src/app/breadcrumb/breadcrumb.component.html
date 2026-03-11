@@ -1,7 +1,7 @@
 @if (visible) {
   <div class="container breadcrumb-outer">
     <ol class="breadcrumb">
-      <li><a routerLink="/">Home</a></li>
+      <li><a [routerLink]="homeRoute">Home</a></li>
       @for (breadcrumb of breadcrumbs; track breadcrumb) {
         <li>
           <a [routerLink]="[breadcrumb.url]">{{ breadcrumb.label }}</a>

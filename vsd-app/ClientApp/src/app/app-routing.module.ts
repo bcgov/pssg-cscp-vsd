@@ -25,27 +25,33 @@ const routes: Routes = [
   {
     path: 'drafts',
     component: DraftDashboardComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { breadcrumb: 'Drafts' }
   },
   {
     path: 'application-selector',
-    component: ApplicationSelectorComponent
+    component: ApplicationSelectorComponent,
+    data: { breadcrumb: 'Application Selector' }
   },
   {
     path: 'victim-application',
-    component: VictimApplicationComponent
+    component: VictimApplicationComponent,
+    data: { breadcrumb: 'Victim Application' }
   },
   {
     path: 'ifm-application',
-    component: IfmApplicationComponent
+    component: IfmApplicationComponent,
+    data: { breadcrumb: 'Family Member Application' }
   },
   {
     path: 'witness-application',
-    component: WitnessApplicationComponent
+    component: WitnessApplicationComponent,
+    data: { breadcrumb: 'Witness Application' }
   },
   {
     path: 'submit-invoice',
-    component: SubmitInvoiceComponent
+    component: SubmitInvoiceComponent,
+    data: { breadcrumb: 'Submit Invoice' }
   },
   {
     path: 'application-cancelled',

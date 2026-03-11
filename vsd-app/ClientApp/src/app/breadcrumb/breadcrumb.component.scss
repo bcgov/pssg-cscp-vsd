@@ -1,0 +1,34 @@
+.breadcrumb-outer {
+  padding: 10px 0;
+}
+
+.breadcrumb {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+
+  li {
+    &:not(:first-child)::before {
+      content: '/';
+      margin: 0 8px;
+      color: #999;
+    }
+
+    a {
+      color: #003366;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &:last-child a {
+      color: #494949;
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+}
