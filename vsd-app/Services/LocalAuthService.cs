@@ -23,12 +23,28 @@ namespace Gov.Cscp.VictimServices.Public.Services
 
     public class LocalAuthService : ILocalAuthService
     {
-        private static readonly Dictionary<string, (string Password, string DisplayName)> Users = new(
-            StringComparer.OrdinalIgnoreCase
-        )
+        /// <summary>
+        /// Hardcoded users with deterministic GUIDs as user IDs.
+        /// When Keycloak replaces this, the <c>sub</c> claim will naturally
+        /// contain the Keycloak-issued user UUID instead.
+        /// </summary>
+        private static readonly Dictionary<
+            string,
+            (string Password, string DisplayName, Guid UserId, DateTime BirthDate)
+        > Users = new(StringComparer.OrdinalIgnoreCase)
         {
-            ["user1"] = ("pass1", "User One"),
-            ["user2"] = ("pass2", "User Two"),
+            ["user1"] = (
+                "pass1",
+                "User One",
+                new Guid("a1111111-1111-1111-1111-111111111111"),
+                new DateTime(1990, 1, 15)
+            ),
+            ["user2"] = (
+                "pass2",
+                "User Two",
+                new Guid("b2222222-2222-2222-2222-222222222222"),
+                new DateTime(1985, 6, 30)
+            ),
         };
 
         private readonly string _jwtSecret;
@@ -60,8 +76,10 @@ namespace Gov.Cscp.VictimServices.Public.Services
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Name, user.DisplayName),
+                new Claim(JwtRegisteredClaimNames.Birthdate, user.BirthDate.ToString("yyyy-MM-dd")),
+                new Claim("preferred_username", username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 

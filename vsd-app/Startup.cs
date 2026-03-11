@@ -57,6 +57,9 @@ namespace Gov.Cscp.VictimServices.Public
             // Local auth service (temporary — will be replaced by Keycloak)
             services.AddSingleton<ILocalAuthService, LocalAuthService>();
 
+            // Contact lookup service — resolves JWT username → Dynamics Contact GUID
+            services.AddScoped<IContactLookupService, ContactLookupService>();
+
             // JWT Bearer authentication
             var jwtSecret =
                 Configuration["LocalAuth:Secret"]
