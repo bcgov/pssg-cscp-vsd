@@ -52,10 +52,7 @@ namespace Gov.Cscp.VictimServices.Public
             services.AddDatabase(Configuration);
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<Gov.Cscp.VictimServices.Public.Services.TokenHandler>();
-
-            // Local auth service (temporary — will be replaced by Keycloak)
-            services.AddSingleton<ILocalAuthService, LocalAuthService>();
+            services.AddTransient<Services.TokenHandler>();
 
             // Contact lookup service — resolves JWT username → Dynamics Contact GUID
             services.AddScoped<IContactLookupService, ContactLookupService>();
