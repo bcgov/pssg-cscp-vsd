@@ -36,6 +36,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                         UseUpdatedComplianceFields = configuration.GetValue<bool>(
                             "FEATURE_USE_UPDATED_COMPLIANCE_FIELDS"
                         ),
+                        UseAuthentication = configuration.GetValue<bool>("FEATURE_USE_AUTHENTICATION"),
                     },
                 };
 
@@ -62,4 +63,5 @@ public class AppConfiguration
 public class FeatureFlagConfiguration
 {
     public bool UseUpdatedComplianceFields { get; set; }
+    public bool UseAuthentication { get; set; }
 }
