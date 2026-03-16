@@ -14,9 +14,9 @@ const DRAFT_TYPE_LABELS: Record<number, string> = {
 /** Maps DraftType int values to the route used to edit that type. */
 const DRAFT_TYPE_ROUTES: Record<number, string> = {
   100000000: '/submit-invoice',
-  100000001: '/victim-application',
-  100000002: '/witness-application',
-  100000003: '/ifm-application'
+  100000001: '/application/victim',
+  100000002: '/application/witness',
+  100000003: '/application/ifm'
 };
 
 export interface DraftSummary {

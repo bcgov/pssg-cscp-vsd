@@ -257,7 +257,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
             let victimForm = this.cloneFormToVictim(formClone);
             this.state.cloning = true;
             this.state.data = victimForm;
-            this.router.navigate(['/victim-application']);
+            this.router.navigate(['/application/victim']);
           } else {
             this.router.navigate(['/application-success']);
           }

@@ -79,13 +79,13 @@ export class ApplicationSelectorComponent extends FormBase implements OnInit {
       let routeUrl = '';
       switch (applicationType) {
         case 100000002:
-          routeUrl = '/victim-application';
+          routeUrl = '/application/victim';
           break;
         case 100000001:
-          routeUrl = '/ifm-application';
+          routeUrl = '/application/ifm';
           break;
         case 100000000:
-          routeUrl = '/witness-application';
+          routeUrl = '/application/witness';
           break;
       }
 

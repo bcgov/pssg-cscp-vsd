@@ -29,24 +29,29 @@ const routes: Routes = [
     data: { breadcrumb: 'Drafts' }
   },
   {
-    path: 'application-selector',
-    component: ApplicationSelectorComponent,
-    data: { breadcrumb: 'Application Selector' }
-  },
-  {
-    path: 'victim-application',
-    component: VictimApplicationComponent,
-    data: { breadcrumb: 'Victim Application' }
-  },
-  {
-    path: 'ifm-application',
-    component: IfmApplicationComponent,
-    data: { breadcrumb: 'Family Member Application' }
-  },
-  {
-    path: 'witness-application',
-    component: WitnessApplicationComponent,
-    data: { breadcrumb: 'Witness Application' }
+    path: 'application',
+    children: [
+      {
+        path: '',
+        component: ApplicationSelectorComponent,
+        data: { breadcrumb: 'Application Selector' }
+      },
+      {
+        path: 'victim',
+        component: VictimApplicationComponent,
+        data: { breadcrumb: 'Victim Application' }
+      },
+      {
+        path: 'ifm',
+        component: IfmApplicationComponent,
+        data: { breadcrumb: 'Family Member Application' }
+      },
+      {
+        path: 'witness',
+        component: WitnessApplicationComponent,
+        data: { breadcrumb: 'Witness Application' }
+      }
+    ]
   },
   {
     path: 'submit-invoice',
