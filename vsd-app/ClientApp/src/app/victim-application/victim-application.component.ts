@@ -549,6 +549,11 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
           this.saving = false;
           if (res?.draftId) {
             this.draftId = res.draftId;
+            this.router.navigate([], {
+              queryParams: { draftId: res.draftId },
+              queryParamsHandling: 'merge',
+              replaceUrl: true
+            });
             this.draftSavedMessage = 'Draft saved.';
             this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
           }
