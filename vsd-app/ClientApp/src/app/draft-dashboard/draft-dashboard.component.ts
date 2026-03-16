@@ -21,7 +21,6 @@ const DRAFT_TYPE_ROUTES: Record<number, string> = {
 
 export interface DraftSummary {
   id: string;
-  name: string;
   draftType: number;
   draftedDate: string;
   createdOn: string;
@@ -84,7 +83,9 @@ export class DraftDashboardComponent implements OnInit {
   }
 
   deleteDraft(draft: DraftSummary): void {
-    if (!confirm(`Cancel draft "${draft.name || draft.id}"?`)) return;
+    const rawDate = draft.draftedDate ?? draft.createdOn;
+    const formattedDate = rawDate ? new Date(rawDate).toLocaleDateString('en-CA') : '';
+    if (!confirm(`Cancel ${this.getDraftTypeLabel(draft.draftType)} draft from ${formattedDate}?`)) return;
 
     this.draftsService.deleteApiApplicationDraftsDraftId(draft.id).subscribe({
       next: () => {

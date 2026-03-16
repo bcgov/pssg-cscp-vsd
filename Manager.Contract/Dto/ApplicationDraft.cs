@@ -23,9 +23,6 @@ public record ApplicationDraft : IDto
     public Guid Id { get; set; }
     public StateCode StateCode { get; set; }
 
-    /// <summary>Name / reference label stored in vsd_name.</summary>
-    public string? Name { get; set; }
-
     /// <summary>Draft type – distinguishes invoice drafts from application drafts.</summary>
     public DraftType? DraftType { get; set; }
 

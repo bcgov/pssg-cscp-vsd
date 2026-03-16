@@ -4,8 +4,7 @@
       <h1>Application Drafts</h1>
     </div>
     <div class="dashboard-actions">
-      <a class="btn btn-primary btn-sm" routerLink="/application">New Application</a>
-      <a class="btn btn-primary btn-sm" routerLink="/submit-invoice">Submit Invoice</a>
+      <a class="btn btn-primary btn-sm" routerLink="/application">New Application</a>      
     </div>
   </div>
 
@@ -30,7 +29,6 @@
     <table class="dashboard-table">
       <thead>
         <tr>
-          <th>Name</th>
           <th>Type</th>
           <th>Created</th>
           <th>Last Modified</th>
@@ -39,7 +37,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let draft of drafts">
-          <td><a class="draft-link" (click)="openDraft(draft)">{{ draft.name || '(untitled)' }}</a></td>
           <td>{{ getDraftTypeLabel(draft.draftType) }}</td>
           <td>{{ draft.createdOn | date: 'mediumDate' }}</td>
           <td>{{ draft.modifiedOn | date: 'medium' }}</td>

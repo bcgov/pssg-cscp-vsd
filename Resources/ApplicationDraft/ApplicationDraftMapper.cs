@@ -8,8 +8,6 @@ public class ApplicationDraftMapper : Profile
         CreateMap<Vsd_VictimServiceDraft, ApplicationDraft>()
             .ForMember(dest => dest.Id,
                 opts => opts.MapFrom(src => src.Vsd_VictimServiceDraftId ?? Guid.Empty))
-            .ForMember(dest => dest.Name,
-                opts => opts.MapFrom(src => src.Vsd_Name))
             .ForMember(dest => dest.DraftType,
                 opts => opts.MapFrom(src => (DraftType?)src.Vsd_VictimServiceFormType))
             .ForMember(dest => dest.DraftData,
@@ -32,8 +30,7 @@ public class ApplicationDraftMapper : Profile
         CreateMap<ApplicationDraft, Vsd_VictimServiceDraft>()
             .ForMember(dest => dest.Vsd_VictimServiceDraftId,
                 opts => opts.MapFrom(src => src.Id == Guid.Empty ? (Guid?)null : src.Id))
-            .ForMember(dest => dest.Vsd_Name,
-                opts => opts.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Vsd_Name, opts => opts.Ignore())
             .ForMember(dest => dest.Vsd_VictimServiceFormType,
                 opts => opts.MapFrom(src => (Vsd_VictimServiceFormType?)src.DraftType))
             .ForMember(dest => dest.Vsd_DraftData,
