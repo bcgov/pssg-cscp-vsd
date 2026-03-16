@@ -296,6 +296,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       ApplicationType: this.FORM_TYPE,
       ApplicationDate: new Date(),
       ApplicationPDFs: [],
+      DraftId: this.draftId,
       Introduction: this.form.get('introduction').value as Introduction,
       PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
       CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,

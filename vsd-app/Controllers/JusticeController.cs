@@ -4,21 +4,29 @@ using Database.Model;
 using Gov.Cscp.VictimServices.Public.Models;
 using Gov.Cscp.VictimServices.Public.Models.Extensions;
 using Gov.Cscp.VictimServices.Public.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Resources;
 using Serilog;
 
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("api/[controller]")]
+    [AllowAnonymous] // TODO: should not be Authorize
     public partial class JusticeController : Controller
     {
         private readonly IOrganizationServiceAsync _organizationService;
+        private readonly IApplicationDraftRepository _draftRepository;
         private readonly ILogger _logger;
 
-        public JusticeController(IOrganizationServiceAsync organizationService)
+        public JusticeController(
+            IOrganizationServiceAsync organizationService,
+            IApplicationDraftRepository draftRepository
+        )
         {
             _organizationService = organizationService;
+            _draftRepository = draftRepository;
             _logger = Log.Logger;
         }
 
@@ -41,6 +49,28 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 if (response?.IsSuccess == true)
                 {
                     _logger.Information("Successfully submitted CVAP claim application.");
+
+                    // Cancel the associated draft (fire-and-forget; don't fail the submission).
+                    if (model.DraftId.HasValue)
+                    {
+                        try
+                        {
+                            _draftRepository.Cancel(model.DraftId.Value);
+                            _logger.Information(
+                                "Cancelled draft {DraftId} after successful submission.",
+                                model.DraftId.Value
+                            );
+                        }
+                        catch (Exception draftEx)
+                        {
+                            _logger.Warning(
+                                draftEx,
+                                "Failed to cancel draft {DraftId} after submission.",
+                                model.DraftId.Value
+                            );
+                        }
+                    }
+
                     return Ok(new { success = true, result = response.Result });
                 }
                 else
