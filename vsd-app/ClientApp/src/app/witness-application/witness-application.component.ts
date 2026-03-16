@@ -26,6 +26,7 @@ import {
   VictimInformation
 } from '../interfaces/application.interface';
 import { AEMService } from '../services/aem.service';
+import { LocalAuthService } from '../services/local-auth.service';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
@@ -84,6 +85,10 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
   isIE: boolean = false;
   protected readonly lookupStore = inject(LookupStore);
 
+  get canSaveDraft(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
   constructor(
     private justiceService: JusticeService,
     private draftsService: ApplicationDraftsService,
@@ -92,7 +97,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit {
     private route: ActivatedRoute,
     public snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private aemService: AEMService
+    private aemService: AEMService,
+    private authService: LocalAuthService
   ) {
     super();
     this.formFullyValidated = false;
