@@ -1,4 +1,4 @@
-@if (visible) {
+@if (visible && isAuthenticated) {
   <div class="container breadcrumb-outer">
     <ol class="breadcrumb">
       <li><a [routerLink]="homeRoute">Home</a></li>

@@ -15,6 +15,10 @@ export class BreadcrumbComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute, private authService: LocalAuthService) {}
 
+  get isAuthenticated(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
   get homeRoute(): string {
     if (this.router.url.startsWith('/drafts')) return '/';
 
