@@ -98,16 +98,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
                 var vi = VictimInformation;
                 if (vi != null)
                 {
-                    if (string.IsNullOrWhiteSpace(vi.firstName))
-                        yield return new ValidationResult(
-                            "Victim first name is required.",
-                            new[] { $"{nameof(VictimInformation)}.{nameof(VictimInformation.firstName)}" }
-                        );
-                    if (string.IsNullOrWhiteSpace(vi.lastName))
-                        yield return new ValidationResult(
-                            "Victim last name is required.",
-                            new[] { $"{nameof(VictimInformation)}.{nameof(VictimInformation.lastName)}" }
-                        );
+                    // firstName and lastName are optional for Witness applications
                     if (vi.maritalStatus == null)
                         yield return new ValidationResult(
                             "Victim marital status is required.",
