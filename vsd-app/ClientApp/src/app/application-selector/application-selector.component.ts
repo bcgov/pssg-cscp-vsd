@@ -6,12 +6,12 @@ import { Subscription } from 'rxjs';
 import { FormBase } from '../shared/form-base';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  selector: 'app-application-selector',
+  templateUrl: './application-selector.component.html',
+  styleUrls: ['./application-selector.component.scss'],
   standalone: false
 })
-export class HomeComponent extends FormBase implements OnInit {
+export class ApplicationSelectorComponent extends FormBase implements OnInit {
   window = window;
   busy: Subscription;
 
@@ -79,13 +79,13 @@ export class HomeComponent extends FormBase implements OnInit {
       let routeUrl = '';
       switch (applicationType) {
         case 100000002:
-          routeUrl = '/victim-application';
+          routeUrl = '/application/victim';
           break;
         case 100000001:
-          routeUrl = '/ifm-application';
+          routeUrl = '/application/ifm';
           break;
         case 100000000:
-          routeUrl = '/witness-application';
+          routeUrl = '/application/witness';
           break;
       }
 

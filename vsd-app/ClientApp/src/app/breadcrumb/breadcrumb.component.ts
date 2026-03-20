@@ -1,18 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { LocalAuthService } from '../services/local-auth.service';
 
 @Component({
-    selector: 'breadcrumb',
-    templateUrl: './breadcrumb.component.html',
-    styleUrls: ['./breadcrumb.component.scss'],
-    standalone: false
+  selector: 'breadcrumb',
+  templateUrl: './breadcrumb.component.html',
+  styleUrls: ['./breadcrumb.component.scss'],
+  standalone: false
 })
 export class BreadcrumbComponent implements OnInit {
   public breadcrumbs: Array<{}> = [];
   public visible = false;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private router: Router, private route: ActivatedRoute, private authService: LocalAuthService) {}
+
+  get isAuthenticated(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  get homeRoute(): string {
+    if (this.router.url.startsWith('/drafts')) return '/';
+
+    return this.authService.isLoggedIn() ? '/drafts' : '/';
+  }
 
   ngOnInit() {
     const ROUTE_DATA_BREADCRUMB: string = 'breadcrumb';

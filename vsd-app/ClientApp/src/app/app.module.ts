@@ -45,11 +45,15 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
+import { ApplicationSelectorComponent } from './application-selector/application-selector.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
-import { HomeComponent } from './home/home.component';
+import { DraftDashboardComponent } from './draft-dashboard/draft-dashboard.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { LandingComponent } from './landing/landing.component';
+import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
@@ -99,6 +103,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     CrimeInformationComponent,
     DateFieldComponent,
     DeclarationInformationComponent,
+    DraftDashboardComponent,
     EmploymentInformationComponent,
     ExpenseInformationComponent,
     FeatureEnabledDirective,
@@ -107,8 +112,10 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     FileUploaderComponent,
     GenderSelectorComponent,
     GSTWarningDialog,
-    HomeComponent,
+    ApplicationSelectorComponent,
     IfmApplicationComponent,
+    LandingComponent,
+    LoginComponent,
     IntroductionComponent,
     InvoiceInstructionsDialog,
     MedicalInformationComponent,
@@ -224,7 +231,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     HeaderTitleService,
     Title,
     provideNgxMask(),
-    provideHttpClient(withInterceptors([LoadingInterceptor]), withInterceptorsFromDi())
+    provideHttpClient(withInterceptors([AuthInterceptor, LoadingInterceptor]), withInterceptorsFromDi())
   ]
 })
 export class AppModule {}

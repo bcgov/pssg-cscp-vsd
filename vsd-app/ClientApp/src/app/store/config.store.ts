@@ -16,7 +16,7 @@ const initialState: ConfigState = {
   outageStartDate: null,
   outageEndDate: null,
   outageMessage: null,
-  featureFlags: { useUpdatedComplianceFields: false },
+  featureFlags: { useAuthentication: false, useUpdatedComplianceFields: false },
   error: null
 };
 
@@ -32,7 +32,7 @@ export const ConfigStore = signalStore(
           outageStartDate: config?.outageStartDate ?? null,
           outageEndDate: config?.outageEndDate ?? null,
           outageMessage: config?.outageMessage ?? null,
-          featureFlags: config?.featureFlags ?? { useUpdatedComplianceFields: false }
+          featureFlags: config?.featureFlags ?? { useAuthentication: false, useUpdatedComplianceFields: false }
         });
       } catch (err) {
         patchState(store, {

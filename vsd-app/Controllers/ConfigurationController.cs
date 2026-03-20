@@ -33,9 +33,13 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     OutageEndDate = configuration.GetValue<string>("CONFIGURATION_OUTAGEINFORMATION_ENDDATE"),
                     FeatureFlags = new FeatureFlagConfiguration
                     {
-                        UseUpdatedComplianceFields = configuration.GetValue<bool>(
-                            "FEATURE_USE_UPDATED_COMPLIANCE_FIELDS"
-                        ),
+                        UseUpdatedComplianceFields =
+                            bool.TryParse(
+                                configuration["FEATURE_USE_UPDATED_COMPLIANCE_FIELDS"],
+                                out var useUpdatedCompliance
+                            ) && useUpdatedCompliance,
+                        UseAuthentication =
+                            bool.TryParse(configuration["FEATURE_USE_AUTHENTICATION"], out var useAuth) && useAuth,
                     },
                 };
 
@@ -62,4 +66,5 @@ public class AppConfiguration
 public class FeatureFlagConfiguration
 {
     public bool UseUpdatedComplianceFields { get; set; }
+    public bool UseAuthentication { get; set; }
 }

@@ -1,0 +1,233 @@
+@use 'sass:color';
+
+// ─── Colour tokens (aligned with BC Government design) ──────────────────────
+$bc-blue: #003366;
+$bc-gold: #fcba19;
+$bc-text: #494949;
+$bc-link: #1a5276;
+$bc-bg: #f1f1f1;
+$bc-white: #ffffff;
+$bc-border: #d6d6d6;
+$bc-primary-hover: #002754;
+$bc-secondary-hover: #e8e8e8;
+
+// ─── Wrapper ─────────────────────────────────────────────────────────────────
+.landing-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
+
+// ─── Page header ─────────────────────────────────────────────────────────────
+.landing-header {
+  margin-bottom: 24px;
+  border-left: 6px solid $bc-gold;
+  padding-left: 16px;
+
+  h1 {
+    color: $bc-blue;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+}
+
+.landing-subtitle {
+  font-size: 1.1rem;
+  color: $bc-text;
+  margin: 0;
+}
+
+// ─── Intro text ──────────────────────────────────────────────────────────────
+.landing-intro {
+  margin-bottom: 36px;
+
+  p {
+    font-size: 1rem;
+    color: $bc-text;
+    line-height: 1.7;
+    margin-bottom: 0.8em;
+  }
+}
+
+// ─── Option cards container ──────────────────────────────────────────────────
+.option-cards {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
+// ─── Individual option card ───────────────────────────────────────────────────
+.option-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: $bc-white;
+  border: 1px solid $bc-border;
+  border-radius: 4px;
+  padding: 32px 28px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  }
+
+  // Primary card – BC Services Card
+  &--primary {
+    border-top: 5px solid $bc-blue;
+
+    .option-card__icon {
+      color: $bc-blue;
+    }
+  }
+
+  // Secondary card – anonymous
+  &--secondary {
+    border-top: 5px solid $bc-gold;
+
+    .option-card__icon {
+      color: color.adjust($bc-gold, $lightness: -15%);
+    }
+  }
+}
+
+// Card icon
+.option-card__icon {
+  margin-bottom: 16px;
+
+  svg {
+    display: block;
+  }
+}
+
+// Card body
+.option-card__body {
+  flex: 1;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $bc-blue;
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: $bc-text;
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+}
+
+// Benefit list
+.option-card__benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+
+  li {
+    font-size: 0.9rem;
+    color: $bc-text;
+    padding: 4px 0 4px 20px;
+    position: relative;
+
+    &::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: $bc-blue;
+      font-weight: 700;
+    }
+  }
+}
+
+// Card action area
+.option-card__action {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid $bc-border;
+
+  .btn {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .btn-primary {
+    background-color: $bc-blue;
+    border: 2px solid $bc-blue;
+    color: $bc-white;
+
+    &:hover,
+    &:focus {
+      background-color: $bc-primary-hover;
+      border-color: $bc-primary-hover;
+      color: $bc-white;
+      text-decoration: none;
+    }
+  }
+
+  .btn-secondary {
+    background-color: $bc-white;
+    border: 2px solid $bc-blue;
+    color: $bc-blue;
+
+    &:hover,
+    &:focus {
+      background-color: $bc-secondary-hover;
+      color: $bc-blue;
+      text-decoration: none;
+    }
+  }
+}
+
+.option-card__note {
+  font-size: 0.85rem;
+  color: $bc-text;
+  margin: 10px 0 0;
+  text-align: center;
+
+  a {
+    color: $bc-link;
+    font-weight: 600;
+    text-decoration: underline;
+
+    &:link,
+    &:visited {
+      color: $bc-link;
+    }
+
+    &:hover {
+      color: color.adjust($bc-link, $lightness: -10%);
+    }
+  }
+}
+
+// ─── Footer help note ────────────────────────────────────────────────────────
+.landing-footer-note {
+  margin-top: 40px;
+  padding: 16px 20px;
+  background-color: color.scale($bc-gold, $lightness: 76.6094420601%);
+  border-left: 4px solid $bc-gold;
+  border-radius: 2px;
+
+  p {
+    font-size: 0.95rem;
+    color: $bc-text;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .phone-number {
+    white-space: nowrap;
+  }
+}

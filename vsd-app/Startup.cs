@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Text;
 using System.Text.Json.Serialization;
 using Database;
 using Gov.Cscp.VictimServices.Public.Services;
 using Manager;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -19,6 +22,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using NWebsec.AspNetCore.Mvc;
 using NWebsec.AspNetCore.Mvc.Csp;
 using Serilog;
@@ -47,12 +52,41 @@ namespace Gov.Cscp.VictimServices.Public
             services.AddDatabase(Configuration);
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<TokenHandler>();
+            services.AddTransient<Services.TokenHandler>();
+
+            // Contact lookup service — resolves JWT username → Dynamics Contact GUID
+            services.AddScoped<IContactLookupService, ContactLookupService>();
+
+            // JWT Bearer authentication
+            var jwtSecret =
+                Configuration["LocalAuth:Secret"]
+                ?? throw new InvalidOperationException("LocalAuth:Secret is not configured.");
+            var jwtIssuer = Configuration["LocalAuth:Issuer"] ?? "vsd-local";
+
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtIssuer,
+                        ValidAudience = jwtIssuer,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+                    };
+                });
 
             services.AddHttpClient<ICOASTAuthService, COASTAuthService>();
             services
                 .AddHttpClient<IDynamicsResultService, DynamicsResultService>()
-                .AddHttpMessageHandler<TokenHandler>();
+                .AddHttpMessageHandler<Gov.Cscp.VictimServices.Public.Services.TokenHandler>();
             services.AddHttpClient<IAEMResultService, AEMResultService>();
 
             // Add a memory cache
@@ -76,8 +110,6 @@ namespace Gov.Cscp.VictimServices.Public
                     //CSPReportOnly
                     opts.Filters.Add(typeof(CspReportOnlyAttribute));
                     opts.Filters.Add(new CspScriptSrcReportOnlyAttribute { None = true });
-
-                    opts.Filters.Add(new AllowAnonymousFilter()); // Allow anonymous for dev
                 })
                 .AddNewtonsoftJson(opts =>
                 {
@@ -119,13 +151,32 @@ namespace Gov.Cscp.VictimServices.Public
             {
                 c.SwaggerDoc(
                     "v1",
-                    new Microsoft.OpenApi.OpenApiInfo
+                    new OpenApiInfo
                     {
                         Title = "VSD API",
                         Version = "v1",
                         Description = "API for the Victim Services Directory (VSD) application",
                     }
                 );
+
+                // Add Bearer token support to Swagger UI
+                c.AddSecurityDefinition(
+                    "Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        Description = "JWT token obtained from POST /api/auth/login. Enter: Bearer {token}",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer",
+                    }
+                );
+
+                // Make Swagger UI send the Bearer token on every request
+                c.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
+                {
+                    { new OpenApiSecuritySchemeReference("Bearer"), new List<string>() },
+                });
             });
         }
 
@@ -244,6 +295,8 @@ namespace Gov.Cscp.VictimServices.Public
             app.UseNoCacheHttpHeaders();
             // IMPORTANT: This session call MUST go before UseMvc()
             app.UseSession();
+
+            app.UseAuthentication();
 
             app.UseCookiePolicy(
                 new CookiePolicyOptions

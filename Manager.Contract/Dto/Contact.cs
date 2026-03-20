@@ -18,6 +18,12 @@ public record ContactQuery : BaseContactQuery, IRequest<IEnumerable<Contact>> { 
 public record BaseContactQuery
 {
     public Guid? Id { get; set; }
+
+    /// <summary>
+    /// Filter by identity-provider user ID.
+    /// Stored in EmailAddress1 in Dynamics (temporary; will move to a dedicated field).
+    /// </summary>
+    public string? ExternalUserId { get; set; }
 }
 
 public record Contact : IDto

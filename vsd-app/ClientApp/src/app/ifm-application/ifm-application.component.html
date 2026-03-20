@@ -117,6 +117,11 @@
           <section class="button-container">
             <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
             <span class="right-buttons">              
+              @if (canSaveDraft) {
+                <button (click)="saveDraft();" class="btn btn-secondary save-draft-btn" [disabled]="saving">
+                  @if (saving) { Saving&hellip; } @else { <i class="fas fa-save" style="margin-right: 6px;"></i>Save Draft }
+                </button>
+              }
               @if (stepper.selectedIndex < 9) {
                 <button (click)="gotoNextStep(stepper);" class="btn btn-primary">CONTINUE <i class="fas fa-chevron-right"></i></button>
               }
