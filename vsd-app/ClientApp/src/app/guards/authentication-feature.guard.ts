@@ -52,9 +52,7 @@ export class AuthGuard implements CanActivate {
 
   public async canActivate(
   ): Promise<boolean> {
-    // 2024-05-27 EMCRI-217 waynezen: replace AuthGuard with built-in from angular-auth-oidc-client
     const response = await this.loginService.checkAuth().toPromise();
     return response?.isAuthenticated ?? false;
-    //return Promise.resolve(true);
   }
 }

@@ -5,9 +5,7 @@ import { LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
 @Injectable({
   providedIn: 'root'
 })
-// 2024-07-26 EMCRI-507 waynezen: re-write to centralize oidcSecurityService calls
 export class LoginService {
-  private _isAuth: boolean | null = null;
   private _accesstoken: string = null;
 
   constructor(
@@ -18,11 +16,9 @@ export class LoginService {
     return this.oidcSecurityService.checkAuth().pipe(
       tap((response: LoginResponse) => {
         console.log('Auth check response:', response);
-        this._isAuth = response?.isAuthenticated;
         this._accesstoken = response?.accessToken;
 
         const isAuthenticated = !!(response?.isAuthenticated || this._accesstoken);
-        this._isAuth = isAuthenticated;
         this.isAuthenticated.next(isAuthenticated);
         
       })
@@ -30,7 +26,6 @@ export class LoginService {
   }
 
   public authorize(): void {
-    this._isAuth = false;
     this.oidcSecurityService.authorize();
   }
 
@@ -64,10 +59,7 @@ export class LoginService {
 
   public logOff(): void {
     this.oidcSecurityService.logoff('').subscribe((result) => {
-      // Only clear app-specific data, not OIDC tokens
-      // localStorage.clear();
       this.isAuthenticated.next(false);
-      this._isAuth = false;
       this._accesstoken = null;
     });
   }
