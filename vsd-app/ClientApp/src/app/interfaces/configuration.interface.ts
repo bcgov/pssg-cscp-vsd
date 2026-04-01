@@ -6,5 +6,6 @@ export interface Configuration {
 }
 
 export interface FeatureFlagConfiguration {
+  useAuthentication: boolean;
   useUpdatedComplianceFields: boolean;
 }

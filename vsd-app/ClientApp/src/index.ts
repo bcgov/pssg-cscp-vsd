@@ -1,4 +1,6 @@
 export * from './api/aem/aem.service';
+export * from './api/application-drafts/application-drafts.service';
+export * from './api/auth/auth.service';
 export * from './api/configuration/configuration.service';
 export * from './api/invoices/invoices.service';
 export * from './api/justice/justice.service';

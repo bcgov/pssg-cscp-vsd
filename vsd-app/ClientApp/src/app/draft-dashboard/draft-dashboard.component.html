@@ -1,0 +1,51 @@
+<div class="dashboard-wrapper">
+  <div class="dashboard-header">
+    <div class="dashboard-title">
+      <h1>Application Drafts</h1>
+    </div>
+    <div class="dashboard-actions">
+      <a class="btn btn-primary btn-sm" routerLink="/application">New Application</a>      
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div class="dashboard-loading" *ngIf="loading">
+    <p>Loading drafts&hellip;</p>
+  </div>
+
+  <!-- Error state -->
+  <div class="dashboard-error" *ngIf="errorMessage">
+    <p>{{ errorMessage }}</p>
+    <button class="btn btn-primary btn-sm" (click)="loadDrafts()">Retry</button>
+  </div>
+
+  <!-- Empty state -->
+  <div class="dashboard-empty" *ngIf="!loading && !errorMessage && drafts.length === 0">
+    <p>No drafts found. Start a new application from the <a routerLink="/">home page</a>.</p>
+  </div>
+
+  <!-- Drafts table -->
+  <div class="dashboard-table-container" *ngIf="!loading && drafts.length > 0">
+    <table class="dashboard-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Created</th>
+          <th>Last Modified</th>
+          <th class="col-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let draft of drafts">
+          <td>{{ getDraftTypeLabel(draft.draftType) }}</td>
+          <td>{{ draft.createdOn | date: 'mediumDate' }}</td>
+          <td>{{ draft.modifiedOn | date: 'medium' }}</td>
+          <td class="col-actions">
+            <button class="btn btn-primary btn-xs" (click)="openDraft(draft)" style="margin-right: 4px;">Open</button>
+            <button class="btn btn-danger btn-xs" (click)="deleteDraft(draft)">Cancel</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

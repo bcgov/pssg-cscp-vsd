@@ -11,6 +11,7 @@ using Gov.Cscp.VictimServices.Public.Models;
 using Gov.Cscp.VictimServices.Public.Models.Extensions;
 using Gov.Cscp.VictimServices.Public.Services;
 using Gov.Cscp.VictimServices.Public.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Query;
@@ -19,6 +20,7 @@ using Serilog;
 namespace Gov.Cscp.VictimServices.Public.Controllers
 {
     [Route("api/[controller]")]
+    [AllowAnonymous] // TODO: should not be Authorize
     public class AEMController : Controller
     {
         private readonly IAEMResultService _aemResultService;
