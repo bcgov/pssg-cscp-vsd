@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first } from 'rxjs';
 import { ApplicationDraftsService } from '../../api/application-drafts/application-drafts.service';
-import { LocalAuthService } from '../services/local-auth.service';
+import { LoginService } from '../services/login.service';
 
 /** Maps DraftType int values to human-readable labels. */
 const DRAFT_TYPE_LABELS: Record<number, string> = {
@@ -42,13 +43,32 @@ export class DraftDashboardComponent implements OnInit {
 
   constructor(
     private draftsService: ApplicationDraftsService,
-    private authService: LocalAuthService,
+    private authService: LoginService,
+    private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.username = this.authService.getUsername();
-    this.loadDrafts();
+    console.log('DraftDashboard ngOnInit');
+    this.authService
+      .checkAuth()
+      .pipe(first())
+      .subscribe((response) => {
+        if (!response?.isAuthenticated) {
+          this.authService.authorize();
+          return;
+        }
+
+        this.authService
+          .getUserName()
+          .pipe(first())
+          .subscribe((username) => {
+            console.log('DraftDashboard got username:', username);
+            this.username = username;
+          });
+
+        this.loadDrafts();
+      });
   }
 
   loadDrafts(): void {
@@ -63,7 +83,7 @@ export class DraftDashboardComponent implements OnInit {
       error: (err) => {
         this.loading = false;
         if (err.status === 401) {
-          this.authService.logout();
+          this.authService.logOff();
           return;
         }
         this.errorMessage = err?.error?.error ?? 'Failed to load drafts.';

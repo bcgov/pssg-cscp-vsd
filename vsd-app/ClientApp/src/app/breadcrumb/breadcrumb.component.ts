@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { LocalAuthService } from '../services/local-auth.service';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'breadcrumb',
@@ -13,16 +13,16 @@ export class BreadcrumbComponent implements OnInit {
   public breadcrumbs: Array<{}> = [];
   public visible = false;
 
-  constructor(private router: Router, private route: ActivatedRoute, private authService: LocalAuthService) {}
+  constructor(private router: Router, private route: ActivatedRoute, private authService: LoginService) {}
 
   get isAuthenticated(): boolean {
-    return this.authService.isLoggedIn();
+    return this.authService.isAuthenticated.value;
   }
 
   get homeRoute(): string {
     if (this.router.url.startsWith('/drafts')) return '/';
 
-    return this.authService.isLoggedIn() ? '/drafts' : '/';
+    return this.authService.isAuthenticated.value ? '/drafts' : '/';
   }
 
   ngOnInit() {

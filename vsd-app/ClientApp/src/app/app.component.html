@@ -15,7 +15,7 @@
           <span class="title" role="banner">{{title}}</span>
         </section>
         <section class="col-md-4 col-xs-12 sign-container">
-          @if (isLoggedIn()) {
+          @if (isAuthenticated) {
             <span class="sign-user">{{ authUsername }}</span>
             <button class="btn btn-outline btn-sm sign-out-btn" (click)="logout()">Sign Out</button>
           }

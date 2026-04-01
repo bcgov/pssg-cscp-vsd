@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { LocalAuthService } from '../services/local-auth.service';
+import { Observable, switchMap, take } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 /**
  * Regex patterns for API URLs that require the Bearer token.
@@ -18,17 +18,23 @@ export const AuthInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
-  const authService = inject(LocalAuthService);
+  const oidcSecurityService = inject(OidcSecurityService);
   const isProtected = PROTECTED_URLS.some((pattern) => pattern.test(req.url));
 
-  if (isProtected) {
-    const token = authService.getToken();
-    if (token) {
-      req = req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` }
-      });
-    }
+  if (!isProtected) {
+    return next(req);
   }
 
+  return oidcSecurityService.getAccessToken().pipe(
+    take(1),
+    switchMap((token: string) => {
+      if (token) {
+        req = req.clone({
+          setHeaders: { Authorization: `Bearer ${token}` }
+        });
+      }
+
   return next(req);
+    })
+  );
 };

@@ -25,7 +25,6 @@ import {
   RepresentativeInformation
 } from '../interfaces/application.interface';
 import { AEMService } from '../services/aem.service';
-import { LocalAuthService } from '../services/local-auth.service';
 import { StateService } from '../services/state.service';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
@@ -42,6 +41,7 @@ import { ServiceNotAvailableComponent } from '../shared/service-not-available.co
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { LookupStore } from '../store/lookup.store';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-victim-application',
@@ -85,7 +85,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   protected readonly lookupStore = inject(LookupStore);
 
   get canSaveDraft(): boolean {
-    return this.authService.isLoggedIn();
+    return this.authService.isAuthenticated.value;
   }
 
   private steps: Array<string> = [
@@ -110,8 +110,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     private matDialog: MatDialog,
     public state: StateService,
     private aemService: AEMService,
-    private authService: LocalAuthService
-  ) {
+    private authService: LoginService) {
     super();
   }
 

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { LookupStore } from '../store/lookup.store';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-landing',
@@ -9,13 +11,12 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class LandingComponent {
-  constructor(private titleService: Title, private router: Router) {
+  constructor(private titleService: Title, private router: Router, private loginService : LoginService) {
     this.titleService.setTitle('Welcome - Crime Victim Assistance Program');
   }
 
   signInWithBcServicesCard(): void {
-    // TODO: Replace with BC Services Card / Keycloak authentication.
-    this.router.navigate(['/login']);
+    this.loginService.authorize();
   }
 
   continueAnonymously(): void {

@@ -5,7 +5,7 @@ import { ApplicationSelectorComponent } from './application-selector/application
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { DraftDashboardComponent } from './draft-dashboard/draft-dashboard.component';
 import { authGuard } from './guards/auth.guard';
-import { authenticationFeatureGuard, landingGuard } from './guards/authentication-feature.guard';
+import { authenticationFeatureGuard, landingGuard, canActivate } from './guards/authentication-feature.guard';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
 import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
@@ -28,7 +28,7 @@ const routes: Routes = [
   {
     path: 'drafts',
     component: DraftDashboardComponent,
-    canActivate: [authenticationFeatureGuard, authGuard],
+    canActivate: [authenticationFeatureGuard, canActivate],
     data: { breadcrumb: 'Drafts' }
   },
   {

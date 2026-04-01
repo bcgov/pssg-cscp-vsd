@@ -1,6 +1,6 @@
 import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
 import { CdkTableModule } from '@angular/cdk/table';
-import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -89,6 +89,42 @@ import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.componen
 import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefits.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
+import { AuthModule, LogLevel, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+export const httpLoaderFactory = (httpClient: HttpClient) => {
+  const config$ = httpClient.get<any>(`/cvapwebform/api/Configuration/keycloak`).pipe(
+    catchError(() => of(null)),
+    map((customConfig: any) => {
+      console.log('OIDC configuration loaded:', customConfig.authority, customConfig.clientId);
+      return {
+        authority: customConfig.authority,
+        redirectUrl: window.location.origin,
+        postLoginRoute: '/drafts',
+        postLogoutRedirectUri: window.location.origin,
+        clientId: customConfig.clientId,
+        scope: "openid profile",
+        autoUserInfo: false,
+        customParamsAuthRequest: {
+          kc_idp_hint: 'bcsc'
+        },
+        responseType: 'code',
+        silentRenew:  true,
+        useRefreshToken:  true,
+        renewTimeBeforeTokenExpiresInSeconds: 30,
+        ignoreNonceAfterRefresh: true,
+        triggerRefreshWhenIdTokenExpired: false,
+        secureRoutes: ['api'],
+        historyCleanupOff: true,
+        storage: localStorage,
+        logLevel: LogLevel.None
+      };
+    })
+  );
+
+  return new StsConfigHttpLoader(config$);
+};
 
 @NgModule({
   declarations: [
@@ -132,9 +168,12 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     ToolTipTriggerComponent,
     VictimApplicationComponent,
     VictimInformationComponent,
-    WitnessApplicationComponent
+    WitnessApplicationComponent,
+    ToolTipTriggerComponent
   ],
   exports: [
+    FieldComponent,
+    AddressComponent,
     AppRoutingModule,
     AngularSignaturePadModule,
     BrowserAnimationsModule,
@@ -223,7 +262,14 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     AngularSignaturePadModule,
     BsDatepickerModule.forRoot(),
     TooltipModule,
-    TypeaheadModule.forRoot()
+    TypeaheadModule.forRoot(),
+    AuthModule.forRoot({
+      loader: {
+        provide: StsConfigLoader,
+        useFactory: httpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     AEMService,
