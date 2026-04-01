@@ -1,10 +1,11 @@
 import { Component, inject, isDevMode, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { filter, first } from 'rxjs';
 import moment from 'moment-timezone';
 import { environment } from '../environments/environment';
-import { LocalAuthService } from './services/local-auth.service';
 import { HeaderTitleService } from './services/titile.service';
 import { ConfigStore } from './store/config.store';
+import { LoginService } from './services/login.service';
 
 @Component({
   selector: 'app-root',
@@ -22,13 +23,14 @@ export class AppComponent implements OnInit {
   apiPath = environment.apiRootUrl;
   public isNewUser: boolean;
   public isDevMode: boolean;
+  isAuthenticated = false;
   authUsername: string | null = null;
 
   constructor(
     private renderer: Renderer2,
     private router: Router,
     private headerTitleService: HeaderTitleService,
-    private authService: LocalAuthService
+    private authService: LoginService
   ) {
     this.isDevMode = isDevMode();
     this.router.events.subscribe((event) => {
@@ -43,6 +45,7 @@ export class AppComponent implements OnInit {
           this.renderer.addClass(document.body, 'ctx-' + nextSlug);
         }
         this.previousUrl = nextSlug;
+        this.refreshAuthState();
       }
     });
   }
@@ -51,16 +54,16 @@ export class AppComponent implements OnInit {
     this.headerTitleService.title.subscribe((updatedTitle) => {
       this.title = updatedTitle;
     });
-  }
 
-  isLoggedIn(): boolean {
-    const loggedIn = this.authService.isLoggedIn();
-    this.authUsername = loggedIn ? this.authService.getUsername() : null;
-    return loggedIn;
+    this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
+      this.isAuthenticated = isAuthenticated;
+    });
+
+    this.refreshAuthState();
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authService.logOff();
   }
 
   isOutage() {
@@ -88,5 +91,26 @@ export class AppComponent implements OnInit {
     }
 
     return false;
+  }
+
+  private refreshAuthState(): void {
+    this.authService
+      .checkAuth()
+      .pipe(first())
+      .subscribe((response) => {
+        this.isAuthenticated = !!response?.isAuthenticated;
+
+        if (!this.isAuthenticated) {
+          this.authUsername = null;
+          return;
+        }
+
+    this.authService
+      .getUserName()
+      .pipe(first())
+      .subscribe((username) => {
+            this.authUsername = username || null;
+          });
+      });
   }
 }

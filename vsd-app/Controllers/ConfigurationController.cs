@@ -51,6 +51,19 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [AllowAnonymous]
+        [HttpGet("keycloak")]
+        public IActionResult GetKeycloakConfiguration()
+        {
+            var keycloak = new KeycloakConfiguration
+            {
+                Authority = configuration.GetValue<string>("auth:jwt:authority"),
+                ClientId = configuration.GetValue<string>("auth:jwt:audience"),
+                Scope = configuration.GetValue<string>("auth:jwt:scope"),
+            };
+            return Ok(keycloak);
+        }
     }
 }
 
@@ -67,4 +80,11 @@ public class FeatureFlagConfiguration
 {
     public bool UseUpdatedComplianceFields { get; set; }
     public bool UseAuthentication { get; set; }
+}
+
+public class KeycloakConfiguration
+{
+    public string Authority { get; set; }
+    public string ClientId { get; set; }
+    public string Scope { get; set; }
 }

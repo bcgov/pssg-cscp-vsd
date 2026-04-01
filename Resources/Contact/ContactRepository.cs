@@ -26,7 +26,7 @@ public class ContactRepository : BaseRepository<Database.Model.Contact, Contact>
     }
 
     /// <inheritdoc />
-    public Guid InsertLocal(string externalUserId, string firstName, string lastName, DateTime birthDate)
+    public Guid InsertLocal(string externalUserId, string firstName, string lastName, DateTime? birthDate)
     {
         var entity = new Database.Model.Contact
         {

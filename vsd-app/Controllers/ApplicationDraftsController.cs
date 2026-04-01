@@ -51,23 +51,27 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         /// <summary>
         /// Extracts the display name (<c>name</c>) claim from the JWT.
         /// </summary>
-        private string GetDisplayName() =>
-            User.FindFirst(JwtRegisteredClaimNames.Name)?.Value
-            ?? User.FindFirst(ClaimTypes.Name)?.Value
-            ?? GetUserId();
-
-        /// <summary>
-        /// Extracts the birth date (<c>birthdate</c>) claim from the JWT.
-        /// Required by the Dynamics "Common - Birth Date Required if Client" workflow.
-        /// </summary>
-        private DateTime GetBirthDate()
+        private string GetDisplayName()
         {
-            var raw =
-                User.FindFirst(JwtRegisteredClaimNames.Birthdate)?.Value
-                ?? User.FindFirst(ClaimTypes.DateOfBirth)?.Value;
-            if (DateTime.TryParse(raw, out var dt))
-                return dt;
-            throw new InvalidOperationException("JWT is missing a valid 'birthdate' claim.");
+            var givenName =
+                User.FindFirst(JwtRegisteredClaimNames.GivenName)?.Value
+                ?? User.FindFirst("given_name")?.Value
+                ?? User.FindFirst(ClaimTypes.GivenName)?.Value;
+
+            var surname =
+                User.FindFirst(JwtRegisteredClaimNames.FamilyName)?.Value
+                ?? User.FindFirst("family_name")?.Value
+                ?? User.FindFirst(ClaimTypes.Surname)?.Value;
+
+            var fullName =
+                User.FindFirst(JwtRegisteredClaimNames.Name)?.Value ?? User.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (!string.IsNullOrWhiteSpace(givenName) || !string.IsNullOrWhiteSpace(surname))
+            {
+                return $"{givenName} {surname}".Trim();
+            }
+
+            return fullName ?? GetUserId();
         }
 
         // ──────────────────────────────────────────────────────────────────────
@@ -165,8 +169,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 );
 
                 // Lazy Contact creation — if the user has no Contact yet, create one now.
-                var birthDate = GetBirthDate();
-                var contactId = _contactLookup.GetOrCreateContactId(userId, displayName, birthDate);
+                var contactId = _contactLookup.GetOrCreateContactId(userId, displayName, null);
 
                 var draft = new ApplicationDraft
                 {

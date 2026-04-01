@@ -9,5 +9,5 @@ public interface IContactRepository : IFindRepository<FindContactQuery, Contact>
     /// </summary>
     /// <param name="externalUserId">Identity-provider user ID (stored in EmailAddress1).</param>
     /// <param name="birthDate">Birth date (required by Dynamics workflow for Client contacts).</param>
-    Guid InsertLocal(string externalUserId, string firstName, string lastName, DateTime birthDate);
+    Guid InsertLocal(string externalUserId, string firstName, string lastName, DateTime? birthDate);
 }
