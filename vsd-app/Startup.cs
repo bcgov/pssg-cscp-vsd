@@ -1,10 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
+using System.IdentityModel.Claims;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Database;
 using Gov.Cscp.VictimServices.Public.Services;
 using Manager;
@@ -23,6 +29,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi;
 using NWebsec.AspNetCore.Mvc;
 using NWebsec.AspNetCore.Mvc.Csp;
@@ -57,39 +64,25 @@ namespace Gov.Cscp.VictimServices.Public
             // Contact lookup service — resolves JWT username → Dynamics Contact GUID
             services.AddScoped<IContactLookupService, ContactLookupService>();
 
-            // JWT Bearer authentication
-            var jwtSecret =
-                Configuration["LocalAuth:Secret"]
-                ?? throw new InvalidOperationException("LocalAuth:Secret is not configured.");
-            var jwtIssuer = Configuration["LocalAuth:Issuer"] ?? "vsd-local";
-
             services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
+                    options.Authority = Configuration["auth:jwt:authority"];
+                    options.Audience = Configuration["auth:jwt:audience"];
+                    options.MapInboundClaims = false;
+
+                    options.RequireHttpsMetadata = true;
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = jwtIssuer,
-                        ValidAudience = jwtIssuer,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
                     };
                 });
 
-            services.AddHttpClient<ICOASTAuthService, COASTAuthService>();
-            services
-                .AddHttpClient<IDynamicsResultService, DynamicsResultService>()
-                .AddHttpMessageHandler<Gov.Cscp.VictimServices.Public.Services.TokenHandler>();
-            services.AddHttpClient<IAEMResultService, AEMResultService>();
-
-            // Add a memory cache
             services.AddMemoryCache();
 
             // for security reasons, the following headers are set.
@@ -99,7 +92,6 @@ namespace Gov.Cscp.VictimServices.Public
                     opts.EnableEndpointRouting = false;
                     // default deny
                     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                    opts.Filters.Add(new AuthorizeFilter(policy));
 
                     opts.Filters.Add(typeof(NoCacheHttpHeadersAttribute));
                     opts.Filters.Add(new XRobotsTagAttribute() { NoIndex = true, NoFollow = true });
@@ -394,5 +386,11 @@ namespace Gov.Cscp.VictimServices.Public
 
             Log.Logger.Information("VSD API Started");
         }
+    }
+
+    public class authJwtSection
+    {
+        public string authority { get; set; }
+        public string scope { get; set; }
     }
 }
