@@ -21,7 +21,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
         /// Returns the existing Contact GUID for the given <paramref name="userId"/>;
         /// if no Contact exists, creates a minimal one and returns the new GUID.
         /// </summary>
-        Guid GetOrCreateContactId(string userId, string displayName, DateTime birthDate);
+        Guid GetOrCreateContactId(string userId, string displayName, DateTime? birthDate);
     }
 
     public class ContactLookupService : IContactLookupService
@@ -45,7 +45,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
             return contact.Id;
         }
 
-        public Guid GetOrCreateContactId(string userId, string displayName, DateTime birthDate)
+        public Guid GetOrCreateContactId(string userId, string displayName, DateTime? birthDate)
         {
             var existing = GetContactId(userId);
             if (existing.HasValue)
