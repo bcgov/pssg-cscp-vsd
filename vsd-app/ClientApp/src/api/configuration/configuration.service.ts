@@ -49,6 +49,19 @@ export class ConfigurationService {
   getApiConfiguration<TData = void>(options?: HttpClientOptions): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/Configuration`, options);
   }
+  getApiConfigurationKeycloak<TData = void>(
+    options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
+  ): Observable<TData>;
+  getApiConfigurationKeycloak<TData = void>(
+    options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
+  ): Observable<AngularHttpResponse<TData>>;
+  getApiConfigurationKeycloak<TData = void>(
+    options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
+  ): Observable<HttpEvent<TData>>;
+  getApiConfigurationKeycloak<TData = void>(options?: HttpClientOptions): Observable<TData> {
+    return this.http.get<TData>(`/cvapwebform/api/Configuration/keycloak`, options);
+  }
 }
 
 export type GetApiConfigurationClientResult = NonNullable<void>;
+export type GetApiConfigurationKeycloakClientResult = NonNullable<void>;

@@ -36,12 +36,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthModule, LogLevel, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
@@ -53,7 +56,6 @@ import { IfmApplicationComponent } from './ifm-application/ifm-application.compo
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { LandingComponent } from './landing/landing.component';
-import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
@@ -89,29 +91,25 @@ import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.componen
 import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefits.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
-import { AuthModule, LogLevel, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
-import { catchError, map, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 export const httpLoaderFactory = (httpClient: HttpClient) => {
   const config$ = httpClient.get<any>(`/cvapwebform/api/Configuration/keycloak`).pipe(
     catchError(() => of(null)),
     map((customConfig: any) => {
-      console.log('OIDC configuration loaded:', customConfig.authority, customConfig.clientId);
       return {
         authority: customConfig.authority,
         redirectUrl: window.location.origin,
         postLoginRoute: '/drafts',
         postLogoutRedirectUri: window.location.origin,
         clientId: customConfig.clientId,
-        scope: "openid profile",
+        scope: 'openid profile',
         autoUserInfo: false,
         customParamsAuthRequest: {
           kc_idp_hint: 'bcsc'
         },
         responseType: 'code',
-        silentRenew:  true,
-        useRefreshToken:  true,
+        silentRenew: true,
+        useRefreshToken: true,
         renewTimeBeforeTokenExpiresInSeconds: 30,
         ignoreNonceAfterRefresh: true,
         triggerRefreshWhenIdTokenExpired: false,
@@ -151,7 +149,6 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     ApplicationSelectorComponent,
     IfmApplicationComponent,
     LandingComponent,
-    LoginComponent,
     IntroductionComponent,
     InvoiceInstructionsDialog,
     MedicalInformationComponent,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { ApplicationDraftsService } from '../../api/application-drafts/application-drafts.service';
 import { LoginService } from '../services/login.service';
@@ -44,12 +44,10 @@ export class DraftDashboardComponent implements OnInit {
   constructor(
     private draftsService: ApplicationDraftsService,
     private authService: LoginService,
-    private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    console.log('DraftDashboard ngOnInit');
     this.authService
       .checkAuth()
       .pipe(first())
@@ -63,7 +61,6 @@ export class DraftDashboardComponent implements OnInit {
           .getUserName()
           .pipe(first())
           .subscribe((username) => {
-            console.log('DraftDashboard got username:', username);
             this.username = username;
           });
 

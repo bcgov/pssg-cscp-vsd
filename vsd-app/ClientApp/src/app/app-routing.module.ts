@@ -4,11 +4,9 @@ import { ApplicationCancelledComponent } from './application-cancelled/applicati
 import { ApplicationSelectorComponent } from './application-selector/application-selector.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { DraftDashboardComponent } from './draft-dashboard/draft-dashboard.component';
-import { authGuard } from './guards/auth.guard';
-import { authenticationFeatureGuard, landingGuard, canActivate } from './guards/authentication-feature.guard';
+import { authFeatureGuard, authGuard } from './guards/authentication-feature.guard';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
 import { LandingComponent } from './landing/landing.component';
-import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
@@ -18,17 +16,12 @@ const routes: Routes = [
   {
     path: '',
     component: LandingComponent,
-    canActivate: [landingGuard]
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [authenticationFeatureGuard]
+    canActivate: [authFeatureGuard]
   },
   {
     path: 'drafts',
     component: DraftDashboardComponent,
-    canActivate: [authenticationFeatureGuard, canActivate],
+    canActivate: [authGuard],
     data: { breadcrumb: 'Drafts' }
   },
   {
