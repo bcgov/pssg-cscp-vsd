@@ -112,7 +112,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
         useRefreshToken: true,
         renewTimeBeforeTokenExpiresInSeconds: 30,
         ignoreNonceAfterRefresh: true,
-        triggerRefreshWhenIdTokenExpired: false,
+        triggerRefreshWhenIdTokenExpired: true,
         secureRoutes: ['api'],
         historyCleanupOff: true,
         storage: localStorage,
