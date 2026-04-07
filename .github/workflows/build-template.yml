@@ -112,7 +112,7 @@ jobs:
 
       # STEP: Print a summary of vulnerabilities in the built image (does not fail build)
       - name: Trivy Image Scan (Table Summary)
-        uses: aquasecurity/trivy-action@0.32.0
+        uses: aquasecurity/trivy-action@v0.35.0
         with:
           scan-type: "image"
           image-ref: "${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ steps.meta.outputs.version }}"
@@ -124,7 +124,7 @@ jobs:
 
       # STEP: Main vulnerability scan on the built image (for GitHub Security tab, reports but doesn't fail)
       - name: Scan Image for Vulnerabilities
-        uses: aquasecurity/trivy-action@0.32.0
+        uses: aquasecurity/trivy-action@v0.35.0
         with:
           scan-type: "image"
           image-ref: "${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ steps.meta.outputs.version }}"
