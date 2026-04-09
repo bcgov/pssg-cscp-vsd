@@ -33,9 +33,13 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                     OutageEndDate = configuration.GetValue<string>("CONFIGURATION_OUTAGEINFORMATION_ENDDATE"),
                     FeatureFlags = new FeatureFlagConfiguration
                     {
-                        UseUpdatedComplianceFields = configuration.GetValue<bool>(
-                            "FEATURE_USE_UPDATED_COMPLIANCE_FIELDS"
-                        ),
+                        UseUpdatedComplianceFields =
+                            bool.TryParse(
+                                configuration["FEATURE_USE_UPDATED_COMPLIANCE_FIELDS"],
+                                out var useUpdatedCompliance
+                            ) && useUpdatedCompliance,
+                        UseAuthentication =
+                            bool.TryParse(configuration["FEATURE_USE_AUTHENTICATION"], out var useAuth) && useAuth,
                     },
                 };
 
@@ -46,6 +50,19 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                 logger.LogError(ex, "Failed to retrieve configuration information.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("keycloak")]
+        public IActionResult GetKeycloakConfiguration()
+        {
+            var keycloak = new KeycloakConfiguration
+            {
+                Authority = configuration.GetValue<string>("auth:jwt:authority"),
+                ClientId = configuration.GetValue<string>("auth:jwt:audience"),
+                Scope = configuration.GetValue<string>("auth:jwt:scope"),
+            };
+            return Ok(keycloak);
         }
     }
 }
@@ -62,4 +79,12 @@ public class AppConfiguration
 public class FeatureFlagConfiguration
 {
     public bool UseUpdatedComplianceFields { get; set; }
+    public bool UseAuthentication { get; set; }
+}
+
+public class KeycloakConfiguration
+{
+    public string Authority { get; set; }
+    public string ClientId { get; set; }
+    public string Scope { get; set; }
 }

@@ -1,6 +1,6 @@
 import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
 import { CdkTableModule } from '@angular/cdk/table';
-import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -36,20 +36,26 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthModule, LogLevel, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
+import { ApplicationSelectorComponent } from './application-selector/application-selector.component';
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
-import { HomeComponent } from './home/home.component';
+import { DraftDashboardComponent } from './draft-dashboard/draft-dashboard.component';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { LandingComponent } from './landing/landing.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
@@ -86,6 +92,38 @@ import { SummaryOfBenefitsDialog } from './summary-of-benefits/summary-of-benefi
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
 
+export const httpLoaderFactory = (httpClient: HttpClient) => {
+  const config$ = httpClient.get<any>(`/cvapwebform/api/Configuration/keycloak`).pipe(
+    catchError(() => of(null)),
+    map((customConfig: any) => {
+      return {
+        authority: customConfig.authority,
+        redirectUrl: window.location.origin,
+        postLoginRoute: '/drafts',
+        postLogoutRedirectUri: window.location.origin,
+        clientId: customConfig.clientId,
+        scope: 'openid profile',
+        autoUserInfo: false,
+        customParamsAuthRequest: {
+          kc_idp_hint: 'bcsc'
+        },
+        responseType: 'code',
+        silentRenew: true,
+        useRefreshToken: true,
+        renewTimeBeforeTokenExpiresInSeconds: 30,
+        ignoreNonceAfterRefresh: true,
+        triggerRefreshWhenIdTokenExpired: true,
+        secureRoutes: ['api'],
+        historyCleanupOff: true,
+        storage: localStorage,
+        logLevel: LogLevel.None
+      };
+    })
+  );
+
+  return new StsConfigHttpLoader(config$);
+};
+
 @NgModule({
   declarations: [
     AddressComponent,
@@ -99,6 +137,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     CrimeInformationComponent,
     DateFieldComponent,
     DeclarationInformationComponent,
+    DraftDashboardComponent,
     EmploymentInformationComponent,
     ExpenseInformationComponent,
     FeatureEnabledDirective,
@@ -107,8 +146,9 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     FileUploaderComponent,
     GenderSelectorComponent,
     GSTWarningDialog,
-    HomeComponent,
+    ApplicationSelectorComponent,
     IfmApplicationComponent,
+    LandingComponent,
     IntroductionComponent,
     InvoiceInstructionsDialog,
     MedicalInformationComponent,
@@ -125,9 +165,12 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     ToolTipTriggerComponent,
     VictimApplicationComponent,
     VictimInformationComponent,
-    WitnessApplicationComponent
+    WitnessApplicationComponent,
+    ToolTipTriggerComponent
   ],
   exports: [
+    FieldComponent,
+    AddressComponent,
     AppRoutingModule,
     AngularSignaturePadModule,
     BrowserAnimationsModule,
@@ -216,7 +259,14 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     AngularSignaturePadModule,
     BsDatepickerModule.forRoot(),
     TooltipModule,
-    TypeaheadModule.forRoot()
+    TypeaheadModule.forRoot(),
+    AuthModule.forRoot({
+      loader: {
+        provide: StsConfigLoader,
+        useFactory: httpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     AEMService,
@@ -224,7 +274,7 @@ import { WitnessApplicationComponent } from './witness-application/witness-appli
     HeaderTitleService,
     Title,
     provideNgxMask(),
-    provideHttpClient(withInterceptors([LoadingInterceptor]), withInterceptorsFromDi())
+    provideHttpClient(withInterceptors([AuthInterceptor, LoadingInterceptor]), withInterceptorsFromDi())
   ]
 })
 export class AppModule {}

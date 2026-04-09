@@ -1,34 +1,58 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { VictimApplicationComponent } from './victim-application/victim-application.component';
-import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
-import { WitnessApplicationComponent } from './witness-application/witness-application.component';
-import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
-import { ApplicationSuccessComponent } from './application-success/application-success.component';
+import { RouterModule, Routes } from '@angular/router';
 import { ApplicationCancelledComponent } from './application-cancelled/application-cancelled.component';
+import { ApplicationSelectorComponent } from './application-selector/application-selector.component';
+import { ApplicationSuccessComponent } from './application-success/application-success.component';
+import { DraftDashboardComponent } from './draft-dashboard/draft-dashboard.component';
+import { authFeatureGuard, authGuard } from './guards/authentication-feature.guard';
+import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
+import { LandingComponent } from './landing/landing.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
+import { VictimApplicationComponent } from './victim-application/victim-application.component';
+import { WitnessApplicationComponent } from './witness-application/witness-application.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: LandingComponent,
+    canActivate: [authFeatureGuard]
   },
   {
-    path: 'victim-application',
-    component: VictimApplicationComponent
+    path: 'drafts',
+    component: DraftDashboardComponent,
+    canActivate: [authGuard],
+    data: { breadcrumb: 'Drafts' }
   },
   {
-    path: 'ifm-application',
-    component: IfmApplicationComponent
-  },
-  {
-    path: 'witness-application',
-    component: WitnessApplicationComponent
+    path: 'application',
+    children: [
+      {
+        path: '',
+        component: ApplicationSelectorComponent,
+        data: { breadcrumb: 'Application Selector' }
+      },
+      {
+        path: 'victim',
+        component: VictimApplicationComponent,
+        data: { breadcrumb: 'Victim Application' }
+      },
+      {
+        path: 'ifm',
+        component: IfmApplicationComponent,
+        data: { breadcrumb: 'Family Member Application' }
+      },
+      {
+        path: 'witness',
+        component: WitnessApplicationComponent,
+        data: { breadcrumb: 'Witness Application' }
+      }
+    ]
   },
   {
     path: 'submit-invoice',
-    component: SubmitInvoiceComponent
+    component: SubmitInvoiceComponent,
+    data: { breadcrumb: 'Submit Invoice' }
   },
   {
     path: 'application-cancelled',

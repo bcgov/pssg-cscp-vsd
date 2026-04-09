@@ -12,6 +12,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Azure.Core" Version="1.46.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.16" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.HealthChecks" Version="1.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
@@ -47,6 +48,8 @@
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.5" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="System.Text.Json" Version="9.0.5" />
+        <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.*" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Manager\Manager.csproj" />

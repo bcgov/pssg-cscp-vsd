@@ -25,6 +25,8 @@ export interface ApplicationFormModel {
   authorizationInformation?: Authorizationinformation;
   crimeInformation?: Crimeinformation;
   declarationInformation?: Declarationinformation;
+  /** @nullable */
+  draftId?: string;
   employmentIncomeInformation?: Employmentincomeinformation;
   expenseInformation?: Expenseinformation;
   introduction?: Introduction;

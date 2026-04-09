@@ -9,8 +9,8 @@
   @if (formType === ApplicationType.Victim_Application) {
     <div>
       <p>This application form is designed for a <strong>Victim</strong> of violent crime. Under the <em>Crime Victim Assistance Act</em>, a victim is a person who is injured, physically or psychologically, as a result of an eligible criminal offence committed in British Columbia.</p>
-      <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/ifm-application">Immediate Family Members</a>.</p>
-      <p>If the victim is deceased, please see the application for <a routerLink="/ifm-application">Immediate Family Members</a>.</p>
+      <p>If this definition does not apply to you, please see the application forms for <a routerLink="/application/witness">Witnesses</a> or <a routerLink="/application/ifm">Immediate Family Members</a>.</p>
+      <p>If the victim is deceased, please see the application for <a routerLink="/application/ifm">Immediate Family Members</a>.</p>
     </div>
   }
   @if (formType === ApplicationType.IFM_Application) {
@@ -22,13 +22,13 @@
         Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Immediate Family Member. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Immediate Family Member that was in effect at that time will apply.
         <app-tool-tip [trigger]="changestotheCrimeVictim"></app-tool-tip>
       </p>
-      <p>If this definition does not apply to you, please see the application forms for <a routerLink="/witness-application">Witnesses</a> or <a routerLink="/victim-application">Victims</a>.</p>
+      <p>If this definition does not apply to you, please see the application forms for <a routerLink="/application/witness">Witnesses</a> or <a routerLink="/application/victim">Victims</a>.</p>
     </div>
   }
   @if (formType === ApplicationType.Witness_Application) {
     <div>
       <p>This application package is designed for a <strong>Witness</strong> of an injured or deceased victim of violent crime. Under the <em>Crime Victim Assistance Act</em>, a witness is a person who witnesses in close proximity a prescribed, or the immediate aftermath of a prescribed offence, that causes a life-threatening injury to, or the death of, the victim.</p>
-      <p>If this definition does not apply to you, please see the application forms for <a routerLink="/ifm-application">Immediate Family Members</a> or <a routerLink="/victim-application">Victims</a>.</p>
+      <p>If this definition does not apply to you, please see the application forms for <a routerLink="/application/ifm">Immediate Family Members</a> or <a routerLink="/application/victim">Victims</a>.</p>
       <p>
         Changes to the <i>Crime Victim Assistance Act</i> came into effect on January 1, 2024 and expanded the definition of Witness. If you are applying in relation to an offence that happened before January 1, 2024, the definition of Witness that was in effect at that time will apply.
         <app-tool-tip [trigger]="witnessTooltip"></app-tool-tip>

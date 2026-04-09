@@ -371,6 +371,10 @@ export class PersonalInformationComponent extends FormBase implements OnInit, On
     altPhoneControl.patchValue(altPhoneControl.value);
   }
 
+  setVoicemailValidators() {
+    this.setPhoneValidators();
+  }
+
   doNotLiveAtAddressChange(val: boolean) {
     if (!val) {
       this.form.get('mailRecipient').patchValue('');

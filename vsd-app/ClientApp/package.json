@@ -52,7 +52,8 @@
     "sass": "^1.32.13",
     "tslib": "^2.0.0",
     "xmlhttprequest": "^1.8.0",
-    "zone.js": "~0.15.1"
+    "zone.js": "~0.15.1",
+    "angular-auth-oidc-client": "^17.1.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.1.2",

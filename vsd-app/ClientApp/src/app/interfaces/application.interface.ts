@@ -5,6 +5,7 @@ export interface Application {
   ApplicationType: number;
   ApplicationDate: Date;
   ApplicationPDFs: DocumentCollectioninformation[];
+  DraftId?: string;
   Introduction: Introduction;
   PersonalInformation: PersonalInformation;
   VictimInformation?: VictimInformation;

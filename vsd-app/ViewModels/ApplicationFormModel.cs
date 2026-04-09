@@ -11,6 +11,7 @@ namespace Gov.Cscp.VictimServices.Public.ViewModels
         public int ApplicationType { get; set; }
         public DocumentCollectioninformation[] ApplicationPDFs { get; set; }
         public DateTime ApplicationDate { get; set; }
+        public Guid? DraftId { get; set; }
         public Introduction Introduction { get; set; }
         public Personalinformation PersonalInformation { get; set; }
         public Crimeinformation CrimeInformation { get; set; }
