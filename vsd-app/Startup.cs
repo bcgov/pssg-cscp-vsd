@@ -83,6 +83,8 @@ namespace Gov.Cscp.VictimServices.Public
                     };
                 });
 
+            services.AddHttpClient<ICOASTAuthService, COASTAuthService>();
+            services.AddHttpClient<IAEMResultService, AEMResultService>();
             services.AddMemoryCache();
 
             // for security reasons, the following headers are set.
