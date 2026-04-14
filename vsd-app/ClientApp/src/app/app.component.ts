@@ -45,7 +45,6 @@ export class AppComponent implements OnInit {
           this.renderer.addClass(document.body, 'ctx-' + nextSlug);
         }
         this.previousUrl = nextSlug;
-        this.refreshAuthState();
       }
     });
   }
@@ -58,8 +57,9 @@ export class AppComponent implements OnInit {
     this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
       this.isAuthenticated = isAuthenticated;
     });
-
-    this.refreshAuthState();
+    if(this.configStore.featureFlags().useUpdatedComplianceFields == true) {
+      this.refreshAuthState();
+    }
   }
 
   logout(): void {
