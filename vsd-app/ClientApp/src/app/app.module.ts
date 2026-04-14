@@ -97,11 +97,11 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     catchError(() => of(null)),
     map((customConfig: any) => {
       return {
-        authority: customConfig.authority,
+        authority: customConfig?.authority,
         redirectUrl: window.location.origin,
         postLoginRoute: '/drafts',
         postLogoutRedirectUri: window.location.origin,
-        clientId: customConfig.clientId,
+        clientId: customConfig?.clientId,
         scope: 'openid profile',
         autoUserInfo: false,
         customParamsAuthRequest: {
