@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
     this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
       this.isAuthenticated = isAuthenticated;
     });
-    if(this.configStore.featureFlags().useUpdatedComplianceFields == true) {
+    if(this.configStore.featureFlags().useAuthentication == true) {
       this.refreshAuthState();
     }
   }
