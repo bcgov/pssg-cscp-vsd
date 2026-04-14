@@ -64,24 +64,27 @@ namespace Gov.Cscp.VictimServices.Public
             // Contact lookup service — resolves JWT username → Dynamics Contact GUID
             services.AddScoped<IContactLookupService, ContactLookupService>();
 
-            services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = Configuration["auth:jwt:authority"];
-                    options.Audience = Configuration["auth:jwt:audience"];
-                    options.MapInboundClaims = false;
-
-                    options.RequireHttpsMetadata = true;
-
-                    options.TokenValidationParameters = new TokenValidationParameters
+            if (Configuration["FEATURE_USE_AUTHENTICATION"] == "true")
+            {
+                services
+                    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                    };
-                });
+                        options.Authority = Configuration["auth:jwt:authority"];
+                        options.Audience = Configuration["auth:jwt:audience"];
+                        options.MapInboundClaims = false;
+
+                        options.RequireHttpsMetadata = true;
+
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                        };
+                    });
+            }
 
             services.AddHttpClient<ICOASTAuthService, COASTAuthService>();
             services.AddHttpClient<IAEMResultService, AEMResultService>();
