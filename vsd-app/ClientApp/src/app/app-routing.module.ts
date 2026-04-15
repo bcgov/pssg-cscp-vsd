@@ -5,27 +5,34 @@ import { ApplicationSelectorComponent } from './application-selector/application
 import { ApplicationSuccessComponent } from './application-success/application-success.component';
 import { DraftDashboardComponent } from './draft-dashboard/draft-dashboard.component';
 import { authFeatureGuard, authGuard } from './guards/authentication-feature.guard';
+import { healthCheckGuard } from './guards/health-check.guard';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
 import { LandingComponent } from './landing/landing.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { OutageComponent } from './outage/outage.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
 import { VictimApplicationComponent } from './victim-application/victim-application.component';
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
 
 const routes: Routes = [
   {
+    path: 'outage',
+    component: OutageComponent
+  },
+  {
     path: '',
     component: LandingComponent,
-    canActivate: [authFeatureGuard]
+    canActivate: [healthCheckGuard, authFeatureGuard]
   },
   {
     path: 'drafts',
     component: DraftDashboardComponent,
-    canActivate: [authGuard],
+    canActivate: [healthCheckGuard, authGuard],
     data: { breadcrumb: 'Drafts' }
   },
   {
     path: 'application',
+    canActivate: [healthCheckGuard],
     children: [
       {
         path: '',
@@ -52,15 +59,18 @@ const routes: Routes = [
   {
     path: 'submit-invoice',
     component: SubmitInvoiceComponent,
+    canActivate: [healthCheckGuard],
     data: { breadcrumb: 'Submit Invoice' }
   },
   {
     path: 'application-cancelled',
-    component: ApplicationCancelledComponent
+    component: ApplicationCancelledComponent,
+    canActivate: [healthCheckGuard]
   },
   {
     path: 'application-success',
-    component: ApplicationSuccessComponent
+    component: ApplicationSuccessComponent,
+    canActivate: [healthCheckGuard]
   },
   { path: '**', component: NotFoundComponent }
 ];

@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Database;
+using Gov.Cscp.VictimServices.Public.HealthChecks;
 using Gov.Cscp.VictimServices.Public.Services;
 using Manager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -189,7 +193,18 @@ namespace Gov.Cscp.VictimServices.Public
             });
 
             // Health checks
-            builder.Services.AddHealthChecks().AddCheck("HTTP Endpoint", () => HealthCheckResult.Healthy("Ok"));
+            builder
+                .Services.AddHealthChecks()
+                .AddCheck<ApiSelfHealthCheck>(
+                    "API",
+                    failureStatus: HealthStatus.Degraded,
+                    tags: new[] { "self", "process" }
+                )
+                .AddCheck<DataverseHealthCheck>(
+                    "Dataverse",
+                    failureStatus: HealthStatus.Unhealthy,
+                    tags: new[] { "dataverse", "dynamics", "ready" }
+                );
 
             builder.Services.AddSession();
             builder.Services.AddSerilog();
@@ -272,7 +287,48 @@ namespace Gov.Cscp.VictimServices.Public
                 };
             });
 
-            app.UseHealthChecks("/hc");
+            app.UseHealthChecks(
+                "/hc",
+                new HealthCheckOptions
+                {
+                    // Return HTTP 200 for all statuses so the pod is never killed by the
+                    // load-balancer solely because Dataverse is temporarily unavailable.
+                    ResultStatusCodes =
+                    {
+                        [HealthStatus.Healthy] = 200,
+                        [HealthStatus.Degraded] = 200,
+                        [HealthStatus.Unhealthy] = 200,
+                    },
+                    ResponseWriter = async (context, report) =>
+                    {
+                        // Overall HTTP status is driven by the API self-check only.
+                        // Dataverse failures surface in per-check details without
+                        // flipping the pod to Unhealthy (which would cause a restart).
+                        var overallStatus = report.Entries.TryGetValue("API", out var apiEntry)
+                            ? apiEntry.Status
+                            : report.Status;
+
+                        context.Response.StatusCode = overallStatus == HealthStatus.Unhealthy ? 503 : 200;
+                        context.Response.ContentType = "application/json";
+
+                        var result = JsonSerializer.Serialize(
+                            new
+                            {
+                                status = overallStatus.ToString(),
+                                checks = report.Entries.Select(e => new
+                                {
+                                    name = e.Key,
+                                    status = e.Value.Status.ToString(),
+                                    description = e.Value.Description,
+                                }),
+                            },
+                            new JsonSerializerOptions { WriteIndented = true }
+                        );
+
+                        await context.Response.WriteAsync(result);
+                    },
+                }
+            );
 
             app.Use(
                 async (ctx, next) =>
