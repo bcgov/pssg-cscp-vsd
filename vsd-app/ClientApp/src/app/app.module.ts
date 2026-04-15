@@ -57,6 +57,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { LandingComponent } from './landing/landing.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { OutageComponent } from './outage/outage.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { QuickExitComponent } from './quick-exit/quick-exit.component';
 import { AEMService } from './services/aem.service';
@@ -154,6 +155,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     MedicalInformationComponent,
     MessageDialog,
     NotFoundComponent,
+    OutageComponent,
     PersonalInformationComponent,
     PhonePipe,
     PronounSelectorComponent,

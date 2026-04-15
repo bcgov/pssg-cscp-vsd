@@ -33,6 +33,9 @@ public static class ServiceCollectionExtensions
         services.AddTransient<CurrencyHandlers>();
         services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 
+        services.AddTransient<CountryHandlers>();
+        services.AddTransient<ICountryRepository, CountryRepository>();
+
         services.AddTransient<IEntitlementRepository, EntitlementRepository>();
 
         services.AddTransient<IIncomeSupportParameterRepository, IncomeSupportParameterRepository>();
@@ -57,6 +60,12 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IProgramTypeRepository, ProgramTypeRepository>();
 
         services.AddTransient<IProvinceRepository, ProvinceRepository>();
+
+        services.AddTransient<ScheduleGHandlers>();
+        services.AddTransient<IScheduleGRepository, ScheduleGRepository>();
+
+        services.AddTransient<TaskHandlers>();
+        services.AddTransient<ITaskRepository, TaskRepository>();
 
         services.AddTransient<ITeamRepository, TeamRepository>();
 
@@ -92,6 +101,8 @@ public static class ServiceCollectionExtensions
             typeof(ScheduleGRepositoryMapper),
             typeof(ProgramTypeMapper),
             typeof(ProvinceMapper),
+            typeof(CountryMapper),
+            typeof(TaskRepositoryMapper),
             typeof(ConfigurationMapper),
             typeof(CasPaymentMapper),
             typeof(CvapStobMapper),

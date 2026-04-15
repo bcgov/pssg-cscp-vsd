@@ -9,7 +9,6 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var configuration = new ConfigurationBuilder()
-            .AddUserSecrets<Gov.Cscp.VictimServices.Public.Startup> ()
             .AddEnvironmentVariables()
             .Build();
         services.AddSingleton<IConfiguration>(configuration);
