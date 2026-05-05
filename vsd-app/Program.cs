@@ -125,7 +125,10 @@ namespace Gov.Cscp.VictimServices.Public
             // Contact lookup service — resolves JWT username → Dynamics Contact GUID
             builder.Services.AddScoped<IContactLookupService, ContactLookupService>();
 
-            if (builder.Configuration["FEATURE_USE_AUTHENTICATION"] == "true")
+            if (
+                bool.TryParse(builder.Configuration["FEATURE_USE_AUTHENTICATION"], out var useAuthentication)
+                && useAuthentication
+            )
             {
                 builder
                     .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -420,11 +423,5 @@ namespace Gov.Cscp.VictimServices.Public
 
             app.Run();
         }
-    }
-
-    public class authJwtSection
-    {
-        public string authority { get; set; }
-        public string scope { get; set; }
     }
 }
