@@ -94,14 +94,16 @@ import { VictimApplicationComponent } from './victim-application/victim-applicat
 import { WitnessApplicationComponent } from './witness-application/witness-application.component';
 
 export const httpLoaderFactory = (httpClient: HttpClient) => {
-  const config$ = httpClient.get<any>(`/cvapwebform/api/Configuration/keycloak`).pipe(
+  const baseHref = '/cvapwebform/';
+
+  const config$ = httpClient.get<any>(`${baseHref}api/Configuration/keycloak`).pipe(
     catchError(() => of(null)),
     map((customConfig: any) => {
       return {
         authority: customConfig?.authority,
-        redirectUrl: window.location.origin,
+        redirectUrl: window.location.origin + baseHref,
         postLoginRoute: '/drafts',
-        postLogoutRedirectUri: window.location.origin,
+        postLogoutRedirectUri: window.location.origin + baseHref,
         clientId: customConfig?.clientId,
         scope: 'openid profile',
         autoUserInfo: false,
