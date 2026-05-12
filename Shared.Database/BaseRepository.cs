@@ -1,6 +1,6 @@
 namespace Shared.Database;
 
-public abstract class BaseRepository<TEntity, TDto> 
+public abstract class BaseRepository<TEntity, TDto>
     where TEntity : Entity
     where TDto : IDto
 {
@@ -24,24 +24,20 @@ public abstract class BaseRepository<TEntity, TDto>
 
     public TDto FirstOrDefault(Expression<Func<TDto, bool>> predicates)
     {
-        var entity = MapExpression(predicates)
-            .FirstOrDefault();
+        var entity = MapExpression(predicates).FirstOrDefault();
         return _mapper.Map<TEntity, TDto>(entity);
     }
 
     public IEnumerable<TDto> Where(Expression<Func<TDto, bool>> predicates)
     {
-        var entities = MapExpression(predicates)
-            .ToList();
+        var entities = MapExpression(predicates).ToList();
         return _mapper.Map<IEnumerable<TEntity>, IEnumerable<TDto>>(entities);
     }
 
     public virtual Guid Upsert(TDto dto)
     {
         var entity = Map(dto);
-        var existingEntity = _databaseContext
-            .CreateQuery<TEntity>()
-            .FirstOrDefault(x => x.Id == entity.Id);
+        var existingEntity = _databaseContext.CreateQuery<TEntity>().FirstOrDefault(x => x.Id == entity.Id);
         if (existingEntity != null)
         {
             _databaseContext.Detach(existingEntity);
@@ -59,9 +55,7 @@ public abstract class BaseRepository<TEntity, TDto>
     // WARNING this method does not work, since assignment operators are not allowed in Expression Trees
     public virtual bool Update(Guid id, params Expression<Func<TDto, object>>[] properties)
     {
-        var entity = _databaseContext
-            .CreateQuery<TEntity>()
-            .FirstOrDefault(x => x.Id == id);
+        var entity = _databaseContext.CreateQuery<TEntity>().FirstOrDefault(x => x.Id == id);
         if (entity == null)
             return false;
 
@@ -72,15 +66,11 @@ public abstract class BaseRepository<TEntity, TDto>
 
         foreach (var lambda in properties)
         {
-            var entityExpression = _mapper
-                .MapExpression<Expression<Func<TEntity, object>>>(lambda)
-                .Compile();
+            var entityExpression = _mapper.MapExpression<Expression<Func<TEntity, object>>>(lambda).Compile();
             entityExpression.Invoke(entity);
         }
 
-        return !_databaseContext
-            .SaveChanges()
-            .HasError;
+        return !_databaseContext.SaveChanges().HasError;
     }
 
     public virtual bool Update(TDto dto)
@@ -104,9 +94,7 @@ public abstract class BaseRepository<TEntity, TDto>
             _databaseContext.Attach(entity);
         }
         _databaseContext.UpdateObject(entity);
-        return !_databaseContext
-            .SaveChanges()
-            .HasError;     
+        return !_databaseContext.SaveChanges().HasError;
     }
 
     public virtual bool TryDelete(Guid id)
@@ -139,9 +127,7 @@ public abstract class BaseRepository<TEntity, TDto>
     // safe delete, use TryDelete for faster deletes
     public virtual bool Delete(Guid id)
     {
-        var entity = _databaseContext
-            .CreateQuery<TEntity>()
-            .FirstOrDefault(x => x.Id == id);
+        var entity = _databaseContext.CreateQuery<TEntity>().FirstOrDefault(x => x.Id == id);
         if (entity == null)
         {
             return false;
@@ -178,8 +164,6 @@ public abstract class BaseRepository<TEntity, TDto>
     private IQueryable<TEntity> MapExpression(Expression<Func<TDto, bool>> predicates)
     {
         var entityPredicateExpression = _mapper.MapExpression<Expression<Func<TEntity, bool>>>(predicates);
-        return _databaseContext
-            .CreateQuery<TEntity>()
-            .Where(entityPredicateExpression);
+        return _databaseContext.CreateQuery<TEntity>().Where(entityPredicateExpression);
     }
 }

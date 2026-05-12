@@ -9,25 +9,18 @@ public class SharedMapper : Profile
 
         RecognizeDestinationPostfixes("Id");
         RecognizePostfixes("Id");
-        
-        CreateMap<Money, decimal>()
-            .ConvertUsing(src => src.Value);
-        CreateMap<Money, decimal?>()
-            .ConvertUsing(src => src != null ? src.Value : null);
-        CreateMap<EntityReference, Guid>()
-            .ConvertUsing(src => src.Id);
-        CreateMap<EntityReference, Guid?>()
-            .ConvertUsing(src => src.Id);
-        CreateMap<DynamicReference, EntityReference>()
-            .ConvertUsing(src => new EntityReference(src.SchemaName, src.Id));
+
+        CreateMap<Money, decimal>().ConvertUsing(src => src.Value);
+        CreateMap<Money, decimal?>().ConvertUsing(src => src != null ? src.Value : null);
+        CreateMap<EntityReference, Guid>().ConvertUsing(src => src.Id);
+        CreateMap<EntityReference, Guid?>().ConvertUsing(src => src.Id);
+        CreateMap<DynamicReference, EntityReference>().ConvertUsing(src => new EntityReference(src.SchemaName, src.Id));
         CreateMap<DynamicReference?, EntityReference>()
             .ConvertUsing(src => src != null ? new EntityReference(src.SchemaName, src.Id) : null);
         CreateMap<EntityReference, DynamicReference>()
             .ConvertUsing(src => new DynamicReference(src.Id, src.LogicalName));
-        CreateMap<StaticReference, EntityReference>()
-            .ConvertUsing(src => new EntityReference(src.SchemaName, src.Id));
-        CreateMap<EntityReference, StaticReference>()
-            .ConvertUsing(src => new StaticReference(src.Id, src.LogicalName));
+        CreateMap<StaticReference, EntityReference>().ConvertUsing(src => new EntityReference(src.SchemaName, src.Id));
+        CreateMap<EntityReference, StaticReference>().ConvertUsing(src => new StaticReference(src.Id, src.LogicalName));
         CreateMap<StaticReference?, EntityReference>()
             .ConvertUsing(src => src != null ? new EntityReference(src.SchemaName, src.Id) : null);
         CreateMap<EntityReference, StaticReference?>()

@@ -11,7 +11,12 @@ public static class DataverseExtensions
     /// <param name="sourceEntity">The source entity to link to</param>
     /// <param name="relationshipName">The relationship name; it is case sensitive</param>
     /// <param name="linkedEntity">The target linked entity</param>
-    public static void AddLink([NotNull] this OrganizationServiceContext context, Entity sourceEntity, string relationshipName, Entity linkedEntity)
+    public static void AddLink(
+        [NotNull] this OrganizationServiceContext context,
+        Entity sourceEntity,
+        string relationshipName,
+        Entity linkedEntity
+    )
     {
         context.AddLink(sourceEntity, new Relationship(relationshipName), linkedEntity);
     }
@@ -23,20 +28,32 @@ public static class DataverseExtensions
     /// <param name="source">The source entity to link to</param>
     /// <param name="relationshipName">The relationship name; it is case sensitive</param>
     /// <param name="target">The target entity to add and link</param>
-    public static void AddRelatedObject([NotNull] this OrganizationServiceContext context, Entity source, string relationshipName, Entity target)
+    public static void AddRelatedObject(
+        [NotNull] this OrganizationServiceContext context,
+        Entity source,
+        string relationshipName,
+        Entity target
+    )
     {
         context.AddRelatedObject(source, new Relationship(relationshipName), target);
     }
 
-    public static void LoadProperties([NotNull] this OrganizationServiceContext context, IEnumerable<Entity> entities, params string[] propertyNames)
+    public static void LoadProperties(
+        [NotNull] this OrganizationServiceContext context,
+        IEnumerable<Entity> entities,
+        params string[] propertyNames
+    )
     {
-        Parallel.ForEach(entities, entity =>
-        {
-            foreach (var property in propertyNames)
+        Parallel.ForEach(
+            entities,
+            entity =>
             {
-                context.LoadProperty(entity, property);
+                foreach (var property in propertyNames)
+                {
+                    context.LoadProperty(entity, property);
+                }
             }
-        });
+        );
     }
 
     private const int FileBlockSize = 4 * 1024 * 1024; // 4 MB
@@ -50,14 +67,23 @@ public static class DataverseExtensions
     /// <param name="file">The file data</param>
     /// <param name="ct">Optional cancellation token</param>
     /// <returns>The uploaded file id</returns>
-    public static async Task<string?> UploadFileAsync([NotNull] this IOrganizationServiceAsync organizationService, [NotNull] Entity entity, string? fileFieldName, [NotNull] FileContainer file, CancellationToken ct = default)
+    public static async Task<string?> UploadFileAsync(
+        [NotNull] this IOrganizationServiceAsync organizationService,
+        [NotNull] Entity entity,
+        string? fileFieldName,
+        [NotNull] FileContainer file,
+        CancellationToken ct = default
+    )
     {
-        var response = (InitializeFileBlocksUploadResponse)await organizationService.ExecuteAsync(new InitializeFileBlocksUploadRequest
-        {
-            Target = new EntityReference(entity.LogicalName, entity.Id),
-            FileAttributeName = fileFieldName,
-            FileName = file.FileName
-        });
+        var response = (InitializeFileBlocksUploadResponse)
+            await organizationService.ExecuteAsync(
+                new InitializeFileBlocksUploadRequest
+                {
+                    Target = new EntityReference(entity.LogicalName, entity.Id),
+                    FileAttributeName = fileFieldName,
+                    FileName = file.FileName,
+                }
+            );
 
         var fileContinuationToken = response.FileContinuationToken;
         int blockNumber = 0;
@@ -77,43 +103,55 @@ public static class DataverseExtensions
 
         try
         {
-            Parallel.ForEach(slices, new ParallelOptions { CancellationToken = ct }, slice =>
-            {
-                string blockId = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()));
-
-                blockIds.Add(blockId);
-
-                organizationService.Execute(new UploadBlockRequest()
+            Parallel.ForEach(
+                slices,
+                new ParallelOptions { CancellationToken = ct },
+                slice =>
                 {
-                    BlockData = slice.ToArray(),
-                    BlockId = blockId,
-                    FileContinuationToken = fileContinuationToken,
-                });
-            });
+                    string blockId = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()));
+
+                    blockIds.Add(blockId);
+
+                    organizationService.Execute(
+                        new UploadBlockRequest()
+                        {
+                            BlockData = slice.ToArray(),
+                            BlockId = blockId,
+                            FileContinuationToken = fileContinuationToken,
+                        }
+                    );
+                }
+            );
         }
         catch (OperationCanceledException)
         {
             return null;
         }
 
-        var commitFileBlocksUploadResponse = (CommitFileBlocksUploadResponse)await organizationService.ExecuteAsync(new CommitFileBlocksUploadRequest
-        {
-            BlockList = blockIds.ToArray(),
-            FileContinuationToken = fileContinuationToken,
-            FileName = file.FileName,
-            MimeType = file.MimeType
-        });
+        var commitFileBlocksUploadResponse = (CommitFileBlocksUploadResponse)
+            await organizationService.ExecuteAsync(
+                new CommitFileBlocksUploadRequest
+                {
+                    BlockList = blockIds.ToArray(),
+                    FileContinuationToken = fileContinuationToken,
+                    FileName = file.FileName,
+                    MimeType = file.MimeType,
+                }
+            );
 
         return await Task.FromResult(commitFileBlocksUploadResponse.FileId.ToString());
     }
 
-    private static RetrieveAttributeResponse GetAttribute([NotNull] this OrganizationServiceContext context, [NotNull] Entity entity, string? fileFieldName)
+    private static RetrieveAttributeResponse GetAttribute(
+        [NotNull] this OrganizationServiceContext context,
+        [NotNull] Entity entity,
+        string? fileFieldName
+    )
     {
-        return (RetrieveAttributeResponse)context.Execute(new RetrieveAttributeRequest
-        {
-            EntityLogicalName = entity.LogicalName,
-            LogicalName = fileFieldName,
-        });
+        return (RetrieveAttributeResponse)
+            context.Execute(
+                new RetrieveAttributeRequest { EntityLogicalName = entity.LogicalName, LogicalName = fileFieldName }
+            );
     }
 
     /// <summary>
@@ -125,17 +163,24 @@ public static class DataverseExtensions
     /// <param name="ct">Optional cancellation token</param>
     /// <returns>The file data, null if not found</returns>
     /// <exception cref="FileNotFoundException"></exception>
-    public static async Task<FileContainer> DownloadFileAsync([NotNull] this IOrganizationServiceAsync organizationService, [NotNull] Entity entity, string? fileFieldName, CancellationToken ct = default)
+    public static async Task<FileContainer> DownloadFileAsync(
+        [NotNull] this IOrganizationServiceAsync organizationService,
+        [NotNull] Entity entity,
+        string? fileFieldName,
+        CancellationToken ct = default
+    )
     {
         InitializeFileBlocksDownloadResponse response;
         try
         {
-            response = (InitializeFileBlocksDownloadResponse)await organizationService.ExecuteAsync(new InitializeFileBlocksDownloadRequest
-
-            {
-                Target = new EntityReference(entity.LogicalName, entity.Id),
-                FileAttributeName = fileFieldName,
-            });
+            response = (InitializeFileBlocksDownloadResponse)
+                await organizationService.ExecuteAsync(
+                    new InitializeFileBlocksDownloadRequest
+                    {
+                        Target = new EntityReference(entity.LogicalName, entity.Id),
+                        FileAttributeName = fileFieldName,
+                    }
+                );
         }
         catch (FaultException<OrganizationServiceFault> ex) when (ex.Message.StartsWith("No file attachment found"))
         {
@@ -147,18 +192,24 @@ public static class DataverseExtensions
         using var ms = new MemoryStream();
         while (offset < response.FileSizeInBytes)
         {
-            if (ct.IsCancellationRequested) break;
-            var dlResponse = (DownloadBlockResponse)await organizationService.ExecuteAsync(new DownloadBlockRequest
-            {
-                FileContinuationToken = response.FileContinuationToken,
-                BlockLength = FileBlockSize,
-                Offset = offset
-            });
+            if (ct.IsCancellationRequested)
+                break;
+            var dlResponse = (DownloadBlockResponse)
+                await organizationService.ExecuteAsync(
+                    new DownloadBlockRequest
+                    {
+                        FileContinuationToken = response.FileContinuationToken,
+                        BlockLength = FileBlockSize,
+                        Offset = offset,
+                    }
+                );
             await ms.WriteAsync(dlResponse.Data, ct);
             offset += dlResponse.Data.Length;
         }
 
-        return await Task.FromResult(new FileContainer(response.FileName, string.Empty, new ReadOnlyMemory<byte>(ms.ToArray())));
+        return await Task.FromResult(
+            new FileContainer(response.FileName, string.Empty, new ReadOnlyMemory<byte>(ms.ToArray()))
+        );
     }
 
     /// <summary>
@@ -168,7 +219,12 @@ public static class DataverseExtensions
     /// <param name="entity">The entity with the file or image field</param>
     /// <param name="fileFieldName">The file or image field name</param>
     /// <param name="ct">Optional cancellation token</param>
-    public static async Task DeleteFileAsync([NotNull] this OrganizationServiceContext context, [NotNull] Entity entity, string? fileFieldName, CancellationToken ct = default)
+    public static async Task DeleteFileAsync(
+        [NotNull] this OrganizationServiceContext context,
+        [NotNull] Entity entity,
+        string? fileFieldName,
+        CancellationToken ct = default
+    )
     {
         await Task.CompletedTask;
 
@@ -182,12 +238,12 @@ public static class DataverseExtensions
         }
         else
         {
-            if (!Guid.TryParse(entity[fileFieldName]?.ToString() ?? string.Empty, out var fileId)) throw new InvalidOperationException($"Cannot find file id in entity {entity.LogicalName}.{fileId} with id {entity.Id}");
+            if (!Guid.TryParse(entity[fileFieldName]?.ToString() ?? string.Empty, out var fileId))
+                throw new InvalidOperationException(
+                    $"Cannot find file id in entity {entity.LogicalName}.{fileId} with id {entity.Id}"
+                );
 
-            DeleteFileRequest deleteFileRequest = new()
-            {
-                FileId = fileId
-            };
+            DeleteFileRequest deleteFileRequest = new() { FileId = fileId };
 
             context.Execute(deleteFileRequest);
         }
