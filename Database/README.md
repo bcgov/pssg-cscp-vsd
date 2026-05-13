@@ -25,48 +25,6 @@ If you encounter a user authentication error and the authentication hasn't chang
 .AddLink - Adds a link between two entity instances that already exist in database
 .AddRelatedObject - Adds a new related entity to an existing entity
 
-## Dataverse Authentication
-
-This project supports both **on-premise (ADFS)** and **cloud (Entra ID)** authentication for Dataverse.
-
-### Configuration
-
-#### On-Premise (ADFS) Authentication
-
-```json
-{
-  "Dynamics": {
-    "AuthenticationType": "OnPremise",
-    "DynamicsApiEndpointUrl": "http://dev-coast-dataverse-proxy.silver.devops.bcgov/api/data/v9.0/",
-    "ADFS": {
-      "OAuth2TokenEndpoint": "https://ststest.gov.bc.ca/adfs/oauth2/token",
-      "ClientId": "<onpremise-client-id>",
-      "ClientSecret": "<onpremise-client-secret>",
-      "ServiceAccountName": "<onpremise-service-account-name>",
-      "ServiceAccountPassword": "<onpremise-service-account-password>",
-      "ResourceName": "https://cscp-vs.dev.jag.gov.bc.ca/api/data/v9.0/"
-    }
-  }
-}
-```
-
-#### Cloud (Entra ID) Authentication
-
-```json
-{
-  "Dynamics": {
-    "AuthenticationType": "Cloud",
-    "DynamicsApiEndpointUrl": "https://cscp-dev.api.crm3.dynamics.com/api/data/v9.2/",
-    "EntraId": {
-      "TenantId": "<cloud-tenant-id>",
-      "ClientId": "<cloud-client-id>",
-      "ClientSecret": "<cloud-client-secret>",
-      "ResourceName": "https://cscp-dev.api.crm3.dynamics.com"
-    }
-  }
-}
-```
-
 **Notes:**
 
 - Use `AuthenticationType: "OnPremise"` for ADFS authentication (on-premise Dataverse)
