@@ -56,6 +56,22 @@
           </div>
         }
 
+        @if (canSaveDraft) {
+          <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div class="save-info">
+              @if (autoSaveCountdown <= 30 && autoSaveCountdown > 0) {
+                <i>Saving in {{ autoSaveCountdown }} {{ autoSaveCountdown === 1 ? "second" : "seconds" }}...</i>
+              }
+              @if (lastSavedAt && (autoSaveCountdown === 0 || autoSaveCountdown > 30)) {
+                <i>Saved at {{ lastSavedAt | date: "mediumTime" }}</i>
+              }
+            </div>
+            <button (click)="saveDraft();" class="btn btn-secondary save-draft-btn" [disabled]="saving || !formChanged">
+              @if (saving) { Saving&hellip; } @else { <i class="fas fa-save" style="margin-right: 6px;"></i>Save Draft }
+            </button>
+          </div>
+        }
+
         @if (this.currentFormStep == 0 || showPrintView) {
           <app-introduction [formGroup]="form" [formType]="FORM_TYPE" formGroupName="introduction"></app-introduction>
         }
@@ -115,12 +131,7 @@
         @if (!showPrintView) {
           <section class="button-container">
             <a (click)="verifyCancellation()" class="cancel-link"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>Cancel Application</a>
-            <span class="right-buttons">
-              @if (canSaveDraft) {
-                <button (click)="saveDraft();" class="btn btn-secondary save-draft-btn" [disabled]="saving">
-                  @if (saving) { Saving&hellip; } @else { <i class="fas fa-save" style="margin-right: 6px;"></i>Save Draft }
-                </button>
-              }
+            <span class="right-buttons">              
               @if (stepper.selectedIndex < 9) {
                 <button (click)="gotoNextStep(stepper);" class="btn btn-primary">CONTINUE <i class="fas fa-chevron-right"></i></button>
               }
