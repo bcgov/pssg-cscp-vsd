@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -26,6 +26,7 @@ import {
   VictimInformation
 } from '../interfaces/application.interface';
 import { AEMService } from '../services/aem.service';
+import { LoginService } from '../services/login.service';
 import { StateService } from '../services/state.service';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
@@ -42,7 +43,6 @@ import { ServiceNotAvailableComponent } from '../shared/service-not-available.co
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { LookupStore } from '../store/lookup.store';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
-import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-ifm-application',
@@ -55,7 +55,7 @@ import { LoginService } from '../services/login.service';
   ],
   standalone: false
 })
-export class IfmApplicationComponent extends FormBase implements OnInit {
+export class IfmApplicationComponent extends FormBase implements OnInit, OnDestroy {
   @ViewChild('stepper') ifmStepper: MatStepper;
   FORM_TYPE = ApplicationType.IFM_Application;
   form: UntypedFormGroup;
@@ -70,6 +70,12 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
   draftId: string | null = null;
   saving = false;
   draftSavedMessage = '';
+  formChanged = false;
+  lastSavedAt: Date | null = null;
+
+  autoSaveTimer: any;
+  autoSaveCountdown = 0;
+  autoSaveInterval = 60;
 
   ApplicationType = ApplicationType;
 
@@ -132,10 +138,39 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
     }
 
     this.form.valueChanges.subscribe(() => {
+      this.formChanged = true;
+      this.resetAutoSaveTimer();
       const currentFormGroupName = this.getFormGroupName(this.ifmStepper.selectedIndex);
       const currentFormGroup = this.form.get(currentFormGroupName);
       this.showValidationMessage = this.hasInvalidTouchedControls(currentFormGroup);
     });
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.autoSaveTimer);
+  }
+
+  @HostListener('window:mousemove')
+  @HostListener('window:mousedown')
+  @HostListener('window:keypress')
+  @HostListener('window:scroll')
+  @HostListener('window:touchmove')
+  resetAutoSaveTimer(): void {
+    if (!this.formChanged || !this.canSaveDraft) {
+      this.autoSaveCountdown = 0;
+      clearInterval(this.autoSaveTimer);
+      return;
+    }
+
+    this.autoSaveCountdown = this.autoSaveInterval;
+    clearInterval(this.autoSaveTimer);
+    this.autoSaveTimer = setInterval(() => {
+      this.autoSaveCountdown -= 1;
+      if (this.autoSaveCountdown === 0) {
+        this.saveDraft();
+        clearInterval(this.autoSaveTimer);
+      }
+    }, 1000);
   }
 
   verifyCancellation(): void {
@@ -331,6 +366,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
 
   /** Save current form state as a draft via the ApplicationDrafts API. */
   saveDraft(): void {
+    if (!this.formChanged) return;
     this.saving = true;
     this.draftSavedMessage = '';
     const formData = JSON.stringify(this.form.getRawValue());
@@ -340,6 +376,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
       this.draftsService.putApiApplicationDraftsDraftId(this.draftId, request).subscribe({
         next: () => {
           this.saving = false;
+          this.lastSavedAt = new Date();
+          this.formChanged = false;
           this.draftSavedMessage = 'Draft saved.';
           this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
         },
@@ -364,6 +402,8 @@ export class IfmApplicationComponent extends FormBase implements OnInit {
               queryParamsHandling: 'merge',
               replaceUrl: true
             });
+            this.lastSavedAt = new Date();
+            this.formChanged = false;
             this.draftSavedMessage = 'Draft saved.';
             this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
           }
