@@ -44,7 +44,7 @@ public static class ServiceCollectionExtensions
             var options = sp.GetRequiredService<IOptions<DynamicsTokenProviderOptions>>().Value;
             var tokenProvider = sp.GetRequiredService<ITokenProvider>();
 
-            var uri = new Uri(options.DynamicsApiEndpointUrl);
+            var uri = new Uri(options.GetDynamicsApiEndpointUrl());
             var client = new ServiceClient(
                 uri,
                 async (instanceUri) => await tokenProvider.AcquireToken(),
