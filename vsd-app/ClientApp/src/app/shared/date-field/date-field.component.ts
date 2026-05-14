@@ -1,82 +1,57 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormControl } from '@angular/forms';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import moment from 'moment';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
+import { MY_FORMATS } from '../enums-list';
 
 @Component({
   selector: 'app-date-field',
   templateUrl: './date-field.component.html',
   styleUrls: ['./date-field.component.scss'],
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
   standalone: false
 })
-export class DateFieldComponent implements OnInit {
-  @Input() control: AbstractControl;
-  @Input() max: Date;
-  @Input() min: Date;
-  @Input() disabled: boolean;
-  dayList = [];
-  yearList = [];
+export class DateFieldComponent implements OnInit, OnDestroy {
+  @Input() control!: AbstractControl;
+  @Input() max!: Date;
+  @Input() min!: Date;
+  @Input() disabled!: boolean;
+  @Output() change = new EventEmitter<void>();
 
-  day = 0;
-  month = -1;
-  year = 0;
+  private readonly destroy$ = new Subject<void>();
 
-  currentYear = new Date().getFullYear();
-
-  constructor() {}
-
-  ngOnInit() {
-    if (this.control.value) {
-      let date: moment.Moment = moment(this.control.value);
-      this.year = date.year();
-      this.month = date.month();
-      this.day = date.date();
-    }
-
-    for (let i = 1; i <= 31; ++i) {
-      this.dayList.push(i);
-    }
-
-    for (let i = 0; i < 120; ++i) {
-      this.yearList.push(this.currentYear - i);
-    }
+  get asFormControl(): FormControl {
+    return this.control as FormControl;
   }
 
-  output() {
-    if (this.day == 0 || this.month == -1 || this.year == 0) {
-      this.control.patchValue(null);
-      return;
-    }
+  ngOnInit(): void {
+    // When a draft is loaded via patchValue, date values arrive as ISO strings.
+    // Convert them to Moment objects so the Material DatePicker renders correctly.
+    this.control.valueChanges
+      .pipe(
+        filter((v) => v && typeof v === 'string'),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((v) => {
+        const m = moment(v);
+        if (m.isValid()) {
+          this.control.setValue(m, { emitEvent: false });
+        }
+      });
+  }
 
-    this.control.markAsTouched();
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-    let hasMinError = false;
-    let hasMaxError = false;
-
-    let date = moment(new Date(this.year, this.month, this.day));
-    if (this.min) {
-      if (date.isBefore(moment(this.min))) {
-        hasMinError = true;
-        setTimeout(() => {
-          this.control.setErrors({ incorrect: true });
-        }, 0);
-      }
-    }
-
-    if (this.max) {
-      if (date.isAfter(moment(this.max))) {
-        hasMaxError = true;
-        setTimeout(() => {
-          this.control.setErrors({ incorrect: true });
-        }, 0);
-      }
-    }
-
-    if (!hasMinError && !hasMaxError) {
-      setTimeout(() => {
-        this.control.setErrors(null);
-      }, 0);
-    }
-
-    this.control.patchValue(date);
+  onDateChange(): void {
+    this.change.emit();
   }
 }
