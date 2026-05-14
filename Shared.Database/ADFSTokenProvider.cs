@@ -31,7 +31,7 @@ public class ADFSTokenProvider : ITokenProvider
     private async Task<string> AcquireTokenInternal()
     {
         logger.LogDebug("Acquiring ADFS token from {0}", options.OAuth2TokenEndpoint);
-        using var httpClient = httpClientFactory.CreateClient("oauth_token");
+        using var httpClient = httpClientFactory.CreateClient("adfs_token");
 
         var response = await httpClient.RequestPasswordTokenAsync(
             new PasswordTokenRequest

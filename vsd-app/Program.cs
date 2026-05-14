@@ -146,7 +146,6 @@ namespace Gov.Cscp.VictimServices.Public
                         });
                 }
 
-                builder.Services.AddHttpClient<ICOASTAuthService, COASTAuthService>();
                 builder.Services.AddHttpClient<IAEMResultService, AEMResultService>();
                 builder.Services.AddMemoryCache();
 

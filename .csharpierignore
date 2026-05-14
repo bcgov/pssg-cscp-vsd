@@ -4,5 +4,3 @@ Database/Messages/*
 Database/OptionSets/*
 Database/DataverseContext.cs
 Database/EntityOptionSetEnum.cs
-
-vsd-interfaces/BCeID/ServiceReference1/Reference.cs

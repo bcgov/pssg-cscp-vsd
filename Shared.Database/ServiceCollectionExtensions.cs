@@ -14,17 +14,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ICache, MemoryCache>();
 
         // Add HTTP client factory for token providers
-        services.AddHttpClient(
-            "oauth_token",
-            (sp, c) =>
-            {
-                var options = sp.GetRequiredService<IOptions<DynamicsTokenProviderOptions>>().Value;
-                if (!string.IsNullOrWhiteSpace(options.ADFS.OAuth2TokenEndpoint))
-                {
-                    c.BaseAddress = new Uri(options.ADFS.OAuth2TokenEndpoint);
-                }
-            }
-        );
+        services.AddHttpClient("adfs_token");
+
         services.AddHttpClient("entraid_token");
 
         // Register both token providers
@@ -34,10 +25,16 @@ public static class ServiceCollectionExtensions
         // Register the appropriate token provider based on configuration
         services.AddTransient<ITokenProvider>(sp =>
         {
-            var options = sp.GetRequiredService<IOptions<DynamicsTokenProviderOptions>>().Value;
-            return options.AuthenticationType == DynamicsAuthenticationType.OnPremise
-                ? sp.GetRequiredService<ADFSTokenProvider>()
-                : sp.GetRequiredService<EntraIdTokenProvider>();
+            var options = sp.GetRequiredService<IOptions<DynamicsTokenProviderOptions>>();
+
+            return options.Value.AuthenticationType switch
+            {
+                DynamicsAuthenticationType.OnPremise => sp.GetRequiredService<ADFSTokenProvider>(),
+                DynamicsAuthenticationType.Cloud => sp.GetRequiredService<EntraIdTokenProvider>(),
+                _ => throw new InvalidOperationException(
+                    $"Unknown authentication type: {options.Value.AuthenticationType}"
+                ),
+            };
         });
 
         // Register Dataverse service
@@ -57,7 +54,6 @@ public static class ServiceCollectionExtensions
 
             if (!client.IsReady)
             {
-                logger.LogError("Failed to connect to Dataverse: {Error}", client.LastError);
                 throw new InvalidOperationException(
                     $"Failed to connect to Dataverse: {client.LastError}",
                     client.LastException
