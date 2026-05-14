@@ -145,6 +145,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
     }
 
     this.form.valueChanges.subscribe(() => {
+      if (!this.form.dirty) return;
       this.formChanged = true;
       this.resetAutoSaveTimer();
 
@@ -570,6 +571,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
           this.saving = false;
           this.lastSavedAt = new Date();
           this.formChanged = false;
+          this.form.markAsPristine();
           this.draftSavedMessage = 'Draft saved.';
           this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
         },
@@ -597,6 +599,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
             });
             this.lastSavedAt = new Date();
             this.formChanged = false;
+            this.form.markAsPristine();
             this.draftSavedMessage = 'Draft saved.';
             this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
           }

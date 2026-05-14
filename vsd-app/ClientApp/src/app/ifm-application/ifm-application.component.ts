@@ -138,6 +138,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
     }
 
     this.form.valueChanges.subscribe(() => {
+      if (!this.form.dirty) return;
       this.formChanged = true;
       this.resetAutoSaveTimer();
       const currentFormGroupName = this.getFormGroupName(this.ifmStepper.selectedIndex);
@@ -378,6 +379,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
           this.saving = false;
           this.lastSavedAt = new Date();
           this.formChanged = false;
+          this.form.markAsPristine();
           this.draftSavedMessage = 'Draft saved.';
           this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
         },
@@ -404,6 +406,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
             });
             this.lastSavedAt = new Date();
             this.formChanged = false;
+            this.form.markAsPristine();
             this.draftSavedMessage = 'Draft saved.';
             this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
           }
@@ -458,7 +461,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
       this.authInfoHelper.createAuthorizedPerson(this.fb)
     );
 
-    this.form.patchValue(savedData);
+    this.form.patchValue(savedData, { emitEvent: false });
   }
 
   /** Ensure a FormArray has the correct number of items to accept patchValue data. */

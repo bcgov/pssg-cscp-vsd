@@ -131,6 +131,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
     }
 
     this.form.valueChanges.subscribe(() => {
+      if (!this.form.dirty) return;
       this.formChanged = true;
       this.resetAutoSaveTimer();
       const currentFormGroupName = this.getFormGroupName(this.currentFormStep);
@@ -339,6 +340,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
           this.saving = false;
           this.lastSavedAt = new Date();
           this.formChanged = false;
+          this.form.markAsPristine();
           this.draftSavedMessage = 'Draft saved.';
           this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
         },
@@ -365,6 +367,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
             });
             this.lastSavedAt = new Date();
             this.formChanged = false;
+            this.form.markAsPristine();
             this.draftSavedMessage = 'Draft saved.';
             this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
           }
