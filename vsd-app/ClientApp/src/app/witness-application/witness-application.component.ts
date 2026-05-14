@@ -133,7 +133,9 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
     this.form.valueChanges.subscribe(() => {
       if (!this.form.dirty) return;
       this.formChanged = true;
-      this.resetAutoSaveTimer();
+      if (this.canSaveDraft) {
+        this.resetAutoSaveTimer();
+      }
       const currentFormGroupName = this.getFormGroupName(this.currentFormStep);
       const currentFormGroup = this.form.get(currentFormGroupName);
       this.showValidationMessage = this.hasInvalidTouchedControls(currentFormGroup);

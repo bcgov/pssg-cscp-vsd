@@ -147,7 +147,9 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
     this.form.valueChanges.subscribe(() => {
       if (!this.form.dirty) return;
       this.formChanged = true;
-      this.resetAutoSaveTimer();
+      if (this.canSaveDraft) {
+        this.resetAutoSaveTimer();
+      }
 
       const currentFormGroupName = this.steps[this.victimStepper.selectedIndex];
       const currentFormGroup = this.form.get(currentFormGroupName);

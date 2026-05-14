@@ -140,7 +140,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
     this.form.valueChanges.subscribe(() => {
       if (!this.form.dirty) return;
       this.formChanged = true;
-      this.resetAutoSaveTimer();
+      if (this.canSaveDraft) {
+        this.resetAutoSaveTimer();
+      }
       const currentFormGroupName = this.getFormGroupName(this.ifmStepper.selectedIndex);
       const currentFormGroup = this.form.get(currentFormGroupName);
       this.showValidationMessage = this.hasInvalidTouchedControls(currentFormGroup);
