@@ -9,7 +9,7 @@
       <h3>Immediate Family Member Application</h3>
       <section class="application-nav sticky-top">
         <div>
-          <mat-vertical-stepper [linear]="true" (selectionChange)="gotoPage($event)" #stepper [class.disabled-stepper]="submitting">
+          <mat-vertical-stepper (selectionChange)="gotoPage($event)" #stepper [class.disabled-stepper]="submitting">
             <ng-template matStepperIcon="edit">
               <i class="fa fa-check"></i>
             </ng-template>
