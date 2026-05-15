@@ -55,11 +55,11 @@ npm install
       "ResourceName": "https://cscp-vs.dev.jag.gov.bc.ca/api/data/v9.0/"
     },
     "EntraId": {
-      "DynamicsApiEndpointUrl": "https://cscp-dev.api.crm3.dynamics.com/api/data/v9.2/",,
+      "DynamicsApiEndpointUrl": "https://csvs-coast-dev.api.crm3.dynamics.com/api/data/v9.2/",,
       "TenantId": "<cloud_tenant_id>",
       "ClientId": "<cloud_client_id>",
       "ClientSecret": "<cloud_client_secret>",
-      "ResourceName": "https://cscp-dev.api.crm3.dynamics.com"
+      "ResourceName": "https://csvs-coast-dev.crm3.dynamics.com"
     }
   }
 }

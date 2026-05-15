@@ -3,11 +3,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Azure;
+using Database;
 using Gov.Cscp.VictimServices.Public.Models;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 using Microsoft.Extensions.Options;
-using Database;
+using Serilog;
 
 namespace Gov.Cscp.VictimServices.Public.Services
 {
@@ -24,7 +24,11 @@ namespace Gov.Cscp.VictimServices.Public.Services
         private readonly ILogger _logger;
         private readonly DynamicsTokenProviderOptions _dynamicsOptions;
 
-        public DynamicsResultService(IConfiguration configuration, HttpClient httpClient, IOptions<DynamicsTokenProviderOptions> dynamicsOptions)
+        public DynamicsResultService(
+            IConfiguration configuration,
+            HttpClient httpClient,
+            IOptions<DynamicsTokenProviderOptions> dynamicsOptions
+        )
         {
             _client = httpClient;
             _configuration = configuration;
