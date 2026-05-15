@@ -18,3 +18,4 @@ vsd-app/vsd-app\.sln\.DotSettings
 /Manager/obj
 /Utilities/bin
 /Utilities/obj
+.playwright-mcp
