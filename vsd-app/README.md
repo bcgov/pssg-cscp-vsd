@@ -33,11 +33,20 @@ npm install
 ```JSON
 {
   "BASE_PATH": "/cvapwebforms",
+
   "AEM_INTERFACE_URI": "<aem_interface_url",
+
+  "CONFIGURATION_OUTAGEINFORMATION_MESSAGE": "",
+  "CONFIGURATION_OUTAGEINFORMATION_STARTDATE": "",
+  "CONFIGURATION_OUTAGEINFORMATION_ENDDATE": "",
+
+  "CVAP_COUNSELLING_EMAIL": "",
+  "CVAP_EMAIL": "",
+
   "Dynamics": {
     "AuthenticationType": "OnPremise",
-    "DynamicsApiEndpointUrl": "http://dev-coast-dataverse-proxy.silver.devops.bcgov/api/data/v9.0/",
     "ADFS": {
+      "DynamicsApiEndpointUrl": "http://dev-coast-dataverse-proxy.silver.devops.bcgov/api/data/v9.0/",
       "OAuth2TokenEndpoint": "https://ststest.gov.bc.ca/adfs/oauth2/token",
       "ClientId": "<onpremise_client_id>",
       "ClientSecret": "<onpremise_client_secret>",
@@ -46,6 +55,7 @@ npm install
       "ResourceName": "https://cscp-vs.dev.jag.gov.bc.ca/api/data/v9.0/"
     },
     "EntraId": {
+      "DynamicsApiEndpointUrl": "https://cscp-dev.api.crm3.dynamics.com/api/data/v9.2/",,
       "TenantId": "<cloud_tenant_id>",
       "ClientId": "<cloud_client_id>",
       "ClientSecret": "<cloud_client_secret>",
