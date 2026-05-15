@@ -232,6 +232,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
     window.scroll(0, 0);
     this.showValidationMessage = false;
     this.currentFormStep = selectPage.selectedIndex;
+    this.saveDraft();
   }
 
   gotoNextStep(stepper: MatStepper, emptyPage?: boolean): void {
@@ -575,6 +576,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
           this.formChanged = false;
           this.form.markAsPristine();
           this.draftSavedMessage = 'Draft saved.';
+          clearInterval(this.autoSaveTimer);
+          this.autoSaveCountdown = 0;
           this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
         },
         error: (err) => {
@@ -603,6 +606,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
             this.formChanged = false;
             this.form.markAsPristine();
             this.draftSavedMessage = 'Draft saved.';
+            clearInterval(this.autoSaveTimer);
+            this.autoSaveCountdown = 0;
             this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
           }
         },

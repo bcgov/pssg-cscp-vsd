@@ -206,6 +206,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
     window.scroll(0, 0);
     this.showValidationMessage = false;
     this.currentFormStep = selectPage.selectedIndex;
+    this.saveDraft();
   }
 
   gotoNextStep(stepper: MatStepper): void {
@@ -330,7 +331,7 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
 
   /** Save current form state as a draft via the ApplicationDrafts API. */
   saveDraft(): void {
-    if (!this.formChanged) return;
+    if (!this.formChanged || !this.canSaveDraft) return;
     this.saving = true;
     this.draftSavedMessage = '';
     const formData = JSON.stringify(this.form.getRawValue());
@@ -344,6 +345,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
           this.formChanged = false;
           this.form.markAsPristine();
           this.draftSavedMessage = 'Draft saved.';
+          clearInterval(this.autoSaveTimer);
+          this.autoSaveCountdown = 0;
           this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
         },
         error: (err) => {
@@ -371,6 +374,8 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
             this.formChanged = false;
             this.form.markAsPristine();
             this.draftSavedMessage = 'Draft saved.';
+            clearInterval(this.autoSaveTimer);
+            this.autoSaveCountdown = 0;
             this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
           }
         },
