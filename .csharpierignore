@@ -1,0 +1,6 @@
+# Ignore generated code
+Database/Entities/*
+Database/Messages/*
+Database/OptionSets/*
+Database/DataverseContext.cs
+Database/EntityOptionSetEnum.cs

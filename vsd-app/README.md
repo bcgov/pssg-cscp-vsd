@@ -28,6 +28,43 @@ npm install
 
 [Setup secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-9.0&tabs=windows#secret-manager)
 
+#### Secrets Template
+
+```JSON
+{
+  "BASE_PATH": "/cvapwebforms",
+
+  "AEM_INTERFACE_URI": "<aem_interface_url",
+
+  "CONFIGURATION_OUTAGEINFORMATION_MESSAGE": "",
+  "CONFIGURATION_OUTAGEINFORMATION_STARTDATE": "",
+  "CONFIGURATION_OUTAGEINFORMATION_ENDDATE": "",
+
+  "CVAP_COUNSELLING_EMAIL": "",
+  "CVAP_EMAIL": "",
+
+  "Dynamics": {
+    "AuthenticationType": "OnPremise",
+    "ADFS": {
+      "DynamicsApiEndpointUrl": "http://dev-coast-dataverse-proxy.silver.devops.bcgov/api/data/v9.0/",
+      "OAuth2TokenEndpoint": "https://ststest.gov.bc.ca/adfs/oauth2/token",
+      "ClientId": "<onpremise_client_id>",
+      "ClientSecret": "<onpremise_client_secret>",
+      "ServiceAccountName": "<onpremise_service_account_username>",
+      "ServiceAccountPassword": "<onpremise_service_account_password>",
+      "ResourceName": "https://cscp-vs.dev.jag.gov.bc.ca/api/data/v9.0/"
+    },
+    "EntraId": {
+      "DynamicsApiEndpointUrl": "https://csvs-coast-dev.api.crm3.dynamics.com/api/data/v9.2/",,
+      "TenantId": "<cloud_tenant_id>",
+      "ClientId": "<cloud_client_id>",
+      "ClientSecret": "<cloud_client_secret>",
+      "ResourceName": "https://csvs-coast-dev.crm3.dynamics.com"
+    }
+  }
+}
+```
+
 ### Start the app
 
 #### Backend
@@ -54,7 +91,7 @@ The frontend should now be available at `localhost:4200`.
 
 This project uses a [Weasyprint](http://weasyprint.org/) microservice to generate PDF documents.
 
-The PDF Microservice is currently using the [aquavitae/weasyprint](https://hub.docker.com/r/aquavitae/weasyprint/) image.  This is a simple microservice that works in an OpenShift environment.
+The PDF Microservice is currently using the [aquavitae/weasyprint](https://hub.docker.com/r/aquavitae/weasyprint/) image. This is a simple microservice that works in an OpenShift environment.
 
 The microservice is exposed internally to the project on http://weasyprint:5001 or at http://localhost:8083 if you are using the docker-compose development environment.
 
@@ -66,18 +103,20 @@ POST to /pdf?filename=myfile.pdf. The body should contain html
 POST to /multiple?filename=myfile.pdf. The body should contain a JSON list of html strings. They will each be rendered and combined into a single pdf
 ```
 
-By default the deployment configuration does not configure a route to the microservice; therefore it is only accessible internally to the project.  If you need an external route for conveyance you can add one manually, but this should only ever be done for a DEV environment.  
+By default the deployment configuration does not configure a route to the microservice; therefore it is only accessible internally to the project. If you need an external route for conveyance you can add one manually, but this should only ever be done for a DEV environment.
 
 ## Testing
 
-Use Postman or some other tool to post the following html to the deployed pdf microservice.  In Postman use `Send and Download` to save the resulting pdf to disk.
+Use Postman or some other tool to post the following html to the deployed pdf microservice. In Postman use `Send and Download` to save the resulting pdf to disk.
 
 Headers to set:
+
 ```
 Accept: application/pdf
 ```
 
 Sample html:
+
 ```
 <!DOCTYPE html>
 <html>
@@ -92,22 +131,24 @@ Sample html:
 
 ## References
 
-* Project: [Weasyprint](http://weasyprint.org/)
-* Image: [aquavitae/weasyprint](https://hub.docker.com/r/aquavitae/weasyprint/)
-* Source: [aquavitae/docker-weasyprint](https://github.com/aquavitae/docker-weasyprint)
+- Project: [Weasyprint](http://weasyprint.org/)
+- Image: [aquavitae/weasyprint](https://hub.docker.com/r/aquavitae/weasyprint/)
+- Source: [aquavitae/docker-weasyprint](https://github.com/aquavitae/docker-weasyprint)
 
 ## Dataverse How-To
 
 Query
-1-1 and N-1 mappings use Join method, see 
+1-1 and N-1 mappings use Join method, see
 1-N and N-N mappings query see PaymentRepository.Query method
 
 Insert with children see PaymentRepository.Insert method
 
 ### TIPS
+
 For joins, try using anonymous types instead of creating a new class; otherwise you might get object reference not set to an instance of an object errors
 
 Query a join table (you shouldn't need to use this, but just in case)
+
 ```
 var queryResults = _databaseContext
     .CreateQuery(Vsd_Payment.Fields.Vsd_Vsd_Payment_Vsd_Invoice.ToLower())
@@ -129,8 +170,9 @@ Add a comment and tag someone from the Mid-Tier/Finance team. On Jan 6, 2025 tha
 ## DYNAMICS AND SCHEDULED JOBS
 
 This repository has the latest code. It was based off of CPU project and contains all of the code from CPU project.
-Originally, this repository and CPU were designed to run from different databases. 
+Originally, this repository and CPU were designed to run from different databases.
 But since they both use the same database, and so do the other sister projects VSD, VPU, etc; going forward, we should move the following projects to a shared repository that can be used by all of the projects:
+
 - Database
 - Manager
 - Manager.Contract
@@ -139,8 +181,8 @@ But since they both use the same database, and so do the other sister projects V
 - Shared.Database
 - Tests
 - Utilities
-These projects were originally designed to have the Shared.X in the shared repository but now all of them can be shared. So, there is opportunity to consolidate the projects now.
-Consider consolidating Database and Shared.Database, and, Manager.Contract and Shared.Contract
+  These projects were originally designed to have the Shared.X in the shared repository but now all of them can be shared. So, there is opportunity to consolidate the projects now.
+  Consider consolidating Database and Shared.Database, and, Manager.Contract and Shared.Contract
 
 ## AUTOMAPPER OPTIMIZATIONS
 

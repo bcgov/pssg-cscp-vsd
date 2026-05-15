@@ -2,16 +2,17 @@
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Database;
 
 namespace Gov.Cscp.VictimServices.Public.Services
 {
     public class TokenHandler : DelegatingHandler
     {
-        private readonly ICOASTAuthService _coastAuthService;
+        private readonly ITokenProvider _tokenProvider;
 
-        public TokenHandler(ICOASTAuthService coastAuthService)
+        public TokenHandler(ITokenProvider tokenProvider)
         {
-            _coastAuthService = coastAuthService;
+            _tokenProvider = tokenProvider;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(
@@ -19,7 +20,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
             CancellationToken cancellationToken
         )
         {
-            var accessToken = await _coastAuthService.GetToken();
+            var accessToken = await _tokenProvider.AcquireToken();
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             return await base.SendAsync(request, cancellationToken);
         }

@@ -3,8 +3,10 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Azure;
+using Database;
 using Gov.Cscp.VictimServices.Public.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace Gov.Cscp.VictimServices.Public.Services
@@ -20,12 +22,18 @@ namespace Gov.Cscp.VictimServices.Public.Services
         private HttpClient _client;
         private IConfiguration _configuration;
         private readonly ILogger _logger;
+        private readonly DynamicsTokenProviderOptions _dynamicsOptions;
 
-        public DynamicsResultService(IConfiguration configuration, HttpClient httpClient)
+        public DynamicsResultService(
+            IConfiguration configuration,
+            HttpClient httpClient,
+            IOptions<DynamicsTokenProviderOptions> dynamicsOptions
+        )
         {
             _client = httpClient;
             _configuration = configuration;
             _logger = Log.Logger;
+            _dynamicsOptions = dynamicsOptions.Value;
         }
 
         public async Task<DynamicsResult> Get(string endpointUrl)
@@ -46,7 +54,7 @@ namespace Gov.Cscp.VictimServices.Public.Services
             string requestJson
         )
         {
-            endpointUrl = _configuration["DYNAMICS_ODATA_URI"] + endpointUrl;
+            endpointUrl = _dynamicsOptions.GetDynamicsApiEndpointUrl() + endpointUrl;
             requestJson = requestJson.Replace("fortunecookie", "@odata.");
 
             HttpRequestMessage _httpRequest = new HttpRequestMessage(method, endpointUrl);
