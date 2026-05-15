@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { AbstractControl, FormControl } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import moment from 'moment';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { MY_FORMATS } from '../enums-list';
@@ -26,22 +25,24 @@ export class DateFieldComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
 
+  constructor(private readonly dateAdapter: DateAdapter<unknown>) {}
+
   get asFormControl(): FormControl {
     return this.control as FormControl;
   }
 
   ngOnInit(): void {
     // When a draft is loaded via patchValue, date values arrive as ISO strings.
-    // Convert them to Moment objects so the Material DatePicker renders correctly.
+    // Deserialize via the adapter so the Material DatePicker receives the correct type.
     this.control.valueChanges
       .pipe(
         filter((v) => v && typeof v === 'string'),
         takeUntil(this.destroy$)
       )
       .subscribe((v) => {
-        const m = moment(v);
-        if (m.isValid()) {
-          this.control.setValue(m, { emitEvent: false });
+        const d = this.dateAdapter.deserialize(v);
+        if (d && this.dateAdapter.isValid(d)) {
+          this.control.setValue(d, { emitEvent: false });
         }
       });
   }
