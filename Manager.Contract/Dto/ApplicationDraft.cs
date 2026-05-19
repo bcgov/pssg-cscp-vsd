@@ -37,6 +37,12 @@ public record ApplicationDraft : IDto
 
     public DateTime? CreatedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
+
+    /// <summary>
+    /// Applicant surname parsed from <c>personalInformation.lastName</c>
+    /// inside the stored JSON.
+    /// </summary>
+    public string? ApplicantLabel { get; set; }
 }
 
 /// <summary>

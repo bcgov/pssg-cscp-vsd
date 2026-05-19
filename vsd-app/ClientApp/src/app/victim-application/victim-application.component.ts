@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -25,6 +25,7 @@ import {
   RepresentativeInformation
 } from '../interfaces/application.interface';
 import { AEMService } from '../services/aem.service';
+import { LoginService } from '../services/login.service';
 import { StateService } from '../services/state.service';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
@@ -41,7 +42,6 @@ import { ServiceNotAvailableComponent } from '../shared/service-not-available.co
 import { VictimInfoHelper } from '../shared/victim-information/victim-information.helper';
 import { LookupStore } from '../store/lookup.store';
 import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benefits.component';
-import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-victim-application',
@@ -54,7 +54,7 @@ import { LoginService } from '../services/login.service';
   ],
   standalone: false
 })
-export class VictimApplicationComponent extends FormBase implements OnInit {
+export class VictimApplicationComponent extends FormBase implements OnInit, OnDestroy {
   @ViewChild('stepper') victimStepper: MatStepper;
   FORM_TYPE = ApplicationType.Victim_Application;
   busy: Promise<any>;
@@ -68,6 +68,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
   draftId: string | null = null;
   saving = false;
   draftSavedMessage = '';
+  formChanged = false;
+  lastSavedAt: Date | null = null;
+
+  autoSaveTimer: any;
+  autoSaveCountdown = 0;
+  autoSaveInterval = 60;
 
   ApplicationType = ApplicationType;
 
@@ -110,7 +116,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     private matDialog: MatDialog,
     public state: StateService,
     private aemService: AEMService,
-    private authService: LoginService) {
+    private authService: LoginService
+  ) {
     super();
   }
 
@@ -138,10 +145,43 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     }
 
     this.form.valueChanges.subscribe(() => {
+      if (!this.form.dirty) return;
+      this.formChanged = true;
+      if (this.canSaveDraft) {
+        this.resetAutoSaveTimer();
+      }
+
       const currentFormGroupName = this.steps[this.victimStepper.selectedIndex];
       const currentFormGroup = this.form.get(currentFormGroupName);
       this.showValidationMessage = this.hasInvalidTouchedControls(currentFormGroup);
     });
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.autoSaveTimer);
+  }
+
+  @HostListener('window:mousemove')
+  @HostListener('window:mousedown')
+  @HostListener('window:keypress')
+  @HostListener('window:scroll')
+  @HostListener('window:touchmove')
+  resetAutoSaveTimer(): void {
+    if (!this.formChanged || !this.canSaveDraft) {
+      this.autoSaveCountdown = 0;
+      clearInterval(this.autoSaveTimer);
+      return;
+    }
+
+    this.autoSaveCountdown = this.autoSaveInterval;
+    clearInterval(this.autoSaveTimer);
+    this.autoSaveTimer = setInterval(() => {
+      this.autoSaveCountdown -= 1;
+      if (this.autoSaveCountdown === 0) {
+        this.saveDraft();
+        clearInterval(this.autoSaveTimer);
+      }
+    }, 1000);
   }
 
   buildApplicationForm(FORM: ApplicationType = this.FORM_TYPE): UntypedFormGroup {
@@ -192,6 +232,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
     window.scroll(0, 0);
     this.showValidationMessage = false;
     this.currentFormStep = selectPage.selectedIndex;
+    this.saveDraft();
   }
 
   gotoNextStep(stepper: MatStepper, emptyPage?: boolean): void {
@@ -519,6 +560,8 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
 
   /** Save current form state as a draft via the ApplicationDrafts API. */
   saveDraft(): void {
+    if (!this.formChanged || !this.canSaveDraft) return;
+
     this.saving = true;
     this.draftSavedMessage = '';
     const formData = JSON.stringify(this.form.getRawValue());
@@ -529,7 +572,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       this.draftsService.putApiApplicationDraftsDraftId(this.draftId, request).subscribe({
         next: () => {
           this.saving = false;
+          this.lastSavedAt = new Date();
+          this.formChanged = false;
+          this.form.markAsPristine();
           this.draftSavedMessage = 'Draft saved.';
+          clearInterval(this.autoSaveTimer);
+          this.autoSaveCountdown = 0;
           this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
         },
         error: (err) => {
@@ -554,7 +602,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
               queryParamsHandling: 'merge',
               replaceUrl: true
             });
+            this.lastSavedAt = new Date();
+            this.formChanged = false;
+            this.form.markAsPristine();
             this.draftSavedMessage = 'Draft saved.';
+            clearInterval(this.autoSaveTimer);
+            this.autoSaveCountdown = 0;
             this.snackBar.open('Draft saved successfully.', 'Close', { duration: 3000 });
           }
         },
@@ -612,7 +665,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit {
       this.employmentInfoHelper.createEmployerInfo(this.fb)
     );
 
-    this.form.patchValue(savedData);
+    this.form.patchValue(savedData, { emitEvent: false });
   }
 
   /** Ensure a FormArray has the correct number of items to accept patchValue data. */

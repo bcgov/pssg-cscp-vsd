@@ -30,6 +30,7 @@
       <thead>
         <tr>
           <th>Type</th>
+          <th>Applicant</th>
           <th>Created</th>
           <th>Last Modified</th>
           <th class="col-actions">Actions</th>
@@ -38,6 +39,7 @@
       <tbody>
         <tr *ngFor="let draft of drafts">
           <td>{{ getDraftTypeLabel(draft.draftType) }}</td>
+          <td>{{ draft.applicantLabel || '—' }}</td>
           <td>{{ draft.createdOn | date: 'mediumDate' }}</td>
           <td>{{ draft.modifiedOn | date: 'medium' }}</td>
           <td class="col-actions">

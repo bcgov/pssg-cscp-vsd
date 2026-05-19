@@ -1,20 +1,120 @@
-.date-container {
-  display: flex;
+:host {
+  display: block;
 }
 
-.month-container,
-.day-container {
-  margin-right: 7px;
+// Bootstrap-style Material DatePicker — applies to all app-date-field usages
+::ng-deep .app-date-field-picker {
+  .mat-mdc-form-field-infix,
+  &.mdc-text-field--outlined .mat-mdc-form-field-infix,
+  &.mdc-text-field--no-label .mat-mdc-form-field-infix {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    min-height: unset !important;
+    height: 37px !important;
+  }
+
+  .mat-mdc-input-element {
+    font-size: 14px;
+    line-height: 22px;
+    color: #555;
+  }
+
+  .mat-mdc-form-field-flex {
+    align-items: center;
+  }
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: #ccc !important;
+    border-width: 1px !important;
+  }
+
+  .mdc-notched-outline__leading {
+    border-radius: 0;
+  }
+
+  .mdc-notched-outline__trailing {
+    border-radius: 0;
+  }
+
+  .mdc-notched-outline__notch {
+    border-top: 1px solid #ccc !important;
+  }
+
+  .mat-mdc-form-field-label-wrapper {
+    display: none;
+  }
+
+  &:hover .mdc-notched-outline__leading,
+  &:hover .mdc-notched-outline__notch,
+  &:hover .mdc-notched-outline__trailing {
+    border-color: #aaa !important;
+  }
+
+  &.mat-focused .mdc-notched-outline__leading,
+  &.mat-focused .mdc-notched-outline__notch,
+  &.mat-focused .mdc-notched-outline__trailing {
+    border-color: #66afe9 !important;
+    border-width: 1px !important;
+    box-shadow: none;
+  }
+
+  .mat-mdc-form-field-icon-suffix {
+    padding: 0 4px 0 0;
+  }
+
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
 }
 
-.year-container {
-  flex: 4 1 0;
+// Red border when the wrapping app-field has the with-error class
+::ng-deep .with-error .app-date-field-picker {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: red !important;
+  }
+
+  .mdc-notched-outline__notch {
+    border-top: 1px solid red !important;
+  }
 }
 
-.month-container {
-  flex: 5 1 0;
+// Calendar popup colours
+::ng-deep .mat-calendar-body-selected {
+  background-color: #38598a;
+  color: #000 !important;
 }
 
-.day-container {
-  flex: 3 1 0;
+::ng-deep .mat-calendar-body-cell-content {
+  color: #54708b;
+}
+
+::ng-deep .mat-calendar-header {
+  background-color: #38598a;
+  color: #fff;
+
+  .mat-calendar-controls {
+    button,
+    .mat-calendar-period-button {
+      color: #fff;
+    }
+
+    .mat-mdc-icon-button svg {
+      fill: #fff;
+    }
+
+    .mat-mdc-button-ripple,
+    .mat-mdc-focus-indicator {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+  }
 }

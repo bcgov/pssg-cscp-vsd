@@ -8,6 +8,7 @@ vsd-app/vsd-app\.sln\.DotSettings
 /Shared.Contract/obj
 /Shared.Database/bin
 /Shared.Database/obj
+Database/Database.csproj.lscache
 /Manager.Contract/bin
 /Manager.Contract/obj
 /Resources/bin
@@ -18,3 +19,9 @@ vsd-app/vsd-app\.sln\.DotSettings
 /Manager/obj
 /Utilities/bin
 /Utilities/obj
+.playwright-mcp
+/vsd-app/ClientApp/e2e-playwright-report
+/vsd-app/ClientApp/test-results
+
+
+*.lscache

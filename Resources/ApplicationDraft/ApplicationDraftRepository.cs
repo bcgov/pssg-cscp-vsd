@@ -1,13 +1,18 @@
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
+
 namespace Resources;
 
 public class ApplicationDraftRepository : BaseRepository<Vsd_VictimServiceDraft, ApplicationDraft>, IApplicationDraftRepository
 {
     private readonly DatabaseContext _databaseContext;
+    private readonly ILogger<ApplicationDraftRepository> _logger;
 
-    public ApplicationDraftRepository(DatabaseContext databaseContext, IMapper mapper)
+    public ApplicationDraftRepository(DatabaseContext databaseContext, IMapper mapper, ILogger<ApplicationDraftRepository> logger)
         : base(databaseContext, mapper)
     {
         _databaseContext = databaseContext;
+        _logger = logger;
     }
 
     // ── Insert ────────────────────────────────────────────────────────────────
@@ -33,7 +38,42 @@ public class ApplicationDraftRepository : BaseRepository<Vsd_VictimServiceDraft,
                 e => e.StateCode == Vsd_VictimServiceDraft_StateCode.Active)
             .ToList();
 
-        return _mapper.Map<IEnumerable<ApplicationDraft>>(results);
+        var drafts = _mapper.Map<IEnumerable<ApplicationDraft>>(results).ToList();
+
+        foreach (var d in drafts)
+            d.ApplicantLabel = ExtractApplicantLabel(d.DraftData, d.Id);
+
+        return drafts;
+    }
+
+    // ── ExtractApplicantLabel ────────────────────────────────────────────────
+
+    /// <summary>
+    /// Extract <c>personalInformation.lastName</c> from the
+    /// stored draft JSON.  Returns <c>null</c> when the field is absent, empty,
+    /// or the JSON cannot be parsed.
+    /// </summary>
+    private string? ExtractApplicantLabel(string? draftData, Guid draftId)
+    {
+        if (string.IsNullOrWhiteSpace(draftData))
+            return null;
+
+        try
+        {
+            using var doc = JsonDocument.Parse(draftData);
+            if (doc.RootElement.TryGetProperty("personalInformation", out var pi) &&
+                pi.TryGetProperty("lastName", out var ln))
+            {
+                var value = ln.GetString();
+                return string.IsNullOrWhiteSpace(value) ? null : value;
+            }
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogWarning(ex, "Failed to parse draftData JSON for applicant label extraction on draft {DraftId}", draftId);
+        }
+
+        return null;
     }
 
     // ── Update ───────────────────────────────────────────────────────────────
