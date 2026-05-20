@@ -16,12 +16,10 @@ import { expect, test } from '@playwright/test';
  *  Step 9  – Review & Submit
  */
 
-const BASE = 'http://localhost:4200/cvapwebform';
-
 // ─── Reusable helpers ──────────────────────────────────────────────────────────
 
 async function goToLanding(page: any) {
-  await page.goto(BASE + '/');
+  await page.goto('/cvapwebform/');
 }
 
 async function continueWithoutSignIn(page: any) {

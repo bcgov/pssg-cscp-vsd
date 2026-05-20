@@ -3,10 +3,13 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * Playwright E2E Test Configuration
  * Target: Crime Victim Assistance Program (CVAP) web application
- * Base URL: http://localhost:4200/cvapwebform
  *
- * Run with:  npx playwright test
- * Report:    npx playwright show-report
+ * Projects:
+ *   localhost  http://localhost:4200          npm run e2e
+ *   dev        http://dev.justice.gov.bc.ca   npm run e2e:dev
+ *   test       http://test.justice.gov.bc.ca  npm run e2e:test
+ *
+ * Report: npm run e2e:report
  */
 export default defineConfig({
   testDir: './e2e-playwright',
@@ -16,7 +19,6 @@ export default defineConfig({
   workers: 1,
   reporter: [['html', { outputFolder: 'e2e-playwright-report' }], ['list']],
   use: {
-    baseURL: 'http://localhost:4200/cvapwebform',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -26,8 +28,16 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
+      name: 'localhost',
+      use: { ...devices['Desktop Chrome'], baseURL: 'http://localhost:4200' }
+    },
+    {
+      name: 'dev',
+      use: { ...devices['Desktop Chrome'], baseURL: 'http://dev.justice.gov.bc.ca' }
+    },
+    {
+      name: 'test',
+      use: { ...devices['Desktop Chrome'], baseURL: 'http://test.justice.gov.bc.ca' }
     }
   ]
 });
