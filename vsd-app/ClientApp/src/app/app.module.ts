@@ -86,6 +86,7 @@ import { IntroductionComponent } from './shared/introduction/introduction.compon
 import { MedicalInformationComponent } from './shared/medical-information/medical-information.component';
 import { PersonalInformationComponent } from './shared/personal-information/personal-information.component';
 import { RepresentativeInformationComponent } from './shared/representative-information/representative-information.component';
+import { StepperNavTipComponent } from './shared/stepper-nav-tip/stepper-nav-tip.component';
 import { ToolTipTriggerComponent } from './shared/tool-tip/tool-tip.component';
 import { VictimInformationComponent } from './shared/victim-information/victim-information.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
@@ -166,6 +167,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     RepresentativeInformationComponent,
     SubmitInvoiceComponent,
     SummaryOfBenefitsDialog,
+    StepperNavTipComponent,
     ToolTipTriggerComponent,
     VictimApplicationComponent,
     VictimInformationComponent,
