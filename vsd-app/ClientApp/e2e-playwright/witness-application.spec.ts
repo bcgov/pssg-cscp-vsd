@@ -91,14 +91,14 @@ test.describe('Application Selector – Witness Application', () => {
     await continueWithoutSignIn(page);
   });
 
-  test('should show Witness Application description when selected', async ({ page }) => {
+  test('TC-WA-01: should show Witness Application description when selected', async ({ page }) => {
     await page.getByRole('combobox').selectOption('Witness Application');
     // Check the description paragraph — also implicitly confirms the Witness context
     await expect(page.getByText(/This application package is designed for a/)).toBeVisible();
     await expect(page.locator('strong:has-text("Witness")').first()).toBeVisible();
   });
 
-  test('should show on-behalf-of options after selecting Witness Application', async ({ page }) => {
+  test('TC-WA-02: should show on-behalf-of options after selecting Witness Application', async ({ page }) => {
     await page.getByRole('combobox').selectOption('Witness Application');
     await expect(page.getByRole('radio', { name: /Completing this application for myself/ })).toBeVisible();
     await expect(
@@ -107,7 +107,7 @@ test.describe('Application Selector – Witness Application', () => {
     await expect(page.getByRole('radio', { name: /legal representative/ })).toBeVisible();
   });
 
-  test('should require "Did the crime occur in BC" selection before continuing', async ({ page }) => {
+  test('TC-WA-03: should require "Did the crime occur in BC" selection before continuing', async ({ page }) => {
     await page.getByRole('combobox').selectOption('Witness Application');
     await page.getByRole('radio', { name: /Completing this application for myself/ }).click();
     await page.getByRole('button', { name: /CONTINUE TO WITNESS APPLICATION/ }).click();
@@ -115,7 +115,7 @@ test.describe('Application Selector – Witness Application', () => {
     await expect(page.getByRole('heading', { name: /Crime Victim Assistance Program Application/ })).toBeVisible();
   });
 
-  test('should redirect to witness application on valid selection', async ({ page }) => {
+  test('TC-WA-04: should redirect to witness application on valid selection', async ({ page }) => {
     await page.getByRole('combobox').selectOption('Witness Application');
     await page.getByRole('radio', { name: /Completing this application for myself/ }).click();
     await page.getByRole('radio', { name: 'Yes' }).first().click();
@@ -133,25 +133,25 @@ test.describe('Step 0: Overview', () => {
     await page.waitForSelector('h1:has-text("Overview")');
   });
 
-  test('should show Overview page with correct heading', async ({ page }) => {
+  test('TC-WA-05: should show Overview page with correct heading', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Overview', level: 1 })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Before you apply', level: 2 })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Who may use this application?', level: 3 })).toBeVisible();
   });
 
-  test('should describe the Witness applicant type', async ({ page }) => {
+  test('TC-WA-06: should describe the Witness applicant type', async ({ page }) => {
     await expect(page.getByText(/This application package is designed for a/)).toBeVisible();
     await expect(page.getByText(/witnesses in close proximity/)).toBeVisible();
   });
 
-  test('should list witness-specific benefits', async ({ page }) => {
+  test('TC-WA-07: should list witness-specific benefits', async ({ page }) => {
     await expect(page.getByText('counselling').first()).toBeVisible();
     await expect(page.getByText('prescription drug expenses')).toBeVisible();
     await expect(page.getByText('transportation and related expenses')).toBeVisible();
     await expect(page.getByText('crime scene cleaning')).toBeVisible();
   });
 
-  test('should display all 10 stepper steps in navigation', async ({ page }) => {
+  test('TC-WA-08: should display all 10 stepper steps in navigation', async ({ page }) => {
     const expectedSteps = [
       'Overview',
       'Personal Information & Addresses',
@@ -169,24 +169,24 @@ test.describe('Step 0: Overview', () => {
     }
   });
 
-  test('should show heading "Witness Application" in side navigation', async ({ page }) => {
+  test('TC-WA-09: should show heading "Witness Application" in side navigation', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Witness Application', level: 3 })).toBeVisible();
   });
 
-  test('should require "I have read and understood" checkbox before continuing', async ({ page }) => {
+  test('TC-WA-10: should require "I have read and understood" checkbox before continuing', async ({ page }) => {
     // Click CONTINUE without checking the box
     await page.getByRole('button', { name: /^CONTINUE/ }).click();
     // Should stay on Overview
     await expect(page.getByRole('heading', { name: 'Overview', level: 1 })).toBeVisible();
   });
 
-  test('should advance to Personal Information & Addresses after accepting', async ({ page }) => {
+  test('TC-WA-11: should advance to Personal Information & Addresses after accepting', async ({ page }) => {
     await page.locator('input[formcontrolname="understoodInformation"]').check();
     await page.getByRole('button', { name: /^CONTINUE/ }).click();
     await expect(page.getByRole('heading', { name: 'Personal Information & Addresses', level: 1 })).toBeVisible();
   });
 
-  test('should show "Cancel Application" link', async ({ page }) => {
+  test('TC-WA-12: should show "Cancel Application" link', async ({ page }) => {
     await expect(page.getByText('Cancel Application')).toBeVisible();
   });
 });
@@ -200,31 +200,31 @@ test.describe('Step 1: Personal Information & Addresses', () => {
     await acceptOverview(page);
   });
 
-  test('should show Personal Information & Addresses heading', async ({ page }) => {
+  test('TC-WA-13: should show Personal Information & Addresses heading', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Personal Information & Addresses', level: 1 })).toBeVisible();
   });
 
-  test('should show Applicant Name fields (First, Middle, Last)', async ({ page }) => {
+  test('TC-WA-14: should show Applicant Name fields (First, Middle, Last)', async ({ page }) => {
     await expect(page.locator('input[formcontrolname="firstName"]')).toBeVisible();
     await expect(page.locator('input[formcontrolname="middleName"]')).toBeVisible();
     await expect(page.locator('input[formcontrolname="lastName"]')).toBeVisible();
   });
 
-  test('should show Email Address field', async ({ page }) => {
+  test('TC-WA-15: should show Email Address field', async ({ page }) => {
     await expect(page.getByRole('textbox', { name: 'Email Address' })).toBeVisible();
   });
 
-  test('should show Contact Information section', async ({ page }) => {
+  test('TC-WA-16: should show Contact Information section', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Contact Information', level: 2 })).toBeVisible();
     await expect(page.getByRole('textbox', { name: 'Email Address' })).toBeVisible();
     await expect(page.locator('input[formcontrolname="confirmEmail"]')).toBeVisible();
   });
 
-  test('should show Primary Mailing Address section', async ({ page }) => {
+  test('TC-WA-17: should show Primary Mailing Address section', async ({ page }) => {
     await expect(page.getByRole('heading', { name: /Primary Mailing Address/, level: 3 })).toBeVisible();
   });
 
-  test('should validate required fields on Continue without input', async ({ page }) => {
+  test('TC-WA-18: should validate required fields on Continue without input', async ({ page }) => {
     await page.getByRole('button', { name: /^CONTINUE/ }).click();
     // Page should stay on step 1 with validation errors
     await expect(page.getByRole('heading', { name: 'Personal Information & Addresses', level: 1 })).toBeVisible();
@@ -241,18 +241,18 @@ test.describe('Step 2: Victim Information (navigation via stepper)', () => {
     await navigateToStep(page, 2);
   });
 
-  test('should show Victim Information heading', async ({ page }) => {
+  test('TC-WA-19: should show Victim Information heading', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Victim Information', level: 1 })).toBeVisible();
   });
 
-  test('should show Victim Name section with First, Middle, Last fields', async ({ page }) => {
+  test('TC-WA-20: should show Victim Name section with First, Middle, Last fields', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Victim Name', level: 3 })).toBeVisible();
     await expect(page.locator('input[formcontrolname="firstName"]')).toBeVisible();
     await expect(page.locator('input[formcontrolname="middleName"]')).toBeVisible();
     await expect(page.locator('input[formcontrolname="lastName"]')).toBeVisible();
   });
 
-  test('should show "Victim Information, if known" subheading (fields are optional)', async ({ page }) => {
+  test('TC-WA-21: should show "Victim Information, if known" subheading (fields are optional)', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Victim Information, if known', level: 2 })).toBeVisible();
   });
 });
@@ -267,19 +267,19 @@ test.describe('Step 3: Crime Information (navigation via stepper)', () => {
     await navigateToStep(page, 3);
   });
 
-  test('should show Crime Information heading', async ({ page }) => {
+  test('TC-WA-22: should show Crime Information heading', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Crime Information', level: 1 })).toBeVisible();
   });
 
-  test('should show Crime Type input field', async ({ page }) => {
+  test('TC-WA-23: should show Crime Type input field', async ({ page }) => {
     await expect(page.locator('input[formcontrolname="typeOfCrime"]')).toBeVisible();
   });
 
-  test('should show crime date fields', async ({ page }) => {
+  test('TC-WA-24: should show crime date fields', async ({ page }) => {
     await expect(page.locator('app-date-field').first()).toBeVisible();
   });
 
-  test('should show police report section', async ({ page }) => {
+  test('TC-WA-25: should show police report section', async ({ page }) => {
     await expect(page.getByText('Was a report made to the police?')).toBeVisible();
   });
 });
@@ -294,11 +294,11 @@ test.describe('Step 4: Medical Information (navigation via stepper)', () => {
     await navigateToStep(page, 4);
   });
 
-  test('should show Medical Information heading', async ({ page }) => {
+  test('TC-WA-26: should show Medical Information heading', async ({ page }) => {
     await expect(page.getByRole('heading', { name: /Medical/, level: 1 })).toBeVisible();
   });
 
-  test('should show Coverage section with MSP and Other Health Coverage questions', async ({ page }) => {
+  test('TC-WA-27: should show Coverage section with MSP and Other Health Coverage questions', async ({ page }) => {
     await expect(page.getByText('Medical Services Coverage').first()).toBeVisible();
     await expect(page.getByText('Other Health Coverage').first()).toBeVisible();
   });
@@ -314,11 +314,11 @@ test.describe('Step 5: Expense & Benefits (navigation via stepper)', () => {
     await navigateToStep(page, 5);
   });
 
-  test('should show Expense & Benefits heading', async ({ page }) => {
+  test('TC-WA-28: should show Expense & Benefits heading', async ({ page }) => {
     await expect(page.getByRole('heading', { name: /Expense/, level: 1 })).toBeVisible();
   });
 
-  test('should show witness benefit checkboxes', async ({ page }) => {
+  test('TC-WA-29: should show witness benefit checkboxes', async ({ page }) => {
     // Counselling is a witness benefit (present on this step)
     await expect(page.getByText(/Counselling/i).first()).toBeVisible();
   });
@@ -334,11 +334,11 @@ test.describe('Step 7: Declaration (navigation via stepper)', () => {
     await navigateToStep(page, 7);
   });
 
-  test('should show Declaration heading and Information Collection Notice', async ({ page }) => {
+  test('TC-WA-30: should show Declaration heading and Information Collection Notice', async ({ page }) => {
     await expect(page.getByRole('heading', { name: /Declaration/, level: 1 })).toBeVisible();
   });
 
-  test('should show Declaration & Signature section with checkbox and signature pad', async ({ page }) => {
+  test('TC-WA-31: should show Declaration & Signature section with checkbox and signature pad', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Declaration & Signature', level: 2 })).toBeVisible();
     await expect(page.locator('input[formcontrolname="declaredAndSigned"]')).toBeVisible();
   });
@@ -354,15 +354,15 @@ test.describe('Step 8: Authorization (navigation via stepper)', () => {
     await navigateToStep(page, 8);
   });
 
-  test('should show Authorization and Consent heading', async ({ page }) => {
+  test('TC-WA-32: should show Authorization and Consent heading', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Authorization and Consent', level: 1 })).toBeVisible();
   });
 
-  test('should show Standard Authorization & Signature section', async ({ page }) => {
+  test('TC-WA-33: should show Standard Authorization & Signature section', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Standard Authorization & Signature', level: 2 })).toBeVisible();
   });
 
-  test('should show Release of Information section with Yes/No options', async ({ page }) => {
+  test('TC-WA-34: should show Release of Information section with Yes/No options', async ({ page }) => {
     await expect(page.getByText(/Release of Information/i).first()).toBeVisible();
   });
 });
@@ -375,11 +375,11 @@ test.describe('Cancellation Flow', () => {
     await page.waitForSelector('h1:has-text("Overview")');
   });
 
-  test('should show Cancel Application link on Overview', async ({ page }) => {
+  test('TC-WA-35: should show Cancel Application link on Overview', async ({ page }) => {
     await expect(page.getByText('Cancel Application')).toBeVisible();
   });
 
-  test('should open cancellation confirmation dialog when Cancel is clicked', async ({ page }) => {
+  test('TC-WA-36: should open cancellation confirmation dialog when Cancel is clicked', async ({ page }) => {
     await page.getByText('Cancel Application').click();
     await expect(page.getByRole('dialog').first()).toBeVisible();
   });
@@ -394,27 +394,27 @@ test.describe('Stepper Navigation', () => {
     await acceptOverview(page);
   });
 
-  test('should navigate to Victim Information via stepper click', async ({ page }) => {
+  test('TC-WA-37: should navigate to Victim Information via stepper click', async ({ page }) => {
     await navigateToStep(page, 2);
     await expect(page.getByRole('heading', { name: 'Victim Information', level: 1 })).toBeVisible();
   });
 
-  test('should navigate to Crime Information via stepper click', async ({ page }) => {
+  test('TC-WA-38: should navigate to Crime Information via stepper click', async ({ page }) => {
     await navigateToStep(page, 3);
     await expect(page.getByRole('heading', { name: 'Crime Information', level: 1 })).toBeVisible();
   });
 
-  test('should navigate to Declaration via stepper click', async ({ page }) => {
+  test('TC-WA-39: should navigate to Declaration via stepper click', async ({ page }) => {
     await navigateToStep(page, 7);
     await expect(page.getByRole('heading', { name: /Declaration/, level: 1 })).toBeVisible();
   });
 
-  test('should navigate to Authorization via stepper click', async ({ page }) => {
+  test('TC-WA-40: should navigate to Authorization via stepper click', async ({ page }) => {
     await navigateToStep(page, 8);
     await expect(page.getByRole('heading', { name: 'Authorization and Consent', level: 1 })).toBeVisible();
   });
 
-  test.skip('should show Review & Submit step as accessible in the stepper', async ({ page }) => {
+  test.skip('TC-WA-41: should show Review & Submit step as accessible in the stepper', async ({ page }) => {
     // Skipped: same issue as victim app — the last step button triggers a browser-close condition
     // after all prior tests complete in sequence. Tracked for future investigation.
     await expect(page.getByRole('button', { name: 'Review & Submit' })).toBeVisible();
