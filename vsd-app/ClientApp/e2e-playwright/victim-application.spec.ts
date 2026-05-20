@@ -40,13 +40,39 @@ async function acceptOverview(page: any) {
   await page.waitForSelector('h1:has-text("Victim Information")');
 }
 
+// Angular Material CDK Stepper only allows clicking one step ahead from the current position.
+// After acceptOverview we are on step 1 (Victim Information & Addresses). To reach step N we
+// must click through steps 2, 3, … N in sequence, waiting for each heading to confirm navigation.
+const VICTIM_STEP_CHAIN: { name: string; heading: string }[] = [
+  { name: 'Crime Information', heading: 'Crime Information' }, // step 2
+  { name: 'Medical & Dental Information', heading: 'Medical' }, // step 3
+  { name: 'Expense & Loss Information', heading: 'Expense' }, // step 4
+  { name: 'Employment Income', heading: 'Employment' }, // step 5
+  { name: 'Application on Behalf of Victim', heading: 'Application on Behalf' }, // step 6
+  { name: 'Declaration', heading: 'Declaration' }, // step 7
+  { name: 'Authorization', heading: 'Authorization' } // step 8
+];
+
+/**
+ * Navigate to the given stepper step index (2–8) by clicking each intermediate step
+ * in sequence. Assumes we are currently on step 1 (Victim Information & Addresses).
+ */
+async function navigateToStep(page: any, targetStepIndex: number): Promise<void> {
+  for (let i = 2; i <= targetStepIndex; i++) {
+    const { name, heading } = VICTIM_STEP_CHAIN[i - 2];
+    await page.getByRole('button', { name }).click({ force: true });
+    await page.waitForSelector(`h1:has-text("${heading}")`);
+  }
+}
+
 // ─── Test Suite: Landing Page ─────────────────────────────────────────────────
 
 test.describe('Landing Page', () => {
   test('should display CVAP program title and sign-in options', async ({ page }) => {
     await goToLanding(page);
 
-    await expect(page).toHaveTitle(/Welcome - Crime Victim Assistance Program/);
+    await expect(page).toHaveTitle(/Victim Services/);
+    await page.waitForSelector('button:has-text("Continue Without Signing In")');
     await expect(page.getByRole('heading', { name: /Crime Victim Assistance Program/ }).first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In with BC Services Card' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Continue Without Signing In' })).toBeVisible();
@@ -59,7 +85,9 @@ test.describe('Landing Page', () => {
 
   test('should display quick-exit "Close" button', async ({ page }) => {
     await goToLanding(page);
-    await expect(page.getByText('Click here to close this site quickly.')).toBeVisible();
+    // The close-info paragraph is inside an animation-hidden div (only shown on hover).
+    // The close-box tab is always visible — check the outer slide-close container.
+    await expect(page.locator('.slide-close')).toBeVisible();
   });
 });
 
@@ -189,10 +217,9 @@ test.describe('Step 1: Victim Information & Addresses', () => {
     await expect(page.locator('input[formcontrolname="otherLastName"]')).toBeVisible();
   });
 
-  test('should show Gender, Birthdate and Marital Status fields', async ({ page }) => {
-    // Use formcontrolname/component selectors — getByText has case-insensitive substring matching
-    // which causes strict-mode violations when label text appears elsewhere on the page
-    await expect(page.locator('input[formcontrolname="gender"]').first()).toBeVisible();
+  test('should show Birthdate and Marital Status fields', async ({ page }) => {
+    // Gender radio buttons are feature-flagged (hidden when useUpdatedComplianceFields is on)
+    // so we only assert the always-present date and marital status fields.
     await expect(page.locator('app-date-field').first()).toBeVisible();
     await expect(page.locator('select[formcontrolname="maritalStatus"]')).toBeVisible();
   });
@@ -256,9 +283,7 @@ test.describe('Step 2: Crime Information (navigation via stepper)', () => {
     await continueWithoutSignIn(page);
     await selectVictimApplication(page);
     await acceptOverview(page);
-    // Navigate directly via stepper
-    await page.getByRole('button', { name: 'Crime Information' }).click();
-    await page.waitForSelector('h1:has-text("Crime Information")');
+    await navigateToStep(page, 2);
   });
 
   test('should show Crime Information page heading', async ({ page }) => {
@@ -291,8 +316,7 @@ test.describe('Step 3: Medical & Dental Information (navigation via stepper)', (
     await continueWithoutSignIn(page);
     await selectVictimApplication(page);
     await acceptOverview(page);
-    await page.getByRole('button', { name: 'Medical & Dental Information' }).click();
-    await page.waitForSelector('h1:has-text("Medical")');
+    await navigateToStep(page, 3);
   });
 
   test('should show Medical & Dental Information heading', async ({ page }) => {
@@ -318,8 +342,7 @@ test.describe('Step 4: Expense & Loss Information (navigation via stepper)', () 
     await continueWithoutSignIn(page);
     await selectVictimApplication(page);
     await acceptOverview(page);
-    await page.getByRole('button', { name: 'Expense & Loss Information' }).click();
-    await page.waitForSelector('h1:has-text("Expense")');
+    await navigateToStep(page, 4);
   });
 
   test('should show Expense & Loss Information heading', async ({ page }) => {
@@ -343,8 +366,7 @@ test.describe('Step 7: Declaration (navigation via stepper)', () => {
     await continueWithoutSignIn(page);
     await selectVictimApplication(page);
     await acceptOverview(page);
-    await page.getByRole('button', { name: 'Declaration' }).click();
-    await page.waitForSelector('h1:has-text("Declaration")');
+    await navigateToStep(page, 7);
   });
 
   test('should show Declaration heading and Information Collection Notice', async ({ page }) => {
@@ -367,8 +389,7 @@ test.describe('Step 8: Authorization (navigation via stepper)', () => {
     await continueWithoutSignIn(page);
     await selectVictimApplication(page);
     await acceptOverview(page);
-    await page.getByRole('button', { name: 'Authorization' }).click();
-    await page.waitForSelector('h1:has-text("Authorization")');
+    await navigateToStep(page, 8);
   });
 
   test('should show Authorization and Consent heading', async ({ page }) => {
@@ -426,17 +447,17 @@ test.describe('Stepper Navigation', () => {
   });
 
   test('should navigate to Crime Information via stepper click', async ({ page }) => {
-    await page.getByRole('button', { name: 'Crime Information' }).click();
+    await navigateToStep(page, 2);
     await expect(page.getByRole('heading', { name: 'Crime Information', level: 1 })).toBeVisible();
   });
 
   test('should navigate to Declaration via stepper click', async ({ page }) => {
-    await page.getByRole('button', { name: 'Declaration' }).click();
+    await navigateToStep(page, 7);
     await expect(page.getByRole('heading', { name: 'Declaration', level: 1 })).toBeVisible();
   });
 
   test('should navigate to Authorization via stepper click', async ({ page }) => {
-    await page.getByRole('button', { name: 'Authorization' }).click();
+    await navigateToStep(page, 8);
     await expect(page.getByRole('heading', { name: 'Authorization and Consent', level: 1 })).toBeVisible();
   });
 

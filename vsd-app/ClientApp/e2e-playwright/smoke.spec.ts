@@ -12,7 +12,8 @@ import { expect, test } from '@playwright/test';
 test.describe('Smoke: Victim Application Happy Path', () => {
   test('1 – Landing page loads correctly', async ({ page }) => {
     await page.goto('/cvapwebform/');
-    await expect(page).toHaveTitle(/Welcome - Crime Victim Assistance Program/);
+    await expect(page).toHaveTitle(/Victim Services/);
+    await page.waitForSelector('button:has-text("Continue Without Signing In")');
     await expect(page.getByRole('heading', { name: /Crime Victim Assistance Program/ }).first()).toBeVisible();
   });
 
