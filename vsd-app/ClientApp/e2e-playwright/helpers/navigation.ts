@@ -11,7 +11,7 @@ import { Page } from '@playwright/test';
  *  6. Click "CONTINUE TO VICTIM APPLICATION"
  */
 export async function navigateToVictimApplication(page: Page): Promise<void> {
-  await page.goto('/');
+  await page.goto('/cvapwebform/');
   await page.getByRole('button', { name: 'Continue Without Signing In' }).click();
 
   await page.getByRole('combobox').selectOption('Victim Application');

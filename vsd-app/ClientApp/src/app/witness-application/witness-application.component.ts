@@ -428,6 +428,12 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
     this.resizeFormArray('authorizationInformation', 'authorizedPerson', savedData, () =>
       this.authInfoHelper.createAuthorizedPerson(this.fb)
     );
+    this.resizeFormArray('crimeInformation', 'documents', savedData, () =>
+      this.fb.group({ filename: [''], body: [''], subject: [''], size: [0] })
+    );
+    this.resizeFormArray('representativeInformation', 'documents', savedData, () =>
+      this.fb.group({ filename: [''], body: [''], subject: [''], size: [0] })
+    );
 
     this.form.patchValue(savedData, { emitEvent: false });
   }
