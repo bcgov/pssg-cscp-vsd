@@ -60,11 +60,12 @@ async function fillStep1PersonalInfo(page: any) {
   // Relationship to Victim (exact: true avoids matching other radios)
   await page.getByRole('radio', { name: 'Spouse', exact: true }).click();
 
-  // Birthdate via day/month/year dropdowns
-  const birthdateCombos = page.locator('app-date-field').first().getByRole('combobox');
-  await birthdateCombos.nth(0).selectOption('15'); // Day
-  await birthdateCombos.nth(1).selectOption('June'); // Month
-  await birthdateCombos.nth(2).selectOption('1985'); // Year
+  // Birthdate via Material datepicker — the input is readonly, so remove the attribute
+  // and fill using the locale format (Moment.js 'LL' = "MMMM D, YYYY" in English).
+  const birthdateInput = page.locator('app-date-field').first().locator('input');
+  await birthdateInput.evaluate((el: HTMLInputElement) => el.removeAttribute('readonly'));
+  await birthdateInput.fill('June 15, 1985');
+  await birthdateInput.press('Tab'); // triggers blur → change event → Angular Material parses the date
 
   // Preferred Method of Contact (value '2' = Phone Call)
   await page.locator('[formcontrolname="preferredMethodOfContact"]').selectOption('2');
@@ -79,14 +80,11 @@ async function fillStep1PersonalInfo(page: any) {
     .getByRole('combobox')
     .selectOption('100000003'); // No Voicemail
 
-  // Primary Address (Country and Province default to Canada / BC)
-  await page.locator('[formcontrolname="line1"]').fill('123 Test Street');
-
-  // City (BC cities dropdown)
-  await page.locator('[formcontrolname="city"]').selectOption('Vancouver');
-
-  // Postal Code
-  await page.locator('[formcontrolname="postalCode"]').fill('V5K0A1');
+  // Primary Address — scope to the first app-address to avoid matching the mailing address section
+  const primaryAddress = page.locator('app-address').first();
+  await primaryAddress.locator('[formcontrolname="line1"]').fill('123 Test Street');
+  await primaryAddress.locator('[formcontrolname="city"]').selectOption('Vancouver');
+  await primaryAddress.locator('[formcontrolname="postalCode"]').fill('V5K0A1');
 }
 
 /**
@@ -97,11 +95,11 @@ async function fillStep2VictimInfo(page: any) {
   await page.locator('[formcontrolname="firstName"]').fill('John');
   await page.locator('[formcontrolname="lastName"]').fill('Doe');
 
-  // Victim Birthdate
-  const victimBirthdateCombos = page.locator('app-date-field').first().getByRole('combobox');
-  await victimBirthdateCombos.nth(0).selectOption('10');
-  await victimBirthdateCombos.nth(1).selectOption('March');
-  await victimBirthdateCombos.nth(2).selectOption('1975');
+  // Victim Birthdate via Material datepicker — remove readonly and fill in locale format
+  const victimBirthdateInput = page.locator('app-date-field').first().locator('input');
+  await victimBirthdateInput.evaluate((el: HTMLInputElement) => el.removeAttribute('readonly'));
+  await victimBirthdateInput.fill('March 10, 1975');
+  await victimBirthdateInput.press('Tab');
 
   // Marital Status
   await page
@@ -192,8 +190,8 @@ test.describe('Step 0: Overview', () => {
     // NOT covered
     await expect(page.getByText(/motor vehicle accidents/i)).toBeVisible();
     await expect(page.getByText(/pain and suffering/i)).toBeVisible();
-    // Contact
-    await expect(page.getByText('1-866-660-3888')).toBeVisible();
+    // Contact (phone appears twice on page, use .first() to avoid strict mode)
+    await expect(page.getByText('1-866-660-3888').first()).toBeVisible();
     await expect(page.getByRole('link', { name: 'cvap@gov.bc.ca' }).first()).toBeVisible();
   });
 
@@ -250,9 +248,14 @@ test.describe('Step 1: Personal Information & Addresses', () => {
 
   test('TC-IFM-09: all Relationship to Victim options present', async ({ page }) => {
     const relationships = ['Spouse', 'Parent/Guardian', 'Child', 'Sibling', 'Grandparent', 'Grandchild', 'Other'];
+    // Scope to the Relationship to Victim app-field to avoid matching radios in the
+    // pronoun selector (which also has an 'Other' option).
+    const relSection = page
+      .locator('app-field')
+      .filter({ hasText: /Relationship to Victim/ })
+      .first();
     for (const rel of relationships) {
-      // exact: true is required to prevent 'Child' from matching 'Grandchild'
-      await expect(page.getByRole('radio', { name: rel, exact: true })).toBeVisible();
+      await expect(relSection.getByRole('radio', { name: rel, exact: true })).toBeVisible();
     }
   });
 
@@ -315,13 +318,25 @@ test.describe('Step 3: Crime Information — IFM-specific fields', () => {
   });
 
   test('TC-IFM-13: Victim Deceased from Crime field is visible (IFM-specific)', async ({ page }) => {
-    await expect(page.getByText(/Was the victim deceased as a result of the crime/i)).toBeVisible();
-    await expect(page.getByRole('radio', { name: 'Yes' }).first()).toBeVisible();
-    await expect(page.getByRole('radio', { name: 'No' }).first()).toBeVisible();
+    // The field label is rendered by app-field — check via label text
+    await expect(page.getByText(/Is the Victim deceased as a result of the crime/i)).toBeVisible();
+    // Scope to the victimDeceasedFromCrime field to avoid matching other Yes/No radios on the page
+    const deceasedField = page
+      .locator('app-field')
+      .filter({ hasText: /Is the Victim deceased.*crime/i })
+      .first();
+    await expect(deceasedField.getByRole('radio', { name: 'Yes', exact: true })).toBeVisible();
+    await expect(deceasedField.getByRole('radio', { name: 'No', exact: true })).toBeVisible();
   });
 
   test('TC-IFM-14: Date of Death field appears when Victim Deceased = Yes', async ({ page }) => {
-    await page.getByRole('radio', { name: 'Yes' }).first().click();
+    // Scope to the victimDeceasedFromCrime field — Crime Info has other Yes/No radios
+    // (e.g. "Did the crime occur over multiple days?") that would be matched by .first()
+    const deceasedField = page
+      .locator('app-field')
+      .filter({ hasText: /Is the Victim deceased.*crime/i })
+      .first();
+    await deceasedField.getByRole('radio', { name: 'Yes', exact: true }).click();
     await expect(page.getByText(/Date of Death/i)).toBeVisible();
   });
 
@@ -362,7 +377,8 @@ test.describe('Step 5: Expense & Benefits', () => {
     await expect(page.getByRole('checkbox', { name: /Vocational services/i })).toBeVisible();
     await expect(page.getByRole('checkbox', { name: /Childcare/i })).toBeVisible();
     await expect(page.getByRole('checkbox', { name: /Legal proceeding/i })).toBeVisible();
-    await expect(page.getByRole('checkbox', { name: /Counselling/i })).toBeVisible();
+    // Anchor at ^ to avoid matching "Transportation to obtain counselling..."
+    await expect(page.getByRole('checkbox', { name: /^Counselling/i })).toBeVisible();
     // Victim-specific expenses should NOT be present
     await expect(page.getByRole('checkbox', { name: /Medical expenses/i })).not.toBeVisible();
     await expect(page.getByRole('checkbox', { name: /Dental expenses/i })).not.toBeVisible();
@@ -386,9 +402,11 @@ test.describe('Step 6: Application on Behalf of Immediate Family Member', () => 
   });
 
   test('TC-IFM-18: completing-on-behalf-of radio options all present', async ({ page }) => {
+    // Three options per representative-information.component.html
     await expect(page.getByRole('radio', { name: /Completing this application for myself/i })).toBeVisible();
-    await expect(page.getByRole('radio', { name: /Victim Service Worker/i })).toBeVisible();
-    await expect(page.getByRole('radio', { name: /Parent|Guardian/i })).toBeVisible();
+    await expect(
+      page.getByRole('radio', { name: /parent completing this application for my minor child/i })
+    ).toBeVisible();
     await expect(page.getByRole('radio', { name: /legal representative/i })).toBeVisible();
   });
 });
