@@ -18,6 +18,7 @@
     "e2e:dev": "playwright test --project=dev",
     "e2e:test": "playwright test --project=test",
     "e2e:test:headed": "playwright test --project=test --headed",
+    "e2e:test:ui": "playwright test --project=test --ui",
     "e2e:report": "playwright show-report"
   },
   "private": true,
