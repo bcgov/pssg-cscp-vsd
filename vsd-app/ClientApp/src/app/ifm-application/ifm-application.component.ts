@@ -470,6 +470,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
     );
     this.resizeFormArray('medicalInformation', 'otherTreatments', savedData, () =>
       this.medicalInfoHelper.createTreatmentItem(this.fb, this.FORM_TYPE)
+    );
     this.resizeFormArray('crimeInformation', 'documents', savedData, () =>
       this.fb.group({ filename: [''], body: [''], subject: [''], size: [0] })
     );
