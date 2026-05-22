@@ -10,14 +10,16 @@
     "buildprod": "ng build --configuration=production",
     "watch": "ng build --watch",
     "test": "ng test",
-    "lint": "ng lint",    
+    "lint": "ng lint",
     "format": "prettier --loglevel=warn --check \"./src/**/*.{js,jsx,ts,tsx,css,scss}\"",
     "format-fix": "prettier --loglevel=warn --write \"./src/**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "generate:api": "orval --config orval.config.ts",
-    "e2e:playwright": "playwright test",
-    "e2e:playwright:smoke": "playwright test e2e-playwright/smoke.spec.ts",
-    "e2e:playwright:headed": "playwright test --headed",
-    "e2e:playwright:report": "playwright show-report e2e-playwright-report"
+    "e2e": "playwright test --project=localhost",
+    "e2e:dev": "playwright test --project=dev",
+    "e2e:test": "playwright test --project=test",
+    "e2e:test:headed": "playwright test --project=test --headed",
+    "e2e:test:ui": "playwright test --project=test --ui",
+    "e2e:report": "playwright show-report"
   },
   "private": true,
   "dependencies": {
