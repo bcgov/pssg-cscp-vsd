@@ -140,8 +140,8 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                     "vsd_racaf_appliedforrestitution"
                 )?.Value,
                 vsd_racaf_requestedexpenses = e.GetAttributeValue<string>("vsd_racaf_requestedexpenses"),
-                vsd_racaf_expensesawarded = (float?)e.Vsd_RACaF_ExpensesAwarded,
-                vsd_racaf_amountreceived = (float?)e.Vsd_RACaF_AmountReceived,
+                vsd_racaf_expensesawarded = e.Vsd_RACaF_ExpensesAwarded,
+                vsd_racaf_amountreceived = e.Vsd_RACaF_AmountReceived,
                 vsd_racaf_legalactiontaken = e.GetAttributeValue<OptionSetValue>("vsd_racaf_legalactiontaken")?.Value,
                 vsd_racaf_lawyerorfirmname = e.GetAttributeValue<string>("vsd_racaf_lawyerorfirmname"),
                 vsd_racaf_lawyeraddressline1 = e.GetAttributeValue<string>("vsd_racaf_lawyeraddressline1"),

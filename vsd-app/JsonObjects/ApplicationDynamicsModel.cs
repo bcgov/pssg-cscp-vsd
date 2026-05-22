@@ -125,8 +125,8 @@ namespace Gov.Cscp.VictimServices.Public.JsonObjects
 
         public int? vsd_racaf_appliedforrestitution { get; set; }
         public string vsd_racaf_requestedexpenses { get; set; }
-        public float? vsd_racaf_expensesawarded { get; set; }
-        public float? vsd_racaf_amountreceived { get; set; }
+        public decimal? vsd_racaf_expensesawarded { get; set; }
+        public decimal? vsd_racaf_amountreceived { get; set; }
 
         public int? vsd_racaf_legalactiontaken { get; set; }
         public string vsd_racaf_lawyerorfirmname { get; set; }
