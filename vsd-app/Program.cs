@@ -153,7 +153,11 @@ namespace Gov.Cscp.VictimServices.Public
                         });
                 }
 
-                builder.Services.AddHttpClient<IAEMResultService, AEMResultService>();
+                builder.Services.AddTransient<Services.AEMTokenHandler>();
+                builder.Services.AddHttpClient("aem_token");
+                builder
+                    .Services.AddHttpClient<IAEMResultService, AEMResultService>()
+                    .AddHttpMessageHandler<Services.AEMTokenHandler>();
                 builder.Services.AddMemoryCache();
 
                 // For security reasons, the following headers are set.
