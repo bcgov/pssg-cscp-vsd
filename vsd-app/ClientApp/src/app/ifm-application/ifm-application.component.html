@@ -60,7 +60,7 @@
         }
 
         @if (canSaveDraft) {
-          <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem; margin: 1rem 0;">
             <div class="save-info">
               @if (autoSaveCountdown <= 30 && autoSaveCountdown > 0) {
                 <i>Saving in {{ autoSaveCountdown }} {{ autoSaveCountdown === 1 ? "second" : "seconds" }}...</i>
