@@ -123,6 +123,9 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
       });
 
     this.appliedToWorkSafeBCSubscription = this.form.get('haveYouAppliedToWorkSafe').valueChanges.subscribe((value) => {
+      // Keep backend field in sync with the UI control
+      this.form.get('haveYouAppliedForWorkersCompensation').patchValue(value, { emitEvent: false });
+
       let control = this.form.get('workersCompensationClaimNumber');
 
       if (value === CRMBoolean.True) {
