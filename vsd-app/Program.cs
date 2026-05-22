@@ -40,6 +40,9 @@ namespace Gov.Cscp.VictimServices.Public
     {
         public static void Main(string[] args)
         {
+            // Enable Serilog self-diagnostics before any logger is created so sink errors are visible.
+            Serilog.Debugging.SelfLog.Enable(msg => Console.Error.WriteLine($"[Serilog SelfLog] {msg}"));
+
             // Bootstrap logger captures startup errors before the full Serilog pipeline is ready.
             Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateBootstrapLogger();
 
@@ -85,6 +88,8 @@ namespace Gov.Cscp.VictimServices.Public
 
                         if (!string.IsNullOrEmpty(splunkCollectorUrl) && !string.IsNullOrEmpty(splunkToken))
                         {
+                            Console.WriteLine($"[Serilog] Splunk sink enabled: {splunkCollectorUrl}");
+
                             HttpClientHandler? handler = null;
 
                             if (hostEnv.IsDevelopment())
@@ -106,8 +111,10 @@ namespace Gov.Cscp.VictimServices.Public
                                 batchIntervalInSeconds: 2
                             );
                         }
-
-                        Serilog.Debugging.SelfLog.Enable(msg => Console.Error.WriteLine($"Serilog Error: {msg}"));
+                        else
+                        {
+                            Console.WriteLine($"[Serilog] Splunk sink NOT configured");
+                        }
                     }
                 );
 
@@ -207,7 +214,6 @@ namespace Gov.Cscp.VictimServices.Public
                     );
 
                 builder.Services.AddSession();
-                builder.Services.AddSerilog();
 
                 // Add Swagger services
                 builder.Services.AddSwaggerGen(c =>

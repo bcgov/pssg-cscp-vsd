@@ -664,6 +664,12 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
     this.resizeFormArray('employmentIncomeInformation', 'employers', savedData, () =>
       this.employmentInfoHelper.createEmployerInfo(this.fb)
     );
+    this.resizeFormArray('employmentIncomeInformation', 'documents', savedData, () =>
+      this.fb.group({ filename: [''], body: [''], subject: [''], size: [0] })
+    );
+    this.resizeFormArray('medicalInformation', 'otherTreatments', savedData, () =>
+      this.medicalInfoHelper.createTreatmentItem(this.fb, this.FORM_TYPE)
+    );
 
     this.form.patchValue(savedData, { emitEvent: false });
   }

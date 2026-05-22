@@ -48,4 +48,32 @@ export class MedicalInfoHelper {
 
     return fb.group(group);
   }
+
+  public createTreatmentItem(fb: UntypedFormBuilder, form_type: ApplicationType): UntypedFormGroup {
+    let group: any = {
+      providerCompany: [''],
+      providerEmail: ['', [EmailValidator()]],
+      providerFirstName: [''],
+      providerLastName: [''],
+      providerPhoneNumber: [''],
+      providerFax: [''],
+      providerAddress: fb.group({
+        line1: [''],
+        line2: [''],
+        city: [''],
+        postalCode: ['', [Validators.pattern(this.postalRegex)]],
+        province: [{ value: 'British Columbia', disabled: false }],
+        country: [{ value: 'Canada', disabled: false }]
+      })
+    };
+
+    if (form_type === ApplicationType.Victim_Application) {
+      group['providerType'] = ['', Validators.required];
+      group['providerTypeText'] = [''];
+    } else {
+      group['providerType'] = ['Counsellor'];
+    }
+
+    return fb.group(group);
+  }
 }
