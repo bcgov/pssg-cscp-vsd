@@ -80,7 +80,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         // ──────────────────────────────────────────────────────────────────────
 
         [HttpGet]
-        public IActionResult GetDrafts()
+        public ActionResult<IEnumerable<ApplicationDraft>> GetDrafts()
         {
             try
             {
