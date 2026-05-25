@@ -1,6 +1,6 @@
-import { POSTAL_CODE, ZIP_CODE } from '../regex.constants';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Address } from '../../interfaces/address.interface';
+import { POSTAL_CODE, ZIP_CODE } from '../regex.constants';
 
 export class AddressHelper {
   postalRegex = POSTAL_CODE;
@@ -78,6 +78,35 @@ export class AddressHelper {
     }
     // postalControl.markAsTouched();
     postalControl.updateValueAndValidity(options);
+  }
+
+  /**
+   * Updates only the postalCode validator on an address FormGroup based on its current country value.
+   * Preserves any existing Validators.required on the postal code control.
+   * Call this after restoring draft data to ensure the correct postal/zip pattern is applied.
+   */
+  public updatePostalCodeValidatorByCountry(addressGroup: UntypedFormGroup): void {
+    if (!addressGroup) return;
+    const postalControl = addressGroup.get('postalCode');
+    if (!postalControl) return;
+
+    const country: string = addressGroup.get('country')?.value ?? '';
+    const isRequired = postalControl.hasValidator(Validators.required);
+
+    if (country === 'Canada') {
+      postalControl.setValidators(
+        isRequired
+          ? [Validators.required, Validators.pattern(this.postalRegex)]
+          : [Validators.pattern(this.postalRegex)]
+      );
+    } else if (country === 'United States of America') {
+      postalControl.setValidators(
+        isRequired ? [Validators.required, Validators.pattern(this.zipRegex)] : [Validators.pattern(this.zipRegex)]
+      );
+    } else {
+      postalControl.setValidators(isRequired ? [Validators.required] : null);
+    }
+    postalControl.updateValueAndValidity({ emitEvent: false });
   }
 
   public hasAddressInfo(address: Address) {
