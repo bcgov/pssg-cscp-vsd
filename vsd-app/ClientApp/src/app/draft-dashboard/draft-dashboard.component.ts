@@ -27,7 +27,8 @@ export interface DraftSummary {
   createdOn: string;
   modifiedOn: string;
   stateCode: number;
-  applicantLabel: string | null;
+  applicantLastName: string | null;
+  applicantFirstName: string | null;
 }
 
 @Component({

@@ -42,7 +42,13 @@ public record ApplicationDraft : IDto
     /// Applicant surname parsed from <c>personalInformation.lastName</c>
     /// inside the stored JSON.
     /// </summary>
-    public string? ApplicantLabel { get; set; }
+    public string? ApplicantLastName { get; set; }
+
+    /// <summary>
+    /// Applicant given name parsed from <c>personalInformation.firstName</c>
+    /// inside the stored JSON.
+    /// </summary>
+    public string? ApplicantFirstName { get; set; }
 }
 
 /// <summary>
