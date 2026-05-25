@@ -27,6 +27,7 @@ import {
 } from '../interfaces/application.interface';
 import { AEMService } from '../services/aem.service';
 import { LoginService } from '../services/login.service';
+import { AddressHelper } from '../shared/address/address.helper';
 import { AuthInfoHelper } from '../shared/authorization-information/authorization-information.helper';
 import { CrimeInfoHelper } from '../shared/crime-information/crime-information.helper';
 import { DeclarationInfoHelper } from '../shared/declaration-information/declaration-information.helper';
@@ -439,6 +440,10 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
     );
 
     this.form.patchValue(savedData, { emitEvent: false });
+
+    // Re-apply postal/zip code validators based on the restored country values, since
+    // patchValue with emitEvent:false does not trigger the country-change handlers.
+    this.reapplyPostalCodeValidators();
   }
 
   /** Ensure a FormArray has the correct number of items to accept patchValue data. */
@@ -458,6 +463,36 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
     while (formArray.length > savedArray.length) {
       formArray.removeAt(formArray.length - 1);
     }
+  }
+
+  /** Re-apply the correct postal/zip code validator for every address in the form based on the
+   *  restored country value. This is needed after loading a draft because patchValue with
+   *  emitEvent:false does not trigger the country-change handlers that normally update validators. */
+  private reapplyPostalCodeValidators(): void {
+    const addressHelper = new AddressHelper();
+
+    const simpleAddressPaths = [
+      'personalInformation.primaryAddress',
+      'personalInformation.alternateAddress',
+      'victimInformation.primaryAddress',
+      'representativeInformation.representativeAddress',
+      'crimeInformation.racafInformation.lawyerAddress',
+      'medicalInformation.familyDoctorAddress'
+    ];
+
+    for (const path of simpleAddressPaths) {
+      addressHelper.updatePostalCodeValidatorByCountry(this.form.get(path) as UntypedFormGroup);
+    }
+
+    const treatmentsArray = this.form.get('medicalInformation.otherTreatments') as UntypedFormArray;
+    treatmentsArray?.controls.forEach((ctrl) =>
+      addressHelper.updatePostalCodeValidatorByCountry(ctrl.get('providerAddress') as UntypedFormGroup)
+    );
+
+    const authorizedPersonsArray = this.form.get('authorizationInformation.authorizedPerson') as UntypedFormArray;
+    authorizedPersonsArray?.controls.forEach((ctrl) =>
+      addressHelper.updatePostalCodeValidatorByCountry(ctrl.get('authorizedPersonAgencyAddress') as UntypedFormGroup)
+    );
   }
 
   private buildApplicationForm(): UntypedFormGroup {
