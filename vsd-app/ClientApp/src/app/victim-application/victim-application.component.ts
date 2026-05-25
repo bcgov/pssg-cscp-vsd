@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ApplicationDraftsService } from '../../api/application-drafts/application-drafts.service';
 import { JusticeService } from '../../api/justice/justice.service';
-import { CreateApplicationDraftRequest, UpdateApplicationDraftRequest } from '../../model';
+import { ApplicationDraft, CreateApplicationDraftRequest, DraftType, UpdateApplicationDraftRequest } from '../../model';
 import {
   Application,
   AuthorizationInformation,
@@ -604,7 +604,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
     } else {
       // Create new draft
       const request: CreateApplicationDraftRequest = {
-        draftType: 100000001, // VictimApplication
+        draftType: DraftType.VictimApplication,
         formData
       };
       this.draftsService.postApiApplicationDrafts<{ success: boolean; draftId: string }>(request).subscribe({
@@ -637,7 +637,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
 
   /** Load a draft by ID and restore form state. */
   private loadDraft(draftId: string): void {
-    this.draftsService.getApiApplicationDraftsDraftId<any>(draftId).subscribe({
+    this.draftsService.getApiApplicationDraftsDraftId<ApplicationDraft>(draftId).subscribe({
       next: (draft) => {
         if (draft?.draftData) {
           try {

@@ -150,10 +150,15 @@ $bc-error: #d8292f;
     background: rgba($bc-blue, 0.03);
   }
 
+  .th-actions {
+    white-space: nowrap;
+  }
+
   .col-actions {
     display: flex;
     gap: 8px;
-    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
   }
 }
 

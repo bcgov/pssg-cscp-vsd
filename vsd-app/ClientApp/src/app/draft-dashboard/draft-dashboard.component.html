@@ -34,7 +34,7 @@
           <th>Last Name</th>
           <th>Created</th>
           <th>Last Modified</th>
-          <th class="col-actions">Actions</th>
+          <th class="th-actions">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -44,9 +44,11 @@
           <td>{{ draft.applicantLastName || '—' }}</td>
           <td>{{ draft.createdOn | date: 'mediumDate' }}</td>
           <td>{{ draft.modifiedOn | date: 'medium' }}</td>
-          <td class="col-actions">
-            <button class="btn btn-primary" (click)="openDraft(draft)" style="margin-right: 4px;">Open</button>
-            <button class="btn btn-danger" (click)="deleteDraft(draft)">Cancel</button>
+          <td>
+            <div class="col-actions">
+              <button class="btn btn-primary" (click)="openDraft(draft)">Open</button>
+              <button class="btn btn-danger" (click)="deleteDraft(draft)">Cancel</button>
+            </div>
           </td>
         </tr>
       </tbody>
