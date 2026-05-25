@@ -491,14 +491,14 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
                         .expensesRequested;
                     if (!string.IsNullOrEmpty(model.CrimeInformation.racafInformation.expensesAwarded))
                     {
-                        application.Application.vsd_racaf_expensesawarded = float.Parse(
+                        application.Application.vsd_racaf_expensesawarded = decimal.Parse(
                             model.CrimeInformation.racafInformation.expensesAwarded
                         );
                     }
 
                     if (!string.IsNullOrEmpty(model.CrimeInformation.racafInformation.expensesReceived))
                     {
-                        application.Application.vsd_racaf_amountreceived = float.Parse(
+                        application.Application.vsd_racaf_amountreceived = decimal.Parse(
                             model.CrimeInformation.racafInformation.expensesReceived
                         );
                     }
