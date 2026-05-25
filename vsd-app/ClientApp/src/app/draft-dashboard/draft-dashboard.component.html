@@ -43,8 +43,8 @@
           <td>{{ draft.createdOn | date: 'mediumDate' }}</td>
           <td>{{ draft.modifiedOn | date: 'medium' }}</td>
           <td class="col-actions">
-            <button class="btn btn-primary btn-xs" (click)="openDraft(draft)" style="margin-right: 4px;">Open</button>
-            <button class="btn btn-danger btn-xs" (click)="deleteDraft(draft)">Cancel</button>
+            <button class="btn btn-primary" (click)="openDraft(draft)" style="margin-right: 4px;">Open</button>
+            <button class="btn btn-danger" (click)="deleteDraft(draft)">Cancel</button>
           </td>
         </tr>
       </tbody>
