@@ -41,39 +41,57 @@ public class ApplicationDraftRepository : BaseRepository<Vsd_VictimServiceDraft,
         var drafts = _mapper.Map<IEnumerable<ApplicationDraft>>(results).ToList();
 
         foreach (var d in drafts)
-            d.ApplicantLabel = ExtractApplicantLabel(d.DraftData, d.Id);
+        {
+            var (lastName, firstName) = ExtractApplicantNames(d.DraftData, d.Id);
+            d.ApplicantLastName = lastName;
+            d.ApplicantFirstName = firstName;
+        }
 
         return drafts;
     }
 
-    // ── ExtractApplicantLabel ────────────────────────────────────────────────
+    // ── ExtractApplicantNames ────────────────────────────────────────────────
 
     /// <summary>
-    /// Extract <c>personalInformation.lastName</c> from the
-    /// stored draft JSON.  Returns <c>null</c> when the field is absent, empty,
-    /// or the JSON cannot be parsed.
+    /// Extracts <c>personalInformation.lastName</c> and
+    /// <c>personalInformation.firstName</c> from the stored draft JSON in a
+    /// single parse pass.  Returns <c>(null, null)</c> when the fields are
+    /// absent, empty, or the JSON cannot be parsed.
     /// </summary>
-    private string? ExtractApplicantLabel(string? draftData, Guid draftId)
+    private (string? lastName, string? firstName) ExtractApplicantNames(string? draftData, Guid draftId)
     {
         if (string.IsNullOrWhiteSpace(draftData))
-            return null;
+            return (null, null);
 
         try
         {
             using var doc = JsonDocument.Parse(draftData);
-            if (doc.RootElement.TryGetProperty("personalInformation", out var pi) &&
-                pi.TryGetProperty("lastName", out var ln))
+            if (doc.RootElement.TryGetProperty("personalInformation", out var pi))
             {
-                var value = ln.GetString();
-                return string.IsNullOrWhiteSpace(value) ? null : value;
+                string? lastName = null;
+                string? firstName = null;
+
+                if (pi.TryGetProperty("lastName", out var ln))
+                {
+                    var v = ln.GetString();
+                    lastName = string.IsNullOrWhiteSpace(v) ? null : v;
+                }
+
+                if (pi.TryGetProperty("firstName", out var fn))
+                {
+                    var v = fn.GetString();
+                    firstName = string.IsNullOrWhiteSpace(v) ? null : v;
+                }
+
+                return (lastName, firstName);
             }
         }
         catch (JsonException ex)
         {
-            _logger.LogWarning(ex, "Failed to parse draftData JSON for applicant label extraction on draft {DraftId}", draftId);
+            _logger.LogWarning(ex, "Failed to parse draftData JSON for applicant name extraction on draft {DraftId}", draftId);
         }
 
-        return null;
+        return (null, null);
     }
 
     // ── Update ───────────────────────────────────────────────────────────────

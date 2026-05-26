@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ApplicationDraftsService } from '../../api/application-drafts/application-drafts.service';
 import { JusticeService } from '../../api/justice/justice.service';
-import { CreateApplicationDraftRequest, UpdateApplicationDraftRequest } from '../../model';
+import { ApplicationDraft, CreateApplicationDraftRequest, DraftType, UpdateApplicationDraftRequest } from '../../model';
 import {
   Application,
   AuthorizationInformation,
@@ -398,7 +398,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
       });
     } else {
       const request: CreateApplicationDraftRequest = {
-        draftType: 100000003, // FamilyMemberApplication
+        draftType: DraftType.FamilyMemberApplication,
         formData
       };
       this.draftsService.postApiApplicationDrafts<{ success: boolean; draftId: string }>(request).subscribe({
@@ -431,7 +431,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
 
   /** Load a draft by ID and restore form state. */
   private loadDraft(draftId: string): void {
-    this.draftsService.getApiApplicationDraftsDraftId<any>(draftId).subscribe({
+    this.draftsService.getApiApplicationDraftsDraftId<ApplicationDraft>(draftId).subscribe({
       next: (draft) => {
         if (draft?.draftData) {
           try {

@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { ApplicationDraftsService } from '../../api/application-drafts/application-drafts.service';
+import { ApplicationDraft, DraftType } from '../../model';
 import { LoginService } from '../services/login.service';
 
 /** Maps DraftType int values to human-readable labels. */
-const DRAFT_TYPE_LABELS: Record<number, string> = {
+const DRAFT_TYPE_LABELS: Record<DraftType, string> = {
   100000000: 'Invoice',
   100000001: 'Victim Application',
   100000002: 'Witness Application',
@@ -13,22 +14,12 @@ const DRAFT_TYPE_LABELS: Record<number, string> = {
 };
 
 /** Maps DraftType int values to the route used to edit that type. */
-const DRAFT_TYPE_ROUTES: Record<number, string> = {
+const DRAFT_TYPE_ROUTES: Record<DraftType, string> = {
   100000000: '/submit-invoice',
   100000001: '/application/victim',
   100000002: '/application/witness',
   100000003: '/application/ifm'
 };
-
-export interface DraftSummary {
-  id: string;
-  draftType: number;
-  draftedDate: string;
-  createdOn: string;
-  modifiedOn: string;
-  stateCode: number;
-  applicantLabel: string | null;
-}
 
 @Component({
   selector: 'app-draft-dashboard',
@@ -37,7 +28,7 @@ export interface DraftSummary {
   standalone: false
 })
 export class DraftDashboardComponent implements OnInit {
-  drafts: DraftSummary[] = [];
+  drafts: ApplicationDraft[] = [];
   loading = true;
   errorMessage = '';
   username: string | null = null;
@@ -73,7 +64,7 @@ export class DraftDashboardComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    this.draftsService.getApiApplicationDrafts<DraftSummary[]>().subscribe({
+    this.draftsService.getApiApplicationDrafts<ApplicationDraft[]>().subscribe({
       next: (drafts) => {
         this.drafts = drafts ?? [];
         this.loading = false;
@@ -89,23 +80,23 @@ export class DraftDashboardComponent implements OnInit {
     });
   }
 
-  getDraftTypeLabel(type: number): string {
+  getDraftTypeLabel(type: DraftType): string {
     return DRAFT_TYPE_LABELS[type] ?? `Unknown (${type})`;
   }
 
-  openDraft(draft: DraftSummary): void {
-    const route = DRAFT_TYPE_ROUTES[draft.draftType];
+  openDraft(draft: ApplicationDraft): void {
+    const route = DRAFT_TYPE_ROUTES[draft.draftType!];
     if (route) {
       this.router.navigate([route], { queryParams: { draftId: draft.id } });
     }
   }
 
-  deleteDraft(draft: DraftSummary): void {
+  deleteDraft(draft: ApplicationDraft): void {
     const rawDate = draft.draftedDate ?? draft.createdOn;
     const formattedDate = rawDate ? new Date(rawDate).toLocaleDateString('en-CA') : '';
-    if (!confirm(`Cancel ${this.getDraftTypeLabel(draft.draftType)} draft from ${formattedDate}?`)) return;
+    if (!confirm(`Cancel ${this.getDraftTypeLabel(draft.draftType!)} draft from ${formattedDate}?`)) return;
 
-    this.draftsService.deleteApiApplicationDraftsDraftId(draft.id).subscribe({
+    this.draftsService.deleteApiApplicationDraftsDraftId(draft.id!).subscribe({
       next: () => {
         this.drafts = this.drafts.filter((d) => d.id !== draft.id);
       },

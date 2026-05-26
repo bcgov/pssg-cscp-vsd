@@ -15,7 +15,7 @@ import type {
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import type { CreateApplicationDraftRequest, UpdateApplicationDraftRequest } from '../../model';
+import type { ApplicationDraft, CreateApplicationDraftRequest, UpdateApplicationDraftRequest } from '../../model';
 
 type HttpClientOptions = {
   headers?:
@@ -38,16 +38,16 @@ type HttpClientOptions = {
 @Injectable({ providedIn: 'root' })
 export class ApplicationDraftsService {
   constructor(private http: HttpClient) {}
-  getApiApplicationDrafts<TData = void>(
+  getApiApplicationDrafts<TData = ApplicationDraft[]>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'body' }
   ): Observable<TData>;
-  getApiApplicationDrafts<TData = void>(
+  getApiApplicationDrafts<TData = ApplicationDraft[]>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'response' }
   ): Observable<AngularHttpResponse<TData>>;
-  getApiApplicationDrafts<TData = void>(
+  getApiApplicationDrafts<TData = ApplicationDraft[]>(
     options?: Omit<HttpClientOptions, 'observe'> & { observe?: 'events' }
   ): Observable<HttpEvent<TData>>;
-  getApiApplicationDrafts<TData = void>(options?: HttpClientOptions): Observable<TData> {
+  getApiApplicationDrafts<TData = ApplicationDraft[]>(options?: HttpClientOptions): Observable<TData> {
     return this.http.get<TData>(`/cvapwebform/api/ApplicationDrafts`, options);
   }
   postApiApplicationDrafts<TData = void>(
@@ -126,7 +126,7 @@ export class ApplicationDraftsService {
   }
 }
 
-export type GetApiApplicationDraftsClientResult = NonNullable<void>;
+export type GetApiApplicationDraftsClientResult = NonNullable<ApplicationDraft[]>;
 export type PostApiApplicationDraftsClientResult = NonNullable<void>;
 export type GetApiApplicationDraftsDraftIdClientResult = NonNullable<void>;
 export type PutApiApplicationDraftsDraftIdClientResult = NonNullable<void>;

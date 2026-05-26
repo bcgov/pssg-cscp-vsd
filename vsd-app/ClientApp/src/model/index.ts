@@ -7,6 +7,7 @@
  */
 
 export * from './address';
+export * from './applicationDraft';
 export * from './applicationFormModel';
 export * from './authorizationinformation';
 export * from './authorizedPerson';
@@ -25,6 +26,7 @@ export * from './cVAPEmailResult';
 export * from './declarationinformation';
 export * from './documentCollectioninformation';
 export * from './documentDto';
+export * from './draftType';
 export * from './employer';
 export * from './employmentincomeinformation';
 export * from './expenseinformation';
@@ -51,5 +53,6 @@ export * from './racafinformation';
 export * from './relationshipLookupDto';
 export * from './relationshipLookupDtoLookupResponseDto';
 export * from './representativeinformation';
+export * from './stateCode';
 export * from './updateApplicationDraftRequest';
 export * from './victimInformation';
