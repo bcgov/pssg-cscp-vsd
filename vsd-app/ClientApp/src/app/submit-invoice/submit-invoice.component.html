@@ -165,13 +165,13 @@
                               <app-field label="Hours" [required]="true" [valid]="isControlValid(item, 'sessionHours')" errorMessage="Please enter the number of hours" [tooltipReference]="sessionDateInfo">
                                 <select class="form-control fixed-select" formControlName="sessionHours">
                                   <option [ngValue]="0">Select...</option>
-                                  <option [ngValue]="0.5">0.50</option>
-                                  <option [ngValue]="0.75">0.75</option>
-                                  <option [ngValue]="1.0">1.0</option>
-                                  <option [ngValue]="1.25">1.25</option>
-                                  <option [ngValue]="1.5">1.50</option>
-                                  <option [ngValue]="1.75">1.75</option>
-                                  <option [ngValue]="2">2.0</option>
+                                  <option [ngValue]="0.5">0.50 (30 mins)</option>
+                                  <option [ngValue]="0.75">0.75 (45 mins)</option>
+                                  <option [ngValue]="1.0">1.0 (60 mins)</option>
+                                  <option [ngValue]="1.25">1.25 (75 mins)</option>
+                                  <option [ngValue]="1.5">1.5 (90 mins)</option>
+                                  <option [ngValue]="1.75">1.75 (105 mins)</option>
+                                  <option [ngValue]="2">2.0 (120 mins)</option>
                                 </select>
                               </app-field>
                               <input class="form-control number-field" type="hidden" formControlName="sessionAmount" [value]="calculateRow(item)" readonly>
@@ -194,6 +194,7 @@
                             <ng-template #sessionDateInfo>
                               <h3>Line Item: Hours</h3>
                               <p>Every 0.25 increment in the drop down equals 15 minutes</p>
+                              <p>50 minute sessions = 1.0 Hr</p>
                             </ng-template>
                             <div class="col-1 text-right">
                               <br />
