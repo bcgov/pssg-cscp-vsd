@@ -1,11 +1,11 @@
-import { TestBed, async, ComponentFixture, ComponentFixtureAutoDetect } from '@angular/core/testing';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, waitForAsync } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
 import { IfmApplicationComponent } from './ifm-application.component';
 let component: IfmApplicationComponent;
 let fixture: ComponentFixture<IfmApplicationComponent>;
 
 describe('IfmApplication component', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [IfmApplicationComponent],
       imports: [BrowserModule],
@@ -15,7 +15,7 @@ describe('IfmApplication component', () => {
     component = fixture.componentInstance;
   }));
 
-  it('should do something', async(() => {
+  it('should do something', waitForAsync(() => {
     expect(true).toEqual(true);
   }));
 });

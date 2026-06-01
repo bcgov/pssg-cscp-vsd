@@ -1,11 +1,11 @@
-import { TestBed, async, ComponentFixture, ComponentFixtureAutoDetect } from '@angular/core/testing';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, waitForAsync } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
 import { WitnessApplicationComponent } from './witness-application.component';
 let component: WitnessApplicationComponent;
 let fixture: ComponentFixture<WitnessApplicationComponent>;
 
 describe('WitnessApplication component', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [WitnessApplicationComponent],
       imports: [BrowserModule],
@@ -15,7 +15,7 @@ describe('WitnessApplication component', () => {
     component = fixture.componentInstance;
   }));
 
-  it('should do something', async(() => {
+  it('should do something', waitForAsync(() => {
     expect(true).toEqual(true);
   }));
 });

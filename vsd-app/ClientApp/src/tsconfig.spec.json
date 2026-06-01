@@ -2,9 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
-    "baseUrl": "",
-    "types": ["jasmine", "node", "knockout"]
+    "types": ["node"]
   },
-  "files": ["test.ts", "polyfills.ts"],
+  "files": ["test-setup.ts", "polyfills.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }
