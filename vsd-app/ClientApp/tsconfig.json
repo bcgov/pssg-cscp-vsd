@@ -1,24 +1,15 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "module": "esnext",
     "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "removeComments": true,
     "esModuleInterop": true,
+    "sourceMap": true,
     "declaration": false,
     "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "ES2022",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "module": "es2020",
-    "baseUrl": "./",
-    "skipLibCheck": true,
-    "useDefineForClassFields": false
-  },
-  "exclude": [
-    "node_modules"
-  ]
+    "typeRoots": ["node_modules/@types"]
+  }
 }

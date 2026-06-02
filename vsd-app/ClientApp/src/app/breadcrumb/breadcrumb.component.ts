@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { LoginService } from '../services/login.service';
@@ -12,8 +12,11 @@ import { LoginService } from '../services/login.service';
 export class BreadcrumbComponent implements OnInit {
   public breadcrumbs: Array<{}> = [];
   public visible = false;
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(LoginService);
 
-  constructor(private router: Router, private route: ActivatedRoute, private authService: LoginService) {}
+  constructor() {}
 
   get isAuthenticated(): boolean {
     return this.authService.isAuthenticated.value;

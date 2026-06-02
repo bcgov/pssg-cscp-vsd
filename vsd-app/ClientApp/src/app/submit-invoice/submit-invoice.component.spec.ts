@@ -1,21 +1,41 @@
-import { TestBed, async, ComponentFixture, ComponentFixtureAutoDetect } from '@angular/core/testing';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterTestingModule } from '@angular/router/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { InvoicesService } from '../../api/invoices/invoices.service';
+import { JusticeService } from '../../api/justice/justice.service';
+import { AEMService } from '../services/aem.service';
+import { LookupStore } from '../store/lookup.store';
 import { SubmitInvoiceComponent } from './submit-invoice.component';
-let component: SubmitInvoiceComponent;
-let fixture: ComponentFixture<SubmitInvoiceComponent>;
 
-describe('SubmitInvoice component', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+describe('SubmitInvoiceComponent', () => {
+  let component: SubmitInvoiceComponent;
+  let fixture: ComponentFixture<SubmitInvoiceComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [SubmitInvoiceComponent],
-      imports: [BrowserModule],
-      providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }]
-    });
+      imports: [RouterTestingModule, ReactiveFormsModule],
+      providers: [
+        { provide: LookupStore, useValue: { cvapEmail: () => '', cvapCounsellingEmail: () => '' } },
+        { provide: InvoicesService, useValue: {} },
+        { provide: JusticeService, useValue: {} },
+        { provide: MatSnackBar, useValue: {} },
+        { provide: MatDialog, useValue: {} },
+        { provide: AEMService, useValue: {} }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+      .overrideComponent(SubmitInvoiceComponent, { set: { template: '<div></div>', styleUrls: [] } })
+      .compileComponents();
     fixture = TestBed.createComponent(SubmitInvoiceComponent);
     component = fixture.componentInstance;
-  }));
+  });
 
-  it('should do something', async(() => {
-    expect(true).toEqual(true);
-  }));
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

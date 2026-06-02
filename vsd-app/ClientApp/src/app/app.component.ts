@@ -1,11 +1,11 @@
 import { Component, inject, isDevMode, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, first } from 'rxjs';
 import moment from 'moment-timezone';
+import { first } from 'rxjs';
 import { environment } from '../environments/environment';
+import { LoginService } from './services/login.service';
 import { HeaderTitleService } from './services/titile.service';
 import { ConfigStore } from './store/config.store';
-import { LoginService } from './services/login.service';
 
 @Component({
   selector: 'app-root',
@@ -17,21 +17,20 @@ export class AppComponent implements OnInit {
   title = '';
   previousUrl: string;
   protected readonly configStore = inject(ConfigStore);
+  private readonly renderer = inject(Renderer2);
+  private readonly router = inject(Router);
+  private readonly headerTitleService = inject(HeaderTitleService);
+  private readonly authService = inject(LoginService);
   get error(): boolean {
     return !!this.configStore.error();
   }
   apiPath = environment.apiRootUrl;
   public isNewUser: boolean;
-  public isDevMode: boolean;
+  public isDevMode: boolean = isDevMode();
   isAuthenticated = false;
   authUsername: string | null = null;
 
-  constructor(
-    private renderer: Renderer2,
-    private router: Router,
-    private headerTitleService: HeaderTitleService,
-    private authService: LoginService
-  ) {
+  constructor() {
     this.isDevMode = isDevMode();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -57,7 +56,7 @@ export class AppComponent implements OnInit {
     this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
       this.isAuthenticated = isAuthenticated;
     });
-    if(this.configStore.featureFlags().useAuthentication == true) {
+    if (this.configStore.featureFlags().useAuthentication == true) {
       this.refreshAuthState();
     }
   }
@@ -105,10 +104,10 @@ export class AppComponent implements OnInit {
           return;
         }
 
-    this.authService
-      .getUserName()
-      .pipe(first())
-      .subscribe((username) => {
+        this.authService
+          .getUserName()
+          .pipe(first())
+          .subscribe((username) => {
             this.authUsername = username || null;
           });
       });

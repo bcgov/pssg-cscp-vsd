@@ -24,7 +24,6 @@ import { EmailMatchingValidator, EmailValidator } from '../validators/email.vali
 })
 export class PersonalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   postalRegex = POSTAL_CODE;
 

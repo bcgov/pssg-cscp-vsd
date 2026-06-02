@@ -1,21 +1,45 @@
-import { TestBed, async, ComponentFixture, ComponentFixtureAutoDetect } from '@angular/core/testing';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterTestingModule } from '@angular/router/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { ApplicationDraftsService } from '../../api/application-drafts/application-drafts.service';
+import { JusticeService } from '../../api/justice/justice.service';
+import { AEMService } from '../services/aem.service';
+import { LoginService } from '../services/login.service';
+import { StateService } from '../services/state.service';
+import { LookupStore } from '../store/lookup.store';
 import { VictimApplicationComponent } from './victim-application.component';
-let component: VictimApplicationComponent;
-let fixture: ComponentFixture<VictimApplicationComponent>;
 
-describe('VictimApplication component', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+describe('VictimApplicationComponent', () => {
+  let component: VictimApplicationComponent;
+  let fixture: ComponentFixture<VictimApplicationComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [VictimApplicationComponent],
-      imports: [BrowserModule],
-      providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }]
-    });
+      imports: [RouterTestingModule, ReactiveFormsModule],
+      providers: [
+        { provide: LookupStore, useValue: {} },
+        { provide: JusticeService, useValue: {} },
+        { provide: ApplicationDraftsService, useValue: {} },
+        { provide: MatSnackBar, useValue: {} },
+        { provide: MatDialog, useValue: {} },
+        { provide: StateService, useValue: { cloning: false, data: null } },
+        { provide: AEMService, useValue: {} },
+        { provide: LoginService, useValue: { isAuthenticated: { value: false } } }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+      .overrideComponent(VictimApplicationComponent, { set: { template: '<div></div>', styleUrls: [] } })
+      .compileComponents();
     fixture = TestBed.createComponent(VictimApplicationComponent);
     component = fixture.componentInstance;
-  }));
+  });
 
-  it('should do something', async(() => {
-    expect(true).toEqual(true);
-  }));
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

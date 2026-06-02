@@ -37,7 +37,6 @@ import { EmailValidator } from '../validators/email.validator';
 export class MedicalInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   protected readonly lookupStore = inject(LookupStore);
-  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   CRMBoolean = CRMBoolean;
 
