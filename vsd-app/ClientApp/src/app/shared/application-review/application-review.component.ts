@@ -8,22 +8,22 @@ import { ApplicationType, CRMBoolean, CRMMultiBoolean, EnumHelper, MY_FORMATS, O
 import { FormBase } from '../form-base';
 
 @Component({
-    selector: 'app-application-review',
-    templateUrl: './application-review.component.html',
-    styleUrls: ['./application-review.component.scss'],
-    providers: [
-        // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-        // application's root module. We provide it at the component level here, due to limitations of
-        // our example generation script.
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-    ],
-    standalone: false
+  selector: 'app-application-review',
+  templateUrl: './application-review.component.html',
+  styleUrls: ['./application-review.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
+  standalone: false
 })
 export class ApplicationReviewComponent extends FormBase implements OnInit {
   @Input() formType: number;
   @Input() parentStepper: MatStepper;
-  public form: UntypedFormGroup;
+  declare form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   CRMBoolean = CRMBoolean;
   CRMMultiBoolean = CRMMultiBoolean;

@@ -28,7 +28,6 @@ import { RepresentativeInfoHelper } from './representative-information.helper';
 export class RepresentativeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   protected readonly lookupStore = inject(LookupStore);
-  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   provinceList: string[];
   relationshipList: string[];

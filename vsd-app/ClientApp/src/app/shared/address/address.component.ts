@@ -17,6 +17,7 @@ import { COUNTRIES_ADDRESS } from './country-list';
   standalone: false
 })
 export class AddressComponent implements OnInit {
+  readonly lookupService = inject(LookupService);
   countryList: CountryLookupDto[] = config.preferred_countries;
   preferred_countries: CountryLookupDto[] = config.preferred_countries;
   postalRegex = POSTAL_CODE;
@@ -46,7 +47,7 @@ export class AddressComponent implements OnInit {
   @Input() showChildrenAsRequired: boolean = true;
   @Input() isDisabled: boolean = false;
 
-  constructor(public lookupService: LookupService) {
+  constructor() {
     let canada = COUNTRIES_ADDRESS.filter((c) => c.name.toLowerCase() == 'canada')[0];
     this.provinceType = canada.areaType;
     this.postalCodeType = canada.postalCodeName;

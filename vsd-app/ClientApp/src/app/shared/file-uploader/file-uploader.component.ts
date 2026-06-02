@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { ControlContainer, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { config } from '../../../config';
@@ -18,11 +18,10 @@ export class FileUploaderComponent implements OnInit {
   MAX_FILE_SIZE = 2 * 1024 * 1024; //2MB
   MAX_TOTAL_FILE_SIZE = 3.5 * 1024 * 1024; //3.5MB
 
-  constructor(
-    private fb: UntypedFormBuilder,
-    private controlContainer: ControlContainer,
-    public snackBar: MatSnackBar
-  ) {}
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly controlContainer = inject(ControlContainer);
+  readonly snackBar = inject(MatSnackBar);
+  constructor() {}
 
   ngOnInit() {
     this.form = <UntypedFormGroup>this.controlContainer.control;

@@ -4,7 +4,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as _ from 'lodash';
+
 import moment from 'moment';
 import { InvoicesService } from '../../api/invoices/invoices.service';
 import { JusticeService } from '../../api/justice/justice.service';
@@ -40,7 +40,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   submitting: boolean = false;
   hasDuplicateLineItem: boolean = false;
 
-  form: UntypedFormGroup;
   enumHelper = new EnumHelper();
 
   formFullyValidated: boolean;
@@ -74,6 +73,12 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
   isIE: boolean = false;
 
   protected readonly lookupStore = inject(LookupStore);
+  private readonly justiceService = inject(JusticeService);
+  private readonly fb = inject(UntypedFormBuilder);
+  readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
+  private readonly aemService = inject(AEMService);
+
   get cvapEmail(): string {
     return this.lookupStore.cvapEmail();
   }
@@ -81,13 +86,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     return this.lookupStore.cvapCounsellingEmail();
   }
 
-  constructor(
-    private justiceService: JusticeService,
-    private fb: UntypedFormBuilder,
-    public snackBar: MatSnackBar,
-    private dialog: MatDialog,
-    private aemService: AEMService
-  ) {
+  constructor() {
     super();
     this.formFullyValidated = false;
   }
@@ -394,7 +393,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.submitting = true;
     this.formFullyValidated = true;
 
-    let formClone = _.cloneDeep(this.form);
+    const formClone = this.form;
     const formData = <InvoiceDto>{
       invoiceDetails: this.form.get('invoiceDetails').value
     };

@@ -33,7 +33,6 @@ import { EmploymentInfoHelper } from './employment-information.helper';
 })
 export class EmploymentInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  public form: UntypedFormGroup;
 
   postalRegex = POSTAL_CODE;
 
@@ -57,7 +56,10 @@ export class EmploymentInformationComponent extends FormBase implements OnInit, 
   selfEmployedSubscription: Subscription;
   sinSubscription: Subscription;
 
-  constructor(private controlContainer: ControlContainer, private fb: UntypedFormBuilder) {
+  constructor(
+    private controlContainer: ControlContainer,
+    private fb: UntypedFormBuilder
+  ) {
     super();
   }
 

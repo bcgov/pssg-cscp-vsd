@@ -23,7 +23,6 @@ import { FormBase } from '../form-base';
 })
 export class IntroductionComponent extends FormBase implements OnInit {
   @Input() formType: number;
-  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   applicant: string = '';
 
@@ -36,7 +35,10 @@ export class IntroductionComponent extends FormBase implements OnInit {
     return this.lookupStore.cvapCounsellingEmail();
   }
 
-  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog) {
+  constructor(
+    private controlContainer: ControlContainer,
+    private matDialog: MatDialog
+  ) {
     super();
   }
 

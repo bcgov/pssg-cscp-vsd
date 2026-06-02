@@ -1,22 +1,26 @@
-import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { NotFoundComponent } from './not-found.component';
 
-let component: NotFoundComponent;
-let fixture: ComponentFixture<NotFoundComponent>;
+describe('NotFoundComponent', () => {
+  let component: NotFoundComponent;
+  let fixture: ComponentFixture<NotFoundComponent>;
 
-describe('NotFound component', () => {
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [NotFoundComponent],
-      imports: [BrowserModule],
-      providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }]
-    });
+      providers: [{ provide: Router, useValue: { navigateByUrl: () => Promise.resolve(true) } }],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+      .overrideComponent(NotFoundComponent, { set: { template: '<div></div>', styleUrls: [] } })
+      .compileComponents();
     fixture = TestBed.createComponent(NotFoundComponent);
     component = fixture.componentInstance;
-  }));
+  });
 
-  it('should do something', waitForAsync(() => {
-    expect(true).toEqual(true);
-  }));
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

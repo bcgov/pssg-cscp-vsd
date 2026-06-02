@@ -35,7 +35,6 @@ import { CrimeInfoHelper } from './crime-information.helper';
 export class CrimeInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   protected readonly lookupStore = inject(LookupStore);
-  public form: UntypedFormGroup;
   CRMBoolean = CRMBoolean;
   CRMMultiBoolean = CRMMultiBoolean;
   crimeLocationItems: UntypedFormArray;

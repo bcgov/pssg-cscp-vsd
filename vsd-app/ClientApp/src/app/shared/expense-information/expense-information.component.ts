@@ -32,7 +32,6 @@ import { FormBase } from '../form-base';
 })
 export class ExpenseInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
 
   BENEFITS: string[];
@@ -51,7 +50,10 @@ export class ExpenseInformationComponent extends FormBase implements OnInit, OnD
   loseWagesSubscription: Subscription;
   missedWorkDueToDeathOfVictimSubscription: Subscription;
 
-  constructor(private controlContainer: ControlContainer, private matDialog: MatDialog) {
+  constructor(
+    private controlContainer: ControlContainer,
+    private matDialog: MatDialog
+  ) {
     super();
   }
 

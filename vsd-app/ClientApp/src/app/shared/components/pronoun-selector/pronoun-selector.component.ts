@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { FormBase } from '../../form-base';
-import { EnumHelper } from '../../enums-list';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { EnumHelper } from '../../enums-list';
+import { FormBase } from '../../form-base';
 
 /**
  * A form control for selecting pronouns.
@@ -15,13 +15,13 @@ import { takeUntil } from 'rxjs/operators';
  * @implements {OnDestroy}
  */
 @Component({
-    selector: 'app-pronoun-selector',
-    templateUrl: './pronoun-selector.component.html',
-    styleUrls: ['./pronoun-selector.component.scss'],
-    standalone: false
+  selector: 'app-pronoun-selector',
+  templateUrl: './pronoun-selector.component.html',
+  styleUrls: ['./pronoun-selector.component.scss'],
+  standalone: false
 })
 export class PronounSelectorComponent extends FormBase implements OnInit, OnDestroy {
-  @Input() form: UntypedFormGroup;
+  @Input() declare form: UntypedFormGroup;
   @Input() isDisabled: boolean;
   @Input() pronounFormControlName: string;
   @Input() otherPronounFormControlName: string;

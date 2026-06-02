@@ -11,9 +11,13 @@ import { LookupStore } from '../store/lookup.store';
 export class ApplicationCancelledComponent implements OnInit {
   applicationType: string;
   protected readonly lookupStore = inject(LookupStore);
-  get cvapEmail(): string { return this.lookupStore.cvapEmail(); }
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  get cvapEmail(): string {
+    return this.lookupStore.cvapEmail();
+  }
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor() {
     this.router.navigateByUrl('/application-cancelled');
   }
 

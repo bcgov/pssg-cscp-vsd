@@ -34,7 +34,7 @@ import { AuthInfoHelper } from './authorization-information.helper';
 export class AuthorizationInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
   protected readonly lookupStore = inject(LookupStore);
-  public form: UntypedFormGroup;
+  declare form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   enumHelper = new EnumHelper();
 
@@ -74,7 +74,7 @@ export class AuthorizationInformationComponent extends FormBase implements OnIni
       authorizedPersonAuthorizesDiscussion.clearValidators();
       authorizedPersonAuthorizesDiscussion.setErrors(null, options);
       authorizedPersonSignature.clearValidators();
-      authorizedPersonSignature.setErrors(null), options;
+      (authorizedPersonSignature.setErrors(null), options);
 
       let useValidation = value === CRMBoolean.True;
       if (useValidation) {

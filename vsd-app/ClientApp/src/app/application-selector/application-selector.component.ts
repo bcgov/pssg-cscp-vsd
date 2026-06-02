@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { NavigationExtras, Router } from '@angular/router';
@@ -16,11 +16,14 @@ export class ApplicationSelectorComponent extends FormBase implements OnInit {
   busy: Subscription;
 
   public selectedApplicationType: number = 0;
-  public selectedApplicationName: string;
-  showValidationMessage: boolean;
+  public selectedApplicationName: string = '';
+  showValidationMessage: boolean = false;
 
   isIE: boolean = false;
-  constructor(private titleService: Title, private fb: UntypedFormBuilder, private router: Router) {
+  private readonly titleService = inject(Title);
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly router = inject(Router);
+  constructor() {
     super();
   }
 

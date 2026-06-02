@@ -19,7 +19,6 @@ import { FormBase } from '../form-base';
 })
 export class VictimInformationComponent extends FormBase implements OnInit, OnDestroy {
   @Input() formType: number;
-  public form: UntypedFormGroup;
   ApplicationType = ApplicationType;
   todaysDate = new Date(); // for the birthdate validation
   oldestHuman = new Date(this.todaysDate.getFullYear() - 120, this.todaysDate.getMonth(), this.todaysDate.getDay());

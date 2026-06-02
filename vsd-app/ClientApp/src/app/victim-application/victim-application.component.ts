@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as _ from 'lodash';
+
 import { ApplicationDraftsService } from '../../api/application-drafts/application-drafts.service';
 import { JusticeService } from '../../api/justice/justice.service';
 import { ApplicationDraft, CreateApplicationDraftRequest, DraftType, UpdateApplicationDraftRequest } from '../../model';
@@ -58,8 +58,7 @@ import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benef
 export class VictimApplicationComponent extends FormBase implements OnInit, OnDestroy {
   @ViewChild('stepper') victimStepper: MatStepper;
   FORM_TYPE = ApplicationType.Victim_Application;
-  busy: Promise<any>;
-  showValidationMessage: boolean;
+
   submitting: boolean = false;
   public showPrintView: boolean = false;
 
@@ -90,6 +89,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
 
   isIE: boolean = false;
   protected readonly lookupStore = inject(LookupStore);
+  private readonly justiceService = inject(JusticeService);
+  private readonly draftsService = inject(ApplicationDraftsService);
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  readonly snackBar = inject(MatSnackBar);
+  private readonly matDialog = inject(MatDialog);
+  readonly state = inject(StateService);
+  private readonly aemService = inject(AEMService);
+  private readonly authService = inject(LoginService);
 
   get canSaveDraft(): boolean {
     return this.authService.isAuthenticated.value;
@@ -107,18 +116,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
     'authorizationInformation'
   ];
 
-  constructor(
-    private justiceService: JusticeService,
-    private draftsService: ApplicationDraftsService,
-    private fb: UntypedFormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    public snackBar: MatSnackBar,
-    private matDialog: MatDialog,
-    public state: StateService,
-    private aemService: AEMService,
-    private authService: LoginService
-  ) {
+  constructor() {
     super();
   }
 
@@ -305,7 +303,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
 
   getAEMPDF(): Promise<string> {
     return new Promise((resolve, reject) => {
-      let application: Application = _.cloneDeep(this.harvestForm());
+      let application: Application = this.harvestForm();
       //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
       application.CrimeInformation.documents.forEach((doc) => (doc.body = ''));
       application.EmploymentIncomeInformation.documents.forEach((doc) => (doc.body = ''));
@@ -343,7 +341,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
 
   getAuthPDF(): Promise<string> {
     return new Promise((resolve, reject) => {
-      let application: Application = _.cloneDeep(this.harvestForm());
+      let application: Application = JSON.parse(JSON.stringify(this.harvestForm()));
       //sending large document info to aem causes it to crap out - it's also unnecessary info, so let's not send it!
       application.CrimeInformation.documents.forEach((doc) => (doc.body = ''));
       application.EmploymentIncomeInformation.documents.forEach((doc) => (doc.body = ''));
@@ -513,7 +511,7 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
 
     if (this.form.valid) {
       this.submitting = true;
-      let formClone = _.cloneDeep(this.form);
+      const formClone = this.form;
       let form = this.harvestForm();
       this.submit(form)
         .then(() => {
