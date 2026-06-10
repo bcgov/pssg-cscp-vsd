@@ -41,8 +41,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    var errors = ModelState
+                        .Where(e => e.Value?.Errors.Count > 0)
+                        .ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage ?? e.Exception?.Message).ToArray()
+                        );
                     _logger.Error(
-                        $"API call to 'GetVictimApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                        "API call to 'GetVictimApplicationPDF' made with invalid model state. Errors: {@ModelStateErrors}. Source = VSD",
+                        errors
                     );
                     return BadRequest(ModelState);
                 }
@@ -68,8 +75,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    var errors = ModelState
+                        .Where(e => e.Value?.Errors.Count > 0)
+                        .ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage ?? e.Exception?.Message).ToArray()
+                        );
                     _logger.Error(
-                        $"API call to 'GetIFMApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                        "API call to 'GetIFMApplicationPDF' made with invalid model state. Errors: {@ModelStateErrors}. Source = VSD",
+                        errors
                     );
                     return BadRequest(ModelState);
                 }
@@ -95,8 +109,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    var errors = ModelState
+                        .Where(e => e.Value?.Errors.Count > 0)
+                        .ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage ?? e.Exception?.Message).ToArray()
+                        );
                     _logger.Error(
-                        $"API call to 'GetWitnessApplicationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                        "API call to 'GetWitnessApplicationPDF' made with invalid model state. Errors: {@ModelStateErrors}. Source = VSD",
+                        errors
                     );
                     return BadRequest(ModelState);
                 }
@@ -122,8 +143,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    var errors = ModelState
+                        .Where(e => e.Value?.Errors.Count > 0)
+                        .ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage ?? e.Exception?.Message).ToArray()
+                        );
                     _logger.Error(
-                        $"API call to 'GetAuthorizationPDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                        "API call to 'GetAuthorizationPDF' made with invalid model state. Errors: {@ModelStateErrors}. Source = VSD",
+                        errors
                     );
                     return BadRequest(ModelState);
                 }
@@ -149,8 +177,15 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    var errors = ModelState
+                        .Where(e => e.Value?.Errors.Count > 0)
+                        .ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage ?? e.Exception?.Message).ToArray()
+                        );
                     _logger.Error(
-                        $"API call to 'GetInvoicePDF' made with invalid model state. Error is:\n{ModelState}. Source = VSD"
+                        "API call to 'GetInvoicePDF' made with invalid model state. Errors: {@ModelStateErrors}. Source = VSD",
+                        errors
                     );
                     return BadRequest(ModelState);
                 }
