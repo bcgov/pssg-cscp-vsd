@@ -393,7 +393,6 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.submitting = true;
     this.formFullyValidated = true;
 
-    const formClone = this.form;
     const formData = <InvoiceDto>{
       invoiceDetails: this.form.get('invoiceDetails').value
     };
@@ -402,7 +401,7 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.submit(formData)
       .then(() => {
         this.invoiceEdit();
-        this.cloneInvoice(formClone);
+        this.cloneInvoice(this.form);
       })
       .catch(() => {
         this.submitErrorHandler();
@@ -483,26 +482,38 @@ export class SubmitInvoiceComponent extends FormBase implements OnInit {
     this.validateAllFormFields(this.form.get('invoiceDetails'));
   }
 
-  private cloneInvoice(formCopy: UntypedFormGroup) {
+  /**
+   * Reset the form, preserving certain fields.
+   *
+   * Why? User's want to submit multiple forms for different people, using the same counsellor/vendor. This allows them
+   * to not have to re-enter the counsellor and vendor information for each form, while still clearing out the claimant
+   * and invoice details that would be different for each submission.
+   *
+   * @private
+   * @param {UntypedFormGroup} currentForm
+   */
+  private cloneInvoice(currentForm: UntypedFormGroup) {
+    // Copy the values from the form
+    const counsellorRegistrationNumber = currentForm.get('invoiceDetails.counsellorRegistrationNumber').value;
+    const counsellorLastName = currentForm.get('invoiceDetails.counsellorLastName').value;
+    const vendorNumber = currentForm.get('invoiceDetails.vendorNumber').value;
+    const vendorPostalCode = currentForm.get('invoiceDetails.vendorPostalCode').value;
+    const submitterFullName = currentForm.get('invoiceDetails.submitterFullName').value;
+    const submitterEmailAddress = currentForm.get('invoiceDetails.submitterEmailAddress').value;
+
+    // Reset the form
     this.form.reset();
     this.form = this.buildInvoiceForm();
     this.lineItems = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
     this.lineItemsControls = this.form.get('invoiceDetails.lineItems') as UntypedFormArray;
 
-    this.form
-      .get('invoiceDetails.counsellorRegistrationNumber')
-      .patchValue(formCopy.get('invoiceDetails.counsellorRegistrationNumber').value);
-    this.form
-      .get('invoiceDetails.counsellorLastName')
-      .patchValue(formCopy.get('invoiceDetails.counsellorLastName').value);
-    this.form.get('invoiceDetails.vendorNumber').patchValue(formCopy.get('invoiceDetails.vendorNumber').value);
-    this.form.get('invoiceDetails.vendorPostalCode').patchValue(formCopy.get('invoiceDetails.vendorPostalCode').value);
-    this.form
-      .get('invoiceDetails.submitterFullName')
-      .patchValue(formCopy.get('invoiceDetails.submitterFullName').value);
-    this.form
-      .get('invoiceDetails.submitterEmailAddress')
-      .patchValue(formCopy.get('invoiceDetails.submitterEmailAddress').value);
+    // Patch the copied values back to the form
+    this.form.get('invoiceDetails.counsellorRegistrationNumber').patchValue(counsellorRegistrationNumber);
+    this.form.get('invoiceDetails.counsellorLastName').patchValue(counsellorLastName);
+    this.form.get('invoiceDetails.vendorNumber').patchValue(vendorNumber);
+    this.form.get('invoiceDetails.vendorPostalCode').patchValue(vendorPostalCode);
+    this.form.get('invoiceDetails.submitterFullName').patchValue(submitterFullName);
+    this.form.get('invoiceDetails.submitterEmailAddress').patchValue(submitterEmailAddress);
   }
 
   private buildInvoiceForm(): UntypedFormGroup {
