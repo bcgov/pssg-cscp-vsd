@@ -685,31 +685,44 @@ export class FormBase {
     let options = { onlySelf: true, emitEvent: true };
 
     if (copyInfo) {
-      target.get('representativePhoneNumber').patchValue(source.get('phoneNumber').value, options);
-      target.get('representativeAlternatePhoneNumber').patchValue(source.get('alternatePhoneNumber').value, options);
-      target.get('representativeEmail').patchValue(source.get('email').value, options);
-      target.get('representativeConfirmEmail').patchValue(source.get('confirmEmail').value, options);
+      const sourcePhoneNumber = source?.get('phoneNumber')?.value;
+      if (sourcePhoneNumber) {
+        target?.get('representativePhoneNumber')?.patchValue(sourcePhoneNumber, options);
+        target?.get('representativePhoneNumber')?.setErrors(null, options);
+        target?.get('representativePhoneNumber')?.disable(options);
+      }
 
-      target.get('representativePhoneNumber').setErrors(null, options);
-      target.get('representativeAlternatePhoneNumber').setErrors(null, options);
-      target.get('representativeEmail').setErrors(null, options);
-      target.get('representativeConfirmEmail').setErrors(null, options);
+      const sourceAlternatePhoneNumber = source?.get('alternatePhoneNumber')?.value;
+      if (sourceAlternatePhoneNumber) {
+        target?.get('representativeAlternatePhoneNumber')?.patchValue(sourceAlternatePhoneNumber, options);
+        target?.get('representativeAlternatePhoneNumber')?.setErrors(null, options);
+        target?.get('representativeAlternatePhoneNumber')?.disable(options);
+      }
 
-      target.get('representativePhoneNumber').disable(options);
-      target.get('representativeAlternatePhoneNumber').disable(options);
-      target.get('representativeEmail').disable(options);
-      target.get('representativeConfirmEmail').disable(options);
+      const sourceEmail = source?.get('email')?.value;
+      if (sourceEmail) {
+        target?.get('representativeEmail')?.patchValue(sourceEmail, options);
+        target?.get('representativeEmail')?.setErrors(null, options);
+        target?.get('representativeEmail')?.disable(options);
+      }
+
+      const sourceConfirmEmail = source?.get('confirmEmail')?.value;
+      if (sourceConfirmEmail) {
+        target?.get('representativeConfirmEmail')?.patchValue(sourceConfirmEmail, options);
+        target?.get('representativeConfirmEmail')?.setErrors(null, options);
+        target?.get('representativeConfirmEmail')?.disable(options);
+      }
     } else {
-      target.get('representativePhoneNumber').enable();
-      target.get('representativeAlternatePhoneNumber').enable();
-      target.get('representativeEmail').enable();
-      target.get('representativeConfirmEmail').enable();
+      target?.get('representativePhoneNumber')?.enable();
+      target?.get('representativeAlternatePhoneNumber')?.enable();
+      target?.get('representativeEmail')?.enable();
+      target?.get('representativeConfirmEmail')?.enable();
     }
 
-    target.get('representativePhoneNumber').updateValueAndValidity(options);
-    target.get('representativeAlternatePhoneNumber').updateValueAndValidity(options);
-    target.get('representativeEmail').updateValueAndValidity(options);
-    target.get('representativeConfirmEmail').updateValueAndValidity(options);
+    target?.get('representativePhoneNumber')?.updateValueAndValidity(options);
+    target?.get('representativeAlternatePhoneNumber')?.updateValueAndValidity(options);
+    target?.get('representativeEmail')?.updateValueAndValidity(options);
+    target?.get('representativeConfirmEmail')?.updateValueAndValidity(options);
   }
 
   setControlValidators(
