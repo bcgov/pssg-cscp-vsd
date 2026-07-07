@@ -355,6 +355,11 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
     if (data.RepresentativeInformation.mostRecentMailingAddressSameAsPersonal == true) {
       data.RepresentativeInformation.representativeAddress = data.PersonalInformation.primaryAddress;
     }
+    if (data.RepresentativeInformation.completingOnBehalfOf == OnBehalfOf.Parent || data.RepresentativeInformation.completingOnBehalfOf == OnBehalfOf.Legal_Guardian) {
+      data.RepresentativeInformation.representativePhoneNumber = data.PersonalInformation.phoneNumber;
+      data.RepresentativeInformation.representativeAlternatePhoneNumber = data.PersonalInformation.alternatePhoneNumber;
+      data.RepresentativeInformation.representativeEmail = data.PersonalInformation.email;
+    }
     if (data.VictimInformation.victimSameContactInfo) {
       data.VictimInformation.phoneNumber = data.PersonalInformation.phoneNumber;
       data.VictimInformation.alternatePhoneNumber = data.PersonalInformation.alternatePhoneNumber;
