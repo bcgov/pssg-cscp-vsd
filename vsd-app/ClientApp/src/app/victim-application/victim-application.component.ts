@@ -333,6 +333,16 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
         },
         (err) => {
           reject(err);
+          var errorStatus = this.aemService.getErrorStatus(err);
+          if (errorStatus === 404) {
+            console.log('PDF generation services are unavailable');
+            this.snackBar.open('PDF generation services are unavailable.', 'Close', { duration: 5000 });
+          }
+
+          if (errorStatus === 400) {
+            console.log('Form is invalid, cannot generate PDF');
+            this.snackBar.open('The form is invalid. Please review your entries and try again.', 'Close', { duration: 5000 });
+          }
           console.log(err);
         }
       );

@@ -48,27 +48,39 @@ namespace Gov.Cscp.VictimServices.Public.Services
 
             HttpRequestMessage _httpRequest = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
             _httpRequest.Content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
-
-            var _httpResponse = await _client.SendAsync(_httpRequest);
-
-            string resultString = await _httpResponse.Content.ReadAsStringAsync();
-            AEMResult result = JsonConvert.DeserializeObject<AEMResult>(resultString);
-
-            if ((int)result.responseCode == 200)
+            try
             {
-                HttpResponseMessage msg = await _client.GetAsync(result.responseMessage);
-                byte[] msgContent = await msg.Content.ReadAsByteArrayAsync();
-                result.responseMessage = Convert.ToBase64String(msgContent);
+                var _httpResponse = await _client.SendAsync(_httpRequest);
+
+                string resultString = await _httpResponse.Content.ReadAsStringAsync();
+                AEMResult result = JsonConvert.DeserializeObject<AEMResult>(resultString);
+
+                if ((int)result.responseCode == 200)
+                {
+                    HttpResponseMessage msg = await _client.GetAsync(result.responseMessage);
+                    byte[] msgContent = await msg.Content.ReadAsByteArrayAsync();
+                    result.responseMessage = Convert.ToBase64String(msgContent);
+                }
+                else
+                {
+                    _logger.Error(
+                        new RequestFailedException("Error calling Dynamics endpoint. Source = VSD"),
+                        "Error calling Dynamics endpoint. Source = VSD."
+                    );
+                }
+
+                return result;
             }
-            else
+            catch
             {
                 _logger.Error(
                     new RequestFailedException("Error calling Dynamics endpoint. Source = VSD"),
                     "Error calling Dynamics endpoint. Source = VSD."
                 );
+                AEMResult result = new AEMResult();
+                result.responseCode = System.Net.HttpStatusCode.NotFound;
+                return result;
             }
-
-            return result;
         }
     }
 }

@@ -582,6 +582,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
   }
 
   downloadPDF() {
+    console.log('downloading pdf');
     this.getAEMPDF()
       .then((pdf: string) => {
         let downloadLink = document.createElement('a');
@@ -594,7 +595,16 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
         document.body.removeChild(downloadLink);
       })
       .catch((err) => {
-        console.log('error getting pdf');
+        var errorStatus = this.aemService.getErrorStatus(err);
+        if (errorStatus === 404) {
+          console.log('PDF generation services are unavailable');
+          this.snackBar.open('PDF generation services are unavailable.', 'Close', { duration: 5000 });
+        }
+
+        if (errorStatus === 400) {
+          console.log('Form is invalid, cannot generate PDF');
+          this.snackBar.open('The form is invalid. Please review your entries and try again.', 'Close', { duration: 5000 });
+        }
         console.log(err);
       });
   }
@@ -846,4 +856,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
 
     return ret;
   }
+
+ 
 }
