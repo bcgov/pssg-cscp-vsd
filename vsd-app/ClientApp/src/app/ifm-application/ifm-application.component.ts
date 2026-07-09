@@ -582,7 +582,6 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
   }
 
   downloadPDF() {
-    console.log('downloading pdf');
     this.getAEMPDF()
       .then((pdf: string) => {
         let downloadLink = document.createElement('a');
@@ -595,6 +594,7 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
         document.body.removeChild(downloadLink);
       })
       .catch((err) => {
+        console.log('error getting pdf');
         var errorStatus = this.aemService.getErrorStatus(err);
         if (errorStatus === 404) {
           console.log('PDF generation services are unavailable');
@@ -856,6 +856,4 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
 
     return ret;
   }
-
- 
 }

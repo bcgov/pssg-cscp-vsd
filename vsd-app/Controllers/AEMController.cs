@@ -48,7 +48,7 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
                             kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage ?? e.Exception?.Message).ToArray()
                         );
                     _logger.Error(
-                       "API call to 'GetVictimApplicationPDF' made with invalid model state. Errors: {@ModelStateErrors}. Source = VSD",
+                        "API call to 'GetVictimApplicationPDF' made with invalid model state. Errors: {@ModelStateErrors}. Source = VSD",
                         errors
                     );
                     return BadRequest(ModelState);
@@ -107,20 +107,20 @@ namespace Gov.Cscp.VictimServices.Public.Controllers
         {
             try
             {
-                //if (!ModelState.IsValid)
-                //{
-                //    var errors = ModelState
-                //        .Where(e => e.Value?.Errors.Count > 0)
-                //        .ToDictionary(
-                //            kvp => kvp.Key,
-                //            kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage ?? e.Exception?.Message).ToArray()
-                //        );
-                //    _logger.Error(
-                //        "API call to 'GetWitnessApplicationPDF' made with invalid model state. Errors: {@ModelStateErrors}. Source = VSD",
-                //        errors
-                //    );
-                //    return BadRequest(ModelState);
-                //}
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState
+                        .Where(e => e.Value?.Errors.Count > 0)
+                        .ToDictionary(
+                            kvp => kvp.Key,
+                            kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage ?? e.Exception?.Message).ToArray()
+                        );
+                    _logger.Error(
+                        "API call to 'GetWitnessApplicationPDF' made with invalid model state. Errors: {@ModelStateErrors}. Source = VSD",
+                        errors
+                    );
+                    return BadRequest(ModelState);
+                }
 
                 string xml = getApplicationXML(model);
                 string requestJson = getAEMJSON(xml, "witness");
