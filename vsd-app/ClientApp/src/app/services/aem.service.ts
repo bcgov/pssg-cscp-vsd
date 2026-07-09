@@ -47,6 +47,19 @@ export class AEMService {
       .pipe(retry(3), catchError(this.handleError));
   }
 
+  public getErrorStatus(error: string): number {
+    if (error.includes('Backend returned code 400')) {
+      return 400;
+    }
+    if (error.includes('Backend returned code 404')) {
+      return 404;
+    }
+    if (error.includes('Backend returned code 500')) {
+      return 500;
+    }
+    return 0;
+  }
+
   protected handleError(err): Observable<never> {
     let errorMessage = '';
     console.log(err);
