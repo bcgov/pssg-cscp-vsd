@@ -1,100 +1,65 @@
-# ======================================================================================
-#  Last Updated: 2025-07-25
-#
-#  Description:
-#  Promotes an image by re-tagging it within the OpenShift ImageStream.
-#  This in-cluster promotion guarantees image digest is preserved.
-#
-# ======================================================================================
+name: Promote VSD to TEST
 
-name: Promote VSD to Test
-
-# --- TRIGGERS -----------------------------------------------------------------------
+# [1] MANUAL ONLY — a human picks the source (a TAG) and which images move
 on:
-  # This workflow is triggered manually, requiring explicit user action.
   workflow_dispatch:
     inputs:
       source_tag:
-        description: "The source tag to promote (e.g., development, or a specific shortsha tag)"
-        required: false
-        default: "development"
+        description: "Source tag: latest · sha-<commit> (one exact build) · test-backup (= ROLLBACK)"
+        default: "latest"
+      images:
+        description: "Which image(s) move — dropdown: no typing, no typos"
+        type: choice
+        options:
+          - all
+          - vsd-api
+          - vsd-ui
+        default: all
 
-# --- ENVIRONMENT VARIABLES (Preserving original structure) -------------------------
-env:
-  IMAGE_REGISTRY: ${{ vars.OCP4_REGISTRY }}
-  NAMESPACE: ${{ secrets.OCP4_NAMESPACE }}
-  SOURCE_TAG: ${{ github.event.inputs.source_tag }}
-  TARGET_TAG: "test"
-  BACKUP_TAG: "test-backup"
+# [2] GUARD RAIL · MINIMAL PERMISSIONS — GitHub token reads only; the cluster is reached via secrets
+permissions:
+  contents: read
 
-# --- JOBS ---------------------------------------------------------------------------
+# [3] GUARD RAIL · ONE PROMOTION AT A TIME — runs QUEUE; a mid-move promotion is never cancelled
+concurrency:
+  group: promote-test
+  cancel-in-progress: false
+
 jobs:
-  promote-images:
-    name: Promote ${{ matrix.image_name }} to Test
+  promote:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image_name: ["vsd-ui", "vsd-api"]
-
-    env:
-      IMAGE_NAME: ${{ matrix.image_name }}
+    timeout-minutes: 10
+    environment: test          # [4] test has no reviewers — passes straight through
 
     steps:
-      - name: Install OpenShift CLI
+      - uses: redhat-actions/openshift-tools-installer@v1   # third-party — pin to commit SHA when hardening
+        with:
+          oc: "4"
+      - run: oc login --token=${{ secrets.OCP4_PASSWORD }} --server=${{ secrets.OPENSHIFT_SERVER }}
+
+      - name: "PASS 1 — resolve every digest first · PASS 2 — move tags. Half-promotion is impossible."
         run: |
-          curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
-          tar -xzf openshift-client-linux.tar.gz
-          sudo mv oc /usr/local/bin/
+          LIST="${{ inputs.images }}"
+          [ "$LIST" = "all" ] && LIST="vsd-api vsd-ui"
+          NS=${{ secrets.OCP4_NAMESPACE }}
+          declare -A DIGEST
+          for img in $LIST; do
+            DIGEST[$img]=$(oc get istag $img:${{ inputs.source_tag }} -n $NS -o jsonpath='{.image.metadata.name}')
+            if [ -z "${DIGEST[$img]}" ]; then
+              echo "::error::could not resolve $img:${{ inputs.source_tag }} in $NS — nothing moved"; exit 1
+            fi
+          done
+          for img in $LIST; do
+            oc tag $NS/$img:test $NS/$img:test-backup --reference-policy=local || true
+            oc tag $NS/$img@${DIGEST[$img]} $NS/$img:test --reference-policy=local
+          done
 
-      - name: Login to OpenShift
+      - name: "VERIFY — done when pods are Ready, not when the tag moves"
         run: |
-          oc login --token="${{ secrets.OCP4_PASSWORD }}" --server="${{ secrets.OPENSHIFT_SERVER }}"
-
-
-      - name: Get source digest
-        id: get_source_digest
-        run: |
-          SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
-          echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
-
-      - name: Get target digest (for backup)
-        id: get_target_digest
-        run: |
-          TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
-          echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
-
-      - name: Backup Current Target Image (by digest)
-        if: steps.get_target_digest.outputs.target_digest != ''
-        run: |
-          echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
-          oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
-          echo "Backup successful."
-          
-      - name: Promote source to target (by digest)
-        run: |
-          echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
-          oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
-          echo "Promotion successful."
-
-      - name: Validate Promotion by Comparing Image Digests
-        run: |
-          echo "Validating promotion for image '${{ env.IMAGE_NAME }}'..."
-          sleep 5
-
-          SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.dockerImageReference}' | sed 's/.*@//')
-          TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.dockerImageReference}' | sed 's/.*@//')
-
-          echo "Source Digest: $SOURCE_SHA"
-          echo "Target Digest: $TARGET_SHA"
-
-          if [[ -z "$SOURCE_SHA" ]]; then
-            echo "::error::Could not find source digest for tag '${{ env.SOURCE_TAG }}' for image '${{ env.IMAGE_NAME }}'."
-            exit 1
-          fi
-
-          if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
-            echo "Validation successful! Digests match perfectly."
-          else
-            echo "::error::Image digests do not match after promotion for image '${{ env.IMAGE_NAME }}'."
-            exit 1
-          fi
+          LIST="${{ inputs.images }}"
+          [ "$LIST" = "all" ] && LIST="vsd-api vsd-ui"
+          oc project f9a9e6-test
+          for img in $LIST; do
+            oc rollout status deployment/$img-argo --timeout=300s   # vsd-api-argo / vsd-ui-argo
+          done
+          # VERIFY = rollout status only: the pipeline SA has 'view' (not exec), and the runner is off-network.

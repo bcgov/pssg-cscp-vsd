@@ -75,6 +75,9 @@ ENV BUILD_IMAGE_NAME=${BUILD_IMAGE_NAME}
 ENV BUILD_VERSION=${BUILD_VERSION}
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+# Strip the file capability BuildKit preserves on the copied binary. Caddy binds 2015 (non-privileged),
+# so cap_net_bind_service is unneeded, and its presence blocks exec under allowPrivilegeEscalation:false (no_new_privs).
+RUN apk add --no-cache libcap && setcap -r /usr/bin/caddy && getcap /usr/bin/caddy || true
 COPY ./vsd-app/ClientApp/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/dist/browser/ /site
 
