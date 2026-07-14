@@ -566,15 +566,6 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
       AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation
     } as Application;
 
-    //using this as a workaround to collect values from disabled fields
-    if (data.RepresentativeInformation.mostRecentMailingAddressSameAsPersonal == true) {
-      data.RepresentativeInformation.representativeAddress = data.PersonalInformation.primaryAddress;
-    }
-    if (data.RepresentativeInformation.completingOnBehalfOf == OnBehalfOf.Parent || data.RepresentativeInformation.completingOnBehalfOf == OnBehalfOf.Legal_Guardian) {
-      data.RepresentativeInformation.representativePhoneNumber = data.PersonalInformation.phoneNumber;
-      data.RepresentativeInformation.representativeAlternatePhoneNumber = data.PersonalInformation.alternatePhoneNumber;
-      data.RepresentativeInformation.representativeEmail = data.PersonalInformation.email;
-    }
 
     return data;
   }
