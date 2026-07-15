@@ -550,22 +550,22 @@ export class VictimApplicationComponent extends FormBase implements OnInit, OnDe
   }
 
   harvestForm(): Application {
+    const rawForm = this.form.getRawValue();
     let data = {
       ApplicationType: this.FORM_TYPE,
       ApplicationDate: new Date(),
       ApplicationPDFs: [],
       DraftId: this.draftId,
-      Introduction: this.form.get('introduction').value as Introduction,
-      PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
-      CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
-      MedicalInformation: this.form.get('medicalInformation').value as MedicalInformation,
-      ExpenseInformation: this.form.get('expenseInformation').value as ExpenseInformation,
-      EmploymentIncomeInformation: this.form.get('employmentIncomeInformation').value as EmploymentIncomeInformation,
-      RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
-      DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
-      AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation
+      Introduction: rawForm.introduction as Introduction,
+      PersonalInformation: rawForm.personalInformation as PersonalInformation,
+      CrimeInformation: rawForm.crimeInformation as CrimeInformation,
+      MedicalInformation: rawForm.medicalInformation as MedicalInformation,
+      ExpenseInformation: rawForm.expenseInformation as ExpenseInformation,
+      EmploymentIncomeInformation: rawForm.employmentIncomeInformation as EmploymentIncomeInformation,
+      RepresentativeInformation: rawForm.representativeInformation as RepresentativeInformation,
+      DeclarationInformation: rawForm.declarationInformation as DeclarationInformation,
+      AuthorizationInformation: rawForm.authorizationInformation as AuthorizationInformation
     } as Application;
-
 
     return data;
   }

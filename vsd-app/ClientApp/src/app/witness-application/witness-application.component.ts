@@ -290,40 +290,25 @@ export class WitnessApplicationComponent extends FormBase implements OnInit, OnD
   }
 
   harvestForm(): Application {
+    const rawForm = this.form.getRawValue();
+
     let data = {
       ApplicationType: this.FORM_TYPE,
       ApplicationDate: new Date(),
       ApplicationPDFs: [],
       DraftId: this.draftId,
-      Introduction: this.form.get('introduction').value as Introduction,
-      PersonalInformation: this.form.get('personalInformation').value as PersonalInformation,
-      CrimeInformation: this.form.get('crimeInformation').value as CrimeInformation,
-      MedicalInformation: this.form.get('medicalInformation').value as MedicalInformation,
-      ExpenseInformation: this.form.get('expenseInformation').value as ExpenseInformation,
+      Introduction: rawForm.introduction as Introduction,
+      PersonalInformation: rawForm.personalInformation as PersonalInformation,
+      CrimeInformation: rawForm.crimeInformation as CrimeInformation,
+      MedicalInformation: rawForm.medicalInformation as MedicalInformation,
+      ExpenseInformation: rawForm.expenseInformation as ExpenseInformation,
       EmploymentIncomeInformation: null as EmploymentIncomeInformation,
-      RepresentativeInformation: this.form.get('representativeInformation').value as RepresentativeInformation,
-      DeclarationInformation: this.form.get('declarationInformation').value as DeclarationInformation,
-      AuthorizationInformation: this.form.get('authorizationInformation').value as AuthorizationInformation,
-      VictimInformation: this.form.get('victimInformation').value as VictimInformation
+      RepresentativeInformation: rawForm.representativeInformation as RepresentativeInformation,
+      DeclarationInformation: rawForm.declarationInformation as DeclarationInformation,
+      AuthorizationInformation: rawForm.authorizationInformation as AuthorizationInformation,
+      VictimInformation: rawForm.victimInformation as VictimInformation
     } as Application;
 
-    //using this as a workaround to collect values from disabled fields
-    if (data.VictimInformation.mostRecentMailingAddressSameAsPersonal == true) {
-      data.VictimInformation.primaryAddress = data.PersonalInformation.primaryAddress;
-    }
-    if (data.RepresentativeInformation.mostRecentMailingAddressSameAsPersonal == true) {
-      data.RepresentativeInformation.representativeAddress = data.PersonalInformation.primaryAddress;
-    }
-    if (data.RepresentativeInformation.completingOnBehalfOf == OnBehalfOf.Parent || data.RepresentativeInformation.completingOnBehalfOf == OnBehalfOf.Legal_Guardian) {
-      data.RepresentativeInformation.representativePhoneNumber = data.PersonalInformation.phoneNumber;
-      data.RepresentativeInformation.representativeAlternatePhoneNumber = data.PersonalInformation.alternatePhoneNumber;
-      data.RepresentativeInformation.representativeEmail = data.PersonalInformation.email;
-    }
-    if (data.VictimInformation.victimSameContactInfo) {
-      data.VictimInformation.phoneNumber = data.PersonalInformation.phoneNumber;
-      data.VictimInformation.alternatePhoneNumber = data.PersonalInformation.alternatePhoneNumber;
-      data.VictimInformation.email = data.PersonalInformation.email;
-    }
 
     return data;
   }
