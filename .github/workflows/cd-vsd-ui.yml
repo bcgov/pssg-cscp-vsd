@@ -40,7 +40,6 @@ jobs:
           images: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/vsd-ui
           tags: |
             type=raw,value=latest
-            type=raw,value=development
             type=sha
       - uses: docker/build-push-action@v7
         with:
