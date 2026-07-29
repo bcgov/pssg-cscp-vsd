@@ -64,6 +64,7 @@ import { AEMService } from './services/aem.service';
 import { StateService } from './services/state.service';
 import { HeaderTitleService } from './services/titile.service';
 import { AddressComponent } from './shared/address/address.component';
+import { AlertComponent } from './shared/alert/alert.component';
 import { ApplicationReviewComponent } from './shared/application-review/application-review.component';
 import { AuthorizationInformationComponent } from './shared/authorization-information/authorization-information.component';
 import { GenderSelectorComponent } from './shared/components/gender-selector/gender-selector.component';
@@ -131,6 +132,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
 @NgModule({
   declarations: [
     AddressComponent,
+    AlertComponent,
     AppComponent,
     ApplicationCancelledComponent,
     ApplicationReviewComponent,
