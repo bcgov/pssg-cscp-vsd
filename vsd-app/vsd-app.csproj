@@ -14,7 +14,6 @@
         <PackageReference Include="Azure.Core" Version="1.46.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.16" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.HealthChecks" Version="1.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
         <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />

@@ -11,7 +11,7 @@
         <PackageReference Include="IdentityModel" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-        <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.7" />
+        <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.26" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Shared.Contract\Shared.Contract.csproj" />
