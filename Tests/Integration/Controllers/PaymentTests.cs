@@ -1,4 +1,4 @@
-﻿public class PaymentTests(IMediator mediator, IMessageRequests messageRequests, ICasHttpClient casHttpClient, ILoggerFactory loggerFactory)
+﻿public class PaymentTests(IMediator mediator, ILoggerFactory loggerFactory)
 {
     private readonly ILogger _logger = loggerFactory.CreateLogger<PaymentScheduleTests>();
 
@@ -6,7 +6,6 @@
     public async Task Send_Invoices_Cas_Transaction()
     {
         //var test = await GenerateCVAPDistributionAccount(new Guid("6baad5a2-7120-eb11-b821-00505683fbf4"));
-        var dateFormat = "dd-MMM-yyyy";
 
         var invoices = new CasApTransactionInvoices();
         invoices.IsBlockSupplier = true;

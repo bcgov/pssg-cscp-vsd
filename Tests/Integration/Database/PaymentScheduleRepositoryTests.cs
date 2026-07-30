@@ -32,7 +32,7 @@ public class PaymentScheduleRepositoryTests(IPaymentScheduleRepository repositor
     public void Update()
     {
         // Arrange
-        var dto = new PaymentSchedule { CaseName = "CaseName", Payee = null };
+        var dto = new PaymentSchedule { CaseName = "CaseName", Payee = null! };
         dto.Id = new Guid("23fdd752-fbd8-eb11-b828-00505683fbf4");
         dto.FirstRunDate = new DateTime(2001, 1, 1);
         dto.NextRunDate = new DateTime(2002, 2, 2);
@@ -51,7 +51,7 @@ public class PaymentScheduleRepositoryTests(IPaymentScheduleRepository repositor
 
         // Assert
         Assert.True(result);
-        
+
         //var command = new PaymentScheduleEntitlementQuery();
         //command.Id = new Guid("538734d6-549d-ef11-b853-00505683fbf4");
 

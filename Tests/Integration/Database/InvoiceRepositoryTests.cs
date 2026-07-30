@@ -76,7 +76,7 @@ public class InvoiceRepositoryTests(IInvoiceRepository repository)
     public void Update()
     {
         // Arrange
-        var invoice = new Invoice() { Owner = null };
+        var invoice = new Invoice() { Owner = null! };
 
         // Act
         var result = repository.Update(invoice);

@@ -1,5 +1,7 @@
 ﻿using System;
 
+#nullable enable annotations
+
 namespace Gov.Cscp.VictimServices.Public.JsonObjects
 {
     public class ApplicationDynamicsModel

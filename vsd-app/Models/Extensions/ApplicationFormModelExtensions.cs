@@ -3,6 +3,7 @@ using System.Reflection;
 using Database.Model;
 using Gov.Cscp.VictimServices.Public.JsonObjects;
 using Gov.Cscp.VictimServices.Public.ViewModels;
+#nullable enable annotations
 using Microsoft.Xrm.Sdk;
 
 namespace Gov.Cscp.VictimServices.Public.Models.Extensions;

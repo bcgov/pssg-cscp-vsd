@@ -30,7 +30,7 @@
         var result = paymentRepository.FirstOrDefault(query);
 
         // Assert
-        Assert.True(result.Invoices.Count() > 0);
+        Assert.True(result!.Invoices!.Count() > 0);
     }
 
     [Fact]
