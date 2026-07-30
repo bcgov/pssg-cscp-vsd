@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 /** @deprecated This component is deprecated and will be removed in a future release. Please use FormFieldComponent instead. */
@@ -14,7 +14,7 @@ export class FieldComponent implements OnInit {
   // TODO: eventually we need to determine validity based on the form control passed in instead of passing in valid as an input
   @Input() valid = true;
   @Input() label: string;
-  @Input() tooltipReference: string;
+  @Input() tooltipReference: string | TemplateRef<any>;
   @Input() leadingText: string;
   @Input() errorMessage: string;
   @Input() disabled: boolean;
