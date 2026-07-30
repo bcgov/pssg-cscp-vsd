@@ -1,1 +1,14 @@
-<span class="tooltip-icon" data-placement="right" data-animation="true" data-show="true" [tooltip]="trigger"><i class="fa fa-info-circle"> </i></span>
+@if (isTemplate) {
+  <span class="tooltip-icon tooltip-wrapper"
+        (mouseenter)="show = true"
+        (mouseleave)="show = false">
+    <i class="fa fa-info-circle"></i>
+    @if (show) {
+      <div class="tooltip-popup" role="tooltip">
+        <ng-container [ngTemplateOutlet]="asTemplate"></ng-container>
+      </div>
+    }
+  </span>
+} @else {
+  <span class="tooltip-icon" [matTooltip]="asString" matTooltipPosition="right"><i class="fa fa-info-circle"></i></span>
+}

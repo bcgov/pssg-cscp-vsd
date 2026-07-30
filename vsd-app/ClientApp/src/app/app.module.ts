@@ -37,9 +37,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthModule, LogLevel, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -218,8 +215,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    ReactiveFormsModule,
-    TooltipModule
+    ReactiveFormsModule
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -265,9 +261,6 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     ReactiveFormsModule,
     NgxMaskDirective,
     AngularSignaturePadModule,
-    BsDatepickerModule.forRoot(),
-    TooltipModule,
-    TypeaheadModule.forRoot(),
     AuthModule.forRoot({
       loader: {
         provide: StsConfigLoader,
