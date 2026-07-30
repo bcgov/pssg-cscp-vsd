@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 
+#nullable enable annotations
+
 namespace Gov.Cscp.VictimServices.Public.Models
 {
     public enum CounsellingTypeEnum

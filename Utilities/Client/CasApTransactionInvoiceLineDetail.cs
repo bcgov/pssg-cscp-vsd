@@ -4,25 +4,25 @@ public class CasApTransactionInvoiceLineDetail
 {
     public int InvoiceLineNumber { get; set; }
 
-    public string InvoiceLineType { get; set; }
+    public string InvoiceLineType { get; set; } = string.Empty;
 
-    public string LineCode { get; set; }
+    public string LineCode { get; set; } = string.Empty;
 
     public decimal InvoiceLineAmount { get; set; }
 
-    public string DefaultDistributionAccount { get; set; }
+    public string DefaultDistributionAccount { get; set; } = string.Empty;
 
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public string TaxClassificationCode { get; set; }
+    public string TaxClassificationCode { get; set; } = string.Empty;
 
-    public string DistributionSupplier { get; set; }
+    public string DistributionSupplier { get; set; } = string.Empty;
 
-    public string Info1 { get; set; }
+    public string Info1 { get; set; } = string.Empty;
 
-    public string Info2 { get; set; }
+    public string Info2 { get; set; } = string.Empty;
 
-    public string Info3 { get; set; }
+    public string Info3 { get; set; } = string.Empty;
 
     public string ToJSONString()
     {

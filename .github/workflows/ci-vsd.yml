@@ -57,7 +57,7 @@ jobs:
       # ── API HALF: compile the .NET app (no CSharpier gate on vsd) ──
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "10.0.x"
       - run: dotnet build vsd-app/vsd-app.csproj -c Release
 
       # ── WHOLE CODEBASE: CodeQL writes its report — C# + TypeScript, one run ──

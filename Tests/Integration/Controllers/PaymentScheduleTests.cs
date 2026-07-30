@@ -1,4 +1,4 @@
-﻿public class PaymentScheduleTests(IMediator mediator, IMessageRequests messageRequests, IEntitlementRepository entitlementRepository, ILoggerFactory loggerFactory)
+﻿public class PaymentScheduleTests(IMediator mediator, ILoggerFactory loggerFactory)
 {
     private readonly ILogger _logger = loggerFactory.CreateLogger<PaymentScheduleTests>();
 

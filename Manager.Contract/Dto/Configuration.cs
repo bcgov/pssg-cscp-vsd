@@ -14,7 +14,7 @@ public record Configuration : IDto
     public StateCode StateCode { get; set; }
     public string? Group { get; set; }
     public string? Key { get; set; }
-    public string Value { get; set; }
+    public string Value { get; set; } = string.Empty;
     public ProgramUnit? ProgramUnit { get; set; }
 }
 

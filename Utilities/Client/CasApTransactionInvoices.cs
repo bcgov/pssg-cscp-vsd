@@ -7,67 +7,67 @@ public class CasApTransactionInvoices
 {
     public bool IsBlockSupplier { get; set; }
 
-    public string InvoiceType { get; set; }
+    public string InvoiceType { get; set; } = string.Empty;
 
-    public string SupplierNumber { get; set; }
+    public string SupplierNumber { get; set; } = string.Empty;
 
     public int SupplierSiteNumber { get; set; }
 
     public DateTime InvoiceDate { get; set; }
 
-    public string InvoiceNumber { get; set; }
+    public string InvoiceNumber { get; set; } = string.Empty;
 
     public decimal InvoiceAmount { get; set; }
 
-    public string PayGroup { get; set; }
+    public string PayGroup { get; set; } = string.Empty;
 
     public DateTime DateInvoiceReceived { get; set; }
 
     public DateTime? DateGoodsReceived { get; set; }
 
-    public string RemittanceCode { get; set; }
+    public string RemittanceCode { get; set; } = string.Empty;
 
     public bool SpecialHandling { get; set; }
 
-    public string NameLine1 { get; set; }
+    public string NameLine1 { get; set; } = string.Empty;
 
-    public string NameLine2 { get; set; }
+    public string NameLine2 { get; set; } = string.Empty;
 
-    public string AddressLine1 { get; set; }
+    public string AddressLine1 { get; set; } = string.Empty;
 
-    public string AddressLine2 { get; set; }
+    public string AddressLine2 { get; set; } = string.Empty;
 
-    public string AddressLine3 { get; set; }
+    public string AddressLine3 { get; set; } = string.Empty;
 
-    public string City { get; set; }
+    public string City { get; set; } = string.Empty;
 
-    public string Country { get; set; }
+    public string Country { get; set; } = string.Empty;
 
-    public string Province { get; set; }
+    public string Province { get; set; } = string.Empty;
 
-    public string PostalCode { get; set; }
+    public string PostalCode { get; set; } = string.Empty;
 
-    public string QualifiedReceiver { get; set; }
+    public string QualifiedReceiver { get; set; } = string.Empty;
 
-    public string Terms { get; set; }
+    public string Terms { get; set; } = string.Empty;
 
-    public string PayAloneFlag { get; set; }
+    public string PayAloneFlag { get; set; } = string.Empty;
 
-    public string PaymentAdviceComments { get; set; }
+    public string PaymentAdviceComments { get; set; } = string.Empty;
 
-    public string RemittanceMessage1 { get; set; }
+    public string RemittanceMessage1 { get; set; } = string.Empty;
 
-    public string RemittanceMessage2 { get; set; }
+    public string RemittanceMessage2 { get; set; } = string.Empty;
 
-    public string RemittanceMessage3 { get; set; }
+    public string RemittanceMessage3 { get; set; } = string.Empty;
 
     public DateTime? GLDate { get; set; }
 
-    public string InvoiceBatchName { get; set; }
+    public string InvoiceBatchName { get; set; } = string.Empty;
 
-    public string CurrencyCode { get; set; }
+    public string CurrencyCode { get; set; } = string.Empty;
 
-    public string AccountNumber { get; set; }
+    public string AccountNumber { get; set; } = string.Empty;
 
     private string _transitNumber = string.Empty;
     public string TransitNumber
@@ -125,11 +125,11 @@ public class CasApTransactionInvoices
         }
     }
 
-    public string EFTAdvice { get; set; }
+    public string EFTAdvice { get; set; } = string.Empty;
 
-    public string EmailAddress { get; set; }
+    public string EmailAddress { get; set; } = string.Empty;
 
-    public List<CasApTransactionInvoiceLineDetail> InvoiceLineDetails { get; set; }
+    public List<CasApTransactionInvoiceLineDetail> InvoiceLineDetails { get; set; } = new();
 
     public string ToJSONString()
     {
