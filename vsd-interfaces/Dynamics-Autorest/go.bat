@@ -1,1 +1,0 @@
-autorest --verbose --input-file=dynamics-swagger.json --output-folder=.  --csharp --use-datetimeoffset --generate-empty-classes --override-client-name=DynamicsClient  --namespace=Gov.Jag.VictimServices.Interfaces --preview  --add-credentials --debug
