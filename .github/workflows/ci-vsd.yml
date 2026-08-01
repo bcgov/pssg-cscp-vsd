@@ -38,7 +38,7 @@ jobs:
     # [5] SETUP -> UI half (build) -> API half (compile) -> whole codebase (CodeQL)
     steps:
       - uses: actions/checkout@v7
-      - uses: github/codeql-action/init@v4
+      - uses: github/codeql-action/init@v4.37.3
         with:
           languages: csharp,javascript-typescript
           queries: security-extended
@@ -61,4 +61,4 @@ jobs:
       - run: dotnet build vsd-app/vsd-app.csproj -c Release
 
       # ── WHOLE CODEBASE: CodeQL writes its report — C# + TypeScript, one run ──
-      - uses: github/codeql-action/analyze@v4
+      - uses: github/codeql-action/analyze@v4.37.3

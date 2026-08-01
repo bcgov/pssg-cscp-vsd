@@ -32,7 +32,7 @@ jobs:
     environment: prod          # [4] prod's Environment requires a reviewer once one is bound — the run PAUSES for approval
 
     steps:
-      - uses: redhat-actions/openshift-tools-installer@v1   # third-party — pin to commit SHA when hardening
+      - uses: redhat-actions/openshift-tools-installer@v2   # third-party — pin to commit SHA when hardening
         with:
           oc: "4"
       - run: oc login --token=${{ secrets.OCP4_PASSWORD }} --server=${{ secrets.OPENSHIFT_SERVER }}
