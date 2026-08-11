@@ -1,6 +1,5 @@
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import moment from 'moment-timezone';
 import { firstValueFrom } from 'rxjs';
 import { ConfigurationService } from '../../api/configuration/configuration.service';
 import type { Configuration, FeatureFlagConfiguration } from '../interfaces/configuration.interface';
@@ -30,10 +29,10 @@ export const ConfigStore = signalStore(
       const startDate = store.outageStartDate();
       const endDate = store.outageEndDate();
       if (!message || !startDate || !endDate) return false;
-      const current = moment().tz('America/Vancouver');
-      const start = moment(startDate).tz('America/Vancouver');
-      const end = moment(endDate).tz('America/Vancouver');
-      return current.isBetween(start, end, null, '[]');
+      // Dates are ISO 8601 UTC strings (e.g. "2025-09-25T04:00:00Z"). Compare as UTC epoch
+      // values so the banner appears at the same instant for all users regardless of locale.
+      const now = Date.now();
+      return now >= new Date(startDate).getTime() && now <= new Date(endDate).getTime();
     })
   })),
   withMethods((store, configService = inject(ConfigurationService)) => ({

@@ -20,7 +20,7 @@
             "tsConfig": "src/tsconfig.app.json",
             "progress": true,
             "polyfills": ["src/polyfills.ts"],
-            "allowedCommonJsDependencies": ["moment", "moment-timezone", "lodash"],
+            "allowedCommonJsDependencies": ["moment", "lodash"],
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",

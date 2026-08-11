@@ -13,7 +13,7 @@ public class PaymentService(IMediator mediator, IMessageRequests messageRequests
     {
         _logger.LogInformation("Starting to send payments to CAS.");
 
-        var startTime = DateTime.Now;
+        var startTime = DateTime.UtcNow;
 
         var configurationQuery = new ConfigurationQuery();
         configurationQuery.StateCode = StateCode.Active;
@@ -32,7 +32,7 @@ public class PaymentService(IMediator mediator, IMessageRequests messageRequests
         paymentQuery.IncludeChildren = true;
         paymentQuery.StateCode = StateCode.Active;
         paymentQuery.StatusCode = PaymentStatusCode.Waiting;
-        paymentQuery.BeforeDate = DateTime.Now;
+        paymentQuery.BeforeDate = DateTime.UtcNow;
         //paymentQuery.Id = new Guid("12e4cbf6-e1d9-eb11-b821-005056830319");
         var payments = await mediator.Send(paymentQuery);
 
@@ -93,7 +93,7 @@ public class PaymentService(IMediator mediator, IMessageRequests messageRequests
                 }
                 else
                 {
-                    updatePaymentCommand.Date = DateTime.Now;
+                    updatePaymentCommand.Date = DateTime.UtcNow;
                     updatePaymentCommand.StatusCode = PaymentStatusCode.Sent;
                 }
                 if (!string.IsNullOrEmpty(userMessage))
@@ -586,9 +586,9 @@ public class PaymentService(IMediator mediator, IMessageRequests messageRequests
             result.PayAloneFlag = "Y";
         }
 
-        if (result.GLDate.HasValue && result.GLDate.Value.ToLocalTime() < DateTime.Today)
+        if (result.GLDate.HasValue && result.GLDate.Value.ToUniversalTime() < DateTime.UtcNow.Date)
         {
-            result.GLDate = DateTime.Now;
+            result.GLDate = DateTime.UtcNow;
         }
 
         return result;

@@ -15,13 +15,13 @@ public class IncomeSupportParameterRepository(DatabaseContext databaseContext, I
     {
         var queryResults = databaseContext.Vsd_IncomeSupportParameterSet
             .Where(x => x.Vsd_Type == Vsd_IncomeSupportParameter_Vsd_Type.Cola)
-            .Where(x => x.Vsd_EffectiveDate >= effectiveDate.ToLocalTime().Date)
+            .Where(x => x.Vsd_EffectiveDate >= effectiveDate.ToUniversalTime().Date)
             .Where(x => x.StateCode == (Vsd_IncomeSupportParameter_StateCode)StateCode.Active)
             .Where(x => x.StatusCode == (Vsd_IncomeSupportParameter_StatusCode)StatusCode.Active)
             .Where(x => x.Vsd_IncomeSupportParameterValidated == Vsd_YesNo.Yes)
             .ToList();
 
-        if (queryResults.Count > 0) 
+        if (queryResults.Count > 0)
         {
             var colaValue = cap;
 
