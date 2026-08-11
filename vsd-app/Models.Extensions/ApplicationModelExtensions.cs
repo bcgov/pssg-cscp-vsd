@@ -1127,7 +1127,7 @@ namespace Gov.Cscp.VictimServices.Public.Models.Extensions
 
             var model = new ApplicationFormModel
             {
-                ApplicationDate = DateTime.Now, // or derive from Dynamics if available
+                ApplicationDate = DateTime.UtcNow, // or derive from Dynamics if available
                 PersonalInformation = MapPersonalInformation(app),
                 MedicalInformation = MapToMedicalInformation(app, dynamics.ProviderCollection),
                 CrimeInformation = MapCrimeInformation(
