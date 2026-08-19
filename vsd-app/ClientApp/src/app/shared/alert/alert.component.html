@@ -1,7 +1,7 @@
 @if (isVisible) {
-  <div class="alert-banner" role="alert" aria-live="polite">
+  <div class="alert-banner alert-banner--{{ type }}" role="alert" aria-live="polite">
     <div class="alert-banner__content">
-      <span class="alert-banner__icon" aria-hidden="true">&#9888;</span>
+      <span class="alert-banner__icon" aria-hidden="true" [innerHTML]="icon"></span>
       <div class="alert-banner__text">{{ message }}</div>
     </div>
     <button

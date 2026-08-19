@@ -26,7 +26,7 @@
       <main class="app-content">
         <div class="app-main">
           @if (showAlert) {
-            <app-alert [message]="alertMessage"></app-alert>
+            <app-alert [message]="alertMessage" type="danger"></app-alert>
           }
           <breadcrumb></breadcrumb>
           <router-outlet></router-outlet>

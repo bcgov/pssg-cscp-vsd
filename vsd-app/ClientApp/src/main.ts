@@ -32,6 +32,10 @@ platformBrowser().bootstrapModule(AppModule, {
       }
 
       await Promise.all([lookupStore.loadAll(), configStore.load()]);
+
+      if (configStore.maintenanceMode()) {
+        router.navigateByUrl('/maintenance');
+      }
     })
   ]
 });

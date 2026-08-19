@@ -6,8 +6,10 @@ import { ApplicationSuccessComponent } from './application-success/application-s
 import { DraftDashboardComponent } from './draft-dashboard/draft-dashboard.component';
 import { authFeatureGuard, authGuard } from './guards/authentication-feature.guard';
 import { healthCheckGuard } from './guards/health-check.guard';
+import { maintenanceGuard } from './guards/maintenance.guard';
 import { IfmApplicationComponent } from './ifm-application/ifm-application.component';
 import { LandingComponent } from './landing/landing.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { OutageComponent } from './outage/outage.component';
 import { SubmitInvoiceComponent } from './submit-invoice/submit-invoice.component';
@@ -20,19 +22,23 @@ const routes: Routes = [
     component: OutageComponent
   },
   {
+    path: 'maintenance',
+    component: MaintenanceComponent
+  },
+  {
     path: '',
     component: LandingComponent,
-    canActivate: [healthCheckGuard, authFeatureGuard]
+    canActivate: [healthCheckGuard, maintenanceGuard, authFeatureGuard]
   },
   {
     path: 'drafts',
     component: DraftDashboardComponent,
-    canActivate: [healthCheckGuard, authGuard],
+    canActivate: [healthCheckGuard, maintenanceGuard, authGuard],
     data: { breadcrumb: 'Drafts' }
   },
   {
     path: 'application',
-    canActivate: [healthCheckGuard],
+    canActivate: [healthCheckGuard, maintenanceGuard],
     children: [
       {
         path: '',
@@ -59,18 +65,18 @@ const routes: Routes = [
   {
     path: 'submit-invoice',
     component: SubmitInvoiceComponent,
-    canActivate: [healthCheckGuard],
+    canActivate: [healthCheckGuard, maintenanceGuard],
     data: { breadcrumb: 'Submit Invoice' }
   },
   {
     path: 'application-cancelled',
     component: ApplicationCancelledComponent,
-    canActivate: [healthCheckGuard]
+    canActivate: [healthCheckGuard, maintenanceGuard]
   },
   {
     path: 'application-success',
     component: ApplicationSuccessComponent,
-    canActivate: [healthCheckGuard]
+    canActivate: [healthCheckGuard, maintenanceGuard]
   },
   { path: '**', component: NotFoundComponent }
 ];
