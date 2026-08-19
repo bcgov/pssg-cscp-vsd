@@ -2,6 +2,7 @@ export interface Configuration {
   outageStartDate?: string;
   outageEndDate?: string;
   outageMessage?: string;
+  maintenanceMode?: boolean;
   featureFlags?: FeatureFlagConfiguration;
   keycloak?: KeycloakConfiguration;
 }

@@ -8,6 +8,7 @@ export interface ConfigState {
   outageStartDate: string | null;
   outageEndDate: string | null;
   outageMessage: string | null;
+  maintenanceMode: boolean;
   featureFlags: FeatureFlagConfiguration;
   error: string | null;
 }
@@ -16,6 +17,7 @@ const initialState: ConfigState = {
   outageStartDate: null,
   outageEndDate: null,
   outageMessage: null,
+  maintenanceMode: false,
   featureFlags: { useAuthentication: false, useUpdatedComplianceFields: false },
   error: null
 };
@@ -44,6 +46,7 @@ export const ConfigStore = signalStore(
           outageStartDate: config?.outageStartDate ?? null,
           outageEndDate: config?.outageEndDate ?? null,
           outageMessage: config?.outageMessage ?? null,
+          maintenanceMode: config?.maintenanceMode ?? false,
           featureFlags: config?.featureFlags ?? {
             useAuthentication: false,
             useUpdatedComplianceFields: false

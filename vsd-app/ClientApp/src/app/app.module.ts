@@ -53,6 +53,7 @@ import { IfmApplicationComponent } from './ifm-application/ifm-application.compo
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { LandingComponent } from './landing/landing.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { OutageComponent } from './outage/outage.component';
 import { PhonePipe } from './pipes/phone.pipe';
@@ -152,6 +153,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     ApplicationSelectorComponent,
     IfmApplicationComponent,
     LandingComponent,
+    MaintenanceComponent,
     IntroductionComponent,
     InvoiceInstructionsDialog,
     MedicalInformationComponent,
