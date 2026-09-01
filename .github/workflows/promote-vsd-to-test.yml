@@ -32,7 +32,7 @@ jobs:
     environment: test          # [4] test has no reviewers — passes straight through
 
     steps:
-      - uses: redhat-actions/openshift-tools-installer@v1   # third-party — pin to commit SHA when hardening
+      - uses: redhat-actions/openshift-tools-installer@v3   # third-party — pin to commit SHA when hardening
         with:
           oc: "4"
       - run: oc login --token=${{ secrets.OCP4_PASSWORD }} --server=${{ secrets.OPENSHIFT_SERVER }}
