@@ -4,16 +4,16 @@ name: CI VSD
 on:
   pull_request:
     branches: [development]
-    paths:
-      - "vsd-app/**"
-      - "Database/**"
-      - "Shared.Database/**"
+    paths-ignore:
+      - "**/*.md"
+      - "LICENSE"
+      - "docs/**"
   push:
     branches: [development]
-    paths:
-      - "vsd-app/**"
-      - "Database/**"
-      - "Shared.Database/**"
+    paths-ignore:
+      - "**/*.md"
+      - "LICENSE"
+      - "docs/**"
   schedule:
     - cron: "0 3 1,15 * *"
   workflow_dispatch:
