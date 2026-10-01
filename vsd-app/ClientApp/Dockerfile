@@ -40,7 +40,7 @@
 # ##################################################################################################
 
 # --- Build Stage ---
-FROM node:22.23.1-alpine@sha256:16e22a550f3863206a3f701448c45f7912c6896a62de43add43bb9c86130c3e2 AS build
+FROM node:22.23.3-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402 AS build
 # upgraded from 8.9.4
 
 # Python/build tools no longer needed since we replaced node-sass with dart-sass
@@ -55,12 +55,12 @@ COPY ./vsd-app/ClientApp .
 RUN npm install --legacy-peer-deps --ignore-scripts
 RUN npm run build --configuration=production
 
-FROM caddy:2.11.4-builder@sha256:198d47eaee306d4d0c38a9960c89ff2c959aa29ad51d3e2dafa3e93ac961782a AS builder
+FROM caddy:2.11.4-builder@sha256:369218c81ca6d6af249981221b3a5c764d886dd5b058f51d144066de13f2418d AS builder
 RUN xcaddy build \
     --with github.com/caddyserver/replace-response
 
 # --- Runtime Stage ---
-FROM caddy:2.11.4-alpine@sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648 AS final
+FROM caddy:2.11.4-alpine@sha256:6aeddd44c3078b0f9a35206472a11420648a79c184603ef95957d0a20044cb2b AS final
 RUN apk update && apk upgrade --no-cache
 
 # Build args for traceability
