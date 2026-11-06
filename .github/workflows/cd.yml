@@ -152,6 +152,7 @@ jobs:
       - name: install the scanner
         run: dotnet tool install --global dotnet-sonarscanner --version 11.3.0
       # Begin: name the project, and say what to read and what to leave out. The token is a GitHub secret, and the address the variable SONAR_URL.
+      # In Sonar this project's main branch is named main, not development. File this scan there, so Sonar's list shows it.
       - name: SonarQube begin
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -160,6 +161,7 @@ jobs:
           dotnet sonarscanner begin /k:"pssg-cscp-vsd" /n:"pssg cscp vsd" \
             /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.token="$SONAR_TOKEN" /d:sonar.projectBaseDir="$GITHUB_WORKSPACE" \
             /d:sonar.inclusions="**/vsd-app/**,**/vsd-app/ClientApp/**" \
+            /d:sonar.branch.name="main" \
             /d:sonar.exclusions="**/node_modules/**,**/dist/**,**/.angular/**,**/obj/**,**/bin/**,**/coverage/**,**/*.spec.ts,**/*.test.ts"
       # Build the .NET code. The scanner reads it as it compiles.
       - name: dotnet build
