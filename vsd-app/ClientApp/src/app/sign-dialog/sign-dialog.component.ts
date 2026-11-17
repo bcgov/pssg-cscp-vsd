@@ -1,8 +1,4 @@
-import {
-  AngularSignaturePadModule,
-  NgSignaturePadOptions,
-  SignaturePadComponent
-} from '@almothafar/angular-signature-pad';
+import { NgSignaturePadOptions, SignaturePadComponent } from '@almothafar/angular-signature-pad';
 
 import {
   CUSTOM_ELEMENTS_SCHEMA,
@@ -19,7 +15,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-sign-dialog',
   templateUrl: './sign-dialog.component.html',
   styleUrls: ['./sign-dialog.component.scss'],
-  imports: [AngularSignaturePadModule, MatDialogModule],
+  imports: [SignaturePadComponent, MatDialogModule],
   changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
