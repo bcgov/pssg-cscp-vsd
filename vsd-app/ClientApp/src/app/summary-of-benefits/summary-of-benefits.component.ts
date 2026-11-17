@@ -1,12 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApplicationType } from '../shared/enums-list';
 import { BenefitLists } from './benefit-list';
 @Component({
-    selector: 'app-summary-of-benefits-dialog',
-    templateUrl: './summary-of-benefits.component.html',
-    styleUrls: ['./summary-of-benefits.component.scss'],
-    standalone: false
+  selector: 'app-summary-of-benefits-dialog',
+  templateUrl: './summary-of-benefits.component.html',
+  styleUrls: ['./summary-of-benefits.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class SummaryOfBenefitsDialog implements OnInit {
   benefitList: any;
@@ -17,7 +18,10 @@ export class SummaryOfBenefitsDialog implements OnInit {
   showFamilyBenefits: boolean = false;
   showWitnessBenefits: boolean = false;
 
-  constructor(public dialogRef: MatDialogRef<SummaryOfBenefitsDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(
+    public dialogRef: MatDialogRef<SummaryOfBenefitsDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   closeMe(): void {
     this.dialogRef.close();

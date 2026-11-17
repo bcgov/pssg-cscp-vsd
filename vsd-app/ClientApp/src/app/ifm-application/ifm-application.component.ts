@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -54,6 +54,7 @@ import { SummaryOfBenefitsDialog } from '../summary-of-benefits/summary-of-benef
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class IfmApplicationComponent extends FormBase implements OnInit, OnDestroy {
@@ -587,7 +588,9 @@ export class IfmApplicationComponent extends FormBase implements OnInit, OnDestr
 
         if (errorStatus === 400) {
           console.log('Form is invalid, cannot generate PDF');
-          this.snackBar.open('The form is invalid. Please review your entries and try again.', 'Close', { duration: 5000 });
+          this.snackBar.open('The form is invalid. Please review your entries and try again.', 'Close', {
+            duration: 5000
+          });
         }
         console.log(err);
       });

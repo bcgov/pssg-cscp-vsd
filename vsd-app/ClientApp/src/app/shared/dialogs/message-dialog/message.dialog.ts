@@ -1,15 +1,19 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-message.dialog',
-    templateUrl: 'message.dialog.html',
-    standalone: false
+  selector: 'app-message.dialog',
+  templateUrl: 'message.dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class MessageDialog {
   title: string;
   message: string;
-  constructor(public dialogRef: MatDialogRef<MessageDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(
+    public dialogRef: MatDialogRef<MessageDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.title = data.title;
     this.message = data.message;
   }

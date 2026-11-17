@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { noop, Observable, Observer, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -14,6 +14,7 @@ import { COUNTRIES_ADDRESS } from './country-list';
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class AddressComponent implements OnInit {

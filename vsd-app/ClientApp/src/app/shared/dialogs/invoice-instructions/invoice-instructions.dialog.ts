@@ -1,10 +1,11 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LookupStore } from '../../../store/lookup.store';
 
 @Component({
   selector: 'app-invoice-instructions.dialog',
   templateUrl: 'invoice-instructions.dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class InvoiceInstructionsDialog implements OnInit {
@@ -16,7 +17,10 @@ export class InvoiceInstructionsDialog implements OnInit {
     return this.lookupStore.cvapCounsellingEmail();
   }
 
-  constructor(public dialogRef: MatDialogRef<InvoiceInstructionsDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(
+    public dialogRef: MatDialogRef<InvoiceInstructionsDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   ngOnInit() {}
 

@@ -1,6 +1,6 @@
-import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
+import { SignaturePadComponent } from '@almothafar/angular-signature-pad';
 import { CdkTableModule } from '@angular/cdk/table';
-import { HttpClient, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -179,7 +179,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     FieldComponent,
     AddressComponent,
     AppRoutingModule,
-    AngularSignaturePadModule,
+    SignaturePadComponent,
     BrowserAnimationsModule,
     BrowserModule,
     CdkTableModule,
@@ -262,7 +262,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     MatTooltipModule,
     ReactiveFormsModule,
     NgxMaskDirective,
-    AngularSignaturePadModule,
+    SignaturePadComponent,
     AuthModule.forRoot({
       loader: {
         provide: StsConfigLoader,
@@ -277,7 +277,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
     HeaderTitleService,
     Title,
     provideNgxMask(),
-    provideHttpClient(withInterceptors([AuthInterceptor, LoadingInterceptor]), withInterceptorsFromDi())
+    provideHttpClient(withXhr(), withInterceptors([AuthInterceptor, LoadingInterceptor]), withInterceptorsFromDi())
   ]
 })
 export class AppModule {}

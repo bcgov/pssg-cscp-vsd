@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfigStore } from '../store/config.store';
 
@@ -12,15 +12,16 @@ import { ConfigStore } from '../store/config.store';
         <!-- @if (outageMessage()) {
           <p class="maintenance-message">{{ outageMessage() }}</p>
         } @else { -->
-          <p class="maintenance-message">
-            The Crime Victim Assistance Program (CVAP) application is currently undergoing scheduled maintenance. Please
-            try again later.
-          </p>
+        <p class="maintenance-message">
+          The Crime Victim Assistance Program (CVAP) application is currently undergoing scheduled maintenance. Please
+          try again later.
+        </p>
         <!-- } -->
         <p class="maintenance-footer">We apologize for the inconvenience and appreciate your patience.</p>
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [
     `
       .maintenance-container {

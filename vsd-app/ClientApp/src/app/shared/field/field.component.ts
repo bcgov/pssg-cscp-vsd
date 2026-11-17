@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 /** @deprecated This component is deprecated and will be removed in a future release. Please use FormFieldComponent instead. */
@@ -6,6 +6,7 @@ import { FormControl, Validators } from '@angular/forms';
   selector: 'app-field',
   templateUrl: './field.component.html',
   styleUrls: ['./field.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class FieldComponent implements OnInit {

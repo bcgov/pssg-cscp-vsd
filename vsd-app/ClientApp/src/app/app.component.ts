@@ -1,4 +1,4 @@
-import { Component, inject, isDevMode, OnInit, Renderer2 } from '@angular/core';
+import { Component, inject, isDevMode, OnInit, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { first } from 'rxjs';
 import { environment } from '../environments/environment';
@@ -10,6 +10,7 @@ import { ConfigStore } from './store/config.store';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class AppComponent implements OnInit {
