@@ -2,12 +2,12 @@ import { NgSignaturePadOptions, SignaturePadComponent } from '@almothafar/angula
 
 import {
   CUSTOM_ELEMENTS_SCHEMA,
+  ChangeDetectionStrategy,
   Component,
   NO_ERRORS_SCHEMA,
   OnInit,
   ViewChild,
-  inject,
-  ChangeDetectionStrategy
+  inject
 } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
