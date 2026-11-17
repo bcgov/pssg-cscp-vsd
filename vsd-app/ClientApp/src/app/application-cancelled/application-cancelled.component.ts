@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupStore } from '../store/lookup.store';
 
@@ -6,6 +6,7 @@ import { LookupStore } from '../store/lookup.store';
   selector: 'application-cancelled',
   templateUrl: './application-cancelled.component.html',
   styleUrls: ['./application-cancelled.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class ApplicationCancelledComponent implements OnInit {

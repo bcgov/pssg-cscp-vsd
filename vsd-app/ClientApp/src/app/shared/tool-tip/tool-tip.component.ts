@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, Input, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-tool-tip',
@@ -37,6 +37,7 @@ import { Component, Input, TemplateRef, ViewEncapsulation } from '@angular/core'
       }
     `
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class ToolTipTriggerComponent {

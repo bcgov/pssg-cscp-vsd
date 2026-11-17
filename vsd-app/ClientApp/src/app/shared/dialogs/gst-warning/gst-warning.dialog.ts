@@ -1,13 +1,17 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-gst-warning.dialog',
-    templateUrl: 'gst-warning.dialog.html',
-    standalone: false
+  selector: 'app-gst-warning.dialog',
+  templateUrl: 'gst-warning.dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class GSTWarningDialog {
-  constructor(public dialogRef: MatDialogRef<GSTWarningDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(
+    public dialogRef: MatDialogRef<GSTWarningDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   onOkayClick() {
     this.dialogRef.close();

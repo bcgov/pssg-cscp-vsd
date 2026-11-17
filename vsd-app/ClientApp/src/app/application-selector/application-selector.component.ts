@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { NavigationExtras, Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { FormBase } from '../shared/form-base';
   selector: 'app-application-selector',
   templateUrl: './application-selector.component.html',
   styleUrls: ['./application-selector.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class ApplicationSelectorComponent extends FormBase implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { ApplicationDraftsService } from '../../api/application-drafts/application-drafts.service';
@@ -25,6 +25,7 @@ const DRAFT_TYPE_ROUTES: Record<DraftType, string> = {
   selector: 'app-draft-dashboard',
   templateUrl: './draft-dashboard.component.html',
   styleUrls: ['./draft-dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class DraftDashboardComponent implements OnInit {

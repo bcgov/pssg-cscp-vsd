@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -18,6 +18,7 @@ import { FormBase } from '../../form-base';
   selector: 'app-race-selector',
   templateUrl: './race-selector.component.html',
   styleUrls: ['./race-selector.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class RaceSelectorComponent extends FormBase implements OnInit, OnDestroy {

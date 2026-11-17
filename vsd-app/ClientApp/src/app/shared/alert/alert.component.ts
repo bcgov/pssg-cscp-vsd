@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 export type AlertType = 'info' | 'success' | 'warning' | 'danger';
 
@@ -13,6 +13,7 @@ const ALERT_ICONS: Record<AlertType, string> = {
   selector: 'app-alert',
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class AlertComponent {

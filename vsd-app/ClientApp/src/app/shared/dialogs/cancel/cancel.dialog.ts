@@ -1,15 +1,19 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-cancel',
-    templateUrl: 'cancel.dialog.html',
-    styleUrls: ['./cancel.dialog.scss'],
-    standalone: false
+  selector: 'app-cancel',
+  templateUrl: 'cancel.dialog.html',
+  styleUrls: ['./cancel.dialog.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class CancelDialog {
   type: string = 'Application';
-  constructor(public dialogRef: MatDialogRef<CancelDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(
+    public dialogRef: MatDialogRef<CancelDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.type = data.type || 'Application';
   }
 
