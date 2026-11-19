@@ -28,7 +28,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { image: vsd-api, dockerfile: vsd-app/Dockerfile, context: ., watch: '{vsd-app,Manager,Manager.Contract,Resources,Shared.Database,Utilities}/**', args: '--build-arg BUILD_IMAGE_NAME=vsd-api --build-arg BUILD_VERSION=$GITHUB_SHA' }
+          - { image: vsd-api, dockerfile: vsd-app/Dockerfile, context: ., watch: '{vsd-app,Manager,Manager.Contract,Resources,Shared.Contract,Shared.Database,Utilities}/**', args: '--build-arg BUILD_IMAGE_NAME=vsd-api --build-arg BUILD_VERSION=$GITHUB_SHA' }
           - { image: vsd-ui, dockerfile: vsd-app/ClientApp/Dockerfile, context: ., watch: 'vsd-app/ClientApp/**', args: '--build-arg BUILD_IMAGE_NAME=vsd-ui --build-arg BUILD_VERSION=$GITHUB_SHA' }
     name: ${{ matrix.image }}
     steps:
