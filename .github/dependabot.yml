@@ -41,3 +41,9 @@ updates:
         update-types: ["version-update:semver-major"]
     groups:
       nuget: { patterns: ["*"] }
+  # Security fixes only for the other folders with NuGet packages: each fix still goes to its owner, and no daily pull request is opened
+  - package-ecosystem: nuget
+    directories: ["/Manager", "/Manager.Contract", "/Resources", "/Shared.Contract", "/Shared.Database", "/Utilities"]
+    schedule: { interval: daily }
+    open-pull-requests-limit: 0
+    assignees: [GeorgeWalker]
